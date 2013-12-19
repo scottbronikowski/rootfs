@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "langs-dev")
+set(langs-dev_RUN_DEPENDS "catkin" "gencpp" "genlisp" "genpy")
+set(langs-dev_VERSION "0.2.6")
+set(langs-dev_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(langs-dev_BUILD_DEPENDS "catkin" "gencpp" "genlisp" "genpy")

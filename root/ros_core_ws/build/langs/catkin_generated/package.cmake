@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "langs")
+set(langs_RUN_DEPENDS "catkin" "cpp_common" "roscpp_serialization" "roscpp_traits" "rostime" "langs-dev")
+set(langs_VERSION "0.4.6")
+set(langs_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(langs_BUILD_DEPENDS "catkin")

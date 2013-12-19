@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "roswtf")
+set(roswtf_RUN_DEPENDS "python-paramiko" "python-rospkg" "rosgraph" "roslaunch" "roslib" "rosnode" "rosservice")
+set(roswtf_VERSION "1.9.32")
+set(roswtf_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(roswtf_BUILD_DEPENDS "catkin" "rostest")

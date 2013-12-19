@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosservice")
+set(rosservice_RUN_DEPENDS "genpy" "rosgraph" "roslib" "rospy" "rosmsg")
+set(rosservice_VERSION "1.9.32")
+set(rosservice_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosservice_BUILD_DEPENDS "catkin")

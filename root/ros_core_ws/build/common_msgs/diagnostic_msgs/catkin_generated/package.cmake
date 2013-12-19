@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "diagnostic_msgs")
+set(diagnostic_msgs_RUN_DEPENDS "langs" "std_msgs")
+set(diagnostic_msgs_VERSION "1.9.9")
+set(diagnostic_msgs_MAINTAINER "Tully Foote <tfoote@willowgarage.com>")
+set(diagnostic_msgs_BUILD_DEPENDS "catkin" "genmsg" "langs-dev" "std_msgs")

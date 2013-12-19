@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "gencpp")
+set(gencpp_RUN_DEPENDS "genmsg")
+set(gencpp_VERSION "0.4.9")
+set(gencpp_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(gencpp_BUILD_DEPENDS "catkin" "genmsg")

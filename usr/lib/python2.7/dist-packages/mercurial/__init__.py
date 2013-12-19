@@ -1,0 +1,1 @@
+../../../../share/pyshared/mercurial/__init__.py

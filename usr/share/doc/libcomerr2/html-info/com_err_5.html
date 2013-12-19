@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on March 30, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>A Common Error Description Library for UNIX: 6. Coding Conventions</title>
+
+<meta name="description" content="A Common Error Description Library for UNIX: 6. Coding Conventions">
+<meta name="keywords" content="A Common Error Description Library for UNIX: 6. Coding Conventions">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Coding-Conventions"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="com_err_4.html#Run_002dtime-support-routines" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_6.html#Building-and-Installation" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="com_err_4.html#Run_002dtime-support-routines" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_6.html#Building-and-Installation" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="com_err_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[Index]</td>
+<td valign="middle" align="left">[<a href="com_err_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Coding-Conventions-1"></a>
+<h2 class="section">6. Coding Conventions</h2>
+
+<p>The following conventions are just some general stylistic conventions
+to follow when writing robust libraries and programs.  Conventions
+similar to this are generally followed inside the UNIX kernel and most
+routines in the Multics operating system.  In general, a routine
+either succeeds (returning a zero error code, and doing some side
+effects in the process), or it fails, doing minimal side effects; in
+any event, any invariant which the library assumes must be maintained.
+</p>
+<p>In general, it is not in the domain of non user-interface library
+routines to write error messages to the user&rsquo;s terminal, or halt the
+process.  Such forms of &ldquo;error handling&rdquo; should be reserved for
+failures of internal invariants and consistancy checks only, as it
+provides the user of the library no way to clean up for himself in the
+event of total failure.
+</p>
+<p>Library routines which can fail should be set up to return an error
+code.  This should usually be done as the return value of the
+function; if this is not acceptable, the routine should return a
+&ldquo;null&rdquo; value, and put the error code into a parameter passed by
+reference.
+</p>
+<p>Routines which use the first style of interface can be used from
+user-interface levels of a program as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">{
+    if ((code = initialize_world(getuid(), random())) != 0) {
+        com_err(&quot;demo&quot;, code,
+                &quot;when trying to initialize world&quot;);
+        exit(1);
+    }
+    if ((database = open_database(&quot;my_secrets&quot;, &amp;code))==NULL) {
+        com_err(&quot;demo&quot;, code,
+                &quot;while opening my_secrets&quot;);
+        exit(1);
+    }
+}
+</pre></td></tr></table>
+
+<p>A caller which fails to check the return status is in error.  It is
+possible to look for code which ignores error returns by using lint;
+look for error messages of the form &ldquo;foobar returns value which is
+sometimes ignored&rdquo; or &ldquo;foobar returns value which is always
+ignored.&rdquo;
+</p>
+<p>Since libraries may be built out of other libraries, it is often necessary
+for the success of one routine to depend on another.  When a lower level
+routine returns an error code, the middle level routine has a few possible
+options.  It can simply return the error code to its caller after doing
+some form of cleanup, it can substitute one of its own, or it can take
+corrective action of its own and continue normally.  For instance, a
+library routine which makes a &ldquo;connect&rdquo; system call to make a network
+connection may reflect the system error code <code>ECONNREFUSED</code>
+(Connection refused) to its caller, or it may return a &ldquo;server not
+available, try again later,&rdquo; or it may try a different server.
+</p>
+<p>Cleanup which is typically necessary may include, but not be limited
+to, freeing allocated memory which will not be needed any more,
+unlocking concurrancy locks, dropping reference counts, closing file
+descriptors, or otherwise undoing anything which the procedure did up
+to this point.  When there are a lot of things which can go wrong, it
+is generally good to write one block of error-handling code which is
+branched to, using a goto, in the event of failure.  A common source
+of errors in UNIX programs is failing to close file descriptors on
+error returns; this leaves a number of &ldquo;zombied&rdquo; file descriptors
+open, which eventually causes the process to run out of file
+descriptors and fall over.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">{
+    FILE *f1=NULL, *f2=NULL, *f3=NULL;
+    int status = 0;
+
+    if ( (f1 = fopen(FILE1, &quot;r&quot;)) == NULL) {
+        status = errno;
+        goto error;
+    }
+
+    /*
+     * Crunch for a while
+     */
+
+    if ( (f2 = fopen(FILE2, &quot;w&quot;)) == NULL) {
+        status = errno;
+        goto error;
+    }
+
+    if ( (f3 = fopen(FILE3, &quot;a+&quot;)) == NULL) {
+        status = errno;
+            goto error;
+    }
+
+    /*
+     * Do more processing.
+     */
+    fclose(f1);
+    fclose(f2);
+    fclose(f3);
+    return 0;
+
+error:
+    if (f1) fclose(f1);
+    if (f2) fclose(f2);
+    if (f3) fclose(f3);
+    return status;
+}
+</pre></td></tr></table>
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="com_err_4.html#Run_002dtime-support-routines" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_6.html#Building-and-Installation" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="com_err_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[Index]</td>
+<td valign="middle" align="left">[<a href="com_err_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>buildd user</em> on <em>March 30, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

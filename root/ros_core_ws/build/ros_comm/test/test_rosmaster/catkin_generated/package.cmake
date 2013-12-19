@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "test_rosmaster")
+set(test_rosmaster_RUN_DEPENDS )
+set(test_rosmaster_VERSION "1.9.32")
+set(test_rosmaster_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(test_rosmaster_BUILD_DEPENDS "catkin" "genmsg" "rosgraph" "rostest")

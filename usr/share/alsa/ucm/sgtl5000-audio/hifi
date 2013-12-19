@@ -1,0 +1,55 @@
+# Use case Configuration for Freescale imx HiFi Music
+# By Wei.Feng <b34248@freescale.com>
+
+SectionVerb {
+  EnableSequence [
+  ]
+  
+  DisableSequence [
+  ]
+
+  Value {
+    TQ "Music"
+    PlaybackCTL "hw:0"
+    CaptureCTL "hw:0"
+    PlaybackPCM "hw:0,0"
+    CapturePCM "hw:0,0"
+  }
+}
+
+SectionDevice."Headset".0 {
+  Comment "Headset connected to 3.5mm jack"
+
+  EnableSequence [
+    cset "name='Line In Function' on"
+  ]
+
+  DisableSequence [
+    cset "name='Line In Function' off"
+  ]
+
+  Value {
+    PlaybackPriority "3000"
+    CapturePriority "3000"
+    PlaybackChannels "2"
+    CaptureChannels "2"
+  }
+}
+
+SectionDevice."Speaker".0 {
+  Comment "Speaker output"
+
+  EnableSequence [
+    cset "name='Speaker Function' on"
+  ]
+
+  DisableSequence [
+    cset "name='Speaker Function' off"
+  ]
+
+  Value {
+    PlaybackPriority "1000"
+    PlaybackChannels "2"
+  }
+}
+

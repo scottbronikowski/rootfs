@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "roslaunch")
+set(roslaunch_RUN_DEPENDS "python-paramiko" "python-yaml" "rosclean" "rosmaster")
+set(roslaunch_VERSION "1.9.32")
+set(roslaunch_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(roslaunch_BUILD_DEPENDS "catkin" "rosgraph_msgs")

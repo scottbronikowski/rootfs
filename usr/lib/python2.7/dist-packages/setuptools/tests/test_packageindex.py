@@ -1,0 +1,1 @@
+../../../../../share/pyshared/setuptools/tests/test_packageindex.py

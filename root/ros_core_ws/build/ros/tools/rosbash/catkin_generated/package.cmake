@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosbash")
+set(rosbash_RUN_DEPENDS )
+set(rosbash_VERSION "1.9.33")
+set(rosbash_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosbash_BUILD_DEPENDS "catkin")

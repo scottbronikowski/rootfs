@@ -1,0 +1,7 @@
+CATKIN_PACKAGE_PREFIX=""
+PROJECT_ABSOLUTE_INCLUDE_DIRS="/root/ros_core_ws/devel/include;/root/ros_core_ws/src/common_msgs/sensor_msgs/include;/usr/include"
+PROJECT_CATKIN_DEPENDS=""
+PKG_CONFIG_LIBRARIES=""
+PROJECT_NAME="sensor_msgs"
+PROJECT_SPACE_DIR="/root/ros_core_ws/devel"
+PROJECT_VERSION="1.9.9"

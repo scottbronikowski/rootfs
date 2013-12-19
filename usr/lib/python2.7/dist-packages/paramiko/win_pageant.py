@@ -1,0 +1,1 @@
+../../../../share/pyshared/paramiko/win_pageant.py

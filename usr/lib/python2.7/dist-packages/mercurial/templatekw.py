@@ -1,0 +1,1 @@
+../../../../share/pyshared/mercurial/templatekw.py

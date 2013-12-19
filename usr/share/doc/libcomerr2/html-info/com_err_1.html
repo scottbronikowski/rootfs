@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on March 30, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>A Common Error Description Library for UNIX: 2. Error codes</title>
+
+<meta name="description" content="A Common Error Description Library for UNIX: 2. Error codes">
+<meta name="keywords" content="A Common Error Description Library for UNIX: 2. Error codes">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Error-codes"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_2.html#Error-table-source-file" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_2.html#Error-table-source-file" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="com_err_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[Index]</td>
+<td valign="middle" align="left">[<a href="com_err_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Error-codes-1"></a>
+<h2 class="section">2. Error codes</h2>
+
+<p>Error codes themselves are 32 bit (signed) integers, of which the high
+order 24 bits are an identifier of which error table the error code is
+from, and the low order 8 bits are a sequential error number within
+the table.  An error code may thus be easily decomposed into its component
+parts.  Only the lowest 32 bits of an error code are considered significant
+on systems which support wider values.
+</p>
+<p>Error table 0 is defined to match the UNIX system call error table
+(<code>sys_errlist</code>); this allows <code>errno</code> values to be used directly
+in the library (assuming that <code>errno</code> is of a type with the same width
+as <tt>long</tt>).  Other error table numbers are formed by compacting together
+the first four characters of the error table name.  The mapping between
+characters in the name and numeric values in the error code are defined in
+a system-independent fashion, so that two systems that can pass integral
+values between them can reliably pass error codes without loss of meaning;
+this should work even if the character sets used are not the same.
+(However, if this is to be done, error table 0 should be avoided, since the
+local system call error tables may differ.)
+</p>
+<p>Any variable which is to contain an error code should be declared <tt>long</tt>.
+The draft proposed American National Standard for C (as of May, 1988)
+requires that <tt>long</tt> variables be at least 32 bits; any system which does
+not support 32-bit <tt>long</tt> values cannot make use of this package (nor
+much other software that assumes an ANSI-C environment base) without
+significant effort.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_2.html#Error-table-source-file" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="com_err_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[Index]</td>
+<td valign="middle" align="left">[<a href="com_err_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>buildd user</em> on <em>March 30, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

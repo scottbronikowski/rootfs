@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rospy_tutorials")
+set(rospy_tutorials_RUN_DEPENDS "rospy" "std_msgs")
+set(rospy_tutorials_VERSION "0.3.6")
+set(rospy_tutorials_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rospy_tutorials_BUILD_DEPENDS "catkin" "genmsg" "langs-dev" "rostest" "std_msgs")

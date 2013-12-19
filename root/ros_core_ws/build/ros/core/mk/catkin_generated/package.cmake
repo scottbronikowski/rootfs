@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "mk")
+set(mk_RUN_DEPENDS )
+set(mk_VERSION "1.9.33")
+set(mk_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(mk_BUILD_DEPENDS "catkin")

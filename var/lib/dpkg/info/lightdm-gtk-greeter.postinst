@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -e
+
+if dpkg-maintscript-helper supports mv_conffile; then
+  dpkg-maintscript-helper mv_conffile \
+    /etc/lightdm/lightdm-gtk-greeter.conf \
+    /etc/lightdm/lightdm-gtk-greeter-ubuntu.conf \
+    1.0.0-0ubuntu1 -- "$@"
+fi    
+
+if [ "$1" = "configure" ] ; then
+  update-alternatives --install /etc/lightdm/lightdm-gtk-greeter.conf \
+    lightdm-gtk-greeter-config-derivative \
+    /etc/lightdm/lightdm-gtk-greeter-ubuntu.conf 10
+fi
+
+case "$1" in
+  configure|upgrade)
+    /usr/lib/lightdm/lightdm-set-defaults --keep-old --greeter=lightdm-gtk-greeter || true
+  ;;
+esac
+
+
+
+exit 0

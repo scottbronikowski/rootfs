@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosclean")
+set(rosclean_RUN_DEPENDS "python-rospkg")
+set(rosclean_VERSION "1.9.33")
+set(rosclean_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosclean_BUILD_DEPENDS "catkin")

@@ -1,0 +1,1 @@
+../../../../../../share/pyshared/mercurial/httpclient/tests/__init__.py

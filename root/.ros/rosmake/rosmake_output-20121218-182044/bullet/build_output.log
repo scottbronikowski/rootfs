@@ -1,0 +1,318 @@
+/root/ros_core_ws/install/share/mk/cmake.mk:7: warning: overriding commands for target `all'
+/root/ros_core_ws/install/share/mk/cmake_stack.mk:7: warning: ignoring old commands for target `all'
+/root/ros_core_ws/install/share/mk/cmake.mk:24: warning: overriding commands for target `clean'
+/root/ros_core_ws/install/share/mk/cmake_stack.mk:16: warning: ignoring old commands for target `clean'
+mkdir -p bin
+cd build && cmake -Wdev -DCMAKE_TOOLCHAIN_FILE=/root/ros_core_ws/install/share/ros/core/rosbuild/rostoolchain.cmake  ..
+-- The C compiler identification is GNU
+-- The CXX compiler identification is GNU
+-- Check for working C compiler: /usr/bin/gcc
+-- Check for working C compiler: /usr/bin/gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Found PythonInterp: /usr/bin/python (found version "2.7.3")
+[rosbuild] Building package bullet
+[rosbuild] Cached build flags older than manifests; calling rospack to get flags
+-- Using CATKIN_DEVEL_PREFIX: /root/ros/bullet/build/devel
+-- Using CMAKE_PREFIX_PATH: /root/ros_core_ws/install
+-- This workspace overlays: /root/ros_core_ws/install
+-- Looking for include files CMAKE_HAVE_PTHREAD_H
+-- Looking for include files CMAKE_HAVE_PTHREAD_H - found
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE 
+-- Found gtest sources under '/usr/src/gtest': gtests will be built
+-- catkin 0.5.52
+[rosbuild] Including /root/ros_core_ws/install/share/roscpp/rosbuild/roscpp.cmake
+[rosbuild] Including /root/ros_core_ws/install/share/rospy/rosbuild/rospy.cmake
+make[1]: Entering directory `/root/ros/bullet'
+make -f Makefile.bullet wipe
+make[2]: Entering directory `/root/ros/bullet'
+rm -f installed
+rm -fr lib include
+make -C  clean
+make: Entering an unknown directory
+make: *** clean: No such file or directory.  Stop.
+make: Leaving an unknown directory
+cd build/bullet-2.79 && make clean
+make[2]: [clean] Error 2 (ignored)
+/bin/sh: 1: cd: can't cd to build/bullet-2.79
+rm -f patched
+make[2]: [clean] Error 2 (ignored)
+rm -rf bullet_svn
+rm -rf build
+make[2]: Leaving directory `/root/ros/bullet'
+touch wiped
+mkdir -p build
+if [ ! -f bullet-2.79-rev2440.md5sum ]; then echo "Error: Couldn't find md5sum file bullet-2.79-rev2440.md5sum" && false; fi
+`rospack find rosbuild`/bin/download_checkmd5.py http://pr.willowgarage.com/downloads/bullet-2.79-rev2440.tgz build/bullet-2.79-rev2440.tgz `awk {'print $1'} bullet-2.79-rev2440.md5sum`
+[rosbuild] Downloading http://pr.willowgarage.com/downloads/bullet-2.79-rev2440.tgz to build/bullet-2.79-rev2440.tgz...Done
+[rosbuild] Checking md5sum on build/bullet-2.79-rev2440.tgz
+touch -c build/bullet-2.79-rev2440.tgz
+rm -rf build/bullet-2.79 
+cd build; tar xzf ../build/bullet-2.79-rev2440.tgz
+touch build/bullet-2.79/unpacked
+cd build/bullet-2.79 && cmake -DCMAKE_INSTALL_PREFIX=/root/ros/bullet -DCMAKE_CXX_FLAGS="-fPIC -DBT_USE_DOUBLE_PRECISION" -D BUILD_SHARED_LIBS=on . 
+-- The C compiler identification is GNU
+-- The CXX compiler identification is GNU
+-- Check for working C compiler: /usr/bin/gcc
+-- Check for working C compiler: /usr/bin/gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+INTEL OPENCL NOT FOUND
+NVidia OPENCL NOT FOUND
+-- Looking for XOpenDisplay in /usr/lib/arm-linux-gnueabihf/libX11.so;/usr/lib/arm-linux-gnueabihf/libXext.so
+-- Looking for XOpenDisplay in /usr/lib/arm-linux-gnueabihf/libX11.so;/usr/lib/arm-linux-gnueabihf/libXext.so - found
+-- Looking for gethostbyname
+-- Looking for gethostbyname - found
+-- Looking for connect
+-- Looking for connect - found
+-- Looking for remove
+-- Looking for remove - found
+-- Looking for shmat
+-- Looking for shmat - found
+-- Looking for IceConnectionNumber in ICE
+-- Looking for IceConnectionNumber in ICE - found
+-- Found X11: /usr/lib/arm-linux-gnueabihf/libX11.so
+-- Found OpenGL: /usr/lib/arm-linux-gnueabihf/libGL.so 
+OPENGL FOUND
+/usr/lib/arm-linux-gnueabihf/libGLU.so/usr/lib/arm-linux-gnueabihf/libGL.so/usr/lib/arm-linux-gnueabihf/libSM.so/usr/lib/arm-linux-gnueabihf/libICE.so/usr/lib/arm-linux-gnueabihf/libX11.so/usr/lib/arm-linux-gnueabihf/libXext.so
+-- WARNING: you are using the obsolete 'GLU' package, please use 'OpenGL' instead
+GLUT FOUND
+/usr/lib/libglut.so
+-- WARNING: you are using the obsolete 'GLU' package, please use 'OpenGL' instead
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /root/ros/bullet/build/bullet-2.79
+# Bullet appears not be parallel-make safe
+#cd build/bullet-2.79 && make  
+cd build/bullet-2.79 && make LinearMath BulletCollision BulletDynamics BulletSoftBody 
+make[2]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[3]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[4]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+Scanning dependencies of target LinearMath
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+[  0%] Building CXX object src/LinearMath/CMakeFiles/LinearMath.dir/btAlignedAllocator.o
+[ 50%] Building CXX object src/LinearMath/CMakeFiles/LinearMath.dir/btConvexHull.o
+[ 50%] Building CXX object src/LinearMath/CMakeFiles/LinearMath.dir/btConvexHullComputer.o
+[ 50%] Building CXX object src/LinearMath/CMakeFiles/LinearMath.dir/btGeometryUtil.o
+[100%] Building CXX object src/LinearMath/CMakeFiles/LinearMath.dir/btQuickprof.o
+[100%] Building CXX object src/LinearMath/CMakeFiles/LinearMath.dir/btSerializer.o
+Linking CXX shared library libLinearMath.so
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+[100%] Built target LinearMath
+make[4]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[3]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[3]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[4]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+[  6%] Built target LinearMath
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+Scanning dependencies of target BulletCollision
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+[  6%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/BroadphaseCollision/btAxisSweep3.o
+[  6%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/BroadphaseCollision/btBroadphaseProxy.o
+[  6%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/BroadphaseCollision/btCollisionAlgorithm.o
+[ 10%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/BroadphaseCollision/btDbvt.o
+[ 10%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/BroadphaseCollision/btDbvtBroadphase.o
+[ 10%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/BroadphaseCollision/btDispatcher.o
+[ 13%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/BroadphaseCollision/btMultiSapBroadphase.o
+[ 13%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/BroadphaseCollision/btOverlappingPairCache.o
+[ 13%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/BroadphaseCollision/btQuantizedBvh.o
+[ 16%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/BroadphaseCollision/btSimpleBroadphase.o
+[ 16%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btActivatingCollisionAlgorithm.o
+[ 16%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btBoxBoxCollisionAlgorithm.o
+[ 20%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btBox2dBox2dCollisionAlgorithm.o
+[ 20%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btBoxBoxDetector.o
+[ 20%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btCollisionDispatcher.o
+[ 20%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btCollisionObject.o
+[ 23%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btCollisionWorld.o
+[ 23%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btCompoundCollisionAlgorithm.o
+[ 23%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btConvexConcaveCollisionAlgorithm.o
+[ 26%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btConvexConvexAlgorithm.o
+[ 26%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btConvexPlaneCollisionAlgorithm.o
+[ 26%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btConvex2dConvex2dAlgorithm.o
+[ 30%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btDefaultCollisionConfiguration.o
+[ 30%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btEmptyCollisionAlgorithm.o
+[ 30%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btGhostObject.o
+[ 33%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btInternalEdgeUtility.o
+[ 33%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btManifoldResult.o
+[ 33%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btSimulationIslandManager.o
+[ 36%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btSphereBoxCollisionAlgorithm.o
+[ 36%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btSphereSphereCollisionAlgorithm.o
+[ 36%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btSphereTriangleCollisionAlgorithm.o
+[ 36%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/btUnionFind.o
+[ 40%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionDispatch/SphereTriangleDetector.o
+[ 40%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btBoxShape.o
+[ 40%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btBox2dShape.o
+[ 43%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btBvhTriangleMeshShape.o
+[ 43%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btCapsuleShape.o
+[ 43%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btCollisionShape.o
+[ 46%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btCompoundShape.o
+[ 46%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btConcaveShape.o
+[ 46%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btConeShape.o
+[ 50%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btConvexHullShape.o
+[ 50%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btConvexInternalShape.o
+[ 50%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btConvexPointCloudShape.o
+[ 50%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btConvexPolyhedron.o
+[ 53%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btConvexShape.o
+[ 53%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btConvex2dShape.o
+[ 53%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btConvexTriangleMeshShape.o
+[ 56%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btCylinderShape.o
+[ 56%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btEmptyShape.o
+[ 56%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btHeightfieldTerrainShape.o
+[ 60%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btMinkowskiSumShape.o
+[ 60%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btMultimaterialTriangleMeshShape.o
+[ 60%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btMultiSphereShape.o
+[ 63%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btOptimizedBvh.o
+[ 63%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btPolyhedralConvexShape.o
+[ 63%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btScaledBvhTriangleMeshShape.o
+[ 63%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btShapeHull.o
+[ 66%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btSphereShape.o
+[ 66%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btStaticPlaneShape.o
+[ 66%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btStridingMeshInterface.o
+[ 70%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btTetrahedronShape.o
+[ 70%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btTriangleBuffer.o
+[ 70%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btTriangleCallback.o
+[ 73%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btTriangleIndexVertexArray.o
+[ 73%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btTriangleIndexVertexMaterialArray.o
+[ 73%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btTriangleMesh.o
+[ 76%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btTriangleMeshShape.o
+[ 76%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/CollisionShapes/btUniformScalingShape.o
+[ 76%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/Gimpact/btContactProcessing.o
+[ 80%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/Gimpact/btGenericPoolAllocator.o
+[ 80%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/Gimpact/btGImpactBvh.o
+[ 80%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/Gimpact/btGImpactCollisionAlgorithm.o
+[ 80%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/Gimpact/btGImpactQuantizedBvh.o
+[ 83%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/Gimpact/btGImpactShape.o
+[ 83%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/Gimpact/btTriangleShapeEx.o
+[ 83%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/Gimpact/gim_box_set.o
+[ 86%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/Gimpact/gim_contact.o
+[ 86%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/Gimpact/gim_memory.o
+[ 86%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/Gimpact/gim_tri_collision.o
+[ 90%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btContinuousConvexCollision.o
+[ 90%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btConvexCast.o
+[ 90%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btGjkConvexCast.o
+[ 93%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btGjkEpa2.o
+[ 93%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btGjkEpaPenetrationDepthSolver.o
+[ 93%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btGjkPairDetector.o
+[ 93%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btMinkowskiPenetrationDepthSolver.o
+[ 96%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btPersistentManifold.o
+[ 96%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btRaycastCallback.o
+[ 96%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btSubSimplexConvexCast.o
+[100%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btVoronoiSimplexSolver.o
+[100%] Building CXX object src/BulletCollision/CMakeFiles/BulletCollision.dir/NarrowPhaseCollision/btPolyhedralContactClipping.o
+Linking CXX shared library libBulletCollision.so
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+[100%] Built target BulletCollision
+make[4]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[3]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[3]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[4]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+[  5%] Built target LinearMath
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+[ 83%] Built target BulletCollision
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+Scanning dependencies of target BulletDynamics
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+[ 83%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/Character/btKinematicCharacterController.o
+[ 86%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btConeTwistConstraint.o
+[ 86%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btContactConstraint.o
+[ 86%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btGeneric6DofConstraint.o
+[ 88%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btGeneric6DofSpringConstraint.o
+[ 88%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btHinge2Constraint.o
+[ 88%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btHingeConstraint.o
+[ 88%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btPoint2PointConstraint.o
+[ 91%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btSequentialImpulseConstraintSolver.o
+[ 91%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btSliderConstraint.o
+[ 91%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btSolve2LinearConstraint.o
+[ 94%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btTypedConstraint.o
+[ 94%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/ConstraintSolver/btUniversalConstraint.o
+[ 94%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/Dynamics/btDiscreteDynamicsWorld.o
+[ 97%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/Dynamics/btRigidBody.o
+[ 97%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/Dynamics/btSimpleDynamicsWorld.o
+[ 97%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/Dynamics/Bullet-C-API.o
+[100%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/Vehicle/btRaycastVehicle.o
+[100%] Building CXX object src/BulletDynamics/CMakeFiles/BulletDynamics.dir/Vehicle/btWheelInfo.o
+Linking CXX shared library libBulletDynamics.so
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+[100%] Built target BulletDynamics
+make[4]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[3]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[3]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[4]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+[  5%] Built target LinearMath
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+[ 78%] Built target BulletCollision
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+[ 94%] Built target BulletDynamics
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+Scanning dependencies of target BulletSoftBody
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[5]: Entering directory `/root/ros/bullet/build/bullet-2.79'
+[ 94%] Building CXX object src/BulletSoftBody/CMakeFiles/BulletSoftBody.dir/btSoftBody.o
+[ 94%] Building CXX object src/BulletSoftBody/CMakeFiles/BulletSoftBody.dir/btSoftBodyConcaveCollisionAlgorithm.o
+[ 97%] Building CXX object src/BulletSoftBody/CMakeFiles/BulletSoftBody.dir/btSoftBodyHelpers.o
+[ 97%] Building CXX object src/BulletSoftBody/CMakeFiles/BulletSoftBody.dir/btSoftBodyRigidBodyCollisionConfiguration.o
+[ 97%] Building CXX object src/BulletSoftBody/CMakeFiles/BulletSoftBody.dir/btSoftRigidCollisionAlgorithm.o
+[100%] Building CXX object src/BulletSoftBody/CMakeFiles/BulletSoftBody.dir/btSoftRigidDynamicsWorld.o
+[100%] Building CXX object src/BulletSoftBody/CMakeFiles/BulletSoftBody.dir/btSoftSoftCollisionAlgorithm.o
+[100%] Building CXX object src/BulletSoftBody/CMakeFiles/BulletSoftBody.dir/btDefaultSoftBodySolver.o
+Linking CXX shared library libBulletSoftBody.so
+make[5]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+[100%] Built target BulletSoftBody
+make[4]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[3]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+make[2]: Leaving directory `/root/ros/bullet/build/bullet-2.79'
+# The 'install' target only works with cmake 2.6 for some reason
+#cd build/bullet-2.79 && make  install
+mkdir -p lib
+cp build/bullet-2.79/src/BulletCollision/libBulletCollision.* build/bullet-2.79/src/BulletDynamics/libBulletDynamics.* build/bullet-2.79/src/LinearMath/libLinearMath.* build/bullet-2.79/src/BulletSoftBody/libBulletSoftBody.*  lib
+mkdir -p include
+mkdir -p include/. && cp build/bullet-2.79/src/./*.h include/.;  mkdir -p include/BulletCollision/CollisionShapes && cp build/bullet-2.79/src/BulletCollision/CollisionShapes/*.h include/BulletCollision/CollisionShapes;  mkdir -p include/BulletCollision/BroadphaseCollision && cp build/bullet-2.79/src/BulletCollision/BroadphaseCollision/*.h include/BulletCollision/BroadphaseCollision;  mkdir -p include/BulletCollision/NarrowPhaseCollision && cp build/bullet-2.79/src/BulletCollision/NarrowPhaseCollision/*.h include/BulletCollision/NarrowPhaseCollision;  mkdir -p include/BulletCollision/CollisionDispatch && cp build/bullet-2.79/src/BulletCollision/CollisionDispatch/*.h include/BulletCollision/CollisionDispatch;  mkdir -p include/BulletCollision/Gimpact && cp build/bullet-2.79/src/BulletCollision/Gimpact/*.h include/BulletCollision/Gimpact;  mkdir -p include/BulletDynamics/ConstraintSolver && cp build/bullet-2.79/src/BulletDynamics/ConstraintSolver/*.h include/BulletDynamics/ConstraintSolver;  mkdir -p include/BulletDynamics/Vehicle && cp build/bullet-2.79/src/BulletDynamics/Vehicle/*.h include/BulletDynamics/Vehicle;  mkdir -p include/BulletDynamics/Dynamics && cp build/bullet-2.79/src/BulletDynamics/Dynamics/*.h include/BulletDynamics/Dynamics;  mkdir -p include/BulletDynamics/Character && cp build/bullet-2.79/src/BulletDynamics/Character/*.h include/BulletDynamics/Character;  mkdir -p include/LinearMath && cp build/bullet-2.79/src/LinearMath/*.h include/LinearMath;  mkdir -p include/BulletSoftBody && cp build/bullet-2.79/src/BulletSoftBody/*.h include/BulletSoftBody;
+touch installed
+make[1]: Leaving directory `/root/ros/bullet'
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /root/ros/bullet/build
+cd build && make -j -l1
+make[1]: Entering directory `/root/ros/bullet/build'
+-- The C compiler identification is GNU
+-- The CXX compiler identification is GNU
+[rosbuild] Building package bullet
+-- Using CATKIN_DEVEL_PREFIX: /root/ros/bullet/build/devel
+-- Using CMAKE_PREFIX_PATH: /root/ros_core_ws/install
+-- This workspace overlays: /root/ros_core_ws/install
+-- Found gtest sources under '/usr/src/gtest': gtests will be built
+-- catkin 0.5.52
+[rosbuild] Including /root/ros_core_ws/install/share/roscpp/rosbuild/roscpp.cmake
+[rosbuild] Including /root/ros_core_ws/install/share/rospy/rosbuild/rospy.cmake
+make[2]: Entering directory `/root/ros/bullet'
+make[2]: Nothing to be done for `all'.
+make[2]: Leaving directory `/root/ros/bullet'
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /root/ros/bullet/build
+make[1]: Leaving directory `/root/ros/bullet/build'

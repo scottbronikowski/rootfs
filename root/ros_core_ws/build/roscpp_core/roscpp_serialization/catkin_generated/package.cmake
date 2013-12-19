@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "roscpp_serialization")
+set(roscpp_serialization_RUN_DEPENDS "cpp_common" "roscpp_traits" "rostime")
+set(roscpp_serialization_VERSION "0.3.9")
+set(roscpp_serialization_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(roscpp_serialization_BUILD_DEPENDS "catkin" "cpp_common" "roscpp_traits" "rostime")

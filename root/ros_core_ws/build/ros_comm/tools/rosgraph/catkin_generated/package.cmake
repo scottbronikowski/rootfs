@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosgraph")
+set(rosgraph_RUN_DEPENDS )
+set(rosgraph_VERSION "1.9.32")
+set(rosgraph_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosgraph_BUILD_DEPENDS "catkin")

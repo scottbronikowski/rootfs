@@ -1,0 +1,7 @@
+CATKIN_PACKAGE_PREFIX=""
+PROJECT_ABSOLUTE_INCLUDE_DIRS="/root/ros_core_ws/install/include"
+PROJECT_CATKIN_DEPENDS=""
+PKG_CONFIG_LIBRARIES="xmlrpcpp"
+PROJECT_NAME="xmlrpcpp"
+PROJECT_SPACE_DIR="/root/ros_core_ws/install"
+PROJECT_VERSION="1.9.32"

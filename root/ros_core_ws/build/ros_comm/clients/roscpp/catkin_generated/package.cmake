@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "roscpp")
+set(roscpp_RUN_DEPENDS "cpp_common" "langs" "rosconsole" "roscpp_serialization" "roscpp_traits" "rosgraph_msgs" "rostime" "std_msgs" "xmlrpcpp")
+set(roscpp_VERSION "1.9.32")
+set(roscpp_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(roscpp_BUILD_DEPENDS "catkin" "cpp_common" "genmsg" "langs-dev" "pkg-config" "rosconsole" "roscpp_serialization" "roscpp_traits" "rosgraph_msgs" "roslang" "rostest" "rostime" "rosunit" "std_msgs" "xmlrpcpp")

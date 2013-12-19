@@ -1,0 +1,7 @@
+CATKIN_PACKAGE_PREFIX=""
+PROJECT_ABSOLUTE_INCLUDE_DIRS="/root/ros_core_ws/src/ros/core/roslib/include"
+PROJECT_CATKIN_DEPENDS=""
+PKG_CONFIG_LIBRARIES="roslib"
+PROJECT_NAME="roslib"
+PROJECT_SPACE_DIR="/root/ros_core_ws/devel"
+PROJECT_VERSION="1.9.33"

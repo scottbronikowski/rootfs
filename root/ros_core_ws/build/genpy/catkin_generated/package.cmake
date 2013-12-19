@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "genpy")
+set(genpy_RUN_DEPENDS "genmsg")
+set(genpy_VERSION "0.4.8")
+set(genpy_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(genpy_BUILD_DEPENDS "catkin" "genmsg")

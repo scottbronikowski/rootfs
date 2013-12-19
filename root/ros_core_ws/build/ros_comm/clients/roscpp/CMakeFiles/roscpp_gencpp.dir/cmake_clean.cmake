@@ -1,0 +1,41 @@
+FILE(REMOVE_RECURSE
+  "CMakeFiles/roscpp_gencpp"
+  "/root/ros_core_ws/devel/include/roscpp/Logger.h"
+  "/root/ros_core_ws/devel/include/roscpp/TestArray.h"
+  "/root/ros_core_ws/devel/include/roscpp/TestEmpty.h"
+  "/root/ros_core_ws/devel/include/roscpp/TestStringInt.h"
+  "/root/ros_core_ws/devel/include/roscpp/TestWithHeader.h"
+  "/root/ros_core_ws/devel/include/roscpp/ArrayOfFixedLength.h"
+  "/root/ros_core_ws/devel/include/roscpp/ArrayOfVariableLength.h"
+  "/root/ros_core_ws/devel/include/roscpp/Constants.h"
+  "/root/ros_core_ws/devel/include/roscpp/CustomHeader.h"
+  "/root/ros_core_ws/devel/include/roscpp/EmbeddedExternal.h"
+  "/root/ros_core_ws/devel/include/roscpp/EmbeddedFixedLength.h"
+  "/root/ros_core_ws/devel/include/roscpp/EmbeddedVariableLength.h"
+  "/root/ros_core_ws/devel/include/roscpp/FixedLength.h"
+  "/root/ros_core_ws/devel/include/roscpp/FixedLengthArrayOfExternal.h"
+  "/root/ros_core_ws/devel/include/roscpp/FixedLengthStringArray.h"
+  "/root/ros_core_ws/devel/include/roscpp/HeaderNotFirstMember.h"
+  "/root/ros_core_ws/devel/include/roscpp/VariableLength.h"
+  "/root/ros_core_ws/devel/include/roscpp/VariableLengthArrayOfExternal.h"
+  "/root/ros_core_ws/devel/include/roscpp/VariableLengthStringArray.h"
+  "/root/ros_core_ws/devel/include/roscpp/WithDuration.h"
+  "/root/ros_core_ws/devel/include/roscpp/WithHeader.h"
+  "/root/ros_core_ws/devel/include/roscpp/WithMemberNamedHeaderThatIsNotAHeader.h"
+  "/root/ros_core_ws/devel/include/roscpp/WithTime.h"
+  "/root/ros_core_ws/devel/include/roscpp/LatencyMessage.h"
+  "/root/ros_core_ws/devel/include/roscpp/ThroughputMessage.h"
+  "/root/ros_core_ws/devel/include/roscpp/ChannelFloat32.h"
+  "/root/ros_core_ws/devel/include/roscpp/Point32.h"
+  "/root/ros_core_ws/devel/include/roscpp/PointCloud.h"
+  "/root/ros_core_ws/devel/include/roscpp/Empty.h"
+  "/root/ros_core_ws/devel/include/roscpp/GetLoggers.h"
+  "/root/ros_core_ws/devel/include/roscpp/SetLoggerLevel.h"
+  "/root/ros_core_ws/devel/include/roscpp/BadTestStringString.h"
+  "/root/ros_core_ws/devel/include/roscpp/TestStringString.h"
+)
+
+# Per-language clean rules from dependency scanning.
+FOREACH(lang)
+  INCLUDE(CMakeFiles/roscpp_gencpp.dir/cmake_clean_${lang}.cmake OPTIONAL)
+ENDFOREACH(lang)

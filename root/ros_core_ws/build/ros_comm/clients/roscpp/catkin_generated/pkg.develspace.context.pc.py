@@ -1,0 +1,7 @@
+CATKIN_PACKAGE_PREFIX=""
+PROJECT_ABSOLUTE_INCLUDE_DIRS="/root/ros_core_ws/devel/include;/root/ros_core_ws/src/ros_comm/clients/roscpp/include;/usr/include"
+PROJECT_CATKIN_DEPENDS="cpp_common;rostime;rosconsole;roscpp_serialization;roscpp_traits;std_msgs;rosgraph_msgs;xmlrpcpp"
+PKG_CONFIG_LIBRARIES="roscpp;/usr/lib/libboost_signals-mt.so;/usr/lib/libboost_filesystem-mt.so;/usr/lib/libboost_system-mt.so"
+PROJECT_NAME="roscpp"
+PROJECT_SPACE_DIR="/root/ros_core_ws/devel"
+PROJECT_VERSION="1.9.32"

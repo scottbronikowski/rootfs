@@ -1,0 +1,1 @@
+../../../../../share/pyshared/nose/ext/__init__.py

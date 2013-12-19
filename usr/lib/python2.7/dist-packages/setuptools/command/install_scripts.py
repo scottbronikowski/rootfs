@@ -1,0 +1,1 @@
+../../../../../share/pyshared/setuptools/command/install_scripts.py

@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosgraph_msgs")
+set(rosgraph_msgs_RUN_DEPENDS "langs")
+set(rosgraph_msgs_VERSION "1.9.32")
+set(rosgraph_msgs_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosgraph_msgs_BUILD_DEPENDS "catkin" "genmsg" "std_msgs" "langs-dev")

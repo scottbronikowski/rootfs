@@ -1,0 +1,1 @@
+../../../../../share/pyshared/hgext/inotify/server.py

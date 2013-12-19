@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosbuild")
+set(rosbuild_RUN_DEPENDS )
+set(rosbuild_VERSION "1.9.33")
+set(rosbuild_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosbuild_BUILD_DEPENDS "catkin" "pkg-config")

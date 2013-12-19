@@ -1,0 +1,42 @@
+#!/bin/sh
+
+set -e
+
+if [ ! -e /usr/local/share ]
+then
+  if mkdir /usr/local/share 2>/dev/null
+  then
+    chown root:staff /usr/local/share
+    chmod 2775 /usr/local/share
+  fi
+fi
+
+if [ ! -e /usr/local/share/emacs ]
+then
+  if mkdir /usr/local/share/emacs 2>/dev/null
+  then
+    chown root:staff /usr/local/share/emacs
+    chmod 2775 /usr/local/share/emacs
+  fi
+fi
+
+if [ ! -e /usr/local/share/emacs/site-lisp ]
+then
+  if mkdir /usr/local/share/emacs/site-lisp 2>/dev/null
+  then
+    chown root:staff /usr/local/share/emacs/site-lisp
+    chmod 2775 /usr/local/share/emacs/site-lisp
+  fi
+fi
+
+if [ ! -e /var/lib/emacsen-common/installed-flavors ]
+then
+  # Be super-careful.
+  echo -n "" > /var/lib/emacsen-common/installed-flavors
+  chmod 644 /var/lib/emacsen-common/installed-flavors
+  echo -n "" > /var/lib/emacsen-common/installed-flavors
+fi
+
+/usr/lib/emacsen-common/emacs-package-install emacsen-common
+
+exit 0

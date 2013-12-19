@@ -1,0 +1,30 @@
+# The set of languages for which implicit dependencies are needed:
+SET(CMAKE_DEPENDS_LANGUAGES
+  "CXX"
+  )
+# The set of files for implicit dependencies of each language:
+SET(CMAKE_DEPENDS_CHECK_CXX
+  "/root/ros_core_ws/src/actionlib/test/server_goal_handle_destruction.cpp" "/root/ros_core_ws/build/actionlib/test/CMakeFiles/actionlib-server_goal_handle_destruction.dir/server_goal_handle_destruction.cpp.o"
+  )
+SET(CMAKE_CXX_COMPILER_ID "GNU")
+
+# Preprocessor definitions for this target.
+SET(CMAKE_TARGET_DEFINITIONS
+  "ROS_BUILD_SHARED_LIBS=1"
+  "ROS_PACKAGE_NAME=\"actionlib\""
+  "roscpp_VERSION_MAJOR=1"
+  "roscpp_VERSION_MINOR=9"
+  "roscpp_VERSION_PATCH=32"
+  )
+
+# Targets to which this target links.
+SET(CMAKE_TARGET_LINKED_INFO_FILES
+  "/root/ros_core_ws/build/actionlib/CMakeFiles/actionlib.dir/DependInfo.cmake"
+  "/root/ros_core_ws/build/gtest/CMakeFiles/gtest.dir/DependInfo.cmake"
+  "/root/ros_core_ws/build/ros_comm/clients/roscpp/CMakeFiles/roscpp.dir/DependInfo.cmake"
+  "/root/ros_core_ws/build/roscpp_core/roscpp_serialization/CMakeFiles/roscpp_serialization.dir/DependInfo.cmake"
+  "/root/ros_core_ws/build/ros_comm/tools/rosconsole/CMakeFiles/rosconsole.dir/DependInfo.cmake"
+  "/root/ros_core_ws/build/roscpp_core/rostime/CMakeFiles/rostime.dir/DependInfo.cmake"
+  "/root/ros_core_ws/build/roscpp_core/cpp_common/CMakeFiles/cpp_common.dir/DependInfo.cmake"
+  "/root/ros_core_ws/build/ros_comm/utilities/xmlrpcpp/CMakeFiles/xmlrpcpp.dir/DependInfo.cmake"
+  )

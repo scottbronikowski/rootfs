@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosbag")
+set(rosbag_RUN_DEPENDS "boost" "bzip2" "genmsg" "genpy" "python-rospkg" "roslib" "roscpp" "roscpp_traits" "rospy" "rostime" "topic_tools")
+set(rosbag_VERSION "1.9.32")
+set(rosbag_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosbag_BUILD_DEPENDS "boost" "bzip2" "catkin" "cpp_common" "genmsg" "langs-dev" "python-imaging" "rosconsole" "roscpp" "roscpp_serialization" "rosgraph_msgs" "rostest" "rosunit" "topic_tools" "xmlrpcpp")

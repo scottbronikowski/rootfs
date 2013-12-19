@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "roslang")
+set(roslang_RUN_DEPENDS "genmsg")
+set(roslang_VERSION "1.9.33")
+set(roslang_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(roslang_BUILD_DEPENDS "catkin")

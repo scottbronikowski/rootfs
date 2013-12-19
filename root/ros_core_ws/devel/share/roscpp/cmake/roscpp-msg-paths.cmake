@@ -1,0 +1,1 @@
+set(roscpp_MSG_INCLUDE_DIRS /root/ros_core_ws/src/ros_comm/clients/roscpp/msg;/root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg;/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg;/root/ros_core_ws/src/ros_comm/clients/roscpp/perf/msg;/root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg)

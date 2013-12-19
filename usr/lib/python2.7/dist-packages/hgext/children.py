@@ -1,0 +1,1 @@
+../../../../share/pyshared/hgext/children.py

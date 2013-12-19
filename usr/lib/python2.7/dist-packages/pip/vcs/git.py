@@ -1,0 +1,1 @@
+../../../../../share/pyshared/pip/vcs/git.py

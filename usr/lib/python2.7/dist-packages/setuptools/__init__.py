@@ -1,0 +1,1 @@
+../../../../share/pyshared/setuptools/__init__.py

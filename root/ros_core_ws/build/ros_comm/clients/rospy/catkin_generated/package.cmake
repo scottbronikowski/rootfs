@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rospy")
+set(rospy_RUN_DEPENDS "genpy" "python-numpy" "python-rospkg" "rosgraph" "roslib" "std_msgs")
+set(rospy_VERSION "1.9.32")
+set(rospy_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rospy_BUILD_DEPENDS "catkin")

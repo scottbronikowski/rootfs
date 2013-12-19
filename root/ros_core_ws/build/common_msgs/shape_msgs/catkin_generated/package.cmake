@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "shape_msgs")
+set(shape_msgs_RUN_DEPENDS "geometry_msgs" "langs" "std_msgs")
+set(shape_msgs_VERSION "1.9.9")
+set(shape_msgs_MAINTAINER "Ioan Sucan <isucan@willowgarage.com>")
+set(shape_msgs_BUILD_DEPENDS "catkin" "genmsg" "geometry_msgs" "langs-dev" "std_msgs")

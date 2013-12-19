@@ -1,0 +1,1 @@
+../../../../../share/pyshared/setuptools/tests/test_upload_docs.py

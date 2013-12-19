@@ -1,0 +1,1 @@
+../../../../../share/pyshared/setuptools/command/easy_install.py

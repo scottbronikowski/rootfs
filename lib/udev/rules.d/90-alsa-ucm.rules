@@ -1,0 +1,13 @@
+SUBSYSTEM!="sound", GOTO="sound_end"
+ACTION!="change", GOTO="sound_end"
+KERNEL!="card*", GOTO="sound_end"
+
+ATTRS{id}=="Panda", RUN+="/usr/bin/alsaucm -c Panda set _verb HiFi"
+ATTRS{id}=="Panda", RUN+="/usr/bin/alsaucm -c Panda set _verb Record"
+ATTRS{id}=="PandaES", RUN+="/usr/bin/alsaucm -c PandaES set _verb HiFi"
+ATTRS{id}=="PandaES", RUN+="/usr/bin/alsaucm -c PandaES set _verb Record"
+ATTRS{id}=="SDP4430", RUN+="/usr/bin/alsaucm -c SDP4430 set _verb HiFi"
+ATTRS{id}=="SDP4430", RUN+="/usr/bin/alsaucm -c SDP4430 set _verb Record"
+ATTRS{id}=="tegraalc5632", RUN+="/usr/bin/alsaucm -c tegraalc5632"
+
+LABEL="sound_end"

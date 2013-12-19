@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "test_roslaunch")
+set(test_roslaunch_RUN_DEPENDS )
+set(test_roslaunch_VERSION "1.9.32")
+set(test_roslaunch_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(test_roslaunch_BUILD_DEPENDS "catkin" "rostest")

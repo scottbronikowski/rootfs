@@ -1,0 +1,22 @@
+#! /bin/sh
+
+set -e
+
+update=/usr/share/python/runtime.d/libboost-python1.46-dev.rtupdate
+
+$update remove
+
+
+# Automatically added by dh_python2:
+if which pyclean >/dev/null 2>&1; then
+	pyclean -p libboost-python1.46-dev 
+else
+	dpkg -L libboost-python1.46-dev | grep \.py$ | while read file
+	do
+		rm -f "${file}"[co] >/dev/null
+  	done
+fi
+
+# End automatically added section
+
+

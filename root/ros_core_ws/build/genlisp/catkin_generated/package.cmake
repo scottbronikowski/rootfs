@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "genlisp")
+set(genlisp_RUN_DEPENDS "genmsg")
+set(genlisp_VERSION "0.4.8")
+set(genlisp_MAINTAINER "Bhaskara Marthi <bhaskara@willowgarage.com>")
+set(genlisp_BUILD_DEPENDS "catkin" "genmsg")

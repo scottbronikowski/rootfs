@@ -1,0 +1,132 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+import argparse
+import multiprocessing
+import subprocess
+import sys
+import os
+
+try:
+    from catkin.init_workspace import init_workspace
+except ImportError:
+    # find the import relatively to make it work before installing catkin
+    sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'python'))
+    from catkin.init_workspace import init_workspace
+
+
+def main():
+    args, cmake_args, make_args = _parse_args()
+
+    # verify that the base path is known
+    base_path = os.path.abspath('.')
+    if args.directory:
+        base_path = os.path.abspath(args.directory)
+    if not os.path.exists(base_path):
+        return 'The specified base path "%s" does not exist' % base_path
+    print('Base path: %s' % base_path)
+
+    # determine source space
+    source_path = os.path.join(base_path, 'src')
+    if args.source:
+        source_path = os.path.abspath(args.source)
+    if not os.path.exists(source_path):
+        return 'The specified source space "%s" does not exist' % source_path
+    print('Source space: %s' % source_path)
+
+    build_path = os.path.join(base_path, 'build')
+    if args.build:
+        build_path = os.path.abspath(args.build)
+    print('Build space: %s' % build_path)
+
+    # determine devel space
+    devel_path = os.path.join(base_path, 'devel')
+    prefix = '-DCATKIN_DEVEL_PREFIX='
+    devel_prefix = [a for a in cmake_args if a.startswith(prefix)]
+    if devel_prefix:
+        devel_path = os.path.abspath(devel_prefix[-1][len(prefix):])
+        cmake_args = [a for a in cmake_args if a not in devel_prefix]
+    print('Devel space: %s' % devel_path)
+
+    # determine install space
+    install_path = os.path.join(base_path, 'install')
+    prefix = '-DCMAKE_INSTALL_PREFIX='
+    install_prefix = [a for a in cmake_args if a.startswith(prefix)]
+    if install_prefix:
+        install_path = os.path.abspath(install_prefix[-1][len(prefix):])
+        cmake_args = [a for a in cmake_args if a not in install_prefix]
+    print('Install space: %s' % install_path)
+
+    # ensure build folder exists
+    if not os.path.exists(build_path):
+        os.mkdir(build_path)
+
+    # ensure toplevel cmake file exists
+    toplevel_cmake = os.path.join(source_path, 'CMakeLists.txt')
+    if not os.path.exists(toplevel_cmake):
+        try:
+            init_workspace(source_path)
+        except Exception as e:
+            return 'Creating the toplevel cmake file failed: %s' % str(e)
+
+    # consider calling cmake
+    makefile = os.path.join(build_path, 'Makefile')
+    if not os.path.exists(makefile) or args.force_cmake:
+        cmd = ['cmake', source_path, '-DCATKIN_DEVEL_PREFIX=%s' % devel_path, '-DCMAKE_INSTALL_PREFIX=%s' % install_path]
+        cmd += cmake_args
+        try:
+            _run_command(cmd, build_path)
+        except subprocess.CalledProcessError:
+            return 'Invoking "cmake" failed'
+
+    # invoke make
+    cmd = ['make']
+    jobs = args.jobs
+    if args.jobs == '':
+        cmd.append('-j')
+    else:
+        jobs = args.jobs
+        if not jobs:
+            if 'ROS_PARALLEL_JOBS' in os.environ:
+                jobs = int(os.environ['ROS_PARALLEL_JOBS'])
+            else:
+                jobs = multiprocessing.cpu_count()
+        cmd.append('-j%d' % jobs)
+    cmd += make_args
+    try:
+        _run_command(cmd, build_path)
+    except subprocess.CalledProcessError:
+        return 'Invoking "make" failed'
+
+
+def _parse_args(args=sys.argv[1:]):
+    # extract -D* arguments
+    cmake_args = [a for a in args if a.startswith('-D')]
+    args = [a for a in args if a not in cmake_args]
+
+    parser = argparse.ArgumentParser(description='Creates the catkin workspace layout and invokes cmake and make. Any argument starting with "-D" will be passed to the "cmake" invocation. All other arguments are passed to the "make" invocation.')
+    parser.add_argument('-C', '--directory', default='.', help='The base path of the workspace (default ".")')
+    parser.add_argument('--source', help='The path to the source space (default "src")')
+    parser.add_argument('--build', help='The path to the build space (default "build")')
+    parser.add_argument('-j', '--jobs', type=int, metavar='JOBS', nargs='?', help='Specifies the number of jobs (commands) to run simultaneously. Defaults to the environment variable ROS_PARALLEL_JOBS and falls back to the number of CPU cores.')
+    parser.add_argument('--force-cmake', action='store_true', help='Invoke "cmake" even if it has been executed before')
+
+    namespace, unknown_args = parser.parse_known_args(args)
+    # support -j/--jobs without an argument which argparse can not distinguish
+    if not namespace.jobs and [a for a in args if a == '-j' or a == '--jobs']:
+        namespace.jobs = ''
+    return namespace, cmake_args, unknown_args
+
+
+def _run_command(cmd, cwd):
+    print('####')
+    print('#### Running command: "%s" in "%s"' % (' '.join(cmd), cwd))
+    print('####')
+    subprocess.check_call(cmd, cwd=cwd)
+
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main())
+    except Exception as e:
+        sys.exit(str(e))

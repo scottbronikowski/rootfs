@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on March 30, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>A Common Error Description Library for UNIX: 1. Why com_err?</title>
+
+<meta name="description" content="A Common Error Description Library for UNIX: 1. Why com_err?">
+<meta name="keywords" content="A Common Error Description Library for UNIX: 1. Why com_err?">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Why-com_005ferr_003f"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[ &lt; ]</td>
+<td valign="middle" align="left">[<a href="com_err_1.html#Error-codes" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[ &lt;&lt; ]</td>
+<td valign="middle" align="left">[ Up ]</td>
+<td valign="middle" align="left">[<a href="com_err_1.html#Error-codes" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Why-com_005ferr_003f" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="com_err_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[Index]</td>
+<td valign="middle" align="left">[<a href="com_err_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Why-com_005ferr_003f-1"></a>
+<h2 class="section">1. Why com_err?</h2>
+
+<p>In building application software packages, a programmer often has to
+deal with a number of libraries, each of which can use a different
+error-reporting mechanism.  Sometimes one of two values is returned,
+indicating simply SUCCESS or FAILURE, with no description of errors
+encountered.  Sometimes it is an index into a table of text strings,
+where the name of the table used is dependent on the library being
+used when the error is generated; since each table starts numbering at
+0 or 1, additional information as to the source of the error code is
+needed to determine which table to look at.  Sometimes no text messages are
+supplied at all, and the programmer must supply them at any point at which
+he may wish to report error conditions.
+Often, a global variable is assigned some value describing the error, but
+the programmer has to know in each case whether to look at <code>errno</code>,
+<code>h_errno</code>, the return value from <code>hes_err()</code>, or whatever other
+variables or routines are specified.
+And what happens if something
+in the procedure of
+examining or reporting the error changes the same variable?
+</p>
+<p>The package we have developed is an attempt to present a common
+error-handling mechanism to manipulate the most common form of error code
+in a fashion that does not have the problems listed above.
+</p>
+<p>A list of up to 256 text messages is supplied to a translator we have
+written, along with the three- to four-character &ldquo;name&rdquo; of the error
+table.  The library using this error table need only call a routine
+generated from this error-table source to make the table &ldquo;known&rdquo; to the
+com_err library, and any error code the library generates can be converted
+to the corresponding error message.  There is also a default format for
+error codes accidentally returned before making the table known, which is
+of the form &lsquo;<samp>unknown code foo 32</samp>&rsquo;, where &lsquo;<samp>foo</samp>&rsquo; would be the name
+of the table.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[ &lt;&lt; ]</td>
+<td valign="middle" align="left">[<a href="com_err_1.html#Error-codes" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Why-com_005ferr_003f" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="com_err_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[Index]</td>
+<td valign="middle" align="left">[<a href="com_err_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>buildd user</em> on <em>March 30, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

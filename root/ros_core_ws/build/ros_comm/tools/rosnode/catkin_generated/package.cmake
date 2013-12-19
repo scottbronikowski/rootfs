@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosnode")
+set(rosnode_RUN_DEPENDS "rosgraph" "rostopic")
+set(rosnode_VERSION "1.9.32")
+set(rosnode_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosnode_BUILD_DEPENDS "catkin" "rostest")

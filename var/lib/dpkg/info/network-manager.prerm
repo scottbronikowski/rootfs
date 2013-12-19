@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+  	remove)
+		RESULT=0
+		stop network-manager || :
+	;;
+esac
+
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/dbus-1/system.d/NetworkManager.conf /etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf 0.9.3.995+git201203152001.04b2a74-0ubuntu1 network-manager -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/NetworkManager/nm-system-settings.conf /etc/NetworkManager/NetworkManager.conf 0.8.3+git.20110210t152733.00327fb network-manager -- "$@"
+# End automatically added section
+
+
+exit 0

@@ -1,0 +1,7 @@
+CATKIN_PACKAGE_PREFIX=""
+PROJECT_ABSOLUTE_INCLUDE_DIRS="/root/ros_core_ws/src/roscpp_core/rostime/include;/usr/include"
+PROJECT_CATKIN_DEPENDS="cpp_common"
+PKG_CONFIG_LIBRARIES="rostime;/usr/lib/libboost_date_time-mt.so;/usr/lib/libboost_system-mt.so;/usr/lib/libboost_thread-mt.so;pthread"
+PROJECT_NAME="rostime"
+PROJECT_SPACE_DIR="/root/ros_core_ws/devel"
+PROJECT_VERSION="0.3.9"

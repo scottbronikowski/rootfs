@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+set -e
+
+if [ "$1" = "remove" ] ; then
+  update-alternatives --remove lxdm.conf /etc/xdg/lubuntu/lxdm/lxdm.conf
+  update-alternatives --remove lightdm-gtk-greeter-config-derivative \
+    /etc/xdg/xdg-xubuntu/lightdm/lightdm-gtk-greeter.conf
+fi
+
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/xdg/pcmanfm/lubuntu.conf /etc/xdg/pcmanfm/lubuntu/pcmanfm.conf 0.15 -- "$@"
+# End automatically added section
+
+exit 0

@@ -1,0 +1,1 @@
+set(ORDERED_PATHS "/root/ros_core_ws/src/rospack/include")

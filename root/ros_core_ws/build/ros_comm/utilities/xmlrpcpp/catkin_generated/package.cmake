@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "xmlrpcpp")
+set(xmlrpcpp_RUN_DEPENDS )
+set(xmlrpcpp_VERSION "1.9.32")
+set(xmlrpcpp_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(xmlrpcpp_BUILD_DEPENDS "catkin" "cpp_common")

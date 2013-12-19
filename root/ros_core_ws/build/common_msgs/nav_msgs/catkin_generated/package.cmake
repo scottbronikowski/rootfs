@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "nav_msgs")
+set(nav_msgs_RUN_DEPENDS "geometry_msgs" "langs" "std_msgs")
+set(nav_msgs_VERSION "1.9.9")
+set(nav_msgs_MAINTAINER "Tully Foote <tfoote@willowgarage.com>")
+set(nav_msgs_BUILD_DEPENDS "catkin" "genmsg" "geometry_msgs" "langs-dev" "std_msgs")

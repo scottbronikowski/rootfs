@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "stereo_msgs")
+set(stereo_msgs_RUN_DEPENDS "langs" "sensor_msgs" "std_msgs")
+set(stereo_msgs_VERSION "1.9.9")
+set(stereo_msgs_MAINTAINER "Tully Foote <tfoote@willowgarage.com>")
+set(stereo_msgs_BUILD_DEPENDS "catkin" "genmsg" "langs-dev" "sensor_msgs" "std_msgs")

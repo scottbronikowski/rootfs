@@ -1,0 +1,1 @@
+../../../../../../share/pyshared/mercurial/httpclient/tests/test_chunked_transfer.py

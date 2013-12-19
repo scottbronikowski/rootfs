@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "trajectory_msgs")
+set(trajectory_msgs_RUN_DEPENDS "langs" "std_msgs")
+set(trajectory_msgs_VERSION "1.9.9")
+set(trajectory_msgs_MAINTAINER "ROS Community <ros-release@code.ros.org>")
+set(trajectory_msgs_BUILD_DEPENDS "catkin" "genmsg" "langs-dev" "std_msgs")

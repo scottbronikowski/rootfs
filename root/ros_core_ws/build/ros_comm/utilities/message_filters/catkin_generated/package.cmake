@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "message_filters")
+set(message_filters_RUN_DEPENDS "rosconsole" "roscpp" "xmlrpcpp")
+set(message_filters_VERSION "1.9.32")
+set(message_filters_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(message_filters_BUILD_DEPENDS "boost" "catkin" "rosconsole" "roscpp" "rostest" "rosunit" "xmlrpcpp")

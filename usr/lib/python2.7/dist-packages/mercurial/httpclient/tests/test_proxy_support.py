@@ -1,0 +1,1 @@
+../../../../../../share/pyshared/mercurial/httpclient/tests/test_proxy_support.py

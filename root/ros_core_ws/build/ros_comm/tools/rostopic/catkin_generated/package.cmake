@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rostopic")
+set(rostopic_RUN_DEPENDS "rospy")
+set(rostopic_VERSION "1.9.32")
+set(rostopic_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rostopic_BUILD_DEPENDS "catkin" "rostest")

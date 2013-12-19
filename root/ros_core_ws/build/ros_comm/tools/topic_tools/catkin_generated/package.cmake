@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "topic_tools")
+set(topic_tools_RUN_DEPENDS "langs" "rosconsole" "roscpp" "rostime" "xmlrpcpp")
+set(topic_tools_VERSION "1.9.32")
+set(topic_tools_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(topic_tools_BUILD_DEPENDS "catkin" "cpp_common" "genmsg" "langs-dev" "rosconsole" "roscpp" "rostest" "rostime" "rosunit" "xmlrpcpp")

@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "roslib")
+set(roslib_RUN_DEPENDS "python-rospkg" "rospack")
+set(roslib_VERSION "1.9.33")
+set(roslib_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(roslib_BUILD_DEPENDS "boost" "catkin" "rospack")

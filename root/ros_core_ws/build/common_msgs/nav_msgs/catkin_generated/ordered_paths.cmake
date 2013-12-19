@@ -1,0 +1,1 @@
+set(ORDERED_PATHS "/root/ros_core_ws/devel/include;/root/ros_core_ws/src/std_msgs/include")

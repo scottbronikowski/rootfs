@@ -1,0 +1,1 @@
+../../../../share/pyshared/nose/result.py

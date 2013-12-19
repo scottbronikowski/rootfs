@@ -1,0 +1,7 @@
+CATKIN_PACKAGE_PREFIX=""
+PROJECT_ABSOLUTE_INCLUDE_DIRS="/root/ros_core_ws/devel/include;/root/ros_core_ws/src/actionlib/include;/usr/include"
+PROJECT_CATKIN_DEPENDS="actionlib_msgs;cpp_common;rosconsole;roscpp;roscpp_traits;rostime"
+PKG_CONFIG_LIBRARIES="actionlib;/usr/lib/libboost_thread-mt.so"
+PROJECT_NAME="actionlib"
+PROJECT_SPACE_DIR="/root/ros_core_ws/devel"
+PROJECT_VERSION="1.9.9"

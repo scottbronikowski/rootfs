@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "turtlesim")
+set(turtlesim_RUN_DEPENDS "langs" "libqt4" "rosconsole" "roscpp" "roscpp_serialization" "roslib" "rostime" "std_srvs")
+set(turtlesim_VERSION "0.3.6")
+set(turtlesim_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(turtlesim_BUILD_DEPENDS "catkin" "genmsg" "langs-dev" "libqt4-dev" "qt4-qmake" "rosconsole" "roscpp" "roscpp_serialization" "roslib" "rostime" "std_srvs")

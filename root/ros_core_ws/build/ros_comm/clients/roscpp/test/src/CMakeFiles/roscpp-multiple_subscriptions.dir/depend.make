@@ -1,0 +1,2 @@
+# Empty dependencies file for roscpp-multiple_subscriptions.
+# This may be replaced when dependencies are built.

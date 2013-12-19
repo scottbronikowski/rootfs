@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "actionlib")
+set(actionlib_RUN_DEPENDS "actionlib_msgs" "boost" "cpp_common" "langs" "rosconsole" "roscpp" "roscpp_traits" "rospy" "rostest" "rostime")
+set(actionlib_VERSION "1.9.9")
+set(actionlib_MAINTAINER "Eitan Marder-Eppstein <eitan@willowgarage.com>")
+set(actionlib_BUILD_DEPENDS "actionlib_msgs" "boost" "catkin" "cpp_common" "genmsg" "langs-dev" "rosconsole" "roscpp" "roscpp_traits" "rospy" "rostest" "rostime")

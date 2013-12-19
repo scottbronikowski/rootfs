@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosout")
+set(rosout_RUN_DEPENDS )
+set(rosout_VERSION "1.9.32")
+set(rosout_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosout_BUILD_DEPENDS "catkin" "roscpp")

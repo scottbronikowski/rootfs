@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosunit")
+set(rosunit_RUN_DEPENDS "python-rospkg")
+set(rosunit_VERSION "1.9.33")
+set(rosunit_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosunit_BUILD_DEPENDS "catkin")

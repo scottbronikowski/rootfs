@@ -1,0 +1,1 @@
+set(ORDERED_PATHS "/root/ros_core_ws/src/roscpp_core/cpp_common/include;/root/ros_core_ws/src/roscpp_core/roscpp_traits/include;/root/ros_core_ws/src/roscpp_core/rostime/include;/usr/include")

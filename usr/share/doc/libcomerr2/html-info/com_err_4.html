@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on March 30, 2012 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>A Common Error Description Library for UNIX: 5. Run-time support routines</title>
+
+<meta name="description" content="A Common Error Description Library for UNIX: 5. Run-time support routines">
+<meta name="keywords" content="A Common Error Description Library for UNIX: 5. Run-time support routines">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Run_002dtime-support-routines"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="com_err_3.html#The-error_002dtable-compiler" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_5.html#Coding-Conventions" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="com_err_3.html#The-error_002dtable-compiler" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_5.html#Coding-Conventions" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="com_err_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[Index]</td>
+<td valign="middle" align="left">[<a href="com_err_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Run_002dtime-support-routines-1"></a>
+<h2 class="section">5. Run-time support routines</h2>
+
+<p>Any source file which uses the routines supplied with or produced by the
+com_err package should include the header file &lsquo;<tt>&lt;com_err.h&gt;</tt>&rsquo;.  It
+contains declarations and definitions which may be needed on some systems.
+(Some functions cannot be referenced properly without the return type
+declarations in this file.  Some functions may work properly on most
+architectures even without the header file, but relying on this is not
+recommended.)
+</p>
+<p>The run-time support routines and variables provided via this package
+include the following:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">void initialize_<var>xxxx</var>_error_table (void);
+</pre></td></tr></table>
+
+<p>One of these routines is built by the error compiler for each error table.
+It makes the <var>xxxx</var> error table &ldquo;known&rdquo; to the error reporting
+system.  By convention, this routine should be called in the initialization
+routine of the <var>xxxx</var> library.  If the library has no initialization
+routine, some combination of routines which form the core of the library
+should ensure that this routine is called.  It is not advised to leave it
+the caller to make this call.
+</p>
+<p>There is no harm in calling this routine more than once.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#define ERROR_TABLE_BASE_<var>xxxx</var> <var>nnnnn</var>L
+</pre></td></tr></table>
+
+<p>This symbol contains the value of the first error code entry in the
+specified table.
+This rarely needs be used by the
+programmer.
+</p>
+<dl>
+<dt><a name="index-char"></a><u>Function:</u> const <b>char</b><i> *error_message (long <var>code</var>);</i></dt>
+<dd>
+<p>This routine returns the character string error message associated
+with <code>code</code>; if this is associated with an unknown error table, or
+if the code is associated with a known error table but the code is not
+in the table, a string of the form &lsquo;<samp>Unknown code <var>xxxx nn</var></samp>&rsquo; is
+returned, where <var>xxxx</var> is the error table name produced by
+reversing the compaction performed on the error table number implied
+by that error code, and <var>nn</var> is the offset from that base value.
+</p>
+<p>Although this routine is available for use when needed, its use should be
+left to circumstances which render <code>com_err</code> (below) unusable.
+</p>
+</dd></dl>
+
+<dl>
+<dt><a name="index-"></a><u>Function:</u></dt>
+<dd><p>void com_err (const char *<var>whoami</var>, long <var>error_code</var>,
+              const char *<var>format</var>, ...);             
+</p>
+<p>This routine provides an alternate way to print error messages to
+standard error; it allows the error message to be passed in as a
+parameter, rather than in an external variable.  <em>Provide grammatical
+context for &ldquo;message.&rdquo;</em>
+</p>
+<p>The module reporting the error should be passed in via <var>whoami</var>.
+If <var>format</var> is <code>(char *)NULL</code>, the formatted message will not be
+printed.  <var>format</var> may not be omitted.
+</p>
+</dd></dl>
+
+<dl>
+<dt><a name="index--1"></a><u>Function:</u></dt>
+<dd><p>void com_err_va (const char *<var>whoami</var>, long <var>error_code</var>, const char *<var>format</var>, va_list <var>args</var>);
+</p>
+<p>This routine provides an interface, equivalent to <code>com_err</code> above,
+which may be used by higher-level variadic functions (functions which
+accept variable numbers of arguments).
+</p>
+</dd></dl>
+
+<dl>
+<dt><a name="index-_0028"></a><u>Function:</u> void <b>(</b><i>*set_com_err_hook (void (*<var>proc</var>) (const char *<var>whoami</var>, long <var>error_code</var>, va_list <var>args</var>))) (const char *<var>whoami</var>, long <var>error_code</var>, va_list <var>args</var>);</i></dt>
+<dt><a name="index-reset_005fcom_005ferr_005fhook"></a><u>Function:</u> void <b>reset_com_err_hook</b><i> ();</i></dt>
+<dd>
+<p>These two routines allow a routine to be dynamically substituted for
+&lsquo;<samp>com_err</samp>&rsquo;.  After &lsquo;<samp>set_com_err_hook</samp>&rsquo; has been called,
+calls to &lsquo;<samp>com_err</samp>&rsquo; will turn into calls to the new hook routine.
+&lsquo;<samp>reset_com_err_hook</samp>&rsquo; turns off this hook.  This may intended to
+be used in daemons (to use a routine which calls <cite>syslog(3)</cite>), or
+in a window system application (which could pop up a dialogue box).
+</p>
+<p>If a program is to be used in an environment in which simply printing
+messages to the <code>stderr</code> stream would be inappropriate (such as in a
+daemon program which runs without a terminal attached),
+<code>set_com_err_hook</code> may be used to redirect output from <code>com_err</code>.
+The following is an example of an error handler which uses <cite>syslog(3)</cite>
+as supplied in BSD 4.3:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;stdio.h&gt;
+#include &lt;stdarg.h&gt;
+#include &lt;syslog.h&gt;
+
+/* extern openlog (const char * name, int logopt, int facility); */
+/* extern syslog (int priority, char * message, ...); */
+
+void hook (const char * whoami, long code,
+           const char * format, va_list args)
+{
+    char buffer[BUFSIZ];
+    static int initialized = 0;
+    if (!initialized) {
+        openlog (whoami,
+                 LOG_NOWAIT|LOG_CONS|LOG_PID|LOG_NDELAY,
+                 LOG_DAEMON);
+        initialized = 1;
+    }
+    vsprintf (buffer, format, args);
+    syslog (LOG_ERR, &quot;%s %s&quot;, error_message (code), buffer);
+}
+</pre></td></tr></table>
+
+<p>After making the call
+<code>set_com_err_hook (hook);</code>,
+any calls to <code>com_err</code> will result in messages being sent to the
+<var>syslogd</var> daemon for logging.
+The name of the program, &lsquo;<samp>whoami</samp>&rsquo;, is supplied to the
+&lsquo;<samp>openlog()</samp>&rsquo; call, and the message is formatted into a buffer and
+passed to <code>syslog</code>.
+</p>
+<p>Note that since the extra arguments to <code>com_err</code> are passed by
+reference via the <code>va_list</code> value <code>args</code>, the hook routine may
+place any form of interpretation on them, including ignoring them.  For
+consistency, <code>printf</code>-style interpretation is suggested, via
+<code>vsprintf</code> (or <code>_doprnt</code> on BSD systems without full support for
+the ANSI C library).
+</p>
+</dd></dl>
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="com_err_3.html#The-error_002dtable-compiler" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="com_err_5.html#Coding-Conventions" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="com_err_0.html#Why-com_005ferr_003f" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="com_err_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[Index]</td>
+<td valign="middle" align="left">[<a href="com_err_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>buildd user</em> on <em>March 30, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

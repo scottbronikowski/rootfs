@@ -1,0 +1,1 @@
+../../../../share/pyshared/paramiko/resource.py

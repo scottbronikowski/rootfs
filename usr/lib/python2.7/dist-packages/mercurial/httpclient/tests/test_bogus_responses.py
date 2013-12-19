@@ -1,0 +1,1 @@
+../../../../../../share/pyshared/mercurial/httpclient/tests/test_bogus_responses.py

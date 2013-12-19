@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "roscpp_traits")
+set(roscpp_traits_RUN_DEPENDS "rostime")
+set(roscpp_traits_VERSION "0.3.9")
+set(roscpp_traits_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(roscpp_traits_BUILD_DEPENDS "catkin")

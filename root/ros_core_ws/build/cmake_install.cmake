@@ -1,0 +1,151 @@
+# Install script for directory: /root/ros_core_ws/src
+
+# Set the install prefix
+IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
+  SET(CMAKE_INSTALL_PREFIX "/root/ros_core_ws/install")
+ENDIF(NOT DEFINED CMAKE_INSTALL_PREFIX)
+STRING(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
+
+# Set the install configuration name.
+IF(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
+  IF(BUILD_TYPE)
+    STRING(REGEX REPLACE "^[^A-Za-z0-9_]+" ""
+           CMAKE_INSTALL_CONFIG_NAME "${BUILD_TYPE}")
+  ELSE(BUILD_TYPE)
+    SET(CMAKE_INSTALL_CONFIG_NAME "")
+  ENDIF(BUILD_TYPE)
+  MESSAGE(STATUS "Install configuration: \"${CMAKE_INSTALL_CONFIG_NAME}\"")
+ENDIF(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
+
+# Set the component getting installed.
+IF(NOT CMAKE_INSTALL_COMPONENT)
+  IF(COMPONENT)
+    MESSAGE(STATUS "Install component: \"${COMPONENT}\"")
+    SET(CMAKE_INSTALL_COMPONENT "${COMPONENT}")
+  ELSE(COMPONENT)
+    SET(CMAKE_INSTALL_COMPONENT)
+  ENDIF(COMPONENT)
+ENDIF(NOT CMAKE_INSTALL_COMPONENT)
+
+# Install shared libraries without execute permission?
+IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
+  SET(CMAKE_INSTALL_SO_NO_EXE "1")
+ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
+
+IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  list(APPEND CPACK_ABSOLUTE_DESTINATION_FILES
+   "/root/ros_core_ws/install/.catkin")
+FILE(INSTALL DESTINATION "/root/ros_core_ws/install" TYPE FILE FILES "/root/ros_core_ws/build/catkin_generated/installspace/.catkin")
+ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+
+IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  list(APPEND CPACK_ABSOLUTE_DESTINATION_FILES
+   "/root/ros_core_ws/install/_setup_util.py")
+FILE(INSTALL DESTINATION "/root/ros_core_ws/install" TYPE PROGRAM FILES "/root/ros_core_ws/src/catkin/cmake/templates/_setup_util.py")
+ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+
+IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  list(APPEND CPACK_ABSOLUTE_DESTINATION_FILES
+   "/root/ros_core_ws/install/env.sh")
+FILE(INSTALL DESTINATION "/root/ros_core_ws/install" TYPE PROGRAM FILES "/root/ros_core_ws/build/catkin_generated/installspace/env.sh")
+ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+
+IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  list(APPEND CPACK_ABSOLUTE_DESTINATION_FILES
+   "/root/ros_core_ws/install/setup.sh")
+FILE(INSTALL DESTINATION "/root/ros_core_ws/install" TYPE FILE FILES "/root/ros_core_ws/build/catkin_generated/installspace/setup.sh")
+ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+
+IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  list(APPEND CPACK_ABSOLUTE_DESTINATION_FILES
+   "/root/ros_core_ws/install/setup.bash")
+FILE(INSTALL DESTINATION "/root/ros_core_ws/install" TYPE FILE FILES "/root/ros_core_ws/build/catkin_generated/installspace/setup.bash")
+ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+
+IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  list(APPEND CPACK_ABSOLUTE_DESTINATION_FILES
+   "/root/ros_core_ws/install/setup.zsh")
+FILE(INSTALL DESTINATION "/root/ros_core_ws/install" TYPE FILE FILES "/root/ros_core_ws/build/catkin_generated/installspace/setup.zsh")
+ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+
+IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  list(APPEND CPACK_ABSOLUTE_DESTINATION_FILES
+   "/root/ros_core_ws/install/.rosinstall")
+FILE(INSTALL DESTINATION "/root/ros_core_ws/install" TYPE FILE FILES "/root/ros_core_ws/build/catkin_generated/installspace/.rosinstall")
+ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+
+IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for each subdirectory.
+  INCLUDE("/root/ros_core_ws/build/gtest/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/catkin/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/roscpp_core/cpp_common/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/genmsg/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/gencpp/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/genlisp/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/genpy/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/langs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/langs-dev/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros/core/mk/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros/tools/rosbash/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros/tools/rosboost_cfg/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros/core/rosbuild/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros/tools/rosclean/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/roscpp_core/roscpp_traits/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros/tools/roscreate/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/rosgraph/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros/core/roslang/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros/tools/rosmake/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/rosmaster/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/rosmsg/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/rospack/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros/core/roslib/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/clients/rospy/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/rosservice/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/roscpp_core/rostime/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/roscpp_core/roscpp_serialization/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros/tools/rosunit/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/rosconsole/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/rostest/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/std_msgs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/common_msgs/actionlib_msgs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/common_msgs/diagnostic_msgs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/common_msgs/geometry_msgs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/common_msgs/nav_msgs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/messages/rosgraph_msgs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/roslaunch/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/rosnode/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/rosparam/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_tutorials/rospy_tutorials/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/rostopic/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/utilities/roswtf/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/common_msgs/sensor_msgs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/common_msgs/shape_msgs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/messages/std_srvs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/common_msgs/stereo_msgs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/test/test_rosgraph/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/test/test_roslaunch/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/test/test_rosmaster/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/common_msgs/trajectory_msgs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/common_msgs/visualization_msgs/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/utilities/xmlrpcpp/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/clients/roscpp/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/actionlib/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/utilities/message_filters/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_tutorials/roscpp_tutorials/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/rosout/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/topic_tools/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_comm/tools/rosbag/cmake_install.cmake")
+  INCLUDE("/root/ros_core_ws/build/ros_tutorials/turtlesim/cmake_install.cmake")
+
+ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
+
+IF(CMAKE_INSTALL_COMPONENT)
+  SET(CMAKE_INSTALL_MANIFEST "install_manifest_${CMAKE_INSTALL_COMPONENT}.txt")
+ELSE(CMAKE_INSTALL_COMPONENT)
+  SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
+ENDIF(CMAKE_INSTALL_COMPONENT)
+
+FILE(WRITE "/root/ros_core_ws/build/${CMAKE_INSTALL_MANIFEST}" "")
+FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
+  FILE(APPEND "/root/ros_core_ws/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+ENDFOREACH(file)

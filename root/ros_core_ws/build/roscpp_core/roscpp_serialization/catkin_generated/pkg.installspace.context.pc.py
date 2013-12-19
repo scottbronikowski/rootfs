@@ -1,0 +1,7 @@
+CATKIN_PACKAGE_PREFIX=""
+PROJECT_ABSOLUTE_INCLUDE_DIRS="/root/ros_core_ws/install/include"
+PROJECT_CATKIN_DEPENDS="cpp_common;roscpp_traits;rostime"
+PKG_CONFIG_LIBRARIES="roscpp_serialization"
+PROJECT_NAME="roscpp_serialization"
+PROJECT_SPACE_DIR="/root/ros_core_ws/install"
+PROJECT_VERSION="0.3.9"

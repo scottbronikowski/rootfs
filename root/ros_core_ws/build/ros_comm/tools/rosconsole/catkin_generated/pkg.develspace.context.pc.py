@@ -1,0 +1,7 @@
+CATKIN_PACKAGE_PREFIX=""
+PROJECT_ABSOLUTE_INCLUDE_DIRS="/root/ros_core_ws/src/ros_comm/tools/rosconsole/include"
+PROJECT_CATKIN_DEPENDS="cpp_common;rostime"
+PKG_CONFIG_LIBRARIES="rosconsole"
+PROJECT_NAME="rosconsole"
+PROJECT_SPACE_DIR="/root/ros_core_ws/devel"
+PROJECT_VERSION="1.9.32"

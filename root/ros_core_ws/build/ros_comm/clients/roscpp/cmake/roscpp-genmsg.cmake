@@ -1,0 +1,691 @@
+# generated from genmsg/cmake/pkg-genmsg.cmake.em
+
+message(STATUS "roscpp: 28 messages, 5 services")
+
+set(MSG_I_FLAGS "-Iroscpp:/root/ros_core_ws/src/ros_comm/clients/roscpp/msg;-Iroscpp:/root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg;-Iroscpp:/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg;-Iroscpp:/root/ros_core_ws/src/ros_comm/clients/roscpp/perf/msg;-Iroscpp:/root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg;-Istd_msgs:/root/ros_core_ws/src/std_msgs/msg;-Irosgraph_msgs:/root/ros_core_ws/src/ros_comm/messages/rosgraph_msgs/msg")
+
+# Find all generators
+find_package(gencpp REQUIRED)
+find_package(genlisp REQUIRED)
+find_package(genpy REQUIRED)
+
+#better way to handle this?
+set (ALL_GEN_OUTPUT_FILES_cpp "")
+
+#
+#  langs = gencpp;genlisp;genpy
+#
+
+### Section generating for lang: gencpp
+### Generating Messages
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/msg/Logger.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestArray.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestEmpty.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestStringInt.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestWithHeader.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/ArrayOfFixedLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/ArrayOfVariableLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/Constants.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/CustomHeader.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/EmbeddedExternal.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/UInt8.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/EmbeddedFixedLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/EmbeddedVariableLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLength.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLengthArrayOfExternal.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/messages/rosgraph_msgs/msg/Log.msg;/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLengthStringArray.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/HeaderNotFirstMember.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLength.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLengthArrayOfExternal.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/messages/rosgraph_msgs/msg/Log.msg;/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLengthStringArray.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithDuration.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithHeader.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithMemberNamedHeaderThatIsNotAHeader.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/CustomHeader.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithTime.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf/msg/LatencyMessage.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf/msg/ThroughputMessage.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/ChannelFloat32.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/Point32.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_msg_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/PointCloud.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg;/root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/ChannelFloat32.msg;/root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/Point32.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+
+### Generating Services
+_generate_srv_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/srv/Empty.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_srv_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/srv/GetLoggers.srv
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/msg/Logger.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_srv_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/srv/SetLoggerLevel.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_srv_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/srv/BadTestStringString.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+_generate_srv_cpp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/srv/TestStringString.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+)
+
+### Generating Module File
+_generate_module_cpp(roscpp
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+  "${ALL_GEN_OUTPUT_FILES_cpp}"
+)
+
+add_custom_target(roscpp_gencpp ALL
+  DEPENDS ${ALL_GEN_OUTPUT_FILES_cpp}
+)
+
+### Section generating for lang: genlisp
+### Generating Messages
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/msg/Logger.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestArray.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestEmpty.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestStringInt.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestWithHeader.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/ArrayOfFixedLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/ArrayOfVariableLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/Constants.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/CustomHeader.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/EmbeddedExternal.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/UInt8.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/EmbeddedFixedLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/EmbeddedVariableLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLength.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLengthArrayOfExternal.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/messages/rosgraph_msgs/msg/Log.msg;/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLengthStringArray.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/HeaderNotFirstMember.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLength.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLengthArrayOfExternal.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/messages/rosgraph_msgs/msg/Log.msg;/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLengthStringArray.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithDuration.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithHeader.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithMemberNamedHeaderThatIsNotAHeader.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/CustomHeader.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithTime.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf/msg/LatencyMessage.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf/msg/ThroughputMessage.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/ChannelFloat32.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/Point32.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_msg_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/PointCloud.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg;/root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/ChannelFloat32.msg;/root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/Point32.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+
+### Generating Services
+_generate_srv_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/srv/Empty.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_srv_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/srv/GetLoggers.srv
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/msg/Logger.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_srv_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/srv/SetLoggerLevel.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_srv_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/srv/BadTestStringString.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+_generate_srv_lisp(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/srv/TestStringString.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+)
+
+### Generating Module File
+_generate_module_lisp(roscpp
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+  "${ALL_GEN_OUTPUT_FILES_lisp}"
+)
+
+add_custom_target(roscpp_genlisp ALL
+  DEPENDS ${ALL_GEN_OUTPUT_FILES_lisp}
+)
+
+### Section generating for lang: genpy
+### Generating Messages
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/msg/Logger.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestArray.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestEmpty.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestStringInt.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/msg/TestWithHeader.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/ArrayOfFixedLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/ArrayOfVariableLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/Constants.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/CustomHeader.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/EmbeddedExternal.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/UInt8.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/EmbeddedFixedLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/EmbeddedVariableLength.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLength.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLength.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLengthArrayOfExternal.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/messages/rosgraph_msgs/msg/Log.msg;/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/FixedLengthStringArray.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/HeaderNotFirstMember.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLength.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLengthArrayOfExternal.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/messages/rosgraph_msgs/msg/Log.msg;/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/VariableLengthStringArray.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithDuration.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithHeader.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithMemberNamedHeaderThatIsNotAHeader.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/CustomHeader.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test_serialization/msg/WithTime.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf/msg/LatencyMessage.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf/msg/ThroughputMessage.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/ChannelFloat32.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/Point32.msg
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_msg_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/PointCloud.msg
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/std_msgs/msg/Header.msg;/root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/ChannelFloat32.msg;/root/ros_core_ws/src/ros_comm/clients/roscpp/perf_serialization/msg/Point32.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+
+### Generating Services
+_generate_srv_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/srv/Empty.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_srv_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/srv/GetLoggers.srv
+  "${MSG_I_FLAGS}"
+  "/root/ros_core_ws/src/ros_comm/clients/roscpp/msg/Logger.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_srv_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/srv/SetLoggerLevel.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_srv_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/srv/BadTestStringString.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+_generate_srv_py(roscpp
+  /root/ros_core_ws/src/ros_comm/clients/roscpp/test/srv/TestStringString.srv
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+)
+
+### Generating Module File
+_generate_module_py(roscpp
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+  "${ALL_GEN_OUTPUT_FILES_py}"
+)
+
+add_custom_target(roscpp_genpy ALL
+  DEPENDS ${ALL_GEN_OUTPUT_FILES_py}
+)
+
+
+debug_message(2 "roscpp: Iflags=${MSG_I_FLAGS}")
+
+
+if(gencpp_INSTALL_DIR)
+  # install generated code
+  install(
+    DIRECTORY ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/roscpp
+    DESTINATION ${gencpp_INSTALL_DIR}
+  )
+endif()
+add_dependencies(roscpp_gencpp std_msgs_gencpp)
+add_dependencies(roscpp_gencpp rosgraph_msgs_gencpp)
+
+if(genlisp_INSTALL_DIR)
+  # install generated code
+  install(
+    DIRECTORY ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/roscpp
+    DESTINATION ${genlisp_INSTALL_DIR}
+  )
+endif()
+add_dependencies(roscpp_genlisp std_msgs_genlisp)
+add_dependencies(roscpp_genlisp rosgraph_msgs_genlisp)
+
+if(genpy_INSTALL_DIR)
+  install(CODE "execute_process(COMMAND \"/usr/bin/python\" -m compileall \"${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp\")")
+  # install generated code
+  install(
+    DIRECTORY ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/roscpp
+    DESTINATION ${genpy_INSTALL_DIR}
+  )
+endif()
+add_dependencies(roscpp_genpy std_msgs_genpy)
+add_dependencies(roscpp_genpy rosgraph_msgs_genpy)

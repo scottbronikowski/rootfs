@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rostime")
+set(rostime_RUN_DEPENDS "boost" "cpp_common")
+set(rostime_VERSION "0.3.9")
+set(rostime_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rostime_BUILD_DEPENDS "boost" "catkin" "cpp_common")

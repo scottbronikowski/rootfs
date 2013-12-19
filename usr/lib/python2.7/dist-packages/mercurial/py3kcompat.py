@@ -1,0 +1,1 @@
+../../../../share/pyshared/mercurial/py3kcompat.py

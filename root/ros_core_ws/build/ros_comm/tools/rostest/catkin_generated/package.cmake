@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rostest")
+set(rostest_RUN_DEPENDS "boost" "rospy" "roslaunch" "rosunit")
+set(rostest_VERSION "1.9.32")
+set(rostest_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rostest_BUILD_DEPENDS "boost" "catkin" "rosunit")

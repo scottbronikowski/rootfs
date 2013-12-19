@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "roscpp_tutorials")
+set(roscpp_tutorials_RUN_DEPENDS "langs" "rosconsole" "roscpp" "roscpp_serialization" "rostime")
+set(roscpp_tutorials_VERSION "0.3.6")
+set(roscpp_tutorials_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(roscpp_tutorials_BUILD_DEPENDS "catkin" "genmsg" "langs-dev" "rosconsole" "roscpp" "roscpp_serialization" "rostime" "std_msgs")

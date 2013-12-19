@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "cpp_common")
+set(cpp_common_RUN_DEPENDS )
+set(cpp_common_VERSION "0.3.9")
+set(cpp_common_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(cpp_common_BUILD_DEPENDS "catkin")

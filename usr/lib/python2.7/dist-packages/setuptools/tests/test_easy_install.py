@@ -1,0 +1,1 @@
+../../../../../share/pyshared/setuptools/tests/test_easy_install.py

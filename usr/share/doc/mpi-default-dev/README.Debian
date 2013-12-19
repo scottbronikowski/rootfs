@@ -1,0 +1,19 @@
+Starting with mpi-default-dev 0.3, the package provides the file
+/usr/share/mpi-defaults/debian-defaults that defines the variable
+ARCH_DEFAULT_MPI_IMPL which contains the source package name of the
+default MPI implementation defined for that architecture.
+
+Developers can use it in their debian/rules files to implement special
+behavior depending on the MPI implementation. It can be used like this
+
+include /usr/share/mpi-default-dev/debian_defaults
+ifneq (,$(findstring $(ARCH_DEFAULT_MPI_IMPL),openmpi))
+...
+endif
+
+to special-case Open MPI.
+
+If there is more information for mpi-defaults to provide to developers,
+please report a wishlist bug to mpi-defaults.
+
+ -- Manuel Prinz <manuel@debian.org>  Sat, 14 Mar 2009 14:50:39 +0100

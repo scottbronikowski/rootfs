@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "sensor_msgs")
+set(sensor_msgs_RUN_DEPENDS "geometry_msgs" "langs" "std_msgs")
+set(sensor_msgs_VERSION "1.9.9")
+set(sensor_msgs_MAINTAINER "Tully Foote <tfoote@willowgarage.com>")
+set(sensor_msgs_BUILD_DEPENDS "catkin" "genmsg" "geometry_msgs" "langs-dev" "std_msgs")

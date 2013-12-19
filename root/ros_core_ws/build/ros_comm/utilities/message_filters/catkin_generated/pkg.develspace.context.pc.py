@@ -1,0 +1,7 @@
+CATKIN_PACKAGE_PREFIX=""
+PROJECT_ABSOLUTE_INCLUDE_DIRS="/root/ros_core_ws/src/ros_comm/utilities/message_filters/include"
+PROJECT_CATKIN_DEPENDS="roscpp;xmlrpcpp;rosconsole"
+PKG_CONFIG_LIBRARIES="message_filters"
+PROJECT_NAME="message_filters"
+PROJECT_SPACE_DIR="/root/ros_core_ws/devel"
+PROJECT_VERSION="1.9.32"

@@ -1,0 +1,39 @@
+#!/bin/sh
+
+set -e
+
+# This script can be called in the following ways:
+#
+# Before the package is installed:
+#       <new-preinst> install
+#
+# Before removed package is upgraded:
+#       <new-preinst> install <old-version>
+#
+# Before the package is upgraded:
+#       <new-preinst> upgrade <old-version>
+#
+#
+# If postrm fails during upgrade or fails on failed upgrade:
+#       <old-preinst> abort-upgrade <new-version>
+
+case "$1" in
+    install|upgrade)
+        ;;
+
+    abort-upgrade)
+        ;;
+
+    *)
+        echo "$0 called with unknown argument \`$1'" 1>&2
+	exit 1
+	;;
+esac
+
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/NetworkManager/nm-system-settings.conf /etc/NetworkManager/NetworkManager.conf 0.8.3+git.20110210t152733.00327fb network-manager -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/dbus-1/system.d/NetworkManager.conf /etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf 0.9.3.995+git201203152001.04b2a74-0ubuntu1 network-manager -- "$@"
+# End automatically added section
+

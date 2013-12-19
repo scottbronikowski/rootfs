@@ -1,0 +1,1 @@
+../../../../share/pyshared/mercurial/win32.py

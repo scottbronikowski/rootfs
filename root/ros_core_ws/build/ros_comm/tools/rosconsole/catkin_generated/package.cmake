@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosconsole")
+set(rosconsole_RUN_DEPENDS "apr" "cpp_common" "log4cxx" "rostime")
+set(rosconsole_VERSION "1.9.32")
+set(rosconsole_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosconsole_BUILD_DEPENDS "apr" "boost" "catkin" "cpp_common" "log4cxx" "rostime" "rosunit")

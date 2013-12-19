@@ -1,0 +1,628 @@
+<?xml version="1.0"?>
+<gconf>
+	<dir name="schemas">
+		<dir name="apps">
+			<dir name="gnome-settings">
+				<dir name="gnumeric">
+					<entry name="toolbar_style">
+						<local_schema short_desc="Style de la barre d&apos;outils">
+							<longdesc>Style de la barre d&apos;outils. Valeurs possibles : both, both_horiz, icon et text</longdesc>
+						</local_schema>
+					</entry>
+				</dir>
+			</dir>
+			<dir name="gnumeric">
+				<dir name="cut-and-paste">
+					<entry name="prefer-clipboard">
+						<local_schema short_desc="Préférer la sélection avec PRESSE-PAPIERS à la méthode INITIALE">
+							<longdesc>Si VRAI, Gnumeric sélectionne avec la méthode moderne du PRESSE-PAPIERS au lieu de la méthode INITIALE traditionnelle (simple tampon). N&apos;activez pas cette option si vous devez utiliser des applications anciennes, telles Xterm ou Emacs, qui n&apos;utilisent que la sélection INITIALE.</longdesc>
+						</local_schema>
+					</entry>
+				</dir>
+				<dir name="core">
+					<dir name="sort">
+						<dir name="dialog">
+							<entry name="max-initial-clauses">
+								<local_schema short_desc="Nombre de clauses automatiques">
+									<longdesc>Lors de la sélection d&apos;une région dans le dialogue de tri, des spécifications de tri additionnelles sont automatiquement proposées. Cette valeur définit le nombre maximal de clauses ainsi ajoutées.</longdesc>
+								</local_schema>
+							</entry>
+						</dir>
+						<dir name="default">
+							<entry name="ascending">
+								<local_schema short_desc="Tri croissant">
+									<longdesc>Cette option détermine l&apos;état initial du bouton « ordre de tri » du dialogue de tri.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="retain-formats">
+								<local_schema short_desc="Conserver les formats en triant">
+									<longdesc>Si cette option est activée, le tri commandé avec les boutons de la barre d&apos;outils conserve les formats de cellule lors du tri. L&apos;état initial de la case à cocher « Conserver les formats en triant » de la boîte de dialogue « Trier... » sera en cohérence avec ce choix.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="by-case">
+								<local_schema short_desc="Tri sensible à la casse">
+									<longdesc>Si cette option est activée, les boutons de la barre d&apos;outils exécutent un tri sensible à la casse et l&apos;état initial de la case à cocher correspondante dans la boîte de dialogue de tri est défini en cohérence avec ce choix.</longdesc>
+								</local_schema>
+							</entry>
+						</dir>
+					</dir>
+					<dir name="file">
+						<dir name="save">
+							<entry name="extension-check-disabled">
+								<local_schema short_desc="Liste des enregistreurs de fichier avec vérification d&apos;extension désactivée.">
+									<longdesc>Cette liste contient les identificateurs des enregistreurs de fichier pour qui la vérification de l&apos;extension est désactivée.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="def-overwrite">
+								<local_schema short_desc="Remplacement de fichier par défaut">
+									<longdesc>Avant qu&apos;un fichier existant ne soit écrasé, Gnumeric vous demande confirmation. Si cette option est vraie, c&apos;est le bouton « remplacer » de ce dialogue qui sera sélectionné par défaut.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="single_sheet">
+								<local_schema short_desc="Avertir lors de l&apos;exportation vers un format à feuille unique">
+									<longdesc>Certains formats de fichier ne peuvent contenir qu&apos;une seule feuille de calcul. Cette variable indique si un avertissement doit apparaître lorsqu&apos;une seule feuille d&apos;un document en comportant plusieurs est sauvegardée.</longdesc>
+								</local_schema>
+							</entry>
+						</dir>
+					</dir>
+					<dir name="xml">
+						<entry name="compression-level">
+							<local_schema short_desc="Niveau de compression par défaut pour les fichiers Gnumeric">
+								<longdesc>Cet entier (entre 0 et 9) indique le taux de compression utilisé par Gnumeric lors de l&apos;enregistrement de fichiers au format par défaut. 0 indique aucune compression, 9 est la compression maximale.</longdesc>
+							</local_schema>
+						</entry>
+					</dir>
+					<dir name="gui">
+						<dir name="window">
+							<entry name="zoom">
+								<local_schema short_desc="Facteur de zoom par défaut">
+									<longdesc>Facteur de zoom initial pour les nouveaux classeurs.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="y">
+								<local_schema short_desc="Taille de fenêtre verticale par défaut">
+									<longdesc>Ce nombre (entre 0,25 et 1,00) indique la fraction verticale d&apos;écran occupée par la fenêtre par défaut.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="x">
+								<local_schema short_desc="Taille de fenêtre horizontale par défaut">
+									<longdesc>Ce nombre (entre 0,25 et 1,00) indique la fraction horizontale d&apos;écran occupée par la fenêtre par défaut.</longdesc>
+								</local_schema>
+							</entry>
+						</dir>
+						<dir name="editing">
+							<entry name="transitionkeys">
+								<local_schema short_desc="Touches de transition">
+									<longdesc>Cette variable indique si les touches de transition doivent être activées. Les touches de transition sont une manière de gérer les événements empruntée à 1-2-3. Elles font que Ctrl-flèche effectuera un mouvement page par page plutôt que de sauter au début ou à la fin d&apos;une série.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="recalclag">
+								<local_schema short_desc="Délai avant recalcul automatique des expressions">
+									<longdesc>Si « délai » est nul, gnumeric recalcule toutes les expressions automatiques immédiatement après chaque changement. Des valeurs non nulles de « délai » permettent à gnumeric d&apos;accumuler les changements avant chaque recalcul. Si « délai » est positif, à chaque fois qu&apos;un changement se produit, gnumeric attend pendant « délai » microsecondes et ensuite recalcule ; si d&apos;autres changements se produisent pendant ce temps, ils sont aussi pris en compte. Si « délai » est négatif, le recalcul ne se produit qu&apos;après une période sans changement de « délai » microsecondes.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="livescrolling">
+								<local_schema short_desc="Défilement immédiat">
+									<longdesc>Cette variable indique si le défilement immédiat (et non différé) est actif.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="function-argument-tooltips">
+								<local_schema short_desc="Afficher les infobulles des paramètres de fonctions">
+									<longdesc>Cette variable indique si les infobulles des paramètres de fonctions sont affichées.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="function-name-tooltips">
+								<local_schema short_desc="Afficher les infobulles des noms de fonctions">
+									<longdesc>Cette variable indique si les infobulles des noms de fonctions sont affichées.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="autocomplete">
+								<local_schema short_desc="Complétion automatique">
+									<longdesc>Cette variable indique si l&apos;achèvement automatique est actif.</longdesc>
+								</local_schema>
+							</entry>
+						</dir>
+						<dir name="toolbars">
+							<entry name="ObjectToolbar-position">
+								<local_schema short_desc="Position de la barre d&apos;outils « objets »">
+									<longdesc>Cette variable indique où la barre d&apos;outils « objets » doit être affichée. 0 signifie à gauche, 1 à droite et 2 en haut.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="ObjectToolbar">
+								<local_schema short_desc="Affichage de la barre d&apos;outils « objets »">
+									<longdesc>Cette variable indique si la barre d&apos;outils « objets » doit être visible au départ.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="LongFormatToolbar-position">
+								<local_schema short_desc="Position de la barre d&apos;outils « format » longue">
+									<longdesc>Cette variable indique où la barre d&apos;outils « format » longue doit être affichée. 0 signifie à gauche, 1 à droite et 2 en haut.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="LongFormatToolbar">
+								<local_schema short_desc="Affichage de la barre d&apos;outils « format » longue">
+									<longdesc>Cette variable indique si la barre d&apos;outils « format » longue doit être visible au départ.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="FormatToolbar-position">
+								<local_schema short_desc="Position de la barre d&apos;outils « format »">
+									<longdesc>Cette variable indique où la barre d&apos;outils « format » doit être affichée. 0 signifie à gauche, 1 à droite et 2 en haut.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="FormatToolbar">
+								<local_schema short_desc="Affichage de la barre d&apos;outils « format »">
+									<longdesc>Cette variable indique si la barre d&apos;outils « format » doit être visible au départ.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="StandardToolbar-position">
+								<local_schema short_desc="Position standard de la barre d&apos;outils">
+									<longdesc>Cette variable indique où la barre d&apos;outils « standard » doit être affichée, 0 signifie à gauche, 1 à droite et 2 en haut.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="StandardToolbar">
+								<local_schema short_desc="Affichage de la barre d&apos;outils « standard »">
+									<longdesc>Cette variable indique si la barre d&apos;outils « standard » doit être visible au départ.</longdesc>
+								</local_schema>
+							</entry>
+						</dir>
+						<dir name="screen">
+							<entry name="verticaldpi">
+								<local_schema short_desc="Résolution verticale (PPP)">
+									<longdesc>Résolution de l&apos;écran dans le sens vertical.</longdesc>
+								</local_schema>
+							</entry>
+							<entry name="horizontaldpi">
+								<local_schema short_desc="Résolution horizontale (PPP)">
+									<longdesc>Résolution de l&apos;écran dans le sens horizontal.</longdesc>
+								</local_schema>
+							</entry>
+						</dir>
+					</dir>
+					<dir name="workbook">
+						<entry name="autosave_time">
+							<local_schema short_desc="Périodicité de la sauvegarde automatique">
+								<longdesc>Nombre de secondes séparant deux sauvegardes automatiques.</longdesc>
+							</local_schema>
+						</entry>
+						<entry name="n-cols">
+							<local_schema short_desc="Nombre de colonnes par défaut dans une feuille">
+								<longdesc>Nombre de colonnes de chaque feuille. Ce réglage n&apos;est utilisé qu&apos;à l&apos;ouverture d&apos;une nouvelle session de gnumeric.</longdesc>
+							</local_schema>
+						</entry>
+						<entry name="n-rows">
+							<local_schema short_desc="Nombre de lignes par défaut dans une feuille">
+								<longdesc>Nombre de lignes de chaque feuille. Ce réglage n&apos;est utilisé qu&apos;à l&apos;ouverture d&apos;une nouvelle session de gnumeric.</longdesc>
+							</local_schema>
+						</entry>
+						<entry name="n-sheet">
+							<local_schema short_desc="Nombre de feuilles par défaut">
+								<longdesc>Nombre de feuilles créées initialement dans un nouveau classeur.</longdesc>
+							</local_schema>
+						</entry>
+					</dir>
+					<dir name="defaultfont">
+						<entry name="italic">
+							<local_schema short_desc="Police italique par défaut.">
+								<longdesc>Cette valeur indique si la fonte par défaut pour un nouveau classeur est en italique.</longdesc>
+							</local_schema>
+						</entry>
+						<entry name="bold">
+							<local_schema short_desc="Police grasse par défaut.">
+								<longdesc>Cette valeur indique si la fonte par défaut pour un nouveau classeur est en gras.</longdesc>
+							</local_schema>
+						</entry>
+						<entry name="name">
+							<local_schema short_desc="Nom de la police par défaut">
+								<longdesc>Nom de la police par défaut pour les nouveaux classeurs.</longdesc>
+							</local_schema>
+						</entry>
+						<entry name="size">
+							<local_schema short_desc="Taille de police par défaut">
+								<longdesc>Taille de la police par défaut pour les nouveaux classeurs.</longdesc>
+							</local_schema>
+						</entry>
+					</dir>
+				</dir>
+				<dir name="undo">
+					<entry name="max_descriptor_width">
+						<local_schema short_desc="Longueur des descripteurs d&apos;action « Annuler »">
+							<longdesc>Cette valeur fixe la longueur maximale du descripteur de commande dans les listes d&apos;annulation.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="maxnum">
+						<local_schema short_desc="Nombre de manipulations annulables">
+							<longdesc>Cette valeur définit le nombre maximum d&apos;éléments dans la liste « annuler/rétablir ».</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="size">
+						<local_schema short_desc="Taille maximale du système « Annuler/Rétablir »">
+							<longdesc>Cette valeur définit la longueur de la chaîne d&apos;annulations. À chaque action d&apos;édition est associée une taille, à comparer avec les besoins mémoire d&apos;une simple modification d&apos;une cellule unique (taille 1). La liste d&apos;annulations est tronquée dès que sa taille totale dépasse la valeur de ce paramètre.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="show_sheet_name">
+						<local_schema short_desc="Afficher le nom de la feuille dans la liste d&apos;annulations">
+							<longdesc>Cette valeur indique si les noms de feuilles doivent apparaître dans les listes d&apos;annulation.</longdesc>
+						</local_schema>
+					</entry>
+				</dir>
+				<dir name="searchreplace">
+					<entry name="error-behaviour">
+						<local_schema short_desc="Rechercher &amp; remplacer le comportement de l&apos;erreur">
+							<longdesc>Comportement par défaut en cas d&apos;erreur de chercher &amp; remplacer sous la forme d&apos;un entier entre 0 et 4.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="columnmajor">
+						<local_schema short_desc="Rechercher &amp; remplacer la colonne principale">
+							<longdesc>Rechercher &amp; remplacer traite dans l&apos;ordre de la colonne principale par défaut</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="regex">
+						<local_schema short_desc="Rechercher &amp; remplacer cherche le type">
+							<longdesc>Cette valeur indique le type d&apos;entrée pour recherche &amp; remplacer. 0 : texte ; 1 : expression régulière ; 2 : nombre</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="keep-strings">
+						<local_schema short_desc="Rechercher &amp; remplacer ne modifie pas les chaînes">
+							<longdesc>Rechercher &amp; remplacer laisse les chaînes en tant que chaînes même si elles ressemblent à des nombres par défaut</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="search-results">
+						<local_schema short_desc="Rechercher recherche dans les résultats">
+							<longdesc>Rechercher recherche dans les résultats par défaut</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="change-comments">
+						<local_schema short_desc="Rechercher &amp; remplacer modifie les commentaires">
+							<longdesc>Rechercher &amp; remplacer modifie les commentaires par défaut</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="change-cell-other">
+						<local_schema short_desc="Rechercher &amp; remplacer modifie les autres valeurs">
+							<longdesc>Rechercher &amp; remplacer modifie les cellules contenant d&apos;autres valeurs par défaut</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="change-cell-expressions">
+						<local_schema short_desc="Rechercher &amp; remplacer modifie les expressions">
+							<longdesc>Rechercher &amp; remplacer modifie les cellules contenant des expressions par défaut</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="change-cell-strings">
+						<local_schema short_desc="Rechercher &amp; remplacer modifie les chaînes">
+							<longdesc>Rechercher &amp; remplacer modifie les cellules contenant des chaînes par défaut</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="scope">
+						<local_schema short_desc="Plage pour le rechercher &amp; remplacer">
+							<longdesc>Plage par défaut de rechercher &amp; remplacer. 0 : classeur complet ; 1 : feuille actuelle ; 2 : plage</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="whole-words-only">
+						<local_schema short_desc="Rechercher &amp; remplacer uniquement les mots complets">
+							<longdesc>Rechercher &amp; remplacer ne remplace que les mots complets par défaut</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="query">
+						<local_schema short_desc="Rechercher &amp; remplacer demande confirmation">
+							<longdesc>Rechercher &amp; remplacer demande confirmation avant chaque modification par défaut</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="preserve-case">
+						<local_schema short_desc="Rechercher &amp; remplacer conserve la casse">
+							<longdesc>Rechercher &amp; remplacer conserve la casse par défaut</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="ignore-case">
+						<local_schema short_desc="Rechercher &amp; remplacer ignore la casse">
+							<longdesc>Rechercher &amp; remplacer ignore la casse par défaut</longdesc>
+						</local_schema>
+					</entry>
+				</dir>
+				<dir name="stf">
+					<dir name="export">
+						<entry name="terminator">
+							<local_schema short_desc="Terminateur d&apos;enregistrement d&apos;exportation de texte">
+								<longdesc>Utilisez la boîte de dialogue « Exportation de texte » pour modifier cette valeur.</longdesc>
+							</local_schema>
+						</entry>
+						<entry name="separator">
+							<local_schema short_desc="Séparateur de champ d&apos;exportation de texte">
+								<longdesc>Utilisez la boîte de dialogue « Exportation de texte » pour modifier cette valeur.</longdesc>
+							</local_schema>
+						</entry>
+						<entry name="stringindicator">
+							<local_schema short_desc="Marqueur de chaîne d&apos;exportation de texte">
+								<longdesc>Utilisez la boîte de dialogue « Exportation de texte » pour modifier cette valeur.</longdesc>
+							</local_schema>
+						</entry>
+					</dir>
+				</dir>
+				<dir name="dialogs">
+					<dir name="rs">
+						<entry name="unfocused">
+							<local_schema short_desc="Autoriser des sélections de plage sans focus">
+								<longdesc>Certains dialogues contiennent un seul champ d&apos;entrée permettant les sélections de plages dans le classeur. Si vrai, les sélections seront envoyées vers ce champ même s&apos;il n&apos;a pas le focus.</longdesc>
+							</local_schema>
+						</entry>
+					</dir>
+				</dir>
+				<dir name="printsetup">
+					<entry name="hf-right">
+						<local_schema short_desc="Mise en forme des en-têtes et pieds de page (partie de droite)">
+							<longdesc>Utilisez la fenêtre « Configuration de l&apos;impression » pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="hf-middle">
+						<local_schema short_desc="Mise en forme des en-têtes et pieds de page (partie centrale)">
+							<longdesc>Utilisez la fenêtre « Configuration de l&apos;impression » pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="hf-left">
+						<local_schema short_desc="Mise en forme des en-têtes et pieds de page (partie de gauche)">
+							<longdesc>Utilisez la fenêtre « Configuration de l&apos;impression » pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="paper-orientation">
+						<local_schema short_desc="Papier">
+							<longdesc>Orientation de page par défaut. Utilisez la fenêtre « Configuration de l&apos;impression » pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="paper">
+						<local_schema short_desc="Papier">
+							<longdesc>Spécification de page par défaut. Utilisez la fenêtre « Configuration de l&apos;impression » pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="margin-gtk-right">
+						<local_schema short_desc="Marge inférieure par défaut">
+							<longdesc>Cette valeur indique le nombre par défaut de points entre le bord droit de la page et la droite du corps de texte. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="margin-gtk-left">
+						<local_schema short_desc="Marge à gauche par défaut">
+							<longdesc>Cette valeur indique le nombre par défaut de points entre le bord gauche de la page et la gauche du corps de texte. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="margin-gtk-top">
+						<local_schema short_desc="Marge extérieure supérieure par défaut">
+							<longdesc>Cette valeur indique le nombre par défaut de points entre le haut de la page et le haut de l&apos;en-tête. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="margin-gtk-bottom">
+						<local_schema short_desc="Marge extérieure inférieure par défaut">
+							<longdesc>Cette valeur indique le nombre par défaut de points entre le bas de la page et le pied de page. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="margin-bottom">
+						<local_schema short_desc="Marge inférieure par défaut">
+							<longdesc>Cette valeur indique le nombre par défaut de points entre le bas de la page et la fin du corps de texte. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="margin-top">
+						<local_schema short_desc="Marge supérieure par défaut">
+							<longdesc>Cette valeur indique le nombre par défaut de points entre le haut de la page et le début du corps de texte. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="preferred-unit">
+						<local_schema short_desc="Unité d&apos;affichage préférée">
+							<longdesc>Cette chaîne indique l&apos;unité à utiliser par défaut dans la fenêtre de Configuration de l&apos;impression.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="repeat-left">
+						<local_schema short_desc="Colonnes à répéter sur la partie gauche par défaut">
+							<longdesc>Cette chaîne indique la zone par défaut qui sera répéter sur la gauche de chaque page imprimée. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="repeat-top">
+						<local_schema short_desc="Lignes à répéter sur la partie supérieure par défaut">
+							<longdesc>Cette chaîne indique la zone qui sera par défaut répéter sur le haut de chaque page imprimée. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="scale-height">
+						<local_schema short_desc="Ajustement vertical par défaut">
+							<longdesc>Cette valeur fixe le nombre maximum de pages sur lesquelles sera disposée dans le sens de la hauteur la sortie d&apos;impression de la feuille de calcul sélectionnée. La feuille sera mise à l&apos;échelle pour entrer dans cette hauteur. Cette valeur peut être modifiée dans la boîte de dialogue « Configuration de l&apos;impression ».</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="scale-width">
+						<local_schema short_desc="Ajustement horizontal par défaut">
+							<longdesc>Cette valeur détermine le nombre maximum de pages sur lesquelles sera disposée dans le sens de la largeur la sortie d&apos;impression de la feuille de calcul sélectionnée. La feuille sera mise à l&apos;échelle pour entrer dans cette largeur. Cette valeur peut être modifiée dans la boîte de dialogue « Configuration de l&apos;impression ».</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="scale-percentage-value">
+						<local_schema short_desc="Pourcentage par défaut de l&apos;ajustement">
+							<longdesc>Cette valeur indique le pourcentage de la mise à l&apos;échelle des pages imprimées. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="scale-percentage">
+						<local_schema short_desc="Type d&apos;ajustement par défaut">
+							<longdesc>Cette valeur indique la valeur par défaut de la fenêtre de Configuration de l&apos;impression pour la mise à l&apos;échelle des pages par un pourcentage donné. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="across-then-down">
+						<local_schema short_desc="Direction d&apos;impression par défaut">
+							<longdesc>Cette valeur indique la valeur par défaut de la fenêtre de Configuration de l&apos;impression pour la direction d&apos;impression des pages. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="print-titles">
+						<local_schema short_desc="Titre par défaut">
+							<longdesc>Cette valeur indique la valeur par défaut de la fenêtre de Configuration de l&apos;impression pour l&apos;impression des en-têtes de colonnes et de lignes. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="print-black-n-white">
+						<local_schema short_desc="Impression en noir et blanc par défaut">
+							<longdesc>Cette valeur indique la valeur par défaut de la fenêtre de Configuration de l&apos;impression pour l&apos;impression en noir et blanc. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="print-even-if-only-styles">
+						<local_schema short_desc="Imprimer par défaut des cellules avec uniquement les styles">
+							<longdesc>Cette valeur indique la valeur par défaut de la fenêtre de Configuration de l&apos;impression pour l&apos;impression des cellules vides mais mises en forme. Utilisez la fenêtre de Configuration de l&apos;impression pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="print-grid-lines">
+						<local_schema short_desc="Impression des lignes de grille par défaut">
+							<longdesc>Cette valeur détermine si le réglage par défaut dans le dialogue « Configuration de l&apos;impression » déclenche l&apos;impression des lignes de grille ou non. Utilisez la boîte de dialogue pour modifier cette valeur.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="center-vertically">
+						<local_schema short_desc="Positionnement vertical par défaut">
+							<longdesc>Cette valeur détermine si le réglage par défaut dans le dialogue « Configuration de l&apos;impression » est de centrer verticalement le contenu des pages ou non.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="center-horizontally">
+						<local_schema short_desc="Centrage horizontal par défaut">
+							<longdesc>Cette valeur détermine si le réglage par défaut dans la boîte de dialogue « Configuration de l&apos;impression » est de centrer horizontalement le contenu des pages ou non.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="hf-font-italic">
+						<local_schema short_desc="La police par défaut pour les en-têtes et pieds de page est en italique.">
+							<longdesc>Cette valeur indique si la police par défaut pour les en-têtes et pieds de page est en italique.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="hf-font-bold">
+						<local_schema short_desc="La police par défaut pour les en-têtes et pieds de page est grasse.">
+							<longdesc>Cette valeur indique si la police par défaut pour les en-têtes et pieds de page est en gras.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="hf-font-name">
+						<local_schema short_desc="Nom de la police par défaut pour les en-têtes et pieds de page">
+							<longdesc>Le nom de la police par défaut pour les en-têtes et pieds de page.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="hf-font-size">
+						<local_schema short_desc="Taille de police par défaut pour les en-têtes et pieds de page">
+							<longdesc>La taille de la police par défaut pour les en-têtes et pieds de page.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="footer">
+						<local_schema short_desc="Pied de page">
+							<longdesc>Pied de page par défaut des nouveaux documents, qui peut être modifié dans le dialogue de configuration de page.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="header">
+						<local_schema short_desc="En-tête de page">
+							<longdesc>En-tête par défaut des nouveaux documents, qui peut être modifié dans le dialogue de configuration de page.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="gtk-setting">
+						<local_schema short_desc="GTKPrintSetting">
+							<longdesc>La configuration de GTKPrintSetting. Ne modifiez pas cette variable.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="all-sheets">
+						<local_schema short_desc="Appliquer la mise en page à toutes les feuilles">
+							<longdesc>Cette valeur détermine si, par défaut, la configuration de l&apos;impression doit s&apos;appliquer à toutes les feuilles simultanément.</longdesc>
+						</local_schema>
+					</entry>
+				</dir>
+				<dir name="autoformat">
+					<entry name="usr-dir">
+						<local_schema short_desc="Répertoire utilisateur pour les formats automatiques">
+							<longdesc>Répertoire où les modèles de format automatique de l&apos;utilisateur sont stockés.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="sys-dir">
+						<local_schema short_desc="Répertoire système pour le format automatique">
+							<longdesc>Ce répertoire contient les modèles préinstallés de format automatique.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="extra-dirs">
+						<local_schema short_desc="Liste des répertoires supplémentaires de format automatique.">
+							<longdesc>Cette liste indique tous les autres répertoires contenant des modèles de format automatique.</longdesc>
+						</local_schema>
+					</entry>
+				</dir>
+				<dir name="plugins">
+					<entry name="extra-dirs">
+						<local_schema short_desc="Liste des répertoires supplémentaires de greffons.">
+							<longdesc>Cette liste indique tous les autres répertoires contenant des greffons.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="file-states">
+						<local_schema short_desc="Liste des états de fichiers de greffons.">
+							<longdesc>Cette liste indique l&apos;état de tous les fichiers de greffons.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="known">
+						<local_schema short_desc="Liste des greffons connus.">
+							<longdesc>Cette liste indique tous les greffons connus.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="active">
+						<local_schema short_desc="Liste des greffons actifs.">
+							<longdesc>Cette liste indique tous les greffons devant être automatiquement activés.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="activate-new">
+						<local_schema short_desc="Activer les nouveaux greffons">
+							<longdesc>Cette valeur indique si chaque nouveau greffon doit être activé.</longdesc>
+						</local_schema>
+					</entry>
+				</dir>
+				<dir name="autocorrect">
+					<entry name="replace">
+						<local_schema short_desc="Correction automatique du remplacement">
+							<longdesc>Correction automatique du remplacement</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="names-of-days">
+						<local_schema short_desc="Correction automatique des noms de jours">
+							<longdesc>Correction automatique des noms de jours</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="first-letter-list">
+						<local_schema short_desc="Liste des exceptions de première lettre">
+							<longdesc>Le moteur de correction automatique ne corrigera pas les premières lettres des mots de cette liste.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="first-letter">
+						<local_schema short_desc="Correction automatique de la première lettre">
+							<longdesc>Correction automatique de la première lettre</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="init-caps-list">
+						<local_schema short_desc="Liste des exceptions de majuscule initiale">
+							<longdesc>Le moteur de correction automatique ne corrigera pas les majuscules initiales des mots de cette liste.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="init-caps">
+						<local_schema short_desc="Correction automatique des majuscules initiales">
+							<longdesc>Correction automatique des majuscules initiales</longdesc>
+						</local_schema>
+					</entry>
+				</dir>
+				<dir name="functionselector">
+					<entry name="num-of-recent">
+						<local_schema short_desc="Longueur maximum de la liste de fonctions récemment utilisées">
+							<longdesc>Le sélecteur de fonctions conserve une liste des fonctions récemment utilisée. Ceci est sa longueur maximale.</longdesc>
+						</local_schema>
+					</entry>
+					<entry name="recentfunctions">
+						<local_schema short_desc="Liste des fonctions récemment utilisées.">
+							<longdesc>Le sélecteur de fonctions conserve une liste des fonctions récemment utilisée. La voici.</longdesc>
+						</local_schema>
+					</entry>
+				</dir>
+				<dir name="plugin">
+					<dir name="glpk">
+						<entry name="glpsol-path">
+							<local_schema short_desc="Chemin complet du programme glpsol à utiliser">
+								<longdesc>Il s&apos;agit du chemin complet vers le binaire glpsol que le greffon lpsolve doit utiliser.</longdesc>
+							</local_schema>
+						</entry>
+					</dir>
+					<dir name="lpsolve">
+						<entry name="lpsolve-path">
+							<local_schema short_desc="Chemin complet du programme lp_solve à utiliser">
+								<longdesc>Il s&apos;agit du chemin complet vers le binaire lp_solve que le greffon lpsolve doit utiliser.</longdesc>
+							</local_schema>
+						</entry>
+					</dir>
+					<dir name="latex">
+						<entry name="use-utf8">
+							<local_schema short_desc="Utiliser UTF-8 lors des exportations LaTeX">
+								<longdesc>Cette valeur définit si les fichiers LaTeX créés utilisent UTF-8 (unicode) ou ISO-8859-1 (Latin1). Pour utiliser UTF-8, le paquet « ucs LaTeX » doit être installé.</longdesc>
+							</local_schema>
+						</entry>
+					</dir>
+				</dir>
+			</dir>
+		</dir>
+	</dir>
+</gconf>

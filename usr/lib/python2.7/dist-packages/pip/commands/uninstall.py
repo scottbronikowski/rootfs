@@ -1,0 +1,1 @@
+../../../../../share/pyshared/pip/commands/uninstall.py

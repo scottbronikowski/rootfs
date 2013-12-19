@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "std_msgs")
+set(std_msgs_RUN_DEPENDS "langs")
+set(std_msgs_VERSION "0.5.5")
+set(std_msgs_MAINTAINER "Tully Foote <tfoote@willowgarage.com>")
+set(std_msgs_BUILD_DEPENDS "catkin" "genmsg" "langs-dev")

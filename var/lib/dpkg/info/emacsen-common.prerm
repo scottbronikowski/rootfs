@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+if [ \( "$1" = "upgrade" -o "$1" = "remove" \) -a -L /usr/doc/emacsen-common ]
+then
+  rm -f /usr/doc/emacsen-common
+fi
+
+/usr/lib/emacsen-common/emacs-package-remove emacsen-common
+
+rmdir /usr/local/share/emacs/site-lisp 2>/dev/null || true
+rmdir /usr/local/share/emacs 2>/dev/null || true
+
+exit 0

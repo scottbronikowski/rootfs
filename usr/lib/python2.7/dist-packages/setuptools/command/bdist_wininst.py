@@ -1,0 +1,1 @@
+../../../../../share/pyshared/setuptools/command/bdist_wininst.py

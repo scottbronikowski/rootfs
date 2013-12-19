@@ -1,0 +1,1 @@
+../../../../../share/pyshared/setuptools/command/upload_docs.py

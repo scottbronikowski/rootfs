@@ -1,0 +1,43 @@
+FILE(REMOVE_RECURSE
+  "CMakeFiles/roscpp_genpy"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_Logger.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_TestArray.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_TestEmpty.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_TestStringInt.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_TestWithHeader.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_ArrayOfFixedLength.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_ArrayOfVariableLength.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_Constants.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_CustomHeader.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_EmbeddedExternal.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_EmbeddedFixedLength.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_EmbeddedVariableLength.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_FixedLength.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_FixedLengthArrayOfExternal.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_FixedLengthStringArray.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_HeaderNotFirstMember.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_VariableLength.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_VariableLengthArrayOfExternal.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_VariableLengthStringArray.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_WithDuration.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_WithHeader.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_WithMemberNamedHeaderThatIsNotAHeader.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_WithTime.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_LatencyMessage.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_ThroughputMessage.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_ChannelFloat32.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_Point32.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/_PointCloud.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/srv/_Empty.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/srv/_GetLoggers.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/srv/_SetLoggerLevel.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/srv/_BadTestStringString.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/srv/_TestStringString.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/msg/__init__.py"
+  "/root/ros_core_ws/devel/lib/python2.7/dist-packages/roscpp/srv/__init__.py"
+)
+
+# Per-language clean rules from dependency scanning.
+FOREACH(lang)
+  INCLUDE(CMakeFiles/roscpp_genpy.dir/cmake_clean_${lang}.cmake OPTIONAL)
+ENDFOREACH(lang)

@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosmaster")
+set(rosmaster_RUN_DEPENDS "rosgraph")
+set(rosmaster_VERSION "1.9.32")
+set(rosmaster_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosmaster_BUILD_DEPENDS "catkin")

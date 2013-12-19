@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rospack")
+set(rospack_RUN_DEPENDS "boost" "gtest" "python" "python-rosdep")
+set(rospack_VERSION "2.1.12")
+set(rospack_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rospack_BUILD_DEPENDS "boost" "catkin" "gtest" "pkg-config" "python")

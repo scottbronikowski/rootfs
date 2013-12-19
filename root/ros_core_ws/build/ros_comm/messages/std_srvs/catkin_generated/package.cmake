@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "std_srvs")
+set(std_srvs_RUN_DEPENDS "langs")
+set(std_srvs_VERSION "1.9.32")
+set(std_srvs_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(std_srvs_BUILD_DEPENDS "catkin" "genmsg" "langs-dev")

@@ -1,0 +1,41 @@
+FILE(REMOVE_RECURSE
+  "CMakeFiles/roscpp_genlisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/Logger.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/TestArray.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/TestEmpty.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/TestStringInt.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/TestWithHeader.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/ArrayOfFixedLength.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/ArrayOfVariableLength.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/Constants.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/CustomHeader.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/EmbeddedExternal.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/EmbeddedFixedLength.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/EmbeddedVariableLength.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/FixedLength.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/FixedLengthArrayOfExternal.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/FixedLengthStringArray.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/HeaderNotFirstMember.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/VariableLength.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/VariableLengthArrayOfExternal.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/VariableLengthStringArray.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/WithDuration.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/WithHeader.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/WithMemberNamedHeaderThatIsNotAHeader.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/WithTime.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/LatencyMessage.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/ThroughputMessage.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/ChannelFloat32.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/Point32.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/msg/PointCloud.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/srv/Empty.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/srv/GetLoggers.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/srv/SetLoggerLevel.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/srv/BadTestStringString.lisp"
+  "/root/ros_core_ws/devel/share/common-lisp/ros/roscpp/srv/TestStringString.lisp"
+)
+
+# Per-language clean rules from dependency scanning.
+FOREACH(lang)
+  INCLUDE(CMakeFiles/roscpp_genlisp.dir/cmake_clean_${lang}.cmake OPTIONAL)
+ENDFOREACH(lang)

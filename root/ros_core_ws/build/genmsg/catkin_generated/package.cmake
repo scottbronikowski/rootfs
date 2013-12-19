@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "genmsg")
+set(genmsg_RUN_DEPENDS )
+set(genmsg_VERSION "0.4.14")
+set(genmsg_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(genmsg_BUILD_DEPENDS "catkin")

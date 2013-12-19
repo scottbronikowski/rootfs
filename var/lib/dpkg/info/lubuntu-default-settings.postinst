@@ -1,0 +1,34 @@
+#!/bin/sh -e
+
+set -e
+
+# Remove alternative file if it's not a symlink, workaround for broken upgrade
+# See bug #625485
+if [ -f /etc/alternatives/lxdm.conf ] ; then
+  if [ ! -h "/etc/alternatives/lxdm.conf" ] ; then
+    rm -f "/etc/alternatives/lxdm.conf"
+  fi
+fi
+
+if [ "$1" = "configure" ] ; then
+  update-alternatives --install /etc/lxdm/default.conf \
+    lxdm.conf /etc/xdg/lubuntu/lxdm/lxdm.conf 60 
+  update-alternatives --install /etc/lightdm/lightdm-gtk-greeter.conf \
+    lightdm-gtk-greeter-config-derivative \
+    /etc/xdg/lubuntu/lightdm/lightdm-gtk-greeter.conf 30
+fi
+
+case "$1" in
+  configure|upgrade)
+    if [ -x /usr/lib/lightdm/lightdm-set-defaults ] ; then
+      /usr/lib/lightdm/lightdm-set-defaults --keep-old --session=Lubuntu || true
+      /usr/lib/lightdm/lightdm-set-defaults --keep-old --greeter=lightdm-gtk-greeter || true
+    fi
+    ;;
+esac
+
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/xdg/pcmanfm/lubuntu.conf /etc/xdg/pcmanfm/lubuntu/pcmanfm.conf 0.15 -- "$@"
+# End automatically added section
+
+exit 0

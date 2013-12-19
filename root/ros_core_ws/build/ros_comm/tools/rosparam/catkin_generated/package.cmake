@@ -1,0 +1,5 @@
+set(_CATKIN_CURRENT_PACKAGE "rosparam")
+set(rosparam_RUN_DEPENDS "python-yaml")
+set(rosparam_VERSION "1.9.32")
+set(rosparam_MAINTAINER "Dirk Thomas <dthomas@willowgarage.com>")
+set(rosparam_BUILD_DEPENDS "catkin" "rostest")

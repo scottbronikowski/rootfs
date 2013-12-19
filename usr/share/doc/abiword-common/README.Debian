@@ -1,0 +1,47 @@
+abiword for Debian
+------------------
+
+libgoffice dependency
+=====================
+
+In January 2012 in order to package latest abiword 2.9.2
+libgoffice dependency was dropped together with 'goffice' plugin.
+If build --with-goffice, Abiword 2.9.2 depends on unreleased libgoffice-0.10
+
+The implications of building without libgoffice are not clear as the
+package maintainer unable to notice any difference.
+
+
+GNOME dependencies
+==================
+
+The normal abiword and abiword-gnome packages have been merged into
+one abiword package.  The gnomeui and gnomevfs support is
+intentionally disabled in debian/rules to avoid depending on a large
+array of GNOME libraries. 
+
+ -- Masayuki Hatta (mhatta) <mhatta@debian.org>  Sun, 22 Mar 2009 18:42:01 +0900
+
+Smooth scrolling issue
+======================
+
+Debian bug #276070 complains that smooth-scrolling is obnoxious and slow.
+As of 2.6.3-1, it has been disabled by default using a patch. However, if
+you are a previous AbiWord user, your preferences file may have the smooth
+scroll setting set to true in your config file, overriding the default.
+
+To fix this, I quote from the AbiWord ML:
+
+"I think you can turn this feature off with a profile change. Open up
+your AbiWord.Profile file and in the custom scheme section (<Scheme
+name="_custom_") try ading the following line:
+
+EnableSmoothScrolling="0"
+
+Hope that helps :)."
+
+The profile in question is located in $HOME/.AbiSuite.
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Fri, 11 Jul 2008 14:08:34 +0300
+
+

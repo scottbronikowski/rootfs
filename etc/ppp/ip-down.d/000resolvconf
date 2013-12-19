@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# PPP down hook script for resolvconf
+#
+# Reconfigures resolver to take into account
+# the disappearance of the ppp interface.
+#
+# This file is part of the resolvconf package.
+#
+
+[ -x /sbin/resolvconf ] || exit 0
+
+/sbin/resolvconf -d "$PPP_IFACE"
+

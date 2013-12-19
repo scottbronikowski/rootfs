@@ -1,0 +1,1 @@
+../../../../share/pyshared/hgext/win32mbcs.py
