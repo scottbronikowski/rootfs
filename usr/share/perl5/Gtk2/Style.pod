@@ -1,0 +1,1043 @@
+=head1 NAME
+
+Gtk2::Style - wrapper for GtkStyle
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Style
+
+
+
+=cut
+
+=for object Gtk2::Style
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 style = Gtk2::Style-E<gt>B<new> 
+
+=head2 $style-E<gt>B<apply_default_background> ($window, $set_bg, $state_type, $area, $x, $y, $width, $height)
+
+=over
+
+=item * $window (Gtk2::Gdk::Window) 
+
+=item * $set_bg (boolean) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 style = $style-E<gt>B<attach> ($window)
+
+=over
+
+=item * $window (Gtk2::Gdk::Window) 
+
+=back
+
+=head2 boolean = $style-E<gt>B<attached> 
+
+=head2 $style-E<gt>B<set_background> ($window, $state_type)
+
+=over
+
+=item * $window (Gtk2::Gdk::Window) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=back
+
+=head2 color = $style-E<gt>B<base> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 gc = $style-E<gt>B<base_gc> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 color = $style-E<gt>B<bg> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 gc = $style-E<gt>B<bg_gc> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 pixmap = $style-E<gt>B<bg_pixmap> ($state, $pixmap=undef)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=item * $pixmap (Gtk2::Gdk::Pixmap or undef) 
+
+=back
+
+=head2 scalar = $style-E<gt>B<black> 
+
+=head2 scalar = $style-E<gt>B<black_gc> 
+
+=head2 style = $style-E<gt>B<copy> 
+
+=head2 color = $style-E<gt>B<dark> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 gc = $style-E<gt>B<dark_gc> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 $style-E<gt>B<detach> 
+
+=head2 Gtk2-E<gt>B<draw_insertion_cursor> ($widget, $drawable, $area, $location, $is_primary, $direction, $draw_arrow)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $drawable (Gtk2::Gdk::Drawable) 
+
+=item * $area (Gtk2::Gdk::Rectangle) 
+
+=item * $location (Gtk2::Gdk::Rectangle) 
+
+=item * $is_primary (boolean) 
+
+=item * $direction (Gtk2::TextDirection) 
+
+=item * $draw_arrow (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 color = $style-E<gt>B<fg> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 gc = $style-E<gt>B<fg_gc> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 scalar = $style-E<gt>B<font_desc> 
+
+=head2 list = $style->B<get> (widget_package, ...)
+
+=head2 list = $style->B<get_style_property> (widget_package, ...)
+
+=over
+
+=item * $widget_package (string) widget package name (ex: 'Gtk2::TreeView')
+
+=item * ... (list) list of property names
+
+=back
+
+
+Fetch and return the values for the style properties named in I<...> for a
+widget of type I<widget_package>.  I<get_style_property> is an alias for
+I<get>.
+
+B<Note>: The I<get> method shadows I<Glib::Object::get>. This shouldn't be a
+problem since I<Gtk2::Style> defines no properties (as of gtk+ 2.16).  If you
+have a class that's derived from Gtk2::Style and adds a property or if a new
+version of gtk+ adds a property to I<Gtk2::Style>, the property can be accessed
+with I<get_property> which still resolves to I<Glib::Object::get_property>:
+
+	my $value = $style->get_property('property');
+
+
+Since: gtk+ 2.16
+
+=head2 color = $style-E<gt>B<light> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 gc = $style-E<gt>B<light_gc> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 color = $style-E<gt>B<lookup_color> ($color_name)
+
+=over
+
+=item * $color_name (string) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 iconset = $style-E<gt>B<lookup_icon_set> ($stock_id)
+
+=over
+
+=item * $stock_id (string) 
+
+=back
+
+=head2 color = $style-E<gt>B<mid> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 gc = $style-E<gt>B<mid_gc> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 $style-E<gt>B<paint_arrow> ($window, $state_type, $shadow_type, $area, $widget, $detail, $arrow_type, $fill, $x, $y, $width, $height)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $arrow_type (Gtk2::ArrowType) 
+
+=item * $fill (boolean) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_box> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_box_gap> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height, $gap_side, $gap_x, $gap_width)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $gap_side (Gtk2::PositionType) 
+
+=item * $gap_x (integer) 
+
+=item * $gap_width (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_check> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_diamond> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_expander> ($window, $state_type, $area, $widget, $detail, $x, $y, $expander_style)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $expander_style (Gtk2::ExpanderStyle) 
+
+=back
+
+=head2 $style-E<gt>B<paint_extension> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height, $gap_side)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $gap_side (Gtk2::PositionType) 
+
+=back
+
+=head2 $style-E<gt>B<paint_flat_box> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_focus> ($window, $state_type, $area, $widget, $detail, $x, $y, $width, $height)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_handle> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height, $orientation)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $orientation (Gtk2::Orientation) 
+
+=back
+
+=head2 $style-E<gt>B<paint_hline> ($window, $state_type, $area, $widget, $detail, $x1, $x2, $y)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $x1 (integer) 
+
+=item * $x2 (integer) 
+
+=item * $y (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_layout> ($window, $state_type, $use_text, $area, $widget, $detail, $x, $y, $layout)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $use_text (boolean) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $layout (Pango::Layout) 
+
+=back
+
+=head2 $style-E<gt>B<paint_option> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_polygon> ($window, $state_type, $shadow_type, $area, $widget, $detail, $fill, $x1, $y1, ...)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $fill (boolean) 
+
+=item * $x1 (integer) x coordinate of the first vertex
+
+=item * $y1 (integer) y coordinate of the first vertex
+
+=item * ... (list) pairs of x and y coordinates
+
+=back
+
+
+
+=head2 $style-E<gt>B<paint_resize_grip> ($window, $state_type, $area, $widget, $detail, $edge, $x, $y, $width, $height)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $edge (Gtk2::Gdk::WindowEdge) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_shadow> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_shadow_gap> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height, $gap_side, $gap_x, $gap_width)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $gap_side (Gtk2::PositionType) 
+
+=item * $gap_x (integer) 
+
+=item * $gap_width (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_slider> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height, $orientation)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $orientation (Gtk2::Orientation) 
+
+=back
+
+=head2 $style-E<gt>B<paint_tab> ($window, $state_type, $shadow_type, $area, $widget, $detail, $x, $y, $width, $height)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $shadow_type (Gtk2::ShadowType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $detail (string or undef) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $style-E<gt>B<paint_vline> ($window, $state_type, $area, $widget, $detail, $y1_, $y2_, $x)
+
+=over
+
+=item * $window (Gtk2::Gdk::Drawable) 
+
+=item * $state_type (Gtk2::StateType) 
+
+=item * $area (Gtk2::Gdk::Rectangle or undef) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=item * $y1_ (integer) 
+
+=item * $y2_ (integer) 
+
+=item * $x (integer) 
+
+=back
+
+=head2 pixbuf = $style-E<gt>B<render_icon> ($source, $direction, $state, $size, $widget, $detail=undef)
+
+=over
+
+=item * $source (Gtk2::IconSource) 
+
+=item * $direction (Gtk2::TextDirection) 
+
+=item * $state (Gtk2::StateType) 
+
+=item * $size (Gtk2::IconSize) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $detail (string or undef) 
+
+=back
+
+=head2 $style-E<gt>B<get_style_property> ($widget_package, ...)
+
+=over
+
+=item * $widget_package (string) 
+
+=item * ... (list) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 color = $style-E<gt>B<text> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 color = $style-E<gt>B<text_aa> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 gc = $style-E<gt>B<text_aa_gc> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 gc = $style-E<gt>B<text_gc> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 scalar = $style-E<gt>B<white> 
+
+=head2 scalar = $style-E<gt>B<white_gc> 
+
+=head2 scalar = $style-E<gt>B<xthickness> 
+
+=head2 scalar = $style-E<gt>B<ythickness> 
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<realize> (Gtk2::Style)
+
+=item B<unrealize> (Gtk2::Style)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::ArrowType
+
+=over
+
+=item * 'up' / 'GTK_ARROW_UP'
+
+=item * 'down' / 'GTK_ARROW_DOWN'
+
+=item * 'left' / 'GTK_ARROW_LEFT'
+
+=item * 'right' / 'GTK_ARROW_RIGHT'
+
+=item * 'none' / 'GTK_ARROW_NONE'
+
+=back
+
+
+=head2 enum Gtk2::ExpanderStyle
+
+=over
+
+=item * 'collapsed' / 'GTK_EXPANDER_COLLAPSED'
+
+=item * 'semi-collapsed' / 'GTK_EXPANDER_SEMI_COLLAPSED'
+
+=item * 'semi-expanded' / 'GTK_EXPANDER_SEMI_EXPANDED'
+
+=item * 'expanded' / 'GTK_EXPANDER_EXPANDED'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::WindowEdge
+
+=over
+
+=item * 'north-west' / 'GDK_WINDOW_EDGE_NORTH_WEST'
+
+=item * 'north' / 'GDK_WINDOW_EDGE_NORTH'
+
+=item * 'north-east' / 'GDK_WINDOW_EDGE_NORTH_EAST'
+
+=item * 'west' / 'GDK_WINDOW_EDGE_WEST'
+
+=item * 'east' / 'GDK_WINDOW_EDGE_EAST'
+
+=item * 'south-west' / 'GDK_WINDOW_EDGE_SOUTH_WEST'
+
+=item * 'south' / 'GDK_WINDOW_EDGE_SOUTH'
+
+=item * 'south-east' / 'GDK_WINDOW_EDGE_SOUTH_EAST'
+
+=back
+
+
+=head2 enum Gtk2::IconSize
+
+=over
+
+=item * 'invalid' / 'GTK_ICON_SIZE_INVALID'
+
+=item * 'menu' / 'GTK_ICON_SIZE_MENU'
+
+=item * 'small-toolbar' / 'GTK_ICON_SIZE_SMALL_TOOLBAR'
+
+=item * 'large-toolbar' / 'GTK_ICON_SIZE_LARGE_TOOLBAR'
+
+=item * 'button' / 'GTK_ICON_SIZE_BUTTON'
+
+=item * 'dnd' / 'GTK_ICON_SIZE_DND'
+
+=item * 'dialog' / 'GTK_ICON_SIZE_DIALOG'
+
+=back
+
+
+=head2 enum Gtk2::Orientation
+
+=over
+
+=item * 'horizontal' / 'GTK_ORIENTATION_HORIZONTAL'
+
+=item * 'vertical' / 'GTK_ORIENTATION_VERTICAL'
+
+=back
+
+
+=head2 enum Gtk2::PositionType
+
+=over
+
+=item * 'left' / 'GTK_POS_LEFT'
+
+=item * 'right' / 'GTK_POS_RIGHT'
+
+=item * 'top' / 'GTK_POS_TOP'
+
+=item * 'bottom' / 'GTK_POS_BOTTOM'
+
+=back
+
+
+=head2 enum Gtk2::ShadowType
+
+=over
+
+=item * 'none' / 'GTK_SHADOW_NONE'
+
+=item * 'in' / 'GTK_SHADOW_IN'
+
+=item * 'out' / 'GTK_SHADOW_OUT'
+
+=item * 'etched-in' / 'GTK_SHADOW_ETCHED_IN'
+
+=item * 'etched-out' / 'GTK_SHADOW_ETCHED_OUT'
+
+=back
+
+
+=head2 enum Gtk2::StateType
+
+=over
+
+=item * 'normal' / 'GTK_STATE_NORMAL'
+
+=item * 'active' / 'GTK_STATE_ACTIVE'
+
+=item * 'prelight' / 'GTK_STATE_PRELIGHT'
+
+=item * 'selected' / 'GTK_STATE_SELECTED'
+
+=item * 'insensitive' / 'GTK_STATE_INSENSITIVE'
+
+=back
+
+
+=head2 enum Gtk2::TextDirection
+
+=over
+
+=item * 'none' / 'GTK_TEXT_DIR_NONE'
+
+=item * 'ltr' / 'GTK_TEXT_DIR_LTR'
+
+=item * 'rtl' / 'GTK_TEXT_DIR_RTL'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

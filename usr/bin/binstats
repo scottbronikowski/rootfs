@@ -1,0 +1,741 @@
+#!/bin/bash
+# -*- sh -*-
+
+# binstats - a Linux utility to find the number and identity of i386 a.out
+#   1.08     ELF and ECOFF binaries, plus their debugging symbols status,
+#            setuid status and dynamic library dependence. The number of shell,
+#            awk, perl, python & tcl scripts are counted. Also it looks for
+#            any duplicated executable name, unused libraries, binaries with
+#            missing libraries and statically linked binaries. Finally it
+#            counts man pages and looks for duplicated names.
+
+# version number of binstats
+BSVER="1.08"
+
+# Make sure 1) the PATH, EXEDIR, DLIBDIR & MANDIR variables are correct.
+#              If you want to use the current PATH for the executables search
+#              then set USEPATH to 1. If you want to use /etc/ld.so.conf for
+#              dynamic library search then set USELDSOCONF to 1.
+#              Alternatively you can set these via the command line.
+#           2) there is enough room in TMPDIR (<300k);
+#           3) that the C program 'derefsymlink' has been built and
+#              installed in /usr/local/bin (or where PATH points to)
+#              if USECDS is set to 1.
+
+# Then run it (if you are not root then any executable without world
+# readable status [especially setuid binaries] will register in the
+# tallies or log as "can't read setuid"). After a while, a summary will
+# appear on screen and a log of more information is recorded in BSLOG
+# (bstats.log).
+
+# Copyright (c) 1996, 1997, 1999 & 2000 by (Peter.Chang@nottingham.ac.uk)
+#   Inspired by "execount" <ftp://metalab.unc.edu/pub/Linux/utils/scripts/>
+#            written by Murple (murple@clark.net)
+
+# Version History:
+#   0.5  - Created on 1996/7/19
+#   0.7  - Modified output format on 1996/7/23
+#   0.9  - Added unused dynamic library hunt, logging to file
+#          and duplicate executable search on 1996/7/25
+#   0.91 - TMPDIR introduced and added search for binaries
+#          with missing libraries on 1996/7/26
+#   0.92 - Derefenced symbolic links that ldd (1.7.14) gives
+#          which confused the list of unused libraries on 1996/8/9
+#   0.93 - Put in un-stripped binaries counting (relies on ELF patch to
+#          file), make sure we only count executables and include NMAGIC
+#          type on 1996/8/12
+#   0.94 - Improved the symbolic link dereferencing to cope with some
+#          types of relative links on 1996/8/20
+#   0.95 - Wrote a C program to do dereferencing, added setuid counting
+#          and beautified output on 1996/8/23
+#   0.96 - (Thanks to Preston.F.Crow@Dartmouth.EDU for his feedback and
+#          suggestions.) Stopped "find" recursing down directories in
+#          EXEDIR, fixed ldd inconsistency, added support for using PATH
+#          and script counting on 1996/9/3
+#   0.97 - Added automatic dynamic library directories detection using the
+#          contents of /etc/ld.so.conf on 1996/9/9
+#   0.98 - Tightened search for dynamic libraries, used derefsymlink for
+#          libraries, checked for derefsymlink and
+#          generalized grep for [sS]hell on 1997/3/28
+#   0.99 - Added Java bytecode detection (need magic support) on 1997/3/29
+#   1.00 - Added command line interface on 1997/4/1
+#   1.01 - Fixed for new version of ldd (1.9.1+), courtesy of
+#          Markus Rex <msrex@comopc.informatik.uni-erlangen.de>,
+#          on 1997/9/23
+#   1.02 - (Thanks to Matej Vela <vela@debian.org> for passing on the
+#          following fixes.) Fixed shared library filename patterns (from
+#          Laurent Bonnaud <Laurent.Bonnaud@inpg.fr>), added use of
+#          environment variable TMPDIR and added -follow to find binaries
+#          that are symlinked on 1999/11/11
+#   1.03 - Removed shell function deref_symlink and fullpath. Added
+#          OMAGIC, ECOFF support and man page checking (the latter
+#          item was suggested in a Debian bug report by Adam P. Harris
+#          <apharris@burrito.onshore.com>) on 1999/11/12
+#   1.04 - The man page code didn't cope with the double colons in many
+#          perl man pages. It is now fixed thanks to Matej Vela
+#          on 1999/11/15
+#   1.05 - Included count of awk scripts as noticed by Arnaud
+#          Launay <alaunay@free.fr> on 1999/11/30
+#   1.06 - Included fixes and counts of python and tcl scripts from Osamu Aoki
+#          <aoki@aokiconsulting.com>, generalized some matches and tweaked
+#          on 2000/6/13
+#   1.07 - Yet another attempt to fix the vagaries of shell and subshell
+#          expansions on 2000/6/14
+#   1.08 - Included some more fixes to the scripts counting as pointed out by
+#          Osamu Aoki <aoki@aokiconsulting.com>, added some more directories
+#          to defaults and made binstat immune to "symlinks in tmp" attacks
+#          from patches by Matej Vela <vela@debian.org> on 2001/1/16
+
+# save old path
+OLDPATH=$PATH
+
+#---------Customise the variables below or use the command line----------
+
+# to use your PATH for a list of binary directories instead of setting
+# EXEDIR separately, set to 1 [beware of having . in your PATH if you only
+# want to see "official" binaries.]
+# otherwise set to 0 and edit EXEDIR
+USEPATH=1
+# the list of directories where your executables reside (change to suit
+# your system or ignore if USEPATH=1)
+EXEDIR="/bin /usr/bin /usr/local/bin /sbin /usr/sbin /usr/local/sbin /usr/X11R6/bin /usr/games"
+
+USEMANPATH=1
+# the list of directories where your man pages reside
+MANDIR="/usr/man /usr/share/man /usr/X11R6/man /usr/local/man"
+
+# to use /etc/ld.so.conf to fill in DLIBDIR, set to 1
+USELDSOCONF=1
+# otherwise set to 0 and edit DLIBDIR
+# the list of dynamic library directories (change to suit your system
+# or ignore if USELDSOCONF=1)
+DLIBDIR="/lib /usr/lib /usr/local/lib /usr/X11R6/lib"
+
+# the path needed by binstats
+
+# for echo, sed, tr, cat, xargs, cut, dirname, find, sort, awk, uniq, grep,
+#     file, ldd, col, diff, wc, uname, date, col & derefsymlink (assumed to be
+#     in /usr/local/bin)
+PATH=/bin:/usr/bin:/usr/local/bin
+
+#---------nothing further to edit below (unless you're hacking)----------
+
+# name of log file
+BSLOG=bstats.log
+
+# temporary storage directory, use environment variable if defined
+TMPDIR=${TMPDIR-/tmp}
+
+# ldd has at least one bug (in 1.7.14) and one inconsistency (or feature) which
+# have to be worked around, see comments in code below for more details
+LDDBA=0 # garbage output
+LDDBB=0 # executable name missing for single name
+# when these are fixed or changed then the following variables to 1
+
+# debugging option, set to 1 to retain files
+DEBUG=0
+# another debugging option, set to 0 to reuse old temp files
+FILEOPS=1
+# Debian checks? Set to 1 to skip Debian-specific checks
+NODEBIAN=0
+
+#----------process command line arguments---------------
+CLI_USAGE=\
+"Usage: ./binstats  [-b[inaries]=\"/bin /usr/bin\"] [-d[ebug]]
+                   [-f[ile]=bstats.log] [-h[elp]]
+                   [-l[ibraries]=\"/lib /usr/lib\"]
+		   [-m[anuals]=\"/usr/man /usr/local/man\"]
+		   [-p[ath]=\"/bin:/usr/bin:/usr/local/bin\"]
+                   [-t[emp]=/tmp] [-s[kip-debian] [-v[ersion]]"
+
+for CLI_OPT
+do
+ case "$CLI_OPT" in
+  -*=*) CLI_ARG=`echo "$CLI_OPT" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  *) CLI_ARG= ;;
+ esac
+
+ case "$CLI_OPT" in
+  -b*=*) USEPATH=0
+         EXEDIR="$CLI_ARG" ;;
+  -d*) DEBUG=1 ;;
+  -f*=*) BSLOG="$CLI_ARG" ;;
+  -h*) echo "$CLI_USAGE"
+     exit 0 ;;
+  -l*=*) USELDSOCONF=0
+         DLIBDIR="$CLI_ARG" ;;
+  -m*=*) MANDIR="$CLI_ARG" ;;
+  -m*=*) USEMANPATH=0
+         MANDIR="$CLI_ARG" ;;
+  -p*=*) PATH="$CLI_ARG" ;;
+  -t*=*) TMPDIR="$CLI_ARG" ;;
+  -s*=*) NODEBIAN=1 ;;
+  -v*) echo "binstats-$BSVER"
+       exit 0 ;;
+  *) echo "$CLI_USAGE"
+     exit 1 ;;
+  esac
+done
+
+#----------define variables and functions---------------
+if [ $USEPATH -eq 1 ]; then
+# use old PATH (not sure if the substitution is needed)
+ EXEDIR=`echo $OLDPATH | tr : ' ' | sed s:\~:$HOME:g`
+fi
+
+if [ $USEMANPATH -eq 1 -a -n "ype -p manpath" ];then
+ MANDIR=`manpath | tr : ' '`
+fi
+
+if [ $USELDSOCONF -eq 1 ]; then
+# use /etc/ld.so.conf plus the two "trusted" locations
+ LDSOCONF=`cat /etc/ld.so.conf | grep -v '^#' | xargs echo`
+ DLIBDIR="/lib /usr/lib $LDSOCONF"
+fi
+
+# ID number
+PIDNO=$$
+
+# name of temp log
+BSLOGTMP=$BSLOG.$PIDNO
+# Create the files we are going to use
+# backup old log file
+if [ -f $BSLOG ]; then mv -f $BSLOG $BSLOG~; fi
+{ umask 066; touch $BSLOG; [ -e $BSLOGTMP ] && rm -f $BSLOGTMP; touch $BSLOGTMP ; } 
+
+if [ $DEBUG -gt 0 ]; then
+ BINSDIR=.
+ PIDNO=00
+else
+ BINSDIR=`mktemp -t -d binstats.XXXXXX` || { echo "$0: Cannot create temporary directory!" >&2; exit 1; }
+fi
+# tidy up
+if [ $DEBUG -eq 0 ]; then
+   trap " [ -d \"$BINSDIR\" ] && /bin/rm -rf -- \"$BINSDIR\"" 0 1 2 3 13 15
+fi
+
+# list of executables
+EXELIST=$BINSDIR/exelist.$PIDNO
+# list of dynamic libraries
+DLIBLIST=$BINSDIR/dliblist.$PIDNO
+# list of man pages
+MANLIST=$BINSDIR/manlist.$PIDNO
+# executable types
+EXEFILE=$BINSDIR/exefile.$PIDNO
+# list of dependent (used) libraries
+EXELIB=$BINSDIR/exelib.$PIDNO
+# list of unused libraries
+DLIBUN=$BINSDIR/dlibun.$PIDNO
+# list of unused libraries with packages
+DLIBUNP=$BINSDIR/dlibunp.$PIDNO
+
+# Unused library packages
+LIBPUN=$BINSDIR/libpun.$PIDNO
+# Package list
+PACKLIST=$BINSDIR/packlist.$PIDNO
+
+# temporary storage
+DTEMPA=$BINSDIR/dtempa.$PIDNO # all dynamic libs in $DLIBDIR
+DTEMPB=$BINSDIR/dtempb.$PIDNO # missing dynamic libs in $EXELIB
+DTEMPC=$BINSDIR/dtempc.$PIDNO # dereferenced list of $DTEMPA
+
+ETEMPA=$BINSDIR/etempa.$PIDNO # all files in $EXEDIR
+ETEMPB=$BINSDIR/etempb.$PIDNO # output of ldd on files in $EXEFILE
+ETEMPC=$BINSDIR/etempc.$PIDNO # statically linked binaries in $ETEMPB
+ETEMPD=$BINSDIR/etempd.$PIDNO # duplicate executable names in $ETEMPA
+ETEMPE=$BINSDIR/etempe.$PIDNO # 'not stripped' binaries in $EXEFILE
+ETEMPF=$BINSDIR/etempf.$PIDNO # setuid binaries in $EXEFILE
+
+MTEMPA=$BINSDIR/mtempa.$PIDNO # all files in $MANDIR
+MTEMPB=$BINSDIR/mtempb.$PIDNO # duplicate executable names in $MTEMPA
+
+# A wrapper around readlink(1).
+derefsymlink()
+{
+ while [ $# -gt 0 ]; do
+  if [ "$1" = -f ]; then
+   shift
+   while read f; do
+    readlink -f "$f" || echo "$f"
+   done < "$1"
+  elif [ "$1" = -s ]; then
+   while read f; do
+    readlink -f "$f" || echo "$f"
+   done
+  else
+   readlink -f "$1" || echo "$1"
+  fi
+  shift
+ done
+}
+
+isdebian()
+{
+  if [ -e /etc/debian_version ] && [ "$NODEBIAN" -eq 0 ] ; then
+  	return 0
+  else
+  	return 1
+  fi
+}
+
+#----------begin program---------------
+if [ $FILEOPS -gt 0 ]; then
+
+echo "Look in $EXEDIR for executables"
+find $EXEDIR -perm +111 -maxdepth 1 -type f -follow -print 2>/dev/null| \
+ derefsymlink -s | sort | uniq | \
+ awk -F '/' '{ printf "%s:%s\n", $NF, $0 }' > $ETEMPA
+
+echo "Find duplicated executable names"
+# use an awk script instead of whereis later (as suggested by Preston Crow)
+#  R=repetition, N=name, P=path
+sort -t ':' $ETEMPA | awk -F ':' \
+'BEGIN { R=0;N="";P="" }
+{
+ if ($1==N) { printf("%s ",P); R=1 } 
+ else { if (R==1) { printf("%s\n",P); R=0 } }; 
+ N=$1; P=$2
+}
+END { if (R==1) {printf("%s\n",P)} }' \
+  > $ETEMPD
+
+echo "Sort out list by alphabetical order"
+sort -t ':' $ETEMPA | cut -d ':' -f 2- > $EXELIST
+
+echo "Find executable type (this will take a long time)"
+cat $EXELIST | xargs file > $EXEFILE
+
+echo "Look for dynamic library dependence (this will take an even longer time)"
+# hmm, ldd (1.7.14) seems to output some unprintable character when it
+# encounters a static a.out image
+# And ldd (1.9.2) prints some hex numbers after library name in parentheses
+if [ $LDDBA -eq 0 ]; then
+  grep 'executable' $EXEFILE | cut -d ':' -f 1 | \
+    xargs ldd 2>/dev/null | col -b | cut -d '(' -f 1 >& $ETEMPB
+else
+  grep 'executable' $EXEFILE | cut -d ':' -f 1 | \
+    xargs ldd 2>/dev/null | awk cut -d '(' -f 1 >& $ETEMPB
+fi
+
+echo "List the used dynamic libraries"
+grep 'lib[^:]*\.so' $ETEMPB | sort -b | uniq -c > $EXELIB
+grep 'statically linked' $EXEFILE > $ETEMPC
+
+echo "Hunt down binaries that depend on missing libraries"
+awk \
+'/^\// { CURPROG = $0; NEW = 1 }
+/not found/ { if (NEW == 1) print CURPROG; NEW = 0 }' \
+ $ETEMPB > $DTEMPB
+
+echo "Look in $DLIBDIR for dynamic libraries"
+ find $DLIBDIR -maxdepth 1 -type f -name 'lib*.so*' | \
+  derefsymlink -s | sort | uniq > $DLIBLIST
+
+echo "Search for unused dynamic libraries"
+grep -v 'not found' $EXELIB | cut -d '/' -f 2- | cut -d ' ' -f 1 | \
+     sort | uniq | sed 's,^,/,g' > $DTEMPA
+
+derefsymlink -f $DTEMPA | sort | uniq > $DTEMPC
+
+diff -du $DLIBLIST $DTEMPC | grep '^-/' | cut -b 2- > $DLIBUN
+
+# If this is a Debian system, add the packages in too
+if isdebian ; then
+	echo "Search for packages holding unused dynamic libraries"
+	>$PACKLIST
+	>$DLIBUNP
+	cat $DLIBUN |
+	while read file; do
+		package=`dpkg -S $file 2>/dev/null | cut -f 1 -d :`
+		if [ -n "$package" ] ; then
+			echo $package >>$PACKLIST
+			echo "$file ($package)" >>$DLIBUNP
+		else
+			echo "$file" >>$DLIBUNP
+		fi
+	done
+	echo "Reviewing packages holding unused dynamic libraries"
+	cat $PACKLIST | sort -u |
+	while read package ; do
+	# TODO, could be done on packages that begin with 'lib'
+		unused=1
+		for library in `dpkg -L $package |grep lib/`; do
+			if [ -z "`grep ^$library\$ $DLIBUN`" ] ; then
+				unused=0
+				break
+			fi
+		done
+		if [ $unused -eq 1 ] ; then
+			echo "$package" >>$LIBPUN
+		fi
+	done
+fi
+
+
+echo "Find un-stripped binaries"
+grep 'not stripped' $EXEFILE | sort > $ETEMPE
+
+echo "Find setuid binaries"
+grep 'setuid' $EXEFILE | sort > $ETEMPF
+
+fi
+
+echo "Look in $MANDIR for man pages"
+find $MANDIR -maxdepth 2 -type f -follow -name '*.*' -print | \
+ derefsymlink -s | sort | uniq | \
+ awk -F '/' '{ printf "%s;%s\n", $NF, $0 }' > $MTEMPA
+
+echo "Find duplicated man page names"
+sort -t ';' $MTEMPA | awk -F ';' \
+'BEGIN { R=0;N="";P="" }
+{
+ if ($1==N) { printf("%s ",P); R=1 } 
+ else { if (R==1) { printf("%s\n",P); R=0 } }; 
+ N=$1; P=$2
+}
+END { if (R==1) {printf("%s\n",P)} }' \
+  > $MTEMPB
+
+
+# finish messing around with files and lists of files
+# now work out some numbers
+echo "Gather statistics"
+AOUTC=`grep 'Linux/i386.*executable' $EXEFILE | wc -l`
+OMAGIC=`grep 'OMAGIC' $EXEFILE | wc -l`
+NMAGIC=`grep 'NMAGIC' $EXEFILE | wc -l`
+QMAGIC=`grep 'QMAGIC' $EXEFILE | wc -l`
+ZMAGIC=`grep 'ZMAGIC' $EXEFILE | wc -l`
+ELFC=`grep 'ELF.*executable' $EXEFILE | wc -l`
+ECOFFC=`grep 'ECOFF.*executable' $EXEFILE | wc -l`
+JAVAC=`grep 'Java bytecode' $EXEFILE | wc -l`
+LIBC=`cat $EXELIB | wc -l`
+UNLIBC=`cat $DLIBUN | wc -l`
+LIBPUNC=`cat $LIBPUN | wc -l`
+DLLIBC=`grep 'DLL' $EXELIB | wc -l`
+SELFC=`grep 'ELF' $ETEMPC | wc -l`
+SECOFFC=`grep 'ECOFF' $ETEMPC | wc -l`
+#SAOUTC=`grep -v 'ELF' $ETEMPC | wc -l`
+SAOUTC=`grep 'Linux/i386' $ETEMPC | wc -l`
+DUPC=`cat $ETEMPD | wc -l`
+MISSC=`cat $DTEMPB | wc -l`
+ELFUNSTR=`grep 'ELF.*executable' $ETEMPE | wc -l`
+ECOFFUNSTR=`grep 'ECOFF.*executable' $ETEMPE | wc -l`
+AOUTUNSTR=`grep 'Linux/i386.*executable' $ETEMPE | wc -l`
+ELFSETUID=`grep 'ELF.*executable' $ETEMPF | wc -l`
+ECOFFSETUID=`grep 'ECOFF.*executable' $ETEMPF | wc -l`
+AOUTSETUID=`grep 'Linux/i386.*executable' $ETEMPF | wc -l`
+UNSETUID=`grep "can\'t" $ETEMPF | wc -l`
+TEXTC=`grep ':.* text' $EXEFILE | wc -l`
+ALLSCRIPTC=`grep -e ':.* script' -e ':.* commands' $EXEFILE | wc -l`
+SHC=`grep 'Bourne [sS]hell' $EXEFILE | wc -l`
+BASHC=`grep 'Bourne-Again' $EXEFILE | wc -l`
+CSHC=`grep '[^x] C [sS]hell' $EXEFILE | wc -l`
+TCSHC=`grep 'Tenex C' $EXEFILE | wc -l`
+AWKC=`grep ':.*awk' $EXEFILE | wc -l`
+PERLC=`grep ':.*perl' $EXEFILE | wc -l`
+PYTHONC=`grep ':.*python' $EXEFILE | wc -l`
+TCLC=`grep -e ':.*tcl' -e ':.*wish ' $EXEFILE | wc -l`
+OTHERC=$[($ALLSCRIPTC)-($SHC+$BASHC+$CSHC+$TCSHC+$AWKC+$PERLC+$PYTHONC+$TCLC)]
+UNIDTC=$[($TEXTC-($ALLSCRIPTC))]
+
+MANC=`cat $MTEMPA | wc -l`
+MANDUPC=`cat $MTEMPB | wc -l`
+
+MACHNAME=`uname -n`
+DATESTAMP=`date +'%Y/%m/%d %T %Z'`
+
+#----------log all info---------------
+echo "binstats-$BSVER output from $MACHNAME on $DATESTAMP" > $BSLOGTMP
+echo "" >> $BSLOGTMP
+echo "Binaries:                     $[($AOUTC+$ELFC+$ECOFFC)]" >> $BSLOGTMP
+echo "   OMAGIC Demand Paged:   $OMAGIC" >> $BSLOGTMP
+echo "   NMAGIC Demand Paged:   $NMAGIC" >> $BSLOGTMP
+echo "   QMAGIC Demand Paged:   $QMAGIC" >> $BSLOGTMP
+echo "   ZMAGIC Demand Paged:   $ZMAGIC" >> $BSLOGTMP
+echo "     statically linked:   $SAOUTC" >> $BSLOGTMP
+echo "          not stripped:   $AOUTUNSTR" >> $BSLOGTMP
+echo "                setuid:   $AOUTSETUID" >> $BSLOGTMP
+echo "   ELF:                   $ELFC" >> $BSLOGTMP
+echo "     statically linked:   $SELFC" >> $BSLOGTMP
+echo "          not stripped:   $ELFUNSTR" >> $BSLOGTMP
+echo "                setuid:   $ELFSETUID" >> $BSLOGTMP
+echo "   ECOFF:                 $ECOFFC" >> $BSLOGTMP
+echo "     statically linked:   $SECOFFC" >> $BSLOGTMP
+echo "          not stripped:   $ECOFFUNSTR" >> $BSLOGTMP
+echo "                setuid:   $ECOFFSETUID" >> $BSLOGTMP
+echo "   Java:                  $JAVAC" >> $BSLOGTMP
+if [ $UNSETUID -gt 0 ]; then
+ echo "   Can't read setuid:     $UNSETUID" >> $BSLOGTMP
+fi
+echo "   Duplicate names:       $DUPC" >> $BSLOGTMP
+echo "   Missing libraries:     $MISSC" >> $BSLOGTMP
+echo "Text:                     $TEXTC" >> $BSLOGTMP
+echo "   Bourne shell:          $SHC" >> $BSLOGTMP
+echo "   Bourne-Again shell:    $BASHC" >> $BSLOGTMP
+echo "   C shell:               $CSHC" >> $BSLOGTMP
+echo "   Tenex C shell:         $TCSHC" >> $BSLOGTMP
+echo "   Awk:                   $AWKC" >> $BSLOGTMP
+echo "   Perl:                  $PERLC" >> $BSLOGTMP
+echo "   Python:                $PYTHONC" >> $BSLOGTMP
+echo "   Tcl:                   $TCLC" >> $BSLOGTMP
+if [ $OTHERC -gt 9 ]; then
+ echo "   Other interpreted:          $OTHERC" >> $BSLOGTMP
+else
+ echo "   Other interpreted:           $OTHERC" >> $BSLOGTMP
+fi
+if [ $UNIDTC -gt 9 ]; then
+ echo "   Unidentified:               $UNIDTC" >> $BSLOGTMP
+else
+ echo "   Unidentified:                $UNIDTC" >> $BSLOGTMP
+fi
+echo "Used libraries:           $LIBC" >> $BSLOGTMP
+echo "   DLL:                   $DLLIBC" >> $BSLOGTMP
+echo "Unused libs:              $UNLIBC" >> $BSLOGTMP
+if isdebian ; then
+echo "Packages with unused libs:      $LIBPUNC" >> $BSLOGTMP
+fi
+echo "Man pages:                $MANC" >> $BSLOGTMP
+echo "   Duplicate names:       $MANDUPC" >> $BSLOGTMP
+
+DOTLINE=0
+echo "==============================================================" >> $BSLOGTMP
+if [ $OMAGIC -gt 0 ]; then
+ DOTLINE=1
+ echo "OMAGIC binaries:" >> $BSLOGTMP
+ grep 'OMAGIC' $EXEFILE | cut -d ':' -f 1 | sort >> $BSLOGTMP
+fi
+if [ $NMAGIC -gt 0 ]; then
+ if [ $DOTLINE -gt 0 ]; then
+  echo "--------------------------------------------------------------" >> $BSLOGTMP
+ fi
+ DOTLINE=1
+ echo "NMAGIC binaries:" >> $BSLOGTMP
+ grep 'NMAGIC' $EXEFILE | cut -d ':' -f 1 | sort >> $BSLOGTMP
+fi
+if [ $QMAGIC -gt 0 ]; then
+ if [ $DOTLINE -gt 0 ]; then
+  echo "--------------------------------------------------------------" >> $BSLOGTMP
+ fi
+ DOTLINE=1
+ echo "QMAGIC binaries:" >> $BSLOGTMP
+ grep 'QMAGIC' $EXEFILE | cut -d ':' -f 1 | sort >> $BSLOGTMP
+fi
+if [ $ZMAGIC -gt 0 ]; then
+ if [ $DOTLINE -gt 0 ]; then
+  echo "--------------------------------------------------------------" >> $BSLOGTMP
+ fi
+ DOTLINE=1
+ echo "ZMAGIC binaries:" >> $BSLOGTMP
+ grep 'ZMAGIC' $EXEFILE | cut -d ':' -f 1 | sort >> $BSLOGTMP
+fi
+if [ $SAOUTC -gt 0 ]; then
+ if [ $DOTLINE -gt 0 ]; then
+  echo "--------------------------------------------------------------" >> $BSLOGTMP
+ fi
+ DOTLINE=1
+ echo "statically linked (a.out):" >> $BSLOGTMP
+ grep -B 1 'statically linked$'  $ETEMPB | \
+   grep '^/' | cut -d ':' -f 1 >> $BSLOGTMP
+fi
+if [ $AOUTUNSTR -gt 0 ]; then
+ if [ $DOTLINE -gt 0 ]; then
+  echo "--------------------------------------------------------------" >> $BSLOGTMP
+ fi
+ DOTLINE=1
+ echo "not stripped (a.out):" >> $BSLOGTMP
+ grep 'Linux/i386.*executable' $ETEMPE | cut -d ':' -f 1 >> $BSLOGTMP
+fi
+if [ $AOUTSETUID -gt 0 ]; then
+ if [ $DOTLINE -gt 0 ]; then
+  echo "--------------------------------------------------------------" >> $BSLOGTMP
+ fi
+ DOTLINE=1
+ echo "setuid (a.out):" >> $BSLOGTMP
+ grep 'Linux/i386.*executable' $ETEMPF | cut -d ':' -f 1 >> $BSLOGTMP
+fi
+if [ $DOTLINE -gt 0 ]; then
+ echo "==============================================================" >> $BSLOGTMP
+fi
+DOTLINE=0
+if [ $SELFC -gt 0 ]; then
+ echo "statically linked (ELF):" >> $BSLOGTMP
+ grep 'ELF' $ETEMPC | cut -d ':' -f 1 >> $BSLOGTMP
+    DOTLINE=1
+fi
+if [ $ELFUNSTR -gt 0 ]; then
+ if [ $DOTLINE -gt 0 ]; then
+  echo "--------------------------------------------------------------" >> $BSLOGTMP
+ fi
+ DOTLINE=1
+ echo "not stripped (ELF):" >> $BSLOGTMP
+ grep 'ELF.*executable' $ETEMPE | cut -d ':' -f 1 >> $BSLOGTMP
+fi
+if [ $ELFSETUID -gt 0 ]; then
+ if [ $DOTLINE -gt 0 ]; then
+  echo "--------------------------------------------------------------" >> $BSLOGTMP
+ fi
+ DOTLINE=1
+ echo "setuid (ELF):" >> $BSLOGTMP
+ grep 'ELF.*executable' $ETEMPF | cut -d ':' -f 1 >> $BSLOGTMP
+fi
+if [ $DOTLINE -gt 0 ]; then
+ echo "==============================================================" >> $BSLOGTMP
+fi
+DOTLINE=0
+if [ $SECOFFC -gt 0 ]; then
+ echo "statically linked (ECOFF):" >> $BSLOGTMP
+ grep -B 1 'statically linked (ECOFF)' $ETEMPB | grep '^/' | \
+     cut -d ':' -f 1 >> $BSLOGTMP
+    DOTLINE=1
+fi
+if [ $ECOFFUNSTR -gt 0 ]; then
+ if [ $DOTLINE -gt 0 ]; then
+  echo "--------------------------------------------------------------" >> $BSLOGTMP
+ fi
+ DOTLINE=1
+ echo "not stripped (ECOFF):" >> $BSLOGTMP
+ grep 'ECOFF.*executable' $ETEMPE | cut -d ':' -f 1 >> $BSLOGTMP
+fi
+if [ $ECOFFSETUID -gt 0 ]; then
+ if [ $DOTLINE -gt 0 ]; then
+  echo "--------------------------------------------------------------" >> $BSLOGTMP
+ fi
+ DOTLINE=1
+ echo "setuid (ECOFF):" >> $BSLOGTMP
+ grep 'ECOFF.*executable' $ETEMPF | cut -d ':' -f 1 >> $BSLOGTMP
+fi
+if [ $DOTLINE -gt 0 ]; then
+  echo "==============================================================" >> $BSLOGTMP
+fi
+if [ $UNSETUID -gt 0 ]; then
+ echo "can't read setuid:" >> $BSLOGTMP
+ grep "can\'t" $ETEMPF | cut -d ':' -f 1 >> $BSLOGTMP
+ echo "==============================================================" >> $BSLOGTMP
+fi
+if [ $DUPC -gt 0 ]; then
+ echo "duplicated executable names:" >> $BSLOGTMP
+ cat $ETEMPD >> $BSLOGTMP
+ echo "==============================================================" >> $BSLOGTMP
+fi
+if [ $MISSC -gt 0 ]; then
+ echo "binaries with missing libraries:" >> $BSLOGTMP
+# work around ldd inconsistency (1.7.14)
+ if [ $LDDBB -eq 0 ]; then
+  if [ $MISSC -eq 1 ]; then
+   cat $DTEMPB >> $BSLOGTMP
+  fi
+ fi
+ cut -d ':' -f 1 $DTEMPB | xargs ldd | cut -d '(' -f 1 >> $BSLOGTMP
+ echo "==============================================================" >> $BSLOGTMP
+fi
+if [ $OTHERC -gt 0 ]; then
+ echo "other interpreted files:" >> $BSLOGTMP
+ grep -e ':.* script' -e ':.* commands' $EXEFILE | \
+ grep -v 'Bourne [sS]hell' | \
+ grep -v 'Bourne-Again' | \
+ grep -v '[^x] C [sS]hell' | \
+ grep -v 'Tenex C' | \
+ grep -v ':.*awk' | \
+ grep -v ':.*perl' | \
+ grep -v ':.*python'  | \
+ grep -v -e ':.*tcl' -e ':.*wish ' >> $BSLOGTMP
+ echo "==============================================================" >> $BSLOGTMP
+fi
+if [ $UNIDTC -gt 0 ]; then
+ echo "unidentified text files:" >> $BSLOGTMP
+ grep ':.* text' $EXEFILE | grep -v ':.* script' | grep -v ':.*perl' | \
+ cut -d ':' -f 1 | sort >> $BSLOGTMP
+ echo "==============================================================" >> $BSLOGTMP
+fi
+echo "  usage count | dynamic library" >> $BSLOGTMP
+echo "--------------------------------------------------------------" >> $BSLOGTMP
+if [ $DLLIBC -gt 0 ]; then
+ echo "DLL:" >> $BSLOGTMP
+ grep 'DLL' $EXELIB >> $BSLOGTMP
+ echo "--------------------------------------------------------------" >> $BSLOGTMP
+fi
+echo "ELF:" >> $BSLOGTMP
+grep -v 'DLL' $EXELIB >> $BSLOGTMP
+if [ $UNLIBC -gt 0 ]; then
+ echo "--------------------------------------------------------------" >> $BSLOGTMP
+ echo "unused:" >> $BSLOGTMP
+ if isdebian ; then
+	 cat $DLIBUNP >> $BSLOGTMP
+ else
+	 cat $DLIBUN >> $BSLOGTMP
+ fi
+fi
+echo "==============================================================" >> $BSLOGTMP
+if isdebian && [ $LIBPUNC -gt 0 ]; then
+ echo "PACKAGES:" >> $BSLOGTMP
+ echo "--------------------------------------------------------------" >> $BSLOGTMP
+ echo "with all libraries unused:" >> $BSLOGTMP
+ cat $LIBPUN >> $BSLOGTMP
+fi
+echo "==============================================================" >> $BSLOGTMP
+if [ $MANDUPC -gt 0 ]; then
+ echo "duplicated man page names:" >> $BSLOGTMP
+ cat $MTEMPB >> $BSLOGTMP
+ echo "==============================================================" >> $BSLOGTMP
+fi
+
+# filter through sed to beautify (note the embedded TAB)
+sed -e 's,^/\(.*[^:]\)$,	/\1,g' $BSLOGTMP > $BSLOG
+rm -f $BSLOGTMP
+
+# begin on-screen summary
+echo ""
+echo ""
+echo "binstats-$BSVER output from $MACHNAME on $DATESTAMP"
+echo ""
+echo "Binaries:                     $[($AOUTC+$ELFC+$ECOFFC)]"
+echo "   OMAGIC Demand Paged:   $OMAGIC"
+echo "   NMAGIC Demand Paged:   $NMAGIC"
+echo "   QMAGIC Demand Paged:   $QMAGIC"
+echo "   ZMAGIC Demand Paged:   $ZMAGIC"
+echo "     statically linked:   $SAOUTC"
+echo "          not stripped:   $AOUTUNSTR"
+echo "                setuid:   $AOUTSETUID"
+echo "   ELF:                   $ELFC"
+echo "     statically linked:   $SELFC"
+echo "          not stripped:   $ELFUNSTR"
+echo "                setuid:   $ELFSETUID"
+echo "   ECOFF:                 $ECOFFC"
+echo "     statically linked:   $SECOFFC"
+echo "          not stripped:   $ECOFFUNSTR"
+echo "                setuid:   $ECOFFSETUID"
+echo "   Java:                  $JAVAC"
+if [ $UNSETUID -gt 0 ]; then
+ echo "   Can't read setuid:     $UNSETUID"
+fi
+echo "   Duplicate names:       $DUPC"
+echo "   Missing libraries:     $MISSC"
+echo "Text:                     $TEXTC"
+echo "   Bourne shell:          $SHC"
+echo "   Bourne-Again shell:    $BASHC"
+echo "   C shell:               $CSHC"
+echo "   Tenex C shell:         $TCSHC"
+echo "   Awk:                   $AWKC"
+echo "   Perl:                  $PERLC"
+echo "   Python:                $PYTHONC"
+echo "   Tcl:                   $TCLC"
+if [ $OTHERC -gt 9 ]; then
+ echo "   Other interpreted:          $OTHERC"
+else
+ echo "   Other interpreted:           $OTHERC"
+fi
+if [ $UNIDTC -gt 9 ]; then
+ echo "   Unidentified:               $UNIDTC"
+else
+ echo "   Unidentified:                $UNIDTC"
+fi
+echo "Used libraries:           $LIBC"
+echo "   DLL:                   $DLLIBC"
+echo "Unused libs:              $UNLIBC"
+echo "Man pages:                $MANC"
+echo "   Duplicate names:       $MANDUPC"
+
+
+echo "=============================================================="
+echo "More detailed information can be obtained in $BSLOG"
+# end of script

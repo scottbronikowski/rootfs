@@ -1,0 +1,312 @@
+=head1 NAME
+
+Gtk2::RecentChooser - wrapper for GtkRecentChooser
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Interface
+  +----Gtk2::RecentChooser
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 $chooser-E<gt>B<add_filter> ($filter)
+
+=over
+
+=item * $filter (Gtk2::RecentFilter) 
+
+=back
+
+=head2 recentinfo = $chooser-E<gt>B<get_current_item> 
+
+=head2 string = $chooser-E<gt>B<get_current_uri> 
+
+=head2 $chooser-E<gt>B<set_current_uri> ($uri)
+
+=over
+
+=item * $uri (string) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 recentfilter = $chooser-E<gt>B<get_filter> 
+
+=head2 $chooser-E<gt>B<set_filter> ($filter)
+
+=over
+
+=item * $filter (Gtk2::RecentFilter) 
+
+=back
+
+=head2 (list) = $chooser->B<get_items>
+
+
+
+=head2 integer = $chooser-E<gt>B<get_limit> 
+
+=head2 $chooser-E<gt>B<set_limit> ($limit)
+
+=over
+
+=item * $limit (integer) 
+
+=back
+
+=head2 (filters) = $chooser->B<list_filters>
+
+
+
+=head2 boolean = $chooser-E<gt>B<get_local_only> 
+
+=head2 $chooser-E<gt>B<set_local_only> ($local_only)
+
+=over
+
+=item * $local_only (boolean) 
+
+=back
+
+=head2 $chooser-E<gt>B<remove_filter> ($filter)
+
+=over
+
+=item * $filter (Gtk2::RecentFilter) 
+
+=back
+
+=head2 $chooser-E<gt>B<select_all> 
+
+=head2 boolean = $chooser-E<gt>B<get_select_multiple> 
+
+=head2 $chooser-E<gt>B<set_select_multiple> ($select_multiple)
+
+=over
+
+=item * $select_multiple (boolean) 
+
+=back
+
+=head2 $chooser-E<gt>B<select_uri> ($uri)
+
+=over
+
+=item * $uri (string) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 boolean = $chooser-E<gt>B<get_show_icons> 
+
+=head2 $chooser-E<gt>B<set_show_icons> ($show_icons)
+
+=over
+
+=item * $show_icons (boolean) 
+
+=back
+
+=head2 boolean = $chooser-E<gt>B<get_show_not_found> 
+
+=head2 $chooser-E<gt>B<set_show_not_found> ($show_not_found)
+
+=over
+
+=item * $show_not_found (boolean) 
+
+=back
+
+=head2 boolean = $chooser-E<gt>B<get_show_private> 
+
+=head2 $chooser-E<gt>B<set_show_private> ($show_private)
+
+=over
+
+=item * $show_private (boolean) 
+
+=back
+
+=head2 boolean = $chooser-E<gt>B<get_show_tips> 
+
+=head2 $chooser-E<gt>B<set_show_tips> ($show_tips)
+
+=over
+
+=item * $show_tips (boolean) 
+
+=back
+
+=head2 $chooser-E<gt>B<set_sort_func> ($sort_func, $sort_data=undef)
+
+=over
+
+=item * $sort_func (scalar) 
+
+=item * $sort_data (scalar) 
+
+=back
+
+=head2 recentsorttype = $chooser-E<gt>B<get_sort_type> 
+
+=head2 $chooser-E<gt>B<set_sort_type> ($sort_type)
+
+=over
+
+=item * $sort_type (Gtk2::RecentSortType) 
+
+=back
+
+=head2 $chooser-E<gt>B<unselect_all> 
+
+=head2 $chooser-E<gt>B<unselect_uri> ($uri)
+
+=over
+
+=item * $uri (string) 
+
+=back
+
+=head2 (list) = $chooser->B<get_uris>
+
+
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'filter' (Gtk2::RecentFilter : default undef : readable / writable / private)
+
+The current filter for selecting which resources are displayed
+
+=item 'limit' (integer : default -1 : readable / writable / private)
+
+The maximum number of items to be displayed
+
+=item 'local-only' (boolean : default true : readable / writable / private)
+
+Whether the selected resource(s) should be limited to local file: URIs
+
+=item 'recent-manager' (Gtk2::RecentManager : default undef : writable / construct-only / private)
+
+The RecentManager object to use
+
+=item 'select-multiple' (boolean : default false : readable / writable / private)
+
+Whether to allow multiple items to be selected
+
+=item 'show-icons' (boolean : default true : readable / writable / private)
+
+Whether there should be an icon near the item
+
+=item 'show-not-found' (boolean : default true : readable / writable / private)
+
+Whether the items pointing to unavailable resources should be displayed
+
+=item 'show-private' (boolean : default false : readable / writable / private)
+
+Whether the private items should be displayed
+
+=item 'show-tips' (boolean : default false : readable / writable / private)
+
+Whether there should be a tooltip on the item
+
+=item 'sort-type' (Gtk2::RecentSortType : default "none" : readable / writable / private)
+
+The sorting order of the items displayed
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<item-activated> (Gtk2::RecentChooser)
+
+=item B<selection-changed> (Gtk2::RecentChooser)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::RecentSortType
+
+
+
+=over
+
+=item * 'none' / 'GTK_RECENT_SORT_NONE'
+
+=item * 'mru' / 'GTK_RECENT_SORT_MRU'
+
+=item * 'lru' / 'GTK_RECENT_SORT_LRU'
+
+=item * 'custom' / 'GTK_RECENT_SORT_CUSTOM'
+
+=back
+
+
+=head2 enum GtkRecentChooserError
+
+
+
+=over
+
+=item * 'not-found' / 'GTK_RECENT_CHOOSER_ERROR_NOT_FOUND'
+
+=item * 'invalid-uri' / 'GTK_RECENT_CHOOSER_ERROR_INVALID_URI'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Interface>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,293 @@
+=head1 NAME
+
+Gtk2::ToolItem - wrapper for GtkToolItem
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Bin
+                           +----Gtk2::ToolItem
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+  Glib::Object::_Unregistered::GtkActivatable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 toolitem = Gtk2::ToolItem-E<gt>B<new> 
+
+=head2 boolean = $tool_item-E<gt>B<get_expand> 
+
+=head2 $tool_item-E<gt>B<set_expand> ($expand)
+
+=over
+
+=item * $expand (boolean) 
+
+=back
+
+=head2 boolean = $tool_item-E<gt>B<get_homogeneous> 
+
+=head2 $tool_item-E<gt>B<set_homogeneous> ($homogeneous)
+
+=over
+
+=item * $homogeneous (boolean) 
+
+=back
+
+=head2 iconsize = $tool_item-E<gt>B<get_icon_size> 
+
+=head2 boolean = $tool_item-E<gt>B<get_is_important> 
+
+=head2 $tool_item-E<gt>B<set_is_important> ($is_important)
+
+=over
+
+=item * $is_important (boolean) 
+
+=back
+
+=head2 orientation = $tool_item-E<gt>B<get_orientation> 
+
+=head2 widget = $tool_item-E<gt>B<get_proxy_menu_item> ($menu_item_id)
+
+=over
+
+=item * $menu_item_id (string) 
+
+=back
+
+=head2 $tool_item-E<gt>B<set_proxy_menu_item> ($menu_item_id, $menu_item)
+
+=over
+
+=item * $menu_item_id (string) 
+
+=item * $menu_item (Gtk2::Widget) 
+
+=back
+
+=head2 $tool_item-E<gt>B<rebuild_menu> 
+
+Since: gtk+ 2.6
+
+=head2 reliefstyle = $tool_item-E<gt>B<get_relief_style> 
+
+=head2 widget = $tool_item-E<gt>B<retrieve_proxy_menu_item> 
+
+=head2 $tool_item-E<gt>B<toolbar_reconfigured> 
+
+Since: gtk+ 2.14
+
+=head2 toolbarstyle = $tool_item-E<gt>B<get_toolbar_style> 
+
+=head2 $tool_item-E<gt>B<set_tooltip_markup> ($markup)
+
+=over
+
+=item * $markup (string or undef) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $tool_item-E<gt>B<set_tooltip> ($tooltips, $tip_text, $tip_private)
+
+=over
+
+=item * $tooltips (Gtk2::Tooltips) 
+
+=item * $tip_text (string) 
+
+=item * $tip_private (string) 
+
+=back
+
+=head2 $tool_item-E<gt>B<set_tooltip_text> ($text)
+
+=over
+
+=item * $text (string or undef) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 boolean = $toolitem-E<gt>B<get_use_drag_window> 
+
+=head2 $toolitem-E<gt>B<set_use_drag_window> ($use_drag_window)
+
+=over
+
+=item * $use_drag_window (boolean) 
+
+=back
+
+=head2 boolean = $toolitem-E<gt>B<get_visible_horizontal> 
+
+=head2 $toolitem-E<gt>B<set_visible_horizontal> ($visible_horizontal)
+
+=over
+
+=item * $visible_horizontal (boolean) 
+
+=back
+
+=head2 boolean = $toolitem-E<gt>B<get_visible_vertical> 
+
+=head2 $toolitem-E<gt>B<set_visible_vertical> ($visible_vertical)
+
+=over
+
+=item * $visible_vertical (boolean) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'is-important' (boolean : default false : readable / writable / private)
+
+Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode
+
+=item 'visible-horizontal' (boolean : default true : readable / writable / private)
+
+Whether the toolbar item is visible when the toolbar is in a horizontal orientation.
+
+=item 'visible-vertical' (boolean : default true : readable / writable / private)
+
+Whether the toolbar item is visible when the toolbar is in a vertical orientation.
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item boolean = B<create-menu-proxy> (Gtk2::ToolItem)
+
+=item B<toolbar-reconfigured> (Gtk2::ToolItem)
+
+=item boolean = B<set-tooltip> (Gtk2::ToolItem, Gtk2::Tooltips, string, string)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::IconSize
+
+=over
+
+=item * 'invalid' / 'GTK_ICON_SIZE_INVALID'
+
+=item * 'menu' / 'GTK_ICON_SIZE_MENU'
+
+=item * 'small-toolbar' / 'GTK_ICON_SIZE_SMALL_TOOLBAR'
+
+=item * 'large-toolbar' / 'GTK_ICON_SIZE_LARGE_TOOLBAR'
+
+=item * 'button' / 'GTK_ICON_SIZE_BUTTON'
+
+=item * 'dnd' / 'GTK_ICON_SIZE_DND'
+
+=item * 'dialog' / 'GTK_ICON_SIZE_DIALOG'
+
+=back
+
+
+=head2 enum Gtk2::Orientation
+
+=over
+
+=item * 'horizontal' / 'GTK_ORIENTATION_HORIZONTAL'
+
+=item * 'vertical' / 'GTK_ORIENTATION_VERTICAL'
+
+=back
+
+
+=head2 enum Gtk2::ReliefStyle
+
+=over
+
+=item * 'normal' / 'GTK_RELIEF_NORMAL'
+
+=item * 'half' / 'GTK_RELIEF_HALF'
+
+=item * 'none' / 'GTK_RELIEF_NONE'
+
+=back
+
+
+=head2 enum Gtk2::ToolbarStyle
+
+=over
+
+=item * 'icons' / 'GTK_TOOLBAR_ICONS'
+
+=item * 'text' / 'GTK_TOOLBAR_TEXT'
+
+=item * 'both' / 'GTK_TOOLBAR_BOTH'
+
+=item * 'both-horiz' / 'GTK_TOOLBAR_BOTH_HORIZ'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>, L<Gtk2::Bin>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

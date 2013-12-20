@@ -1,0 +1,127 @@
+=head1 NAME
+
+Gtk2::TreeIter - wrapper for GtkTreeIter
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Boxed
+  +----Gtk2::TreeIter
+
+
+
+=cut
+
+=head1 SYNOPSIS
+
+  package MyCustomListStore;
+
+  use Glib::Object::Subclass
+      Glib::Object::,
+      interfaces => [ Gtk2::TreeModel:: ],
+      ;
+
+  ...
+
+  sub set {
+      my $list = shift;
+      my $iter = shift; # a Gtk2::TreeIter
+
+      # this method needs access to the internal representation
+      # of the iter, as the model implementation sees it:
+      my $arrayref = $iter->to_arrayref ($list->{stamp});
+      ...
+  }
+
+
+=head1 DESCRIPTION
+
+The methods described here are only of use in custom Gtk2::TreeModel
+implementations; they are not safe to be used on generic iters or in
+application code.  See L<Gtk2::TreeModel/CREATING A CUSTOM TREE MODEL> for
+more information.
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 treeiter = Gtk2::TreeIter-E<gt>B<new_from_arrayref> ($sv_iter)
+
+=over
+
+=item * $sv_iter (scalar) 
+
+=back
+
+Create a new Gtk2::TreeIter from the "internal" array reference representation
+used by custom Gtk2::TreeModel implementations.  This is the complement to
+Gtk2::TreeIter::to_arrayref(), and is used when you need to create and return
+a new iter from a method that is not one of the Gtk2::TreeModelIface
+interface vfuncs.  See L<Gtk2::TreeModel/CREATING A CUSTOM TREE MODEL> for
+more information.
+
+=head2 $iter-E<gt>B<set> ($from)
+
+=over
+
+=item * $from (scalar) 
+
+=back
+
+Set the contents of $iter.  $from can be either another Gtk2::TreeIter
+or an "internal" arrayref form as above.
+
+Often you create a new iter instead of modifying an existing one, but
+C<set> lets you to implement things in the style of the C<remove>
+method of Gtk2::ListStore and Gtk2::TreeStore.
+
+A set can also explicitly invalidate an iter by zapping its stamp, so
+nobody can accidentally use it again.
+
+    $iter->set ([0,0,undef,undef]);
+
+
+=head2 scalar = $iter-E<gt>B<to_arrayref> ($stamp)
+
+=over
+
+=item * $stamp (integer) 
+
+=back
+
+Convert a boxed Gtk2::TreeIter reference into the "internal" array reference
+representation used by custom Gtk2::TreeModel implementations.  This is
+necessary when you need to get to the data inside your iters in methods
+which are not the vfuncs of the Gtk2::TreeModelIface interface.  The stamp
+must match; this protects the binding code from potential memory faults
+when attempting to convert an iter that doesn't actually belong to your
+model.  See L<Gtk2::TreeModel/CREATING A CUSTOM TREE MODEL> for
+more information.
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Boxed>, L<Gtk2::TreeModel>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

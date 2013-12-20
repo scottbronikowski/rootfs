@@ -1,0 +1,301 @@
+=head1 NAME
+
+Gtk2::Paned - wrapper for GtkPaned
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Paned
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+  Gtk2::Orientable
+
+
+
+=cut
+
+=for object
+
+Gtk2::Paned is the base class for widgets with two panes, arranged either
+horizontally (Gtk2::HPaned) or vertically (Gtk2::VPaned).  Child widgets are
+added to the panes of the widget with C<< $paned->pack1 >> and
+C<< $paned->pack2 >>.  The division beween the two children is set by default
+from the size requests of the children, but it can be adjusted by the user. 
+
+A paned widget draws a separator between the two child widgets and a small
+handle that the user can drag to adjust the division.  It does not draw any
+relief around the children or around the separator.  Often, it is useful to put
+each child inside a Gtk2::Frame with the shadow type set to 'in' so that the
+gutter appears as a ridge. 
+
+Each child has two options that can be set, resize and shrink.  If resize is
+true, then when the Gtk2::Paned is resized, that child will expand or shrink
+along with the paned widget.  If shrink is true, then when that child can be
+made smaller than its requisition by the user.  Setting shrink to FALSE allows
+the application to set a minimum size.  If resize is false for both children,
+then this is treated as if resize is true for both children. 
+
+The application can set the position of the slider as if it were set by the
+user, by calling C<< $paned->set_position >>. 
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 $paned-E<gt>B<add1> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 $paned-E<gt>B<add2> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 widget = $paned-E<gt>B<child1> 
+
+=head2 widget = $paned-E<gt>B<get_child1> 
+
+=head2 boolean = $paned->B<child1_resize>
+
+=head2 $paned->B<child1_resize> (newval)
+
+=over
+
+=item * $newval (boolean) 
+
+=back
+
+C<child1_resize> determines whether the first child should expand when 
+I<$paned> is resized.
+
+=head2 boolean = $paned->B<child1_shrink>
+
+=head2 $paned->B<child1_shrink> (newval)
+
+=over
+
+=item * $newval (boolean) 
+
+=back
+
+C<child1_shrink> determines whether the first child may be made smaller
+than its requisition.
+
+=head2 widget = $paned-E<gt>B<child2> 
+
+=head2 widget = $paned-E<gt>B<get_child2> 
+
+=head2 boolean = $paned->B<child2_resize>
+
+=head2 $paned->B<child2_resize> (newval)
+
+=over
+
+=item * $newval (boolean) 
+
+=back
+
+C<child2_resize> determines whether the second child should expand when 
+I<$paned> is resized.
+
+=head2 boolean = $paned->B<child2_shrink>
+
+=head2 $paned->B<child2_shrink> (newval)
+
+=over
+
+=item * $newval (boolean) 
+
+=back
+
+C<child2_shrink> determines whether the second child may be made smaller
+than its requisition.
+
+=head2 $paned-E<gt>B<compute_position> ($allocation, $child1_req, $child2_req)
+
+=over
+
+=item * $allocation (integer) 
+
+=item * $child1_req (integer) 
+
+=item * $child2_req (integer) 
+
+=back
+
+=head2 $paned-E<gt>B<pack1> ($child, $resize, $shrink)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $resize (boolean) 
+
+=item * $shrink (boolean) 
+
+=back
+
+=head2 $paned-E<gt>B<pack2> ($child, $resize, $shrink)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $resize (boolean) 
+
+=item * $shrink (boolean) 
+
+=back
+
+=head2 integer = $paned-E<gt>B<get_position> 
+
+=head2 $paned-E<gt>B<set_position> ($position)
+
+=over
+
+=item * $position (integer) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'max-position' (integer : default INT_MAX : readable / private)
+
+Largest possible value for the "position" property
+
+=item 'min-position' (integer : default 0 : readable / private)
+
+Smallest possible value for the "position" property
+
+=item 'position' (integer : default 0 : readable / writable / private)
+
+Position of paned separator in pixels (0 means all the way to the left/top)
+
+=item 'position-set' (boolean : default false : readable / writable / private)
+
+TRUE if the Position property should be used
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item boolean = B<cycle-child-focus> (Gtk2::Paned, boolean)
+
+=item boolean = B<toggle-handle-focus> (Gtk2::Paned)
+
+=item boolean = B<move-handle> (Gtk2::Paned, Gtk2::ScrollType)
+
+=item boolean = B<cycle-handle-focus> (Gtk2::Paned, boolean)
+
+=item boolean = B<accept-position> (Gtk2::Paned)
+
+=item boolean = B<cancel-position> (Gtk2::Paned)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::ScrollType
+
+=over
+
+=item * 'none' / 'GTK_SCROLL_NONE'
+
+=item * 'jump' / 'GTK_SCROLL_JUMP'
+
+=item * 'step-backward' / 'GTK_SCROLL_STEP_BACKWARD'
+
+=item * 'step-forward' / 'GTK_SCROLL_STEP_FORWARD'
+
+=item * 'page-backward' / 'GTK_SCROLL_PAGE_BACKWARD'
+
+=item * 'page-forward' / 'GTK_SCROLL_PAGE_FORWARD'
+
+=item * 'step-up' / 'GTK_SCROLL_STEP_UP'
+
+=item * 'step-down' / 'GTK_SCROLL_STEP_DOWN'
+
+=item * 'page-up' / 'GTK_SCROLL_PAGE_UP'
+
+=item * 'page-down' / 'GTK_SCROLL_PAGE_DOWN'
+
+=item * 'step-left' / 'GTK_SCROLL_STEP_LEFT'
+
+=item * 'step-right' / 'GTK_SCROLL_STEP_RIGHT'
+
+=item * 'page-left' / 'GTK_SCROLL_PAGE_LEFT'
+
+=item * 'page-right' / 'GTK_SCROLL_PAGE_RIGHT'
+
+=item * 'start' / 'GTK_SCROLL_START'
+
+=item * 'end' / 'GTK_SCROLL_END'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

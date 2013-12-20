@@ -1,0 +1,1155 @@
+=head1 NAME
+
+Gtk2::Gdk::Window - wrapper for GdkWindow
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Gdk::Drawable
+       +----Gtk2::Gdk::Window
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 window = Gtk2::Gdk::Window-E<gt>B<new> ($parent, $attributes_ref)
+
+=over
+
+=item * $parent (Gtk2::Gdk::Window or undef) 
+
+=item * $attributes_ref (scalar) 
+
+=back
+
+Create and return a new window.  parent can be undef to mean the root
+window of the default screen.  attributes_ref is a hashref containing
+some of the following keys,
+
+    title              string
+    event_mask         Gtk2::Gdk::EventMask flags
+    x                  integer
+    y                  integer
+    width              integer
+    height             integer
+    wclass             Gtk2::Gdk::WindowClass enum
+    visual             Gtk2::Gdk::Visual
+    colormap           Gtk2::Gdk::Colormap
+    window_type        Gtk2::Gdk::WindowType enum
+    cursor             Gtk2::Gdk::Cursor
+    wmclass_name       string
+    wmclass_class      string
+    override_redirect  boolean (integer 0 or 1)
+
+window_type is mandatory because it defaults to "root" but of course
+it's not possible to create a new root window.  The other fields get default
+values zero, empty, unset, etc.
+
+    my $win = Gtk2::Gdk::Window->new
+                (undef, { window_type => 'toplevel,
+                          wclass => 'GDK_INPUT_OUTPUT',
+                          x => 0,
+                          y => 0,
+                          width => 200,
+                          height => 100 });
+
+Incidentally, the nicknames for wclass Gtk2::Gdk::WindowClass really
+are "output" for input-output and "only" for input-only.  Those names
+are a bit odd, but that's what Gtk has.  You can, as for any enum,
+give the full names like "GDK_INPUT_OUTPUT" if desired, for some
+clarity.
+
+=head2 $window-E<gt>B<set_accept_focus> ($accept_focus)
+
+=over
+
+=item * $accept_focus (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 (window, win_x, win_y) = Gtk2::Gdk::Window->B<at_pointer>
+
+Returns window, a Gtk2::Gdk::Window and win_x and win_y, integers.
+
+=head2 $window-E<gt>B<set_back_pixmap> ($pixmap, $parent_relative=0)
+
+=over
+
+=item * $pixmap (Gtk2::Gdk::Pixmap or undef) 
+
+=item * $parent_relative (boolean) 
+
+=back
+
+=head2 $window-E<gt>B<set_background> ($color)
+
+=over
+
+=item * $color (Gtk2::Gdk::Color) 
+
+=back
+
+=head2 $window-E<gt>B<beep> 
+
+Since: gtk+ 2.12
+
+=head2 $window-E<gt>B<begin_move_drag> ($button, $root_x, $root_y, $timestamp)
+
+=over
+
+=item * $button (integer) 
+
+=item * $root_x (integer) 
+
+=item * $root_y (integer) 
+
+=item * $timestamp (unsigned) 
+
+=back
+
+=head2 $window-E<gt>B<begin_paint_rect> ($rectangle)
+
+=over
+
+=item * $rectangle (Gtk2::Gdk::Rectangle) 
+
+=back
+
+=head2 $window-E<gt>B<begin_paint_region> ($region)
+
+=over
+
+=item * $region (Gtk2::Gdk::Region) 
+
+=back
+
+=head2 $window-E<gt>B<begin_resize_drag> ($edge, $button, $root_x, $root_y, $timestamp)
+
+=over
+
+=item * $edge (Gtk2::Gdk::WindowEdge) 
+
+=item * $button (integer) 
+
+=item * $root_x (integer) 
+
+=item * $root_y (integer) 
+
+=item * $timestamp (unsigned) 
+
+=back
+
+=head2 $window-E<gt>B<set_child_input_shapes> 
+
+Since: gtk+ 2.10
+
+=head2 $window-E<gt>B<set_child_shapes> 
+
+=head2 list = $window-E<gt>B<get_children> 
+
+Returns the list of children (Gtk2::Gdk::Window's) known to gdk.
+
+=head2 $window-E<gt>B<clear> 
+
+=head2 $window-E<gt>B<clear_area> ($x, $y, $width, $height)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $window-E<gt>B<clear_area_e> ($x, $y, $width, $height)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $window-E<gt>B<set_composited> ($composited)
+
+=over
+
+=item * $composited (boolean) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $window-E<gt>B<configure_finished> 
+
+Since: gtk+ 2.6
+
+=head2 $window-E<gt>B<set_cursor> ($cursor)
+
+=over
+
+=item * $cursor (Gtk2::Gdk::Cursor or undef) 
+
+=back
+
+=head2 Gtk2::Gdk::Window->B<set_debug_updates> ($enable)
+
+=head2 $window->B<set_debug_updates> ($enable)
+
+=over
+
+=item * $enable (boolean) 
+
+=back
+
+
+
+=head2 list = $window-E<gt>B<get_decorations> 
+
+=head2 $window-E<gt>B<set_decorations> ($decorations)
+
+=over
+
+=item * $decorations (Gtk2::Gdk::WMDecoration) 
+
+=back
+
+=head2 $window-E<gt>B<deiconify> 
+
+=head2 $window-E<gt>B<destroy> 
+
+=head2 $window-E<gt>B<enable_synchronized_configure> 
+
+Since: gtk+ 2.6
+
+=head2 $window-E<gt>B<end_paint> 
+
+=head2 eventmask = $window-E<gt>B<get_events> 
+
+=head2 $window-E<gt>B<set_events> ($event_mask)
+
+=over
+
+=item * $event_mask (Gtk2::Gdk::EventMask) 
+
+=back
+
+=head2 $window-E<gt>B<focus> ($timestamp)
+
+=over
+
+=item * $timestamp (unsigned) 
+
+=back
+
+=head2 $window-E<gt>B<set_focus_on_map> ($focus_on_map)
+
+=over
+
+=item * $focus_on_map (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 window = Gtk2::Gdk::Window-E<gt>B<foreign_new> ($anid)
+
+=over
+
+=item * $anid (Gtk2::Gdk::NativeWindow) 
+
+=back
+
+=head2 window = Gtk2::Gdk::Window-E<gt>B<foreign_new_for_display> ($display, $anid)
+
+=over
+
+=item * $display (Gtk2::Gdk::Display) 
+
+=item * $anid (Gtk2::Gdk::NativeWindow) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 rectangle = $window-E<gt>B<get_frame_extents> 
+
+=head2 $window-E<gt>B<freeze_updates> 
+
+=head2 $window-E<gt>B<fullscreen> 
+
+Since: gtk+ 2.2
+
+=head2 $window-E<gt>B<set_functions> ($functions)
+
+=over
+
+=item * $functions (Gtk2::Gdk::WMFunction) 
+
+=back
+
+=head2 $sm_client_id-E<gt>B<gdk_set_sm_client_id> 
+
+=head2 (x, y, width, height, depth) = $window-E<gt>B<get_geometry> 
+
+=head2 $window->B<set_geometry_hints> ($geometry)
+
+=head2 $window->B<set_geometry_hints> ($geometry, $geom_mask)
+
+=over
+
+=item * $geometry_ref (scalar) 
+
+=item * $geom_mask_sv (scalar) 
+
+=item * $geom_mask (Gtk2::Gdk::WindowHints) optional, usually inferred from I<$geometry>
+
+=item * $geometry (Gtk2::Gdk::Geometry) 
+
+=back
+
+
+
+
+The geom_mask argument, describing which fields in the geometry are valid, is
+optional.  If omitted it will be inferred from the geometry itself.
+
+
+=head2 window = $window-E<gt>B<get_group> 
+
+Since: gtk+ 2.4
+
+=head2 $window-E<gt>B<set_group> ($leader)
+
+=over
+
+=item * $leader (Gtk2::Gdk::Window) 
+
+=back
+
+=head2 $window-E<gt>B<hide> 
+
+=head2 $window-E<gt>B<set_icon_list> (...)
+
+=over
+
+=item * ... (list) of GdkPixbuf's
+
+=back
+
+
+
+
+=head2 $window-E<gt>B<set_icon_name> ($name)
+
+=over
+
+=item * $name (string) 
+
+=back
+
+=head2 $window-E<gt>B<set_icon> ($icon_window, $pixmap, $mask)
+
+=over
+
+=item * $icon_window (Gtk2::Gdk::Window or undef) 
+
+=item * $pixmap (Gtk2::Gdk::Pixmap or undef) 
+
+=item * $mask (Gtk2::Gdk::Bitmap or undef) 
+
+=back
+
+=head2 $window-E<gt>B<iconify> 
+
+=head2 $window-E<gt>B<input_shape_combine_mask> ($mask, $x, $y)
+
+=over
+
+=item * $mask (Gtk2::Gdk::Bitmap) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 $window-E<gt>B<input_shape_combine_region> ($shape, $offset_x, $offset_y)
+
+=over
+
+=item * $shape (Gtk2::Gdk::Region) 
+
+=item * $offset_x (integer) 
+
+=item * $offset_y (integer) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 list = $window-E<gt>B<get_internal_paint_info> 
+
+=head2 $window-E<gt>B<invalidate_maybe_recurse> ($region, $func, $data=undef)
+
+=over
+
+=item * $region (Gtk2::Gdk::Region) 
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+=head2 $window-E<gt>B<invalidate_rect> ($rectangle, $invalidate_children)
+
+=over
+
+=item * $rectangle (Gtk2::Gdk::Rectangle) 
+
+=item * $invalidate_children (boolean) 
+
+=back
+
+=head2 $window-E<gt>B<invalidate_region> ($region, $invalidate_children)
+
+=over
+
+=item * $region (Gtk2::Gdk::Region) 
+
+=item * $invalidate_children (boolean) 
+
+=back
+
+=head2 boolean = $window-E<gt>B<is_viewable> 
+
+=head2 boolean = $window-E<gt>B<is_visible> 
+
+=head2 $window-E<gt>B<set_keep_above> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 $window-E<gt>B<set_keep_below> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 window = Gtk2::Gdk::Window-E<gt>B<lookup> ($anid)
+
+=over
+
+=item * $anid (Gtk2::Gdk::NativeWindow) 
+
+=back
+
+=head2 window = Gtk2::Gdk::Window-E<gt>B<lookup_for_display> ($display, $anid)
+
+=over
+
+=item * $display (Gtk2::Gdk::Display) 
+
+=item * $anid (Gtk2::Gdk::NativeWindow) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $window-E<gt>B<lower> 
+
+=head2 $window-E<gt>B<maximize> 
+
+=head2 $window-E<gt>B<merge_child_input_shapes> 
+
+Since: gtk+ 2.10
+
+=head2 $window-E<gt>B<merge_child_shapes> 
+
+=head2 $window-E<gt>B<set_modal_hint> ($modal)
+
+=over
+
+=item * $modal (boolean) 
+
+=back
+
+=head2 $window-E<gt>B<move> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+=head2 $window-E<gt>B<move_region> ($region, $dx, $dy)
+
+=over
+
+=item * $region (Gtk2::Gdk::Region) 
+
+=item * $dx (integer) 
+
+=item * $dy (integer) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 $window-E<gt>B<move_resize> ($x, $y, $width, $height)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $window-E<gt>B<move_to_current_desktop> 
+
+Since: gtk+ 2.8
+
+=head2 (x, y) = $window-E<gt>B<get_origin> 
+
+=head2 $window-E<gt>B<set_override_redirect> ($override_redirect)
+
+=over
+
+=item * $override_redirect (boolean) 
+
+=back
+
+=head2 window = $window-E<gt>B<get_parent> 
+
+=head2 list = $window-E<gt>B<peek_children> 
+
+An alias for get_children
+
+=head2 (window_at_pointer, x, y, mask) = $window->B<get_pointer>
+
+Returns window_at_pointer, a Gtk2::Gdk::Window or undef, x and y, integers, and
+mask, a Gtk2::Gdk::ModifierType.
+
+=head2 (x, y) = $window-E<gt>B<get_position> 
+
+=head2 Gtk2::Gdk::Window->B<process_all_updates>
+
+=head2 $window->B<process_all_updates>
+
+
+
+=head2 $window-E<gt>B<process_updates> ($update_children)
+
+=over
+
+=item * $update_children (boolean) 
+
+=back
+
+=head2 $window-E<gt>B<property_change> ($property, $type, $format, $mode, ...)
+
+=over
+
+=item * $property (Gtk2::Gdk::Atom) 
+
+=item * $type (Gtk2::Gdk::Atom) 
+
+=item * $format (integer) 
+
+=item * $mode (Gtk2::Gdk::PropMode) 
+
+=item * ... (list) property value(s)
+
+=back
+
+
+
+Depending on the value of I<format>, the property value(s) can be:
+
+  +--------------------+------------------------------------+
+  |      format        |                value               |
+  +--------------------+------------------------------------+
+  | Gtk2::Gdk::CHARS   | a string                           |
+  | Gtk2::Gdk::USHORTS | one or more unsigned short numbers |
+  | Gtk2::Gdk::ULONGS  | one or more unsigned long numbers  |
+  +--------------------+------------------------------------+
+
+
+=head2 $window-E<gt>B<property_delete> ($property)
+
+=over
+
+=item * $property (Gtk2::Gdk::Atom) 
+
+=back
+
+=head2 (property_type, format, data) = $window->B<property_get> ($property, $type, $offset, $length, $pdelete)
+
+=over
+
+=item * $property (Gtk2::Gdk::Atom) 
+
+=item * $type (Gtk2::Gdk::Atom) 
+
+=item * $offset (unsigned) 
+
+=item * $length (unsigned) 
+
+=item * $pdelete (integer) 
+
+=back
+
+
+
+See I<property_change> for an explanation of the meaning of I<format>.
+
+
+=head2 $window-E<gt>B<raise> 
+
+=head2 $window-E<gt>B<redirect_to_drawable> ($drawable, $src_x, $src_y, $dest_x, $dest_y, $width, $height)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable) 
+
+=item * $src_x (integer) 
+
+=item * $src_y (integer) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+Since: gtk+ 2.14
+
+=head2 $window-E<gt>B<register_dnd> 
+
+=head2 $window-E<gt>B<remove_redirection> 
+
+Since: gtk+ 2.14
+
+=head2 $window-E<gt>B<reparent> ($new_parent, $x, $y)
+
+=over
+
+=item * $new_parent (Gtk2::Gdk::Window) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+=head2 $window-E<gt>B<resize> ($width, $height)
+
+=over
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $window-E<gt>B<set_role> ($role)
+
+=over
+
+=item * $role (string) 
+
+=back
+
+=head2 (x, y) = $window-E<gt>B<get_root_origin> 
+
+=head2 $window-E<gt>B<scroll> ($dx, $dy)
+
+=over
+
+=item * $dx (integer) 
+
+=item * $dy (integer) 
+
+=back
+
+=head2 $window-E<gt>B<shape_combine_mask> ($mask, $x, $y)
+
+=over
+
+=item * $mask (Gtk2::Gdk::Bitmap) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+=head2 $window-E<gt>B<shape_combine_region> ($shape_region, $offset_x, $offset_y)
+
+=over
+
+=item * $shape_region (Gtk2::Gdk::Region) 
+
+=item * $offset_x (integer) 
+
+=item * $offset_y (integer) 
+
+=back
+
+=head2 $window-E<gt>B<show> 
+
+=head2 $window-E<gt>B<show_unraised> 
+
+=head2 $window-E<gt>B<set_skip_pager_hint> ($skips_pager)
+
+=over
+
+=item * $skips_pager (boolean) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $window-E<gt>B<set_skip_taskbar_hint> ($skips_taskbar)
+
+=over
+
+=item * $skips_taskbar (boolean) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $window-E<gt>B<set_startup_id> ($startup_id)
+
+=over
+
+=item * $startup_id (string) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 windowstate = $window-E<gt>B<get_state> 
+
+=head2 boolean = $window-E<gt>B<set_static_gravities> ($use_static)
+
+=over
+
+=item * $use_static (boolean) 
+
+=back
+
+=head2 $window-E<gt>B<stick> 
+
+=head2 $window-E<gt>B<thaw_updates> 
+
+=head2 $window-E<gt>B<set_title> ($title)
+
+=over
+
+=item * $title (string) 
+
+=back
+
+=head2 window = $window-E<gt>B<get_toplevel> 
+
+=head2 list = Gtk2::Gdk::Window-E<gt>B<get_toplevels> 
+
+Returns a list of top level windows (Gtk2::Gdk::Window's) known to gdk, on the 
+default screen. A toplevel window is a child of the root window.
+
+=head2 $window-E<gt>B<set_transient_for> ($parent)
+
+=over
+
+=item * $parent (Gtk2::Gdk::Window) 
+
+=back
+
+=head2 windowtypehint = $window-E<gt>B<get_type_hint> 
+
+Since: gtk+ 2.10
+
+=head2 $window-E<gt>B<set_type_hint> ($hint)
+
+=over
+
+=item * $hint (Gtk2::Gdk::WindowTypeHint) 
+
+=back
+
+=head2 $window-E<gt>B<unfullscreen> 
+
+Since: gtk+ 2.2
+
+=head2 $window-E<gt>B<unmaximize> 
+
+=head2 $window-E<gt>B<unstick> 
+
+=head2 region or undef = $window-E<gt>B<get_update_area> 
+
+=head2 $window-E<gt>B<set_urgency_hint> ($urgent)
+
+=over
+
+=item * $urgent (boolean) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 unsigned = $window-E<gt>B<get_user_data> 
+
+=head2 $window-E<gt>B<set_user_data> ($user_data)
+
+=over
+
+=item * $user_data (unsigned) 
+
+=back
+
+=head2 $window-E<gt>B<set_user_time> ($timestamp)
+
+=over
+
+=item * $timestamp (unsigned) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 windowtype = $window-E<gt>B<get_window_type> 
+
+=head2 $window-E<gt>B<withdraw> 
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'cursor' (Gtk2::Gdk::Cursor : default undef : readable / writable)
+
+Cursor
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item Gtk2::Gdk::Window = B<pick-embedded-child> (Gtk2::Gdk::Window, double, double)
+
+=item B<to-embedder> (Gtk2::Gdk::Window, double, double, gpointer, gpointer)
+
+=item B<from-embedder> (Gtk2::Gdk::Window, double, double, gpointer, gpointer)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::Gdk::EventMask
+
+=over
+
+=item * 'exposure-mask' / 'GDK_EXPOSURE_MASK'
+
+=item * 'pointer-motion-mask' / 'GDK_POINTER_MOTION_MASK'
+
+=item * 'pointer-motion-hint-mask' / 'GDK_POINTER_MOTION_HINT_MASK'
+
+=item * 'button-motion-mask' / 'GDK_BUTTON_MOTION_MASK'
+
+=item * 'button1-motion-mask' / 'GDK_BUTTON1_MOTION_MASK'
+
+=item * 'button2-motion-mask' / 'GDK_BUTTON2_MOTION_MASK'
+
+=item * 'button3-motion-mask' / 'GDK_BUTTON3_MOTION_MASK'
+
+=item * 'button-press-mask' / 'GDK_BUTTON_PRESS_MASK'
+
+=item * 'button-release-mask' / 'GDK_BUTTON_RELEASE_MASK'
+
+=item * 'key-press-mask' / 'GDK_KEY_PRESS_MASK'
+
+=item * 'key-release-mask' / 'GDK_KEY_RELEASE_MASK'
+
+=item * 'enter-notify-mask' / 'GDK_ENTER_NOTIFY_MASK'
+
+=item * 'leave-notify-mask' / 'GDK_LEAVE_NOTIFY_MASK'
+
+=item * 'focus-change-mask' / 'GDK_FOCUS_CHANGE_MASK'
+
+=item * 'structure-mask' / 'GDK_STRUCTURE_MASK'
+
+=item * 'property-change-mask' / 'GDK_PROPERTY_CHANGE_MASK'
+
+=item * 'visibility-notify-mask' / 'GDK_VISIBILITY_NOTIFY_MASK'
+
+=item * 'proximity-in-mask' / 'GDK_PROXIMITY_IN_MASK'
+
+=item * 'proximity-out-mask' / 'GDK_PROXIMITY_OUT_MASK'
+
+=item * 'substructure-mask' / 'GDK_SUBSTRUCTURE_MASK'
+
+=item * 'scroll-mask' / 'GDK_SCROLL_MASK'
+
+=item * 'all-events-mask' / 'GDK_ALL_EVENTS_MASK'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::PropMode
+
+=over
+
+=item * 'replace' / 'GDK_PROP_MODE_REPLACE'
+
+=item * 'prepend' / 'GDK_PROP_MODE_PREPEND'
+
+=item * 'append' / 'GDK_PROP_MODE_APPEND'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::WMDecoration
+
+=over
+
+=item * 'all' / 'GDK_DECOR_ALL'
+
+=item * 'border' / 'GDK_DECOR_BORDER'
+
+=item * 'resizeh' / 'GDK_DECOR_RESIZEH'
+
+=item * 'title' / 'GDK_DECOR_TITLE'
+
+=item * 'menu' / 'GDK_DECOR_MENU'
+
+=item * 'minimize' / 'GDK_DECOR_MINIMIZE'
+
+=item * 'maximize' / 'GDK_DECOR_MAXIMIZE'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::WMFunction
+
+=over
+
+=item * 'all' / 'GDK_FUNC_ALL'
+
+=item * 'resize' / 'GDK_FUNC_RESIZE'
+
+=item * 'move' / 'GDK_FUNC_MOVE'
+
+=item * 'minimize' / 'GDK_FUNC_MINIMIZE'
+
+=item * 'maximize' / 'GDK_FUNC_MAXIMIZE'
+
+=item * 'close' / 'GDK_FUNC_CLOSE'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::WindowEdge
+
+=over
+
+=item * 'north-west' / 'GDK_WINDOW_EDGE_NORTH_WEST'
+
+=item * 'north' / 'GDK_WINDOW_EDGE_NORTH'
+
+=item * 'north-east' / 'GDK_WINDOW_EDGE_NORTH_EAST'
+
+=item * 'west' / 'GDK_WINDOW_EDGE_WEST'
+
+=item * 'east' / 'GDK_WINDOW_EDGE_EAST'
+
+=item * 'south-west' / 'GDK_WINDOW_EDGE_SOUTH_WEST'
+
+=item * 'south' / 'GDK_WINDOW_EDGE_SOUTH'
+
+=item * 'south-east' / 'GDK_WINDOW_EDGE_SOUTH_EAST'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::WindowHints
+
+=over
+
+=item * 'pos' / 'GDK_HINT_POS'
+
+=item * 'min-size' / 'GDK_HINT_MIN_SIZE'
+
+=item * 'max-size' / 'GDK_HINT_MAX_SIZE'
+
+=item * 'base-size' / 'GDK_HINT_BASE_SIZE'
+
+=item * 'aspect' / 'GDK_HINT_ASPECT'
+
+=item * 'resize-inc' / 'GDK_HINT_RESIZE_INC'
+
+=item * 'win-gravity' / 'GDK_HINT_WIN_GRAVITY'
+
+=item * 'user-pos' / 'GDK_HINT_USER_POS'
+
+=item * 'user-size' / 'GDK_HINT_USER_SIZE'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::WindowState
+
+=over
+
+=item * 'withdrawn' / 'GDK_WINDOW_STATE_WITHDRAWN'
+
+=item * 'iconified' / 'GDK_WINDOW_STATE_ICONIFIED'
+
+=item * 'maximized' / 'GDK_WINDOW_STATE_MAXIMIZED'
+
+=item * 'sticky' / 'GDK_WINDOW_STATE_STICKY'
+
+=item * 'fullscreen' / 'GDK_WINDOW_STATE_FULLSCREEN'
+
+=item * 'above' / 'GDK_WINDOW_STATE_ABOVE'
+
+=item * 'below' / 'GDK_WINDOW_STATE_BELOW'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::WindowType
+
+=over
+
+=item * 'root' / 'GDK_WINDOW_ROOT'
+
+=item * 'toplevel' / 'GDK_WINDOW_TOPLEVEL'
+
+=item * 'child' / 'GDK_WINDOW_CHILD'
+
+=item * 'dialog' / 'GDK_WINDOW_DIALOG'
+
+=item * 'temp' / 'GDK_WINDOW_TEMP'
+
+=item * 'foreign' / 'GDK_WINDOW_FOREIGN'
+
+=item * 'offscreen' / 'GDK_WINDOW_OFFSCREEN'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::WindowTypeHint
+
+=over
+
+=item * 'normal' / 'GDK_WINDOW_TYPE_HINT_NORMAL'
+
+=item * 'dialog' / 'GDK_WINDOW_TYPE_HINT_DIALOG'
+
+=item * 'menu' / 'GDK_WINDOW_TYPE_HINT_MENU'
+
+=item * 'toolbar' / 'GDK_WINDOW_TYPE_HINT_TOOLBAR'
+
+=item * 'splashscreen' / 'GDK_WINDOW_TYPE_HINT_SPLASHSCREEN'
+
+=item * 'utility' / 'GDK_WINDOW_TYPE_HINT_UTILITY'
+
+=item * 'dock' / 'GDK_WINDOW_TYPE_HINT_DOCK'
+
+=item * 'desktop' / 'GDK_WINDOW_TYPE_HINT_DESKTOP'
+
+=item * 'dropdown-menu' / 'GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU'
+
+=item * 'popup-menu' / 'GDK_WINDOW_TYPE_HINT_POPUP_MENU'
+
+=item * 'tooltip' / 'GDK_WINDOW_TYPE_HINT_TOOLTIP'
+
+=item * 'notification' / 'GDK_WINDOW_TYPE_HINT_NOTIFICATION'
+
+=item * 'combo' / 'GDK_WINDOW_TYPE_HINT_COMBO'
+
+=item * 'dnd' / 'GDK_WINDOW_TYPE_HINT_DND'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Gtk2::Gdk::Drawable>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

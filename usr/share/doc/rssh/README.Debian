@@ -1,0 +1,45 @@
+rssh for Debian
+---------------
+
+rssh provides a way of restricting a user to only using one or more of
+scp, sftp, cvs, rsync, rdist, and svnserve.  rssh also can optionally
+chroot into a jail before running the command and has a configuration file
+to specify which commands are allowed.
+
+Please thoroughly read the rssh man page before using this program.  If
+rssh is not configured correctly, it may not be secure.  You may also want
+to read the security history in /usr/share/doc/rssh/SECURITY.  In
+particular, if you're allowing ssh access, make sure that either the
+restricted user cannot write to ~/.ssh or ~/.ssh/environment or that you
+have PermitUserEnvironment set to no in /etc/sshd_config.
+
+/usr/share/doc/rssh/examples/mkchroot.sh automates much of the work of
+setting up a chroot environment if you choose to configure rssh that way.
+Alternately, you could try using makejail, which takes a more
+comprehensive approach to figuring out what files are needed.  makejail is
+designed for daemons, so it's a bit difficult to use, but if you configure
+makejail to run (via testCommandsInsideJail) the programs you want to
+allow the user to run via rssh, it may be able to figure it out.
+
+rssh is built using shared libraries by default.  If you want to recompile
+it statically linked, build the source package with:
+
+    DEB_CONFIGURE_OPTIONS=static
+
+in the environment.  The rssh author recommends this, but static binaries
+are not well-supported by glibc.
+
+Keep in mind that the software has been developed to be simple, trying to
+avoid possible security problems, but cannot be assured.  If you find a
+security problem, please report it as soon as possible.  Note that the
+Debian bug tracking system is public; if you believe you have discovered a
+serious security vulnerability, feel free to contact the maintainers
+directly.
+
+Also note that the upstream maintainer of rssh does not plan to make any
+further releases.  If you are interested in support for additional
+programs (such as passwd; see Debian Bug#323384) and you have the skills
+to maintain a security-sensitive C program, consider taking over upstream
+maintenance.
+
+ -- Russ Allbery <rra@debian.org>, Mon, 29 Mar 2010 11:23:15 -0700

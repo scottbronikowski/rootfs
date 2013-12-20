@@ -1,0 +1,329 @@
+=head1 NAME
+
+Gtk2::Button - wrapper for GtkButton
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Bin
+                           +----Gtk2::Button
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+  Glib::Object::_Unregistered::GtkActivatable
+
+
+
+=cut
+
+=head1 MNEMONICS
+
+Mnemonics are "memory aids"; in GTK+, a mnemonic is an underlined character
+which corresponds to a keyboard accelerator.  For a button, that means pressing
+Alt and that key activates the button.
+
+For convenience, Gtk2-Perl uses mnemonics by default on widgets that support
+them.  If characters in label string are preceded by an underscore, they are
+underlined.  If you need a literal underscore character in a label, use '__'
+(two underscores).  If you don't want to use mnemonics at all, use the
+non-mnemonic version explicitly (e.g. C<Gtk2::Button::new_with_label>).
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::Button->B<new>
+
+=head2 widget = Gtk2::Button->B<new> ($mnemonic)
+
+=over
+
+=item * $mnemonic (string) used to label the widget, see L</MNEMONICS>
+
+=back
+
+
+
+=head2 widget = Gtk2::Button-E<gt>B<new_from_stock> ($stock_id)
+
+=over
+
+=item * $stock_id (string) creates a new button using the icon and text from the
+
+=back
+
+
+specified stock item, see L<Gtk2::Stock>
+
+
+=head2 widget = Gtk2::Button->B<new_with_label> ($label)
+
+=over
+
+=item * $label (string) used to label the widget
+
+=back
+
+
+
+=head2 widget = Gtk2::Button->B<new_with_mnemonic> ($mnemonic)
+
+=over
+
+=item * $mnemonic (string) used to label the widget, see L</MNEMONICS>
+
+=back
+
+
+
+=head2 (xalign, yalign) = $button-E<gt>B<get_alignment> 
+
+Since: gtk+ 2.4
+
+=head2 $button-E<gt>B<set_alignment> ($xalign, $yalign)
+
+=over
+
+=item * $xalign (double) 
+
+=item * $yalign (double) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 $button-E<gt>B<clicked> 
+
+=head2 $button-E<gt>B<enter> 
+
+=head2 boolean = $button-E<gt>B<get_focus_on_click> 
+
+Since: gtk+ 2.4
+
+=head2 $button-E<gt>B<set_focus_on_click> ($focus_on_click)
+
+=over
+
+=item * $focus_on_click (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 widget or undef = $button-E<gt>B<get_image> 
+
+Since: gtk+ 2.6
+
+=head2 positiontype = $button-E<gt>B<get_image_position> 
+
+Since: gtk+ 2.9
+
+=head2 $button-E<gt>B<set_image_position> ($position)
+
+=over
+
+=item * $position (Gtk2::PositionType) 
+
+=back
+
+Since: gtk+ 2.9
+
+=head2 $button-E<gt>B<set_image> ($image)
+
+=over
+
+=item * $image (Gtk2::Widget or undef) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 string = $button-E<gt>B<get_label> 
+
+=head2 $button-E<gt>B<set_label> ($label)
+
+=over
+
+=item * $label (string) 
+
+=back
+
+=head2 $button-E<gt>B<leave> 
+
+=head2 $button-E<gt>B<pressed> 
+
+=head2 $button-E<gt>B<released> 
+
+=head2 reliefstyle = $button-E<gt>B<get_relief> 
+
+=head2 $button-E<gt>B<set_relief> ($newstyle)
+
+=over
+
+=item * $newstyle (Gtk2::ReliefStyle) 
+
+=back
+
+=head2 boolean = $button-E<gt>B<get_use_stock> 
+
+=head2 $button-E<gt>B<set_use_stock> ($use_stock)
+
+=over
+
+=item * $use_stock (boolean) 
+
+=back
+
+=head2 boolean = $button-E<gt>B<get_use_underline> 
+
+=head2 $button-E<gt>B<set_use_underline> ($use_underline)
+
+=over
+
+=item * $use_underline (boolean) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'focus-on-click' (boolean : default true : readable / writable / private)
+
+Whether the button grabs focus when it is clicked with the mouse
+
+=item 'image' (Gtk2::Widget : default undef : readable / writable / private)
+
+Child widget to appear next to the button text
+
+=item 'image-position' (Gtk2::PositionType : default "left" : readable / writable / private)
+
+The position of the image relative to the text
+
+=item 'label' (string : default undef : readable / writable / construct / private)
+
+Text of the label widget inside the button, if the button contains a label widget
+
+=item 'relief' (Gtk2::ReliefStyle : default "normal" : readable / writable / private)
+
+The border relief style
+
+=item 'use-stock' (boolean : default false : readable / writable / construct / private)
+
+If set, the label is used to pick a stock item instead of being displayed
+
+=item 'use-underline' (boolean : default false : readable / writable / construct / private)
+
+If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key
+
+=item 'xalign' (float : default 0.5 : readable / writable / private)
+
+Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned
+
+=item 'yalign' (float : default 0.5 : readable / writable / private)
+
+Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<activate> (Gtk2::Button)
+
+=item B<pressed> (Gtk2::Button)
+
+=item B<released> (Gtk2::Button)
+
+=item B<clicked> (Gtk2::Button)
+
+=item B<enter> (Gtk2::Button)
+
+=item B<leave> (Gtk2::Button)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::PositionType
+
+=over
+
+=item * 'left' / 'GTK_POS_LEFT'
+
+=item * 'right' / 'GTK_POS_RIGHT'
+
+=item * 'top' / 'GTK_POS_TOP'
+
+=item * 'bottom' / 'GTK_POS_BOTTOM'
+
+=back
+
+
+=head2 enum Gtk2::ReliefStyle
+
+=over
+
+=item * 'normal' / 'GTK_RELIEF_NORMAL'
+
+=item * 'half' / 'GTK_RELIEF_HALF'
+
+=item * 'none' / 'GTK_RELIEF_NONE'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>, L<Gtk2::Bin>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

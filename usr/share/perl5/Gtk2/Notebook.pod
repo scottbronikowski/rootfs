@@ -1,0 +1,577 @@
+=head1 NAME
+
+Gtk2::Notebook - wrapper for GtkNotebook
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Notebook
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::Notebook-E<gt>B<new> 
+
+=head2 integer = $notebook-E<gt>B<append_page> ($child, $tab_label=undef)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $tab_label (scalar) 
+
+=back
+
+(integer return since Gtk2-Perl 1.080)
+
+=head2 integer = $notebook-E<gt>B<append_page_menu> ($child, $tab_label, $menu_label)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $tab_label (Gtk2::Widget or undef) 
+
+=item * $menu_label (Gtk2::Widget or undef) 
+
+=back
+
+(integer return since Gtk2-Perl 1.080)
+
+=head2 integer = $notebook-E<gt>B<get_current_page> 
+
+=head2 $notebook-E<gt>B<set_current_page> ($page_num)
+
+=over
+
+=item * $page_num (integer) 
+
+=back
+
+=head2 integer = $notebook-E<gt>B<get_group_id> 
+
+Since: gtk+ 2.10
+
+=head2 $notebook-E<gt>B<set_group_id> ($group_id)
+
+=over
+
+=item * $group_id (integer) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 integer = $notebook-E<gt>B<insert_page> ($child, $tab_label, $position)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $tab_label (scalar) 
+
+=item * $position (integer) 
+
+=back
+
+(integer return since Gtk2-Perl 1.080)
+
+=head2 integer = $notebook-E<gt>B<insert_page_menu> ($child, $tab_label, $menu_label, $position)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $tab_label (Gtk2::Widget or undef) 
+
+=item * $menu_label (Gtk2::Widget or undef) 
+
+=item * $position (integer) 
+
+=back
+
+(integer return since Gtk2-Perl 1.080)
+
+=head2 widget or undef = $notebook-E<gt>B<get_menu_label> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 $notebook-E<gt>B<set_menu_label> ($child, $menu_label=undef)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $menu_label (Gtk2::Widget or undef) 
+
+=back
+
+=head2 string = $notebook-E<gt>B<get_menu_label_text> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 $notebook-E<gt>B<set_menu_label_text> ($child, $menu_text)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $menu_text (string) 
+
+=back
+
+=head2 integer = $notebook-E<gt>B<get_n_pages> 
+
+=head2 $notebook-E<gt>B<next_page> 
+
+=head2 widget or undef = $notebook-E<gt>B<get_nth_page> ($page_num)
+
+=over
+
+=item * $page_num (integer) 
+
+=back
+
+=head2 integer = $notebook-E<gt>B<page_num> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 $notebook-E<gt>B<popup_disable> 
+
+=head2 $notebook-E<gt>B<popup_enable> 
+
+=head2 integer = $notebook-E<gt>B<prepend_page> ($child, $tab_label=undef)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $tab_label (scalar) 
+
+=back
+
+(integer return since Gtk2-Perl 1.080)
+
+=head2 integer = $notebook-E<gt>B<prepend_page_menu> ($child, $tab_label, $menu_label)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $tab_label (Gtk2::Widget or undef) 
+
+=item * $menu_label (Gtk2::Widget or undef) 
+
+=back
+
+(integer return since Gtk2-Perl 1.080)
+
+=head2 $notebook-E<gt>B<prev_page> 
+
+=head2 list = $notebook-E<gt>B<query_tab_label_packing> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 $notebook-E<gt>B<remove_page> ($page_num)
+
+=over
+
+=item * $page_num (integer) 
+
+=back
+
+=head2 $notebook-E<gt>B<reorder_child> ($child, $position)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $position (integer) 
+
+=back
+
+=head2 boolean = $notebook-E<gt>B<get_scrollable> 
+
+=head2 $notebook-E<gt>B<set_scrollable> ($scrollable)
+
+=over
+
+=item * $scrollable (boolean) 
+
+=back
+
+=head2 boolean = $notebook-E<gt>B<get_show_border> 
+
+=head2 $notebook-E<gt>B<set_show_border> ($show_border)
+
+=over
+
+=item * $show_border (boolean) 
+
+=back
+
+=head2 boolean = $notebook-E<gt>B<get_show_tabs> 
+
+=head2 $notebook-E<gt>B<set_show_tabs> ($show_tabs)
+
+=over
+
+=item * $show_tabs (boolean) 
+
+=back
+
+=head2 $notebook-E<gt>B<set_tab_border> ($border_width)
+
+=over
+
+=item * $border_width (integer) 
+
+=back
+
+=head2 boolean = $notebook-E<gt>B<get_tab_detachable> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 $notebook-E<gt>B<set_tab_detachable> ($child, $detachable)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $detachable (boolean) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 $notebook-E<gt>B<set_tab_hborder> ($tab_hborder)
+
+=over
+
+=item * $tab_hborder (integer) 
+
+=back
+
+=head2 widget = $notebook-E<gt>B<get_tab_label> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 $notebook-E<gt>B<set_tab_label_packing> ($child, $expand, $fill, $pack_type)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $expand (boolean) 
+
+=item * $fill (boolean) 
+
+=item * $pack_type (Gtk2::PackType) 
+
+=back
+
+=head2 $notebook-E<gt>B<set_tab_label> ($child, $tab_label=undef)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $tab_label (Gtk2::Widget or undef) 
+
+=back
+
+=head2 string = $notebook-E<gt>B<get_tab_label_text> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 $notebook-E<gt>B<set_tab_label_text> ($child, $tab_text)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $tab_text (string) 
+
+=back
+
+=head2 positiontype = $notebook-E<gt>B<get_tab_pos> 
+
+=head2 $notebook-E<gt>B<set_tab_pos> ($pos)
+
+=over
+
+=item * $pos (Gtk2::PositionType) 
+
+=back
+
+=head2 boolean = $notebook-E<gt>B<get_tab_reorderable> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 $notebook-E<gt>B<set_tab_reorderable> ($child, $reorderable)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $reorderable (boolean) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 $notebook-E<gt>B<set_tab_vborder> ($tab_vborder)
+
+=over
+
+=item * $tab_vborder (integer) 
+
+=back
+
+=head2 Gtk2::Notebook-E<gt>B<set_window_creation_hook> ($func, $data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+Since: gtk+ 2.10
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'enable-popup' (boolean : default false : readable / writable / private)
+
+If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page
+
+=item 'group' (gpointer : default 0 : readable / writable / private)
+
+Group for tabs drag and drop
+
+=item 'group-id' (integer : default -1 : readable / writable / private)
+
+Group ID for tabs drag and drop
+
+=item 'group-name' (string : default undef : readable / writable / private)
+
+Group name for tabs drag and drop
+
+=item 'homogeneous' (boolean : default false : readable / writable / private)
+
+Whether tabs should have homogeneous sizes
+
+=item 'page' (integer : default -1 : readable / writable / private)
+
+The index of the current page
+
+=item 'scrollable' (boolean : default false : readable / writable / private)
+
+If TRUE, scroll arrows are added if there are too many tabs to fit
+
+=item 'show-border' (boolean : default true : readable / writable / private)
+
+Whether the border should be shown or not
+
+=item 'show-tabs' (boolean : default true : readable / writable / private)
+
+Whether tabs should be shown or not
+
+=item 'tab-border' (Glib::UInt : default 2 : writable / private)
+
+Width of the border around the tab labels
+
+=item 'tab-hborder' (Glib::UInt : default 2 : readable / writable / private)
+
+Width of the horizontal border of tab labels
+
+=item 'tab-pos' (Gtk2::PositionType : default "top" : readable / writable / private)
+
+Which side of the notebook holds the tabs
+
+=item 'tab-vborder' (Glib::UInt : default 2 : readable / writable / private)
+
+Width of the vertical border of tab labels
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<switch-page> (Gtk2::Notebook, gpointer, Glib::UInt)
+
+=item boolean = B<focus-tab> (Gtk2::Notebook, Gtk2::NotebookTab)
+
+=item boolean = B<select-page> (Gtk2::Notebook, boolean)
+
+=item boolean = B<change-current-page> (Gtk2::Notebook, integer)
+
+=item B<move-focus-out> (Gtk2::Notebook, Gtk2::DirectionType)
+
+=item boolean = B<reorder-tab> (Gtk2::Notebook, Gtk2::DirectionType, boolean)
+
+=item B<page-reordered> (Gtk2::Notebook, Gtk2::Widget, Glib::UInt)
+
+=item B<page-removed> (Gtk2::Notebook, Gtk2::Widget, Glib::UInt)
+
+=item B<page-added> (Gtk2::Notebook, Gtk2::Widget, Glib::UInt)
+
+=item Gtk2::Notebook = B<create-window> (Gtk2::Notebook, Gtk2::Widget, integer, integer)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::DirectionType
+
+=over
+
+=item * 'tab-forward' / 'GTK_DIR_TAB_FORWARD'
+
+=item * 'tab-backward' / 'GTK_DIR_TAB_BACKWARD'
+
+=item * 'up' / 'GTK_DIR_UP'
+
+=item * 'down' / 'GTK_DIR_DOWN'
+
+=item * 'left' / 'GTK_DIR_LEFT'
+
+=item * 'right' / 'GTK_DIR_RIGHT'
+
+=back
+
+
+=head2 enum Gtk2::NotebookTab
+
+=over
+
+=item * 'first' / 'GTK_NOTEBOOK_TAB_FIRST'
+
+=item * 'last' / 'GTK_NOTEBOOK_TAB_LAST'
+
+=back
+
+
+=head2 enum Gtk2::PackType
+
+=over
+
+=item * 'start' / 'GTK_PACK_START'
+
+=item * 'end' / 'GTK_PACK_END'
+
+=back
+
+
+=head2 enum Gtk2::PositionType
+
+=over
+
+=item * 'left' / 'GTK_POS_LEFT'
+
+=item * 'right' / 'GTK_POS_RIGHT'
+
+=item * 'top' / 'GTK_POS_TOP'
+
+=item * 'bottom' / 'GTK_POS_BOTTOM'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

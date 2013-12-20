@@ -1,0 +1,371 @@
+#! /usr/bin/perl
+
+use POSIX;
+use Fcntl;
+use File::Temp;
+use Getopt::Long;
+
+if ($0 =~ /autoconf$/) {
+    $mode = 'autoconf';
+} elsif ($0 =~ /autoheader$/) {
+    $mode = 'autoheader';
+} elsif ($0 =~ /autoreconf$/) {
+    $mode = 'autoreconf';
+} else {
+    die "autoconf-wrapper: unrecognized mode '$0'\n";
+}
+
+$print_version = 0;
+
+OPTION: for ($i = 0; $i <= $#ARGV; $i++) {
+    $_ = $arg = $ARGV[$i];
+
+    # --install was added to autoreconf around version 2.50
+    if ($mode eq 'autoreconf' && $arg eq '--install') {
+	ac250 ();
+    }
+    # --force was added to autoconf around version 2.53
+    elsif (($mode eq 'autoconf' || $mode eq 'autoheader')
+	   && $arg eq '--force') {
+	ac250 ();
+    }
+    # Note that help or version was requested, so that we can append the
+    # wrapper info after Autoconf runs.
+    elsif (/--vers.*/ || $arg eq '-V'
+	   || /^--h.+/ || $arg eq '-h'
+	  ) {
+	$print_version = 1;
+    }
+    # Most options don't tell us anything or need any special handling.
+    elsif ($arg eq '--verbose' || $arg eq '-v'
+	|| $arg eq '--debug' || $arg eq '-d'
+	|| /^--output=/ || /^-o.+/
+	|| $arg eq '--force' || $arg eq '-f'
+	|| $arg eq '--install' || $arg eq '-i'
+	|| $arg eq '--symlink' || $arg eq '-s'
+	|| /^--m4dir=/ || /^-M.+/
+	|| $arg eq '--cygnus'
+	|| $arg eq '--foreign'
+	|| $arg eq '--gnits'
+	|| $arg eq '--gnu'
+	|| $arg eq '--include-deps' || $arg eq '-i'
+	) {
+	# Nothing to do
+    }
+    # We need to know the macro dir in order to properly search for aclocal.m4.
+    # Only a fsckwit would use --macrodir to find aclocal.m4, but I'm trying
+    # to be bug-for-bug compatible here.
+    elsif ($arg eq '--macrodir' || $arg eq '-m') {
+	$macrodir = $ARGV[++$i];
+    }
+    elsif (/^--macrodir=(.*)$/ || /^-m(.+)$/) {
+	$macrodir = $1;
+    }
+
+    # Ditto for the local dir.
+    elsif ($arg eq '--localdir' || $arg eq '-l') {
+	$localdir = $ARGV[++$i];
+    }
+    elsif (/^--localdir=(.*)$/ || /^-l(.+)$/) {
+	$localdir = $1;
+    }
+
+    # Some options require that we skip the next argument too.
+    elsif ($arg eq '--output' || $arg eq '-o'
+	   ) {
+	$i++;
+    }
+
+    # Some options are new in autoconf 2.50, so we know what version to use.
+    elsif (/^--trace/ || /^-t/
+	   || /^--autoconf-dir/ || /^-A/
+	   || $arg eq '--initialization' || $arg eq '-i'
+	   || $arg eq '--m4dir' || $arg eq '-M'
+	   || /^--warnings=/ || /^-W.+/ || $arg eq '-W'
+	   || /^--include=/ || /^-I.+/ || $arg eq '-I'
+	   || /^--prepend-include=/ || /^-B.+/ || $arg eq '-B'
+	   ) {
+	ac250 ();
+    }
+
+    # autoheader2.50 and autoreconf2.50 allow short options to be bundled
+    # together, but autoconf2.50 and auto*2.13 do not.
+    elsif (($mode eq 'autoheader' || $mode eq 'autoreconf') && /^-[^-]./) {
+	ac250 ();
+    }
+
+    # -- causes us to stop option processing.
+    elsif ($arg eq '--') {
+	for ($i++; $i <= $#ARGV; $i++) {
+	    nonoption_arg ($arg);
+	}
+	last OPTION;
+    }
+
+    # Check for an option we don't understand.
+    elsif (/^-.+/) {
+	print "autoconf-wrapper: unrecognized option $arg\n";
+    }
+
+    # Otherwise, it's a nonoption argument.
+    else {
+	nonoption_arg ($arg);
+    }
+}
+
+# If no input file was passed on the command line, 
+# find the default.
+if (!defined ($infile)) {
+    if (-e 'configure.ac') {
+	$infile = 'configure.ac';
+    } elsif (-e 'configure.in') {
+	$infile = 'configure.in';
+    } elsif ($mode eq 'autoreconf') {
+	# A cop-out, but autoreconf is pretty uncommon in practice.
+	ac213 ();
+    }
+}
+
+# If we're running autoreconf and there's no aclocal.m4, run
+# aclocal first so that we'll catch any AC_PREREQs in the
+# generated aclocal.m4.
+if ($mode eq 'autoreconf' && ! -f 'aclocal.m4') {
+    do_run_aclocal ();
+}
+
+if (defined ($infile)) {
+    # Assume an input file ending in .ac is 2.50,
+    # because that extension was introduced after 2.13.
+    if ($infile =~ /\.ac$/) {
+	ac250 ();
+    }
+
+    # If the input file is stdin, copy it to a temporary file.
+    if ($infile eq '-') {
+	($fh) = File::Temp::tmpfile ();
+	fcntl ($fh, F_SETFD, fcntl ($fh, F_GETFD, 0) & ~FD_CLOEXEC);
+	while (<STDIN>) {
+	    print $fh $_;
+	}
+	seek ($fh, SEEK_SET, 0);
+    } else {
+	$fh = 'INFILE';
+	open ($fh, "<$infile") || die "autoconf-wrapper: $infile: $!\n";
+    }
+
+    # Read the input file and check for AC_PREREQ calls.
+    check_fh ();
+
+    if ($infile ne '-') {
+	close ($fh);
+    }
+
+    # Check aclocal.m4, too.
+    check_file ('aclocal.m4');
+
+    # Check include files, recursively, too.
+    while (@included_files) {
+	my ($filename) = pop (@included_files);
+	check_file ($filename);
+    }
+}
+
+# Default to 2.13.
+ac213 ();
+
+# Check the specified file for AC_PREREQ and include directives.
+# Searches the m4 include path to find the file.
+sub check_file {
+    my ($basename) = @_;
+    my ($filename);
+    if (-e $basename) {
+	$filename = $basename;
+    } else {
+	foreach $dir ($macrodir, $localdir, split (/:/, $ENV{'M4PATH'})) {
+	    my ($try) = "$dir/basename";
+	    if (-e $try) {
+		$filename = $try;
+		last;
+	    }
+	}
+    }
+
+    if (defined ($filename)) {
+	$fh = 'INFILE';
+	open ($fh, "<$filename") || die ("autoconf-wrapper: $filename: $!\n");
+	check_fh ();
+	close ($fh);
+    }
+}
+
+# Checks $fh for a line containing a v2.50+ AC_PREREQ call
+# and adds any not-yet-processed included files to @included_files.
+sub check_fh {
+    while (<$fh>) {
+	if (/AC_PREREQ\s*\(\s*\[?\s*2\.(\d+).*\)/) {
+	    $prematch = $`;
+	    if (!($prematch =~ /(\bdnl\b)|#/)) {
+		  if ($1 > 13) {
+		      ac250 ();
+		  }
+	      }
+	}
+	elsif (/\bs?include\((.*)\)/) {
+	    push (@included_files, $1) unless $checked_files{$1};
+	    $checked_files{$1} = 1;
+	}
+    }
+}
+
+# Handle nonoption argument. 
+sub nonoption_arg {
+    my ($arg) = @_;
+    die "autoconf-wrapper: invalid number of arguments\n"
+	if defined ($infile) || $mode eq 'autoreconf';
+    $infile = $arg;
+}
+
+sub ac213 {
+    run_autoconf ("2.13");
+}
+
+sub ac250 {
+    run_autoconf ("2.50");
+}
+
+sub run_autoconf {
+    my ($version) = @_;
+    my ($binary) = "/usr/bin/${mode}${version}";
+
+    # If we read input from stdin, rewind the temporary file
+    # and make the temporary stream available as a new stdin.
+    if ($infile eq '-') {
+	seek ($fh, SEEK_SET, 0);
+	dup2 (fileno ($fh), 0);
+    }
+
+    if (!$print_version) {
+	exec { $binary } $binary, @ARGV;
+	die "couldn't exec $binary: $!";
+    } else {
+	my ($code) = system { $binary } $binary, @ARGV;
+	print STDERR "couldn't exec $binary: $!\n" if $code == -1;
+	print "---\n";
+	print "Autoconf $version chosen by Debian wrapper script.\n";
+	print "For information and tuning advice see autoconf(1).\n";
+	exit $code;
+    }
+}
+
+# autoreconf - install the GNU Build System in a directory tree
+# Copyright (C) 1994, 1999, 2000, 2001, 2002, 2003
+# Free Software Foundation, Inc.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+# Written by David J. MacKenzie.
+# Extended and rewritten in Perl by Akim Demaille.
+
+BEGIN
+{
+  my $datadir = $ENV{'autom4te_perllibdir'} || '/usr/share/autoconf';
+  unshift @INC, $datadir;
+}
+use Autom4te::XFile;
+use Autom4te::FileUtils;
+
+sub do_run_aclocal {
+  my $aclocal    = $ENV{'ACLOCAL'}    || 'aclocal';
+
+  # If there are flags for aclocal in Makefile.am, use them.
+  my $aclocal_flags = '';
+  if ($uses_aclocal && -f 'Makefile.am')
+    {
+      my $makefile = new Autom4te::XFile 'Makefile.am';
+      while ($_ = $makefile->getline)
+        {
+          if (/^ACLOCAL_[A-Z_]*FLAGS\s*=\s*(.*)/)
+            {
+              $aclocal_flags = $1;
+              last;
+            }
+        }
+    }
+  run_aclocal ($aclocal, $aclocal_flags);
+}
+
+# &run_aclocal ($ACLOCAL, $FLAGS)
+# -------------------------------
+# Update aclocal.m4 as lazily as possible, as aclocal pre-1.8 always
+# overwrites aclocal.m4, hence triggers autoconf, autoheader, automake
+# etc. uselessly.  aclocal 1.8+ does not need this.
+sub run_aclocal ($$)
+{
+  my ($aclocal, $flags) = @_;
+
+  # Does aclocal support --force?
+  my ($aclocal_supports_force) = `$aclocal --help` =~ /--force/;
+
+  # aclocal 1.8+ does all this for free.  It can be recognized by its
+  # --force support.
+  if ($aclocal_supports_force)
+    {
+      xsystem ("$aclocal $flags");
+    }
+  else
+    {
+      xsystem ("$aclocal $flags --output=aclocal.m4t");
+      # aclocal may produce no output.
+      if (-f 'aclocal.m4t')
+	{
+	  update_file ('aclocal.m4t', 'aclocal.m4');
+	  # Make sure that the local m4 files are older than
+	  # aclocal.m4.
+	  #
+	  # Why is not always the case?  Because we already run
+	  # aclocal at first (before tracing), which, for instance,
+	  # can find Gettext's macros in .../share/aclocal, so we may
+	  # have had the right aclocal.m4 already.  Then autopoint is
+	  # run, and installs locally these M4 files.  Then
+	  # autoreconf, via update_file, sees it is the _same_
+	  # aclocal.m4, and doesn't change its timestamp.  But later,
+	  # Automake's Makefile expresses that aclocal.m4 depends on
+	  # these local files, which are newer, so it triggers aclocal
+	  # again.
+	  #
+	  # To make sure aclocal.m4 is no older, we change the
+	  # modification times of the local M4 files to be not newer
+	  # than it.
+	  #
+	  # First, where are the local files?
+	  my $aclocal_local_dir = '.';
+	  if ($flags =~ /-I\s+(\S+)/)
+	    {
+	      $aclocal_local_dir = $1;
+	    }
+	  # All the local files newer than aclocal.m4 are to be
+	  # made not newer than it.
+	  my $aclocal_m4_mtime = mtime ('aclocal.m4');
+	  for my $file (glob ("$aclocal_local_dir/*.m4"), 'acinclude.m4')
+	    {
+	      if ($aclocal_m4_mtime < mtime ($file))
+		{
+		  utime $aclocal_m4_mtime, $aclocal_m4_mtime, $file;
+		}
+	    }
+	}
+    }
+}

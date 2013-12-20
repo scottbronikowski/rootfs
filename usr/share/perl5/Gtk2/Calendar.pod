@@ -1,0 +1,289 @@
+=head1 NAME
+
+Gtk2::Calendar - wrapper for GtkCalendar
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Calendar
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::Calendar-E<gt>B<new> 
+
+=head2 $calendar-E<gt>B<clear_marks> 
+
+=head2 (year, month, day) = $calendar-E<gt>B<get_date> 
+
+=head2 $calendar-E<gt>B<set_detail_func> ($func, $data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+Since: gtk+ 2.14
+
+=head2 integer = $calendar-E<gt>B<get_detail_height_rows> 
+
+Since: gtk+ 2.14
+
+=head2 $calendar-E<gt>B<set_detail_height_rows> ($rows)
+
+=over
+
+=item * $rows (integer) 
+
+=back
+
+Since: gtk+ 2.14
+
+=head2 integer = $calendar-E<gt>B<get_detail_width_chars> 
+
+Since: gtk+ 2.14
+
+=head2 $calendar-E<gt>B<set_detail_width_chars> ($chars)
+
+=over
+
+=item * $chars (integer) 
+
+=back
+
+Since: gtk+ 2.14
+
+=head2 $calendar-E<gt>B<display_options> ($flags)
+
+=over
+
+=item * $flags (Gtk2::CalendarDisplayOptions) 
+
+=back
+
+The old name for C<set_display_options>.
+
+=head2 calendardisplayoptions = $calendar-E<gt>B<get_display_options> 
+
+=head2 $calendar-E<gt>B<set_display_options> ($flags)
+
+=over
+
+=item * $flags (Gtk2::CalendarDisplayOptions) 
+
+=back
+
+=head2 $calendar-E<gt>B<freeze> 
+
+=head2 boolean = $calendar-E<gt>B<mark_day> ($day)
+
+=over
+
+=item * $day (integer) 
+
+=back
+
+=head2 $widget->B<marked_date> ($value)
+
+=head2 value = $widget->B<marked_date>
+
+
+
+=head2 $widget->B<month> ($value)
+
+=head2 value = $widget->B<month>
+
+
+
+=head2 $widget->B<num_marked_dates> ($value)
+
+=head2 value = $widget->B<num_marked_dates>
+
+
+
+=head2 $calendar-E<gt>B<select_day> ($day)
+
+=over
+
+=item * $day (integer) 
+
+=back
+
+=head2 boolean = $calendar-E<gt>B<select_month> ($month, $year)
+
+=over
+
+=item * $month (integer) 
+
+=item * $year (integer) 
+
+=back
+
+=head2 $widget->B<selected_day> ($value)
+
+=head2 value = $widget->B<selected_day>
+
+
+
+=head2 $calendar-E<gt>B<thaw> 
+
+=head2 boolean = $calendar-E<gt>B<unmark_day> ($day)
+
+=over
+
+=item * $day (integer) 
+
+=back
+
+=head2 $widget->B<year> ($value)
+
+=head2 value = $widget->B<year>
+
+
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'day' (integer : default 0 : readable / writable / private)
+
+The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)
+
+=item 'detail-height-rows' (integer : default 0 : readable / writable / private)
+
+Details height in rows
+
+=item 'detail-width-chars' (integer : default 0 : readable / writable / private)
+
+Details width in characters
+
+=item 'month' (integer : default 0 : readable / writable / private)
+
+The selected month (as a number between 0 and 11)
+
+=item 'no-month-change' (boolean : default false : readable / writable / private)
+
+If TRUE, the selected month cannot be changed
+
+=item 'show-day-names' (boolean : default true : readable / writable / private)
+
+If TRUE, day names are displayed
+
+=item 'show-details' (boolean : default true : readable / writable / private)
+
+If TRUE, details are shown
+
+=item 'show-heading' (boolean : default true : readable / writable / private)
+
+If TRUE, a heading is displayed
+
+=item 'show-week-numbers' (boolean : default false : readable / writable / private)
+
+If TRUE, week numbers are displayed
+
+=item 'year' (integer : default 0 : readable / writable / private)
+
+The selected year
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<month-changed> (Gtk2::Calendar)
+
+=item B<day-selected> (Gtk2::Calendar)
+
+=item B<day-selected-double-click> (Gtk2::Calendar)
+
+=item B<prev-month> (Gtk2::Calendar)
+
+=item B<next-month> (Gtk2::Calendar)
+
+=item B<prev-year> (Gtk2::Calendar)
+
+=item B<next-year> (Gtk2::Calendar)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::CalendarDisplayOptions
+
+=over
+
+=item * 'show-heading' / 'GTK_CALENDAR_SHOW_HEADING'
+
+=item * 'show-day-names' / 'GTK_CALENDAR_SHOW_DAY_NAMES'
+
+=item * 'no-month-change' / 'GTK_CALENDAR_NO_MONTH_CHANGE'
+
+=item * 'show-week-numbers' / 'GTK_CALENDAR_SHOW_WEEK_NUMBERS'
+
+=item * 'week-start-monday' / 'GTK_CALENDAR_WEEK_START_MONDAY'
+
+=item * 'show-details' / 'GTK_CALENDAR_SHOW_DETAILS'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

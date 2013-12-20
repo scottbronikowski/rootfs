@@ -1,0 +1,17 @@
+# Copy this file into /etc/makejail to set defaults
+# configuration options specific to OpenBSD (tested on 3.0)
+
+pathToLdSoConf=None
+pathToLdSoCache="/var/run/ld.so.hints"
+psCommand="ps -ax"
+psColumns=[1,5]
+straceCommand="ktrace -a -f %file -i %command"
+straceCommandPid="ktrace -p %pid -a -f %file -i"
+straceCommandStop="ktrace -C"
+straceCommandView="kdump -f %file"
+stracePatterns=[['.* NAMI +"([^"]*)".*',
+				 '.* RET *(exec.*|open|access|utimes|chown|.*stat|readlink|chdir) -1 errno 2.*']]
+straceCreatePatterns=[['.* NAMI +"([^"]*)".*',
+					   '.* RET *bind -1 errno 2.*']]
+straceSocketPatterns=[['.* NAMI +"([^"]*)".*',
+					   '.* RET *connect -1 errno 2.*']]

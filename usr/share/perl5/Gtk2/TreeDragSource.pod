@@ -1,0 +1,72 @@
+=head1 NAME
+
+Gtk2::TreeDragSource - wrapper for GtkTreeDragSource
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Interface
+  +----Gtk2::TreeDragSource
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 boolean = $drag_source-E<gt>B<drag_data_delete> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 selection_data = $drag_source->B<drag_data_get> ($path, $selection_data)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $selection_data (Gtk2::SelectionData) 
+
+=back
+
+Get selection data from a drag source.  The data is written to $selection_data,
+or if $selection_data is not given then to a newly created Gtk2::SelectionData
+object with target type C<GTK_TREE_MODEL_ROW>.  On success the return is the
+given or new object, or on failure the return is undef.
+
+=head2 boolean = $drag_source-E<gt>B<row_draggable> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Interface>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

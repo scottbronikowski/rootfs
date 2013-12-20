@@ -1,0 +1,366 @@
+=head1 NAME
+
+Gtk2::Image - wrapper for GtkImage
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Misc
+                      +----Gtk2::Image
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::Image-E<gt>B<new> 
+
+=head2 widget = Gtk2::Image-E<gt>B<new_from_animation> ($animation)
+
+=over
+
+=item * $animation (Gtk2::Gdk::PixbufAnimation) 
+
+=back
+
+=head2 widget = Gtk2::Image-E<gt>B<new_from_file> ($filename)
+
+=over
+
+=item * $filename (localized file name or undef) 
+
+=back
+
+=head2 widget = Gtk2::Image-E<gt>B<new_from_icon_name> ($icon_name, $size)
+
+=over
+
+=item * $icon_name (string) 
+
+=item * $size (Gtk2::IconSize) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 widget = Gtk2::Image-E<gt>B<new_from_icon_set> ($icon_set, $size)
+
+=over
+
+=item * $icon_set (Gtk2::IconSet) 
+
+=item * $size (Gtk2::IconSize) 
+
+=back
+
+=head2 widget = Gtk2::Image-E<gt>B<new_from_image> ($image, $mask)
+
+=over
+
+=item * $image (Gtk2::Gdk::Image or undef) 
+
+=item * $mask (Gtk2::Gdk::Bitmap or undef) 
+
+=back
+
+=head2 widget = Gtk2::Image-E<gt>B<new_from_pixbuf> ($pixbuf)
+
+=over
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf or undef) 
+
+=back
+
+=head2 widget = Gtk2::Image-E<gt>B<new_from_pixmap> ($pixmap, $mask)
+
+=over
+
+=item * $pixmap (Gtk2::Gdk::Pixmap or undef) 
+
+=item * $mask (Gtk2::Gdk::Bitmap or undef) 
+
+=back
+
+=head2 widget = Gtk2::Image-E<gt>B<new_from_stock> ($stock_id, $size)
+
+=over
+
+=item * $stock_id (string) 
+
+=item * $size (Gtk2::IconSize) 
+
+=back
+
+=head2 pixbufanimation = $image-E<gt>B<get_animation> 
+
+=head2 $image-E<gt>B<clear> 
+
+Since: gtk+ 2.8
+
+=head2 $image-E<gt>B<set_from_animation> ($animation)
+
+=over
+
+=item * $animation (Gtk2::Gdk::PixbufAnimation) 
+
+=back
+
+=head2 $image-E<gt>B<set_from_file> ($filename)
+
+=over
+
+=item * $filename (localized file name or undef) 
+
+=back
+
+=head2 $image-E<gt>B<set_from_icon_name> ($icon_name, $size)
+
+=over
+
+=item * $icon_name (string) 
+
+=item * $size (Gtk2::IconSize) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 $image-E<gt>B<set_from_icon_set> ($icon_set, $size)
+
+=over
+
+=item * $icon_set (Gtk2::IconSet) 
+
+=item * $size (Gtk2::IconSize) 
+
+=back
+
+=head2 $image-E<gt>B<set_from_image> ($gdk_image, $mask)
+
+=over
+
+=item * $gdk_image (Gtk2::Gdk::Image or undef) 
+
+=item * $mask (Gtk2::Gdk::Bitmap or undef) 
+
+=back
+
+=head2 $image-E<gt>B<set_from_pixbuf> ($pixbuf)
+
+=over
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf or undef) 
+
+=back
+
+=head2 $image-E<gt>B<set_from_pixmap> ($pixmap, $mask)
+
+=over
+
+=item * $pixmap (Gtk2::Gdk::Pixmap or undef) 
+
+=item * $mask (Gtk2::Gdk::Bitmap or undef) 
+
+=back
+
+=head2 $image-E<gt>B<set_from_stock> ($stock_id, $size)
+
+=over
+
+=item * $stock_id (string) 
+
+=item * $size (Gtk2::IconSize) 
+
+=back
+
+=head2 list = $image-E<gt>B<get_icon_name> 
+
+Since: gtk+ 2.6
+
+=head2 list = $image-E<gt>B<get_icon_set> 
+
+=head2 list = $image-E<gt>B<get_image> 
+
+=head2 pixbuf = $image-E<gt>B<get_pixbuf> 
+
+=head2 integer = $image-E<gt>B<get_pixel_size> 
+
+Since: gtk+ 2.6
+
+=head2 $image-E<gt>B<set_pixel_size> ($pixel_size)
+
+=over
+
+=item * $pixel_size (integer) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 list = $image-E<gt>B<get_pixmap> 
+
+=head2 (stock_id, icon_size) = $image->B<get_stock>
+
+
+
+=head2 imagetype = $image-E<gt>B<get_storage_type> 
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'file' (string : default undef : readable / writable / private)
+
+Filename to load and display
+
+=item 'gicon' (Glib::Object::_Unregistered::GIcon : default undef : readable / writable / private)
+
+The GIcon being displayed
+
+=item 'icon-name' (string : default undef : readable / writable / private)
+
+The name of the icon from the icon theme
+
+=item 'icon-set' (Gtk2::IconSet : default undef : readable / writable / private)
+
+Icon set to display
+
+=item 'icon-size' (integer : default 4 : readable / writable / private)
+
+Symbolic size to use for stock icon, icon set or named icon
+
+=item 'image' (Gtk2::Gdk::Image : default undef : readable / writable / private)
+
+A GdkImage to display
+
+=item 'mask' (Gtk2::Gdk::Pixmap : default undef : readable / writable / private)
+
+Mask bitmap to use with GdkImage or GdkPixmap
+
+=item 'pixbuf' (Gtk2::Gdk::Pixbuf : default undef : readable / writable / private)
+
+A GdkPixbuf to display
+
+=item 'pixbuf-animation' (Gtk2::Gdk::PixbufAnimation : default undef : readable / writable / private)
+
+GdkPixbufAnimation to display
+
+=item 'pixel-size' (integer : default -1 : readable / writable / private)
+
+Pixel size to use for named icon
+
+=item 'pixmap' (Gtk2::Gdk::Pixmap : default undef : readable / writable / private)
+
+A GdkPixmap to display
+
+=item 'stock' (string : default undef : readable / writable / private)
+
+Stock ID for a stock image to display
+
+=item 'storage-type' (Gtk2::ImageType : default "empty" : readable / private)
+
+The representation being used for image data
+
+=item 'use-fallback' (boolean : default false : readable / writable / private)
+
+Whether to use icon names fallback
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::IconSize
+
+=over
+
+=item * 'invalid' / 'GTK_ICON_SIZE_INVALID'
+
+=item * 'menu' / 'GTK_ICON_SIZE_MENU'
+
+=item * 'small-toolbar' / 'GTK_ICON_SIZE_SMALL_TOOLBAR'
+
+=item * 'large-toolbar' / 'GTK_ICON_SIZE_LARGE_TOOLBAR'
+
+=item * 'button' / 'GTK_ICON_SIZE_BUTTON'
+
+=item * 'dnd' / 'GTK_ICON_SIZE_DND'
+
+=item * 'dialog' / 'GTK_ICON_SIZE_DIALOG'
+
+=back
+
+
+=head2 enum Gtk2::ImageType
+
+=over
+
+=item * 'empty' / 'GTK_IMAGE_EMPTY'
+
+=item * 'pixmap' / 'GTK_IMAGE_PIXMAP'
+
+=item * 'image' / 'GTK_IMAGE_IMAGE'
+
+=item * 'pixbuf' / 'GTK_IMAGE_PIXBUF'
+
+=item * 'stock' / 'GTK_IMAGE_STOCK'
+
+=item * 'icon-set' / 'GTK_IMAGE_ICON_SET'
+
+=item * 'animation' / 'GTK_IMAGE_ANIMATION'
+
+=item * 'icon-name' / 'GTK_IMAGE_ICON_NAME'
+
+=item * 'gicon' / 'GTK_IMAGE_GICON'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Misc>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

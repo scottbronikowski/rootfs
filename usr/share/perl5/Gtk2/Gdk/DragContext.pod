@@ -1,0 +1,332 @@
+=head1 NAME
+
+Gtk2::Gdk::DragContext - wrapper for GdkDragContext
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Gdk::DragContext
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 dragcontext = Gtk2::Gdk::DragContext-E<gt>B<new> 
+
+=head2 $context-E<gt>B<abort> ($time_)
+
+=over
+
+=item * $time_ (unsigned) 
+
+=back
+
+=head2 scalar = $dc-E<gt>B<action> 
+
+=head2 scalar = $dc-E<gt>B<actions> 
+
+=head2 dragcontext = Gtk2::Gdk::DragContext-E<gt>B<begin> ($window, ...)
+
+=over
+
+=item * $window (Gtk2::Gdk::Window) 
+
+=item * ... (list) of Gtk2::Gdk::Atom's
+
+=back
+
+
+
+=head2 scalar = $dc-E<gt>B<dest_window> 
+
+=head2 boolean = $context-E<gt>B<drag_drop_succeeded> 
+
+Since: gtk+ 2.6
+
+=head2 $context-E<gt>B<drop> ($time_)
+
+=over
+
+=item * $time_ (unsigned) 
+
+=back
+
+=head2 $context-E<gt>B<drop_finish> ($success, $time_=GDK_CURRENT_TIME)
+
+=over
+
+=item * $success (boolean) 
+
+=item * $time_ (unsigned) 
+
+=back
+
+=head2 $context-E<gt>B<drop_reply> ($ok, $time_=GDK_CURRENT_TIME)
+
+=over
+
+=item * $ok (boolean) 
+
+=item * $time_ (unsigned) 
+
+=back
+
+=head2 (dest_window, protocol) = $context->B<find_window> ($drag_window, $x_root, $y_root)
+
+=over
+
+=item * $drag_window (Gtk2::Gdk::Window) 
+
+=item * $x_root (integer) 
+
+=item * $y_root (integer) 
+
+=back
+
+
+
+=head2 (dest_window, protocol) = $context->B<find_window_for_screen> ($drag_window, $screen, $x_root, $y_root)
+
+=over
+
+=item * $drag_window (Gtk2::Gdk::Window) 
+
+=item * $screen (Gtk2::Gdk::Screen) 
+
+=item * $x_root (integer) 
+
+=item * $y_root (integer) 
+
+=back
+
+
+
+Since: gtk+ 2.2
+
+=head2 $context-E<gt>B<finish> ($success, $del, $time_)
+
+=over
+
+=item * $success (boolean) 
+
+=item * $del (boolean) 
+
+=item * $time_ (unsigned) 
+
+=back
+
+=head2 $context-E<gt>B<set_icon_default> 
+
+=head2 $context-E<gt>B<set_icon_name> ($icon_name, $hot_x, $hot_y)
+
+=over
+
+=item * $icon_name (string) 
+
+=item * $hot_x (integer) 
+
+=item * $hot_y (integer) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 $context-E<gt>B<set_icon_pixbuf> ($pixbuf, $hot_x, $hot_y)
+
+=over
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf) 
+
+=item * $hot_x (integer) 
+
+=item * $hot_y (integer) 
+
+=back
+
+=head2 $context-E<gt>B<set_icon_pixmap> ($colormap, $pixmap, $mask, $hot_x, $hot_y)
+
+=over
+
+=item * $colormap (Gtk2::Gdk::Colormap) 
+
+=item * $pixmap (Gtk2::Gdk::Pixmap) 
+
+=item * $mask (Gtk2::Gdk::Bitmap or undef) 
+
+=item * $hot_x (integer) 
+
+=item * $hot_y (integer) 
+
+=back
+
+=head2 $context-E<gt>B<set_icon_stock> ($stock_id, $hot_x, $hot_y)
+
+=over
+
+=item * $stock_id (string) 
+
+=item * $hot_x (integer) 
+
+=item * $hot_y (integer) 
+
+=back
+
+=head2 $context-E<gt>B<set_icon_widget> ($widget, $hot_x, $hot_y)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $hot_x (integer) 
+
+=item * $hot_y (integer) 
+
+=back
+
+=head2 scalar = $dc-E<gt>B<is_source> 
+
+=head2 boolean = $context-E<gt>B<motion> ($dest_window, $protocol, $x_root, $y_root, $suggested_action, $possible_actions, $time_)
+
+=over
+
+=item * $dest_window (Gtk2::Gdk::Window) 
+
+=item * $protocol (Gtk2::Gdk::DragProtocol) 
+
+=item * $x_root (integer) 
+
+=item * $y_root (integer) 
+
+=item * $suggested_action (Gtk2::Gdk::DragAction) 
+
+=item * $possible_actions (Gtk2::Gdk::DragAction) 
+
+=item * $time_ (unsigned) 
+
+=back
+
+=head2 scalar = $dc-E<gt>B<protocol> 
+
+=head2 (ret, protocol) = Gtk2::Gdk::DragContext->B<get_protocol_for_display> ($display, $xid)
+
+=over
+
+=item * $display (Gtk2::Gdk::Display) 
+
+=item * $xid (unsigned) 
+
+=back
+
+
+
+Since: gtk+ 2.2
+
+=head2 (ret, protocol) = Gtk2::Gdk::DragContext->B<get_protocol> ($xid)
+
+=over
+
+=item * $xid (unsigned) 
+
+=back
+
+
+
+=head2 atom = $context-E<gt>B<get_selection> 
+
+=head2 widget = $context-E<gt>B<get_source_widget> 
+
+=head2 scalar = $dc-E<gt>B<source_window> 
+
+=head2 scalar = $dc-E<gt>B<start_time> 
+
+=head2 $context-E<gt>B<status> ($action, $time_=GDK_CURRENT_TIME)
+
+=over
+
+=item * $action (Gtk2::Gdk::DragAction) 
+
+=item * $time_ (unsigned) 
+
+=back
+
+=head2 scalar = $dc-E<gt>B<suggested_action> 
+
+=head2 list = $dc-E<gt>B<targets> 
+
+Returns a list of Gtk2::Gdk::Atom's, the targets.
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::Gdk::DragAction
+
+=over
+
+=item * 'default' / 'GDK_ACTION_DEFAULT'
+
+=item * 'copy' / 'GDK_ACTION_COPY'
+
+=item * 'move' / 'GDK_ACTION_MOVE'
+
+=item * 'link' / 'GDK_ACTION_LINK'
+
+=item * 'private' / 'GDK_ACTION_PRIVATE'
+
+=item * 'ask' / 'GDK_ACTION_ASK'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::DragProtocol
+
+=over
+
+=item * 'motif' / 'GDK_DRAG_PROTO_MOTIF'
+
+=item * 'xdnd' / 'GDK_DRAG_PROTO_XDND'
+
+=item * 'rootwin' / 'GDK_DRAG_PROTO_ROOTWIN'
+
+=item * 'none' / 'GDK_DRAG_PROTO_NONE'
+
+=item * 'win32-dropfiles' / 'GDK_DRAG_PROTO_WIN32_DROPFILES'
+
+=item * 'ole2' / 'GDK_DRAG_PROTO_OLE2'
+
+=item * 'local' / 'GDK_DRAG_PROTO_LOCAL'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

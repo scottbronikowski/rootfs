@@ -1,0 +1,471 @@
+=head1 NAME
+
+Gtk2::TextTag - wrapper for GtkTextTag
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::TextTag
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 texttag = Gtk2::TextTag-E<gt>B<new> ($name=undef)
+
+=over
+
+=item * $name (string or undef) 
+
+=back
+
+=head2 boolean = $tag-E<gt>B<event> ($event_object, $event, $iter)
+
+=over
+
+=item * $event_object (Glib::Object) 
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=item * $iter (Gtk2::TextIter) 
+
+=back
+
+=head2 integer = $tag-E<gt>B<get_priority> 
+
+=head2 $tag-E<gt>B<set_priority> ($priority)
+
+=over
+
+=item * $priority (integer) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'accumulative-margin' (boolean : default false : readable / writable / private)
+
+Whether left and right margins accumulate.
+
+=item 'background' (string : default undef : writable / private)
+
+Background color as a string
+
+=item 'background-full-height' (boolean : default false : readable / writable / private)
+
+Whether the background color fills the entire line height or only the height of the tagged characters
+
+=item 'background-full-height-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects background height
+
+=item 'background-gdk' (Gtk2::Gdk::Color : default undef : readable / writable / private)
+
+Background color as a (possibly unallocated) GdkColor
+
+=item 'background-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the background color
+
+=item 'background-stipple' (Gtk2::Gdk::Pixmap : default undef : readable / writable / private)
+
+Bitmap to use as a mask when drawing the text background
+
+=item 'background-stipple-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the background stipple
+
+=item 'direction' (Gtk2::TextDirection : default "none" : readable / writable / private)
+
+Text direction, e.g. right-to-left or left-to-right
+
+=item 'editable' (boolean : default true : readable / writable / private)
+
+Whether the text can be modified by the user
+
+=item 'editable-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects text editability
+
+=item 'family' (string : default undef : readable / writable / private)
+
+Name of the font family, e.g. Sans, Helvetica, Times, Monospace
+
+=item 'family-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the font family
+
+=item 'font' (string : default undef : readable / writable / private)
+
+Font description as a string, e.g. "Sans Italic 12"
+
+=item 'font-desc' (Pango::FontDescription : default undef : readable / writable / private)
+
+Font description as a PangoFontDescription struct
+
+=item 'foreground' (string : default undef : writable / private)
+
+Foreground color as a string
+
+=item 'foreground-gdk' (Gtk2::Gdk::Color : default undef : readable / writable / private)
+
+Foreground color as a (possibly unallocated) GdkColor
+
+=item 'foreground-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the foreground color
+
+=item 'foreground-stipple' (Gtk2::Gdk::Pixmap : default undef : readable / writable / private)
+
+Bitmap to use as a mask when drawing the text foreground
+
+=item 'foreground-stipple-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the foreground stipple
+
+=item 'indent' (integer : default 0 : readable / writable / private)
+
+Amount to indent the paragraph, in pixels
+
+=item 'indent-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects indentation
+
+=item 'invisible' (boolean : default false : readable / writable / private)
+
+Whether this text is hidden.
+
+=item 'invisible-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects text visibility
+
+=item 'justification' (Gtk2::Justification : default "left" : readable / writable / private)
+
+Left, right, or center justification
+
+=item 'justification-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects paragraph justification
+
+=item 'language' (string : default undef : readable / writable / private)
+
+The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If not set, an appropriate default will be used.
+
+=item 'language-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the language the text is rendered as
+
+=item 'left-margin' (integer : default 0 : readable / writable / private)
+
+Width of the left margin in pixels
+
+=item 'left-margin-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the left margin
+
+=item 'name' (string : default undef : readable / writable / construct-only / private)
+
+Name used to refer to the text tag. NULL for anonymous tags
+
+=item 'paragraph-background' (string : default undef : writable / private)
+
+Paragraph background color as a string
+
+=item 'paragraph-background-gdk' (Gtk2::Gdk::Color : default undef : readable / writable / private)
+
+Paragraph background color as a (possibly unallocated) GdkColor
+
+=item 'paragraph-background-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the paragraph background color
+
+=item 'pixels-above-lines' (integer : default 0 : readable / writable / private)
+
+Pixels of blank space above paragraphs
+
+=item 'pixels-above-lines-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the number of pixels above lines
+
+=item 'pixels-below-lines' (integer : default 0 : readable / writable / private)
+
+Pixels of blank space below paragraphs
+
+=item 'pixels-below-lines-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the number of pixels above lines
+
+=item 'pixels-inside-wrap' (integer : default 0 : readable / writable / private)
+
+Pixels of blank space between wrapped lines in a paragraph
+
+=item 'pixels-inside-wrap-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the number of pixels between wrapped lines
+
+=item 'right-margin' (integer : default 0 : readable / writable / private)
+
+Width of the right margin in pixels
+
+=item 'right-margin-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the right margin
+
+=item 'rise' (integer : default 0 : readable / writable / private)
+
+Offset of text above the baseline (below the baseline if rise is negative) in Pango units
+
+=item 'rise-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the rise
+
+=item 'scale' (double : default 1 : readable / writable / private)
+
+Font size as a scale factor relative to the default font size. This properly adapts to theme changes etc. so is recommended. Pango predefines some scales such as PANGO_SCALE_X_LARGE
+
+=item 'scale-set' (boolean : default false : readable / writable / private)
+
+Whether this tag scales the font size by a factor
+
+=item 'size' (integer : default 0 : readable / writable / private)
+
+Font size in Pango units
+
+=item 'size-points' (double : default 0 : readable / writable / private)
+
+Font size in points
+
+=item 'size-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the font size
+
+=item 'stretch' (Pango::Stretch : default "normal" : readable / writable / private)
+
+Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED
+
+=item 'stretch-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the font stretch
+
+=item 'strikethrough' (boolean : default false : readable / writable / private)
+
+Whether to strike through the text
+
+=item 'strikethrough-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects strikethrough
+
+=item 'style' (Pango::Style : default "normal" : readable / writable / private)
+
+Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC
+
+=item 'style-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the font style
+
+=item 'tabs' (Pango::TabArray : default undef : readable / writable / private)
+
+Custom tabs for this text
+
+=item 'tabs-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects tabs
+
+=item 'underline' (Pango::Underline : default "none" : readable / writable / private)
+
+Style of underline for this text
+
+=item 'underline-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects underlining
+
+=item 'variant' (Pango::Variant : default "normal" : readable / writable / private)
+
+Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS
+
+=item 'variant-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the font variant
+
+=item 'weight' (integer : default 400 : readable / writable / private)
+
+Font weight as an integer, see predefined values in PangoWeight; for example, PANGO_WEIGHT_BOLD
+
+=item 'weight-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the font weight
+
+=item 'wrap-mode' (Gtk2::WrapMode : default "none" : readable / writable / private)
+
+Whether to wrap lines never, at word boundaries, or at character boundaries
+
+=item 'wrap-mode-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects line wrap mode
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item boolean = B<event> (Gtk2::TextTag, Glib::Object, Gtk2::Gdk::Event, Gtk2::TextIter)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::Justification
+
+=over
+
+=item * 'left' / 'GTK_JUSTIFY_LEFT'
+
+=item * 'right' / 'GTK_JUSTIFY_RIGHT'
+
+=item * 'center' / 'GTK_JUSTIFY_CENTER'
+
+=item * 'fill' / 'GTK_JUSTIFY_FILL'
+
+=back
+
+
+=head2 enum Gtk2::TextDirection
+
+=over
+
+=item * 'none' / 'GTK_TEXT_DIR_NONE'
+
+=item * 'ltr' / 'GTK_TEXT_DIR_LTR'
+
+=item * 'rtl' / 'GTK_TEXT_DIR_RTL'
+
+=back
+
+
+=head2 enum Gtk2::WrapMode
+
+=over
+
+=item * 'none' / 'GTK_WRAP_NONE'
+
+=item * 'char' / 'GTK_WRAP_CHAR'
+
+=item * 'word' / 'GTK_WRAP_WORD'
+
+=item * 'word-char' / 'GTK_WRAP_WORD_CHAR'
+
+=back
+
+
+=head2 enum Pango::Stretch
+
+=over
+
+=item * 'ultra-condensed' / 'PANGO_STRETCH_ULTRA_CONDENSED'
+
+=item * 'extra-condensed' / 'PANGO_STRETCH_EXTRA_CONDENSED'
+
+=item * 'condensed' / 'PANGO_STRETCH_CONDENSED'
+
+=item * 'semi-condensed' / 'PANGO_STRETCH_SEMI_CONDENSED'
+
+=item * 'normal' / 'PANGO_STRETCH_NORMAL'
+
+=item * 'semi-expanded' / 'PANGO_STRETCH_SEMI_EXPANDED'
+
+=item * 'expanded' / 'PANGO_STRETCH_EXPANDED'
+
+=item * 'extra-expanded' / 'PANGO_STRETCH_EXTRA_EXPANDED'
+
+=item * 'ultra-expanded' / 'PANGO_STRETCH_ULTRA_EXPANDED'
+
+=back
+
+
+=head2 enum Pango::Style
+
+=over
+
+=item * 'normal' / 'PANGO_STYLE_NORMAL'
+
+=item * 'oblique' / 'PANGO_STYLE_OBLIQUE'
+
+=item * 'italic' / 'PANGO_STYLE_ITALIC'
+
+=back
+
+
+=head2 enum Pango::Underline
+
+=over
+
+=item * 'none' / 'PANGO_UNDERLINE_NONE'
+
+=item * 'single' / 'PANGO_UNDERLINE_SINGLE'
+
+=item * 'double' / 'PANGO_UNDERLINE_DOUBLE'
+
+=item * 'low' / 'PANGO_UNDERLINE_LOW'
+
+=item * 'error' / 'PANGO_UNDERLINE_ERROR'
+
+=back
+
+
+=head2 enum Pango::Variant
+
+=over
+
+=item * 'normal' / 'PANGO_VARIANT_NORMAL'
+
+=item * 'small-caps' / 'PANGO_VARIANT_SMALL_CAPS'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

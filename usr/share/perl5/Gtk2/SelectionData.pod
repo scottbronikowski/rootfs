@@ -1,0 +1,158 @@
+=head1 NAME
+
+Gtk2::SelectionData - wrapper for GtkSelectionData
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Boxed
+  +----Gtk2::SelectionData
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 scalar = $d-E<gt>B<get_data> 
+
+=head2 scalar = $d-E<gt>B<get_data_type> 
+
+=head2 scalar = $d-E<gt>B<get_display> 
+
+=head2 scalar = $d-E<gt>B<get_format> 
+
+=head2 $selection_data-E<gt>B<set> ($type, $format, $data)
+
+=over
+
+=item * $type (Gtk2::Gdk::Atom) 
+
+=item * $format (integer) 
+
+=item * $data (Glib::UChar) 
+
+=back
+
+=head2 scalar = $d-E<gt>B<get_length> 
+
+=head2 pixbuf or undef = $selection_data-E<gt>B<get_pixbuf> 
+
+Since: gtk+ 2.6
+
+=head2 boolean = $selection_data-E<gt>B<set_pixbuf> ($pixbuf)
+
+=over
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 (tree_model, path) = $selection_data->B<get_row_drag_data>
+
+If $selection_data is not of target type GTK_TREE_MODEL_ROW then the return is
+an empty list.
+
+=head2 boolean = $selection_data-E<gt>B<set_row_drag_data> ($tree_model, $path)
+
+=over
+
+=item * $tree_model (Gtk2::TreeModel) 
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 scalar = $d-E<gt>B<get_selection> 
+
+=head2 scalar = $d-E<gt>B<get_target> 
+
+=head2 list = $selection_data-E<gt>B<get_targets> 
+
+Gets the contents of selection_data as an array of targets. This can be used to
+interpret the results of getting the standard TARGETS target that is always
+supplied for any selection.
+
+Returns a list of GdkAtoms, the targets.
+
+=head2 boolean = $selection_data-E<gt>B<targets_include_image> ($writable)
+
+=over
+
+=item * $writable (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 boolean = $selection_data-E<gt>B<targets_include_rich_text> ($buffer)
+
+=over
+
+=item * $buffer (Gtk2::TextBuffer) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 boolean = $selection_data-E<gt>B<targets_include_text> 
+
+=head2 boolean = $selection_data-E<gt>B<targets_include_uri> 
+
+Since: gtk+ 2.10
+
+=head2 string = $selection_data-E<gt>B<get_text> 
+
+=head2 boolean = $selection_data-E<gt>B<set_text> ($str, $len=-1)
+
+=over
+
+=item * $str (string) 
+
+=item * $len (integer) 
+
+=back
+
+=head2 list = $selection_data-E<gt>B<get_uris> 
+
+Since: gtk+ 2.6
+
+=head2 boolean = $selection_data-E<gt>B<set_uris> (...)
+
+=over
+
+=item * ... (list) of strings
+
+=back
+
+
+
+Since: gtk+ 2.6
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Boxed>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

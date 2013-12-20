@@ -1,0 +1,271 @@
+=head1 NAME
+
+Gtk2::Action - wrapper for GtkAction
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Action
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 $action-E<gt>B<set_accel_group> ($accel_group)
+
+=over
+
+=item * $accel_group (Gtk2::AccelGroup or undef) 
+
+=back
+
+=head2 string = $action-E<gt>B<get_accel_path> 
+
+Since: gtk+ 2.6
+
+=head2 $action-E<gt>B<set_accel_path> ($accel_path)
+
+=over
+
+=item * $accel_path (string) 
+
+=back
+
+=head2 $action-E<gt>B<activate> 
+
+=head2 $action-E<gt>B<block_activate_from> ($proxy)
+
+=over
+
+=item * $proxy (Gtk2::Widget) 
+
+=back
+
+=head2 $action-E<gt>B<connect_accelerator> 
+
+=head2 $action-E<gt>B<connect_proxy> ($proxy)
+
+=over
+
+=item * $proxy (Gtk2::Widget) 
+
+=back
+
+=head2 widget = $action-E<gt>B<create_icon> ($icon_size)
+
+=over
+
+=item * $icon_size (Gtk2::IconSize) 
+
+=back
+
+=head2 widget = $action-E<gt>B<create_menu> 
+
+Since: gtk+ 2.12
+
+=head2 widget = $action-E<gt>B<create_menu_item> 
+
+=head2 widget = $action-E<gt>B<create_tool_item> 
+
+=head2 $action-E<gt>B<disconnect_accelerator> 
+
+=head2 $action-E<gt>B<disconnect_proxy> ($proxy)
+
+=over
+
+=item * $proxy (Gtk2::Widget) 
+
+=back
+
+=head2 boolean = $action-E<gt>B<is_sensitive> 
+
+=head2 boolean = $action-E<gt>B<is_visible> 
+
+=head2 string = $action-E<gt>B<get_name> 
+
+=head2 list = $action-E<gt>B<get_proxies> 
+
+=head2 boolean = $action-E<gt>B<get_sensitive> 
+
+=head2 $action-E<gt>B<set_sensitive> ($sensitive)
+
+=over
+
+=item * $sensitive (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 $action-E<gt>B<unblock_activate_from> ($proxy)
+
+=over
+
+=item * $proxy (Gtk2::Widget) 
+
+=back
+
+=head2 boolean = $action-E<gt>B<get_visible> 
+
+=head2 $action-E<gt>B<set_visible> ($visible)
+
+=over
+
+=item * $visible (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'action-group' (Gtk2::ActionGroup : default undef : readable / writable / private)
+
+The GtkActionGroup this GtkAction is associated with, or NULL (for internal use).
+
+=item 'always-show-image' (boolean : default false : readable / writable / construct / private)
+
+Whether the image will always be shown
+
+=item 'gicon' (Glib::Object::_Unregistered::GIcon : default undef : readable / writable / private)
+
+The GIcon being displayed
+
+=item 'hide-if-empty' (boolean : default true : readable / writable / private)
+
+When TRUE, empty menu proxies for this action are hidden.
+
+=item 'icon-name' (string : default undef : readable / writable / private)
+
+The name of the icon from the icon theme
+
+=item 'is-important' (boolean : default false : readable / writable / private)
+
+Whether the action is considered important. When TRUE, toolitem proxies for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode.
+
+=item 'label' (string : default undef : readable / writable / private)
+
+The label used for menu items and buttons that activate this action.
+
+=item 'name' (string : default undef : readable / writable / construct-only / private)
+
+A unique name for the action.
+
+=item 'sensitive' (boolean : default true : readable / writable / private)
+
+Whether the action is enabled.
+
+=item 'short-label' (string : default undef : readable / writable / private)
+
+A shorter label that may be used on toolbar buttons.
+
+=item 'stock-id' (string : default undef : readable / writable / private)
+
+The stock icon displayed in widgets representing this action.
+
+=item 'tooltip' (string : default undef : readable / writable / private)
+
+A tooltip for this action.
+
+=item 'visible' (boolean : default true : readable / writable / private)
+
+Whether the action is visible.
+
+=item 'visible-horizontal' (boolean : default true : readable / writable / private)
+
+Whether the toolbar item is visible when the toolbar is in a horizontal orientation.
+
+=item 'visible-overflown' (boolean : default true : readable / writable / private)
+
+When TRUE, toolitem proxies for this action are represented in the toolbar overflow menu.
+
+=item 'visible-vertical' (boolean : default true : readable / writable / private)
+
+Whether the toolbar item is visible when the toolbar is in a vertical orientation.
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<activate> (Gtk2::Action)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::IconSize
+
+=over
+
+=item * 'invalid' / 'GTK_ICON_SIZE_INVALID'
+
+=item * 'menu' / 'GTK_ICON_SIZE_MENU'
+
+=item * 'small-toolbar' / 'GTK_ICON_SIZE_SMALL_TOOLBAR'
+
+=item * 'large-toolbar' / 'GTK_ICON_SIZE_LARGE_TOOLBAR'
+
+=item * 'button' / 'GTK_ICON_SIZE_BUTTON'
+
+=item * 'dnd' / 'GTK_ICON_SIZE_DND'
+
+=item * 'dialog' / 'GTK_ICON_SIZE_DIALOG'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

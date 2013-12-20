@@ -1,0 +1,440 @@
+=head1 NAME
+
+Gtk2::CellRenderer - An object that renders a single cell onto a Gtk2::Gdk::Drawable
+
+=cut
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+The Gtk2::CellRenderer is the base class for objects which render cells
+onto drawables.  These objects are used primarily by the Gtk2::TreeView,
+though they aren't tied to them in any specific way.
+
+Typically, one cell renderer is used to draw many cells onto the screen.
+Thus, the cell renderer doesn't keep state; instead, any state is set
+immediately prior to use through the object property system.  The cell
+is measured with C<get_size>, and then renderered with C<render>.
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::CellRenderer
+
+
+
+=cut
+
+=for object Gtk2::CellRenderer - An object that renders a single cell onto a Gtk2::Gdk::Drawable
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 boolean = $cell-E<gt>B<activate> ($event, $widget, $path, $background_area, $cell_area, $flags)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $path (string) 
+
+=item * $background_area (Gtk2::Gdk::Rectangle) 
+
+=item * $cell_area (Gtk2::Gdk::Rectangle) 
+
+=item * $flags (Gtk2::CellRendererState) 
+
+=back
+
+=head2 $cell-E<gt>B<editing_canceled> 
+
+Since: gtk+ 2.4
+
+=head2 (width, height) = $cell-E<gt>B<get_fixed_size> 
+
+Fetch the fixed size if I<$cell>.  Values of -1 mean "this dimension is not
+fixed."
+
+=head2 $cell-E<gt>B<set_fixed_size> ($width, $height)
+
+=over
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+Set the renderer's size explicitly, independent of object properties.  A value
+of -1 means "don't use a fixed size for this dimension."
+
+=head2 $cell-E<gt>B<render> ($drawable, $widget, $background_area, $cell_area, $expose_area, $flags)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable) 
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $background_area (Gtk2::Gdk::Rectangle) 
+
+=item * $cell_area (Gtk2::Gdk::Rectangle) 
+
+=item * $expose_area (Gtk2::Gdk::Rectangle) 
+
+=item * $flags (Gtk2::CellRendererState) 
+
+=back
+
+=head2 (x_offset, y_offset, width, height) = $cell->B<get_size> ($widget, $cell_area)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $cell_area (Gtk2::Gdk::Rectangle or undef) 
+
+=back
+
+
+
+=head2 celleditable or undef = $cell->B<start_editing> ($event, $widget, $path, $background_area, $cell_area, $flags)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $path (string) 
+
+=item * $background_area (Gtk2::Gdk::Rectangle) 
+
+=item * $cell_area (Gtk2::Gdk::Rectangle) 
+
+=item * $flags (Gtk2::CellRendererState) 
+
+=back
+
+
+
+=head2 $cell-E<gt>B<stop_editing> ($canceled)
+
+=over
+
+=item * $canceled (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'cell-background' (string : default undef : writable / private)
+
+Cell background color as a string
+
+=item 'cell-background-gdk' (Gtk2::Gdk::Color : default undef : readable / writable / private)
+
+Cell background color as a GdkColor
+
+=item 'cell-background-set' (boolean : default false : readable / writable / private)
+
+Whether this tag affects the cell background color
+
+=item 'editing' (boolean : default false : readable / private)
+
+Whether the cell renderer is currently in editing mode
+
+=item 'height' (integer : default -1 : readable / writable / private)
+
+The fixed height
+
+=item 'is-expanded' (boolean : default false : readable / writable / private)
+
+Row is an expander row, and is expanded
+
+=item 'is-expander' (boolean : default false : readable / writable / private)
+
+Row has children
+
+=item 'mode' (Gtk2::CellRendererMode : default "inert" : readable / writable / private)
+
+Editable mode of the CellRenderer
+
+=item 'sensitive' (boolean : default true : readable / writable / private)
+
+Display the cell sensitive
+
+=item 'visible' (boolean : default true : readable / writable / private)
+
+Display the cell
+
+=item 'width' (integer : default -1 : readable / writable / private)
+
+The fixed width
+
+=item 'xalign' (float : default 0.5 : readable / writable / private)
+
+The x-align
+
+=item 'xpad' (Glib::UInt : default 0 : readable / writable / private)
+
+The xpad
+
+=item 'yalign' (float : default 0.5 : readable / writable / private)
+
+The y-align
+
+=item 'ypad' (Glib::UInt : default 0 : readable / writable / private)
+
+The ypad
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<editing-canceled> (Gtk2::CellRenderer)
+
+=item B<editing-started> (Gtk2::CellRenderer, Gtk2::CellEditable, string)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::CellRendererMode
+
+
+
+=over
+
+=item * 'inert' / 'GTK_CELL_RENDERER_MODE_INERT'
+
+=item * 'activatable' / 'GTK_CELL_RENDERER_MODE_ACTIVATABLE'
+
+=item * 'editable' / 'GTK_CELL_RENDERER_MODE_EDITABLE'
+
+=back
+
+
+=head2 flags Gtk2::CellRendererState
+
+
+
+=over
+
+=item * 'selected' / 'GTK_CELL_RENDERER_SELECTED'
+
+=item * 'prelit' / 'GTK_CELL_RENDERER_PRELIT'
+
+=item * 'insensitive' / 'GTK_CELL_RENDERER_INSENSITIVE'
+
+=item * 'sorted' / 'GTK_CELL_RENDERER_SORTED'
+
+=item * 'focused' / 'GTK_CELL_RENDERER_FOCUSED'
+
+=back
+
+
+
+
+=cut
+
+=for position post_enums
+
+=head1 DERIVING NEW CELL RENDERERS
+
+Gtk+ provides three cell renderers: Gtk2::CellRendererText,
+Gtk2::CellRendererToggle, and Gtk2::CellRendererPixbuf.
+You may derive a new renderer from any of these, or directly from
+Gtk2::CellRenderer itself.
+
+There are a number of rules that must be followed when writing a new
+cell renderer.  First and foremost, it's important that a certain set of
+properties always yields a cell of the same size, barring a Gtk2::Style
+change.  The cell renderer also has a number of generic properties that
+are expected to be honored by all children.
+
+The new renderer must be a GObject, so you must follow the normal procedure
+for creating a new Glib::Object (i.e., either Glib::Object::Subclass or
+Glib::Type::register_object).  The new subclass can customize the object's
+behavior by providing new implementations of these four methods:
+
+=over
+
+=item (x_offset, y_offset, width, height) = GET_SIZE ($cell, $widget, $cell_area)
+
+=over
+
+=item o $cell (Gtk2::CellRenderer) 
+
+=item o $widget (Gtk2::Widget) widget to which I<$cell> is rendering
+
+=item o $cell_area (Gtk2::Gdk::Rectangle or undef) The area a cell will be allocated, or undef.
+
+=back
+
+Return Values:
+
+=over
+
+=item - x_offset - x offset of cell relative to I<$cell_area>
+
+=item - y_offset - y offset of cell relative to I<$cell_area>
+
+=item - width - width needed to render cell
+
+=item - height - height needed to render cell
+
+=back
+
+This is called to calculate the size of the cell for display, taking into
+account the padding and alignment properties of the parent.  This one will
+be called very often.  If you need to know your cell's data, then get it
+from the appropriate object properties, which will be set accordingly before
+this method is called.
+
+=item RENDER ($cell, $drawable, $widget, $background_area, $cell_area, $expose_area, $flags)
+
+=over
+
+=item o $cell (Gtk2::CellRenderer)
+
+=item o $drawable (Gtk2::Gdk::Drawable) window on which to draw
+
+=item o $widget (Gtk2::Widget) widget owning I<$drawable>
+
+=item o $background_area (Gtk2::Gdk::Rectangle) entire cell area (including tree expanders and maybe padding on the sides)
+
+=item o $cell_area (Gtk2::Gdk::Rectangle) area normally rendered by a cell renderer
+
+=item o $expose_area (Gtk2::Gdk::Rectangle) area that actually needs updating
+
+=item o $flags (Gtk2::CellRendererState) flags that affect rendering
+
+=back
+
+This is called to render the cell onto the screen.  As with GET_SIZE, the
+data for the cell comes from object properties.  In general, you'll want to
+make use of Gtk2::Style methods for drawing anything fancy.
+
+The three passed-in rectangles are areas of I<$drawable>.  Most renderers draw
+within I<$cell_area>; the xalign, yalign, xpad, and ypad fields of the 
+cell renderer should be honored with respect to I<$cell_area>.
+I<$background_area> includes the blank space around the cell, and also the
+area containing the tree expander; so the I<$background_area> rectangles for
+all cells cover the entire I<$drawable>.  I<$expose_area> is a clip
+rectangle.
+
+=item boolean = ACTIVATE ($cell, $event, $widget, $path, $background_area, $cell_area, $flags)
+
+=over
+
+=item o $cell (Gtk2::CellRenderer)
+
+=item o $event (Gtk2::Gdk::Event)
+
+=item o $widget (Gtk2::Widget) widget that received the event
+
+=item o $path (string) widget-dependent string representation of the event location; e.g. for a Gtk2::TreeView, a string representation of a Gtk2::TreePath.
+
+=item o $background_area (Gtk2::Gdk::Rectangle) background area as passed to C<RENDER>.
+
+=item o $cell_area (Gtk2::Gdk::Rectangle) cell area as passed to C<RENDER>.
+
+=item o $flags (Gtk2::CellRendererState) render flags
+
+=back
+
+This method is called when an event occurs on a cell.  Implementing it is
+not mandatory.  The return value should be TRUE if the event was
+consumed/handled.
+
+=item celleditable or undef = START_EDITING ($cell, $event, $widget, $path, $background_area, $cell_area, $flags)
+
+=over
+
+=item o $cell (Gtk2::CellRenderer)
+
+=item o $event (Gtk2::Gdk::Event)
+
+=item o $widget (Gtk2::Widget) widget that received the event
+
+=item o $path (string) widget-dependent string representation of the event location; e.g. for a Gtk2::TreeView, a string representation of a Gtk2::TreePath.
+
+=item o $background_area (Gtk2::Gdk::Rectangle) background area as passed to C<RENDER>.
+
+=item o $cell_area (Gtk2::Gdk::Rectangle) cell area as passed to C<RENDER>.
+
+=item o $flags (Gtk2::CellRendererState) render flags
+
+=back
+
+For cells that are editable, this is called to put the cell into editing
+mode.  If the return value is an object is a Gtk2::CellEditable, that
+widget will be used to edit the value; the calling code takes care of
+sizing, placing, and showing the editable, you just need to return it.
+If the return value is undef, the editing is aborted.
+
+=back
+
+Note: for backward compatibility, the bizarre and non-standard scheme used
+for this in 1.02x is still supported, but is deprecated and should not be
+used in new code, and since i don't want people to use it any more i will
+not document it here.
+
+=cut
+
+
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

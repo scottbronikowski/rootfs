@@ -1,0 +1,246 @@
+=head1 NAME
+
+Gtk2::Gdk::Device - wrapper for GdkDevice
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Gdk::Device
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 list = $device-E<gt>B<axes> 
+
+
+Returns a list of hash references that resemble the I<GdkDeviceAxis> structure,
+i.e. that have three keys: "use", "min", and "max".
+
+
+=head2 double = $device-E<gt>B<get_axis> ($use, ...)
+
+=over
+
+=item * $use (Gtk2::Gdk::AxisUse) 
+
+=item * ... (list) of axis values such as the one returned by L<get_state>
+
+=back
+
+
+
+
+=head2 $device-E<gt>B<set_axis_use> ($index_, $use)
+
+=over
+
+=item * $index_ (integer) 
+
+=item * $use (Gtk2::Gdk::AxisUse) 
+
+=back
+
+=head2 device = Gtk2::Gdk::Device-E<gt>B<get_core_pointer> 
+
+=head2 boolean = $device-E<gt>B<has_cursor> 
+
+=head2 list = $device-E<gt>B<get_history> ($window, $start, $stop)
+
+=over
+
+=item * $window (Gtk2::Gdk::Window) 
+
+=item * $start (unsigned) 
+
+=item * $stop (unsigned) 
+
+=back
+
+
+Returns a list of hash references that resemble the I<GdkTimeCoord> structure,
+i.e. that have two keys: "time" and "axes".
+
+
+=head2 $device-E<gt>B<set_key> ($index_, $keyval, $modifiers)
+
+=over
+
+=item * $index_ (integer) 
+
+=item * $keyval (integer) 
+
+=item * $modifiers (Gtk2::Gdk::ModifierType) 
+
+=back
+
+=head2 list = $device-E<gt>B<keys> 
+
+
+Returns a list of hash references that resemble the I<GdkDeviceKey> structure,
+i.e. that have two keys: "keyval" and "modifiers".
+
+
+=head2 inputmode = $device-E<gt>B<mode> 
+
+=head2 boolean = $device-E<gt>B<set_mode> ($mode)
+
+=over
+
+=item * $mode (Gtk2::Gdk::InputMode) 
+
+=back
+
+=head2 string = $device-E<gt>B<name> 
+
+=head2 inputsource = $device-E<gt>B<source> 
+
+=head2 $device-E<gt>B<set_source> ($source)
+
+=over
+
+=item * $source (Gtk2::Gdk::InputSource) 
+
+=back
+
+=head2 list = $device-E<gt>B<get_state> ($window)
+
+=over
+
+=item * $window (Gtk2::Gdk::Window) 
+
+=back
+
+
+Returns the modifier mask and a list of values of the axes.
+
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::Gdk::AxisUse
+
+=over
+
+=item * 'ignore' / 'GDK_AXIS_IGNORE'
+
+=item * 'x' / 'GDK_AXIS_X'
+
+=item * 'y' / 'GDK_AXIS_Y'
+
+=item * 'pressure' / 'GDK_AXIS_PRESSURE'
+
+=item * 'xtilt' / 'GDK_AXIS_XTILT'
+
+=item * 'ytilt' / 'GDK_AXIS_YTILT'
+
+=item * 'wheel' / 'GDK_AXIS_WHEEL'
+
+=item * 'last' / 'GDK_AXIS_LAST'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::InputMode
+
+=over
+
+=item * 'disabled' / 'GDK_MODE_DISABLED'
+
+=item * 'screen' / 'GDK_MODE_SCREEN'
+
+=item * 'window' / 'GDK_MODE_WINDOW'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::InputSource
+
+=over
+
+=item * 'mouse' / 'GDK_SOURCE_MOUSE'
+
+=item * 'pen' / 'GDK_SOURCE_PEN'
+
+=item * 'eraser' / 'GDK_SOURCE_ERASER'
+
+=item * 'cursor' / 'GDK_SOURCE_CURSOR'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

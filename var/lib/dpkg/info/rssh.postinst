@@ -1,0 +1,53 @@
+#! /bin/sh
+# postinst script for rssh
+
+set -e
+
+# Path to the helper program, which we may make setuid.
+helper=/usr/lib/rssh/rssh_chroot_helper
+
+if [ "$1" = "configure" ] || [ "$1" = "reconfigure" ] ; then
+    . /usr/share/debconf/confmodule
+    db_get rssh/chroot_helper_setuid
+    setuid="$RET"
+    db_stop
+
+    # We don't want to change the setuid status if the sysadmin has overridden
+    # it with dpkg-statoverride.
+    if dpkg-statoverride --list "$helper" > /dev/null ; then
+        status=0
+    else
+        status=1
+    fi
+    if [ "$status" != 0 ] ; then
+        if [ "$setuid" = "true" ] ; then
+            chmod 4755 "$helper"
+        else
+            chmod 0755 "$helper"
+        fi
+    fi
+
+    # Older versions of rssh incorrectly added rssh to /etc/shells.  We don't
+    # want that.  Remove it from /etc/shells to clean up after older
+    # packages.  See Bug#424672.
+    if [ -n "$2" ] && dpkg --compare-versions "$2" lt 2.3.2-5 ; then
+        remove-shell /usr/bin/rssh
+    fi
+
+    # 2.3.2-9 added Subversion support, which requires adding another binary
+    # digit to the user configuration lines in rssh.conf.  When upgrading, run
+    # the conf_convert script to do so.
+    if [ -n "$2" ] && dpkg --compare-versions "$2" lt 2.3.2-9 ; then
+        echo 'Adjusting /etc/rssh.conf for file format change'
+        /usr/share/rssh/conf_convert /etc/rssh.conf > /etc/rssh.conf.dpkg-tmp
+        if cmp /etc/rssh.conf.dpkg-tmp /etc/rssh.conf >/dev/null ; then
+            rm /etc/rssh.conf.dpkg-tmp
+        else
+            mv /etc/rssh.conf.dpkg-tmp /etc/rssh.conf
+        fi
+    fi
+fi
+
+
+
+exit 0

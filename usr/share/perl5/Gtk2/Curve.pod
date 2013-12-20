@@ -1,0 +1,172 @@
+=head1 NAME
+
+Gtk2::Curve - wrapper for GtkCurve
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::DrawingArea
+                      +----Gtk2::Curve
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::Curve-E<gt>B<new> 
+
+=head2 $curve-E<gt>B<set_curve_type> ($type)
+
+=over
+
+=item * $type (Gtk2::CurveType) 
+
+=back
+
+=head2 $curve-E<gt>B<set_gamma> ($gamma)
+
+=over
+
+=item * $gamma (double) 
+
+=back
+
+=head2 $curve-E<gt>B<set_range> ($min_x, $max_x, $min_y, $max_y)
+
+=over
+
+=item * $min_x (double) 
+
+=item * $max_x (double) 
+
+=item * $min_y (double) 
+
+=item * $max_y (double) 
+
+=back
+
+=head2 $curve-E<gt>B<reset> 
+
+=head2 list = $curve-E<gt>B<get_vector> ($veclen=32)
+
+=over
+
+=item * $veclen (integer) 
+
+=back
+
+Returns a list of real numbers, the curve's vector.
+
+=head2 $curve-E<gt>B<set_vector> (...)
+
+=over
+
+=item * ... (list) of float's, the points of the curve
+
+=back
+
+
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'curve-type' (Gtk2::CurveType : default "spline" : readable / writable / private)
+
+Is this curve linear, spline interpolated, or free-form
+
+=item 'max-x' (float : default 1 : readable / writable / private)
+
+Maximum possible X value
+
+=item 'max-y' (float : default 1 : readable / writable / private)
+
+Maximum possible value for Y
+
+=item 'min-x' (float : default 0 : readable / writable / private)
+
+Minimum possible value for X
+
+=item 'min-y' (float : default 0 : readable / writable / private)
+
+Minimum possible value for Y
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<curve-type-changed> (Gtk2::Curve)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::CurveType
+
+=over
+
+=item * 'linear' / 'GTK_CURVE_TYPE_LINEAR'
+
+=item * 'spline' / 'GTK_CURVE_TYPE_SPLINE'
+
+=item * 'free' / 'GTK_CURVE_TYPE_FREE'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::DrawingArea>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

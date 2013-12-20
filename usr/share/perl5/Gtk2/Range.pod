@@ -1,0 +1,322 @@
+=head1 NAME
+
+Gtk2::Range - wrapper for GtkRange
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Range
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+  Gtk2::Orientable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 adjustment = $range-E<gt>B<get_adjustment> 
+
+=head2 $range-E<gt>B<set_adjustment> ($adjustment)
+
+=over
+
+=item * $adjustment (Gtk2::Adjustment) 
+
+=back
+
+=head2 double = $range-E<gt>B<get_fill_level> 
+
+Since: gtk+ 2.12
+
+=head2 $range-E<gt>B<set_fill_level> ($fill_level)
+
+=over
+
+=item * $fill_level (double) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $range-E<gt>B<set_increments> ($step, $page)
+
+=over
+
+=item * $step (double) 
+
+=item * $page (double) 
+
+=back
+
+=head2 boolean = $range-E<gt>B<get_inverted> 
+
+=head2 $range-E<gt>B<set_inverted> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 sensitivitytype = $range-E<gt>B<get_lower_stepper_sensitivity> 
+
+Since: gtk+ 2.10
+
+=head2 $range-E<gt>B<set_lower_stepper_sensitivity> ($sensitivity)
+
+=over
+
+=item * $sensitivity (Gtk2::SensitivityType) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 $range-E<gt>B<set_range> ($min, $max)
+
+=over
+
+=item * $min (double) 
+
+=item * $max (double) 
+
+=back
+
+=head2 boolean = $range-E<gt>B<get_restrict_to_fill_level> 
+
+Since: gtk+ 2.12
+
+=head2 $range-E<gt>B<set_restrict_to_fill_level> ($restrict_to_fill_level)
+
+=over
+
+=item * $restrict_to_fill_level (boolean) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 boolean = $range-E<gt>B<get_show_fill_level> 
+
+Since: gtk+ 2.12
+
+=head2 $range-E<gt>B<set_show_fill_level> ($show_fill_level)
+
+=over
+
+=item * $show_fill_level (boolean) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 updatetype = $range-E<gt>B<get_update_policy> 
+
+=head2 $range-E<gt>B<set_update_policy> ($policy)
+
+=over
+
+=item * $policy (Gtk2::UpdateType) 
+
+=back
+
+=head2 sensitivitytype = $range-E<gt>B<get_upper_stepper_sensitivity> 
+
+Since: gtk+ 2.10
+
+=head2 $range-E<gt>B<set_upper_stepper_sensitivity> ($sensitivity)
+
+=over
+
+=item * $sensitivity (Gtk2::SensitivityType) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 double = $range-E<gt>B<get_value> 
+
+=head2 $range-E<gt>B<set_value> ($value)
+
+=over
+
+=item * $value (double) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'adjustment' (Gtk2::Adjustment : default undef : readable / writable / construct / private)
+
+The GtkAdjustment that contains the current value of this range object
+
+=item 'fill-level' (double : default DBL_MAX : readable / writable / private)
+
+The fill level.
+
+=item 'inverted' (boolean : default false : readable / writable / private)
+
+Invert direction slider moves to increase range value
+
+=item 'lower-stepper-sensitivity' (Gtk2::SensitivityType : default "auto" : readable / writable / private)
+
+The sensitivity policy for the stepper that points to the adjustment's lower side
+
+=item 'restrict-to-fill-level' (boolean : default true : readable / writable / private)
+
+Whether to restrict the upper boundary to the fill level.
+
+=item 'round-digits' (integer : default -1 : readable / writable / private)
+
+The number of digits to round the value to.
+
+=item 'show-fill-level' (boolean : default false : readable / writable / private)
+
+Whether to display a fill level indicator graphics on trough.
+
+=item 'update-policy' (Gtk2::UpdateType : default "continuous" : readable / writable / private)
+
+How the range should be updated on the screen
+
+=item 'upper-stepper-sensitivity' (Gtk2::SensitivityType : default "auto" : readable / writable / private)
+
+The sensitivity policy for the stepper that points to the adjustment's upper side
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<value-changed> (Gtk2::Range)
+
+=item B<adjust-bounds> (Gtk2::Range, double)
+
+=item B<move-slider> (Gtk2::Range, Gtk2::ScrollType)
+
+=item boolean = B<change-value> (Gtk2::Range, Gtk2::ScrollType, double)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::ScrollType
+
+=over
+
+=item * 'none' / 'GTK_SCROLL_NONE'
+
+=item * 'jump' / 'GTK_SCROLL_JUMP'
+
+=item * 'step-backward' / 'GTK_SCROLL_STEP_BACKWARD'
+
+=item * 'step-forward' / 'GTK_SCROLL_STEP_FORWARD'
+
+=item * 'page-backward' / 'GTK_SCROLL_PAGE_BACKWARD'
+
+=item * 'page-forward' / 'GTK_SCROLL_PAGE_FORWARD'
+
+=item * 'step-up' / 'GTK_SCROLL_STEP_UP'
+
+=item * 'step-down' / 'GTK_SCROLL_STEP_DOWN'
+
+=item * 'page-up' / 'GTK_SCROLL_PAGE_UP'
+
+=item * 'page-down' / 'GTK_SCROLL_PAGE_DOWN'
+
+=item * 'step-left' / 'GTK_SCROLL_STEP_LEFT'
+
+=item * 'step-right' / 'GTK_SCROLL_STEP_RIGHT'
+
+=item * 'page-left' / 'GTK_SCROLL_PAGE_LEFT'
+
+=item * 'page-right' / 'GTK_SCROLL_PAGE_RIGHT'
+
+=item * 'start' / 'GTK_SCROLL_START'
+
+=item * 'end' / 'GTK_SCROLL_END'
+
+=back
+
+
+=head2 enum Gtk2::SensitivityType
+
+=over
+
+=item * 'auto' / 'GTK_SENSITIVITY_AUTO'
+
+=item * 'on' / 'GTK_SENSITIVITY_ON'
+
+=item * 'off' / 'GTK_SENSITIVITY_OFF'
+
+=back
+
+
+=head2 enum Gtk2::UpdateType
+
+=over
+
+=item * 'continuous' / 'GTK_UPDATE_CONTINUOUS'
+
+=item * 'discontinuous' / 'GTK_UPDATE_DISCONTINUOUS'
+
+=item * 'delayed' / 'GTK_UPDATE_DELAYED'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

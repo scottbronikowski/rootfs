@@ -1,0 +1,696 @@
+=head1 NAME
+
+Gtk2::IconView - wrapper for GtkIconView
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::IconView
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+  Gtk2::CellLayout
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::IconView-E<gt>B<new> 
+
+=head2 widget = Gtk2::IconView-E<gt>B<new_with_model> ($model)
+
+=over
+
+=item * $model (Gtk2::TreeModel) 
+
+=back
+
+=head2 integer = $icon_view-E<gt>B<get_column_spacing> 
+
+=head2 $icon_view-E<gt>B<set_column_spacing> ($column_spacing)
+
+=over
+
+=item * $column_spacing (integer) 
+
+=back
+
+=head2 integer = $icon_view-E<gt>B<get_columns> 
+
+=head2 $icon_view-E<gt>B<set_columns> ($columns)
+
+=over
+
+=item * $columns (integer) 
+
+=back
+
+=head2 (bx, by) = $icon_view-E<gt>B<convert_widget_to_bin_window_coords> ($wx, $wy)
+
+=over
+
+=item * $wx (integer) 
+
+=item * $wy (integer) 
+
+=back
+
+Since: gtk+ 2.11
+
+=head2 pixmap = $icon_view-E<gt>B<create_drag_icon> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 list = $icon_view-E<gt>B<get_cursor> 
+
+Since: gtk+ 2.8
+
+=head2 $icon_view-E<gt>B<set_cursor> ($path, $cell, $start_editing)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $cell (Gtk2::CellRenderer or undef) 
+
+=item * $start_editing (boolean) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 $icon_view-E<gt>B<get_dest_item_at_pos> ($drag_x, $drag_y)
+
+=over
+
+=item * $drag_x (integer) 
+
+=item * $drag_y (integer) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 list = $icon_view-E<gt>B<get_drag_dest_item> 
+
+Since: gtk+ 2.8
+
+=head2 $icon_view-E<gt>B<set_drag_dest_item> ($path, $pos)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $pos (Gtk2::IconView::DropPosition) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 $icon_view-E<gt>B<enable_model_drag_dest> ($actions, ...)
+
+=over
+
+=item * $actions (Gtk2::Gdk::DragAction) 
+
+=item * ... (list) of Gtk2::TargetEntry's
+
+=back
+
+
+
+Since: gtk+ 2.8
+
+=head2 $icon_view-E<gt>B<enable_model_drag_source> ($start_button_mask, $actions, ...)
+
+=over
+
+=item * $start_button_mask (Gtk2::Gdk::ModifierType) 
+
+=item * $actions (Gtk2::Gdk::DragAction) 
+
+=item * ... (list) of Gtk2::TargetEntry's
+
+=back
+
+
+
+Since: gtk+ 2.8
+
+=head2 $icon_view-E<gt>B<item_activated> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 $icon_view-E<gt>B<get_item_at_pos> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 integer = $icon_view-E<gt>B<get_item_width> 
+
+=head2 $icon_view-E<gt>B<set_item_width> ($item_width)
+
+=over
+
+=item * $item_width (integer) 
+
+=back
+
+=head2 integer = $icon_view-E<gt>B<get_margin> 
+
+=head2 $icon_view-E<gt>B<set_margin> ($margin)
+
+=over
+
+=item * $margin (integer) 
+
+=back
+
+=head2 integer = $icon_view-E<gt>B<get_markup_column> 
+
+=head2 $icon_view-E<gt>B<set_markup_column> ($column)
+
+=over
+
+=item * $column (integer) 
+
+=back
+
+=head2 treemodel = $icon_view-E<gt>B<get_model> 
+
+=head2 $icon_view-E<gt>B<set_model> ($model)
+
+=over
+
+=item * $model (Gtk2::TreeModel) 
+
+=back
+
+=head2 orientation = $icon_view-E<gt>B<get_orientation> 
+
+=head2 $icon_view-E<gt>B<set_orientation> ($orientation)
+
+=over
+
+=item * $orientation (Gtk2::Orientation) 
+
+=back
+
+=head2 treepath = $icon_view-E<gt>B<get_path_at_pos> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+=head2 boolean = $icon_view-E<gt>B<path_is_selected> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 integer = $icon_view-E<gt>B<get_pixbuf_column> 
+
+=head2 $icon_view-E<gt>B<set_pixbuf_column> ($column)
+
+=over
+
+=item * $column (integer) 
+
+=back
+
+=head2 boolean = $icon_view-E<gt>B<get_reorderable> 
+
+Since: gtk+ 2.8
+
+=head2 $icon_view-E<gt>B<set_reorderable> ($reorderable)
+
+=over
+
+=item * $reorderable (boolean) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 integer = $icon_view-E<gt>B<get_row_spacing> 
+
+=head2 $icon_view-E<gt>B<set_row_spacing> ($row_spacing)
+
+=over
+
+=item * $row_spacing (integer) 
+
+=back
+
+=head2 $icon_view-E<gt>B<scroll_to_path> ($path, $use_align=FALSE, $row_align=0.0, $col_align=0.0)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $use_align (boolean) 
+
+=item * $row_align (double) 
+
+=item * $col_align (double) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 $icon_view-E<gt>B<select_all> 
+
+=head2 $icon_view-E<gt>B<select_path> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 $icon_view-E<gt>B<selected_foreach> ($func, $data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+=head2 list = $icon_view-E<gt>B<get_selected_items> 
+
+=head2 selectionmode = $icon_view-E<gt>B<get_selection_mode> 
+
+=head2 $icon_view-E<gt>B<set_selection_mode> ($mode)
+
+=over
+
+=item * $mode (Gtk2::SelectionMode) 
+
+=back
+
+=head2 integer = $icon_view-E<gt>B<get_spacing> 
+
+=head2 $icon_view-E<gt>B<set_spacing> ($spacing)
+
+=over
+
+=item * $spacing (integer) 
+
+=back
+
+=head2 integer = $icon_view-E<gt>B<get_text_column> 
+
+=head2 $icon_view-E<gt>B<set_text_column> ($column)
+
+=over
+
+=item * $column (integer) 
+
+=back
+
+=head2 $icon_view-E<gt>B<set_tooltip_cell> ($tooltip, $path, $cell)
+
+=over
+
+=item * $tooltip (Gtk2::Tooltip) 
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=back
+
+Since: gtk+ 2.11
+
+=head2 integer = $icon_view-E<gt>B<get_tooltip_column> 
+
+Since: gtk+ 2.11
+
+=head2 $icon_view-E<gt>B<set_tooltip_column> ($column)
+
+=over
+
+=item * $column (integer) 
+
+=back
+
+Since: gtk+ 2.11
+
+=head2 list = $icon_view-E<gt>B<get_tooltip_context> ($x, $y, $keyboard_tip)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $keyboard_tip (boolean) 
+
+=back
+
+Since: gtk+ 2.11
+
+=head2 $icon_view-E<gt>B<set_tooltip_item> ($tooltip, $path)
+
+=over
+
+=item * $tooltip (Gtk2::Tooltip) 
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+Since: gtk+ 2.11
+
+=head2 $icon_view-E<gt>B<unselect_all> 
+
+=head2 $icon_view-E<gt>B<unselect_path> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 $icon_view-E<gt>B<unset_model_drag_dest> 
+
+Since: gtk+ 2.8
+
+=head2 $icon_view-E<gt>B<unset_model_drag_source> 
+
+Since: gtk+ 2.8
+
+=head2 list = $icon_view-E<gt>B<get_visible_range> 
+
+Since: gtk+ 2.8
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'column-spacing' (integer : default 6 : readable / writable / private)
+
+Space which is inserted between grid columns
+
+=item 'columns' (integer : default -1 : readable / writable / private)
+
+Number of columns to display
+
+=item 'item-orientation' (Gtk2::Orientation : default "vertical" : readable / writable / private)
+
+How the text and icon of each item are positioned relative to each other
+
+=item 'item-padding' (integer : default 6 : readable / writable / private)
+
+Padding around icon view items
+
+=item 'item-width' (integer : default -1 : readable / writable / private)
+
+The width used for each item
+
+=item 'margin' (integer : default 6 : readable / writable / private)
+
+Space which is inserted at the edges of the icon view
+
+=item 'markup-column' (integer : default -1 : readable / writable / private)
+
+Model column used to retrieve the text if using Pango markup
+
+=item 'model' (Gtk2::TreeModel : default undef : readable / writable / private)
+
+The model for the icon view
+
+=item 'orientation' (Gtk2::Orientation : default "vertical" : readable / writable / private)
+
+How the text and icon of each item are positioned relative to each other
+
+=item 'pixbuf-column' (integer : default -1 : readable / writable / private)
+
+Model column used to retrieve the icon pixbuf from
+
+=item 'reorderable' (boolean : default false : readable / writable)
+
+View is reorderable
+
+=item 'row-spacing' (integer : default 6 : readable / writable / private)
+
+Space which is inserted between grid rows
+
+=item 'selection-mode' (Gtk2::SelectionMode : default "single" : readable / writable / private)
+
+The selection mode
+
+=item 'spacing' (integer : default 0 : readable / writable / private)
+
+Space which is inserted between cells of an item
+
+=item 'text-column' (integer : default -1 : readable / writable / private)
+
+Model column used to retrieve the text from
+
+=item 'tooltip-column' (integer : default -1 : readable / writable / private)
+
+The column in the model containing the tooltip texts for the items
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<set-scroll-adjustments> (Gtk2::IconView, Gtk2::Adjustment, Gtk2::Adjustment)
+
+=item B<item-activated> (Gtk2::IconView, Gtk2::TreePath)
+
+=item B<selection-changed> (Gtk2::IconView)
+
+=item B<select-all> (Gtk2::IconView)
+
+=item B<unselect-all> (Gtk2::IconView)
+
+=item B<select-cursor-item> (Gtk2::IconView)
+
+=item B<toggle-cursor-item> (Gtk2::IconView)
+
+=item boolean = B<activate-cursor-item> (Gtk2::IconView)
+
+=item boolean = B<move-cursor> (Gtk2::IconView, Gtk2::MovementStep, integer)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::Gdk::DragAction
+
+=over
+
+=item * 'default' / 'GDK_ACTION_DEFAULT'
+
+=item * 'copy' / 'GDK_ACTION_COPY'
+
+=item * 'move' / 'GDK_ACTION_MOVE'
+
+=item * 'link' / 'GDK_ACTION_LINK'
+
+=item * 'private' / 'GDK_ACTION_PRIVATE'
+
+=item * 'ask' / 'GDK_ACTION_ASK'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+=head2 enum Gtk2::IconView::DropPosition
+
+=over
+
+=item * 'no-drop' / 'GTK_ICON_VIEW_NO_DROP'
+
+=item * 'drop-into' / 'GTK_ICON_VIEW_DROP_INTO'
+
+=item * 'drop-left' / 'GTK_ICON_VIEW_DROP_LEFT'
+
+=item * 'drop-right' / 'GTK_ICON_VIEW_DROP_RIGHT'
+
+=item * 'drop-above' / 'GTK_ICON_VIEW_DROP_ABOVE'
+
+=item * 'drop-below' / 'GTK_ICON_VIEW_DROP_BELOW'
+
+=back
+
+
+=head2 enum Gtk2::MovementStep
+
+=over
+
+=item * 'logical-positions' / 'GTK_MOVEMENT_LOGICAL_POSITIONS'
+
+=item * 'visual-positions' / 'GTK_MOVEMENT_VISUAL_POSITIONS'
+
+=item * 'words' / 'GTK_MOVEMENT_WORDS'
+
+=item * 'display-lines' / 'GTK_MOVEMENT_DISPLAY_LINES'
+
+=item * 'display-line-ends' / 'GTK_MOVEMENT_DISPLAY_LINE_ENDS'
+
+=item * 'paragraphs' / 'GTK_MOVEMENT_PARAGRAPHS'
+
+=item * 'paragraph-ends' / 'GTK_MOVEMENT_PARAGRAPH_ENDS'
+
+=item * 'pages' / 'GTK_MOVEMENT_PAGES'
+
+=item * 'buffer-ends' / 'GTK_MOVEMENT_BUFFER_ENDS'
+
+=item * 'horizontal-pages' / 'GTK_MOVEMENT_HORIZONTAL_PAGES'
+
+=back
+
+
+=head2 enum Gtk2::Orientation
+
+=over
+
+=item * 'horizontal' / 'GTK_ORIENTATION_HORIZONTAL'
+
+=item * 'vertical' / 'GTK_ORIENTATION_VERTICAL'
+
+=back
+
+
+=head2 enum Gtk2::SelectionMode
+
+=over
+
+=item * 'none' / 'GTK_SELECTION_NONE'
+
+=item * 'single' / 'GTK_SELECTION_SINGLE'
+
+=item * 'browse' / 'GTK_SELECTION_BROWSE'
+
+=item * 'multiple' / 'GTK_SELECTION_MULTIPLE'
+
+=item * 'extended' / 'GTK_SELECTION_EXTENDED'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

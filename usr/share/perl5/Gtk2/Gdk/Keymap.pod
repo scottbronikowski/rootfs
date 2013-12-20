@@ -1,0 +1,200 @@
+=head1 NAME
+
+Gtk2::Gdk::Keymap - wrapper for GdkKeymap
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Gdk::Keymap
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 keymap = Gtk2::Gdk::Keymap-E<gt>B<get_default> 
+
+=head2 direction = $keymap-E<gt>B<get_direction> 
+
+=head2 ({ key1, keyval1 }, { ... }) = $keymap->B<get_entries_for_keycode> (hardware_keycode)
+
+=over
+
+=item * $hardware_keycode (integer) 
+
+=back
+
+Returns a list of hash references, each with two keys: "key" pointing to a
+I<GdkKeymapKey> and "keyval" pointing to the corresponding key value.
+
+=head2 keys = $keymap->B<get_entries_for_keyval> (keyval)
+
+=over
+
+=item * $keyval (integer) 
+
+=back
+
+Returns a list of I<GdkKeymapKey>s.
+
+Obtains a list of keycode/group/level combinations that will generate
+I<$keyval>.  Groups and levels are two kinds of keyboard mode; in general, the
+level determines whether the top or bottom symbol on a key is used, and the
+group determines whether the left or right symbol is used.  On US keyboards,
+the shift key changes the keyboard level, and there are no groups.  A group
+switch key might convert a keyboard between Hebrew to English modes, for
+example.  Gtk2::Gdk::Event::Key contains a group field that indicates
+the active keyboard group.  The level is computed from the modifier
+mask.
+
+=head2 keymap = Gtk2::Gdk::Keymap-E<gt>B<get_for_display> ($display)
+
+=over
+
+=item * $display (Gtk2::Gdk::Display) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 boolean = $keymap-E<gt>B<have_bidi_layouts> 
+
+Since: gtk+ 2.12
+
+=head2 integer = $keymap-E<gt>B<lookup_key> ($key)
+
+=over
+
+=item * $key (scalar) 
+
+=back
+
+=head2 (keyval, effective_group, level, consumed_modifiers) = $keymap->B<translate_keyboard_state> (hardware_keycode, state, group)
+
+=over
+
+=item * $hardware_keycode (integer) 
+
+=item * $state (Gtk2::Gdk::ModifierType) 
+
+=item * $group (integer) 
+
+=back
+
+
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<state-changed> (Gtk2::Gdk::Keymap)
+
+=item B<direction-changed> (Gtk2::Gdk::Keymap)
+
+=item B<keys-changed> (Gtk2::Gdk::Keymap)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+=head2 enum Pango::Direction
+
+=over
+
+=item * 'ltr' / 'PANGO_DIRECTION_LTR'
+
+=item * 'rtl' / 'PANGO_DIRECTION_RTL'
+
+=item * 'ttb-ltr' / 'PANGO_DIRECTION_TTB_LTR'
+
+=item * 'ttb-rtl' / 'PANGO_DIRECTION_TTB_RTL'
+
+=item * 'weak-ltr' / 'PANGO_DIRECTION_WEAK_LTR'
+
+=item * 'weak-rtl' / 'PANGO_DIRECTION_WEAK_RTL'
+
+=item * 'neutral' / 'PANGO_DIRECTION_NEUTRAL'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,266 @@
+=head1 NAME
+
+Gtk2::EntryCompletion - wrapper for GtkEntryCompletion
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::EntryCompletion
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Gtk2::CellLayout
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 entrycompletion = Gtk2::EntryCompletion-E<gt>B<new> 
+
+=head2 $completion-E<gt>B<complete> 
+
+=head2 string or undef = $completion-E<gt>B<get_completion_prefix> 
+
+Since: gtk+ 2.12
+
+=head2 $completion-E<gt>B<delete_action> ($index)
+
+=over
+
+=item * $index (integer) 
+
+=back
+
+=head2 widget = $entry-E<gt>B<get_entry> 
+
+=head2 boolean = $completion-E<gt>B<get_inline_completion> 
+
+Since: gtk+ 2.6
+
+=head2 $completion-E<gt>B<set_inline_completion> ($inline_completion)
+
+=over
+
+=item * $inline_completion (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 boolean = $completion-E<gt>B<get_inline_selection> 
+
+Since: gtk+ 2.12
+
+=head2 $completion-E<gt>B<set_inline_selection> ($inline_selection)
+
+=over
+
+=item * $inline_selection (boolean) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $completion-E<gt>B<insert_action_markup> ($index, $markup)
+
+=over
+
+=item * $index (integer) 
+
+=item * $markup (string) 
+
+=back
+
+=head2 $completion-E<gt>B<insert_action_text> ($index, $text)
+
+=over
+
+=item * $index (integer) 
+
+=item * $text (string) 
+
+=back
+
+=head2 $completion-E<gt>B<insert_prefix> 
+
+Since: gtk+ 2.6
+
+=head2 $completion-E<gt>B<set_match_func> ($func, $func_data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $func_data (scalar) 
+
+=back
+
+=head2 integer = $completion-E<gt>B<get_minimum_key_length> 
+
+=head2 $completion-E<gt>B<set_minimum_key_length> ($length)
+
+=over
+
+=item * $length (integer) 
+
+=back
+
+=head2 treemodel = $completion-E<gt>B<get_model> 
+
+=head2 $completion-E<gt>B<set_model> ($model)
+
+=over
+
+=item * $model (Gtk2::TreeModel or undef) 
+
+=back
+
+=head2 boolean = $completion-E<gt>B<get_popup_completion> 
+
+Since: gtk+ 2.6
+
+=head2 $completion-E<gt>B<set_popup_completion> ($popup_completion)
+
+=over
+
+=item * $popup_completion (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 boolean = $completion-E<gt>B<get_popup_set_width> 
+
+Since: gtk+ 2.8
+
+=head2 $completion-E<gt>B<set_popup_set_width> ($popup_set_width)
+
+=over
+
+=item * $popup_set_width (boolean) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 boolean = $completion-E<gt>B<get_popup_single_match> 
+
+Since: gtk+ 2.8
+
+=head2 $completion-E<gt>B<set_popup_single_match> ($popup_single_match)
+
+=over
+
+=item * $popup_single_match (boolean) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 integer = $completion-E<gt>B<get_text_column> 
+
+Since: gtk+ 2.6
+
+=head2 $completion-E<gt>B<set_text_column> ($column)
+
+=over
+
+=item * $column (integer) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'inline-completion' (boolean : default false : readable / writable / private)
+
+Whether the common prefix should be inserted automatically
+
+=item 'inline-selection' (boolean : default false : readable / writable / private)
+
+Your description here
+
+=item 'minimum-key-length' (integer : default 1 : readable / writable / private)
+
+Minimum length of the search key in order to look up matches
+
+=item 'model' (Gtk2::TreeModel : default undef : readable / writable / private)
+
+The model to find matches in
+
+=item 'popup-completion' (boolean : default true : readable / writable / private)
+
+Whether the completions should be shown in a popup window
+
+=item 'popup-set-width' (boolean : default true : readable / writable / private)
+
+If TRUE, the popup window will have the same size as the entry
+
+=item 'popup-single-match' (boolean : default true : readable / writable / private)
+
+If TRUE, the popup window will appear for a single match.
+
+=item 'text-column' (integer : default -1 : readable / writable / private)
+
+The column of the model containing the strings.
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item boolean = B<insert-prefix> (Gtk2::EntryCompletion, string)
+
+=item boolean = B<match-selected> (Gtk2::EntryCompletion, Gtk2::TreeModel, Gtk2::TreeIter)
+
+=item boolean = B<cursor-on-match> (Gtk2::EntryCompletion, Gtk2::TreeModel, Gtk2::TreeIter)
+
+=item B<action-activated> (Gtk2::EntryCompletion, integer)
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,853 @@
+=head1 NAME
+
+Gtk2::Gdk::Pixbuf - wrapper for GdkPixbuf
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Gdk::Pixbuf
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::GIcon
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 pixbuf = Gtk2::Gdk::Pixbuf-E<gt>B<new> ($colorspace, $has_alpha, $bits_per_sample, $width, $height)
+
+=over
+
+=item * $colorspace (Gtk2::Gdk::Colorspace) 
+
+=item * $has_alpha (boolean) 
+
+=item * $bits_per_sample (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 pixbuf = Gtk2::Gdk::Pixbuf-E<gt>B<new_from_data> ($data, $colorspace, $has_alpha, $bits_per_sample, $width, $height, $rowstride)
+
+=over
+
+=item * $data (scalar) packed binary pixel data, usually made with pack()
+
+=item * $colorspace (Gtk2::Gdk::Colorspace) 
+
+=item * $has_alpha (boolean) true if the image data includes an alpha channel (opacity information).
+
+=item * $bits_per_sample (integer) 
+
+=item * $width (integer) in pixels.
+
+=item * $height (integer) in pixels.
+
+=item * $rowstride (integer) distance in bytes between row starts; usually 3*width for rgb data, 4*width if I<$has_alpha> is true.
+
+=back
+
+
+Creates a new Gtk2::Gdk::Pixbuf out of in-memory image data.  Currently only
+RGB images with 8 bits per sample are supported.
+
+In C this function allows you to wrap a GdkPixbuf structure around existing
+pixel data.  In Perl, we have to use C<pack> to generate a scalar containing
+the pixel data, and pass that scalar to C<new_from_data>, which copies the
+scalar to keep it around.  It also manages the memory automagically, so there's
+no need for a destruction notifier function.  This all means that if you change
+your copy of the data scalar later, the pixbuf will I<not> reflect that, but
+because of the way perl manages string data and scalars, it would be pretty
+fragile to do that in the first place.  If you need to modify a pixbuf's data
+after it has been created, you can create new pixbufs for the changed regions
+and use C<< $pixbuf->composite >>, or try a different approach (possibly use a
+server-side pixmap and gdk drawing primitives, or something like libart).
+
+
+=head2 pixbuf = Gtk2::Gdk::Pixbuf-E<gt>B<new_from_file> ($filename)
+
+=over
+
+=item * $filename (localized file name) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 pixbuf = Gtk2::Gdk::Pixbuf-E<gt>B<new_from_file_at_scale> ($filename, $width, $height, $preserve_aspect_ratio)
+
+=over
+
+=item * $filename (localized file name) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $preserve_aspect_ratio (boolean) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+Since: gtk+ 2.6
+
+=head2 pixbuf = Gtk2::Gdk::Pixbuf-E<gt>B<new_from_file_at_size> ($filename, $width, $height)
+
+=over
+
+=item * $filename (localized file name) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+Since: gtk+ 2.4
+
+=head2 pixbuf = Gtk2::Gdk::Pixbuf-E<gt>B<new_from_inline> ($data, $copy_pixels=TRUE)
+
+=over
+
+=item * $data (scalar) packed binary data, the format is special, see discussion
+
+=item * $copy_pixels (boolean) whether I<$data> should be copied, defaults to true
+
+=back
+
+
+Gtk+ ships with a tool called C<gdk-pixbuf-csource>, which turns any image
+understood by gdk-pixbuf into the C syntax of the declaration of a static
+data structure containing that image data, to be #included directly into
+your source code.  C<gdk_pixbuf_new_from_inline> creates a new GdkPixbuf
+from that data structure.
+
+Currently, this is not very easy to do from Perl.  The output of
+C<gdk-pixbuf-csource> must be mangled rather ruthlessly to create valid
+Perl code using pack and translation from C string escapes to valid Perl
+string escapes (for encoding and interpretation isses).  Because Perl
+scalars are garbage collected, it's rather rare to have the ability to use
+static data, so I<$copy_pixels> defaults to true; if you can guarantee the
+image data will outlive the pixbuf you can pass false here and save some
+memory. 
+
+For more information, see the description of C<gdk_pixbuf_new_from_inline>
+in the C API reference at http://gtk.org/api/ .
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 pixbuf = Gtk2::Gdk::Pixbuf-E<gt>B<new_from_xpm_data> (...)
+
+=over
+
+=item * ... (list) xpm data as a list of strings (see discussion)
+
+=back
+
+X Pixel Map (XPM) files are designed to be easy to edit and easy to include
+directly into C programs.  The file format is the C syntax of the declaration
+and initialization of a variable containing an array of strings.
+C<new_from_xpm_data> allows you to create an image from such data included
+directly in your program source.
+
+Since XPM files are C syntax, you must mangle that source a bit to work in a
+Perl program.  For example, this is a valid xpm, but it is not valid Perl code:
+
+ /* XPM */
+ static char * test_xpm[] = {
+ "4 4 3 1",
+ " 	c None",
+ ".	c red",
+ "+	c blue",
+ ".. +",
+ ". ++",
+ " ++.",
+ "++.."};
+
+You'll need to change the array declaration format, and change the
+double-quoted strings to single-quoted to avoid Perl interpreting
+any chars in the strings as special.
+
+ my @test_xpm = (
+ '4 4 3 1',
+ ' 	c None',
+ '.	c red',
+ '+	c blue',
+ '.. +',
+ '. ++',
+ ' ++.',
+ '++..');
+
+ $pixbuf = Gtk2::Gdk::Pixbuf->new_from_xpm_data (@test_xpm);
+
+[It's only two or three regexes... Perhaps we should distribute a script
+to convert XPM files to the proper format?]
+
+=head2 pixbuf = $src_pixbuf-E<gt>B<new_subpixbuf> ($src_x, $src_y, $width, $height)
+
+=over
+
+=item * $src_x (integer) 
+
+=item * $src_y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 pixbuf = $pixbuf-E<gt>B<add_alpha> ($substitute_color, $r, $g, $b)
+
+=over
+
+=item * $substitute_color (boolean) 
+
+=item * $r (Glib::UChar) 
+
+=item * $g (Glib::UChar) 
+
+=item * $b (Glib::UChar) 
+
+=back
+
+=head2 pixbuf = $src-E<gt>B<apply_embedded_orientation> 
+
+Since: gtk+ 2.11
+
+=head2 integer = $pixbuf-E<gt>B<get_bits_per_sample> 
+
+=head2 colorspace = $pixbuf-E<gt>B<get_colorspace> 
+
+=head2 $src-E<gt>B<composite> ($dest, $dest_x, $dest_y, $dest_width, $dest_height, $offset_x, $offset_y, $scale_x, $scale_y, $interp_type, $overall_alpha)
+
+=over
+
+=item * $dest (Gtk2::Gdk::Pixbuf) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=item * $dest_width (integer) 
+
+=item * $dest_height (integer) 
+
+=item * $offset_x (double) 
+
+=item * $offset_y (double) 
+
+=item * $scale_x (double) 
+
+=item * $scale_y (double) 
+
+=item * $interp_type (Gtk2::Gdk::InterpType) 
+
+=item * $overall_alpha (integer) 
+
+=back
+
+=head2 $src-E<gt>B<composite_color> ($dest, $dest_x, $dest_y, $dest_width, $dest_height, $offset_x, $offset_y, $scale_x, $scale_y, $interp_type, $overall_alpha, $check_x, $check_y, $check_size, $color1, $color2)
+
+=over
+
+=item * $dest (Gtk2::Gdk::Pixbuf) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=item * $dest_width (integer) 
+
+=item * $dest_height (integer) 
+
+=item * $offset_x (double) 
+
+=item * $offset_y (double) 
+
+=item * $scale_x (double) 
+
+=item * $scale_y (double) 
+
+=item * $interp_type (Gtk2::Gdk::InterpType) 
+
+=item * $overall_alpha (integer) 
+
+=item * $check_x (integer) 
+
+=item * $check_y (integer) 
+
+=item * $check_size (integer) 
+
+=item * $color1 (unsigned) 
+
+=item * $color2 (unsigned) 
+
+=back
+
+=head2 pixbuf or undef = $src-E<gt>B<composite_color_simple> ($dest_width, $dest_height, $interp_type, $overall_alpha, $check_size, $color1, $color2)
+
+=over
+
+=item * $dest_width (integer) 
+
+=item * $dest_height (integer) 
+
+=item * $interp_type (Gtk2::Gdk::InterpType) 
+
+=item * $overall_alpha (integer) 
+
+=item * $check_size (integer) 
+
+=item * $color1 (unsigned) 
+
+=item * $color2 (unsigned) 
+
+=back
+
+=head2 pixbuf = $pixbuf-E<gt>B<copy> 
+
+=head2 $src_pixbuf-E<gt>B<copy_area> ($src_x, $src_y, $width, $height, $dest_pixbuf, $dest_x, $dest_y)
+
+=over
+
+=item * $src_x (integer) 
+
+=item * $src_y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $dest_pixbuf (Gtk2::Gdk::Pixbuf) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=back
+
+=head2 (format, width, height) = $pixbuf->B<get_file_info> ($filename)
+
+=over
+
+=item * $filename (localized file name) 
+
+=back
+
+
+Parses enough of I<$filename> to determine and return the format and size.
+If the format is unknown or the file can't be opened, returns an empty list.
+
+
+Since: gtk+ 2.4
+
+=head2 $pixbuf-E<gt>B<fill> ($pixel)
+
+=over
+
+=item * $pixel (unsigned) a packed RGBA value.
+
+=back
+
+Clear I<$pixbuf> to contain only the value given in I<$pixel>.
+
+=head2 pixbuf = $src-E<gt>B<flip> ($horizontal)
+
+=over
+
+=item * $horizontal (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 list = Gtk2::Gdk::Pixbuf-E<gt>B<get_formats> 
+
+Returns a list of hashes with information about the formats supported by
+Gtk2::Gdk::Pixbuf.
+
+Since: gtk+ 2.2
+
+=head2 pixbuf = Gtk2::Gdk::Pixbuf->B<get_from_drawable> ($src, $cmap, $src_x, $src_y, $dest_x, $dest_y, $width, $height)
+
+=head2 pixbuf = $pixbuf->B<get_from_drawable> ($src, $cmap, $src_x, $src_y, $dest_x, $dest_y, $width, $height)
+
+=over
+
+=item * $src (Gtk2::Gdk::Drawable) 
+
+=item * $cmap (Gtk2::Gdk::Colormap or undef) 
+
+=item * $src_x (integer) 
+
+=item * $src_y (integer) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+Fetch pixels from a Gtk2::Gdk::Drawable as a Gtk2::Gdk::Pixbuf.
+Returns a new Gtk2::Gdk::Pixbuf if you use the class form, or I<$pixbuf> if
+you call it on an existing pixbuf.
+
+=head2 pixbuf = Gtk2::Gdk::Pixbuf->B<get_from_image> ($src, $cmap, $src_x, $src_y, $dest_x, $dest_y, $width, $height)
+
+=head2 pixbuf = $pixbuf->B<get_from_image> ($src, $cmap, $src_x, $src_y, $dest_x, $dest_y, $width, $height)
+
+=over
+
+=item * $src (Gtk2::Gdk::Image) 
+
+=item * $cmap (Gtk2::Gdk::Colormap or undef) 
+
+=item * $src_x (integer) 
+
+=item * $src_y (integer) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+Fetch pixels from a Gtk2::Gdk::Image as a Gtk2::Gdk::Pixbuf.
+Returns a new Gtk2::Gdk::Pixbuf if you use the class form, or I<$pixbuf> if
+you call it on an existing pixbuf.
+
+=head2 boolean = $pixbuf-E<gt>B<get_has_alpha> 
+
+=head2 integer = $pixbuf-E<gt>B<get_height> 
+
+=head2 integer = $pixbuf-E<gt>B<get_n_channels> 
+
+=head2 string or undef = $pixbuf-E<gt>B<get_option> ($key)
+
+=over
+
+=item * $key (string) 
+
+=back
+
+=head2 scalar = $pixbuf-E<gt>B<get_pixels> 
+
+=head2 pixmap = $pixbuf->B<render_pixmap_and_mask> ($alpha_threshold)
+
+=head2 (pixmap, mask) = $pixbuf->B<render_pixmap_and_mask> ($alpha_threshold)
+
+=over
+
+=item * $alpha_threshold (integer) 
+
+=back
+
+
+
+=head2 pixmap = $pixbuf->B<render_pixmap_and_mask_for_colormap> ($colormap, $alpha_threshold)
+
+=head2 (pixmap, mask) = $pixbuf->B<render_pixmap_and_mask_for_colormap> ($colormap, $alpha_threshold)
+
+=over
+
+=item * $colormap (Gtk2::Gdk::Colormap) 
+
+=item * $alpha_threshold (integer) 
+
+=back
+
+
+
+=head2 $pixbuf-E<gt>B<render_threshold_alpha> ($bitmap, $src_x, $src_y, $dest_x, $dest_y, $width, $height, $alpha_threshold)
+
+=over
+
+=item * $bitmap (Gtk2::Gdk::Bitmap) 
+
+=item * $src_x (integer) 
+
+=item * $src_y (integer) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $alpha_threshold (integer) 
+
+=back
+
+=head2 $pixbuf-E<gt>B<render_to_drawable> ($drawable, $gc, $src_x, $src_y, $dest_x, $dest_y, $width, $height, $dither, $x_dither, $y_dither)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable) 
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $src_x (integer) 
+
+=item * $src_y (integer) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $dither (Gtk2::Gdk::RgbDither) 
+
+=item * $x_dither (integer) 
+
+=item * $y_dither (integer) 
+
+=back
+
+=head2 $pixbuf-E<gt>B<render_to_drawable_alpha> ($drawable, $src_x, $src_y, $dest_x, $dest_y, $width, $height, $alpha_mode, $alpha_threshold, $dither, $x_dither, $y_dither)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable) 
+
+=item * $src_x (integer) 
+
+=item * $src_y (integer) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $alpha_mode (Gtk2::Gdk::PixbufAlphaMode) 
+
+=item * $alpha_threshold (integer) 
+
+=item * $dither (Gtk2::Gdk::RgbDither) 
+
+=item * $x_dither (integer) 
+
+=item * $y_dither (integer) 
+
+=back
+
+=head2 pixbuf = $src-E<gt>B<rotate_simple> ($angle)
+
+=over
+
+=item * $angle (Gtk2::Gdk::PixbufRotation) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 integer = $pixbuf-E<gt>B<get_rowstride> 
+
+=head2 $src-E<gt>B<saturate_and_pixelate> ($dest, $saturation, $pixelate)
+
+=over
+
+=item * $dest (Gtk2::Gdk::Pixbuf) 
+
+=item * $saturation (double) 
+
+=item * $pixelate (boolean) 
+
+=back
+
+=head2 $pixbuf-E<gt>B<save> ($filename, $type, ...)
+
+=over
+
+=item * $filename (localized file name) 
+
+=item * $type (string) name of file format (e.g. "jpeg", "png")
+
+=item * ... (list) list of key-value save options
+
+=back
+
+
+Save I<$pixbuf> to a file named I<$filename>, in the format I<$type>, which
+is currently "jpeg" or "png".  The function will croak if there is an error,
+which may arise from file- or image format-related issues.
+
+Any values in I<...> should be key/value string pairs that modify the saving
+parameters.  For example:
+
+ $pixbuf->save ($filename, 'jpeg', quality => '100');
+
+Currently only a few parameters exist.  JPEG images can be saved with a
+"quality" parameter; its value should be in the range [0,100].  Text chunks can
+be attached to PNG images by specifying parameters of the form "tEXt::key",
+where key is an ASCII string of length 1-79.  The values are UTF-8 encoded
+strings.  (This is a quote from the C API reference; note that the C API
+reference is the canonical source for this information.)
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 scalar = $pixbuf-E<gt>B<save_to_buffer> ($type, ...)
+
+=over
+
+=item * $type (string) name of file format (e.g. "jpeg", "png")
+
+=item * ... (list) list of key-value save options
+
+=back
+
+
+Save I<$pixbuf> to a scalar buffer, in the format I<$type>, which is currently
+"jpeg" or "png".  The function will croak if there is an error, which may arise
+from image format-related issues.
+
+The returned string contains binary data, which may have embedded nuls.  Don't
+try to C<print> it.
+
+See C<Gtk2::Gdk::Pixbuf::save> for more details.
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+Since: gtk+ 2.4
+
+=head2 $src-E<gt>B<scale> ($dest, $dest_x, $dest_y, $dest_width, $dest_height, $offset_x, $offset_y, $scale_x, $scale_y, $interp_type)
+
+=over
+
+=item * $dest (Gtk2::Gdk::Pixbuf) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=item * $dest_width (integer) 
+
+=item * $dest_height (integer) 
+
+=item * $offset_x (double) 
+
+=item * $offset_y (double) 
+
+=item * $scale_x (double) 
+
+=item * $scale_y (double) 
+
+=item * $interp_type (Gtk2::Gdk::InterpType) 
+
+=back
+
+=head2 pixbuf or undef = $src-E<gt>B<scale_simple> ($dest_width, $dest_height, $interp_type)
+
+=over
+
+=item * $dest_width (integer) 
+
+=item * $dest_height (integer) 
+
+=item * $interp_type (Gtk2::Gdk::InterpType) 
+
+=back
+
+=head2 integer = $pixbuf-E<gt>B<get_width> 
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'bits-per-sample' (integer : default 8 : readable / writable / construct-only / private)
+
+The number of bits per sample
+
+=item 'colorspace' (Gtk2::Gdk::Colorspace : default "rgb" : readable / writable / construct-only / private)
+
+The colorspace in which the samples are interpreted
+
+=item 'has-alpha' (boolean : default false : readable / writable / construct-only / private)
+
+Whether the pixbuf has an alpha channel
+
+=item 'height' (integer : default 1 : readable / writable / construct-only / private)
+
+The number of rows of the pixbuf
+
+=item 'n-channels' (integer : default 3 : readable / writable / construct-only / private)
+
+The number of samples per pixel
+
+=item 'pixels' (gpointer : default 0 : readable / writable / construct-only / private)
+
+A pointer to the pixel data of the pixbuf
+
+=item 'rowstride' (integer : default 1 : readable / writable / construct-only / private)
+
+The number of bytes between the start of a row and the start of the next row
+
+=item 'width' (integer : default 1 : readable / writable / construct-only / private)
+
+The number of columns of the pixbuf
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::Gdk::Colorspace
+
+
+
+=over
+
+=item * 'rgb' / 'GDK_COLORSPACE_RGB'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::InterpType
+
+=over
+
+=item * 'nearest' / 'GDK_INTERP_NEAREST'
+
+=item * 'tiles' / 'GDK_INTERP_TILES'
+
+=item * 'bilinear' / 'GDK_INTERP_BILINEAR'
+
+=item * 'hyper' / 'GDK_INTERP_HYPER'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::PixbufAlphaMode
+
+
+
+=over
+
+=item * 'bilevel' / 'GDK_PIXBUF_ALPHA_BILEVEL'
+
+=item * 'full' / 'GDK_PIXBUF_ALPHA_FULL'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::PixbufError
+
+
+
+=over
+
+=item * 'corrupt-image' / 'GDK_PIXBUF_ERROR_CORRUPT_IMAGE'
+
+=item * 'insufficient-memory' / 'GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY'
+
+=item * 'bad-option' / 'GDK_PIXBUF_ERROR_BAD_OPTION'
+
+=item * 'unknown-type' / 'GDK_PIXBUF_ERROR_UNKNOWN_TYPE'
+
+=item * 'unsupported-operation' / 'GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION'
+
+=item * 'failed' / 'GDK_PIXBUF_ERROR_FAILED'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::PixbufRotation
+
+=over
+
+=item * 'none' / 'GDK_PIXBUF_ROTATE_NONE'
+
+=item * 'counterclockwise' / 'GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE'
+
+=item * 'upsidedown' / 'GDK_PIXBUF_ROTATE_UPSIDEDOWN'
+
+=item * 'clockwise' / 'GDK_PIXBUF_ROTATE_CLOCKWISE'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::RgbDither
+
+=over
+
+=item * 'none' / 'GDK_RGB_DITHER_NONE'
+
+=item * 'normal' / 'GDK_RGB_DITHER_NORMAL'
+
+=item * 'max' / 'GDK_RGB_DITHER_MAX'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

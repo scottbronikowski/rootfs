@@ -1,0 +1,1088 @@
+=head1 NAME
+
+Gtk2::TreeView - wrapper for GtkTreeView
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::TreeView
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::TreeView-E<gt>B<new> ($model=undef)
+
+=over
+
+=item * $model (Gtk2::TreeModel) 
+
+=back
+
+=head2 widget = Gtk2::TreeView-E<gt>B<new_with_model> ($model)
+
+=over
+
+=item * $model (Gtk2::TreeModel) 
+
+=back
+
+=head2 integer = $tree_view-E<gt>B<append_column> ($column)
+
+=over
+
+=item * $column (Gtk2::TreeViewColumn) 
+
+=back
+
+=head2 rectangle = $tree_view-E<gt>B<get_background_area> ($path, $column)
+
+=over
+
+=item * $path (Gtk2::TreePath or undef) 
+
+=item * $column (Gtk2::TreeViewColumn or undef) 
+
+=back
+
+=head2 window = $tree_view-E<gt>B<get_bin_window> 
+
+=head2 rectangle = $tree_view-E<gt>B<get_cell_area> ($path, $column)
+
+=over
+
+=item * $path (Gtk2::TreePath or undef) 
+
+=item * $column (Gtk2::TreeViewColumn or undef) 
+
+=back
+
+=head2 $tree_view-E<gt>B<collapse_all> 
+
+=head2 boolean = $tree_view-E<gt>B<collapse_row> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 $tree_view-E<gt>B<set_column_drag_function> ($func, $data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+=head2 treeviewcolumn = $tree_view-E<gt>B<get_column> ($n)
+
+=over
+
+=item * $n (integer) 
+
+=back
+
+=head2 $tree_view-E<gt>B<columns_autosize> 
+
+=head2 list = $tree_view-E<gt>B<get_columns> 
+
+Retuns an array of columns.
+
+=head2 (tx, ty) = $tree_view-E<gt>B<convert_bin_window_to_tree_coords> ($bx, $by)
+
+=over
+
+=item * $bx (integer) 
+
+=item * $by (integer) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 (wx, wy) = $tree_view-E<gt>B<convert_bin_window_to_widget_coords> ($bx, $by)
+
+=over
+
+=item * $bx (integer) 
+
+=item * $by (integer) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 (bx, by) = $tree_view-E<gt>B<convert_tree_to_bin_window_coords> ($tx, $ty)
+
+=over
+
+=item * $tx (integer) 
+
+=item * $ty (integer) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 (wx, wy) = $tree_view-E<gt>B<convert_tree_to_widget_coords> ($tx, $ty)
+
+=over
+
+=item * $tx (integer) 
+
+=item * $ty (integer) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 (bx, by) = $tree_view-E<gt>B<convert_widget_to_bin_window_coords> ($wx, $wy)
+
+=over
+
+=item * $wx (integer) 
+
+=item * $wy (integer) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 (tx, ty) = $tree_view-E<gt>B<convert_widget_to_tree_coords> ($wx, $wy)
+
+=over
+
+=item * $wx (integer) 
+
+=item * $wy (integer) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 pixmap = $tree_view-E<gt>B<create_row_drag_icon> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 (path, focus_column) = $tree_view->B<get_cursor>
+
+Returns the Gtk2::TreePath and Gtk2::TreeViewColumn of the cell with the
+keyboard focus cursor.  Either may be undef.
+
+=head2 $tree_view-E<gt>B<set_cursor_on_cell> ($path, $focus_column, $focus_cell, $start_editing)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $focus_column (Gtk2::TreeViewColumn or undef) 
+
+=item * $focus_cell (Gtk2::CellRenderer or undef) 
+
+=item * $start_editing (boolean) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $tree_view-E<gt>B<set_cursor> ($path, $focus_column=undef, $start_editing=FALSE)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $focus_column (Gtk2::TreeViewColumn or undef) 
+
+=item * $start_editing (boolean) 
+
+=back
+
+=head2 (path, dropposition) = $tree_view->B<get_dest_row_at_pos> ($drag_x, $drag_y)
+
+=over
+
+=item * $drag_x (integer) 
+
+=item * $drag_y (integer) 
+
+=back
+
+
+
+=head2 (path, dropposition) = $tree_view->B<get_drag_dest_row>
+
+
+
+=head2 $tree_view-E<gt>B<set_drag_dest_row> ($path, $pos)
+
+=over
+
+=item * $path (Gtk2::TreePath or undef) 
+
+=item * $pos (Gtk2::TreeViewDropPosition) 
+
+=back
+
+=head2 $tree_view-E<gt>B<enable_model_drag_dest> ($actions, ...)
+
+=over
+
+=item * $actions (Gtk2::Gdk::DragAction) 
+
+=item * ... (list) of Gtk2::TargetEntry's
+
+=back
+
+
+
+=head2 $tree_view-E<gt>B<enable_model_drag_source> ($start_button_mask, $actions, ...)
+
+=over
+
+=item * $start_button_mask (Gtk2::Gdk::ModifierType) 
+
+=item * $actions (Gtk2::Gdk::DragAction) 
+
+=item * ... (list) of Gtk2::TargetEntry's
+
+=back
+
+
+
+=head2 boolean = $tree_view-E<gt>B<get_enable_search> 
+
+=head2 $tree_view-E<gt>B<set_enable_search> ($enable_search)
+
+=over
+
+=item * $enable_search (boolean) 
+
+=back
+
+=head2 boolean = $tree_view-E<gt>B<get_enable_tree_lines> 
+
+Since: gtk+ 2.10
+
+=head2 $tree_view-E<gt>B<set_enable_tree_lines> ($enabled)
+
+=over
+
+=item * $enabled (boolean) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 $tree_view-E<gt>B<expand_all> 
+
+=head2 boolean = $tree_view-E<gt>B<expand_row> ($path, $open_all)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $open_all (boolean) 
+
+=back
+
+=head2 $tree_view-E<gt>B<expand_to_path> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 treeviewcolumn or undef = $tree_view-E<gt>B<get_expander_column> 
+
+=head2 $tree_view-E<gt>B<set_expander_column> ($column)
+
+=over
+
+=item * $column (Gtk2::TreeViewColumn or undef) 
+
+=back
+
+=head2 boolean = $treeview-E<gt>B<get_fixed_height_mode> 
+
+Since: gtk+ 2.6
+
+=head2 $treeview-E<gt>B<set_fixed_height_mode> ($enable)
+
+=over
+
+=item * $enable (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 treeviewgridlines = $tree_view-E<gt>B<get_grid_lines> 
+
+Since: gtk+ 2.10
+
+=head2 $tree_view-E<gt>B<set_grid_lines> ($grid_lines)
+
+=over
+
+=item * $grid_lines (Gtk2::TreeViewGridLines) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 adjustment or undef = $tree_view-E<gt>B<get_hadjustment> 
+
+=head2 $tree_view-E<gt>B<set_hadjustment> ($adjustment)
+
+=over
+
+=item * $adjustment (Gtk2::Adjustment or undef) 
+
+=back
+
+=head2 boolean = $tree_view-E<gt>B<get_headers_clickable> 
+
+Since: gtk+ 2.10
+
+=head2 $tree_view-E<gt>B<set_headers_clickable> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 boolean = $tree_view-E<gt>B<get_headers_visible> 
+
+=head2 $tree_view-E<gt>B<set_headers_visible> ($headers_visible)
+
+=over
+
+=item * $headers_visible (boolean) 
+
+=back
+
+=head2 boolean = $treeview-E<gt>B<get_hover_expand> 
+
+Since: gtk+ 2.6
+
+=head2 $treeview-E<gt>B<set_hover_expand> ($expand)
+
+=over
+
+=item * $expand (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 boolean = $treeview-E<gt>B<get_hover_selection> 
+
+Since: gtk+ 2.6
+
+=head2 $treeview-E<gt>B<set_hover_selection> ($hover)
+
+=over
+
+=item * $hover (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 integer = $tree_view-E<gt>B<insert_column> ($column, $position)
+
+=over
+
+=item * $column (Gtk2::TreeViewColumn) 
+
+=item * $position (integer) 
+
+=back
+
+=head2 $tree_view->B<insert_column_with_attributes> ($position, $title, $cellrenderer, $attr1, $col1, $attr2, $col2, ...)
+
+=over
+
+=item * $position (integer) 
+
+=item * $title (string) 
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=item * ... (list) 
+
+=back
+
+
+
+=head2 integer = $tree_view-E<gt>B<insert_column_with_data_func> ($position, $title, $cell, $func, $data=undef)
+
+=over
+
+=item * $position (integer) 
+
+=item * $title (string) 
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=item * $func (subroutine) 
+
+=item * $data (scalar) 
+
+=back
+
+
+Insert a column that calls I<$func> every time it needs to fetch the data for
+a cell.  I<$func> will get a cell renderer, the tree model, and the iter of
+the row in question, and should set the proper value into the cell renderer.
+
+
+=head2 boolean = $tree_view-E<gt>B<is_rubber_banding_active> 
+
+Since: gtk+ 2.12
+
+=head2 integer = $tree_view-E<gt>B<get_level_indentation> 
+
+Since: gtk+ 2.12
+
+=head2 $tree_view-E<gt>B<set_level_indentation> ($indentation)
+
+=over
+
+=item * $indentation (integer) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $tree_view-E<gt>B<map_expanded_rows> ($func, $data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+=head2 treemodel or undef = $tree_view-E<gt>B<get_model> 
+
+=head2 $tree_view-E<gt>B<set_model> ($model)
+
+=over
+
+=item * $model (Gtk2::TreeModel or undef) 
+
+=back
+
+=head2 $tree_view-E<gt>B<move_column_after> ($column, $base_column)
+
+=over
+
+=item * $column (Gtk2::TreeViewColumn) 
+
+=item * $base_column (Gtk2::TreeViewColumn or undef) 
+
+=back
+
+=head2 path = $tree_view->B<get_path_at_pos> ($x, $y)
+
+=head2 (path, column, cell_x, cell_y) = $tree_view->B<get_path_at_pos> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+
+Finds the path at the point (I<$x>, I<$y>), relative to widget
+coordinates. That is, I<$x> and I<$y> are relative to an event's
+coordinates. I<$x> and I<$y> must come from an event on the I<$tree_view> only
+where C<$event-E<gt>window == $tree_view-E<gt>get_bin_window>. It is primarily
+for things like popup menus.  In scalar context, returns the Gtk2::TreePath, in
+array context, adds the Gtk2::TreeViewColumn, and I<$x> and I<$y> translated to
+be relative to the cell.  This function is only meaningful if I<$tree_view> is
+realized.
+
+
+=head2 integer = $tree_view-E<gt>B<remove_column> ($column)
+
+=over
+
+=item * $column (Gtk2::TreeViewColumn) 
+
+=back
+
+=head2 boolean = $tree_view-E<gt>B<get_reorderable> 
+
+=head2 $tree_view-E<gt>B<set_reorderable> ($reorderable)
+
+=over
+
+=item * $reorderable (boolean) 
+
+=back
+
+=head2 $tree_view-E<gt>B<row_activated> ($path, $column)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $column (Gtk2::TreeViewColumn) 
+
+=back
+
+=head2 boolean = $tree_view-E<gt>B<row_expanded> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 $tree_view-E<gt>B<set_row_separator_func> ($func, $data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 boolean = $tree_view-E<gt>B<get_rubber_banding> 
+
+Since: gtk+ 2.10
+
+=head2 $tree_view-E<gt>B<set_rubber_banding> ($enable)
+
+=over
+
+=item * $enable (boolean) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 boolean = $tree_view-E<gt>B<get_rules_hint> 
+
+=head2 $tree_view-E<gt>B<set_rules_hint> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 $tree_view-E<gt>B<scroll_to_cell> ($path, $column=undef, $use_align=FALSE, $row_align=0.0, $col_align=0.0)
+
+=over
+
+=item * $path (Gtk2::TreePath or undef) 
+
+=item * $column (Gtk2::TreeViewColumn or undef) 
+
+=item * $use_align (boolean) 
+
+=item * $row_align (double) 
+
+=item * $col_align (double) 
+
+=back
+
+=head2 $tree_view-E<gt>B<scroll_to_point> ($tree_x, $tree_y)
+
+=over
+
+=item * $tree_x (scalar) 
+
+=item * $tree_y (scalar) 
+
+=back
+
+=head2 integer = $tree_view-E<gt>B<get_search_column> 
+
+=head2 $tree_view-E<gt>B<set_search_column> ($column)
+
+=over
+
+=item * $column (integer) 
+
+=back
+
+=head2 entry or undef = $tree_view-E<gt>B<get_search_entry> 
+
+Since: gtk+ 2.10
+
+=head2 $tree_view-E<gt>B<set_search_entry> ($entry)
+
+=over
+
+=item * $entry (Gtk2::Entry or undef) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 $tree_view-E<gt>B<set_search_equal_func> ($func, $data=undef)
+
+=over
+
+=item * $func (subroutine) 
+
+=item * $data (scalar) 
+
+=back
+
+
+
+=head2 $tree_view-E<gt>B<set_search_position_func> ($func, $user_data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+Pass undef for the I<func> to restore the default search position function.
+
+Since: gtk+ 2.10
+
+=head2 treeselection = $tree_view-E<gt>B<get_selection> 
+
+=head2 boolean = $tree_view-E<gt>B<get_show_expanders> 
+
+Since: gtk+ 2.12
+
+=head2 $tree_view-E<gt>B<set_show_expanders> ($enabled)
+
+=over
+
+=item * $enabled (boolean) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $tree_view-E<gt>B<set_tooltip_cell> ($tooltip, $path, $column, $cell)
+
+=over
+
+=item * $tooltip (Gtk2::Tooltip) 
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $column (Gtk2::TreeViewColumn) 
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 integer = $tree_view-E<gt>B<get_tooltip_column> 
+
+Since: gtk+ 2.12
+
+=head2 $tree_view-E<gt>B<set_tooltip_column> ($column)
+
+=over
+
+=item * $column (integer) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 (x, y, model, path, iter) = $treeview->B<get_tooltip_context> ($x, $y, $keyboard_tip)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $keyboard_tip (boolean) 
+
+=back
+
+
+
+Since: gtk+ 2.12
+
+=head2 $tree_view-E<gt>B<set_tooltip_row> ($tooltip, $path)
+
+=over
+
+=item * $tooltip (Gtk2::Tooltip) 
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 (wx, wy) = $tree_view-E<gt>B<tree_to_widget_coords> ($tx, $ty)
+
+=over
+
+=item * $tx (integer) 
+
+=item * $ty (integer) 
+
+=back
+
+=head2 $tree_view-E<gt>B<unset_rows_drag_dest> 
+
+=head2 $tree_view-E<gt>B<unset_rows_drag_source> 
+
+=head2 adjustment or undef = $tree_view-E<gt>B<get_vadjustment> 
+
+=head2 $tree_view-E<gt>B<set_vadjustment> ($adjustment)
+
+=over
+
+=item * $adjustment (Gtk2::Adjustment or undef) 
+
+=back
+
+=head2 (start_path, end_path) = $tree_view->B<get_visible_range>
+
+
+
+Since: gtk+ 2.8
+
+=head2 rectangle = $tree_view-E<gt>B<get_visible_rect> 
+
+=head2 (tx, ty) = $tree_view-E<gt>B<widget_to_tree_coords> ($wx, $wy)
+
+=over
+
+=item * $wx (integer) 
+
+=item * $wy (integer) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'enable-grid-lines' (Gtk2::TreeViewGridLines : default "none" : readable / writable / private)
+
+Whether grid lines should be drawn in the tree view
+
+=item 'enable-search' (boolean : default true : readable / writable / private)
+
+View allows user to search through columns interactively
+
+=item 'enable-tree-lines' (boolean : default false : readable / writable / private)
+
+Whether tree lines should be drawn in the tree view
+
+=item 'expander-column' (Gtk2::TreeViewColumn : default undef : readable / writable / private)
+
+Set the column for the expander column
+
+=item 'fixed-height-mode' (boolean : default false : readable / writable / private)
+
+Speeds up GtkTreeView by assuming that all rows have the same height
+
+=item 'hadjustment' (Gtk2::Adjustment : default undef : readable / writable / private)
+
+Horizontal Adjustment for the widget
+
+=item 'headers-clickable' (boolean : default true : readable / writable / private)
+
+Column headers respond to click events
+
+=item 'headers-visible' (boolean : default true : readable / writable / private)
+
+Show the column header buttons
+
+=item 'hover-expand' (boolean : default false : readable / writable / private)
+
+Whether rows should be expanded/collapsed when the pointer moves over them
+
+=item 'hover-selection' (boolean : default false : readable / writable / private)
+
+Whether the selection should follow the pointer
+
+=item 'level-indentation' (integer : default 0 : readable / writable / private)
+
+Extra indentation for each level
+
+=item 'model' (Gtk2::TreeModel : default undef : readable / writable / private)
+
+The model for the tree view
+
+=item 'reorderable' (boolean : default false : readable / writable / private)
+
+View is reorderable
+
+=item 'rubber-banding' (boolean : default false : readable / writable / private)
+
+Whether to enable selection of multiple items by dragging the mouse pointer
+
+=item 'rules-hint' (boolean : default false : readable / writable / private)
+
+Set a hint to the theme engine to draw rows in alternating colors
+
+=item 'search-column' (integer : default -1 : readable / writable / private)
+
+Model column to search through during interactive search
+
+=item 'show-expanders' (boolean : default true : readable / writable / private)
+
+View has expanders
+
+=item 'tooltip-column' (integer : default -1 : readable / writable / private)
+
+The column in the model containing the tooltip texts for the rows
+
+=item 'ubuntu-almost-fixed-height-mode' (boolean : default false : readable / writable / private)
+
+Private Ubuntu extension
+
+=item 'vadjustment' (Gtk2::Adjustment : default undef : readable / writable / private)
+
+Vertical Adjustment for the widget
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<set-scroll-adjustments> (Gtk2::TreeView, Gtk2::Adjustment, Gtk2::Adjustment)
+
+=item boolean = B<select-all> (Gtk2::TreeView)
+
+=item boolean = B<unselect-all> (Gtk2::TreeView)
+
+=item boolean = B<move-cursor> (Gtk2::TreeView, Gtk2::MovementStep, integer)
+
+=item B<row-activated> (Gtk2::TreeView, Gtk2::TreePath, Gtk2::TreeViewColumn)
+
+=item boolean = B<test-expand-row> (Gtk2::TreeView, Gtk2::TreeIter, Gtk2::TreePath)
+
+=item boolean = B<test-collapse-row> (Gtk2::TreeView, Gtk2::TreeIter, Gtk2::TreePath)
+
+=item B<row-expanded> (Gtk2::TreeView, Gtk2::TreeIter, Gtk2::TreePath)
+
+=item B<row-collapsed> (Gtk2::TreeView, Gtk2::TreeIter, Gtk2::TreePath)
+
+=item B<columns-changed> (Gtk2::TreeView)
+
+=item B<cursor-changed> (Gtk2::TreeView)
+
+=item boolean = B<select-cursor-row> (Gtk2::TreeView, boolean)
+
+=item boolean = B<toggle-cursor-row> (Gtk2::TreeView)
+
+=item boolean = B<expand-collapse-cursor-row> (Gtk2::TreeView, boolean, boolean, boolean)
+
+=item boolean = B<select-cursor-parent> (Gtk2::TreeView)
+
+=item boolean = B<start-interactive-search> (Gtk2::TreeView)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::Gdk::DragAction
+
+=over
+
+=item * 'default' / 'GDK_ACTION_DEFAULT'
+
+=item * 'copy' / 'GDK_ACTION_COPY'
+
+=item * 'move' / 'GDK_ACTION_MOVE'
+
+=item * 'link' / 'GDK_ACTION_LINK'
+
+=item * 'private' / 'GDK_ACTION_PRIVATE'
+
+=item * 'ask' / 'GDK_ACTION_ASK'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+=head2 enum Gtk2::MovementStep
+
+=over
+
+=item * 'logical-positions' / 'GTK_MOVEMENT_LOGICAL_POSITIONS'
+
+=item * 'visual-positions' / 'GTK_MOVEMENT_VISUAL_POSITIONS'
+
+=item * 'words' / 'GTK_MOVEMENT_WORDS'
+
+=item * 'display-lines' / 'GTK_MOVEMENT_DISPLAY_LINES'
+
+=item * 'display-line-ends' / 'GTK_MOVEMENT_DISPLAY_LINE_ENDS'
+
+=item * 'paragraphs' / 'GTK_MOVEMENT_PARAGRAPHS'
+
+=item * 'paragraph-ends' / 'GTK_MOVEMENT_PARAGRAPH_ENDS'
+
+=item * 'pages' / 'GTK_MOVEMENT_PAGES'
+
+=item * 'buffer-ends' / 'GTK_MOVEMENT_BUFFER_ENDS'
+
+=item * 'horizontal-pages' / 'GTK_MOVEMENT_HORIZONTAL_PAGES'
+
+=back
+
+
+=head2 enum Gtk2::TreeViewDropPosition
+
+
+
+=over
+
+=item * 'before' / 'GTK_TREE_VIEW_DROP_BEFORE'
+
+=item * 'after' / 'GTK_TREE_VIEW_DROP_AFTER'
+
+=item * 'into-or-before' / 'GTK_TREE_VIEW_DROP_INTO_OR_BEFORE'
+
+=item * 'into-or-after' / 'GTK_TREE_VIEW_DROP_INTO_OR_AFTER'
+
+=back
+
+
+=head2 enum Gtk2::TreeViewGridLines
+
+=over
+
+=item * 'none' / 'GTK_TREE_VIEW_GRID_LINES_NONE'
+
+=item * 'horizontal' / 'GTK_TREE_VIEW_GRID_LINES_HORIZONTAL'
+
+=item * 'vertical' / 'GTK_TREE_VIEW_GRID_LINES_VERTICAL'
+
+=item * 'both' / 'GTK_TREE_VIEW_GRID_LINES_BOTH'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

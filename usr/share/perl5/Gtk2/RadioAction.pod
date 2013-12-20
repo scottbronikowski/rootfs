@@ -1,0 +1,126 @@
+=head1 NAME
+
+Gtk2::RadioAction - wrapper for GtkRadioAction
+
+=cut
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  my $action = Gtk2::RadioAction->new (name => 'one',
+                                       tooltip => 'One',
+                                       value => 23);
+
+Note that the constructor slightly deviates from the convenience constructor in
+the C API.  Instead of passing in a list of values for name, label, tooltip,
+stock-id and value, you just use key => value pairs like with
+Glib::Object::new.
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Action
+       +----Gtk2::ToggleAction
+            +----Gtk2::RadioAction
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 integer = $action-E<gt>B<get_current_value> 
+
+=head2 $action-E<gt>B<set_current_value> ($value)
+
+=over
+
+=item * $value (integer) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 list = $action-E<gt>B<get_group> 
+
+=head2 $action-E<gt>B<set_group> ($member_or_listref)
+
+=over
+
+=item * $member_or_listref (scalar) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'current-value' (integer : default 0 : readable / writable / private)
+
+The value property of the currently active member of the group to which this action belongs.
+
+=item 'group' (Gtk2::RadioAction : default undef : writable / private)
+
+The radio action whose group this action belongs to.
+
+=item 'value' (integer : default 0 : readable / writable / private)
+
+The value returned by gtk_radio_action_get_current_value() when this action is the current action of its group.
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<changed> (Gtk2::RadioAction, Gtk2::RadioAction)
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Gtk2::Action>, L<Gtk2::ToggleAction>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

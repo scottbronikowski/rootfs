@@ -1,0 +1,2021 @@
+=head1 NAME
+
+Gtk2::Widget - wrapper for GtkWidget
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+=for position post_interfaces
+
+=head1 CONSTANTS
+
+C<EVENT_STOP> and C<EVENT_PROPAGATE> are designed for the return from
+widget event signal handlers and similar, being true to stop or false
+to propagate.  The names can help you avoid confusion over which way
+is true and which is false.  (You can also remember the return as
+meaning "handled", which is the jargon in a few other signal handler
+types.)
+
+    Gtk2::EVENT_STOP         # true
+    Gtk2::EVENT_PROPAGATE    # false
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 $widget-E<gt>B<set_accel_path> ($accel_path, $accel_group)
+
+=over
+
+=item * $accel_path (string) 
+
+=item * $accel_group (Gtk2::AccelGroup) 
+
+=back
+
+=head2 object = $widget-E<gt>B<get_accessible> 
+
+=head2 action or undef = $widget-E<gt>B<get_action> 
+
+Since: gtk+ 2.10
+
+=head2 boolean = $widget-E<gt>B<activate> 
+
+This function works by emitting an action signal nominated by the various
+widget subclasses.  The signal is normally called C<activate>, but it
+doesn't have to be.
+
+Currently if you make a widget subclass in Perl there's no way to
+nominate a signal to be emitted by C<< $widget->activate >>.  A signal
+merely named C<activate> is not automatically hooked up.
+
+=head2 $widget-E<gt>B<add_accelerator> ($accel_signal, $accel_group, $accel_key, $accel_mods, $flags)
+
+=over
+
+=item * $accel_signal (string) 
+
+=item * $accel_group (Gtk2::AccelGroup) 
+
+=item * $accel_key (integer) 
+
+=item * $accel_mods (Gtk2::Gdk::ModifierType) 
+
+=item * $flags (Gtk2::AccelFlags) 
+
+=back
+
+=head2 $widget-E<gt>B<add_events> ($events)
+
+=over
+
+=item * $events (Gtk2::Gdk::EventMask) 
+
+=back
+
+=head2 $widget-E<gt>B<add_mnemonic_label> ($label)
+
+=over
+
+=item * $label (Gtk2::Widget) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 rectangle = $widget-E<gt>B<allocation> 
+
+Return the current allocated size and position of $widget within its
+parent widget.  The allocated size is not necessarily the same as the
+requested size.
+
+The returned rect object points into $widget and can only be used as
+long as $widget exists.
+
+=head2 widget or undef = $widget-E<gt>B<get_ancestor> ($ancestor_package)
+
+=over
+
+=item * $ancestor_package (string) 
+
+=back
+
+=head2 $widget->B<app_paintable> ($boolean)
+
+=head2 boolean = $widget->B<app_paintable>
+
+=over
+
+=back
+
+
+
+=head2 $widget-E<gt>B<set_app_paintable> ($app_paintable)
+
+=over
+
+=item * $app_paintable (boolean) 
+
+=back
+
+=head2 boolean = $widget-E<gt>B<can_activate_accel> ($signal_id)
+
+=over
+
+=item * $signal_id (integer) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 $widget->B<can_default> ($boolean)
+
+=head2 boolean = $widget->B<can_default>
+
+=over
+
+=back
+
+
+
+=head2 $widget->B<can_focus> ($boolean)
+
+=head2 boolean = $widget->B<can_focus>
+
+=over
+
+=back
+
+
+
+=head2 boolean = $widget-E<gt>B<child_focus> ($direction)
+
+=over
+
+=item * $direction (Gtk2::DirectionType) 
+
+=back
+
+=head2 $widget-E<gt>B<child_notify> ($child_property)
+
+=over
+
+=item * $child_property (string) 
+
+=back
+
+=head2 requisition = $widget-E<gt>B<get_child_requisition> 
+
+This function is only for use in widget implementations.  Obtains
+C<< $widget->requisition >>, unless someone has forced a particular geometry
+on the widget (e.g., with C<set_usize()>, in which case it returns that
+geometry instead of the widget's requisition.
+
+This function differs from
+L<size_request()|/"requisition = $widget-E<gt>B<size_request>">
+in that it retrieves the last size request value from
+C<< $widget->requisition >>,
+while C<size_request()> actually calls the C<size_request> virtual method
+(that is, emits the "size-request" signal) on the I<$widget> to compute
+the size request and fill in C<< $widget->requisition >>, and only then
+returns C<< $widget->requisition >>.
+
+Because this function does not call the C<size_request> method, it can only
+be used when you know that C<< $widget->requisition >> is up-to-date.  In
+general, only container implementations have this information; applications
+should use C<size_request ()>.
+
+=head2 boolean = $widget-E<gt>B<get_child_visible> 
+
+=head2 $widget-E<gt>B<set_child_visible> ($is_visible)
+
+=over
+
+=item * $is_visible (boolean) 
+
+=back
+
+=head2 (path, path_reversed) = $widget->B<class_path>
+
+
+
+=head2 clipboard = $widget-E<gt>B<get_clipboard> ($selection=GDK_SELECTION_CLIPBOARD)
+
+=over
+
+=item * $selection (Gtk2::Gdk::Atom) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 colormap = $widget-E<gt>B<get_colormap> 
+
+=head2 $widget-E<gt>B<set_colormap> ($colormap)
+
+=over
+
+=item * $colormap (Gtk2::Gdk::Colormap) 
+
+=back
+
+=head2 $widget->B<composite_child> ($boolean)
+
+=head2 boolean = $widget->B<composite_child>
+
+=over
+
+=back
+
+
+
+=head2 string = $widget-E<gt>B<get_composite_name> 
+
+=head2 $widget-E<gt>B<set_composite_name> ($name)
+
+=over
+
+=item * $name (string) 
+
+=back
+
+=head2 context = $widget-E<gt>B<create_pango_context> 
+
+=head2 layout = $widget-E<gt>B<create_pango_layout> ($text)
+
+=over
+
+=item * $text (string) 
+
+=back
+
+=head2 colormap = Gtk2::Widget->B<get_default_colormap>
+
+=head2 colormap = $widget->B<get_default_colormap>
+
+
+
+=head2 Gtk2::Widget->B<set_default_colormap> ($colormap)
+
+=head2 $widget->B<set_default_colormap> ($colormap)
+
+=over
+
+=item * $colormap (Gtk2::Gdk::Colormap) 
+
+=back
+
+
+
+=head2 textdirection = Gtk2::Widget-E<gt>B<get_default_direction> 
+
+=head2 Gtk2::Widget-E<gt>B<set_default_direction> ($dir)
+
+=over
+
+=item * $dir (Gtk2::TextDirection) 
+
+=back
+
+=head2 style = Gtk2::Widget->B<get_default_style>
+
+=head2 style = $widget->B<get_default_style>
+
+
+
+=head2 visual = Gtk2::Widget->B<get_default_visual>
+
+=head2 visual = $widget->B<get_default_visual>
+
+
+
+=head2 $widget-E<gt>B<destroy> 
+
+=head2 textdirection = $widget-E<gt>B<get_direction> 
+
+=head2 $widget-E<gt>B<set_direction> ($dir)
+
+=over
+
+=item * $dir (Gtk2::TextDirection) 
+
+=back
+
+=head2 display = $widget-E<gt>B<get_display> 
+
+Since: gtk+ 2.2
+
+=head2 $widget->B<double_buffered> ($boolean)
+
+=head2 boolean = $widget->B<double_buffered>
+
+=over
+
+=back
+
+
+
+=head2 $widget-E<gt>B<set_double_buffered> ($double_buffered)
+
+=over
+
+=item * $double_buffered (boolean) 
+
+=back
+
+=head2 dragcontext = $widget-E<gt>B<drag_begin> ($targets, $actions, $button, $event)
+
+=over
+
+=item * $targets (Gtk2::TargetList) 
+
+=item * $actions (Gtk2::Gdk::DragAction) 
+
+=item * $button (integer) 
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=back
+
+=head2 boolean = $widget-E<gt>B<drag_check_threshold> ($start_x, $start_y, $current_x, $current_y)
+
+=over
+
+=item * $start_x (integer) 
+
+=item * $start_y (integer) 
+
+=item * $current_x (integer) 
+
+=item * $current_y (integer) 
+
+=back
+
+=head2 $widget-E<gt>B<drag_dest_add_image_targets> 
+
+Since: gtk+ 2.6
+
+=head2 $widget-E<gt>B<drag_dest_add_text_targets> 
+
+Since: gtk+ 2.6
+
+=head2 $widget-E<gt>B<drag_dest_add_uri_targets> 
+
+Since: gtk+ 2.6
+
+=head2 atom = $widget-E<gt>B<drag_dest_find_target> ($context, $target_list)
+
+=over
+
+=item * $context (Gtk2::Gdk::DragContext) 
+
+=item * $target_list (Gtk2::TargetList or undef) 
+
+=back
+
+=head2 targetlist or undef = $widget-E<gt>B<drag_dest_get_target_list> 
+
+=head2 boolean = $widget-E<gt>B<drag_dest_get_track_motion> 
+
+Since: gtk+ 2.10
+
+=head2 $widget-E<gt>B<drag_dest_set> ($flags, $actions, ...)
+
+=over
+
+=item * $flags (Gtk2::DestDefaults) 
+
+=item * $actions (Gtk2::Gdk::DragAction) 
+
+=item * ... (list) of Gtk2::TargetEntry's
+
+=back
+
+
+
+=head2 $widget-E<gt>B<drag_dest_set_proxy> ($proxy_window, $protocol, $use_coordinates)
+
+=over
+
+=item * $proxy_window (Gtk2::Gdk::Window) 
+
+=item * $protocol (Gtk2::Gdk::DragProtocol) 
+
+=item * $use_coordinates (boolean) 
+
+=back
+
+=head2 $widget-E<gt>B<drag_dest_set_target_list> ($target_list)
+
+=over
+
+=item * $target_list (Gtk2::TargetList or undef) 
+
+=back
+
+=head2 $widget-E<gt>B<drag_dest_set_track_motion> ($track_motion)
+
+=over
+
+=item * $track_motion (boolean) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 $widget-E<gt>B<drag_dest_unset> 
+
+=head2 $widget-E<gt>B<drag_get_data> ($context, $target, $time_)
+
+=over
+
+=item * $context (Gtk2::Gdk::DragContext) 
+
+=item * $target (Gtk2::Gdk::Atom) 
+
+=item * $time_ (unsigned) 
+
+=back
+
+=head2 $widget-E<gt>B<drag_highlight> 
+
+=head2 $widget-E<gt>B<drag_source_add_image_targets> 
+
+Since: gtk+ 2.6
+
+=head2 $widget-E<gt>B<drag_source_add_text_targets> 
+
+Since: gtk+ 2.6
+
+=head2 $widget-E<gt>B<drag_source_add_uri_targets> 
+
+Since: gtk+ 2.6
+
+=head2 targetlist or undef = $widget-E<gt>B<drag_source_get_target_list> 
+
+Since: gtk+ 2.4
+
+=head2 $widget-E<gt>B<drag_source_set> ($start_button_mask, $actions, ...)
+
+=over
+
+=item * $start_button_mask (Gtk2::Gdk::ModifierType) 
+
+=item * $actions (Gtk2::Gdk::DragAction) 
+
+=item * ... (list) of Gtk2::TargetEntry's
+
+=back
+
+
+
+=head2 $widget-E<gt>B<drag_source_set_icon> ($colormap, $pixmap, $mask)
+
+=over
+
+=item * $colormap (Gtk2::Gdk::Colormap or undef) 
+
+=item * $pixmap (Gtk2::Gdk::Pixmap or undef) 
+
+=item * $mask (Gtk2::Gdk::Bitmap or undef) 
+
+=back
+
+=head2 $widget-E<gt>B<drag_source_set_icon_name> ($icon_name)
+
+=over
+
+=item * $icon_name (string) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 $widget-E<gt>B<drag_source_set_icon_pixbuf> ($pixbuf)
+
+=over
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf or undef) 
+
+=back
+
+=head2 $widget-E<gt>B<drag_source_set_icon_stock> ($stock_id)
+
+=over
+
+=item * $stock_id (string) 
+
+=back
+
+=head2 $widget-E<gt>B<drag_source_set_target_list> ($target_list)
+
+=over
+
+=item * $target_list (Gtk2::TargetList or undef) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 $widget-E<gt>B<drag_source_unset> 
+
+=head2 $widget-E<gt>B<drag_unhighlight> 
+
+=head2 $widget->B<drawable> ($boolean)
+
+=head2 boolean = $widget->B<drawable>
+
+=over
+
+=back
+
+
+
+=head2 $widget-E<gt>B<ensure_style> 
+
+=head2 $widget-E<gt>B<error_bell> 
+
+Since: gtk+ 2.12
+
+=head2 boolean = $widget-E<gt>B<event> ($event)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=back
+
+This rarely-used function emits an event signal on I<$widget>.  Don't use
+this to synthesize events; use C<< Gtk2->main_do_event >> instead.  Don't
+synthesize expose events; use C<< $gdkwindow->invalidate_rect >> instead.
+Basically, the main use for this in gtk2-perl will be to pass motion
+notify events to rulers from other widgets.
+
+=head2 eventmask = $widget-E<gt>B<get_events> 
+
+=head2 $widget-E<gt>B<set_events> ($events)
+
+=over
+
+=item * $events (Gtk2::Gdk::EventMask) 
+
+=back
+
+=head2 extensionmode = $widget-E<gt>B<get_extension_events> 
+
+=head2 $widget-E<gt>B<set_extension_events> ($mode)
+
+=over
+
+=item * $mode (Gtk2::Gdk::ExtensionMode) 
+
+=back
+
+=head2 widgetflags = $widget-E<gt>B<flags> 
+
+=head2 widgetflags = $widget-E<gt>B<get_flags> 
+
+=head2 $widget-E<gt>B<set_flags> ($flags)
+
+=over
+
+=item * $flags (Gtk2::WidgetFlags) 
+
+=back
+
+=head2 $widget-E<gt>B<freeze_child_notify> 
+
+=head2 $widget-E<gt>B<grab_default> 
+
+=head2 $widget-E<gt>B<grab_focus> 
+
+=head2 $widget->B<has_default> ($boolean)
+
+=head2 boolean = $widget->B<has_default>
+
+=over
+
+=back
+
+
+
+=head2 $widget->B<has_focus> ($boolean)
+
+=head2 boolean = $widget->B<has_focus>
+
+=over
+
+=back
+
+
+
+=head2 $widget->B<has_grab> ($boolean)
+
+=head2 boolean = $widget->B<has_grab>
+
+=over
+
+=back
+
+
+
+=head2 boolean = $widget-E<gt>B<has_screen> 
+
+Since: gtk+ 2.2
+
+=head2 boolean = $widget-E<gt>B<get_has_tooltip> 
+
+Since: gtk+ 2.12
+
+=head2 $widget-E<gt>B<set_has_tooltip> ($has_tooltip)
+
+=over
+
+=item * $has_tooltip (boolean) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $widget-E<gt>B<hide> 
+
+=head2 $widget-E<gt>B<hide_all> 
+
+=head2 boolean = Gtk2::Widget::hide_on_delete ($widget, ...)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=item * ... (list) other arguments ignored (event etc)
+
+=back
+
+
+This is a helper function intended to be used as the callback for the
+C<delete-event> signal:
+
+  $wiget->signal_connect (
+    delete_event => \&Gtk2::Widget::hide_on_delete);
+
+
+=head2 $widget-E<gt>B<input_shape_combine_mask> ($shape_mask, $offset_x, $offset_y)
+
+=over
+
+=item * $shape_mask (Gtk2::Gdk::Bitmap or undef) 
+
+=item * $offset_x (integer) 
+
+=item * $offset_y (integer) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 rectangle = $widget-E<gt>B<intersect> ($area)
+
+=over
+
+=item * $area (Gtk2::Gdk::Rectangle) 
+
+=back
+
+Returns undef if I<$widget> and I<$area> do not intersect.
+
+=head2 boolean = $widget-E<gt>B<is_ancestor> ($ancestor)
+
+=over
+
+=item * $ancestor (Gtk2::Widget) 
+
+=back
+
+=head2 boolean = $widget-E<gt>B<is_focus> 
+
+=head2 $widget->B<is_sensitive> ($boolean)
+
+=head2 boolean = $widget->B<is_sensitive>
+
+=over
+
+=back
+
+
+
+=head2 boolean = $widget-E<gt>B<keynav_failed> ($direction)
+
+=over
+
+=item * $direction (Gtk2::DirectionType) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 list = $widget-E<gt>B<list_mnemonic_labels> 
+
+Since: gtk+ 2.4
+
+=head2 $widget-E<gt>B<map> 
+
+=head2 $widget->B<mapped> ($boolean)
+
+=head2 boolean = $widget->B<mapped>
+
+=over
+
+=back
+
+
+
+=head2 boolean = $widget-E<gt>B<mnemonic_activate> ($group_cycling)
+
+=over
+
+=item * $group_cycling (boolean) 
+
+=back
+
+=head2 rcstyle = $widget-E<gt>B<get_modifier_style> 
+
+=head2 $widget-E<gt>B<modify_base> ($state, $color)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=item * $color (Gtk2::Gdk::Color or undef) 
+
+=back
+
+=head2 $widget-E<gt>B<modify_bg> ($state, $color)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=item * $color (Gtk2::Gdk::Color or undef) 
+
+=back
+
+=head2 $widget-E<gt>B<modify_cursor> ($primary, $secondary)
+
+=over
+
+=item * $primary (Gtk2::Gdk::Color) 
+
+=item * $secondary (Gtk2::Gdk::Color) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $widget-E<gt>B<modify_fg> ($state, $color)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=item * $color (Gtk2::Gdk::Color or undef) 
+
+=back
+
+=head2 $widget-E<gt>B<modify_font> ($font_desc)
+
+=over
+
+=item * $font_desc (Pango::FontDescription or undef) 
+
+=back
+
+=head2 $widget-E<gt>B<modify_style> ($style)
+
+=over
+
+=item * $style (Gtk2::RcStyle) 
+
+=back
+
+=head2 $widget-E<gt>B<modify_text> ($state, $color)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=item * $color (Gtk2::Gdk::Color or undef) 
+
+=back
+
+=head2 string = $widget-E<gt>B<get_name> 
+
+=head2 $widget-E<gt>B<set_name> ($name)
+
+=over
+
+=item * $name (string) 
+
+=back
+
+=head2 boolean = $widget-E<gt>B<get_no_show_all> 
+
+Since: gtk+ 2.4
+
+=head2 $widget-E<gt>B<set_no_show_all> ($no_show_all)
+
+=over
+
+=item * $no_show_all (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 $widget->B<no_window> ($boolean)
+
+=head2 boolean = $widget->B<no_window>
+
+=over
+
+=back
+
+
+
+=head2 context = $widget-E<gt>B<get_pango_context> 
+
+=head2 widget or undef = $widget-E<gt>B<parent> 
+
+=head2 widget or undef = $widget-E<gt>B<get_parent> 
+
+=head2 $widget->B<parent_sensitive> ($boolean)
+
+=head2 boolean = $widget->B<parent_sensitive>
+
+=over
+
+=back
+
+
+
+=head2 $widget-E<gt>B<set_parent> ($parent)
+
+=over
+
+=item * $parent (Gtk2::Widget) 
+
+=back
+
+=head2 window = $widget-E<gt>B<get_parent_window> 
+
+=head2 $widget-E<gt>B<set_parent_window> ($parent_window)
+
+=over
+
+=item * $parent_window (Gtk2::Gdk::Window) 
+
+=back
+
+=head2 (path, path_reversed) = $widget->B<path>
+
+
+
+=head2 (x, y) = $widget-E<gt>B<get_pointer> 
+
+=head2 Gtk2::Widget->B<pop_colormap> (cmap)
+
+=head2 $widget->B<pop_colormap> (cmap)
+
+
+
+=head2 Gtk2::Widget->B<pop_composite_child>
+
+=head2 $widget->B<pop_composite_child>
+
+
+
+=head2 $widget-E<gt>B<propagate_event> ($event)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=back
+
+
+From gtk+'s API documentation:
+
+You most likely don't want to use any of these functions; synthesizing events
+is rarely needed. Consider asking on the mailing list for better ways to
+achieve your goals. For example, use Gtk2::Gdk::invalidate_rect or
+Gtk2::Widget::queue_draw instead of making up expose events.
+
+
+=head2 Gtk2::Widget->B<push_colormap> (cmap)
+
+=head2 $widget->B<push_colormap> (cmap)
+
+=over
+
+=item * $cmap (Gtk2::Gdk::Colormap) 
+
+=back
+
+
+
+=head2 Gtk2::Widget->B<push_composite_child>
+
+=head2 $widget->B<push_composite_child>
+
+
+
+=head2 $widget-E<gt>B<queue_draw> 
+
+=head2 $widget-E<gt>B<queue_draw_area> ($x, $y, $width, $height)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $widget-E<gt>B<queue_resize> 
+
+=head2 $widget-E<gt>B<queue_resize_no_redraw> 
+
+Since: gtk+ 2.4
+
+=head2 $widget->B<rc_style> ($boolean)
+
+=head2 boolean = $widget->B<rc_style>
+
+=over
+
+=back
+
+
+
+=head2 $widget-E<gt>B<realize> 
+
+=head2 $widget->B<realized> ($boolean)
+
+=head2 boolean = $widget->B<realized>
+
+=over
+
+=back
+
+
+
+=head2 $widget->B<receives_default> ($boolean)
+
+=head2 boolean = $widget->B<receives_default>
+
+=over
+
+=back
+
+
+
+=head2 $widget-E<gt>B<set_redraw_on_allocate> ($redraw_on_allocate)
+
+=over
+
+=item * $redraw_on_allocate (boolean) 
+
+=back
+
+=head2 region = $widget-E<gt>B<region_intersect> ($region)
+
+=over
+
+=item * $region (Gtk2::Gdk::Region) 
+
+=back
+
+=head2 boolean = $widget-E<gt>B<remove_accelerator> ($accel_group, $accel_key, $accel_mods)
+
+=over
+
+=item * $accel_group (Gtk2::AccelGroup) 
+
+=item * $accel_key (integer) 
+
+=item * $accel_mods (Gtk2::Gdk::ModifierType) 
+
+=back
+
+=head2 $widget-E<gt>B<remove_mnemonic_label> ($label)
+
+=over
+
+=item * $label (Gtk2::Widget) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 pixbuf = $widget-E<gt>B<render_icon> ($stock_id, $size, $detail=undef)
+
+=over
+
+=item * $stock_id (string) 
+
+=item * $size (Gtk2::IconSize) 
+
+=item * $detail (string) 
+
+=back
+
+=head2 $widget-E<gt>B<reparent> ($new_parent)
+
+=over
+
+=item * $new_parent (Gtk2::Widget) 
+
+=back
+
+=head2 requisition = $widget-E<gt>B<requisition> 
+
+Return the currently desired width and height of $widget.  Basically
+this is the result from the last C<size_request> call on $widget, and
+therefore may not be up-to-date if $widget has asked for a resize but
+its container parent has not yet called C<size_request>.
+
+The returned requisition object points into $widget and can only be
+used as long as $widget exists.
+
+=head2 $widget-E<gt>B<reset_rc_styles> 
+
+=head2 $widget-E<gt>B<reset_shapes> 
+
+=head2 window = $widget-E<gt>B<get_root_window> 
+
+Since: gtk+ 2.2
+
+=head2 statetype = $widget-E<gt>B<saved_state> 
+
+=head2 screen = $widget-E<gt>B<get_screen> 
+
+Since: gtk+ 2.2
+
+=head2 boolean = $widget-E<gt>B<set_scroll_adjustments> ($hadjustment, $vadjustment)
+
+=over
+
+=item * $hadjustment (Gtk2::Adjustment or undef) 
+
+=item * $vadjustment (Gtk2::Adjustment or undef) 
+
+=back
+
+This function works by emitting a setter signal nominated by the
+various widget types which have "native" scrolling.  The signal is
+normally called C<set-scroll-adjustments>, but it doesn't have to be.
+
+If you make a widget subclass in Perl and create a signal in it called
+C<set-scroll-adjustments> taking two Gtk2::Adjustment parameters then
+the subclassing automatically hooks that up to be emitted by
+C<< $widget->set_scroll_adjustments >>.  (Your "class closure" default
+handler code should then store the adjustment objects somewhere.)
+
+=head2 $widget-E<gt>B<selection_add_target> ($selection, $target, $info)
+
+=over
+
+=item * $selection (Gtk2::Gdk::Atom) 
+
+=item * $target (Gtk2::Gdk::Atom) 
+
+=item * $info (integer) 
+
+=back
+
+=head2 $widget-E<gt>B<selection_add_targets> ($selection, ...)
+
+=over
+
+=item * $selection (Gtk2::Gdk::Atom) 
+
+=item * ... (list) of Gtk2::TargetEntry's
+
+=back
+
+
+
+=head2 $widget-E<gt>B<selection_clear_targets> ($selection)
+
+=over
+
+=item * $selection (Gtk2::Gdk::Atom) 
+
+=back
+
+=head2 boolean = $widget-E<gt>B<selection_convert> ($selection, $target, $time_)
+
+=over
+
+=item * $selection (Gtk2::Gdk::Atom) 
+
+=item * $target (Gtk2::Gdk::Atom) 
+
+=item * $time_ (unsigned) 
+
+=back
+
+=head2 $widget-E<gt>B<selection_remove_all> 
+
+=head2 $widget->B<sensitive> ($boolean)
+
+=head2 boolean = $widget->B<sensitive>
+
+=over
+
+=back
+
+
+
+=head2 $widget-E<gt>B<set_sensitive> ($sensitive)
+
+=over
+
+=item * $sensitive (boolean) 
+
+=back
+
+=head2 settings = $widget-E<gt>B<get_settings> 
+
+=head2 $widget-E<gt>B<shape_combine_mask> ($shape_mask, $offset_x, $offset_y)
+
+=over
+
+=item * $shape_mask (Gtk2::Gdk::Bitmap) 
+
+=item * $offset_x (integer) 
+
+=item * $offset_y (integer) 
+
+=back
+
+=head2 $widget-E<gt>B<show> 
+
+=head2 $widget-E<gt>B<show_all> 
+
+=head2 $widget-E<gt>B<show_now> 
+
+=head2 $widget-E<gt>B<size_allocate> ($allocation)
+
+=over
+
+=item * $allocation (Gtk2::Gdk::Rectangle) 
+
+=back
+
+=head2 requisition = $widget-E<gt>B<size_request> 
+
+This function is typically used when implementing a GtkContainer subclass.
+Obtains the preferred size of a widget. The container uses this information to
+arrange its child widgets and decide what size allocations to give them with
+size_allocate ().
+
+You can also call this function from an application, with some caveats. Most
+notably, getting a size request requires the widget to be associated with a
+screen, because font information may be needed. Multihead-aware applications
+should keep this in mind.
+
+Also remember that the size request is not necessarily the size a widget will
+actually be allocated.
+
+See also L<get_child_requisition ()|/"requisition = $widget-E<gt>B<get_child_requisition>">
+
+=head2 (width, height) = $widget->B<get_size_request>
+
+
+Gets the size request that was explicitly set for the widget using
+C<set_size_request()>.  A value of -1 for I<width> or I<height> indicates
+that the dimension has not been explicitly set and the natural requisition
+of the widget will be used instead.
+See L<set_size_request()|/"$widget-E<gt>B<set_size_request> ($width=-1, $height=-1)">.
+To get the size a widget will actually use, call
+L<size_request()|/"requisition = $widget-E<gt>B<size_request>"> instead of
+this function.
+
+=head2 $widget-E<gt>B<set_size_request> ($width=-1, $height=-1)
+
+=over
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 pixmap or undef = $widget-E<gt>B<get_snapshot> ($clip_rect=undef)
+
+=over
+
+=item * $clip_rect (Gtk2::Gdk::Rectangle or undef) 
+
+=back
+
+Since: gtk+ 2.14
+
+=head2 statetype = $widget-E<gt>B<state> 
+
+=head2 $widget-E<gt>B<set_state> ($state)
+
+=over
+
+=item * $state (Gtk2::StateType) 
+
+=back
+
+=head2 style = $widget-E<gt>B<style> 
+
+=head2 style = $widget-E<gt>B<get_style> 
+
+=head2 list = $widget-E<gt>B<style_get> ($first_property_name, ...)
+
+=over
+
+=item * $first_property_name (string) 
+
+=item * ... (list) 0 or more additional property names
+
+=back
+
+Returns the values of the requested style properties.
+
+Since: gtk+ 2.2
+
+=head2 list = $widget-E<gt>B<style_get_property> ($first_property_name, ...)
+
+=over
+
+=item * $first_property_name (string) 
+
+=item * ... (list) 0 or more additional property names
+
+=back
+
+An alias for style_get.
+
+Since: gtk+ 2.2
+
+=head2 $widget-E<gt>B<set_style> ($style)
+
+=over
+
+=item * $style (Gtk2::Style or undef) 
+
+=back
+
+=head2 $widget-E<gt>B<thaw_child_notify> 
+
+=head2 string = $widget-E<gt>B<get_tooltip_markup> 
+
+Since: gtk+ 2.12
+
+=head2 $widget-E<gt>B<set_tooltip_markup> ($markup)
+
+=over
+
+=item * $markup (string or undef) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 string = $widget-E<gt>B<get_tooltip_text> 
+
+Since: gtk+ 2.12
+
+=head2 $widget-E<gt>B<set_tooltip_text> ($text)
+
+=over
+
+=item * $text (string or undef) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 window or undef = $widget-E<gt>B<get_tooltip_window> 
+
+Since: gtk+ 2.12
+
+=head2 $widget-E<gt>B<set_tooltip_window> ($custom_window)
+
+=over
+
+=item * $custom_window (Gtk2::Window or undef) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $widget->B<toplevel> ($value)
+
+=head2 boolean = $widget->B<toplevel>
+
+=over
+
+=back
+
+
+
+=head2 widget or undef = $widget-E<gt>B<get_toplevel> 
+
+=head2 (dst_x, dst_y) = $src_widget->B<translate_coordinates> ($dest_widget, $src_x, $src_y)
+
+=over
+
+=item * $dest_widget (Gtk2::Widget) 
+
+=item * $src_x (integer) 
+
+=item * $src_y (integer) 
+
+=back
+
+Returns an empty list if either widget is not realized or if they do not share
+a common ancestor.
+
+=head2 $widget-E<gt>B<trigger_tooltip_query> 
+
+Since: gtk+ 2.12
+
+=head2 $widget-E<gt>B<unmap> 
+
+=head2 $widget-E<gt>B<unparent> 
+
+=head2 $widget-E<gt>B<unrealize> 
+
+=head2 $widget-E<gt>B<unset_flags> ($flags)
+
+=over
+
+=item * $flags (Gtk2::WidgetFlags) 
+
+=back
+
+=head2 $widget->B<visible> ($boolean)
+
+=head2 boolean = $widget->B<visible>
+
+=over
+
+=back
+
+
+
+=head2 visual = $widget-E<gt>B<get_visual> 
+
+=head2 window or undef = $widget-E<gt>B<window> ($new=undef)
+
+=over
+
+=item * $new (Gtk2::Gdk::Window or undef) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'app-paintable' (boolean : default false : readable / writable / private)
+
+Whether the application will paint directly on the widget
+
+=item 'can-default' (boolean : default false : readable / writable / private)
+
+Whether the widget can be the default widget
+
+=item 'can-focus' (boolean : default false : readable / writable / private)
+
+Whether the widget can accept the input focus
+
+=item 'composite-child' (boolean : default false : readable / private)
+
+Whether the widget is part of a composite widget
+
+=item 'double-buffered' (boolean : default true : readable / writable / private)
+
+Whether or not the widget is double buffered
+
+=item 'events' (Gtk2::Gdk::EventMask : default structure-mask : readable / writable / private)
+
+The event mask that decides what kind of GdkEvents this widget gets
+
+=item 'extension-events' (Gtk2::Gdk::ExtensionMode : default "none" : readable / writable / private)
+
+The mask that decides what kind of extension events this widget gets
+
+=item 'has-default' (boolean : default false : readable / writable / private)
+
+Whether the widget is the default widget
+
+=item 'has-focus' (boolean : default false : readable / writable / private)
+
+Whether the widget has the input focus
+
+=item 'has-tooltip' (boolean : default false : readable / writable / private)
+
+Whether this widget has a tooltip
+
+=item 'height-request' (integer : default -1 : readable / writable / private)
+
+Override for height request of the widget, or -1 if natural request should be used
+
+=item 'is-focus' (boolean : default false : readable / writable / private)
+
+Whether the widget is the focus widget within the toplevel
+
+=item 'name' (string : default undef : readable / writable / private)
+
+The name of the widget
+
+=item 'no-show-all' (boolean : default false : readable / writable / private)
+
+Whether gtk_widget_show_all() should not affect this widget
+
+=item 'parent' (Gtk2::Container : default undef : readable / writable / private)
+
+The parent widget of this widget. Must be a Container widget
+
+=item 'receives-default' (boolean : default false : readable / writable / private)
+
+If TRUE, the widget will receive the default action when it is focused
+
+=item 'sensitive' (boolean : default true : readable / writable / private)
+
+Whether the widget responds to input
+
+=item 'style' (Gtk2::Style : default undef : readable / writable / private)
+
+The style of the widget, which contains information about how it will look (colors etc)
+
+=item 'tooltip-markup' (string : default undef : readable / writable / private)
+
+The contents of the tooltip for this widget
+
+=item 'tooltip-text' (string : default undef : readable / writable / private)
+
+The contents of the tooltip for this widget
+
+=item 'visible' (boolean : default false : readable / writable / private)
+
+Whether the widget is visible
+
+=item 'width-request' (integer : default -1 : readable / writable / private)
+
+Override for width request of the widget, or -1 if natural request should be used
+
+=item 'window' (Gtk2::Gdk::Window : default undef : readable / private)
+
+The widget's window if it is realized
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<show> (Gtk2::Widget)
+
+=item B<hide> (Gtk2::Widget)
+
+=item B<map> (Gtk2::Widget)
+
+=item B<unmap> (Gtk2::Widget)
+
+=item B<realize> (Gtk2::Widget)
+
+=item B<unrealize> (Gtk2::Widget)
+
+=item B<size-request> (Gtk2::Widget, Gtk2::Requisition)
+
+=item B<size-allocate> (Gtk2::Widget, Gtk2::Gdk::Rectangle)
+
+=item B<state-changed> (Gtk2::Widget, Gtk2::StateType)
+
+=item B<parent-set> (Gtk2::Widget, Gtk2::Widget)
+
+=item B<hierarchy-changed> (Gtk2::Widget, Gtk2::Widget)
+
+=item B<style-set> (Gtk2::Widget, Gtk2::Style)
+
+=item B<direction-changed> (Gtk2::Widget, Gtk2::TextDirection)
+
+=item B<grab-notify> (Gtk2::Widget, boolean)
+
+=item B<child-notify> (Gtk2::Widget, Glib::ParamSpec)
+
+=item boolean = B<mnemonic-activate> (Gtk2::Widget, boolean)
+
+=item B<grab-focus> (Gtk2::Widget)
+
+=item boolean = B<focus> (Gtk2::Widget, Gtk2::DirectionType)
+
+=item B<move-focus> (Gtk2::Widget, Gtk2::DirectionType)
+
+=item boolean = B<event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item B<event-after> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<button-press-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<button-release-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<scroll-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<motion-notify-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item B<composited-changed> (Gtk2::Widget)
+
+=item boolean = B<keynav-failed> (Gtk2::Widget, Gtk2::DirectionType)
+
+=item boolean = B<delete-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<destroy-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<expose-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<key-press-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<key-release-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<enter-notify-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<leave-notify-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<configure-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<focus-in-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<focus-out-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<map-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<unmap-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<property-notify-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<selection-clear-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<selection-request-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<selection-notify-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item B<selection-received> (Gtk2::Widget, Gtk2::SelectionData, Glib::UInt)
+
+=item B<selection-get> (Gtk2::Widget, Gtk2::SelectionData, Glib::UInt, Glib::UInt)
+
+=item boolean = B<proximity-in-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<proximity-out-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item B<drag-leave> (Gtk2::Widget, Gtk2::Gdk::DragContext, Glib::UInt)
+
+=item B<drag-begin> (Gtk2::Widget, Gtk2::Gdk::DragContext)
+
+=item B<drag-end> (Gtk2::Widget, Gtk2::Gdk::DragContext)
+
+=item B<drag-data-delete> (Gtk2::Widget, Gtk2::Gdk::DragContext)
+
+=item boolean = B<drag-failed> (Gtk2::Widget, Gtk2::Gdk::DragContext, GtkDragResult)
+
+=item boolean = B<drag-motion> (Gtk2::Widget, Gtk2::Gdk::DragContext, integer, integer, Glib::UInt)
+
+=item boolean = B<drag-drop> (Gtk2::Widget, Gtk2::Gdk::DragContext, integer, integer, Glib::UInt)
+
+=item B<drag-data-get> (Gtk2::Widget, Gtk2::Gdk::DragContext, Gtk2::SelectionData, Glib::UInt, Glib::UInt)
+
+=item B<drag-data-received> (Gtk2::Widget, Gtk2::Gdk::DragContext, integer, integer, Gtk2::SelectionData, Glib::UInt, Glib::UInt)
+
+=item boolean = B<visibility-notify-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<client-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<no-expose-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<window-state-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<damage-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<grab-broken-event> (Gtk2::Widget, Gtk2::Gdk::Event)
+
+=item boolean = B<query-tooltip> (Gtk2::Widget, integer, integer, boolean, Gtk2::Tooltip)
+
+=item boolean = B<popup-menu> (Gtk2::Widget)
+
+=item boolean = B<show-help> (Gtk2::Widget, Gtk2::WidgetHelpType)
+
+=item B<accel-closures-changed> (Gtk2::Widget)
+
+=item B<screen-changed> (Gtk2::Widget, Gtk2::Gdk::Screen)
+
+=item boolean = B<can-activate-accel> (Gtk2::Widget, Glib::UInt)
+
+=back
+
+
+
+=cut
+
+=for position post_signals
+
+Note that currently signal_chain_from_overridden doesn't work from a
+size-request class closure, because the Gtk2::Requisition parameter
+you pass ends up getting copied, so changes made to it by the
+superclass are lost.  You can still write a class closure for
+size-request, but you'll have to calculate the desired size by
+yourself, you can't chain up to ask your superclass what it thinks.
+
+=cut
+
+
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::AccelFlags
+
+=over
+
+=item * 'visible' / 'GTK_ACCEL_VISIBLE'
+
+=item * 'locked' / 'GTK_ACCEL_LOCKED'
+
+=item * 'mask' / 'GTK_ACCEL_MASK'
+
+=back
+
+
+=head2 flags Gtk2::DestDefaults
+
+=over
+
+=item * 'motion' / 'GTK_DEST_DEFAULT_MOTION'
+
+=item * 'highlight' / 'GTK_DEST_DEFAULT_HIGHLIGHT'
+
+=item * 'drop' / 'GTK_DEST_DEFAULT_DROP'
+
+=item * 'all' / 'GTK_DEST_DEFAULT_ALL'
+
+=back
+
+
+=head2 enum Gtk2::DirectionType
+
+=over
+
+=item * 'tab-forward' / 'GTK_DIR_TAB_FORWARD'
+
+=item * 'tab-backward' / 'GTK_DIR_TAB_BACKWARD'
+
+=item * 'up' / 'GTK_DIR_UP'
+
+=item * 'down' / 'GTK_DIR_DOWN'
+
+=item * 'left' / 'GTK_DIR_LEFT'
+
+=item * 'right' / 'GTK_DIR_RIGHT'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::DragAction
+
+=over
+
+=item * 'default' / 'GDK_ACTION_DEFAULT'
+
+=item * 'copy' / 'GDK_ACTION_COPY'
+
+=item * 'move' / 'GDK_ACTION_MOVE'
+
+=item * 'link' / 'GDK_ACTION_LINK'
+
+=item * 'private' / 'GDK_ACTION_PRIVATE'
+
+=item * 'ask' / 'GDK_ACTION_ASK'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::DragProtocol
+
+=over
+
+=item * 'motif' / 'GDK_DRAG_PROTO_MOTIF'
+
+=item * 'xdnd' / 'GDK_DRAG_PROTO_XDND'
+
+=item * 'rootwin' / 'GDK_DRAG_PROTO_ROOTWIN'
+
+=item * 'none' / 'GDK_DRAG_PROTO_NONE'
+
+=item * 'win32-dropfiles' / 'GDK_DRAG_PROTO_WIN32_DROPFILES'
+
+=item * 'ole2' / 'GDK_DRAG_PROTO_OLE2'
+
+=item * 'local' / 'GDK_DRAG_PROTO_LOCAL'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::EventMask
+
+=over
+
+=item * 'exposure-mask' / 'GDK_EXPOSURE_MASK'
+
+=item * 'pointer-motion-mask' / 'GDK_POINTER_MOTION_MASK'
+
+=item * 'pointer-motion-hint-mask' / 'GDK_POINTER_MOTION_HINT_MASK'
+
+=item * 'button-motion-mask' / 'GDK_BUTTON_MOTION_MASK'
+
+=item * 'button1-motion-mask' / 'GDK_BUTTON1_MOTION_MASK'
+
+=item * 'button2-motion-mask' / 'GDK_BUTTON2_MOTION_MASK'
+
+=item * 'button3-motion-mask' / 'GDK_BUTTON3_MOTION_MASK'
+
+=item * 'button-press-mask' / 'GDK_BUTTON_PRESS_MASK'
+
+=item * 'button-release-mask' / 'GDK_BUTTON_RELEASE_MASK'
+
+=item * 'key-press-mask' / 'GDK_KEY_PRESS_MASK'
+
+=item * 'key-release-mask' / 'GDK_KEY_RELEASE_MASK'
+
+=item * 'enter-notify-mask' / 'GDK_ENTER_NOTIFY_MASK'
+
+=item * 'leave-notify-mask' / 'GDK_LEAVE_NOTIFY_MASK'
+
+=item * 'focus-change-mask' / 'GDK_FOCUS_CHANGE_MASK'
+
+=item * 'structure-mask' / 'GDK_STRUCTURE_MASK'
+
+=item * 'property-change-mask' / 'GDK_PROPERTY_CHANGE_MASK'
+
+=item * 'visibility-notify-mask' / 'GDK_VISIBILITY_NOTIFY_MASK'
+
+=item * 'proximity-in-mask' / 'GDK_PROXIMITY_IN_MASK'
+
+=item * 'proximity-out-mask' / 'GDK_PROXIMITY_OUT_MASK'
+
+=item * 'substructure-mask' / 'GDK_SUBSTRUCTURE_MASK'
+
+=item * 'scroll-mask' / 'GDK_SCROLL_MASK'
+
+=item * 'all-events-mask' / 'GDK_ALL_EVENTS_MASK'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::ExtensionMode
+
+=over
+
+=item * 'none' / 'GDK_EXTENSION_EVENTS_NONE'
+
+=item * 'all' / 'GDK_EXTENSION_EVENTS_ALL'
+
+=item * 'cursor' / 'GDK_EXTENSION_EVENTS_CURSOR'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+=head2 enum Gtk2::IconSize
+
+=over
+
+=item * 'invalid' / 'GTK_ICON_SIZE_INVALID'
+
+=item * 'menu' / 'GTK_ICON_SIZE_MENU'
+
+=item * 'small-toolbar' / 'GTK_ICON_SIZE_SMALL_TOOLBAR'
+
+=item * 'large-toolbar' / 'GTK_ICON_SIZE_LARGE_TOOLBAR'
+
+=item * 'button' / 'GTK_ICON_SIZE_BUTTON'
+
+=item * 'dnd' / 'GTK_ICON_SIZE_DND'
+
+=item * 'dialog' / 'GTK_ICON_SIZE_DIALOG'
+
+=back
+
+
+=head2 enum Gtk2::StateType
+
+=over
+
+=item * 'normal' / 'GTK_STATE_NORMAL'
+
+=item * 'active' / 'GTK_STATE_ACTIVE'
+
+=item * 'prelight' / 'GTK_STATE_PRELIGHT'
+
+=item * 'selected' / 'GTK_STATE_SELECTED'
+
+=item * 'insensitive' / 'GTK_STATE_INSENSITIVE'
+
+=back
+
+
+=head2 enum Gtk2::TextDirection
+
+=over
+
+=item * 'none' / 'GTK_TEXT_DIR_NONE'
+
+=item * 'ltr' / 'GTK_TEXT_DIR_LTR'
+
+=item * 'rtl' / 'GTK_TEXT_DIR_RTL'
+
+=back
+
+
+=head2 flags Gtk2::WidgetFlags
+
+=over
+
+=item * 'toplevel' / 'GTK_TOPLEVEL'
+
+=item * 'no-window' / 'GTK_NO_WINDOW'
+
+=item * 'realized' / 'GTK_REALIZED'
+
+=item * 'mapped' / 'GTK_MAPPED'
+
+=item * 'visible' / 'GTK_VISIBLE'
+
+=item * 'sensitive' / 'GTK_SENSITIVE'
+
+=item * 'parent-sensitive' / 'GTK_PARENT_SENSITIVE'
+
+=item * 'can-focus' / 'GTK_CAN_FOCUS'
+
+=item * 'has-focus' / 'GTK_HAS_FOCUS'
+
+=item * 'can-default' / 'GTK_CAN_DEFAULT'
+
+=item * 'has-default' / 'GTK_HAS_DEFAULT'
+
+=item * 'has-grab' / 'GTK_HAS_GRAB'
+
+=item * 'rc-style' / 'GTK_RC_STYLE'
+
+=item * 'composite-child' / 'GTK_COMPOSITE_CHILD'
+
+=item * 'no-reparent' / 'GTK_NO_REPARENT'
+
+=item * 'app-paintable' / 'GTK_APP_PAINTABLE'
+
+=item * 'receives-default' / 'GTK_RECEIVES_DEFAULT'
+
+=item * 'double-buffered' / 'GTK_DOUBLE_BUFFERED'
+
+=item * 'no-show-all' / 'GTK_NO_SHOW_ALL'
+
+=back
+
+
+=head2 enum Gtk2::WidgetHelpType
+
+=over
+
+=item * 'tooltip' / 'GTK_WIDGET_HELP_TOOLTIP'
+
+=item * 'whats-this' / 'GTK_WIDGET_HELP_WHATS_THIS'
+
+=back
+
+
+=head2 enum GtkDragResult
+
+=over
+
+=item * 'success' / 'GTK_DRAG_RESULT_SUCCESS'
+
+=item * 'no-target' / 'GTK_DRAG_RESULT_NO_TARGET'
+
+=item * 'user-cancelled' / 'GTK_DRAG_RESULT_USER_CANCELLED'
+
+=item * 'timeout-expired' / 'GTK_DRAG_RESULT_TIMEOUT_EXPIRED'
+
+=item * 'grab-broken' / 'GTK_DRAG_RESULT_GRAB_BROKEN'
+
+=item * 'error' / 'GTK_DRAG_RESULT_ERROR'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::TargetEntry>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

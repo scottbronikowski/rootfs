@@ -1,0 +1,83 @@
+=head1 NAME
+
+Gtk2::TargetEntry
+
+=cut
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  # as a HASH
+  $target_entry = {
+      target => 'text/plain', # some string representing the drag type
+      flags => [], # Gtk2::TargetFlags
+      info => 42,  # some app-defined integer identifier
+  };
+
+  # as an ARRAY, for compactness
+  $target_entry = [ $target, $flags, $info ];
+
+=cut
+
+
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+A Gtk2::TargetEntry data structure represents a single type of data than can
+be supplied for by a widget for a selection or for supplied or received during
+drag-and-drop.  It  contains a string representing the drag type, a flags field
+(used only for drag and drop - see Gtk2::TargetFlags), and an application
+assigned integer ID.  The integer ID will later be passed as a signal parameter
+for signals like "selection_get".  It allows the application to identify the
+target type without extensive string compares. 
+
+=cut
+
+
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::TargetFlags
+
+
+
+=over
+
+=item * 'same-app' / 'GTK_TARGET_SAME_APP'
+
+=item * 'same-widget' / 'GTK_TARGET_SAME_WIDGET'
+
+=item * 'other-app' / 'GTK_TARGET_OTHER_APP'
+
+=item * 'other-widget' / 'GTK_TARGET_OTHER_WIDGET'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Gtk2::TargetList>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

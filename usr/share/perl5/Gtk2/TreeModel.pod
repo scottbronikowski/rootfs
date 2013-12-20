@@ -1,0 +1,590 @@
+=head1 NAME
+
+Gtk2::TreeModel - wrapper for GtkTreeModel
+
+=cut
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+ # Three ways of getting the iter pointing to the location 3:2:5
+
+ # get the iterator from a string
+ $iter = $model->get_iter_from_string ("3:2:5");
+
+ # get the iterator from a path
+ $path = Gtk2::TreePath->new_from_string ("3:2:5");
+ $iter = $model->get_iter ($path);
+
+ # walk the tree to find the iterator
+ $iter = $model->iter_nth_child (undef, 3);
+ $iter = $model->iter_nth_child ($iter, 2);
+ $iter = $model->iter_nth_child ($iter, 5);
+
+ 
+ # getting and setting values
+
+ # assuming a model with these columns
+ use constant STRING_COLUMN => 0;
+ use constant INT_COLUMN => 1;
+
+ # set values
+ $model->set ($iter,
+	      STRING_COLUMN, $new_string_value,
+	      INT_COLUMN, $new_int_value);
+
+ # and get values
+ ($int, $str) = $model->get ($iter, INT_COLUMN, STRING_COLUMN);
+
+ # if you don't specify a list of column numbers,
+ # you get all of them.
+ @values = $model->get ($iter);
+
+=cut
+
+
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+The Gtk2::TreeModel provides a generic tree interface for use by the 
+Gtk2::TreeView widget.  It is an abstract interface, designed to be usable
+with any appropriate data structure.
+
+The model is represented as a hierarchical tree of strongly-typed, columned
+data.  In other words, the model can be seen as a tree where every node has
+different values depending on which column is being queried.  The type of
+data found in a column is determined by using the GType system (i.e. package
+names like Glib::Int, Gtk2::Button, Glib::Scalar, etc).  The types are
+homogeneous per column across all nodes.  It is important to note that this
+interface only provides a way of examining a model and observing changes.
+The implementation of each individual model decides how and if changes are
+made.
+
+In order to make life simpler for programmers who do not need to write their
+own specialized model, two generic models are provided - the Gtk2::TreeStore
+and the Gtk2::ListStore.  To use these, the developer simply pushes data into
+these models as necessary.  These models provide the data structure as well
+as all appropriate tree interfaces.  As a result, implementing drag and drop,
+sorting, and storing data is trivial.  For the vast majority of trees and
+lists, these two models are sufficient.  For information on how to implement
+your own model in Perl, see L</CREATING A CUSTOM TREE MODEL>.
+
+Models are accessed on a node/column level of granularity.  One can query for
+the value of a model at a certain node and a certain column on that node.
+There are two structures used to reference a particular node in a model:
+the Gtk2::TreePath and the Gtk2::TreeIter (short for "iterator").  Most of
+the interface consists of operations on a Gtk2::TreeIter.
+
+A path is essentially a potential node.  It is a location on a model that
+may or may not actually correspond to a node on a specific model.  The
+Gtk2::TreePath object can be converted into either an array of unsigned
+integers or a string.  The string form is a list of numbers separated by a
+colon.  Each number refers to the offset at that level.  Thus, the path '0'
+refers to the root node and the path '2:4' refers to the fifth child of the
+third node.
+
+By contrast, a Gtk2::TreeIter is a reference to a specific node on a specific
+model.  To the user of a model, the iter is merely an opaque object.
+One can convert a path to an iterator by calling C<Gtk2::TreeModel::get_iter>.
+These iterators are the primary way of accessing a model and are
+similar to the iterators used by Gtk2::TextBuffer. The model interface
+defines a set of operations using them for navigating the model.
+
+The iterators are generally used only for a short time, and their
+behaviour is different to that suggested by the Gtk+ documentation. They
+are not valid when the model is changed, even though get_flags returns
+'iters-persist'. Iterators obtained within a GtkTreeModelForeachFunc are
+also invalid after the foreach terminates. There may be other such
+cases. In the foreach case, and perhaps others, a persistent iterator
+may be obtained by copying it (see Glib::Boxed->copy).
+
+(The preceding description and most of the method descriptions have been
+adapted directly from the Gtk+ C API reference.)
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Interface
+  +----Gtk2::TreeModel
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 string = $tree_model-E<gt>B<get_column_type> ($index_)
+
+=over
+
+=item * $index_ (integer) 
+
+=back
+
+Returns the type of column I<$index_> as a package name.
+
+=head2 treemodelflags = $tree_model-E<gt>B<get_flags> 
+
+=head2 $model-E<gt>B<foreach> ($func, $user_data=undef)
+
+=over
+
+=item * $func (subroutine) 
+
+=item * $user_data (scalar) 
+
+=back
+
+Call I<$func> on each row in I<$model> as
+
+    bool = &$func ($model, $path, $iter, $user_data)
+
+If I<$func> returns true, the tree ceases to be walked,
+and C<< $treemodel->foreach >> returns.
+
+=head2 $tree_model-E<gt>B<get> ($iter, ...)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=item * ... (list) of column indices
+
+=back
+
+
+Fetch and return the model's values in the row pointed to by I<$iter>.
+If you specify no column indices, it returns the values for all of the
+columns, otherwise, returns just those columns' values (in order).
+
+This overrides overrides Glib::Object's C<get>, so you'll want to use
+C<< $object->get_property >> to get object properties.
+
+
+=head2 treeiter = $tree_model-E<gt>B<iter_children> ($parent)
+
+=over
+
+=item * $parent (Gtk2::TreeIter or undef) 
+
+=back
+
+Returns undef if I<$parent> has no children, otherwise, returns a new iter
+to the first child of I<$parent>.  I<$parent> is unaltered.  If I<$parent>
+is undef, this is equivalent to C<Gtk2::TreeModel::get_iter_first>.
+
+=head2 treeiter = $tree_model-E<gt>B<get_iter_first> 
+
+Return a new iter pointing to the first node in the tree (the one at path
+"0"), or undef if the tree is empty.
+
+=head2 treeiter = $tree_model-E<gt>B<get_iter_from_string> ($path_string)
+
+=over
+
+=item * $path_string (string) 
+
+=back
+
+Returns a new iter pointing to the node described by I<$path_string>, or
+undef if the path does not exist.
+
+=head2 treeiter = $tree_model-E<gt>B<get_iter> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+Returns a new Gtk2::TreeIter corresponding to I<$path>.
+
+=head2 boolean = $tree_model-E<gt>B<iter_has_child> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+Returns true if I<$iter> has child nodes.
+
+=head2 integer = $tree_model-E<gt>B<iter_n_children> ($iter=undef)
+
+=over
+
+=item * $iter (Gtk2::TreeIter or undef) 
+
+=back
+
+Returns the number of children I<$iter> has.  If I<$iter> is undef (or omitted)
+then returns the number of toplevel nodes.
+
+=head2 treeiter = $tree_model-E<gt>B<iter_next> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+Return a new iter pointing to node following I<$iter> at the current level,
+or undef if there is no next node.  I<$iter> is unaltered.  (Note: this is
+different from the C version, which modifies the iter.)
+
+=head2 treeiter = $tree_model-E<gt>B<iter_nth_child> ($parent, $n)
+
+=over
+
+=item * $parent (Gtk2::TreeIter or undef) 
+
+=item * $n (integer) 
+
+=back
+
+Returns an iter to the child of I<$parent> at index I<$n>, or undef if there
+is no such child.  I<$parent> is unaltered.
+
+=head2 treeiter = $tree_model-E<gt>B<iter_parent> ($child)
+
+=over
+
+=item * $child (Gtk2::TreeIter) 
+
+=back
+
+Returns a new iter pointing to I<$child>'s parent node, or undef if I<$child>
+doesn't have a parent.  I<$child> is unaltered.
+
+=head2 integer = $tree_model-E<gt>B<get_n_columns> 
+
+=head2 treepath = $tree_model-E<gt>B<get_path> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+Return a new Gtk2::TreePath corresponding to I<$iter>.
+
+=head2 $tree_model-E<gt>B<ref_node> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+Lets the tree ref the node. This is an optional method for models to implement.
+To be more specific, models may ignore this call as it exists primarily for
+performance reasons.
+
+This function is primarily meant as a way for views to let caching model know
+when nodes are being displayed (and hence, whether or not to cache that node.)
+For example, a file-system based model would not want to keep the entire
+file-hierarchy in memory, just the sections that are currently being
+displayed by every current view.
+
+A model should be expected to be able to get an iter independent of its reffed
+state.
+
+=head2 $tree_model-E<gt>B<row_changed> ($path, $iter)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+Emits the "row_changed" signal on I<$tree_model>.
+
+=head2 $tree_model-E<gt>B<row_deleted> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+Emits the "row_deleted" signal on I<$tree_model>.  This should be called by
+models after a row has been removed.  The location pointed to by I<$path>
+should be the removed row's old location.  It may not be a valid location
+anymore.
+
+=head2 $tree_model-E<gt>B<row_has_child_toggled> ($path, $iter)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+Emits the "row_has_child_toggled" signal on I<$tree_model>.  This should be
+called by models after the child state of a node changes.
+
+=head2 $tree_model-E<gt>B<row_inserted> ($path, $iter)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+Emits the "row_inserted" signal on I<$tree_model>.
+
+=head2 $tree_model-E<gt>B<rows_reordered> ($path, $iter, ...)
+
+=over
+
+=item * $path (Gtk2::TreePath) the tree node whose children have been reordered
+
+=item * $iter (Gtk2::TreeIter or undef) the tree node whose children have been reordered
+
+=item * ... (list) list of integers mapping the current position of each child to its old position before the re-ordering, i.e. $new_order[$newpos] = $oldpos.  There should be as many elements in this list as there are rows in I<$tree_model>.
+
+=back
+
+
+Emits the "rows-reordered" signal on I<$tree_model>/  This should be called
+by models with their rows have been reordered.
+
+=head2 string = $tree_model-E<gt>B<get_string_from_iter> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+Generates a string representation of the iter.  This string is a ':' separated
+list of numbers.  For example, "4:10:0:3" would be an acceptable return value
+for this string.
+
+Since: gtk+ 2.2
+
+=head2 $tree_model-E<gt>B<unref_node> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+Lets the tree unref the node. This is an optional method for models to
+implement. To be more specific, models may ignore this call as it exists
+primarily for performance reasons.
+
+For more information on what this means, see C<Gtk2::TreeModel::ref_node>.
+Please note that nodes that are deleted are not unreffed.
+
+=head2 $tree_model-E<gt>B<get_value> ($iter, ...)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=item * ... (list) of column indices
+
+=back
+
+Alias for L<get|/"$tree_model-E<gt>B<get> ($iter, ...)">.
+
+
+
+=cut
+
+=for position post_methods
+
+=head1 CREATING A CUSTOM TREE MODEL
+
+GTK+ provides two model implementations, Gtk2::TreeStore and Gtk2::ListStore,
+which should be sufficient in most cases.  For some cases, however, it is
+advantageous to provide a custom tree model implementation.  It is possible
+to create custom tree models in Perl, because we're cool like that.
+
+To do this, you create a Glib::Object derivative which implements the 
+Gtk2::TreeModel interface; this is gtk2-perl-speak for "you have to add
+a special key when you register your object type."  For example:
+
+  package MyModel;
+  use Gtk2;
+  use Glib::Object::Subclass
+      Glib::Object::,
+      interfaces => [ Gtk2::TreeModel:: ],
+      ;
+
+This will cause perl to call several virtual methods with ALL_CAPS_NAMES
+when Gtk+ attempts to perform certain actions on the model.  You simply
+provide (or override) those methods.
+
+=head2 TREE ITERS
+
+Gtk2::TreeIter is normally an opaque object, but on the implementation side
+of a Gtk2::TreeModel, you have to define what's inside.  The virtual methods
+described below deal with iters as a reference to an array containing four
+values:
+
+=over
+
+=item o stamp (integer)
+
+A number unique to this model.
+
+=item o user_data (integer)
+
+An arbitrary integer value.
+
+=item o user_data2 (scalar)
+
+An arbitrary reference.  Will not persist.  May be undef.
+
+=item o user_data3 (scalar)
+
+An arbitrary reference.  Will not persist.  May be undef.
+
+=back
+
+The two references, if used, will generally be to data within the model,
+like a row array, or a node object in a tree or linked list.  Keeping the
+things referred to alive is the model's responsibility.  An iter doesn't
+make them persist, and if the things are destroyed then any iters still
+containing them will become invalid (and result in memory corruption if
+used).  An iter only has to remain valid until the model contents change, so
+generally anything internal to the model is fine.
+
+=head2 VIRTUAL METHODS
+
+An implementation of
+
+=over
+
+=item treemodelflags = GET_FLAGS ($model)
+
+=item integer = GET_N_COLUMNS ($model)
+
+=item string = GET_COLUMN_TYPE ($model, $index)
+
+=item ARRAYREF = GET_ITER ($model, $path)
+
+See above for a description of what goes in the returned array reference.
+
+=item treepath = GET_PATH ($model, ARRAYREF)
+
+=item scalar = GET_VALUE ($model, ARRAYREF, $column)
+
+Implements $treemodel->get().
+
+=item ARRAYREF = ITER_NEXT ($model, ARRAYREF)
+
+=item ARRAYREF = ITER_CHILDREN ($model, ARRAYREF)
+
+=item boolean = ITER_HAS_CHILD ($model, ARRAYREF)
+
+=item integer = ITER_N_CHILDREN ($model, ARRAYREF)
+
+=item ARRAYREF = ITER_NTH_CHILD ($model, ARRAYREF, $n)
+
+=item ARRAYREF = ITER_PARENT ($model, ARRAYREF)
+
+=item REF_NODE ($model, ARRAYREF)
+
+Optional.
+
+=item UNREF_NODE ($model, ARRAYREF)
+
+Optional.
+
+=back
+
+=cut
+
+
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<row-changed> (Gtk2::TreeModel, Gtk2::TreePath, Gtk2::TreeIter)
+
+=item B<row-inserted> (Gtk2::TreeModel, Gtk2::TreePath, Gtk2::TreeIter)
+
+=item B<row-has-child-toggled> (Gtk2::TreeModel, Gtk2::TreePath, Gtk2::TreeIter)
+
+=item B<row-deleted> (Gtk2::TreeModel, Gtk2::TreePath)
+
+=item B<rows-reordered> (Gtk2::TreeModel, Gtk2::TreePath, Gtk2::TreeIter, gpointer)
+
+=back
+
+
+
+=cut
+
+=for position post_signals
+
+Note that currently in a Perl subclass of an object implementing
+C<Gtk2::TreeModel>, the class closure, ie. class default signal
+handler, for the C<rows-reordered> signal is called only with an
+integer address for the reorder array parameter, not a Perl arrayref
+like a handler installed with C<signal_connect> receives.  It works to
+C<signal_chain_from_overridden> with the address, but it's otherwise
+fairly useless and will likely change in the future.
+
+=cut
+
+
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::TreeModelFlags
+
+
+
+=over
+
+=item * 'iters-persist' / 'GTK_TREE_MODEL_ITERS_PERSIST'
+
+=item * 'list-only' / 'GTK_TREE_MODEL_LIST_ONLY'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Interface>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

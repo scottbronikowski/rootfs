@@ -1,0 +1,164 @@
+=head1 NAME
+
+Gtk2::Builder - wrapper for GtkBuilder
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Builder
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 builder = Gtk2::Builder-E<gt>B<new> 
+
+=head2 integer = $builder-E<gt>B<add_from_file> ($filename)
+
+=over
+
+=item * $filename (localized file name) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 integer = $builder-E<gt>B<add_from_string> ($buffer)
+
+=over
+
+=item * $buffer (string) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 integer = $builder-E<gt>B<add_objects_from_string> ($buffer, $first_object_id, ...)
+
+=over
+
+=item * $buffer (string) 
+
+=item * $first_object_id (string) 
+
+=item * ... (list) 
+
+=back
+
+Since: gtk+ 2.14
+
+=head2 $builder->B<connect_signals> ($user_data)
+
+=head2 $builder->B<connect_signals> ($user_data, $package)
+
+=head2 $builder->B<connect_signals> ($user_data, %handlers)
+
+=over
+
+=back
+
+
+There are four ways to let Gtk2::Builder do the signal connecting work for you:
+
+=over
+
+=item C<< $builder->connect_signals ($user_data) >>
+
+When invoked like this, Gtk2::Builder will connect signals to functions in the
+calling package.  The callback names are specified in the UI description.
+
+=item C<< $builder->connect_signals ($user_data, $package) >>
+
+When invoked like this, Gtk2::Builder will connect signals to functions in the
+package I<$package>.
+
+=item C<< $builder->connect_signals ($user_data, $object) >>
+
+When invoked like this, Gtk2::Builder will connect signals to method calls
+against the object $object.
+
+=item C<< $builder->connect_signals ($user_data, %handlers) >>
+
+When invoked like this, I<%handlers> is used as a mapping from handler names to
+code references.
+
+=back
+
+
+=head2 $builder-E<gt>B<connect_signals_full> ($func, $user_data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+=head2 object = $builder-E<gt>B<get_object> ($name)
+
+=over
+
+=item * $name (string) 
+
+=back
+
+=head2 list = $builder-E<gt>B<get_objects> 
+
+=head2 string or undef = $builder-E<gt>B<get_translation_domain> 
+
+=head2 $builder-E<gt>B<set_translation_domain> ($domain)
+
+=over
+
+=item * $domain (string or undef) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'translation-domain' (string : default undef : readable / writable / private)
+
+The translation domain used by gettext
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,48 @@
+#!/usr/bin/awk -f
+#
+# conf_convert - convert rssh  config files  from 2.0, 2.1.1, 2.2 format
+#                to  rssh  2.3.2  format config  files  adding  svnserve
+#                support
+#
+# Copyright (C) 2009 Davide Scola <davide.scola@gmail.com>
+#
+# This program is  free software; you can redistribute  it and/or modify
+# it under the  terms of the GNU General Public  License as published by
+# the Free  Software Foundation; either  version 2, or (at  your option)
+# any later version.
+#
+# This  program is  distributed  in the  hope that  it  will be  useful,
+# but  WITHOUT  ANY  WARRANTY;  without even  the  implied  warranty  of
+# MERCHANTABILITY  or FITNESS  FOR A  PARTICULAR PURPOSE.   See the  GNU
+# General Public License for more details.
+#
+# You should  have received  a copy  of the  GNU General  Public License
+# along  with  this  program;  if   not,  write  to  the  Free  Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA.
+#
+BEGIN {
+	FS = OFS = ":";
+}
+
+{
+	if( /^[# ]*user *= */ && match($3, /^([01]+)/) ) {
+		gsub(/^([01]+)/, replaceString( RLENGTH ), $3);
+	}
+
+	print
+}
+
+function replaceString(nitems) {
+	str = "&";
+
+	if(nitems == 2) { # config < v2.2
+		str = "000&0";
+	}
+
+	else if(nitems == 5) { # v2.2 <= config <= v2.3.2 (vanilla)
+		str = "&0";
+	}
+
+	return str;
+}
+

@@ -1,0 +1,458 @@
+=head1 NAME
+
+Gtk2::Gdk::GC - wrapper for GdkGC
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Gdk::GC
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 gc = Gtk2::Gdk::GC-E<gt>B<new> ($drawable, $values=undef)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable) 
+
+=item * $values (scalar) 
+
+=back
+
+Create and return a new GC.
+
+C<$drawable> is used for the depth and the display
+(C<Gtk2::Gdk::Display>) for the GC.  The GC can then be used with any
+drawable of the same depth on that display.
+
+C<$values> is a hashref containing some of the following keys,
+
+    foreground          Gtk2::Gdk::Color
+    background          Gtk2::Gdk::Color
+    font                Gtk2::Gdk::Font
+    function            Gtk2::Gdk::Function enum
+    fill                Gtk2::Gdk::Fill enum
+    tile                Gtk2::Gdk::Pixmap
+    stipple             Gtk2::Gdk::Pixmap
+    clip_mask           Gtk2::Gdk::Pixmap
+    subwindow_mode      Gtk2::Gdk::SubwindowMode enum
+    ts_x_origin         integer
+    ts_y_origin         integer
+    clip_x_origin       integer
+    clip_y_origin       integer
+    graphics_exposures  boolean integer 1 or 0
+    line_width          integer
+    line_style          Gtk2::Gdk::LineStyle enum
+    cap_style           Gtk2::Gdk::CapStyle enum
+    join_style          Gtk2::Gdk::JoinStyle enum
+
+Keys not given get default values.  For the C<foreground> and
+C<background> colour objects only the C<pixel> field is used; the red,
+green and blue are ignored.  For example
+
+    my $pixel = 0x123456;
+    my $color = Gtk2::Gdk::Color->new (0,0,0, $pixel);
+    my $gc = Gtk2::Gdk::GC->new_with_values
+      ($win, { foreground => $color,
+               line_style => 'on_off_dash' });
+
+
+=head2 gc = Gtk2::Gdk::GC-E<gt>B<new_with_values> ($drawable, $values=undef)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable) 
+
+=item * $values (scalar) 
+
+=back
+
+=head2 $gc-E<gt>B<set_background> ($color)
+
+=over
+
+=item * $color (Gtk2::Gdk::Color) 
+
+=back
+
+=head2 $gc-E<gt>B<set_clip_mask> ($mask)
+
+=over
+
+=item * $mask (scalar) 
+
+=back
+
+=head2 $gc-E<gt>B<set_clip_origin> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+=head2 $gc-E<gt>B<set_clip_rectangle> ($rectangle)
+
+=over
+
+=item * $rectangle (Gtk2::Gdk::Rectangle or undef) 
+
+=back
+
+=head2 $gc-E<gt>B<set_clip_region> ($region)
+
+=over
+
+=item * $region (Gtk2::Gdk::Region or undef) 
+
+=back
+
+=head2 colormap = $gc-E<gt>B<get_colormap> 
+
+=head2 $gc-E<gt>B<set_colormap> ($colormap)
+
+=over
+
+=item * $colormap (Gtk2::Gdk::Colormap) 
+
+=back
+
+=head2 $dst_gc-E<gt>B<copy> ($src_gc)
+
+=over
+
+=item * $src_gc (Gtk2::Gdk::GC) 
+
+=back
+
+=head2 $gc-E<gt>B<set_dashes> ($dash_offset, ...)
+
+=over
+
+=item * $dash_offset (integer) 
+
+=item * ... (list) of integers, the length of the dash segments
+
+=back
+
+Sets the way dashed-lines are drawn. Lines will be drawn with alternating on
+and off segments of the lengths specified in list of dashes. The manner in
+which the on and off segments are drawn is determined by the line_style value
+of the GC.
+
+=head2 $gc-E<gt>B<set_exposures> ($exposures)
+
+=over
+
+=item * $exposures (boolean) 
+
+=back
+
+=head2 $gc-E<gt>B<set_fill> ($fill)
+
+=over
+
+=item * $fill (Gtk2::Gdk::Fill) 
+
+=back
+
+=head2 $gc-E<gt>B<set_font> ($font)
+
+=over
+
+=item * $font (Gtk2::Gdk::Font) 
+
+=back
+
+=head2 $gc-E<gt>B<set_foreground> ($color)
+
+=over
+
+=item * $color (Gtk2::Gdk::Color) 
+
+=back
+
+=head2 $gc-E<gt>B<set_function> ($function)
+
+=over
+
+=item * $function (Gtk2::Gdk::Function) 
+
+=back
+
+=head2 $gc-E<gt>B<set_line_attributes> ($line_width, $line_style, $cap_style, $join_style)
+
+=over
+
+=item * $line_width (integer) 
+
+=item * $line_style (Gtk2::Gdk::LineStyle) 
+
+=item * $cap_style (Gtk2::Gdk::CapStyle) 
+
+=item * $join_style (Gtk2::Gdk::JoinStyle) 
+
+=back
+
+=head2 $gc-E<gt>B<offset> ($x_offset, $y_offset)
+
+=over
+
+=item * $x_offset (integer) 
+
+=item * $y_offset (integer) 
+
+=back
+
+=head2 $gc-E<gt>B<set_rgb_background> ($rgb)
+
+=over
+
+=item * $rgb (unsigned) 
+
+=back
+
+=head2 $gc-E<gt>B<set_rgb_bg_color> ($color)
+
+=over
+
+=item * $color (Gtk2::Gdk::Color) 
+
+=back
+
+=head2 $gc-E<gt>B<set_rgb_fg_color> ($color)
+
+=over
+
+=item * $color (Gtk2::Gdk::Color) 
+
+=back
+
+=head2 $gc-E<gt>B<set_rgb_foreground> ($rgb)
+
+=over
+
+=item * $rgb (unsigned) 
+
+=back
+
+=head2 $gc-E<gt>B<rgb_gc_set_background> ($rgb)
+
+=over
+
+=item * $rgb (unsigned) 
+
+=back
+
+=head2 $gc-E<gt>B<rgb_gc_set_foreground> ($rgb)
+
+=over
+
+=item * $rgb (unsigned) 
+
+=back
+
+=head2 screen = $gc-E<gt>B<get_screen> 
+
+Since: gtk+ 2.2
+
+=head2 $gc-E<gt>B<set_stipple> ($stipple)
+
+=over
+
+=item * $stipple (Gtk2::Gdk::Pixmap) 
+
+=back
+
+=head2 $gc-E<gt>B<set_subwindow> ($mode)
+
+=over
+
+=item * $mode (Gtk2::Gdk::SubwindowMode) 
+
+=back
+
+=head2 $gc-E<gt>B<set_tile> ($tile)
+
+=over
+
+=item * $tile (Gtk2::Gdk::Pixmap) 
+
+=back
+
+=head2 $gc-E<gt>B<set_ts_origin> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+=head2 scalar = $gc-E<gt>B<get_values> 
+
+Return the attributes of C<$gc> in the form of a hashref with keys and
+values as described with C<new> above.
+
+In the C<foreground> and C<background> colour objects returned only
+the C<pixel> fields are set; the red, green and blue fields are
+garbage.
+
+=head2 $gc-E<gt>B<set_values> ($values)
+
+=over
+
+=item * $values (scalar) 
+
+=back
+
+Set some of the attributes of C<$gc>.  C<$values> is a hashref of keys
+and values as described for C<new> and C<new_with_values> above.
+Fields not present in C<$values> are left unchanged.
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::Gdk::CapStyle
+
+=over
+
+=item * 'not-last' / 'GDK_CAP_NOT_LAST'
+
+=item * 'butt' / 'GDK_CAP_BUTT'
+
+=item * 'round' / 'GDK_CAP_ROUND'
+
+=item * 'projecting' / 'GDK_CAP_PROJECTING'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::Fill
+
+=over
+
+=item * 'solid' / 'GDK_SOLID'
+
+=item * 'tiled' / 'GDK_TILED'
+
+=item * 'stippled' / 'GDK_STIPPLED'
+
+=item * 'opaque-stippled' / 'GDK_OPAQUE_STIPPLED'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::Function
+
+=over
+
+=item * 'copy' / 'GDK_COPY'
+
+=item * 'invert' / 'GDK_INVERT'
+
+=item * 'xor' / 'GDK_XOR'
+
+=item * 'clear' / 'GDK_CLEAR'
+
+=item * 'and' / 'GDK_AND'
+
+=item * 'and-reverse' / 'GDK_AND_REVERSE'
+
+=item * 'and-invert' / 'GDK_AND_INVERT'
+
+=item * 'noop' / 'GDK_NOOP'
+
+=item * 'or' / 'GDK_OR'
+
+=item * 'equiv' / 'GDK_EQUIV'
+
+=item * 'or-reverse' / 'GDK_OR_REVERSE'
+
+=item * 'copy-invert' / 'GDK_COPY_INVERT'
+
+=item * 'or-invert' / 'GDK_OR_INVERT'
+
+=item * 'nand' / 'GDK_NAND'
+
+=item * 'nor' / 'GDK_NOR'
+
+=item * 'set' / 'GDK_SET'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::JoinStyle
+
+=over
+
+=item * 'miter' / 'GDK_JOIN_MITER'
+
+=item * 'round' / 'GDK_JOIN_ROUND'
+
+=item * 'bevel' / 'GDK_JOIN_BEVEL'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::LineStyle
+
+=over
+
+=item * 'solid' / 'GDK_LINE_SOLID'
+
+=item * 'on-off-dash' / 'GDK_LINE_ON_OFF_DASH'
+
+=item * 'double-dash' / 'GDK_LINE_DOUBLE_DASH'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::SubwindowMode
+
+=over
+
+=item * 'clip-by-children' / 'GDK_CLIP_BY_CHILDREN'
+
+=item * 'include-inferiors' / 'GDK_INCLUDE_INFERIORS'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

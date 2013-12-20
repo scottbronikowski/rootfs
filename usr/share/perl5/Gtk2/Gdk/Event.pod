@@ -1,0 +1,443 @@
+=head1 NAME
+
+Gtk2::Gdk::Event - wrapper for GdkEvent
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Boxed
+  +----Gtk2::Gdk::Event
+
+
+
+=cut
+
+=head1 EVENT TYPES
+
+=over
+
+=item * L<Gtk2::Gdk::Event::Button>
+
+=item * L<Gtk2::Gdk::Event::Client>
+
+=item * L<Gtk2::Gdk::Event::Configure>
+
+=item * L<Gtk2::Gdk::Event::Crossing>
+
+=item * L<Gtk2::Gdk::Event::DND>
+
+=item * L<Gtk2::Gdk::Event::Expose>
+
+=item * L<Gtk2::Gdk::Event::Focus>
+
+=item * L<Gtk2::Gdk::Event::Key>
+
+=item * L<Gtk2::Gdk::Event::Motion>
+
+=item * L<Gtk2::Gdk::Event::NoExpose>
+
+=item * L<Gtk2::Gdk::Event::Property>
+
+=item * L<Gtk2::Gdk::Event::Proximity>
+
+=item * L<Gtk2::Gdk::Event::Scroll>
+
+=item * L<Gtk2::Gdk::Event::Selection>
+
+=item * L<Gtk2::Gdk::Event::Setting>
+
+=item * L<Gtk2::Gdk::Event::Visibility>
+
+=item * L<Gtk2::Gdk::Event::WindowState>
+
+=item * L<Gtk2::Gdk::Event::OwnerChange> (since gtk+ 2.6)
+
+=item * L<Gtk2::Gdk::Event::GrabBroken> (since gtk+ 2.8)
+
+=back
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 event = Gtk2::Gdk::Event-E<gt>B<new> ($type)
+
+=over
+
+=item * $type (Gtk2::Gdk::EventType) 
+
+=back
+
+=head2 double = $event-E<gt>B<axis> ($axis_use)
+
+=over
+
+=item * $axis_use (Gtk2::Gdk::AxisUse) 
+
+=back
+
+=head2 double = $event-E<gt>B<get_axis> ($axis_use)
+
+=over
+
+=item * $axis_use (Gtk2::Gdk::AxisUse) 
+
+=back
+
+=head2 ($x, $y) = $event->B<coords>
+
+
+
+=head2 ($x, $y) = $event->B<get_coords>
+
+
+
+=head2 event = $event-E<gt>B<copy> 
+
+=head2 event or undef = Gtk2::Gdk::Event-E<gt>B<get> 
+
+=head2 event or undef = Gtk2::Gdk::Event-E<gt>B<get_graphics_expose> ($window)
+
+=over
+
+=item * $window (Gtk2::Gdk::Window) 
+
+=back
+
+=head2 Gtk2::Gdk::Event-E<gt>B<handler_set> ($func, $data=undef)
+
+=over
+
+=item * $func (subroutine) function to get called for each event.
+
+=item * $data (scalar) 
+
+=back
+
+Set the function that handles all events from GDK.  GTK+ uses this to
+dispatch events, and as such this is rarely of use to applications,
+unless you are implementing completely custom event dispatching (unlikely)
+or preprocess events somehow and then pass them on to
+C<Gtk2::main_do_event>.  As a special case, if I<func> is undef,
+we "reset" the handler by passing the actual C function gtk_main_do_event
+to GDK, to bypass the Perl marshaling (and take things back up to full
+speed).
+
+=head2 event or undef = Gtk2::Gdk::Event-E<gt>B<peek> 
+
+=head2 Gtk2::Gdk::Event-E<gt>B<put> ($event)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=back
+
+=head2 ($x_root, $y_root) = $event->B<root_coords>
+
+
+
+=head2 ($x_root, $y_root) = $event->B<get_root_coords>
+
+
+
+=head2 screen = $event-E<gt>B<get_screen> 
+
+Since: gtk+ 2.2
+
+=head2 $event-E<gt>B<set_screen> ($screen)
+
+=over
+
+=item * $screen (Gtk2::Gdk::Screen) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 boolean = Gtk2::Gdk::Event-E<gt>B<send_client_message> ($event, $winid)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=item * $winid (Gtk2::Gdk::NativeWindow) 
+
+=back
+
+=head2 boolean = Gtk2::Gdk::Event-E<gt>B<send_client_message_for_display> ($display, $event, $winid)
+
+=over
+
+=item * $display (Gtk2::Gdk::Display) 
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=item * $winid (Gtk2::Gdk::NativeWindow) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 Gtk2::Gdk::Event-E<gt>B<send_clientmessage_toall> ($event)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=back
+
+=head2 integer = $event-E<gt>B<send_event> ($newvalue=0)
+
+=over
+
+=item * $newvalue (integer) 
+
+=back
+
+=head2 $modifiertype = $event->B<get_state>
+
+=head2 $modifiertype = $event->B<state>
+
+=over
+
+=back
+
+Get I<$event>'s state.  Croaks if that event type doesn't have a state.
+
+=head2 $event->B<set_state> ($newstate)
+
+=over
+
+=item * $newstate (Gtk2::Gdk::ModifierType) 
+
+=back
+
+
+
+=head2 $timestamp = $event->B<get_time>
+
+=head2 $timestamp = $event->B<time>
+
+=over
+
+=back
+
+Get I<$event>'s time.  If that event type doesn't have a time, or if
+I<$event> is undef, returns GDK_CURRENT_TIME, which is 0.
+
+=head2 $event->B<set_time> ($newtime)
+
+=over
+
+=item * $newtime (integer) timestamp
+
+=back
+
+
+
+=head2 eventtype = $event-E<gt>B<type> 
+
+=head2 window or undef = $event-E<gt>B<window> ($newvalue=undef)
+
+=over
+
+=item * $newvalue (Gtk2::Gdk::Window or undef) 
+
+=back
+
+=head2 integer = $event->B<x_root>
+
+
+
+=head2 integer = $event->B<y_root>
+
+
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::Gdk::AxisUse
+
+=over
+
+=item * 'ignore' / 'GDK_AXIS_IGNORE'
+
+=item * 'x' / 'GDK_AXIS_X'
+
+=item * 'y' / 'GDK_AXIS_Y'
+
+=item * 'pressure' / 'GDK_AXIS_PRESSURE'
+
+=item * 'xtilt' / 'GDK_AXIS_XTILT'
+
+=item * 'ytilt' / 'GDK_AXIS_YTILT'
+
+=item * 'wheel' / 'GDK_AXIS_WHEEL'
+
+=item * 'last' / 'GDK_AXIS_LAST'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::EventType
+
+
+
+=over
+
+=item * 'nothing' / 'GDK_NOTHING'
+
+=item * 'delete' / 'GDK_DELETE'
+
+=item * 'destroy' / 'GDK_DESTROY'
+
+=item * 'expose' / 'GDK_EXPOSE'
+
+=item * 'motion-notify' / 'GDK_MOTION_NOTIFY'
+
+=item * 'button-press' / 'GDK_BUTTON_PRESS'
+
+=item * '2button-press' / 'GDK_2BUTTON_PRESS'
+
+=item * '3button-press' / 'GDK_3BUTTON_PRESS'
+
+=item * 'button-release' / 'GDK_BUTTON_RELEASE'
+
+=item * 'key-press' / 'GDK_KEY_PRESS'
+
+=item * 'key-release' / 'GDK_KEY_RELEASE'
+
+=item * 'enter-notify' / 'GDK_ENTER_NOTIFY'
+
+=item * 'leave-notify' / 'GDK_LEAVE_NOTIFY'
+
+=item * 'focus-change' / 'GDK_FOCUS_CHANGE'
+
+=item * 'configure' / 'GDK_CONFIGURE'
+
+=item * 'map' / 'GDK_MAP'
+
+=item * 'unmap' / 'GDK_UNMAP'
+
+=item * 'property-notify' / 'GDK_PROPERTY_NOTIFY'
+
+=item * 'selection-clear' / 'GDK_SELECTION_CLEAR'
+
+=item * 'selection-request' / 'GDK_SELECTION_REQUEST'
+
+=item * 'selection-notify' / 'GDK_SELECTION_NOTIFY'
+
+=item * 'proximity-in' / 'GDK_PROXIMITY_IN'
+
+=item * 'proximity-out' / 'GDK_PROXIMITY_OUT'
+
+=item * 'drag-enter' / 'GDK_DRAG_ENTER'
+
+=item * 'drag-leave' / 'GDK_DRAG_LEAVE'
+
+=item * 'drag-motion' / 'GDK_DRAG_MOTION'
+
+=item * 'drag-status' / 'GDK_DRAG_STATUS'
+
+=item * 'drop-start' / 'GDK_DROP_START'
+
+=item * 'drop-finished' / 'GDK_DROP_FINISHED'
+
+=item * 'client-event' / 'GDK_CLIENT_EVENT'
+
+=item * 'visibility-notify' / 'GDK_VISIBILITY_NOTIFY'
+
+=item * 'no-expose' / 'GDK_NO_EXPOSE'
+
+=item * 'scroll' / 'GDK_SCROLL'
+
+=item * 'window-state' / 'GDK_WINDOW_STATE'
+
+=item * 'setting' / 'GDK_SETTING'
+
+=item * 'owner-change' / 'GDK_OWNER_CHANGE'
+
+=item * 'grab-broken' / 'GDK_GRAB_BROKEN'
+
+=item * 'damage' / 'GDK_DAMAGE'
+
+=item * 'event-last' / 'GDK_EVENT_LAST'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Boxed>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

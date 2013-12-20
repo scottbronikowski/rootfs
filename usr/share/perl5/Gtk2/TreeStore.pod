@@ -1,0 +1,260 @@
+=head1 NAME
+
+Gtk2::TreeStore - wrapper for GtkTreeStore
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::TreeStore
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Gtk2::TreeModel
+  Gtk2::TreeDragSource
+  Gtk2::TreeDragDest
+  Gtk2::TreeSortable
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 treestore = Gtk2::TreeStore-E<gt>B<new> (...)
+
+=over
+
+=item * ... (list) of strings, package names 
+
+=back
+
+
+
+=head2 treeiter = $tree_store-E<gt>B<append> ($parent)
+
+=over
+
+=item * $parent (Gtk2::TreeIter or undef) 
+
+=back
+
+=head2 $tree_store-E<gt>B<clear> 
+
+=head2 $tree_store-E<gt>B<set_column_types> (...)
+
+=over
+
+=item * ... (list) of strings, package names
+
+=back
+
+
+
+=head2 $tree_store-E<gt>B<set> ($iter, $col1, $val1, ...)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=item * $col1 (integer) the first column number
+
+=item * $val1 (scalar) the first value
+
+=item * ... (list) pairs of columns and values
+
+=back
+
+
+
+=head2 treeiter = $tree_store-E<gt>B<insert> ($parent, $position)
+
+=over
+
+=item * $parent (Gtk2::TreeIter or undef) 
+
+=item * $position (integer) 
+
+=back
+
+=head2 treeiter = $tree_store-E<gt>B<insert_after> ($parent, $sibling)
+
+=over
+
+=item * $parent (Gtk2::TreeIter or undef) 
+
+=item * $sibling (Gtk2::TreeIter or undef) 
+
+=back
+
+=head2 treeiter = $tree_store-E<gt>B<insert_before> ($parent, $sibling)
+
+=over
+
+=item * $parent (Gtk2::TreeIter or undef) 
+
+=item * $sibling (Gtk2::TreeIter or undef) 
+
+=back
+
+=head2 treeiter = $tree_store-E<gt>B<insert_with_values> ($parent, $position, ...)
+
+=over
+
+=item * $parent (Gtk2::TreeIter or undef) 
+
+=item * $position (integer) position to insert the new row
+
+=item * ... (list) pairs of column numbers and values
+
+=back
+
+Like doing insert followed by set, except that insert_with_values emits only
+the row-inserted signal, rather than row-inserted, row-changed, and, if the
+store is sorted, rows-reordered as in the multiple-operation case.
+Since emitting the rows-reordered signal repeatedly can affect the performance
+of the program, insert_with_values should generally be preferred when
+inserting rows in a sorted tree store.
+
+Since: gtk+ 2.10
+
+=head2 boolean = $tree_store-E<gt>B<is_ancestor> ($iter, $descendant)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=item * $descendant (Gtk2::TreeIter) 
+
+=back
+
+=head2 integer = $tree_store-E<gt>B<iter_depth> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+=head2 boolean = $tree_store-E<gt>B<iter_is_valid> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $tree_store-E<gt>B<move_after> ($iter, $position)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=item * $position (Gtk2::TreeIter or undef) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $tree_store-E<gt>B<move_before> ($iter, $position)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=item * $position (Gtk2::TreeIter or undef) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 treeiter = $tree_store-E<gt>B<prepend> ($parent)
+
+=over
+
+=item * $parent (Gtk2::TreeIter or undef) 
+
+=back
+
+=head2 boolean = $tree_store-E<gt>B<remove> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+=head2 $tree_store-E<gt>B<reorder> ($parent, ...)
+
+=over
+
+=item * $parent (Gtk2::TreeIter or undef) 
+
+=item * ... (list) of integer's, the new_order
+
+=back
+
+
+
+Since: gtk+ 2.2
+
+=head2 $tree_store-E<gt>B<swap> ($a, $b)
+
+=over
+
+=item * $a (Gtk2::TreeIter) 
+
+=item * $b (Gtk2::TreeIter) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $tree_store-E<gt>B<set_value> ($iter, $col1, $val1, ...)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=item * $col1 (integer) the first column number
+
+=item * $val1 (scalar) the first value
+
+=item * ... (list) pairs of columns and values
+
+=back
+
+Alias for Gtk2::TreeStore::set().
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

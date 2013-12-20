@@ -1,0 +1,1143 @@
+=head1 NAME
+
+Gtk2::Window - wrapper for GtkWindow
+
+=cut
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+A Gtk2::Window is a top-level window displayed on the root window and
+interacting (or not) with the window manager.  It can be an
+application's main window, a dialog, or a temporary such as a popup
+splash window.
+
+=head2 Delete Event and Destroy
+
+The default action for a C<delete-event> (normally from the window
+manager close button) is to destroy the window with
+C<< $window->destroy >>.  In your main window you might want to exit
+the main loop when that happens.
+
+    $toplevel->signal_connect (destroy => sub { Gtk2->main_quit });
+
+If you install a handler for C<delete-event> and return true, meaning
+"don't propagate", you can do something other than destroy the window.
+For example
+
+    $toplevel->signal_connect (delete_event => sub {
+       if (any_unsaved_documents()) {
+         popup_ask_save_before_exit_dialog();
+         return Gtk2::EVENT_STOP;  # don't go to default destroy
+       } else {
+         return Gtk2::EVENT_PROPAGATE;
+       }
+    });
+
+In a dialog or secondary app window you might not want to destroy but
+instead just hide ready for later re-use.
+
+    $dialog->signal_connect
+      (delete_event => \&Gtk2::Widget::hide_on_delete);
+
+The choice between destroying or hiding is normally just a matter of
+memory saved against the time to re-create, and how likely the dialog
+might be needed again.  (However if you build windows with Glade it's
+not particularly easy to re-create them there, so you'll mostly want
+to just hide in that case.)
+
+A hidden toplevel window is still in
+C<< Gtk2::Window->list_toplevels >> and that's a good place to search
+for an existing window of a desired type to C<< $window->present >>
+again.
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Bin
+                           +----Gtk2::Window
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::Window-E<gt>B<new> ($type=GTK_WINDOW_TOPLEVEL)
+
+=over
+
+=item * $type (Gtk2::WindowType) 
+
+=back
+
+=head2 boolean = $window-E<gt>B<get_accept_focus> 
+
+Since: gtk+ 2.4
+
+=head2 $window-E<gt>B<set_accept_focus> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 boolean = $window-E<gt>B<activate_default> 
+
+=head2 boolean = $window-E<gt>B<activate_focus> 
+
+=head2 boolean = $window-E<gt>B<activate_key> ($event)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event::Key) 
+
+=back
+
+
+
+Since: gtk+ 2.4
+
+=head2 $window-E<gt>B<add_accel_group> ($accel_group)
+
+=over
+
+=item * $accel_group (Gtk2::AccelGroup) 
+
+=back
+
+=head2 $window-E<gt>B<add_embedded_xid> ($xid)
+
+=over
+
+=item * $xid (integer) 
+
+=back
+
+=head2 $window-E<gt>B<add_mnemonic> ($keyval, $target)
+
+=over
+
+=item * $keyval (integer) 
+
+=item * $target (Gtk2::Widget) 
+
+=back
+
+=head2 Gtk2::Window-E<gt>B<set_auto_startup_notification> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $window-E<gt>B<begin_move_drag> ($button, $root_x, $root_y, $timestamp)
+
+=over
+
+=item * $button (integer) 
+
+=item * $root_x (integer) 
+
+=item * $root_y (integer) 
+
+=item * $timestamp (unsigned) 
+
+=back
+
+=head2 $window-E<gt>B<begin_resize_drag> ($edge, $button, $root_x, $root_y, $timestamp)
+
+=over
+
+=item * $edge (Gtk2::Gdk::WindowEdge) 
+
+=item * $button (integer) 
+
+=item * $root_x (integer) 
+
+=item * $root_y (integer) 
+
+=item * $timestamp (unsigned) 
+
+=back
+
+=head2 boolean = $window-E<gt>B<get_decorated> 
+
+=head2 $window-E<gt>B<set_decorated> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 Gtk2::Window->B<set_default_icon_from_file> ($filename)
+
+=head2 $window->B<set_default_icon_from_file> ($filename)
+
+=over
+
+=item * $filename (localized file name) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+Since: gtk+ 2.2
+
+=head2 list = Gtk2::Window-E<gt>B<get_default_icon_list> 
+
+Gets the value set by L<$window-E<gt>set_default_icon_list>.
+
+=head2 $window->B<set_default_icon_list> ($pixbuf1, ...)
+
+=over
+
+=item * ... (list) 
+
+=item * $pixbuf1 (Gtk2::Gdk::Pixbuf) 
+
+=back
+
+
+
+=head2 Gtk2::Window-E<gt>B<set_default_icon_name> ($name)
+
+=over
+
+=item * $name (string) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 Gtk2::Window-E<gt>B<set_default_icon> ($icon)
+
+=over
+
+=item * $icon (Gtk2::Gdk::Pixbuf) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 $window-E<gt>B<set_default> ($default_widget)
+
+=over
+
+=item * $default_widget (Gtk2::Widget or undef) 
+
+=back
+
+=head2 (width, height) = $window-E<gt>B<get_default_size> 
+
+=head2 $window-E<gt>B<set_default_size> ($width, $height)
+
+=over
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 widget or undef = $window-E<gt>B<get_default_widget> 
+
+Since: gtk+ 2.14
+
+=head2 $window-E<gt>B<deiconify> 
+
+=head2 boolean = $window-E<gt>B<get_deletable> 
+
+Since: gtk+ 2.10
+
+=head2 $window-E<gt>B<set_deletable> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 boolean = $window-E<gt>B<get_destroy_with_parent> 
+
+=head2 $window-E<gt>B<set_destroy_with_parent> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 widget or undef = $window-E<gt>B<get_focus> 
+
+=head2 boolean = $window-E<gt>B<get_focus_on_map> 
+
+Since: gtk+ 2.6
+
+=head2 $window-E<gt>B<set_focus_on_map> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 $window-E<gt>B<set_focus> ($focus=undef)
+
+=over
+
+=item * $focus (Gtk2::Widget or undef) 
+
+=back
+
+=head2 (left, top, right, bottom) = $window-E<gt>B<get_frame_dimensions> 
+
+=head2 $window-E<gt>B<set_frame_dimensions> ($left, $top, $right, $bottom)
+
+=over
+
+=item * $left (integer) 
+
+=item * $top (integer) 
+
+=item * $right (integer) 
+
+=item * $bottom (integer) 
+
+=back
+
+=head2 $window-E<gt>B<fullscreen> 
+
+Since: gtk+ 2.2
+
+=head2 $window->B<set_geometry_hints> ($geometry_widget, $geometry)
+
+=head2 $window->B<set_geometry_hints> ($geometry_widget, $geometry, $geom_mask)
+
+=over
+
+=item * $geometry_widget (Gtk2::Widget) 
+
+=item * $geometry_ref (scalar) 
+
+=item * $geom_mask_sv (scalar) 
+
+=item * $geom_mask (Gtk2::Gdk::WindowHints) optional, usually inferred from I<$geometry>
+
+=item * $geometry (Gtk2::Gdk::Geometry) 
+
+=back
+
+
+
+
+The geom_mask argument, describing which fields in the geometry are valid, is
+optional.  If omitted it will be inferred from the geometry itself.
+
+
+=head2 gravity = $window-E<gt>B<get_gravity> 
+
+=head2 $window-E<gt>B<set_gravity> ($gravity)
+
+=over
+
+=item * $gravity (Gtk2::Gdk::Gravity) 
+
+=back
+
+=head2 windowgroup or undef = $window-E<gt>B<get_group> 
+
+Since: gtk+ 2.10
+
+=head2 boolean = $window-E<gt>B<get_has_frame> 
+
+=head2 $window-E<gt>B<set_has_frame> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 boolean = $window-E<gt>B<has_toplevel_focus> 
+
+Since: gtk+ 2.4
+
+=head2 $window-E<gt>B<set_icon_from_file> ($filename)
+
+=over
+
+=item * $filename (localized file name) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+Since: gtk+ 2.2
+
+=head2 pixbuf or undef = $window-E<gt>B<get_icon> 
+
+=head2 list = $window-E<gt>B<get_icon_list> 
+
+Retrieves the list of icons set by L<set_icon_list()|/"$window-E<gt>B<set_icon_list> (...)">.
+
+=head2 $window-E<gt>B<set_icon_list> (...)
+
+=over
+
+=item * ... (list) of Gtk2::Gdk::Pixbuf's
+
+=back
+
+Sets up the icon representing a Gtk2::Window. The icon is used when the window
+is minimized (also known as iconified). Some window managers or desktop
+environments may also place it in the window frame, or display it in other
+contexts.
+
+L<set_icon_list ()|/"$window-E<gt>B<set_icon_list> (...)"> allows you to pass
+in the same icon in several hand-drawn sizes. The list should contain the
+natural sizes your icon is available in; that is, don't scale the image before
+passing it to GTK+.  Scaling is postponed until the last minute, when the
+desired final size is known, to allow best quality.
+
+By passing several sizes, you may improve the final image quality of the icon,
+by reducing or eliminating automatic image scaling.
+
+Recommended sizes to provide: 16x16, 32x32, 48x48 at minimum, and larger
+images (64x64, 128x128) if you have them. 
+
+=head2 string or undef = $window-E<gt>B<get_icon_name> 
+
+Since: gtk+ 2.6
+
+=head2 $window-E<gt>B<set_icon_name> ($name)
+
+=over
+
+=item * $name (string) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 $window-E<gt>B<set_icon> ($icon)
+
+=over
+
+=item * $icon (Gtk2::Gdk::Pixbuf or undef) 
+
+=back
+
+=head2 $window-E<gt>B<iconify> 
+
+=head2 boolean = $window-E<gt>B<is_active> 
+
+Since: gtk+ 2.4
+
+=head2 $window-E<gt>B<set_keep_above> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 $window-E<gt>B<set_keep_below> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 list = Gtk2::Window-E<gt>B<list_toplevels> 
+
+Returns a list of all existing toplevel windows. 
+
+=head2 $window-E<gt>B<maximize> 
+
+=head2 boolean = $window-E<gt>B<mnemonic_activate> ($keyval, $modifier)
+
+=over
+
+=item * $keyval (integer) 
+
+=item * $modifier (Gtk2::Gdk::ModifierType) 
+
+=back
+
+=head2 modifiertype = $window-E<gt>B<get_mnemonic_modifier> 
+
+=head2 $window-E<gt>B<set_mnemonic_modifier> ($modifier)
+
+=over
+
+=item * $modifier (Gtk2::Gdk::ModifierType) 
+
+=back
+
+=head2 boolean = $window-E<gt>B<get_modal> 
+
+=head2 $window-E<gt>B<set_modal> ($modal)
+
+=over
+
+=item * $modal (boolean) 
+
+=back
+
+=head2 $window-E<gt>B<move> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+=head2 double = $window-E<gt>B<get_opacity> 
+
+Since: gtk+ 2.12
+
+=head2 $window-E<gt>B<set_opacity> ($opacity)
+
+=over
+
+=item * $opacity (double) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 boolean = $window-E<gt>B<parse_geometry> ($geometry)
+
+=over
+
+=item * $geometry (string) 
+
+=back
+
+=head2 (root_x, root_y) = $window-E<gt>B<get_position> 
+
+=head2 $window-E<gt>B<set_position> ($position)
+
+=over
+
+=item * $position (Gtk2::WindowPosition) 
+
+=back
+
+=head2 $window-E<gt>B<present> 
+
+=head2 $window-E<gt>B<present_with_time> ($timestamp)
+
+=over
+
+=item * $timestamp (unsigned) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 boolean = $window-E<gt>B<propagate_key_event> ($event)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event::Key) 
+
+=back
+
+
+
+Since: gtk+ 2.4
+
+=head2 $window-E<gt>B<remove_accel_group> ($accel_group)
+
+=over
+
+=item * $accel_group (Gtk2::AccelGroup) 
+
+=back
+
+=head2 $window-E<gt>B<remove_embedded_xid> ($xid)
+
+=over
+
+=item * $xid (integer) 
+
+=back
+
+=head2 $window-E<gt>B<remove_mnemonic> ($keyval, $target)
+
+=over
+
+=item * $keyval (integer) 
+
+=item * $target (Gtk2::Widget) 
+
+=back
+
+=head2 $window-E<gt>B<reshow_with_initial_size> 
+
+=head2 boolean = $window-E<gt>B<get_resizable> 
+
+=head2 $window-E<gt>B<set_resizable> ($resizable)
+
+=over
+
+=item * $resizable (boolean) 
+
+=back
+
+=head2 $window-E<gt>B<resize> ($width, $height)
+
+=over
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 string = $window-E<gt>B<get_role> 
+
+=head2 $window-E<gt>B<set_role> ($role)
+
+=over
+
+=item * $role (string) 
+
+=back
+
+=head2 screen = $window-E<gt>B<get_screen> 
+
+Since: gtk+ 2.2
+
+=head2 $window-E<gt>B<set_screen> ($screen)
+
+=over
+
+=item * $screen (Gtk2::Gdk::Screen) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 (width, height) = $window-E<gt>B<get_size> 
+
+=head2 boolean = $window-E<gt>B<get_skip_pager_hint> 
+
+Since: gtk+ 2.2
+
+=head2 $window-E<gt>B<set_skip_pager_hint> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 boolean = $window-E<gt>B<get_skip_taskbar_hint> 
+
+Since: gtk+ 2.2
+
+=head2 $window-E<gt>B<set_skip_taskbar_hint> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $window-E<gt>B<set_startup_id> ($startup_id)
+
+=over
+
+=item * $startup_id (string) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $window-E<gt>B<stick> 
+
+=head2 string = $window-E<gt>B<get_title> 
+
+=head2 $window-E<gt>B<set_title> ($title=undef)
+
+=over
+
+=item * $title (string or undef) 
+
+=back
+
+=head2 window or undef = $window-E<gt>B<get_transient_for> 
+
+=head2 $window-E<gt>B<set_transient_for> ($parent)
+
+=over
+
+=item * $parent (Gtk2::Window or undef) 
+
+=back
+
+=head2 windowtypehint = $window-E<gt>B<get_type_hint> 
+
+=head2 $window-E<gt>B<set_type_hint> ($hint)
+
+=over
+
+=item * $hint (Gtk2::Gdk::WindowTypeHint) 
+
+=back
+
+=head2 $window-E<gt>B<unfullscreen> 
+
+Since: gtk+ 2.2
+
+=head2 $window-E<gt>B<unmaximize> 
+
+=head2 $window-E<gt>B<unstick> 
+
+=head2 boolean = $window-E<gt>B<get_urgency_hint> 
+
+Since: gtk+ 2.8
+
+=head2 $window-E<gt>B<set_urgency_hint> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 $window-E<gt>B<set_wmclass> ($wmclass_name, $wmclass_class)
+
+=over
+
+=item * $wmclass_name (string) 
+
+=item * $wmclass_class (string) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'accept-focus' (boolean : default true : readable / writable / private)
+
+TRUE if the window should receive the input focus.
+
+=item 'allow-grow' (boolean : default true : readable / writable / private)
+
+If TRUE, users can expand the window beyond its minimum size
+
+=item 'allow-shrink' (boolean : default false : readable / writable / private)
+
+If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea
+
+=item 'decorated' (boolean : default true : readable / writable / private)
+
+Whether the window should be decorated by the window manager
+
+=item 'default-height' (integer : default -1 : readable / writable / private)
+
+The default height of the window, used when initially showing the window
+
+=item 'default-width' (integer : default -1 : readable / writable / private)
+
+The default width of the window, used when initially showing the window
+
+=item 'deletable' (boolean : default true : readable / writable / private)
+
+Whether the window frame should have a close button
+
+=item 'destroy-with-parent' (boolean : default false : readable / writable / private)
+
+If this window should be destroyed when the parent is destroyed
+
+=item 'focus-on-map' (boolean : default true : readable / writable / private)
+
+TRUE if the window should receive the input focus when mapped.
+
+=item 'gravity' (Gtk2::Gdk::Gravity : default "north-west" : readable / writable / private)
+
+The window gravity of the window
+
+=item 'has-resize-grip' (boolean : default true : readable / writable / private)
+
+Specifies whether the window should have a resize grip
+
+=item 'has-toplevel-focus' (boolean : default false : readable / private)
+
+Whether the input focus is within this GtkWindow
+
+=item 'icon' (Gtk2::Gdk::Pixbuf : default undef : readable / writable / private)
+
+Icon for this window
+
+=item 'icon-name' (string : default undef : readable / writable / private)
+
+Name of the themed icon for this window
+
+=item 'is-active' (boolean : default false : readable / private)
+
+Whether the toplevel is the current active window
+
+=item 'mnemonics-visible' (boolean : default true : readable / writable / private)
+
+Whether mnemonics are currently visible in this window
+
+=item 'modal' (boolean : default false : readable / writable / private)
+
+If TRUE, the window is modal (other windows are not usable while this one is up)
+
+=item 'opacity' (double : default 1 : readable / writable / private)
+
+The opacity of the window, from 0 to 1
+
+=item 'resizable' (boolean : default true : readable / writable / private)
+
+If TRUE, users can resize the window
+
+=item 'resize-grip-visible' (boolean : default false : readable / private)
+
+Specifies whether the window's resize grip is visible.
+
+=item 'role' (string : default undef : readable / writable / private)
+
+Unique identifier for the window to be used when restoring a session
+
+=item 'screen' (Gtk2::Gdk::Screen : default undef : readable / writable / private)
+
+The screen where this window will be displayed
+
+=item 'skip-pager-hint' (boolean : default false : readable / writable / private)
+
+TRUE if the window should not be in the pager.
+
+=item 'skip-taskbar-hint' (boolean : default false : readable / writable / private)
+
+TRUE if the window should not be in the task bar.
+
+=item 'startup-id' (string : default undef : writable / private)
+
+Unique startup identifier for the window used by startup-notification
+
+=item 'title' (string : default undef : readable / writable / private)
+
+The title of the window
+
+=item 'transient-for' (Gtk2::Window : default undef : readable / writable / construct / private)
+
+The transient parent of the dialog
+
+=item 'type' (Gtk2::WindowType : default "toplevel" : readable / writable / construct-only / private)
+
+The type of the window
+
+=item 'type-hint' (Gtk2::Gdk::WindowTypeHint : default "normal" : readable / writable / private)
+
+Hint to help the desktop environment understand what kind of window this is and how to treat it.
+
+=item 'ubuntu-no-proxy' (boolean : default false : readable / writable / private)
+
+Disable menu proxies for this window
+
+=item 'urgency-hint' (boolean : default false : readable / writable / private)
+
+TRUE if the window should be brought to the user's attention.
+
+=item 'window-position' (Gtk2::WindowPosition : default "none" : readable / writable / private)
+
+The initial position of the window
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<keys-changed> (Gtk2::Window)
+
+=item B<set-focus> (Gtk2::Window, Gtk2::Widget)
+
+=item boolean = B<frame-event> (Gtk2::Window, Gtk2::Gdk::Event)
+
+=item B<activate-focus> (Gtk2::Window)
+
+=item B<activate-default> (Gtk2::Window)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::Gdk::Gravity
+
+=over
+
+=item * 'north-west' / 'GDK_GRAVITY_NORTH_WEST'
+
+=item * 'north' / 'GDK_GRAVITY_NORTH'
+
+=item * 'north-east' / 'GDK_GRAVITY_NORTH_EAST'
+
+=item * 'west' / 'GDK_GRAVITY_WEST'
+
+=item * 'center' / 'GDK_GRAVITY_CENTER'
+
+=item * 'east' / 'GDK_GRAVITY_EAST'
+
+=item * 'south-west' / 'GDK_GRAVITY_SOUTH_WEST'
+
+=item * 'south' / 'GDK_GRAVITY_SOUTH'
+
+=item * 'south-east' / 'GDK_GRAVITY_SOUTH_EAST'
+
+=item * 'static' / 'GDK_GRAVITY_STATIC'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::WindowEdge
+
+=over
+
+=item * 'north-west' / 'GDK_WINDOW_EDGE_NORTH_WEST'
+
+=item * 'north' / 'GDK_WINDOW_EDGE_NORTH'
+
+=item * 'north-east' / 'GDK_WINDOW_EDGE_NORTH_EAST'
+
+=item * 'west' / 'GDK_WINDOW_EDGE_WEST'
+
+=item * 'east' / 'GDK_WINDOW_EDGE_EAST'
+
+=item * 'south-west' / 'GDK_WINDOW_EDGE_SOUTH_WEST'
+
+=item * 'south' / 'GDK_WINDOW_EDGE_SOUTH'
+
+=item * 'south-east' / 'GDK_WINDOW_EDGE_SOUTH_EAST'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::WindowHints
+
+=over
+
+=item * 'pos' / 'GDK_HINT_POS'
+
+=item * 'min-size' / 'GDK_HINT_MIN_SIZE'
+
+=item * 'max-size' / 'GDK_HINT_MAX_SIZE'
+
+=item * 'base-size' / 'GDK_HINT_BASE_SIZE'
+
+=item * 'aspect' / 'GDK_HINT_ASPECT'
+
+=item * 'resize-inc' / 'GDK_HINT_RESIZE_INC'
+
+=item * 'win-gravity' / 'GDK_HINT_WIN_GRAVITY'
+
+=item * 'user-pos' / 'GDK_HINT_USER_POS'
+
+=item * 'user-size' / 'GDK_HINT_USER_SIZE'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::WindowTypeHint
+
+=over
+
+=item * 'normal' / 'GDK_WINDOW_TYPE_HINT_NORMAL'
+
+=item * 'dialog' / 'GDK_WINDOW_TYPE_HINT_DIALOG'
+
+=item * 'menu' / 'GDK_WINDOW_TYPE_HINT_MENU'
+
+=item * 'toolbar' / 'GDK_WINDOW_TYPE_HINT_TOOLBAR'
+
+=item * 'splashscreen' / 'GDK_WINDOW_TYPE_HINT_SPLASHSCREEN'
+
+=item * 'utility' / 'GDK_WINDOW_TYPE_HINT_UTILITY'
+
+=item * 'dock' / 'GDK_WINDOW_TYPE_HINT_DOCK'
+
+=item * 'desktop' / 'GDK_WINDOW_TYPE_HINT_DESKTOP'
+
+=item * 'dropdown-menu' / 'GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU'
+
+=item * 'popup-menu' / 'GDK_WINDOW_TYPE_HINT_POPUP_MENU'
+
+=item * 'tooltip' / 'GDK_WINDOW_TYPE_HINT_TOOLTIP'
+
+=item * 'notification' / 'GDK_WINDOW_TYPE_HINT_NOTIFICATION'
+
+=item * 'combo' / 'GDK_WINDOW_TYPE_HINT_COMBO'
+
+=item * 'dnd' / 'GDK_WINDOW_TYPE_HINT_DND'
+
+=back
+
+
+=head2 enum Gtk2::WindowPosition
+
+
+
+=over
+
+=item * 'none' / 'GTK_WIN_POS_NONE'
+
+=item * 'center' / 'GTK_WIN_POS_CENTER'
+
+=item * 'mouse' / 'GTK_WIN_POS_MOUSE'
+
+=item * 'center-always' / 'GTK_WIN_POS_CENTER_ALWAYS'
+
+=item * 'center-on-parent' / 'GTK_WIN_POS_CENTER_ON_PARENT'
+
+=back
+
+
+=head2 enum Gtk2::WindowType
+
+
+
+=over
+
+=item * 'toplevel' / 'GTK_WINDOW_TOPLEVEL'
+
+=item * 'popup' / 'GTK_WINDOW_POPUP'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>, L<Gtk2::Bin>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,236 @@
+=head1 NAME
+
+Gtk2::AccelGroup - wrapper for GtkAccelGroup
+
+=cut
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  my $win = Gtk2::Window->new;
+  my $accel = Gtk2::AccelGroup->new;
+  $accel->connect (42, ['control-mask'], ['visible'], 
+                   sub { # do something });
+  $win->add_accel_group ($accel);
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::AccelGroup
+
+
+
+=cut
+
+=for object Gtk2::AccelGroup
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 accelgroup = Gtk2::AccelGroup-E<gt>B<new> 
+
+=head2 boolean = Gtk2::AccelGroups-E<gt>B<activate> ($object, $accel_key, $accel_mods)
+
+=over
+
+=item * $object (Glib::Object) 
+
+=item * $accel_key (integer) 
+
+=item * $accel_mods (Gtk2::Gdk::ModifierType) 
+
+=back
+
+=head2 $accel_group-E<gt>B<connect> ($accel_key, $accel_mods, $accel_flags, $func)
+
+=over
+
+=item * $accel_key (integer) 
+
+=item * $accel_mods (Gtk2::Gdk::ModifierType) 
+
+=item * $accel_flags (Gtk2::AccelFlags) 
+
+=item * $func (scalar) 
+
+=back
+
+=head2 $accel_group-E<gt>B<connect_by_path> ($accel_path, $func)
+
+=over
+
+=item * $accel_path (string) 
+
+=item * $func (scalar) 
+
+=back
+
+=head2 boolean = $accel_group-E<gt>B<disconnect> ($func)
+
+=over
+
+=item * $func (scalar) 
+
+=back
+
+=head2 boolean = $accel_group-E<gt>B<disconnect_key> ($accel_key, $accel_mods)
+
+=over
+
+=item * $accel_key (integer) 
+
+=item * $accel_mods (Gtk2::Gdk::ModifierType) 
+
+=back
+
+=head2 list = Gtk2::AccelGroups-E<gt>B<from_object> ($object)
+
+=over
+
+=item * $object (Glib::Object) 
+
+=back
+
+Returns a list of Gtk2::AccelGroup's.
+
+=head2 boolean = $accel_group-E<gt>B<get_is_locked> 
+
+Since: gtk+ 2.14
+
+=head2 $accel_group-E<gt>B<lock> 
+
+=head2 modifiertype = $accel_group-E<gt>B<get_modifier_mask> 
+
+Since: gtk+ 2.14
+
+=head2 $accel_group-E<gt>B<unlock> 
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'is-locked' (boolean : default false : readable)
+
+Is the accel group locked
+
+=item 'modifier-mask' (Gtk2::Gdk::ModifierType : default shift-mask,control-mask,mod1-mask,super-mask,hyper-mask,meta-mask : readable)
+
+Modifier Mask
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item boolean = B<accel-activate> (Gtk2::AccelGroup, Glib::Object, Glib::UInt, Gtk2::Gdk::ModifierType)
+
+=item B<accel-changed> (Gtk2::AccelGroup, Glib::UInt, Gtk2::Gdk::ModifierType, GClosure)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::AccelFlags
+
+=over
+
+=item * 'visible' / 'GTK_ACCEL_VISIBLE'
+
+=item * 'locked' / 'GTK_ACCEL_LOCKED'
+
+=item * 'mask' / 'GTK_ACCEL_MASK'
+
+=back
+
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

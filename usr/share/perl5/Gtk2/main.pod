@@ -1,0 +1,289 @@
+=head1 NAME
+
+Gtk2::main
+
+=cut
+
+=for object Gtk2::main
+=cut
+
+=for object Gtk2::main
+=cut
+
+=for object Gtk2::main
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 boolean = Gtk2-E<gt>B<alternative_dialog_button_order> ($screen=undef)
+
+=over
+
+=item * $screen (Gtk2::Gdk::Screen or undef) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 event or undef = Gtk2-E<gt>B<get_current_event> 
+
+=head2 modifiertype = Gtk2-E<gt>B<get_current_event_state> 
+
+=head2 unsigned = Gtk2-E<gt>B<get_current_event_time> 
+
+=head2 language = Gtk2-E<gt>B<get_default_language> 
+
+=head2 Gtk2-E<gt>B<disable_setlocale> 
+
+=head2 widget or undef = Gtk2-E<gt>B<get_event_widget> ($event)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event or undef) 
+
+=back
+
+=head2 integer = Gtk2-E<gt>B<events_pending> 
+
+=head2 Gtk2-E<gt>B<grab_add> ($widget)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=back
+
+=head2 widget or undef = Gtk2-E<gt>B<grab_get_current> 
+
+=head2 Gtk2-E<gt>B<grab_remove> ($widget)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=back
+
+=head2 boolean = Gtk2-E<gt>B<init> 
+
+Initialize Gtk+.  This must be called before any other Gtk2 functions in a 
+GUI application; the Gtk2 module's import method allows you to pass C<-init>
+in the C<use> statement to do this automatically.  This function also scans
+I<@ARGV> for any options it knows, and will remove them automagically.
+
+Note: this function will terminate your program if it is unable to initialize
+the gui for any reason.  If you want your program to fall back to some other
+interface, you want to use C<< Gtk2->init_check >> instead.
+
+=head2 Gtk2-E<gt>B<init_add> ($function, $data=undef)
+
+=over
+
+=item * $function (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+=head2 boolean = Gtk2-E<gt>B<init_check> 
+
+This is the non-fatal version of C<< Gtk2->init >>; instead of calling C<exit>
+if Gtk+ initialization fails, C<< Gtk2->init_check >> returns false.  This
+allows your application to fall back on some other means of communication with
+the user - for example a curses or command-line interface.
+
+=head2 integer = Gtk2-E<gt>B<key_snooper_install> ($snooper, $func_data=undef)
+
+=over
+
+=item * $snooper (subroutine) function to call on every event
+
+=item * $func_data (scalar) 
+
+=back
+
+Install a key "snooper" function which will get called on all key
+events before those events are delivered normally.  These snoopers can
+be used to implement custom key event handling.
+
+C<key_snooper_install> returns an id that may be used with
+C<key_snooper_remove> (below).  I<snooper> is called as
+
+    stopbool = &snooper ($widget, $event, $func_data);
+
+It should return true to stop event propagation, the same as
+C<Gtk2::Widget> event signal handlers.  The C<Gtk2::EVENT_STOP> and
+C<Gtk2::EVENT_PROPAGATE> constants can be used for the return (see
+L<Gtk2::Widget>).
+
+=head2 Gtk2-E<gt>B<key_snooper_remove> ($snooper_handler_id)
+
+=over
+
+=item * $snooper_handler_id (integer) 
+
+=back
+
+=head2 string = Gtk2-E<gt>B<set_locale> 
+
+=head2 Gtk2-E<gt>B<main> 
+
+=head2 Gtk2-E<gt>B<main_do_event> ($event)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=back
+
+This is the event handler that GTK+ registers with GDK.  GTK+ exposes it to
+allow filtering of events between GDK and GTK+; it is rare that you would
+need this, except if you are using C<Gtk2::Gdk::Event::handler_set>.
+
+=head2 boolean = Gtk2-E<gt>B<main_iteration> 
+
+=head2 boolean = Gtk2-E<gt>B<main_iteration_do> ($blocking)
+
+=over
+
+=item * $blocking (boolean) 
+
+=back
+
+=head2 integer = Gtk2-E<gt>B<main_level> 
+
+=head2 Gtk2-E<gt>B<main_quit> 
+
+=head2 optiongroup = Gtk2-E<gt>B<get_option_group> ($open_default_display)
+
+=over
+
+=item * $open_default_display (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 boolean = Gtk2-E<gt>B<parse_args> 
+
+Since: gtk+ 2.4
+
+=head2 integer = Gtk2-E<gt>B<quit_add> ($main_level, $function, $data=undef)
+
+=over
+
+=item * $main_level (integer) 
+
+=item * $function (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+=head2 Gtk2-E<gt>B<quit_add_destroy> ($main_level, $object)
+
+=over
+
+=item * $main_level (integer) 
+
+=item * $object (Gtk2::Object) 
+
+=back
+
+=head2 Gtk2-E<gt>B<quit_remove> ($quit_handler_id)
+
+=over
+
+=item * $quit_handler_id (integer) 
+
+=back
+
+=head2 Gtk2::show_uri ($screen, $uri, $timestamp=GDK_CURRENT_TIME)
+
+=over
+
+=item * $screen (Gtk2::Gdk::Screen or undef) 
+
+=item * $uri (string) 
+
+=item * $timestamp (unsigned) 
+
+=back
+
+
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

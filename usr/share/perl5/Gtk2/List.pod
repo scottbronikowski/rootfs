@@ -1,0 +1,323 @@
+=head1 NAME
+
+Gtk2::List - wrapper for GtkList
+
+=cut
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+Gtk2::List is deprecated; use Gtk2::TreeView and a Gtk2::ListStore instead.
+
+Gtk2::List is included in Gtk2-Perl only because Gtk2::Combo still makes
+use of it, and Gtk2::Combo's replacement, Gtk2::ComboBox, didn't appear in
+gtk+ until 2.4.0.
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::List
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::List-E<gt>B<new> 
+
+=head2 $list-E<gt>B<append_items> (...)
+
+=over
+
+=item * ... (list) of Gtk2::ListItem's to be appended
+
+=back
+
+
+
+=head2 integer = $list-E<gt>B<child_position> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 $list-E<gt>B<clear_items> ($start, $end)
+
+=over
+
+=item * $start (integer) 
+
+=item * $end (integer) 
+
+=back
+
+=head2 $list-E<gt>B<end_drag_selection> 
+
+=head2 $list-E<gt>B<end_selection> 
+
+=head2 $list-E<gt>B<extend_selection> ($scroll_type, $position, $auto_start_selection)
+
+=over
+
+=item * $scroll_type (Gtk2::ScrollType) 
+
+=item * $position (double) 
+
+=item * $auto_start_selection (boolean) 
+
+=back
+
+=head2 $list-E<gt>B<insert_items> ($position, ...)
+
+=over
+
+=item * $position (integer) 
+
+=item * ... (list) of Gtk2::ListItem's to be inserted
+
+=back
+
+
+
+=head2 $list-E<gt>B<prepend_items> (..., $list_item)
+
+=over
+
+=item * ... (list) of Gtk2::ListItem's to be prepended
+
+=item * $list_item (Gtk2::ListItem) 
+
+=back
+
+
+
+=head2 $list-E<gt>B<remove_items> (..., $list_item)
+
+=over
+
+=item * ... (list) of Gtk2::ListItem's to be removed
+
+=item * $list_item (Gtk2::ListItem) 
+
+=back
+
+
+
+=head2 $list-E<gt>B<scroll_horizontal> ($scroll_type, $position)
+
+=over
+
+=item * $scroll_type (Gtk2::ScrollType) 
+
+=item * $position (double) 
+
+=back
+
+=head2 $list-E<gt>B<scroll_vertical> ($scroll_type, $position)
+
+=over
+
+=item * $scroll_type (Gtk2::ScrollType) 
+
+=item * $position (double) 
+
+=back
+
+=head2 $list-E<gt>B<select_all> 
+
+=head2 $list-E<gt>B<select_child> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 $list-E<gt>B<select_item> ($item)
+
+=over
+
+=item * $item (integer) 
+
+=back
+
+=head2 $list-E<gt>B<set_selection_mode> ($mode)
+
+=over
+
+=item * $mode (Gtk2::SelectionMode) 
+
+=back
+
+=head2 $list-E<gt>B<start_selection> 
+
+=head2 $list-E<gt>B<toggle_add_mode> 
+
+=head2 $list-E<gt>B<toggle_focus_row> 
+
+=head2 $list-E<gt>B<toggle_row> ($item)
+
+=over
+
+=item * $item (Gtk2::Widget) 
+
+=back
+
+=head2 $list-E<gt>B<undo_selection> 
+
+=head2 $list-E<gt>B<unselect_all> 
+
+=head2 $list-E<gt>B<unselect_child> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 $list-E<gt>B<unselect_item> ($item)
+
+=over
+
+=item * $item (integer) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'selection-mode' (Gtk2::SelectionMode : default "none" : readable / writable / private)
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<selection-changed> (Gtk2::List)
+
+=item B<select-child> (Gtk2::List, Gtk2::Widget)
+
+=item B<unselect-child> (Gtk2::List, Gtk2::Widget)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::ScrollType
+
+=over
+
+=item * 'none' / 'GTK_SCROLL_NONE'
+
+=item * 'jump' / 'GTK_SCROLL_JUMP'
+
+=item * 'step-backward' / 'GTK_SCROLL_STEP_BACKWARD'
+
+=item * 'step-forward' / 'GTK_SCROLL_STEP_FORWARD'
+
+=item * 'page-backward' / 'GTK_SCROLL_PAGE_BACKWARD'
+
+=item * 'page-forward' / 'GTK_SCROLL_PAGE_FORWARD'
+
+=item * 'step-up' / 'GTK_SCROLL_STEP_UP'
+
+=item * 'step-down' / 'GTK_SCROLL_STEP_DOWN'
+
+=item * 'page-up' / 'GTK_SCROLL_PAGE_UP'
+
+=item * 'page-down' / 'GTK_SCROLL_PAGE_DOWN'
+
+=item * 'step-left' / 'GTK_SCROLL_STEP_LEFT'
+
+=item * 'step-right' / 'GTK_SCROLL_STEP_RIGHT'
+
+=item * 'page-left' / 'GTK_SCROLL_PAGE_LEFT'
+
+=item * 'page-right' / 'GTK_SCROLL_PAGE_RIGHT'
+
+=item * 'start' / 'GTK_SCROLL_START'
+
+=item * 'end' / 'GTK_SCROLL_END'
+
+=back
+
+
+=head2 enum Gtk2::SelectionMode
+
+=over
+
+=item * 'none' / 'GTK_SELECTION_NONE'
+
+=item * 'single' / 'GTK_SELECTION_SINGLE'
+
+=item * 'browse' / 'GTK_SELECTION_BROWSE'
+
+=item * 'multiple' / 'GTK_SELECTION_MULTIPLE'
+
+=item * 'extended' / 'GTK_SELECTION_EXTENDED'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,289 @@
+#!/usr/bin/perl -w
+
+# hkpms transport -- HKP-over-TLS, authenticated by monkeysphere
+
+use strict;
+use warnings;
+
+
+
+# Author: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
+# Copyright: 2010
+# License: GPL v3+
+#          (you should have received a COPYING file with this distribution)
+
+
+
+
+{ package Crypt::Monkeysphere::MSVA::HKPMS;
+  use POSIX;
+  use Crypt::Monkeysphere::MSVA::Logger;
+  use Crypt::Monkeysphere::MSVA::Client;
+  use Regexp::Common qw /net/;
+  use Module::Load::Conditional;
+
+  sub parse_input {
+    my $self = shift;
+    my $input = shift;
+
+    my $inheaders = 1;
+    foreach my $line (split(/\n/, $input)) {
+      if ($inheaders) {
+        if ($line eq '') {
+          $inheaders = 0;
+        } else {
+          next if ($line =~ /^#/);
+          my @args = split(/ /, $line);
+          my $cmd = shift @args;
+          $self->{config}->{lc($cmd)} = join(' ', @args);
+          if (lc($cmd) eq 'option') {
+            my $opt = lc($args[0]);
+            if ($opt eq 'debug') {
+              $self->{logger}->set_log_level('debug');
+            } elsif ($opt eq 'verbose') {
+              $self->{logger}->more_verbose();
+            } elsif ($opt eq 'no-check-cert') {
+              $self->{logger}->log('error', "Received no-check-cert option.  Why are you bothering with hkpms if you aren't checking?\n");
+              $self->{actually_check} = 0;
+            } elsif ($opt eq 'check-cert') {
+              $self->{actually_check} = 1;
+            } elsif ($opt =~ /^http-proxy=(.*)/) {
+              my $hp = $1;
+              if ($hp =~ /^(socks|http|https):\/\/($RE{net}{domain}|$RE{net}{IPv4}):([[:digit:]]+)\/?$/) {
+                if ('socks' eq $1) {
+                  if ( ! Module::Load::Conditional::check_install(module => 'LWP::Protocol::socks')) {
+                    $self->{logger}->log('error', "Requesting a socks proxy for hkpms, but LWP::Protocol::socks is not installed.\nThis will likely fail.\n");
+                  }
+                }
+                $self->{proxy} = sprintf('%s://%s:%s', $1, $2, $3);
+              } else {
+                $self->{logger}->log('error', "Failed to make sense of this http-proxy address: '%s'; ignoring.\n", $hp);
+              }
+            } else {
+              $self->{logger}->log('error', "Received '%s' as an option, but gpgkeys_hkpms does not implement it. Ignoring...\n", $opt);
+            }
+            # FIXME: consider other keyserver-options from gpg(1).
+            # in particular, the following might be interesting:
+            # timeout
+            # include-revoked
+            # include-disabled
+            # ca-cert-file
+          }
+        }
+      } else {
+        push(@{$self->{args}}, $line);
+      }
+    }
+  }
+
+  sub verify_cert {
+    my $self = shift;
+    my ($ok, $ctxstore, $certname, $error, $cert) = @_;
+    my $certpem = Net::SSLeay::PEM_get_string_X509($cert);
+    my ($status, $ret);
+
+    if (exists $self->{cache}->{$certpem}) {
+      ($status, $ret) = @{$self->{cache}->{$certpem}};
+      $self->{logger}->log('debug', "Found response in cache\n");
+    } else {
+      # use Crypt::Monkeysphere::MSVA::Client if available:
+      if (defined($self->{client})) {
+        # because we really don't want to create some sort of MSVA loop:
+        ($status, $ret) = $self->{client}->query_agent('https', $self->{config}->{host}, 'server', 'x509pem', $certpem, 'never');
+      } else {
+        use Crypt::Monkeysphere::MSVA;
+        $self->{logger}->log('verbose', "Could not find a running agent (MONKEYSPHERE_VALIDATION_AGENT_SOCKET env var).\nFalling back to in-process certificate checks.\n");
+        # If there is no running agent, we might want to be able to fall
+        # back here.
+
+        # FIXME: this is hackery!  we're just calling daemon-internal code
+        # (and it's not a stable API):
+
+        my $data = {peer => { name => $self->{config}->{host}, type => 'server' },
+                    context => 'https',
+                    pkc => { type => 'x509pem', data => $certpem },
+                    keyserverpolicy => 'never', # because we really don't want to create some sort of MSVA loop
+                   };
+
+        my $clientinfo = { uid => POSIX::geteuid(), inode => undef };
+
+        ($status, $ret) = Crypt::Monkeysphere::MSVA::reviewcert($data, $clientinfo);
+      }
+
+      # make a cache of the cert if it verifies once, since this seems
+      # to get called 3 times by perl for some reason. (see
+      # https://bugs.debian.org/606249)
+      $self->{cache}->{$certpem} = [ $status, $ret ];
+      if (JSON::is_bool($ret->{valid}) && ($ret->{valid} eq 1)) {
+        $self->{logger}->log('verbose', "Monkeysphere HKPMS Certificate validation succeeded:\n  %s\n", $ret->{message});
+      } else {
+        $self->{logger}->log('error', "Monkeysphere HKPMS Certificate validation failed:\n  %s\n", $ret->{message});
+      }
+    }
+
+    if (JSON::is_bool($ret->{valid}) && ($ret->{valid} eq 1)) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  sub query {
+    my $self = shift;
+
+    # FIXME: i'd like to pass this debug argument to IO::Socket::SSL,
+    # but i don't know how to do that.
+    # i get 'Variable "@iosslargs" will not stay shared' if i try to call
+    # use IO::Socket::SSL 1.37 @iosslargs;
+    my @iosslargs = ();
+    if ($self->{logger}->get_log_level() >= 4) {
+      push @iosslargs, sprintf("debug%d", int($self->{logger}->get_log_level() - 3));
+    }
+
+    # versions earlier than 1.35 can fail open: bad news!.
+    # 1.37 lets us set ca_path and ca_file to undef, which is what we want.
+    use IO::Socket::SSL 1.37;
+    use Net::SSLeay;
+    use LWP::UserAgent;
+    use URI;
+
+    IO::Socket::SSL::set_ctx_defaults(
+                                      verify_callback => sub { $self->verify_cert(@_); },
+                                      verify_mode => 0x03,
+                                      ca_path => undef,
+                                      ca_file => undef,
+                                     );
+
+    my $ua = LWP::UserAgent::->new();
+
+    if (exists($self->{proxy})) {
+      $self->{logger}->log('verbose', "Using http-proxy: %s\n", $self->{proxy});
+      $ua->proxy([qw(http https)] => $self->{proxy});
+    } else {
+      # if no proxy was explicitly set, use the environment:
+      $ua->env_proxy();
+    }
+
+    printf("VERSION 1\nPROGRAM %s gpgkeys_hkpms msva-perl/%s\n",
+           $self->{config}->{program},  # this is kind of cheating :/
+           $Crypt::Monkeysphere::MSVA::VERSION);
+
+
+    $self->{logger}->log('debug', "command: %s\n", $self->{config}->{command});
+    if (lc($self->{config}->{command}) eq 'search') {
+      # for COMMAND = SEARCH, we want op=index, and we want to rejoin all args with spaces.
+      my $uri = URI::->new(sprintf('https://%s/pks/lookup', $self->{config}->{host}));
+      my $arg = join(' ', @{$self->{args}});
+      $uri->query_form(op => 'index',
+                       options => 'mr',
+                       search => $arg,
+                      );
+      $arg =~ s/\n/ /g ; # swap out newlines for spaces
+      printf("\n%s %s BEGIN\n", $self->{config}->{command}, $arg);
+      $self->{logger}->log('debug', "URI: %s\n", $uri);
+      my $resp = $ua->get($uri);
+      if ($resp->is_success) {
+        print($resp->decoded_content);
+      } else {
+        # FIXME: handle errors better
+        $self->{logger}->log('error', "HTTPS error: %s\n", $resp->status_line);
+      }
+      printf("\n%s %s END\n", $self->{config}->{command}, $arg);
+    } elsif (lc($self->{config}->{command}) eq 'get') {
+      # for COMMAND = GET, we want op=get, and we want to issue each query separately.
+      my $uri = URI::->new(sprintf('https://%s/pks/lookup', $self->{config}->{host}));
+      foreach my $arg (@{$self->{args}}) {
+        printf("\n%s %s BEGIN\n", $self->{config}->{command}, $arg);
+        $uri->query_form(op => 'get',
+                         options => 'mr',
+                         search => $arg,
+                        );
+        my $resp = $ua->get($uri);
+        if ($resp->is_success) {
+          print($resp->decoded_content);
+        } else {
+          # FIXME: handle errors better
+          $self->{logger}->log('error', "HTTPS error: %s\n", $resp->status_line);
+        }
+        printf("\n%s %s END\n", $self->{config}->{command}, $arg);
+      }
+    } elsif (lc($self->{config}->{command}) eq 'send') {
+      $self->{logger}->log('debug', "Sending keys");
+      # walk the input looking for "KEY E403BC1A17856FB7 BEGIN" lines.
+      my @keydata;
+      my $keyid;
+      foreach my $arg (@{$self->{args}}) {
+        if ($arg =~ /^KEY ([a-fA-F0-9]+) BEGIN\s*$/) {
+          @keydata = ();
+          $keyid = $1;
+          $self->{logger}->log('debug', "Found KEY BEGIN line (%s)\n", $keyid);
+        } elsif (defined($keyid)) {
+          if ($arg eq sprintf('KEY %s END', $keyid)) {
+            $self->{logger}->log('debug', "Found KEY END line with %d lines of data elapsed\n", scalar(@keydata));
+            # for sending keys, we want to POST to /pks/add, with a keytext variable.
+            my $uri = URI::->new(sprintf('https://%s/pks/add', $self->{config}->{host}));
+            my $resp = $ua->post($uri, {keytext => join("\n", @keydata)});
+            if ($resp->is_success) {
+              printf("\n%s", $resp->decoded_content);
+            } else {
+              # FIXME: handle errors better
+              $self->{logger}->log('error', "HTTPS error: %s\n", $resp->status_line);
+            }
+            printf("\nKEY %s SENT\n", $keyid);
+            @keydata = ();
+            $keyid = undef;
+          } else {
+            push @keydata, $arg;
+          }
+        } else {
+          $self->{logger}->log('debug2', "Found garbage line\n");
+        }
+      }
+      if (defined($keyid)) {
+        $self->{logger}->log('error', "Never got a 'KEY %s END' line, discarding.\n", $keyid);
+      }
+    } else {
+      # are there other commands we might want?
+      $self->{logger}->log('error', "Unknown command %s\n", $self->{config}->{command});
+    }
+  }
+
+
+  sub new {
+    my $class = shift;
+
+    my $default_log_level = 'error';
+    my $client;
+    if (exists($ENV{MONKEYSPHERE_VALIDATION_AGENT_SOCKET})) {
+      $client = Crypt::Monkeysphere::MSVA::Client::->new(
+                                                         socket => $ENV{MONKEYSPHERE_VALIDATION_AGENT_SOCKET},
+                                                         log_level => $default_log_level,
+                                                        );
+    }
+    my $self = { config => { },
+                 args => [ ],
+                 logger => (defined($client) ? $client->{logger} : Crypt::Monkeysphere::MSVA::Logger::->new($default_log_level)),
+                 cache => { },
+                 client => $client,
+                 actually_check => 1,
+               };
+
+    bless ($self, $class);
+    return $self;
+  }
+  1;
+}
+
+
+my $hkpms = Crypt::Monkeysphere::MSVA::HKPMS::->new();
+
+my $input = # load gpg instructions from stdin:
+  do {
+    local $/; # slurp!
+    <STDIN>;
+  };
+
+
+$hkpms->parse_input($input);
+$hkpms->query();
+

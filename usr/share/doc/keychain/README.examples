@@ -1,0 +1,8 @@
+The script keychain.xsession, placed in /etc/X11/Xsession.d/80keychain, 
+will automatically configure keychain (with no keys initially loaded) for
+every user with a .keychain directory.
+
+The GPG part of this functionality needs a change to the 90gpg-agent
+Xsession script from the gnupg-agent package (wishlist Bug#336480), since
+currently 90gpg-agent will overwrite GPG_AGENT_INFO with that of a
+replacement agent.

@@ -1,0 +1,241 @@
+=head1 NAME
+
+Gtk2::UIManager - wrapper for GtkUIManager
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::UIManager
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 uimanager = Gtk2::UIManager-E<gt>B<new> 
+
+=head2 integer = $self-E<gt>B<new_merge_id> 
+
+=head2 accelgroup = $self-E<gt>B<get_accel_group> 
+
+=head2 action = $self-E<gt>B<get_action> ($path)
+
+=over
+
+=item * $path (string) 
+
+=back
+
+=head2 list = $self-E<gt>B<get_action_groups> 
+
+=head2 boolean = $self-E<gt>B<get_add_tearoffs> 
+
+=head2 $self-E<gt>B<set_add_tearoffs> ($add_tearoffs)
+
+=over
+
+=item * $add_tearoffs (boolean) 
+
+=back
+
+=head2 $self-E<gt>B<add_ui> ($merge_id, $path, $name, $action, $type, $top)
+
+=over
+
+=item * $merge_id (integer) 
+
+=item * $path (string) 
+
+=item * $name (string) 
+
+=item * $action (string or undef) 
+
+=item * $type (Gtk2::UIManagerItemType) 
+
+=item * $top (boolean) 
+
+=back
+
+=head2 integer = $self-E<gt>B<add_ui_from_file> ($filename)
+
+=over
+
+=item * $filename (string) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 integer = $self-E<gt>B<add_ui_from_string> ($buffer)
+
+=over
+
+=item * $buffer (string) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 $self-E<gt>B<ensure_update> 
+
+=head2 $self-E<gt>B<insert_action_group> ($action_group, $pos)
+
+=over
+
+=item * $action_group (Gtk2::ActionGroup) 
+
+=item * $pos (integer) 
+
+=back
+
+=head2 $self-E<gt>B<remove_action_group> ($action_group)
+
+=over
+
+=item * $action_group (Gtk2::ActionGroup) 
+
+=back
+
+=head2 $self-E<gt>B<remove_ui> ($merge_id)
+
+=over
+
+=item * $merge_id (integer) 
+
+=back
+
+=head2 list = $self-E<gt>B<get_toplevels> ($types)
+
+=over
+
+=item * $types (Gtk2::UIManagerItemType) 
+
+=back
+
+=head2 string = $self-E<gt>B<get_ui> 
+
+=head2 widget = $self-E<gt>B<get_widget> ($path)
+
+=over
+
+=item * $path (string) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'add-tearoffs' (boolean : default false : readable / writable / private)
+
+Whether tearoff menu items should be added to menus
+
+=item 'ui' (string : default "E<lt>ui>\nE<lt>/ui>\n" : readable / private)
+
+An XML string describing the merged UI
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<connect-proxy> (Gtk2::UIManager, Gtk2::Action, Gtk2::Widget)
+
+=item B<disconnect-proxy> (Gtk2::UIManager, Gtk2::Action, Gtk2::Widget)
+
+=item B<pre-activate> (Gtk2::UIManager, Gtk2::Action)
+
+=item B<post-activate> (Gtk2::UIManager, Gtk2::Action)
+
+=item B<add-widget> (Gtk2::UIManager, Gtk2::Widget)
+
+=item B<actions-changed> (Gtk2::UIManager)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::UIManagerItemType
+
+=over
+
+=item * 'auto' / 'GTK_UI_MANAGER_AUTO'
+
+=item * 'menubar' / 'GTK_UI_MANAGER_MENUBAR'
+
+=item * 'menu' / 'GTK_UI_MANAGER_MENU'
+
+=item * 'toolbar' / 'GTK_UI_MANAGER_TOOLBAR'
+
+=item * 'placeholder' / 'GTK_UI_MANAGER_PLACEHOLDER'
+
+=item * 'popup' / 'GTK_UI_MANAGER_POPUP'
+
+=item * 'menuitem' / 'GTK_UI_MANAGER_MENUITEM'
+
+=item * 'toolitem' / 'GTK_UI_MANAGER_TOOLITEM'
+
+=item * 'separator' / 'GTK_UI_MANAGER_SEPARATOR'
+
+=item * 'accelerator' / 'GTK_UI_MANAGER_ACCELERATOR'
+
+=item * 'popup-with-accels' / 'GTK_UI_MANAGER_POPUP_WITH_ACCELS'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

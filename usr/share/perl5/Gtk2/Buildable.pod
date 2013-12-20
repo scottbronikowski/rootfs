@@ -1,0 +1,383 @@
+=head1 NAME
+
+Gtk2::Buildable - Interface for objects that can be built by Gtk2::Builder
+
+=cut
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  package Thing;
+  use Gtk2;
+  use Glib::Object::Subclass
+      Glib::Object::,
+      # The important bit -- add this GInterface to our class
+      interfaces => [ Gtk2::Buildable:: ],
+  
+      # Some signals and properties on the object...
+      signals => {
+          exploderize => {},
+      },
+      properties => [
+          Glib::ParamSpec->int ('force', 'Force',
+                                'Explosive force, in megatons',
+                                0, 1000000, 5, ['readable', 'writable']),
+      ],
+      ;
+  
+  sub exploderize {
+      my $self = shift;
+      $self->signal_emit ('exploderize');
+  }
+  
+  # We can accept all defaults for Buildable; see the description
+  # for details on custom XML.
+  
+  package main;
+  use Gtk2 -init;
+  my $builder = Gtk2::Builder->new ();
+  $builder->add_from_string ('<interface>
+      <object class="Thing" id="thing1">
+          <property name="force">50</property>
+          <signal name="exploderize" handler="do_explode" />
+      </object>
+  </interface>');
+  $builder->connect_signals ();
+  
+  my $thing = $builder->get_object ('thing1');
+  
+  $thing->exploderize ();
+
+  sub do_explode {
+      my $thing = shift;
+      printf "boom * %d!\n", $thing->get ('force');
+  }
+
+  # This program prints "boom * 50!" on stdout.
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Interface
+  +----Gtk2::Buildable
+
+
+
+=cut
+
+=for object Gtk2::Buildable - Interface for objects that can be built by Gtk2::Builder
+=cut
+
+=head1 DESCRIPTION
+
+In order to allow construction from a Gtk2::Builder UI description
+(L<http://library.gnome.org/devel/gtk/unstable/GtkBuilder.html#BUILDER-UI>),
+an object must implement the Gtk2::Buildable interface.  The interface
+includes methods for setting names and properties of objects, parsing
+custom tags, and constructing child objects.
+
+The Gtk2::Buildable interface is implemented by all widgets and many
+of the non-widget objects that are provided by GTK+.  The main user of
+this interface is Gtk2::Builder, so there should be very little need for
+applications to call any of the Gtk2::Buildable methods.
+
+So, instead of focusing on how to call the methods of a Gtk2::Buildable,
+this documentation deals with implementing a buildable object.
+
+=head1 WIDGETS
+
+Since Gtk2::Widget implements the Gtk2::Buildable interface, all widgets
+get buildability gratis.  If your widget requires no special markup
+syntax to express its configuration, and all properties can be handled
+through the standard mechanisms, you can simply add the name of your
+perl-derived Glib::Object types to the C<object> tag in the builder UI
+description.  You don't even have to do anything special in your class
+definition.  For example, objects of this class:
+
+  package My::Frame;
+  use Gtk2;
+  use Glib::Object::Subclass
+      Gtk2::Frame::,
+      properties => [
+          Glib::ParamSpec->int ('foo', ...),
+      ],
+      ;
+
+  ...
+
+  1;
+
+could be expressed in a builder definition file like this:
+
+  <object class="My__Frame" id="myframe">
+    <property name="foo">15</property>
+  </object>
+
+Notice that the '::' package separator has been replaced with '__' in the
+C<class> attribute; this is because the ':' character is not valid for
+GType type names.  The mapping from perl package names to GType names should,
+in general, be as simple as transliterating the colons.
+
+
+=head1 PLAIN OBJECTS
+
+Glib::Object does not implement Gtk2::Buildable by itself, so to get a
+builder UI file to create your custom Glib::Object subtypes, you'll have
+add the Gtk2::Buildable interface to your class's interfaces list.
+
+  package My::Thing;
+  use Gtk2; # to get Gtk2::Buildable
+  use Glib::Object::Subclass
+      Glib::Object::,
+      interfaces => [ 'Gtk2::Buildable' ],
+      ...
+      ;
+
+Again, if you have no special requirements, then that should be all you need
+to do.
+
+=head1 OVERRIDING BUILDABLE INTERFACE METHODS
+
+In some cases, you need to override the default Buildable behavior.  Maybe
+your objects already store their names, or you need some special markup
+tags to express configuration.  In these cases, add the Gtk2::Buildable
+interface to your object declaration, and implement the following methods
+as necessary.
+
+Note that in the current implementation the custom tags code doesn't
+chain up to any buildable interfaces in superclasses.  This means for
+instance if you implement Gtk2::Buildable on a new widget subclass
+then you lose the <accelerator> and <accessibility> tags normally
+available from Gtk2::Widget.  This will likely change in the future,
+probably by chaining up by default for unhandled tags, maybe with a
+way to ask deliberately not to chain.
+
+=over
+
+=item SET_NAME ($self, $name)
+
+=over
+
+=item * $name (string)
+
+=back
+
+This method should store I<$name> in I<$self> somehow.  For example,
+Gtk2::Widget maps this to the Gtk2::Widget's C<name> property.  If you don't
+implement this method, the name will be attached in object data down in C
+code.  Implement this method if your object has some notion of "name" and
+it makes sense to map the XML name attribute to that.
+
+=item string = GET_NAME ($self)
+
+If you implement C<SET_NAME>, you need to implement this method to retrieve
+that name.
+
+=item ADD_CHILD ($self, $builder, $child, $type)
+
+=over
+
+=item * $builder (Gtk2::Builder)
+
+=item * $child (Glib::Object or undef)
+
+=item * $type (string)
+
+=back
+
+C<ADD_CHILD> will be called to add I<$child> to I<$self>.  I<$type> can be
+used to determine the kind of child.  For example, Gtk2::Container implements
+this method to add a child widget to the container, and Gtk2::Notebook uses
+I<$type> to distinguish between "page-label" and normal children.  The value
+of I<$type> comes directly from the C<type> attribute of the XML C<child> tag.
+
+
+=item SET_BUILDABLE_PROPERTY ($self, $builder, $name, $value)
+
+=over
+
+=item * $builder (Gtk2::Builder)
+
+=item * $name (string)
+
+=item * $value (scalar)
+
+=back
+
+This will be called to set the object property I<$name> on I<$self>, directly
+from the C<property> XML tag.  It is not normally necessary to implement this
+method, as the fallback simply calls C<Glib::Object::set()>.  Gtk2::Window
+implements this method to delay showing itself (i.e., setting the "visible"
+property) until the whole interface is created.  You can also use this to
+handle properties that are not wired up through the Glib::Object property
+system (though simply creating the property is easier).
+
+
+=item parser or undef = CUSTOM_TAG_START ($self, $builder, $child, $tagname)
+
+=over
+
+=item * $builder (Gtk2::Builder)
+
+=item * $child (Glib::Object or undef)
+
+=item * $tagname (string)
+
+=back
+
+When Gtk2::Builder encounters an unknown tag while parsing the definition
+of I<$self>, it will call C<CUSTOM_TAG_START> to give your code a chance
+to do something with it.  If I<$tagname> was encountered inside a C<child>
+tag, the corresponding object will be passed in I<$child>; otherwise,
+I<$child> will be C<undef>.
+
+Your C<CUSTOM_TAG_START> method should decide whether it supports I<$tagname>.
+If not, return C<undef>.  If you do support it, return a blessed perl object
+that implements three special methods to be used to parse that tag.  (These
+methods are defined by GLib's GMarkupParser, which is a simple SAX-style
+setup.)
+
+=over
+
+=item START_ELEMENT ($self, $context, $element_name, $attributes)
+
+=over
+
+=item * $context (Gtk2::Buildable::ParseContext)
+
+=item * $element_name (string)
+
+=item * $attributes (hash reference) Dictionary of all attributes of this tag.
+
+=back
+
+
+=item TEXT ($self, $context, $text)
+
+=over
+
+=item * $context (Gtk2::Buildable::ParseContext)
+
+=item * $text (string) The text contained in the tag.
+
+=back
+
+
+=item END_ELEMENT ($self, $context, $element_name)
+
+=over
+
+=item * $context (Gtk2::Buildable::ParseContext)
+
+=item * $element_name (string)
+
+=back
+
+=back
+
+Any blessed perl object that implements these methods is valid as a parser.
+(Ain't duck-typing great?)  Gtk2::Builder will hang on to this object until
+the parsing is complete, and will pass it to C<CUSTOM_TAG_END> and
+C<CUSTOM_FINISHED>, so you shouldn't have to worry about its lifetime.
+
+
+=item CUSTOM_TAG_END ($self, $builder, $child, $tagname, $parser)
+
+=over
+
+=item * $builder (Gtk2::Builder)
+
+=item * $child (Glib::Object or undef)
+
+=item * $tagname (string)
+
+=item * $parser (some perl object) as returned from C<CUSTOM_TAG_START>
+
+=back
+
+This method will be called (if it exists) when the close tag for I<$tagname>
+is encountered.  I<$parser> will be the object you returned from
+C<CUSTOM_TAG_START>.  I<$child> is the same object-or-undef as passed to
+C<CUSTOM_TAG_START>.
+
+
+=item CUSTOM_FINISHED ($self, $builder, $child, $tagname, $parser)
+
+=over
+
+=item * $builder (Gtk2::Builder)
+
+=item * $child (Glib::Object or undef)
+
+=item * $tagname (string)
+
+=item * $parser (some perl object) as returned from C<CUSTOM_TAG_START>
+
+=back
+
+This method will be called (if it exists) when the parser finishes dealing
+with the custom tag I<$tagname>.  I<$parser> will be the object you returned
+from C<CUSTOM_TAG_START>.  I<$child> is the same object-or-undef as passed
+to C<CUSTOM_TAG_START>.
+
+
+=item PARSER_FINISHED ($self, $builder)
+
+=over
+
+=item * $builder (Gtk2::Builder)
+
+=back
+
+If this method exists, it will be invoked when the builder finishes parsing
+the description data.  This method is handy if you need to defer any object
+initialization until all of the rest of the input is parsed, most likely
+because you need to refer to an object that is declared after I<$self> or
+you need to perform special cleanup actions.  It is not normally necessary
+to implement this method.
+
+
+=item object or undef = GET_INTERNAL_CHILD ($self, $builder, $childname)
+
+=over
+
+=item * $builder (Gtk2::Builder)
+
+=item * $childname (string)
+
+=back
+
+This will be called to fetch an internal child of I<$self>.  Implement this
+method if your buildable has internal children that need to be accessed from
+a UI definition.  For example, Gtk2::Dialog implements this to give access
+to its internal vbox child.
+
+=back
+
+=cut
+
+
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Interface>, L<http://library.gnome.org/devel/gtk/unstable/GtkBuilder.html#BUILDER-UI>, L<Gtk2::Buildable::ParseContext>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

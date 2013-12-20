@@ -1,0 +1,204 @@
+=head1 NAME
+
+Gtk2::TreeSelection - wrapper for GtkTreeSelection
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::TreeSelection
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 integer = $selection-E<gt>B<count_selected_rows> 
+
+=head2 boolean = $selection-E<gt>B<iter_is_selected> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+=head2 selectionmode = $selection-E<gt>B<get_mode> 
+
+=head2 $selection-E<gt>B<set_mode> ($type)
+
+=over
+
+=item * $type (Gtk2::SelectionMode) 
+
+=back
+
+=head2 boolean = $selection-E<gt>B<path_is_selected> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 $selection-E<gt>B<select_all> 
+
+=head2 $selection-E<gt>B<set_select_function> ($func, $data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+=head2 $selection-E<gt>B<select_iter> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+=head2 $selection-E<gt>B<select_path> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 $selection-E<gt>B<select_range> ($start_path, $end_path)
+
+=over
+
+=item * $start_path (Gtk2::TreePath) 
+
+=item * $end_path (Gtk2::TreePath) 
+
+=back
+
+=head2 $selection-E<gt>B<selected_foreach> ($func, $data=undef)
+
+=over
+
+=item * $func (subroutine) 
+
+=item * $data (scalar) 
+
+=back
+
+Call I<$func> on every selected row in I<$selection>'s view.
+
+=head2 iter = $tree_selection->B<get_selected>
+
+=head2 (model, iter) = $tree_selection->B<get_selected>
+
+Since most of the time you are only interested in the iter, C<get_selected>
+returns only the iter in scalar context.
+
+=head2 @paths = $selection->B<get_selected_rows>
+
+Returns the Gtk2::TreePath of each selected row, or an empty list if no
+rows are selected.  The model is I<not> returned, as documented in the C
+API reference.  To get the model, try
+C<< $selection->get_tree_view->get_model >>.
+
+=head2 treeview = $selection-E<gt>B<get_tree_view> 
+
+=head2 $selection-E<gt>B<unselect_all> 
+
+=head2 $selection-E<gt>B<unselect_iter> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+=head2 $selection-E<gt>B<unselect_path> ($path)
+
+=over
+
+=item * $path (Gtk2::TreePath) 
+
+=back
+
+=head2 $selection-E<gt>B<unselect_range> ($start_path, $end_path)
+
+=over
+
+=item * $start_path (Gtk2::TreePath) 
+
+=item * $end_path (Gtk2::TreePath) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 scalar = $selection-E<gt>B<get_user_data> 
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<changed> (Gtk2::TreeSelection)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::SelectionMode
+
+=over
+
+=item * 'none' / 'GTK_SELECTION_NONE'
+
+=item * 'single' / 'GTK_SELECTION_SINGLE'
+
+=item * 'browse' / 'GTK_SELECTION_BROWSE'
+
+=item * 'multiple' / 'GTK_SELECTION_MULTIPLE'
+
+=item * 'extended' / 'GTK_SELECTION_EXTENDED'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,379 @@
+=head1 NAME
+
+Gtk2::StatusIcon - wrapper for GtkStatusIcon
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::StatusIcon
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 statusicon = Gtk2::StatusIcon-E<gt>B<new> 
+
+=head2 statusicon = Gtk2::StatusIcon-E<gt>B<new_from_file> ($filename)
+
+=over
+
+=item * $filename (localized file name) 
+
+=back
+
+=head2 statusicon = Gtk2::StatusIcon-E<gt>B<new_from_icon_name> ($icon_name)
+
+=over
+
+=item * $icon_name (string) 
+
+=back
+
+=head2 statusicon = Gtk2::StatusIcon-E<gt>B<new_from_pixbuf> ($pixbuf)
+
+=over
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf) 
+
+=back
+
+=head2 statusicon = Gtk2::StatusIcon-E<gt>B<new_from_stock> ($stock_id)
+
+=over
+
+=item * $stock_id (string) 
+
+=back
+
+=head2 boolean = $status_icon-E<gt>B<get_blinking> 
+
+=head2 $status_icon-E<gt>B<set_blinking> ($blinking)
+
+=over
+
+=item * $blinking (boolean) 
+
+=back
+
+=head2 $status_icon-E<gt>B<set_from_file> ($filename)
+
+=over
+
+=item * $filename (localized file name) 
+
+=back
+
+=head2 $status_icon-E<gt>B<set_from_icon_name> ($icon_name)
+
+=over
+
+=item * $icon_name (string) 
+
+=back
+
+=head2 $status_icon-E<gt>B<set_from_pixbuf> ($pixbuf)
+
+=over
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf or undef) 
+
+=back
+
+=head2 $status_icon-E<gt>B<set_from_stock> ($stock_id)
+
+=over
+
+=item * $stock_id (string) 
+
+=back
+
+=head2 list = $status_icon-E<gt>B<get_geometry> 
+
+=head2 boolean = $status_icon-E<gt>B<get_has_tooltip> 
+
+Since: gtk+ 2.16
+
+=head2 $status_icon-E<gt>B<set_has_tooltip> ($has_tooltip)
+
+=over
+
+=item * $has_tooltip (boolean) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 string or undef = $status_icon-E<gt>B<get_icon_name> 
+
+=head2 boolean = $status_icon-E<gt>B<is_embedded> 
+
+=head2 pixbuf or undef = $status_icon-E<gt>B<get_pixbuf> 
+
+=head2 (x, y, push_in) = Gtk2::StatusIcon::position_menu (menu, icon)
+
+=head2 (x, y, push_in) = Gtk2::StatusIcon::position_menu (menu, x, y, icon)
+
+=over
+
+=item * ... (list) 
+
+=item * $icon (Gtk2::StatusIcon) 
+
+=item * $y (integer) 
+
+=item * $x (integer) 
+
+=back
+
+
+
+
+This function takes four arguments so that it may be passed directly as the
+menu position callback to Gtk2::Menu::popup(), which passes in initial x and y
+values for historical reasons.  Otherwise, you need only pass two arguments.
+
+This function can be used as the I<menu_pos_func> argument to
+I<Gtk2::Menu::popup>.
+
+
+=head2 screen = $status_icon-E<gt>B<get_screen> 
+
+Since: gtk+ 2.12
+
+=head2 $status_icon-E<gt>B<set_screen> ($screen)
+
+=over
+
+=item * $screen (Gtk2::Gdk::Screen) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 integer = $status_icon-E<gt>B<get_size> 
+
+=head2 string or undef = $status_icon-E<gt>B<get_stock> 
+
+=head2 imagetype = $status_icon-E<gt>B<get_storage_type> 
+
+=head2 string or undef = $status_icon-E<gt>B<get_tooltip_markup> 
+
+Since: gtk+ 2.16
+
+=head2 $status_icon-E<gt>B<set_tooltip_markup> ($markup)
+
+=over
+
+=item * $markup (string or undef) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 $status_icon-E<gt>B<set_tooltip> ($tooltip_text)
+
+=over
+
+=item * $tooltip_text (string or undef) 
+
+=back
+
+=head2 string or undef = $status_icon-E<gt>B<get_tooltip_text> 
+
+Since: gtk+ 2.16
+
+=head2 $status_icon-E<gt>B<set_tooltip_text> ($text)
+
+=over
+
+=item * $text (string or undef) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 boolean = $status_icon-E<gt>B<get_visible> 
+
+=head2 $status_icon-E<gt>B<set_visible> ($visible)
+
+=over
+
+=item * $visible (boolean) 
+
+=back
+
+=head2 unsigned = $status_icon-E<gt>B<get_x11_window_id> 
+
+Since: gtk+ 2.14
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'blinking' (boolean : default false : readable / writable / private)
+
+Whether or not the status icon is blinking
+
+=item 'embedded' (boolean : default false : readable / private)
+
+Whether or not the status icon is embedded
+
+=item 'file' (string : default undef : writable / private)
+
+Filename to load and display
+
+=item 'gicon' (Glib::Object::_Unregistered::GIcon : default undef : readable / writable / private)
+
+The GIcon being displayed
+
+=item 'has-tooltip' (boolean : default false : readable / writable / private)
+
+Whether this tray icon has a tooltip
+
+=item 'icon-name' (string : default undef : readable / writable / private)
+
+The name of the icon from the icon theme
+
+=item 'orientation' (Gtk2::Orientation : default "horizontal" : readable / private)
+
+The orientation of the tray
+
+=item 'pixbuf' (Gtk2::Gdk::Pixbuf : default undef : readable / writable / private)
+
+A GdkPixbuf to display
+
+=item 'screen' (Gtk2::Gdk::Screen : default undef : readable / writable / private)
+
+The screen where this status icon will be displayed
+
+=item 'size' (integer : default 0 : readable / private)
+
+The size of the icon
+
+=item 'stock' (string : default undef : readable / writable / private)
+
+Stock ID for a stock image to display
+
+=item 'storage-type' (Gtk2::ImageType : default "empty" : readable / private)
+
+The representation being used for image data
+
+=item 'title' (string : default undef : readable / writable / private)
+
+The title of this tray icon
+
+=item 'tooltip-markup' (string : default undef : readable / writable / private)
+
+The contents of the tooltip for this tray icon
+
+=item 'tooltip-text' (string : default undef : readable / writable / private)
+
+The contents of the tooltip for this widget
+
+=item 'visible' (boolean : default true : readable / writable / private)
+
+Whether or not the status icon is visible
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<activate> (Gtk2::StatusIcon)
+
+=item boolean = B<button-press-event> (Gtk2::StatusIcon, Gtk2::Gdk::Event)
+
+=item boolean = B<button-release-event> (Gtk2::StatusIcon, Gtk2::Gdk::Event)
+
+=item boolean = B<scroll-event> (Gtk2::StatusIcon, Gtk2::Gdk::Event)
+
+=item boolean = B<query-tooltip> (Gtk2::StatusIcon, integer, integer, boolean, Gtk2::Tooltip)
+
+=item B<popup-menu> (Gtk2::StatusIcon, Glib::UInt, Glib::UInt)
+
+=item boolean = B<size-changed> (Gtk2::StatusIcon, integer)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::ImageType
+
+=over
+
+=item * 'empty' / 'GTK_IMAGE_EMPTY'
+
+=item * 'pixmap' / 'GTK_IMAGE_PIXMAP'
+
+=item * 'image' / 'GTK_IMAGE_IMAGE'
+
+=item * 'pixbuf' / 'GTK_IMAGE_PIXBUF'
+
+=item * 'stock' / 'GTK_IMAGE_STOCK'
+
+=item * 'icon-set' / 'GTK_IMAGE_ICON_SET'
+
+=item * 'animation' / 'GTK_IMAGE_ANIMATION'
+
+=item * 'icon-name' / 'GTK_IMAGE_ICON_NAME'
+
+=item * 'gicon' / 'GTK_IMAGE_GICON'
+
+=back
+
+
+=head2 enum Gtk2::Orientation
+
+=over
+
+=item * 'horizontal' / 'GTK_ORIENTATION_HORIZONTAL'
+
+=item * 'vertical' / 'GTK_ORIENTATION_VERTICAL'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

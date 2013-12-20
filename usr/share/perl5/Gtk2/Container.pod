@@ -1,0 +1,325 @@
+=head1 NAME
+
+Gtk2::Container - wrapper for GtkContainer
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 $container-E<gt>B<add> ($widget)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=back
+
+=head2 $container-E<gt>B<add_with_properties> ($widget, ...)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=item * ... (list) list of property name/value pairs
+
+=back
+
+
+
+
+=head2 integer = $container-E<gt>B<get_border_width> 
+
+=head2 $container-E<gt>B<set_border_width> ($border_width)
+
+=over
+
+=item * $border_width (integer) 
+
+=back
+
+=head2 $container-E<gt>B<check_resize> 
+
+=head2 list = $container-E<gt>B<child_get> ($child, ...)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * ... (list) list of property names
+
+=back
+
+Returns a list of properties of the child.
+
+=head2 list = $container-E<gt>B<child_get_property> ($child, ...)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * ... (list) 
+
+=back
+
+Alias for child_get
+
+=head2 $container-E<gt>B<child_set> ($child, ...)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * ... (list) list of property name/value pairs
+
+=back
+
+Sets a list of properties on the child.
+
+=head2 $container-E<gt>B<child_set_property> ($child, ...)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * ... (list) 
+
+=back
+
+Alias for child_set
+
+=head2 string = $container-E<gt>B<child_type> 
+
+=head2 list = $container-E<gt>B<get_children> 
+
+Returns a list of Gtk2::Widget's, the children of the container.
+
+=head2 list = $container-E<gt>B<get_focus_chain> 
+
+Returns a list of Gtk2::Widgets, the focus chain.
+
+=head2 $container-E<gt>B<set_focus_chain> (...)
+
+=over
+
+=item * ... (list) of Gtk2::Widget's, the focus chain
+
+=back
+
+Sets a focus chain, overriding the one computed automatically by GTK+.
+
+In principle each widget in the chain should be a descendant of the container,
+but this is not enforced by this method, since it's allowed to set the focus
+chain before you pack the widgets, or have a widget in the chain that isn't
+always packed. The necessary checks are done when the focus chain is actually
+traversed.
+
+=head2 widget or undef = $container-E<gt>B<get_focus_child> 
+
+Since: gtk+ 2.14
+
+=head2 $container-E<gt>B<set_focus_child> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget or undef) 
+
+=back
+
+=head2 adjustment or undef = $container-E<gt>B<get_focus_hadjustment> 
+
+=head2 $container-E<gt>B<set_focus_hadjustment> ($adjustment)
+
+=over
+
+=item * $adjustment (Gtk2::Adjustment or undef) 
+
+=back
+
+=head2 adjustment or undef = $container-E<gt>B<get_focus_vadjustment> 
+
+=head2 $container-E<gt>B<set_focus_vadjustment> ($adjustment)
+
+=over
+
+=item * $adjustment (Gtk2::Adjustment or undef) 
+
+=back
+
+=head2 $container-E<gt>B<forall> ($callback, $callback_data=undef)
+
+=over
+
+=item * $callback (subroutine) Code to invoke on each child widget
+
+=item * $callback_data (scalar) 
+
+=back
+
+Invoke I<$callback> on each child of I<$container>, including "internal"
+children.  Most applications should not use this function.  Compare
+with I<Gtk2::Container::foreach>.
+
+=head2 $container-E<gt>B<foreach> ($callback, $callback_data=undef)
+
+=over
+
+=item * $callback (subroutine) Code to invoke on each child widget
+
+=item * $callback_data (scalar) 
+
+=back
+
+Invoke I<$callback> on each child of I<$container>, ignoring "internal"
+children.
+
+=head2 $container-E<gt>B<propagate_expose> ($child, $event)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=back
+
+=head2 $container-E<gt>B<set_reallocate_redraws> ($needs_redraws)
+
+=over
+
+=item * $needs_redraws (boolean) 
+
+=back
+
+=head2 $container-E<gt>B<remove> ($widget)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=back
+
+=head2 $container-E<gt>B<resize_children> 
+
+=head2 resizemode = $container-E<gt>B<get_resize_mode> 
+
+=head2 $container-E<gt>B<set_resize_mode> ($resize_mode)
+
+=over
+
+=item * $resize_mode (Gtk2::ResizeMode) 
+
+=back
+
+=head2 $container-E<gt>B<unset_focus_chain> 
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'border-width' (Glib::UInt : default 0 : readable / writable / private)
+
+The width of the empty border outside the containers children
+
+=item 'child' (Gtk2::Widget : default undef : writable / private)
+
+Can be used to add a new child to the container
+
+=item 'resize-mode' (Gtk2::ResizeMode : default "parent" : readable / writable / private)
+
+Specify how resize events are handled
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<add> (Gtk2::Container, Gtk2::Widget)
+
+=item B<remove> (Gtk2::Container, Gtk2::Widget)
+
+=item B<check-resize> (Gtk2::Container)
+
+=item B<set-focus-child> (Gtk2::Container, Gtk2::Widget)
+
+=item B<child-added> (Gtk2::Container, Gtk2::Widget)
+
+=item B<child-removed> (Gtk2::Container, Gtk2::Widget)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::ResizeMode
+
+=over
+
+=item * 'parent' / 'GTK_RESIZE_PARENT'
+
+=item * 'queue' / 'GTK_RESIZE_QUEUE'
+
+=item * 'immediate' / 'GTK_RESIZE_IMMEDIATE'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

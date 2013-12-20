@@ -1,0 +1,258 @@
+=head1 NAME
+
+Gtk2::RecentManager - wrapper for GtkRecentManager
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::RecentManager
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 recentmanager = Gtk2::RecentManager-E<gt>B<new> 
+
+=head2 boolean = $manager-E<gt>B<add_full> ($uri, $data)
+
+=over
+
+=item * $uri (string) 
+
+=item * $data (scalar) 
+
+=back
+
+Add I<$uri> to the list of recently used documents.  Instead of letting the
+Gtk2::RecentManager object guess the meta-data, use I<$data> to supply it.
+I<$data> is a hash reference with these keys:
+
+=over
+
+=item display_name
+
+The name to be used when displaying the document inside the recently used
+documents list.
+
+=item description
+
+A short description of the document.
+
+=item mime_type
+
+The MIME type of the document. [Mandatory]
+
+=item app_name
+
+The name of the application that is registering the document.  You might
+use the same name you used in L<Glib::set_application_name>.
+
+=item app_exec
+
+The command line needed to launch the application with the document.  You
+can use the variable C<"%u">, which will be expanded to the document's URI,
+or the variable C<"%f"> which will be expanded to the document's canonical
+full path.
+
+=item groups
+
+An array reference, containing the group names the document belongs to.
+
+=item is_private
+
+Whether the document should be visible only to the applications and groups
+that have registered it.
+
+=back
+
+
+=head2 boolean = $manager-E<gt>B<add_item> ($uri)
+
+=over
+
+=item * $uri (string) 
+
+=back
+
+Add I<$uri> to the list of recently used documents.  The Gtk2::RecentManager
+object will try to guess the meta-data of the document from its URI, but if
+you know it you should use L<Gtk2::RecentManager::add_full>.
+
+=head2 recentmanager = Gtk2::RecentManager-E<gt>B<get_default> 
+
+=head2 recentmanager = Gtk2::RecentManager-E<gt>B<get_for_screen> ($screen)
+
+=over
+
+=item * $screen (Gtk2::Gdk::Screen) 
+
+=back
+
+=head2 boolean = $manager-E<gt>B<has_item> ($uri)
+
+=over
+
+=item * $uri (string) 
+
+=back
+
+=head2 (items) = $manager->B<get_items>
+
+
+
+=head2 integer = $manager-E<gt>B<get_limit> 
+
+=head2 $manager-E<gt>B<set_limit> ($limit)
+
+=over
+
+=item * $limit (integer) 
+
+=back
+
+=head2 recentinfo = $manager-E<gt>B<lookup_item> ($uri)
+
+=over
+
+=item * $uri (string) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 $manager-E<gt>B<move_item> ($old_uri, $new_uri)
+
+=over
+
+=item * $old_uri (string) 
+
+=item * $new_uri (string or undef) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 integer = $manager-E<gt>B<purge_items> 
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 $manager-E<gt>B<remove_item> ($uri)
+
+=over
+
+=item * $uri (string) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 $manager-E<gt>B<set_screen> ($screen)
+
+=over
+
+=item * $screen (Gtk2::Gdk::Screen) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'filename' (string : default undef : readable / writable / construct-only)
+
+The full path to the file to be used to store and read the list
+
+=item 'limit' (integer : default -1 : readable / writable)
+
+The maximum number of items to be returned by gtk_recent_manager_get_items()
+
+=item 'size' (integer : default 0 : readable)
+
+The size of the recently used resources list
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<changed> (Gtk2::RecentManager)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum GtkRecentManagerError
+
+
+
+=over
+
+=item * 'not-found' / 'GTK_RECENT_MANAGER_ERROR_NOT_FOUND'
+
+=item * 'invalid-uri' / 'GTK_RECENT_MANAGER_ERROR_INVALID_URI'
+
+=item * 'invalid-encoding' / 'GTK_RECENT_MANAGER_ERROR_INVALID_ENCODING'
+
+=item * 'not-registered' / 'GTK_RECENT_MANAGER_ERROR_NOT_REGISTERED'
+
+=item * 'read' / 'GTK_RECENT_MANAGER_ERROR_READ'
+
+=item * 'write' / 'GTK_RECENT_MANAGER_ERROR_WRITE'
+
+=item * 'unknown' / 'GTK_RECENT_MANAGER_ERROR_UNKNOWN'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

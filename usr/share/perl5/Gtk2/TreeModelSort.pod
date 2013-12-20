@@ -1,0 +1,136 @@
+=head1 NAME
+
+Gtk2::TreeModelSort - wrapper for GtkTreeModelSort
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::TreeModelSort
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Gtk2::TreeModel
+  Gtk2::TreeSortable
+  Gtk2::TreeDragSource
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 treemodel = Gtk2::TreeModelSort->B<new> ($child_model)
+
+=head2 treemodel = Gtk2::TreeModelSort->B<new> (model => $child_model)
+
+=over
+
+=item * $child_model (Gtk2::TreeModel) The tree model to proxy.
+
+=back
+
+Aliases for C<new_with_model>.  Before Gtk2 1.120, C<new> resolved to
+C<Glib::Object::new>, which would allow creation of an invalid object if the
+required property C<model> was not supplied.
+
+=head2 treemodelsort = Gtk2::TreeModelSort-E<gt>B<new_with_model> ($child_model)
+
+=over
+
+=item * $child_model (Gtk2::TreeModel) 
+
+=back
+
+=head2 $tree_model_sort-E<gt>B<clear_cache> 
+
+=head2 treeiter = $tree_model_sort-E<gt>B<convert_child_iter_to_iter> ($child_iter)
+
+=over
+
+=item * $child_iter (Gtk2::TreeIter) 
+
+=back
+
+=head2 treepath or undef = $tree_model_sort-E<gt>B<convert_child_path_to_path> ($child_path)
+
+=over
+
+=item * $child_path (Gtk2::TreePath) 
+
+=back
+
+=head2 treeiter = $tree_model_sort-E<gt>B<convert_iter_to_child_iter> ($sorted_iter)
+
+=over
+
+=item * $sorted_iter (Gtk2::TreeIter) 
+
+=back
+
+=head2 treepath or undef = $tree_model_sort-E<gt>B<convert_path_to_child_path> ($sorted_path)
+
+=over
+
+=item * $sorted_path (Gtk2::TreePath) 
+
+=back
+
+=head2 boolean = $tree_model_sort-E<gt>B<iter_is_valid> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TreeIter) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 treemodel = $tree_model-E<gt>B<get_model> 
+
+=head2 $tree_model_sort-E<gt>B<reset_default_sort_func> 
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'model' (Gtk2::TreeModel : default undef : readable / writable / construct-only / private)
+
+The model for the TreeModelSort to sort
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,144 @@
+=head1 NAME
+
+Gtk2::version -  Library Version Information
+
+=cut
+
+=for object Gtk2::version Library Version Information
+=cut
+
+=head1 SYNOPSIS
+
+  use Gtk2 '1.023';  # require at least version 1.023 of the bindings
+
+  if ($Gtk2::VERSION >= 1.040 and Gtk2->CHECK_VERSION (2, 4, 0)) {
+     # the GtkFileChooser, new in gtk+ 2.4.0 and first supported in
+     # Gtk2-Perl at 1.040, is available
+  } else {
+     # GtkFileChooser is not available, fall back to GtkFileSelection
+  }
+
+=head1 DESCRIPTION
+
+Since the Gtk2 Perl module is a bridge to an external library with its own
+versions and API revisions, we have three different versions available for
+inspection.  Which one you need to use at which time depends entirely on
+the situation.  Gtk2 uses the same scheme as Glib and the underlying gtk+
+C library; that is, the standard
+C<$Gtk2::VERSION> for the version of the bindings, all-caps
+(MAJOR|MINOR|MICRO)_VERSION functions for the bound version, and
+lower-case (major|minor|micro)_version functions for the runtime version.
+See L<Glib::version> and
+L<http://developer.gnome.org/doc/API/2.0/gtk/gtk-Feature-Test-Macros.html>
+for more information.
+
+Note also that gtk_check_version() and GTK_CHECK_VERSION() have different
+semantics in C, and we have preserved those faithfully.
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 boolean = Gtk2-E<gt>B<CHECK_VERSION> ($required_major, $required_minor, $required_micro)
+
+=over
+
+=item * $required_major (integer) 
+
+=item * $required_minor (integer) 
+
+=item * $required_micro (integer) 
+
+=back
+
+Provides a mechanism for checking the version information that Gtk2 was
+compiled against. Essentially equvilent to the macro GTK_CHECK_VERSION. In most
+cases this function should be used rather than 
+L<check_version ()|/"string = Gtk2-E<gt>B<check_version> ($required_major, $required_minor, $required_micro)">.
+
+=head2 (MAJOR, MINOR, MICRO) = Gtk2->B<GET_VERSION_INFO>
+
+Shorthand to fetch as a list the gtk+ version for which Gtk2 was compiled.
+See C<Gtk2::MAJOR_VERSION>, etc.
+
+=head2 integer = Gtk2::MAJOR_VERSION 
+
+The major version of the gtk+ library against which Gtk2 was compiled.
+Equivalent to gtk+'s GTK_MAJOR_VERSION.
+
+=head2 integer = Gtk2::MICRO_VERSION 
+
+The micro version of the gtk+ library against which Gtk2 was compiled.
+Equivalent to gtk+'s GTK_MICRO_VERSION.
+
+=head2 integer = Gtk2::MINOR_VERSION 
+
+The minor version of the gtk+ library against which Gtk2 was compiled.
+Equivalent to gtk+'s GTK_MINOR_VERSION.
+
+=head2 string = Gtk2-E<gt>B<check_version> ($required_major, $required_minor, $required_micro)
+
+=over
+
+=item * $required_major (integer) 
+
+=item * $required_minor (integer) 
+
+=item * $required_micro (integer) 
+
+=back
+
+Returns undef if the version of gtk+ currently in use is compatible with the
+given version, otherwise returns a string describing the mismatch.  Note that
+this is not the same logic as C<Gtk2::CHECK_VERSION>.  This check is not
+terribly reliable, and should not be used to test for availability of widgets
+or functions in the Gtk2 module --- use C<Gtk2::CHECK_VERSION> for that.
+See L<Glib::version> for a more detailed description of when you'd want to
+do a runtime-version test.
+
+=head2 integer = Gtk2::major_version 
+
+The major version of the gtk+ library current in use at runtime.
+Equivalent to gtk+'s global variable gtk_major_version.
+
+=head2 integer = Gtk2::micro_version 
+
+The micro version of the gtk+ library current in use at runtime.
+Equivalent to gtk+'s global variable gtk_micro_version.
+
+=head2 integer = Gtk2::minor_version 
+
+The minor version of the gtk+ library current in use at runtime.
+Equivalent to gtk+'s global variable gtk_minor_version.
+
+=head2 (major, minor, micro) = Gtk2->B<get_version_info>
+
+Shorthand to fetch as a list the gtk+ version against which Gtk2 is linked.
+See C<Gtk2::major_version>, etc.
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::version>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

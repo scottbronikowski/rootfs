@@ -1,0 +1,238 @@
+<html>
+<head>
+<title> Chrooted Apache with makejail</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="title" lang="en" content="Setting up a chrooted Apache server with makejail on Debian GNU/Linux">
+<meta name="description" lang="en" content="How to set up a chrooted Apache daemon with the makejail script on a Debian GNU/Linux system.">
+<meta name="keywords" lang="en" content="chrooted Apache server, GNU/Linux">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h1>Setting up a chrooted Apache server with makejail on Debian Woody</h1>
+<p class="version_date">$Revision: 1.8 $<br>
+  $Date: 2003/08/29 07:56:20 $</p>
+<h2>Introduction</h2>
+<p class="resume"></p>
+<p>The <code>chroot</code> utility is often used to jail a daemon in a restricted 
+  tree. You can use it to insulate services from one another, so that security 
+  issues in a software package do not jeoparize the whole server. When using the 
+  <code>makejail</code> script, setting up and updating the chrooted tree is much 
+  easier.</p>
+<h3 class="resume">Licensing</h3>
+<p class="licence">Copyright 2002-2003 Alexandre Ratti. This doc is dual-licensed 
+  under the GNU GPL 2 (<a href="http://www.gnu.org/licenses/gpl.html"></a><a href="http://www.gnu.org/licenses/gpl.html">GNU General 
+  Public License</a>)
+  and the GNU&nbsp;FDL&nbsp;1.2 (<a href="http://www.fsf.org/copyleft/fdl.html"></a><a href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation License</a>). 
+  [<a href="http://worldserver3.oleane.com/bouynot/gabuzomeu/alex/doc/licences/index-en.html#GFDL">Tell me more</a>]</p>
+
+<h2>Installing the server</h2>
+<p>This procedure was tested on Debian GNU/Linux&nbsp;3.0 (Woody) with <code>makejail</code> 
+  0.0.4-1 (in Debian/testing).</p>
+<ol>
+  <li> 
+    <p>Log in as <code>root</code> and create a new jail directory:<br>
+      <br>
+      <code>mkdir -p /var/chroot/apache</code></p>
+  </li>
+  <li> 
+    <p>Create a new user and a new group. The chrooted Apache server will run 
+      as this user/group, which isn't used for anything else on the system. In 
+      this example, both user and group are called <code>chrapach</code>.<br>
+      <br>
+      <code>adduser --home /var/chroot/apache --shell /bin/false --no-create-home 
+      \<br>
+      --system --group chrapach</code><br>
+      <br>
+      <i>TODO&nbsp;: I created a system user; it is a good idea?</i></p>
+  </li>
+  <li> 
+    <p>Install Apache as usual on Debian:<br>
+      <br>
+      <code>apt-get install apache</code></p>
+  </li>
+  <li> 
+    <p>Set up Apache (eg. define your subdomains, etc.). In <code>/etc/apache/httpd.conf</code>, 
+      set the <em class="option">User</em> and<em class="option"> Group</em> options 
+      to <code>chrapach</code>. Then restart Apache and make sure the server is 
+      working correctly. Now, stop the Apache daemon. <br>
+      <br>
+      <code>User chrapach</code><br>
+      <code>Group chrapach<br>
+      <br>
+      /etc/init.d/apache restart<br>
+      ...<br>
+      /etc/init.d/apache stop</code></p>
+  </li>
+  <li> 
+    <p>Install<code> makejail</code> (available in Debian/testing for now). You 
+      should also also <code>wget</code> et <code>lynx</code> as they are used 
+      by <code>makejail</code> to test the chrooted server.<br>
+      <br>
+      <code>apt-get install makejail wget lynx</code></p>
+  </li>
+  <li> 
+    <p>Copy the sample config file for Apache.<br>
+      <br>
+      <code>cp /usr/share/doc/makejail/examples/apache.py /etc/makejail.d/</code></p>
+  </li>
+  <li> 
+    <p> Edit <code>/etc/makejail.d/apache.py</code>. You need to set the <code>chroot</code>, 
+      <code>users</code> and <code>groups</code> options. To run this version 
+      of <code>makejail</code>, I also added a <code>packages</code> option. See 
+      the <a href="http://www.floc.net/makejail/current/doc/"><code>makejail</code> 
+      doc</a>. Here is the content of my file&nbsp;:</p>
+    <pre>
+chroot=&quot;/var/chroot/apache&quot;
+testCommandsInsideJail=[&quot;/usr/sbin/apachectl start&quot;]
+processNames=[&quot;apache&quot;]
+testCommandsOutsideJail=[&quot;wget -r --spider http://localhost/&quot;,
+                         &quot;lynx --source https://localhost/&quot;]
+preserve=[&quot;/var/www&quot;,
+          &quot;/var/log/apache&quot;,
+          &quot;/dev/log&quot;]
+users=[&quot;chrapach&quot;]
+groups=[&quot;chrapach&quot;]
+packages=[&quot;apache&quot;, &quot;apache-common&quot;]
+userFiles=[&quot;/etc/password&quot;,
+           &quot;/etc/shadow&quot;]
+groupFiles=[&quot;/etc/group&quot;,
+            &quot;/etc/gshadow&quot;]
+forceCopy=[&quot;/etc/hosts&quot;,
+           &quot;/etc/mime.types&quot;]
+</pre>
+    <p><i>TODO: some options do not seem to work properly. For instance, <code>/etc/shadow</code> 
+      and<code>/etc/gshadow</code> are not copied, whereas <code>/etc/password</code> 
+      et <code>/etc/group</code> are fully copied instead of being filtered. </i></p>
+  </li>
+  <li> 
+    <p>Create the chroot tree:<br>
+      <br>
+      <code>makejail /etc/makejail.d/apache.py</code></p>
+  </li>
+  <li> 
+    <p>If <code>/etc/password</code> and <code>/etc/group</code> were fully copied, 
+      type:<br>
+      <br>
+      <code>grep chrapach /etc/passwd &gt; /var/chroot/apache/etc/passwd<br>
+      grep chrapach /etc/group &gt; /var/chroot/apache/etc/group</code><br>
+      <br>
+      to replace them with filtered copies.</p>
+  </li>
+  <li> 
+    <p>Copy the Web site pages and the logs into the jail. These files are not 
+      copied automatically (see the <code>preserve</code> option in the config 
+      file).<br>
+      <br>
+      <code>cp -Rp /var/www /var/chroot/apache/var<br>
+      cp -Rp /var/log/apache/*.log /var/chroot/apache/var/log/apache</code><br>
+    </p>
+  </li>
+  <li> 
+    <p>Edit the startup script for the system logging daemon so that it also listen 
+      to the <code>/var/chroot/apache/dev/log</code> socket. In <code>/etc/init.d/sysklogd</code>, 
+      replace:<br>
+      <br>
+      <code>SYSLOGD=&quot;&quot;</code><br>
+      <br>
+      with<br>
+      <br>
+      <code>SYSLOGD=&quot; -a /var/chroot/apache/dev/log&quot;</code><br>
+      <br>
+      and restart the daemon (<code>/etc/init.d/sysklogd restart</code>).</p>
+  </li>
+  <li> 
+    <p>Edit the Apache startup script (<code>/etc/init.d/apache</code>). I had 
+      to hack the default startup script for it to run properly with a chrooted 
+      tree. You need to:</p>
+    <ul>
+      <li>set a new <code>CHRDIR</code> variable at the top of the file;</li>
+      <li>edit the <code>start</code>, <code>stop</code>, <code>reload</code>, 
+        etc. sections;</li>
+      <li> 
+        <p>add a line to mount and unmount a<code>/proc</code> tree within the 
+          jail. </p>
+      </li>
+    </ul>
+    <p>See <a href="start-apache.sh">my file</a>. <br>
+      <i>TODO: should the first Apache process be run as another user than root 
+      (i.e. add --chuid chrapach:chrapach)? Cons: chrapach will need write access 
+      to the logs, which is awkward.</i></p>
+  </li>
+  <li> 
+    <p>In <code>/etc/logrotate.d/apache</code>, replace<br>
+      <br>
+      <code>/var/log/apache/*.log</code><br>
+      <br>
+      with<br>
+      <br>
+      <code>/var/chroot/apache/var/log/apache/*.log</code><br>
+    </p>
+  </li>
+  <li> 
+    <p>Start Apache (<code>/etc/init.d/apache start</code>) and check what is 
+      it reported in the jail log (<code>/var/chroot/apache/var/log/apache/error.log</code>). 
+      If your setup is more complex, (eg. if you also use PHP and MySQL), files 
+      will probably be missing. if some files are not copied automatically by 
+      <code>makejail</code>, you can list them in the <code>forceCopy</code> option 
+      in <code>/etc/makejail.d/apache.py</code>. </p>
+  </li>
+  <li> 
+    <p>Type &quot;<code>ps aux | grep apache</code>&quot; to make sure Apache 
+      is running. You should see:<br>
+      <br>
+      <code>root 180 0.0 1.1 2936 1436 ? S 04:03 0:00 /usr/sbin/apache<br>
+      chrapach 189 0.0 1.1 2960 1456 ? S 04:03 0:00 /usr/sbin/apache<br>
+      chrapach 190 0.0 1.1 2960 1456 ? S 04:03 0:00 /usr/sbin/apache<br>
+      chrapach 191 0.0 1.1 2960 1456 ? S 04:03 0:00 /usr/sbin/apache<br>
+      chrapach 192 0.0 1.1 2960 1456 ? S 04:03 0:00 /usr/sbin/apache<br>
+      chrapach 193 0.0 1.1 2960 1456 ? S 04:03 0:00 /usr/sbin/apache</code></p>
+  </li>
+  <li> Make sure the Apache processes are running chrooted&nbsp;:<br>
+    <br>
+    <code>ls -la /proc/<i>process_number</i>/root/.</code><br>
+    <br>
+    where <i>process</i> is one of the PID numbers listed above (2nd column; 189 
+    for instance). Entries for a restricted tree should be listed:<br>
+    <br>
+    <code>drwxr-sr-x 10 root staff 240 Dec 2 16:06 .<br>
+    drwxrwsr-x 4 root staff 72 Dec 2 08:07 ..<br>
+    drwxr-xr-x 2 root root 144 Dec 2 16:05 bin<br>
+    drwxr-xr-x 2 root root 120 Dec 3 04:03 dev<br>
+    drwxr-xr-x 5 root root 408 Dec 3 04:03 etc<br>
+    drwxr-xr-x 2 root root 800 Dec 2 16:06 lib<br>
+    dr-xr-xr-x 43 root root 0 Dec 3 05:03 proc<br>
+    drwxr-xr-x 2 root root 48 Dec 2 16:06 sbin<br>
+    drwxr-xr-x 6 root root 144 Dec 2 16:04 usr<br>
+    drwxr-xr-x 7 root root 168 Dec 2 16:06 var<br>
+    <br>
+    </code>To automate this test, you can type:<code><br>
+    <br>
+    ls -la /proc/`cat /var/chroot/apache/var/run/apache.pid`/root/.<br>
+    <br>
+    </code> <i>TODO: other tests that can be run to make sure the jail is closed?</i><code><br>
+    </code></li>
+</ol>
+<p><b>Why I like this script</b>: setting up the jail is not very difficult and 
+  the server can be updated in 2&nbsp;lines:</p>
+<blockquote> 
+  <p><code>apt-get update &amp;&amp; apt-get install apache</code><br>
+    <code>makejail /etc/makejail.d/apache.py</code> </p>
+</blockquote>
+<h2>See also</h2>
+<ul>
+  <li><a href="http://www.floc.net/makejail/"><code>makejail</code> homepage</a> 
+    (this script was written by Alain T&eacute;sio)</li>
+  <li><a href="http://www.easter-eggs.org/article242.html">Bind9 chroot&eacute; 
+    avec <code>makejail</code></a>, Pascal Brugier, easter-eggs.org, 21/03/2002</li>
+  <li><a href="http://www.networkdweebs.com/chroot.html">Chrooting daemons and 
+    system processes</a>, jonathan, Network Dweebs, 21/10/2002</li>
+  <li><a href="http://www.digitaltoad.net/docs/guide/secure_rh/chap29sec254.html">Apache 
+    in a chroot jail</a>, <i>Securing and Optimizing Linux</i>, Gerhard Mourani, 
+    2000 </li>
+</ul>
+<hr>
+<p>
+$Id: index-en.html,v 1.8 2003/08/29 07:56:20 alex Exp $
+ <br>
+Available at  http://www.gabuzomeu.net/alex/doc/apache/index-en.html
+</body>
+</html>

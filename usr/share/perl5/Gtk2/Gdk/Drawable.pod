@@ -1,0 +1,547 @@
+=head1 NAME
+
+Gtk2::Gdk::Drawable - wrapper for GdkDrawable
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Gdk::Drawable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 unsigned = $drawable-E<gt>B<XID> 
+
+=head2 unsigned = $drawable-E<gt>B<XWINDOW> 
+
+=head2 region = $drawable-E<gt>B<get_clip_region> 
+
+=head2 colormap = $drawable-E<gt>B<get_colormap> 
+
+=head2 $drawable-E<gt>B<set_colormap> ($colormap)
+
+=over
+
+=item * $colormap (Gtk2::Gdk::Colormap) 
+
+=back
+
+=head2 image = $drawable-E<gt>B<copy_to_image> ($image, $src_x, $src_y, $dest_x, $dest_y, $width, $height)
+
+=over
+
+=item * $image (Gtk2::Gdk::Image or undef) 
+
+=item * $src_x (integer) 
+
+=item * $src_y (integer) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 integer = $drawable-E<gt>B<get_depth> 
+
+=head2 display = $drawable-E<gt>B<get_display> 
+
+Since: gtk+ 2.2
+
+=head2 $drawable-E<gt>B<draw_arc> ($gc, $filled, $x, $y, $width, $height, $angle1, $angle2)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $filled (boolean) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $angle1 (integer) 
+
+=item * $angle2 (integer) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_drawable> ($gc, $src, $xsrc, $ysrc, $xdest, $ydest, $width, $height)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $src (Gtk2::Gdk::Drawable) 
+
+=item * $xsrc (integer) 
+
+=item * $ysrc (integer) 
+
+=item * $xdest (integer) 
+
+=item * $ydest (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_gray_image> ($gc, $x, $y, $width, $height, $dith, $buf, $rowstride)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $dith (Gtk2::Gdk::RgbDither) 
+
+=item * $buf (scalar) 
+
+=item * $rowstride (integer) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_image> ($gc, $image, $xsrc, $ysrc, $xdest, $ydest, $width, $height)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $image (Gtk2::Gdk::Image) 
+
+=item * $xsrc (integer) 
+
+=item * $ysrc (integer) 
+
+=item * $xdest (integer) 
+
+=item * $ydest (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_indexed_image> ($gc, $x, $y, $width, $height, $dith, $buf, $rowstride, $cmap)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $dith (Gtk2::Gdk::RgbDither) 
+
+=item * $buf (scalar) 
+
+=item * $rowstride (integer) 
+
+=item * $cmap (scalar) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_layout> ($gc, $x, $y, $layout)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $layout (Pango::Layout) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_layout_line> ($gc, $x, $y, $line)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $line (Pango::LayoutLine) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_layout_line_with_colors> ($gc, $x, $y, $line, $foreground, $background)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $line (Pango::LayoutLine) 
+
+=item * $foreground (Gtk2::Gdk::Color) 
+
+=item * $background (Gtk2::Gdk::Color) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_layout_with_colors> ($gc, $x, $y, $layout, $foreground, $background)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $layout (Pango::Layout) 
+
+=item * $foreground (Gtk2::Gdk::Color) 
+
+=item * $background (Gtk2::Gdk::Color) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_line> ($gc, $x1_, $y1_, $x2_, $y2_)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x1_ (integer) 
+
+=item * $y1_ (integer) 
+
+=item * $x2_ (integer) 
+
+=item * $y2_ (integer) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_lines> ($gc, $x1, $y1, ...)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x1 (integer) the x coordinate of the first point
+
+=item * $y1 (integer) the y coordinate of the first point
+
+=item * ... (list) pairs of x and y coordinates
+
+=back
+
+
+
+=head2 $drawable-E<gt>B<draw_pixbuf> ($gc, $pixbuf, $src_x, $src_y, $dest_x, $dest_y, $width, $height, $dither, $x_dither, $y_dither)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf) 
+
+=item * $src_x (integer) 
+
+=item * $src_y (integer) 
+
+=item * $dest_x (integer) 
+
+=item * $dest_y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $dither (Gtk2::Gdk::RgbDither) 
+
+=item * $x_dither (integer) 
+
+=item * $y_dither (integer) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $drawable-E<gt>B<draw_point> ($gc, $x, $y)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_points> ($gc, $x1, $y1, ...)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x1 (integer) the x coordinate of the first point
+
+=item * $y1 (integer) the y coordinate of the first point
+
+=back
+
+
+
+=head2 $drawable-E<gt>B<draw_polygon> ($gc, $filled, $x1, $y1, ...)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $filled (boolean) 
+
+=item * $x1 (integer) the x coordinate of the first point
+
+=item * $y1 (integer) the y coordinate of the first point
+
+=item * ... (list) pairs of x and y coordinates
+
+=back
+
+
+
+=head2 $drawable-E<gt>B<draw_rectangle> ($gc, $filled, $x, $y, $width, $height)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $filled (boolean) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_rgb_32_image> ($gc, $x, $y, $width, $height, $dith, $buf, $rowstride)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $dith (Gtk2::Gdk::RgbDither) 
+
+=item * $buf (scalar) 
+
+=item * $rowstride (integer) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_rgb_32_image_dithalign> ($gc, $x, $y, $width, $height, $dith, $rgb_buf, $rowstride, $xdith, $ydith)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $dith (Gtk2::Gdk::RgbDither) 
+
+=item * $rgb_buf (scalar) 
+
+=item * $rowstride (integer) 
+
+=item * $xdith (integer) 
+
+=item * $ydith (integer) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_rgb_image> ($gc, $x, $y, $width, $height, $dith, $buf, $rowstride)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $dith (Gtk2::Gdk::RgbDither) 
+
+=item * $buf (scalar) 
+
+=item * $rowstride (integer) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_rgb_image_dithalign> ($gc, $x, $y, $width, $height, $dith, $rgb_buf, $rowstride, $xdith, $ydith)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $dith (Gtk2::Gdk::RgbDither) 
+
+=item * $rgb_buf (scalar) 
+
+=item * $rowstride (integer) 
+
+=item * $xdith (integer) 
+
+=item * $ydith (integer) 
+
+=back
+
+=head2 $drawable-E<gt>B<draw_segments> ($gc, $x1, $y1, $x2, $y2, ...)
+
+=over
+
+=item * $gc (Gtk2::Gdk::GC) 
+
+=item * $x1 (integer) the x coordinate of the first point
+
+=item * $y1 (integer) the y coordinate of the first point
+
+=item * $x2 (integer) the x coordinate of the second point
+
+=item * $y2 (integer) the y coordinate of the second point
+
+=item * ... (list) quads of x and y coordinates
+
+=back
+
+
+
+=head2 image = $drawable-E<gt>B<get_image> ($x, $y, $width, $height)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=back
+
+=head2 screen = $drawable-E<gt>B<get_screen> 
+
+Since: gtk+ 2.2
+
+=head2 (width, height) = $drawable-E<gt>B<get_size> 
+
+=head2 region = $drawable-E<gt>B<get_visible_region> 
+
+=head2 visual = $drawable-E<gt>B<get_visual> 
+
+=head2 unsigned = $drawable-E<gt>B<get_xid> 
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::Gdk::RgbDither
+
+=over
+
+=item * 'none' / 'GDK_RGB_DITHER_NONE'
+
+=item * 'normal' / 'GDK_RGB_DITHER_NORMAL'
+
+=item * 'max' / 'GDK_RGB_DITHER_MAX'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

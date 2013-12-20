@@ -1,0 +1,236 @@
+=head1 NAME
+
+Gtk2::ActionGroup - wrapper for GtkActionGroup
+
+=cut
+
+=for position DESCRIPTION
+
+=head2 NOTE: Translation
+
+In C, gtk+'s action groups can use the translation domain to ensure that action
+labels and tooltips are translated along with the rest of the app.  However,
+the translation function was not available for calling B<by> the Perl bindings
+until gtk+ 2.6; that is, setting the translation domain had no effect.
+Translation of action groups is supported in Perl as of Gtk2 1.080 using
+gtk+ 2.6.0 or later.
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::ActionGroup
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 actiongroup = Gtk2::ActionGroup-E<gt>B<new> ($name)
+
+=over
+
+=item * $name (string) 
+
+=back
+
+=head2 action = $action_group-E<gt>B<get_action> ($action_name)
+
+=over
+
+=item * $action_name (string) 
+
+=back
+
+=head2 $action_group-E<gt>B<add_action> ($action)
+
+=over
+
+=item * $action (Gtk2::Action) 
+
+=back
+
+=head2 $action_group-E<gt>B<add_action_with_accel> ($action, $accelerator)
+
+=over
+
+=item * $action (Gtk2::Action) 
+
+=item * $accelerator (string or undef) 
+
+=back
+
+=head2 $action_group-E<gt>B<add_actions> ($action_entries, $user_data=undef)
+
+=over
+
+=item * $action_entries (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+=head2 $action_group-E<gt>B<add_radio_actions> ($radio_action_entries, $value, $on_change, $user_data=undef)
+
+=over
+
+=item * $radio_action_entries (scalar) 
+
+=item * $value (integer) 
+
+=item * $on_change (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+=head2 $action_group-E<gt>B<add_toggle_actions> ($toggle_action_entries, $user_data=undef)
+
+=over
+
+=item * $toggle_action_entries (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+=head2 list = $action_group-E<gt>B<list_actions> 
+
+=head2 string = $action_group-E<gt>B<get_name> 
+
+=head2 $action_group-E<gt>B<remove_action> ($action)
+
+=over
+
+=item * $action (Gtk2::Action) 
+
+=back
+
+=head2 boolean = $action_group-E<gt>B<get_sensitive> 
+
+=head2 $action_group-E<gt>B<set_sensitive> ($sensitive)
+
+=over
+
+=item * $sensitive (boolean) 
+
+=back
+
+=head2 $action_group-E<gt>B<set_translate_func> ($func, $data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 string = $action_group-E<gt>B<translate_string> ($string)
+
+=over
+
+=item * $string (string) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 $action_group-E<gt>B<set_translation_domain> ($domain)
+
+=over
+
+=item * $domain (string) 
+
+=back
+
+=head2 boolean = $action_group-E<gt>B<get_visible> 
+
+=head2 $action_group-E<gt>B<set_visible> ($sensitive)
+
+=over
+
+=item * $sensitive (boolean) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'name' (string : default undef : readable / writable / construct-only / private)
+
+A name for the action group.
+
+=item 'sensitive' (boolean : default true : readable / writable / private)
+
+Whether the action group is enabled.
+
+=item 'visible' (boolean : default true : readable / writable / private)
+
+Whether the action group is visible.
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<connect-proxy> (Gtk2::ActionGroup, Gtk2::Action, Gtk2::Widget)
+
+=item B<disconnect-proxy> (Gtk2::ActionGroup, Gtk2::Action, Gtk2::Widget)
+
+=item B<pre-activate> (Gtk2::ActionGroup, Gtk2::Action)
+
+=item B<post-activate> (Gtk2::ActionGroup, Gtk2::Action)
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

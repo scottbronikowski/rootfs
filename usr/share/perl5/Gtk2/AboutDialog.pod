@@ -1,0 +1,356 @@
+=head1 NAME
+
+Gtk2::AboutDialog - wrapper for GtkAboutDialog
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Bin
+                           +----Gtk2::Window
+                                +----Gtk2::Dialog
+                                     +----Gtk2::AboutDialog
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+=for object Gtk2::AboutDialog
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::AboutDialog-E<gt>B<new> 
+
+=head2 list = $about-E<gt>B<get_artists> 
+
+=head2 $about-E<gt>B<set_artists> ($artist1, ...)
+
+=over
+
+=item * $artist1 (string) 
+
+=item * ... (list) 
+
+=back
+
+
+
+=head2 list = $about-E<gt>B<get_authors> 
+
+=head2 $about-E<gt>B<set_authors> ($author1, ...)
+
+=over
+
+=item * $author1 (string) 
+
+=item * ... (list) 
+
+=back
+
+
+
+=head2 string or undef = $about-E<gt>B<get_comments> 
+
+=head2 $about-E<gt>B<set_comments> ($comments)
+
+=over
+
+=item * $comments (string or undef) 
+
+=back
+
+=head2 string or undef = $about-E<gt>B<get_copyright> 
+
+=head2 $about-E<gt>B<set_copyright> ($copyright)
+
+=over
+
+=item * $copyright (string or undef) 
+
+=back
+
+=head2 list = $about-E<gt>B<get_documenters> 
+
+=head2 $about-E<gt>B<set_documenters> ($documenter1, ...)
+
+=over
+
+=item * $documenter1 (string) 
+
+=item * ... (list) 
+
+=back
+
+
+
+=head2 Gtk2::AboutDialog-E<gt>B<set_email_hook> ($func, $data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+=head2 string or undef = $about-E<gt>B<get_license> 
+
+=head2 $about-E<gt>B<set_license> ($license)
+
+=over
+
+=item * $license (string or undef) 
+
+=back
+
+=head2 pixbuf or undef = $about-E<gt>B<get_logo> 
+
+=head2 string or undef = $about-E<gt>B<get_logo_icon_name> 
+
+=head2 $about-E<gt>B<set_logo_icon_name> ($icon_name)
+
+=over
+
+=item * $icon_name (string or undef) 
+
+=back
+
+=head2 $about-E<gt>B<set_logo> ($logo)
+
+=over
+
+=item * $logo (Gtk2::Gdk::Pixbuf or undef) 
+
+=back
+
+=head2 string or undef = $about-E<gt>B<get_program_name> 
+
+=head2 $about-E<gt>B<set_program_name> ($name)
+
+=over
+
+=item * $name (string or undef) 
+
+=back
+
+=head2 Gtk2-E<gt>B<show_about_dialog> ($parent, $first_property_name, ...)
+
+=over
+
+=item * $parent (Gtk2::Window or undef) 
+
+=item * $first_property_name (string) 
+
+=item * ... (list) the rest of a list of name=>property value pairs.
+
+=back
+
+This is a convenience function for showing an application's about box. The
+constructed dialog is associated with the parent window and reused for
+future invocations of this function.
+
+The dialog is shown nonmodally, and will be hidden by any response.
+
+=head2 string or undef = $about-E<gt>B<get_translator_credits> 
+
+=head2 $about-E<gt>B<set_translator_credits> ($translator_credits)
+
+=over
+
+=item * $translator_credits (string or undef) 
+
+=back
+
+=head2 Gtk2::AboutDialog-E<gt>B<set_url_hook> ($func, $data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+=head2 string or undef = $about-E<gt>B<get_version> 
+
+=head2 $about-E<gt>B<set_version> ($version)
+
+=over
+
+=item * $version (string or undef) 
+
+=back
+
+=head2 string or undef = $about-E<gt>B<get_website> 
+
+=head2 string or undef = $about-E<gt>B<get_website_label> 
+
+=head2 $about-E<gt>B<set_website_label> ($website_label)
+
+=over
+
+=item * $website_label (string or undef) 
+
+=back
+
+=head2 $about-E<gt>B<set_website> ($website)
+
+=over
+
+=item * $website (string or undef) 
+
+=back
+
+=head2 boolean = $about-E<gt>B<get_wrap_license> 
+
+Since: gtk+ 2.8
+
+=head2 $about-E<gt>B<set_wrap_license> ($wrap_license)
+
+=over
+
+=item * $wrap_license (boolean) 
+
+=back
+
+Since: gtk+ 2.8
+
+
+
+=cut
+
+=for position post_methods
+
+=head1 URL AND EMAIL HOOKS
+
+When setting the website and email hooks for the Gtk2::AboutDialog widget, you
+should remember that the order is important: you should set the hook functions
+B<before> setting the website and email URL properties, like this:
+
+  $about_dialog->set_url_hook(\&launch_web_browser);
+  $about_dialog->set_website($app_website);
+
+otherwise the AboutDialog will not display the website and the email addresses
+as clickable.
+
+=cut
+
+
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'artists' (Glib::Strv : default undef : readable / writable / private)
+
+List of people who have contributed artwork to the program
+
+=item 'authors' (Glib::Strv : default undef : readable / writable / private)
+
+List of authors of the program
+
+=item 'comments' (string : default undef : readable / writable / private)
+
+Comments about the program
+
+=item 'copyright' (string : default undef : readable / writable / private)
+
+Copyright information for the program
+
+=item 'documenters' (Glib::Strv : default undef : readable / writable / private)
+
+List of people documenting the program
+
+=item 'license' (string : default undef : readable / writable / private)
+
+The license of the program
+
+=item 'logo' (Gtk2::Gdk::Pixbuf : default undef : readable / writable / private)
+
+A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()
+
+=item 'logo-icon-name' (string : default undef : readable / writable / private)
+
+A named icon to use as the logo for the about box.
+
+=item 'program-name' (string : default undef : readable / writable / private)
+
+The name of the program. If this is not set, it defaults to g_get_application_name()
+
+=item 'translator-credits' (string : default undef : readable / writable / private)
+
+Credits to the translators. This string should be marked as translatable
+
+=item 'version' (string : default undef : readable / writable / private)
+
+The version of the program
+
+=item 'website' (string : default undef : readable / writable / private)
+
+The URL for the link to the website of the program
+
+=item 'website-label' (string : default undef : readable / writable / private)
+
+The label for the link to the website of the program. If this is not set, it defaults to the URL
+
+=item 'wrap-license' (boolean : default false : readable / writable / private)
+
+Whether to wrap the license text.
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item boolean = B<activate-link> (Gtk2::AboutDialog, string)
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>, L<Gtk2::Bin>, L<Gtk2::Window>, L<Gtk2::Dialog>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

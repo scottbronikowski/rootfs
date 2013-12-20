@@ -1,0 +1,90 @@
+=head1 NAME
+
+Gtk2::Gdk::Event::Client
+
+=cut
+
+=for position post_hierarchy
+
+=head1 HIERARCHY
+
+  Gtk2::Gdk::Event
+  +----Gtk2::Gdk::Event::Client
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 old_string = $eventclient->B<data> (string)
+
+=head2 old_list = $eventclient->B<data> (list of ten shorts)
+
+=head2 old_list = $eventclient->B<data> (list of five longs)
+
+=over
+
+=item * ... (list) 
+
+=back
+
+
+
+Depending on the value of I<data_format>, I<data> takes one of three different
+kinds of values:
+
+  +-------------------+-----------------------+
+  |    data_format    |         data          |
+  +-------------------+-----------------------+
+  | Gtk2::Gdk::CHARS  | a string of length 20 |
+  | Gtk2::Gdk::SHORTS | a list of ten shorts  |
+  | Gtk2::Gdk::LONGS  | a list of five longs  |
+  +-------------------+-----------------------+
+
+
+=head2 unsigned = $eventclient-E<gt>B<data_format> ($newvalue=0)
+
+=over
+
+=item * $newvalue (unsigned) 
+
+=back
+
+
+This should be set to either $Gtk2::Gdk::CHARS, $Gtk2::Gdk::SHORTS, or
+$Gtk2::Gdk::LONGS.  See I<data> for a full explanation.
+
+
+=head2 atom = $eventclient-E<gt>B<message_type> ($newvalue=0)
+
+=over
+
+=item * $newvalue (Gtk2::Gdk::Atom) 
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

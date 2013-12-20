@@ -1,0 +1,789 @@
+=head1 NAME
+
+Gtk2::Entry - wrapper for GtkEntry
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Entry
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+  Gtk2::Editable
+  Gtk2::CellEditable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::Entry-E<gt>B<new> 
+
+=head2 widget = Gtk2::Entry-E<gt>B<new_with_max_length> ($max)
+
+=over
+
+=item * $max (integer) 
+
+=back
+
+=head2 boolean = $entry-E<gt>B<get_activates_default> 
+
+=head2 $entry-E<gt>B<set_activates_default> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 double = $entry-E<gt>B<get_alignment> 
+
+Since: gtk+ 2.4
+
+=head2 $entry-E<gt>B<set_alignment> ($xalign)
+
+=over
+
+=item * $xalign (double) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 $entry-E<gt>B<append_text> ($text)
+
+=over
+
+=item * $text (string) 
+
+=back
+
+=head2 entrycompletion or undef = $entry-E<gt>B<get_completion> 
+
+Since: gtk+ 2.4
+
+=head2 $entry-E<gt>B<set_completion> ($completion)
+
+=over
+
+=item * $completion (Gtk2::EntryCompletion or undef) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 adjustment or undef = $entry-E<gt>B<get_cursor_hadjustment> 
+
+Since: gtk+ 2.12
+
+=head2 $entry-E<gt>B<set_cursor_hadjustment> ($adjustment)
+
+=over
+
+=item * $adjustment (Gtk2::Adjustment or undef) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $entry-E<gt>B<set_editable> ($editable)
+
+=over
+
+=item * $editable (boolean) 
+
+=back
+
+=head2 boolean = $entry-E<gt>B<get_has_frame> 
+
+=head2 $entry-E<gt>B<set_has_frame> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 boolean = $entry-E<gt>B<get_icon_activatable> ($icon_pos)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 $entry-E<gt>B<set_icon_activatable> ($icon_pos, $activatable)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=item * $activatable (boolean) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 integer = $entry-E<gt>B<get_icon_at_pos> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 $entry-E<gt>B<set_icon_from_icon_name> ($icon_pos, $icon_name)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=item * $icon_name (string or undef) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 $entry-E<gt>B<set_icon_from_pixbuf> ($icon_pos, $pixbuf)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf or undef) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 $entry-E<gt>B<set_icon_from_stock> ($icon_pos, $stock_id)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=item * $stock_id (string or undef) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 string or undef = $entry-E<gt>B<get_icon_name> ($icon_pos)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 pixbuf or undef = $entry-E<gt>B<get_icon_pixbuf> ($icon_pos)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 boolean = $entry-E<gt>B<get_icon_sensitive> ($icon_pos)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 $entry-E<gt>B<set_icon_sensitive> ($icon_pos, $sensitive)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=item * $sensitive (boolean) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 string or undef = $entry-E<gt>B<get_icon_stock> ($icon_pos)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 imagetype = $entry-E<gt>B<get_icon_storage_type> ($icon_pos)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 $entry-E<gt>B<set_icon_tooltip_markup> ($icon_pos, $tooltip)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=item * $tooltip (string or undef) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 $entry-E<gt>B<set_icon_tooltip_text> ($icon_pos, $tooltip)
+
+=over
+
+=item * $icon_pos (Gtk2::EntryIconPosition) 
+
+=item * $tooltip (string or undef) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 border or undef = $entry-E<gt>B<get_inner_border> 
+
+Since: gtk+ 2.10
+
+=head2 $entry-E<gt>B<set_inner_border> ($border)
+
+=over
+
+=item * $border (Gtk2::Border or undef) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 character = $entry-E<gt>B<get_invisible_char> 
+
+=head2 $entry-E<gt>B<set_invisible_char> ($ch)
+
+=over
+
+=item * $ch (character) 
+
+=back
+
+=head2 layout = $entry-E<gt>B<get_layout> 
+
+=head2 integer = $entry-E<gt>B<layout_index_to_text_index> ($layout_index)
+
+=over
+
+=item * $layout_index (integer) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 (x, y) = $entry-E<gt>B<get_layout_offsets> 
+
+=head2 integer = $entry-E<gt>B<get_max_length> 
+
+=head2 $entry-E<gt>B<set_max_length> ($max)
+
+=over
+
+=item * $max (integer) 
+
+=back
+
+=head2 boolean = $entry-E<gt>B<get_overwrite_mode> 
+
+Since: gtk+ 2.14
+
+=head2 $entry-E<gt>B<set_overwrite_mode> ($overwrite)
+
+=over
+
+=item * $overwrite (boolean) 
+
+=back
+
+Since: gtk+ 2.14
+
+=head2 $entry-E<gt>B<set_position> ($position)
+
+=over
+
+=item * $position (integer) 
+
+=back
+
+=head2 $entry-E<gt>B<prepend_text> ($text)
+
+=over
+
+=item * $text (string) 
+
+=back
+
+=head2 double = $entry-E<gt>B<get_progress_fraction> 
+
+Since: gtk+ 2.16
+
+=head2 $entry-E<gt>B<set_progress_fraction> ($fraction)
+
+=over
+
+=item * $fraction (double) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 $entry-E<gt>B<progress_pulse> 
+
+Since: gtk+ 2.16
+
+=head2 double = $entry-E<gt>B<get_progress_pulse_step> 
+
+Since: gtk+ 2.16
+
+=head2 $entry-E<gt>B<set_progress_pulse_step> ($fraction)
+
+=over
+
+=item * $fraction (double) 
+
+=back
+
+Since: gtk+ 2.16
+
+=head2 $entry-E<gt>B<select_region> ($start, $end)
+
+=over
+
+=item * $start (integer) 
+
+=item * $end (integer) 
+
+=back
+
+=head2 string = $entry-E<gt>B<get_text> 
+
+=head2 integer = $entry-E<gt>B<text_index_to_layout_index> ($text_index)
+
+=over
+
+=item * $text_index (integer) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 unsigned = $entry-E<gt>B<get_text_length> 
+
+Since: gtk+ 2.14
+
+=head2 $entry-E<gt>B<set_text> ($text)
+
+=over
+
+=item * $text (string) 
+
+=back
+
+=head2 $entry-E<gt>B<unset_invisible_char> 
+
+Since: gtk+ 2.16
+
+=head2 boolean = $entry-E<gt>B<get_visibility> 
+
+=head2 $entry-E<gt>B<set_visibility> ($visible)
+
+=over
+
+=item * $visible (boolean) 
+
+=back
+
+=head2 integer = $entry-E<gt>B<get_width_chars> 
+
+=head2 $entry-E<gt>B<set_width_chars> ($n_chars)
+
+=over
+
+=item * $n_chars (integer) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'activates-default' (boolean : default false : readable / writable / private)
+
+Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed
+
+=item 'buffer' (Glib::Object::_Unregistered::GtkEntryBuffer : default undef : readable / writable / construct / private)
+
+Text buffer object which actually stores entry text
+
+=item 'caps-lock-warning' (boolean : default true : readable / writable / private)
+
+Whether password entries will show a warning when Caps Lock is on
+
+=item 'cursor-position' (integer : default 0 : readable / private)
+
+The current position of the insertion cursor in chars
+
+=item 'editable' (boolean : default true : readable / writable / private)
+
+Whether the entry contents can be edited
+
+=item 'has-frame' (boolean : default true : readable / writable / private)
+
+FALSE removes outside bevel from entry
+
+=item 'im-module' (string : default undef : readable / writable / private)
+
+Which IM module should be used
+
+=item 'inner-border' (Gtk2::Border : default undef : readable / writable / private)
+
+Border between text and frame. Overrides the inner-border style property
+
+=item 'invisible-char' (Glib::UInt : default 42 "*" : readable / writable / private)
+
+The character to use when masking entry contents (in "password mode")
+
+=item 'invisible-char-set' (boolean : default false : readable / writable / private)
+
+Whether the invisible char has been set
+
+=item 'max-length' (integer : default 0 : readable / writable / private)
+
+Maximum number of characters for this entry. Zero if no maximum
+
+=item 'overwrite-mode' (boolean : default false : readable / writable / private)
+
+Whether new text overwrites existing text
+
+=item 'primary-icon-activatable' (boolean : default false : readable / writable / private)
+
+Whether the primary icon is activatable
+
+=item 'primary-icon-gicon' (Glib::Object::_Unregistered::GIcon : default undef : readable / writable / private)
+
+GIcon for primary icon
+
+=item 'primary-icon-name' (string : default undef : readable / writable / private)
+
+Icon name for primary icon
+
+=item 'primary-icon-pixbuf' (Gtk2::Gdk::Pixbuf : default undef : readable / writable / private)
+
+Primary pixbuf for the entry
+
+=item 'primary-icon-sensitive' (boolean : default true : readable / writable / private)
+
+Whether the primary icon is sensitive
+
+=item 'primary-icon-stock' (string : default undef : readable / writable / private)
+
+Stock ID for primary icon
+
+=item 'primary-icon-storage-type' (Gtk2::ImageType : default "empty" : readable / private)
+
+The representation being used for primary icon
+
+=item 'primary-icon-tooltip-markup' (string : default undef : readable / writable / private)
+
+The contents of the tooltip on the primary icon
+
+=item 'primary-icon-tooltip-text' (string : default undef : readable / writable / private)
+
+The contents of the tooltip on the primary icon
+
+=item 'progress-fraction' (double : default 0 : readable / writable / private)
+
+The current fraction of the task that's been completed
+
+=item 'progress-pulse-step' (double : default 0.1 : readable / writable / private)
+
+The fraction of total entry width to move the progress bouncing block for each call to gtk_entry_progress_pulse()
+
+=item 'scroll-offset' (integer : default 0 : readable / private)
+
+Number of pixels of the entry scrolled off the screen to the left
+
+=item 'secondary-icon-activatable' (boolean : default false : readable / writable / private)
+
+Whether the secondary icon is activatable
+
+=item 'secondary-icon-gicon' (Glib::Object::_Unregistered::GIcon : default undef : readable / writable / private)
+
+GIcon for secondary icon
+
+=item 'secondary-icon-name' (string : default undef : readable / writable / private)
+
+Icon name for secondary icon
+
+=item 'secondary-icon-pixbuf' (Gtk2::Gdk::Pixbuf : default undef : readable / writable / private)
+
+Secondary pixbuf for the entry
+
+=item 'secondary-icon-sensitive' (boolean : default true : readable / writable / private)
+
+Whether the secondary icon is sensitive
+
+=item 'secondary-icon-stock' (string : default undef : readable / writable / private)
+
+Stock ID for secondary icon
+
+=item 'secondary-icon-storage-type' (Gtk2::ImageType : default "empty" : readable / private)
+
+The representation being used for secondary icon
+
+=item 'secondary-icon-tooltip-markup' (string : default undef : readable / writable / private)
+
+The contents of the tooltip on the secondary icon
+
+=item 'secondary-icon-tooltip-text' (string : default undef : readable / writable / private)
+
+The contents of the tooltip on the secondary icon
+
+=item 'selection-bound' (integer : default 0 : readable / private)
+
+The position of the opposite end of the selection from the cursor in chars
+
+=item 'shadow-type' (Gtk2::ShadowType : default "in" : readable / writable / private)
+
+Which kind of shadow to draw around the entry when has-frame is set
+
+=item 'text' (string : default "" : readable / writable / private)
+
+The contents of the entry
+
+=item 'text-length' (Glib::UInt : default 0 : readable / private)
+
+Length of the text currently in the entry
+
+=item 'truncate-multiline' (boolean : default false : readable / writable / private)
+
+Whether to truncate multiline pastes to one line.
+
+=item 'visibility' (boolean : default true : readable / writable / private)
+
+FALSE displays the "invisible char" instead of the actual text (password mode)
+
+=item 'width-chars' (integer : default -1 : readable / writable / private)
+
+Number of characters to leave space for in the entry
+
+=item 'xalign' (float : default 0 : readable / writable / private)
+
+The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts.
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<activate> (Gtk2::Entry)
+
+=item B<preedit-changed> (Gtk2::Entry, string)
+
+=item B<move-cursor> (Gtk2::Entry, Gtk2::MovementStep, integer, boolean)
+
+=item B<insert-at-cursor> (Gtk2::Entry, string)
+
+=item B<delete-from-cursor> (Gtk2::Entry, Gtk2::DeleteType, integer)
+
+=item B<backspace> (Gtk2::Entry)
+
+=item B<cut-clipboard> (Gtk2::Entry)
+
+=item B<copy-clipboard> (Gtk2::Entry)
+
+=item B<paste-clipboard> (Gtk2::Entry)
+
+=item B<toggle-overwrite> (Gtk2::Entry)
+
+=item B<populate-popup> (Gtk2::Entry, Gtk2::Menu)
+
+=item B<icon-press> (Gtk2::Entry, Gtk2::EntryIconPosition, Gtk2::Gdk::Event)
+
+=item B<icon-release> (Gtk2::Entry, Gtk2::EntryIconPosition, Gtk2::Gdk::Event)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::DeleteType
+
+=over
+
+=item * 'chars' / 'GTK_DELETE_CHARS'
+
+=item * 'word-ends' / 'GTK_DELETE_WORD_ENDS'
+
+=item * 'words' / 'GTK_DELETE_WORDS'
+
+=item * 'display-lines' / 'GTK_DELETE_DISPLAY_LINES'
+
+=item * 'display-line-ends' / 'GTK_DELETE_DISPLAY_LINE_ENDS'
+
+=item * 'paragraph-ends' / 'GTK_DELETE_PARAGRAPH_ENDS'
+
+=item * 'paragraphs' / 'GTK_DELETE_PARAGRAPHS'
+
+=item * 'whitespace' / 'GTK_DELETE_WHITESPACE'
+
+=back
+
+
+=head2 enum Gtk2::EntryIconPosition
+
+=over
+
+=item * 'primary' / 'GTK_ENTRY_ICON_PRIMARY'
+
+=item * 'secondary' / 'GTK_ENTRY_ICON_SECONDARY'
+
+=back
+
+
+=head2 enum Gtk2::ImageType
+
+=over
+
+=item * 'empty' / 'GTK_IMAGE_EMPTY'
+
+=item * 'pixmap' / 'GTK_IMAGE_PIXMAP'
+
+=item * 'image' / 'GTK_IMAGE_IMAGE'
+
+=item * 'pixbuf' / 'GTK_IMAGE_PIXBUF'
+
+=item * 'stock' / 'GTK_IMAGE_STOCK'
+
+=item * 'icon-set' / 'GTK_IMAGE_ICON_SET'
+
+=item * 'animation' / 'GTK_IMAGE_ANIMATION'
+
+=item * 'icon-name' / 'GTK_IMAGE_ICON_NAME'
+
+=item * 'gicon' / 'GTK_IMAGE_GICON'
+
+=back
+
+
+=head2 enum Gtk2::MovementStep
+
+=over
+
+=item * 'logical-positions' / 'GTK_MOVEMENT_LOGICAL_POSITIONS'
+
+=item * 'visual-positions' / 'GTK_MOVEMENT_VISUAL_POSITIONS'
+
+=item * 'words' / 'GTK_MOVEMENT_WORDS'
+
+=item * 'display-lines' / 'GTK_MOVEMENT_DISPLAY_LINES'
+
+=item * 'display-line-ends' / 'GTK_MOVEMENT_DISPLAY_LINE_ENDS'
+
+=item * 'paragraphs' / 'GTK_MOVEMENT_PARAGRAPHS'
+
+=item * 'paragraph-ends' / 'GTK_MOVEMENT_PARAGRAPH_ENDS'
+
+=item * 'pages' / 'GTK_MOVEMENT_PAGES'
+
+=item * 'buffer-ends' / 'GTK_MOVEMENT_BUFFER_ENDS'
+
+=item * 'horizontal-pages' / 'GTK_MOVEMENT_HORIZONTAL_PAGES'
+
+=back
+
+
+=head2 enum Gtk2::ShadowType
+
+=over
+
+=item * 'none' / 'GTK_SHADOW_NONE'
+
+=item * 'in' / 'GTK_SHADOW_IN'
+
+=item * 'out' / 'GTK_SHADOW_OUT'
+
+=item * 'etched-in' / 'GTK_SHADOW_ETCHED_IN'
+
+=item * 'etched-out' / 'GTK_SHADOW_ETCHED_OUT'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

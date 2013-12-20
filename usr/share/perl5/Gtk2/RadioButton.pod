@@ -1,0 +1,223 @@
+=head1 NAME
+
+Gtk2::RadioButton - wrapper for GtkRadioButton
+
+=cut
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  # first group
+  $foo1 = Gtk2::RadioButton->new (undef, 'Foo One');
+  $foo2 = Gtk2::RadioButton->new ($foo1, 'Foo Two');
+  $foo3 = Gtk2::RadioButton->new ($foo2, 'Foo Three');
+
+  # second group, using the group reference
+  $bar1 = Gtk2::RadioButton->new (undef, 'Bar One');
+  $group = $bar1->get_group;
+  $bar2 = Gtk2::RadioButton->new ($group, 'Bar Two');
+  $bar3 = Gtk2::RadioButton->new ($group, 'Bar Three');
+
+  # move bar3 from the bar group to the foo group.
+  $bar->set_group ($foo->get_group);
+
+  # iterate over the widgets in the group
+  $group = $foo1->get_group;
+  foreach my $r (@$group) {
+      $r->set_sensitive ($whatever);
+  }
+
+=cut
+
+
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+A single radio button performs the same basic function as a Gtk2::CheckButton,
+as its position in the object hierarchy reflects.  It is only when multiple
+radio buttons are grouped together that they become a different user interface
+component in their own right.
+
+Every radio button is a member of some group of radio buttons.  When one is
+selected, all other radio buttons in the same group are deselected.  A
+Gtk2::RadioButton is one way of giving the user a choice from many options;
+Gtk2::OptionMenu and Gtk2::ComboBox (added in gtk+ 2.4) are alternatives.
+
+Each constructor can take either a group or widget from that group where the
+group is wanted; this is an enhancement over the C API.  Nevertheless, the
+_from_widget forms are provided for completeness.
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Bin
+                           +----Gtk2::Button
+                                +----Gtk2::ToggleButton
+                                     +----Gtk2::CheckButton
+                                          +----Gtk2::RadioButton
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+  Glib::Object::_Unregistered::GtkActivatable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::RadioButton-E<gt>B<new> ($member_or_listref=undef, $label=undef)
+
+=over
+
+=item * $member_or_listref (scalar) reference to radiobutton group or a Gtk2::RadioButton belonging to that group.
+
+=item * $label (string) 
+
+=back
+
+Create a radio button.  If I<$label> is provided, it will be interpreted
+as a mnemonic.  If I<$member_or_listref> is undef, the radio button will
+be created in a new group.
+
+=head2 widget = Gtk2::RadioButton-E<gt>B<new_from_widget> ($group, $label=undef)
+
+=over
+
+=item * $group (Gtk2::RadioButton or undef) 
+
+=item * $label (string) 
+
+=back
+
+=head2 widget = Gtk2::RadioButton-E<gt>B<new_with_label> ($member_or_listref=undef, $label=undef)
+
+=over
+
+=item * $member_or_listref (scalar) reference to radiobutton group or a Gtk2::RadioButton belonging to that group.
+
+=item * $label (string) 
+
+=back
+
+Create a radio button with a plain text label, which will not be interpreted
+as a mnemonic.
+
+=head2 widget = Gtk2::RadioButton-E<gt>B<new_with_label_from_widget> ($group, $label=undef)
+
+=over
+
+=item * $group (Gtk2::RadioButton or undef) 
+
+=item * $label (string) 
+
+=back
+
+=head2 widget = Gtk2::RadioButton-E<gt>B<new_with_mnemonic> ($member_or_listref=undef, $label=undef)
+
+=over
+
+=item * $member_or_listref (scalar) reference to radiobutton group or a Gtk2::RadioButton belonging to that group.
+
+=item * $label (string) 
+
+=back
+
+Create a radio button with a mnemonic; this is an alias for C<new>.
+
+=head2 widget = Gtk2::RadioButton-E<gt>B<new_with_mnemonic_from_widget> ($group, $label=undef)
+
+=over
+
+=item * $group (Gtk2::RadioButton or undef) 
+
+=item * $label (string) 
+
+=back
+
+=head2 $group = $radio_button->B<get_group>
+
+Return a reference to the radio group to which I<$radio_button> belongs.
+The group is a reference to an array of widget references; the array is B<not>
+magical, that is, it will not be updated automatically if the group changes;
+call C<get_group> each time you want to use the group.
+
+=head2 $radio_button-E<gt>B<set_group> ($member_or_listref)
+
+=over
+
+=item * $member_or_listref (scalar) reference to the group or a Gtk2::RadioButton belonging to that group.
+
+=back
+
+Assign I<$radio_button> to a new group.
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'group' (Gtk2::RadioButton : default undef : writable / private)
+
+The radio button whose group this widget belongs to.
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<group-changed> (Gtk2::RadioButton)
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>, L<Gtk2::Bin>, L<Gtk2::Button>, L<Gtk2::ToggleButton>, L<Gtk2::CheckButton>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

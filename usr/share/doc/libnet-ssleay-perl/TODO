@@ -1,0 +1,42 @@
+* Fix POD to pass t/02_pod_coverage.t.
+
+* Update documentation with regard to the various limitations which have been
+  removed recently.
+
+* Tests for ssl_read_until.
+
+* Fix this issue on hpux:
+	two major diffs to the rest of the world:
+	1. libssl.sl instead of libssl.so
+	   The default installation still expects .so files, so the sysadm needs to
+	   make symlinks to find those Tux
+
+	2. HP-UX uses SHLIB_PATH alongside LD_LIBRARY_PATH Tux HP-UX allows both,
+	   and allows them together. The search sequence can be set in each library
+	   itself
+
+	If you find your libs in Makefile.PL, you should extend LD_LIBRARY_PATH
+	with that location, also in MAKEFILE to make 'make test' pass
+
+* Better test coverage
+  + Write a test for http://rt.cpan.org/Ticket/Display.html?id=9611
+  + Test if exports work correctly
+
+* Changelogging!
+
+* Improve the search for installed openssl and zlib libs so it will recognize
+  them only runtime is installed without the headers required for building the
+  module.
+
+* Instruction on how to the the prerequisites
+  Installing OpenSSL
+  ------------------
+  On Debian and Debian based Operating systems one can install
+  by typing:
+
+  apt-get install libssl-dev
+
+  On some Ubuntu versions libssl-dev seems to be broken as it doesn't depend on
+  zlib1g-dev.
+
+  apt-get install zlib1g fixes that.

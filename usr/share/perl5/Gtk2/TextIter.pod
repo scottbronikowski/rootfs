@@ -1,0 +1,553 @@
+=head1 NAME
+
+Gtk2::TextIter - wrapper for GtkTextIter
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Boxed
+  +----Gtk2::TextIter
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 textattributes = $iter-E<gt>B<get_attributes> 
+
+=head2 boolean = $iter-E<gt>B<backward_char> 
+
+=head2 boolean = $iter-E<gt>B<backward_chars> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<backward_cursor_position> 
+
+=head2 boolean = $iter-E<gt>B<backward_cursor_positions> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<backward_find_char> ($pred, $user_data=undef, $limit=undef)
+
+=over
+
+=item * $pred (scalar) 
+
+=item * $user_data (scalar) 
+
+=item * $limit (Gtk2::TextIter or undef) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<backward_line> 
+
+=head2 boolean = $iter-E<gt>B<backward_lines> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+=head2 (match_start, match_end) = $iter->B<forward_search> ($str, $flags, $limit=NULL)
+
+=over
+
+=item * $str (string) 
+
+=item * $flags (Gtk2::TextSearchFlags) 
+
+=item * $limit (Gtk2::TextIter or undef) 
+
+=back
+
+
+
+=head2 boolean = $iter-E<gt>B<backward_sentence_start> 
+
+=head2 boolean = $iter-E<gt>B<backward_sentence_starts> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<backward_to_tag_toggle> ($tag)
+
+=over
+
+=item * $tag (Gtk2::TextTag or undef) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<backward_visible_cursor_position> 
+
+Since: gtk+ 2.4
+
+=head2 boolean = $iter-E<gt>B<backward_visible_cursor_positions> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 boolean = $iter-E<gt>B<backward_visible_line> 
+
+Since: gtk+ 2.8
+
+=head2 boolean = $iter-E<gt>B<backward_visible_lines> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 boolean = $iter-E<gt>B<backward_visible_word_start> 
+
+Since: gtk+ 2.4
+
+=head2 boolean = $iter-E<gt>B<backward_visible_word_starts> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 boolean = $iter-E<gt>B<backward_word_start> 
+
+=head2 boolean = $iter-E<gt>B<backward_word_starts> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<begins_tag> ($tag)
+
+=over
+
+=item * $tag (Gtk2::TextTag or undef) 
+
+=back
+
+=head2 textbuffer = $iter-E<gt>B<get_buffer> 
+
+=head2 integer = $iter-E<gt>B<get_bytes_in_line> 
+
+=head2 boolean = $iter-E<gt>B<can_insert> ($default_editability)
+
+=over
+
+=item * $default_editability (boolean) 
+
+=back
+
+=head2 character = $iter-E<gt>B<get_char> 
+
+=head2 integer = $iter-E<gt>B<get_chars_in_line> 
+
+=head2 textchildanchor or undef = $iter-E<gt>B<get_child_anchor> 
+
+=head2 integer = $lhs-E<gt>B<compare> ($rhs)
+
+=over
+
+=item * $rhs (Gtk2::TextIter) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<editable> ($default_setting)
+
+=over
+
+=item * $default_setting (boolean) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<ends_line> 
+
+=head2 boolean = $iter-E<gt>B<ends_sentence> 
+
+=head2 boolean = $iter-E<gt>B<ends_tag> ($tag)
+
+=over
+
+=item * $tag (Gtk2::TextTag or undef) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<ends_word> 
+
+=head2 boolean = $lhs-E<gt>B<equal> ($rhs)
+
+=over
+
+=item * $rhs (Gtk2::TextIter) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<forward_char> 
+
+=head2 boolean = $iter-E<gt>B<forward_chars> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<forward_cursor_position> 
+
+=head2 boolean = $iter-E<gt>B<forward_cursor_positions> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<forward_find_char> ($pred, $user_data=undef, $limit=undef)
+
+=over
+
+=item * $pred (scalar) 
+
+=item * $user_data (scalar) 
+
+=item * $limit (Gtk2::TextIter or undef) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<forward_line> 
+
+=head2 boolean = $iter-E<gt>B<forward_lines> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+=head2 (match_start, match_end) = $iter->B<forward_search> ($str, $flags, $limit=NULL)
+
+=over
+
+=item * $str (string) 
+
+=item * $flags (Gtk2::TextSearchFlags) 
+
+=item * $limit (Gtk2::TextIter or undef) 
+
+=back
+
+
+
+=head2 boolean = $iter-E<gt>B<forward_sentence_end> 
+
+=head2 boolean = $iter-E<gt>B<forward_sentence_ends> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+=head2 $iter-E<gt>B<forward_to_end> 
+
+=head2 boolean = $iter-E<gt>B<forward_to_line_end> 
+
+=head2 boolean = $iter-E<gt>B<forward_to_tag_toggle> ($tag)
+
+=over
+
+=item * $tag (Gtk2::TextTag or undef) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<forward_visible_cursor_position> 
+
+Since: gtk+ 2.4
+
+=head2 boolean = $iter-E<gt>B<forward_visible_cursor_positions> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 boolean = $iter-E<gt>B<forward_visible_line> 
+
+Since: gtk+ 2.8
+
+=head2 boolean = $iter-E<gt>B<forward_visible_lines> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 boolean = $iter-E<gt>B<forward_visible_word_end> 
+
+Since: gtk+ 2.4
+
+=head2 boolean = $iter-E<gt>B<forward_visible_word_ends> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 boolean = $iter-E<gt>B<forward_word_end> 
+
+=head2 boolean = $iter-E<gt>B<forward_word_ends> ($count)
+
+=over
+
+=item * $count (integer) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<has_tag> ($tag)
+
+=over
+
+=item * $tag (Gtk2::TextTag) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<in_range> ($start, $end)
+
+=over
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<inside_sentence> 
+
+=head2 boolean = $iter-E<gt>B<inside_word> 
+
+=head2 boolean = $iter-E<gt>B<is_cursor_position> 
+
+=head2 boolean = $iter-E<gt>B<is_end> 
+
+=head2 boolean = $iter-E<gt>B<is_start> 
+
+=head2 language = $iter-E<gt>B<get_language> 
+
+=head2 integer = $iter-E<gt>B<get_line> 
+
+=head2 integer = $iter-E<gt>B<get_line_index> 
+
+=head2 $iter-E<gt>B<set_line_index> ($byte_on_line)
+
+=over
+
+=item * $byte_on_line (integer) 
+
+=back
+
+=head2 integer = $iter-E<gt>B<get_line_offset> 
+
+=head2 $iter-E<gt>B<set_line_offset> ($char_on_line)
+
+=over
+
+=item * $char_on_line (integer) 
+
+=back
+
+=head2 $iter-E<gt>B<set_line> ($line_number)
+
+=over
+
+=item * $line_number (integer) 
+
+=back
+
+=head2 list = $iter-E<gt>B<get_marks> 
+
+Returns a list of all Gtk2::TextMark at this location. Because marks are not
+iterable (they don't take up any "space" in the buffer, they are just marks in
+between iterable locations), multiple marks can exist in the same place. The
+returned list is not in any meaningful order.
+
+=head2 integer = $iter-E<gt>B<get_offset> 
+
+=head2 $iter-E<gt>B<set_offset> ($char_offset)
+
+=over
+
+=item * $char_offset (integer) 
+
+=back
+
+=head2 $first-E<gt>B<order> ($second)
+
+=over
+
+=item * $second (Gtk2::TextIter) 
+
+=back
+
+=head2 pixbuf or undef = $iter-E<gt>B<get_pixbuf> 
+
+=head2 string = $start-E<gt>B<get_slice> ($end)
+
+=over
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 boolean = $iter-E<gt>B<starts_line> 
+
+=head2 boolean = $iter-E<gt>B<starts_sentence> 
+
+=head2 boolean = $iter-E<gt>B<starts_word> 
+
+=head2 list = $iter-E<gt>B<get_tags> 
+
+Returns a list of tags that apply to iter, in ascending order of priority
+(highest-priority tags are last). 
+
+=head2 string = $start-E<gt>B<get_text> ($end)
+
+=over
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 list = $iter-E<gt>B<get_toggled_tags> ($toggled_on)
+
+=over
+
+=item * $toggled_on (boolean) 
+
+=back
+
+Returns a list of Gtk2::TextTag that are toggled on or off at this point. (If
+toggled_on is TRUE, the list contains tags that are toggled on.) If a tag is
+toggled on at iter, then some non-empty range of characters following iter has
+that tag applied to it. If a tag is toggled off, then some non-empty range
+following iter does not have the tag applied to it.
+
+=head2 boolean = $iter-E<gt>B<toggles_tag> ($tag)
+
+=over
+
+=item * $tag (Gtk2::TextTag or undef) 
+
+=back
+
+=head2 integer = $iter-E<gt>B<get_visible_line_index> 
+
+=head2 $iter-E<gt>B<set_visible_line_index> ($byte_on_line)
+
+=over
+
+=item * $byte_on_line (integer) 
+
+=back
+
+=head2 integer = $iter-E<gt>B<get_visible_line_offset> 
+
+=head2 $iter-E<gt>B<set_visible_line_offset> ($char_on_line)
+
+=over
+
+=item * $char_on_line (integer) 
+
+=back
+
+=head2 string = $start-E<gt>B<get_visible_slice> ($end)
+
+=over
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 string = $start-E<gt>B<get_visible_text> ($end)
+
+=over
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::TextSearchFlags
+
+=over
+
+=item * 'visible-only' / 'GTK_TEXT_SEARCH_VISIBLE_ONLY'
+
+=item * 'text-only' / 'GTK_TEXT_SEARCH_TEXT_ONLY'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Boxed>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

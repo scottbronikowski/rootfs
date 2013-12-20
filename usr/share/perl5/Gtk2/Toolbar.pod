@@ -1,0 +1,534 @@
+=head1 NAME
+
+Gtk2::Toolbar - wrapper for GtkToolbar
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Toolbar
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+  Gtk2::ToolShell
+  Gtk2::Orientable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::Toolbar-E<gt>B<new> 
+
+=head2 widget = $toolbar-E<gt>B<append_element> ($type, $widget, $text, $tooltip_text, $tooltip_private_text, $icon, $callback=undef, $user_data=undef)
+
+=over
+
+=item * $type (Gtk2::ToolbarChildType) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $text (string) 
+
+=item * $tooltip_text (string or undef) 
+
+=item * $tooltip_private_text (string or undef) 
+
+=item * $icon (Gtk2::Widget or undef) 
+
+=item * $callback (subroutine) 
+
+=item * $user_data (scalar) 
+
+=back
+
+
+
+=head2 widget = $toolbar-E<gt>B<append_item> ($text, $tooltip_text, $tooltip_private_text, $icon, $callback=undef, $user_data=undef)
+
+=over
+
+=item * $text (string) 
+
+=item * $tooltip_text (string or undef) 
+
+=item * $tooltip_private_text (string or undef) 
+
+=item * $icon (Gtk2::Widget or undef) 
+
+=item * $callback (subroutine) 
+
+=item * $user_data (scalar) 
+
+=back
+
+
+
+=head2 $toolbar-E<gt>B<append_space> 
+
+=head2 $toolbar-E<gt>B<append_widget> ($widget, $tooltip_text, $tooltip_private_text)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $tooltip_text (string or undef) 
+
+=item * $tooltip_private_text (string or undef) 
+
+=back
+
+
+
+=head2 $toolbar-E<gt>B<set_drop_highlight_item> ($tool_item, $index)
+
+=over
+
+=item * $tool_item (Gtk2::ToolItem or undef) 
+
+=item * $index (integer) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 integer = $toolbar-E<gt>B<get_drop_index> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 iconsize = $toolbar-E<gt>B<get_icon_size> 
+
+=head2 $toolbar-E<gt>B<set_icon_size> ($icon_size)
+
+=over
+
+=item * $icon_size (Gtk2::IconSize) 
+
+=back
+
+=head2 $toolbar-E<gt>B<insert> ($item, $pos)
+
+=over
+
+=item * $item (Gtk2::ToolItem) 
+
+=item * $pos (integer) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 widget = $toolbar-E<gt>B<insert_element> ($type, $widget, $text, $tooltip_text, $tooltip_private_text, $icon, $callback, $user_data, $position)
+
+=over
+
+=item * $type (Gtk2::ToolbarChildType) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $text (string) 
+
+=item * $tooltip_text (string or undef) 
+
+=item * $tooltip_private_text (string or undef) 
+
+=item * $icon (Gtk2::Widget or undef) 
+
+=item * $callback (subroutine) 
+
+=item * $user_data (scalar) 
+
+=item * $position (integer) 
+
+=back
+
+
+
+=head2 widget = $toolbar-E<gt>B<insert_item> ($text, $tooltip_text, $tooltip_private_text, $icon, $callback, $user_data, $position)
+
+=over
+
+=item * $text (string) 
+
+=item * $tooltip_text (string or undef) 
+
+=item * $tooltip_private_text (string or undef) 
+
+=item * $icon (Gtk2::Widget or undef) 
+
+=item * $callback (subroutine) 
+
+=item * $user_data (scalar) 
+
+=item * $position (integer) 
+
+=back
+
+
+
+=head2 $toolbar-E<gt>B<insert_space> ($position)
+
+=over
+
+=item * $position (integer) 
+
+=back
+
+=head2 widget = $toolbar-E<gt>B<insert_stock> ($stock_id, $tooltip_text, $tooltip_private_text, $callback, $user_data, $position)
+
+=over
+
+=item * $stock_id (string) 
+
+=item * $tooltip_text (string or undef) 
+
+=item * $tooltip_private_text (string or undef) 
+
+=item * $callback (subroutine) 
+
+=item * $user_data (scalar) 
+
+=item * $position (integer) 
+
+=back
+
+
+
+=head2 $toolbar-E<gt>B<insert_widget> ($widget, $tooltip_text, $tooltip_private_text, $position)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $tooltip_text (string or undef) 
+
+=item * $tooltip_private_text (string or undef) 
+
+=item * $position (integer) 
+
+=back
+
+
+
+=head2 integer = $toolbar-E<gt>B<get_item_index> ($item)
+
+=over
+
+=item * $item (Gtk2::ToolItem) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 integer = $toolbar-E<gt>B<get_n_items> 
+
+Since: gtk+ 2.4
+
+=head2 toolitem or undef = $toolbar-E<gt>B<get_nth_item> ($n)
+
+=over
+
+=item * $n (integer) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 orientation = $toolbar-E<gt>B<get_orientation> 
+
+=head2 $toolbar-E<gt>B<set_orientation> ($orientation)
+
+=over
+
+=item * $orientation (Gtk2::Orientation) 
+
+=back
+
+=head2 widget = $toolbar-E<gt>B<prepend_element> ($type, $widget, $text, $tooltip_text, $tooltip_private_text, $icon, $callback=undef, $user_data=undef)
+
+=over
+
+=item * $type (Gtk2::ToolbarChildType) 
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=item * $text (string) 
+
+=item * $tooltip_text (string or undef) 
+
+=item * $tooltip_private_text (string or undef) 
+
+=item * $icon (Gtk2::Widget or undef) 
+
+=item * $callback (subroutine) 
+
+=item * $user_data (scalar) 
+
+=back
+
+
+
+=head2 widget = $toolbar-E<gt>B<prepend_item> ($text, $tooltip_text, $tooltip_private_text, $icon, $callback=undef, $user_data=undef)
+
+=over
+
+=item * $text (string) 
+
+=item * $tooltip_text (string or undef) 
+
+=item * $tooltip_private_text (string or undef) 
+
+=item * $icon (Gtk2::Widget or undef) 
+
+=item * $callback (subroutine) 
+
+=item * $user_data (scalar) 
+
+=back
+
+
+
+=head2 $toolbar-E<gt>B<prepend_space> 
+
+=head2 $toolbar-E<gt>B<prepend_widget> ($widget, $tooltip_text, $tooltip_private_text)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=item * $tooltip_text (string or undef) 
+
+=item * $tooltip_private_text (string or undef) 
+
+=back
+
+
+
+=head2 reliefstyle = $toolbar-E<gt>B<get_relief_style> 
+
+Since: gtk+ 2.4
+
+=head2 $toolbar-E<gt>B<remove_space> ($position)
+
+=over
+
+=item * $position (integer) 
+
+=back
+
+=head2 boolean = $toolbar-E<gt>B<get_show_arrow> 
+
+Since: gtk+ 2.4
+
+=head2 $toolbar-E<gt>B<set_show_arrow> ($show_arrow)
+
+=over
+
+=item * $show_arrow (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 toolbarstyle = $toolbar-E<gt>B<get_style> 
+
+=head2 $toolbar-E<gt>B<set_style> ($style)
+
+=over
+
+=item * $style (Gtk2::ToolbarStyle) 
+
+=back
+
+=head2 boolean = $toolbar-E<gt>B<get_tooltips> 
+
+=head2 $toolbar-E<gt>B<set_tooltips> ($enable)
+
+=over
+
+=item * $enable (boolean) 
+
+=back
+
+=head2 $toolbar-E<gt>B<unset_icon_size> 
+
+=head2 $toolbar-E<gt>B<unset_style> 
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'icon-size' (integer : default 3 : readable / writable / private)
+
+Size of icons in this toolbar
+
+=item 'icon-size-set' (boolean : default false : readable / writable / private)
+
+Whether the icon-size property has been set
+
+=item 'show-arrow' (boolean : default true : readable / writable / private)
+
+If an arrow should be shown if the toolbar doesn't fit
+
+=item 'toolbar-style' (Gtk2::ToolbarStyle : default "both" : readable / writable / private)
+
+How to draw the toolbar
+
+=item 'tooltips' (boolean : default true : readable / writable / private)
+
+If the tooltips of the toolbar should be active or not
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<orientation-changed> (Gtk2::Toolbar, Gtk2::Orientation)
+
+=item B<style-changed> (Gtk2::Toolbar, Gtk2::ToolbarStyle)
+
+=item boolean = B<popup-context-menu> (Gtk2::Toolbar, integer, integer, integer)
+
+=item boolean = B<focus-home-or-end> (Gtk2::Toolbar, boolean)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::IconSize
+
+=over
+
+=item * 'invalid' / 'GTK_ICON_SIZE_INVALID'
+
+=item * 'menu' / 'GTK_ICON_SIZE_MENU'
+
+=item * 'small-toolbar' / 'GTK_ICON_SIZE_SMALL_TOOLBAR'
+
+=item * 'large-toolbar' / 'GTK_ICON_SIZE_LARGE_TOOLBAR'
+
+=item * 'button' / 'GTK_ICON_SIZE_BUTTON'
+
+=item * 'dnd' / 'GTK_ICON_SIZE_DND'
+
+=item * 'dialog' / 'GTK_ICON_SIZE_DIALOG'
+
+=back
+
+
+=head2 enum Gtk2::Orientation
+
+=over
+
+=item * 'horizontal' / 'GTK_ORIENTATION_HORIZONTAL'
+
+=item * 'vertical' / 'GTK_ORIENTATION_VERTICAL'
+
+=back
+
+
+=head2 enum Gtk2::ReliefStyle
+
+=over
+
+=item * 'normal' / 'GTK_RELIEF_NORMAL'
+
+=item * 'half' / 'GTK_RELIEF_HALF'
+
+=item * 'none' / 'GTK_RELIEF_NONE'
+
+=back
+
+
+=head2 enum Gtk2::ToolbarChildType
+
+=over
+
+=item * 'space' / 'GTK_TOOLBAR_CHILD_SPACE'
+
+=item * 'button' / 'GTK_TOOLBAR_CHILD_BUTTON'
+
+=item * 'togglebutton' / 'GTK_TOOLBAR_CHILD_TOGGLEBUTTON'
+
+=item * 'radiobutton' / 'GTK_TOOLBAR_CHILD_RADIOBUTTON'
+
+=item * 'widget' / 'GTK_TOOLBAR_CHILD_WIDGET'
+
+=back
+
+
+=head2 enum Gtk2::ToolbarStyle
+
+=over
+
+=item * 'icons' / 'GTK_TOOLBAR_ICONS'
+
+=item * 'text' / 'GTK_TOOLBAR_TEXT'
+
+=item * 'both' / 'GTK_TOOLBAR_BOTH'
+
+=item * 'both-horiz' / 'GTK_TOOLBAR_BOTH_HORIZ'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

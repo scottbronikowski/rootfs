@@ -1,0 +1,201 @@
+=head1 NAME
+
+Gtk2::Gdk::Region - wrapper for GdkRegion
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Boxed
+  +----Gtk2::Gdk::Region
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 region = Gtk2::Gdk::Region-E<gt>B<new> 
+
+=head2 rectangle = $region-E<gt>B<get_clipbox> 
+
+=head2 boolean = $region-E<gt>B<empty> 
+
+=head2 boolean = $region1-E<gt>B<equal> ($region2)
+
+=over
+
+=item * $region2 (Gtk2::Gdk::Region) 
+
+=back
+
+=head2 $source1-E<gt>B<intersect> ($source2)
+
+=over
+
+=item * $source2 (Gtk2::Gdk::Region) 
+
+=back
+
+=head2 $region-E<gt>B<offset> ($dx, $dy)
+
+=over
+
+=item * $dx (integer) 
+
+=item * $dy (integer) 
+
+=back
+
+=head2 boolean = $region-E<gt>B<point_in> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+=head2 region = Gtk2::Gdk::Region-E<gt>B<polygon> ($points_ref, $fill_rule)
+
+=over
+
+=item * $points_ref (scalar) 
+
+=item * $fill_rule (Gtk2::Gdk::FillRule) 
+
+=back
+
+=head2 overlaptype = $region-E<gt>B<rect_in> ($rect)
+
+=over
+
+=item * $rect (Gtk2::Gdk::Rectangle) 
+
+=back
+
+=head2 region = Gtk2::Gdk::Region-E<gt>B<rectangle> ($rectangle)
+
+=over
+
+=item * $rectangle (Gtk2::Gdk::Rectangle) 
+
+=back
+
+=head2 list = $region-E<gt>B<get_rectangles> 
+
+Returns a list of rectangles (Gtk2::Gdk::Rectangle's), the area covered by the
+region.
+
+=head2 $region-E<gt>B<shrink> ($dx, $dy)
+
+=over
+
+=item * $dx (integer) 
+
+=item * $dy (integer) 
+
+=back
+
+=head2 $region-E<gt>B<spans_intersect_foreach> ($spans_ref, $sorted, $func, $data=undef)
+
+=over
+
+=item * $spans_ref (scalar) 
+
+=item * $sorted (boolean) 
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+=head2 $source1-E<gt>B<subtract> ($source2)
+
+=over
+
+=item * $source2 (Gtk2::Gdk::Region) 
+
+=back
+
+=head2 $source1-E<gt>B<union> ($source2)
+
+=over
+
+=item * $source2 (Gtk2::Gdk::Region) 
+
+=back
+
+=head2 $region-E<gt>B<union_with_rect> ($rect)
+
+=over
+
+=item * $rect (Gtk2::Gdk::Rectangle) 
+
+=back
+
+=head2 $source1-E<gt>B<xor> ($source2)
+
+=over
+
+=item * $source2 (Gtk2::Gdk::Region) 
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::Gdk::FillRule
+
+=over
+
+=item * 'even-odd-rule' / 'GDK_EVEN_ODD_RULE'
+
+=item * 'winding-rule' / 'GDK_WINDING_RULE'
+
+=back
+
+
+=head2 enum Gtk2::Gdk::OverlapType
+
+=over
+
+=item * 'in' / 'GDK_OVERLAP_RECTANGLE_IN'
+
+=item * 'out' / 'GDK_OVERLAP_RECTANGLE_OUT'
+
+=item * 'part' / 'GDK_OVERLAP_RECTANGLE_PART'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Boxed>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,199 @@
+=head1 NAME
+
+Gtk2::Gdk::Pixmap - wrapper for GdkPixmap
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Gdk::Drawable
+       +----Gtk2::Gdk::Pixmap
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 pixmap = Gtk2::Gdk::Pixmap-E<gt>B<new> ($drawable, $width, $height, $depth)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable or undef) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $depth (integer) 
+
+=back
+
+=head2 (pixmap, mask) = Gtk2::Gdk::Pixmap->B<colormap_create_from_xpm> ($drawable, $colormap, $transparent_color, $filename)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable or undef) may be undef if I<$colormap> is given
+
+=item * $colormap (Gtk2::Gdk::Colormap or undef) GdkColormap to use for the new image; may be undef if I<$drawable> is given.
+
+=item * $transparent_color (Gtk2::Gdk::Color or undef) color of pixels that are transparent in the input file.  if undef, a default is used.
+
+=item * $filename (localized file name) 
+
+=back
+
+
+
+=head2 ($pixmap, $mask) = Gtk2::Gdk::Pixmap->B<colormap_create_from_xpm_d> ($drawable, $colormap, $transparent_color, @xpm_data)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable or undef) may be undef if I<$colormap> is given
+
+=item * $colormap (Gtk2::Gdk::Colormap or undef) GdkColormap to use for the new image; may be undef if I<$drawable> is given.
+
+=item * $transparent_color (Gtk2::Gdk::Color or undef) color of pixels that are transparent in the input file.  if undef, a default is used.
+
+=item * ... (list) of strings, xpm data
+
+=back
+
+
+Create a pixmap from the provided xpm data, using a specific colormap.
+See C<create_from_xpm_d>.
+
+=head2 pixmap = Gtk2::Gdk::Pixmap-E<gt>B<create_from_data> ($drawable, $data, $width, $height, $depth, $fg, $bg)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable) 
+
+=item * $data (string) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $depth (integer) 
+
+=item * $fg (Gtk2::Gdk::Color) 
+
+=item * $bg (Gtk2::Gdk::Color) 
+
+=back
+
+=head2 (pixmap, mask) = Gtk2::Gdk::Pixmap->B<create_from_xpm> ($drawable, $transparent_color, $filename)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable) 
+
+=item * $transparent_color (Gtk2::Gdk::Color or undef) 
+
+=item * $filename (localized file name) 
+
+=back
+
+
+
+=head2 ($pixmap, $mask) = Gtk2::Gdk::Pixmap->B<create_from_xpm_d> ($drawable, $transparent_color, @xpm_data)
+
+=over
+
+=item * $drawable (Gtk2::Gdk::Drawable) used to determine the colormap and visual of the image.
+
+=item * $transparent_color (Gtk2::Gdk::Color or undef) color of pixels that are transparent in the input file.  if undef, a default is used.
+
+=item * ... (list) of strings, xpm data
+
+=back
+
+
+Create a pixmap from the provided xpm data, usually included in the program as
+an inline image.  See C<new_from_xpm_data> in L<Gtk2::Gdk::Pixbuf> for a 
+description of the format of this data.
+
+=head2 pixmap = Gtk2::Gdk::Pixmap-E<gt>B<foreign_new> ($anid)
+
+=over
+
+=item * $anid (Gtk2::Gdk::NativeWindow) 
+
+=back
+
+=head2 pixmap = Gtk2::Gdk::Pixmap-E<gt>B<foreign_new_for_display> ($display, $anid)
+
+=over
+
+=item * $display (Gtk2::Gdk::Display) 
+
+=item * $anid (Gtk2::Gdk::NativeWindow) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 pixmap = Gtk2::Gdk::Pixmap-E<gt>B<foreign_new_for_screen> ($screen, $anid, $width, $height, $depth)
+
+=over
+
+=item * $screen (Gtk2::Gdk::Screen) 
+
+=item * $anid (Gtk2::Gdk::NativeWindow) 
+
+=item * $width (integer) 
+
+=item * $height (integer) 
+
+=item * $depth (integer) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 pixmap = Gtk2::Gdk::Pixmap-E<gt>B<lookup> ($anid)
+
+=over
+
+=item * $anid (Gtk2::Gdk::NativeWindow) 
+
+=back
+
+=head2 pixmap = Gtk2::Gdk::Pixmap-E<gt>B<lookup_for_display> ($display, $anid)
+
+=over
+
+=item * $display (Gtk2::Gdk::Display) 
+
+=item * $anid (Gtk2::Gdk::NativeWindow) 
+
+=back
+
+Since: gtk+ 2.2
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Gtk2::Gdk::Drawable>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

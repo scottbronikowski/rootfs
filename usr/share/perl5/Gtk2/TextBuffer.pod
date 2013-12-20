@@ -1,0 +1,753 @@
+=head1 NAME
+
+Gtk2::TextBuffer - wrapper for GtkTextBuffer
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::TextBuffer
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 textbuffer = Gtk2::TextBuffer-E<gt>B<new> ($tagtable=undef)
+
+=over
+
+=item * $tagtable (Gtk2::TextTagTable or undef) 
+
+=back
+
+=head2 $buffer-E<gt>B<add_mark> ($mark, $where)
+
+=over
+
+=item * $mark (Gtk2::TextMark) 
+
+=item * $where (Gtk2::TextIter) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $buffer-E<gt>B<add_selection_clipboard> ($clipboard)
+
+=over
+
+=item * $clipboard (Gtk2::Clipboard) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $buffer-E<gt>B<apply_tag> ($tag, $start, $end)
+
+=over
+
+=item * $tag (Gtk2::TextTag) 
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 $buffer-E<gt>B<apply_tag_by_name> ($name, $start, $end)
+
+=over
+
+=item * $name (string) 
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 boolean = $buffer-E<gt>B<backspace> ($iter, $interactive, $default_editable)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $interactive (boolean) 
+
+=item * $default_editable (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 $buffer-E<gt>B<begin_user_action> 
+
+=head2 (start, end) = $buffer->B<get_bounds>
+
+Retrieves the first and last iterators in the buffer, i.e. the entire buffer
+lies within the range (start,end).
+
+=head2 integer = $buffer-E<gt>B<get_char_count> 
+
+=head2 $buffer-E<gt>B<copy_clipboard> ($clipboard)
+
+=over
+
+=item * $clipboard (Gtk2::Clipboard) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 targetlist = $buffer-E<gt>B<get_copy_target_list> 
+
+Since: gtk+ 2.10
+
+=head2 textchildanchor = $buffer-E<gt>B<create_child_anchor> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=back
+
+=head2 textmark = $buffer-E<gt>B<create_mark> ($mark_name, $where, $left_gravity)
+
+=over
+
+=item * $mark_name (string or undef) 
+
+=item * $where (Gtk2::TextIter) 
+
+=item * $left_gravity (boolean) 
+
+=back
+
+=head2 texttag = $buffer-E<gt>B<create_tag> ($tag_name, $property_name1, $property_value1, ...)
+
+=over
+
+=item * $tag_name (string or undef) 
+
+=item * $property_name1 (string) the first property name
+
+=item * $property_value1 (string) the first property value
+
+=item * ... (list) pairs of names and values
+
+=back
+
+
+
+=head2 $buffer-E<gt>B<cut_clipboard> ($clipboard, $default_editable)
+
+=over
+
+=item * $clipboard (Gtk2::Clipboard) 
+
+=item * $default_editable (boolean) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $buffer-E<gt>B<delete> ($start, $end)
+
+=over
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 boolean = $buffer-E<gt>B<delete_interactive> ($start_iter, $end_iter, $default_editable)
+
+=over
+
+=item * $start_iter (Gtk2::TextIter) 
+
+=item * $end_iter (Gtk2::TextIter) 
+
+=item * $default_editable (boolean) 
+
+=back
+
+=head2 $buffer-E<gt>B<delete_mark> ($mark)
+
+=over
+
+=item * $mark (Gtk2::TextMark) 
+
+=back
+
+=head2 $buffer-E<gt>B<delete_mark_by_name> ($name)
+
+=over
+
+=item * $name (string) 
+
+=back
+
+=head2 boolean = $buffer-E<gt>B<delete_selection> ($interactive, $default_editable)
+
+=over
+
+=item * $interactive (boolean) 
+
+=item * $default_editable (boolean) 
+
+=back
+
+=head2 $register_buffer-E<gt>B<deserialize> ($content_buffer, $format, $iter, $data)
+
+=over
+
+=item * $content_buffer (Gtk2::TextBuffer) 
+
+=item * $format (Gtk2::Gdk::Atom) 
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $data (scalar) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 list = $buffer-E<gt>B<get_deserialize_formats> 
+
+=head2 boolean = $buffer-E<gt>B<deserialize_get_can_create_tags> ($format)
+
+=over
+
+=item * $format (Gtk2::Gdk::Atom) 
+
+=back
+
+=head2 $buffer-E<gt>B<deserialize_set_can_create_tags> ($format, $can_create_tags)
+
+=over
+
+=item * $format (Gtk2::Gdk::Atom) 
+
+=item * $can_create_tags (boolean) 
+
+=back
+
+=head2 textiter = $buffer-E<gt>B<get_end_iter> 
+
+=head2 $buffer-E<gt>B<end_user_action> 
+
+=head2 boolean = $buffer-E<gt>B<get_has_selection> 
+
+Since: gtk+ 2.10
+
+=head2 $buffer-E<gt>B<insert> ($iter, $text)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $text (string) 
+
+=back
+
+=head2 $buffer-E<gt>B<insert_at_cursor> ($text)
+
+=over
+
+=item * $text (string) 
+
+=back
+
+=head2 $buffer-E<gt>B<insert_child_anchor> ($iter, $anchor)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $anchor (Gtk2::TextChildAnchor) 
+
+=back
+
+=head2 textmark = $buffer-E<gt>B<get_insert> 
+
+=head2 boolean = $buffer-E<gt>B<insert_interactive> ($iter, $text, $default_editable)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $text (string) 
+
+=item * $default_editable (boolean) 
+
+=back
+
+=head2 boolean = $buffer-E<gt>B<insert_interactive_at_cursor> ($text, $default_editable)
+
+=over
+
+=item * $text (string) 
+
+=item * $default_editable (boolean) 
+
+=back
+
+=head2 $buffer-E<gt>B<insert_pixbuf> ($iter, $pixbuf)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf) 
+
+=back
+
+=head2 $buffer-E<gt>B<insert_range> ($iter, $start, $end)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 boolean = $buffer-E<gt>B<insert_range_interactive> ($iter, $start, $end, $default_editable)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=item * $default_editable (boolean) 
+
+=back
+
+=head2 $buffer-E<gt>B<insert_with_tags> ($iter, $text, ...)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $text (string) 
+
+=item * ... (list) of Gtk2::TextTag's
+
+=back
+
+
+
+=head2 $buffer-E<gt>B<insert_with_tags_by_name> ($iter, $text, ...)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $text (string) 
+
+=item * ... (list) of strings, tag names
+
+=back
+
+
+
+=head2 textiter = $buffer-E<gt>B<get_iter_at_child_anchor> ($anchor)
+
+=over
+
+=item * $anchor (Gtk2::TextChildAnchor) 
+
+=back
+
+=head2 textiter = $buffer-E<gt>B<get_iter_at_line> ($line_number)
+
+=over
+
+=item * $line_number (integer) 
+
+=back
+
+=head2 textiter = $buffer-E<gt>B<get_iter_at_line_index> ($line_number, $byte_index)
+
+=over
+
+=item * $line_number (integer) 
+
+=item * $byte_index (integer) 
+
+=back
+
+=head2 textiter = $buffer-E<gt>B<get_iter_at_line_offset> ($line_number, $char_offset)
+
+=over
+
+=item * $line_number (integer) 
+
+=item * $char_offset (integer) 
+
+=back
+
+=head2 textiter = $buffer-E<gt>B<get_iter_at_mark> ($mark)
+
+=over
+
+=item * $mark (Gtk2::TextMark) 
+
+=back
+
+=head2 textiter = $buffer-E<gt>B<get_iter_at_offset> ($char_offset)
+
+=over
+
+=item * $char_offset (integer) 
+
+=back
+
+=head2 integer = $buffer-E<gt>B<get_line_count> 
+
+=head2 textmark or undef = $buffer-E<gt>B<get_mark> ($name)
+
+=over
+
+=item * $name (string) 
+
+=back
+
+=head2 boolean = $buffer-E<gt>B<get_modified> 
+
+=head2 $buffer-E<gt>B<set_modified> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 $buffer-E<gt>B<move_mark> ($mark, $where)
+
+=over
+
+=item * $mark (Gtk2::TextMark) 
+
+=item * $where (Gtk2::TextIter) 
+
+=back
+
+=head2 $buffer-E<gt>B<move_mark_by_name> ($name, $where)
+
+=over
+
+=item * $name (string) 
+
+=item * $where (Gtk2::TextIter) 
+
+=back
+
+=head2 $buffer-E<gt>B<paste_clipboard> ($clipboard, $override_location, $default_editable)
+
+=over
+
+=item * $clipboard (Gtk2::Clipboard) 
+
+=item * $override_location (Gtk2::TextIter or undef) 
+
+=item * $default_editable (boolean) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 targetlist = $buffer-E<gt>B<get_paste_target_list> 
+
+Since: gtk+ 2.10
+
+=head2 $buffer-E<gt>B<place_cursor> ($where)
+
+=over
+
+=item * $where (Gtk2::TextIter) 
+
+=back
+
+=head2 atom = $buffer-E<gt>B<register_deserialize_format> ($mime_type, $function, $user_data=undef)
+
+=over
+
+=item * $mime_type (string) 
+
+=item * $function (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+=head2 atom = $buffer-E<gt>B<register_deserialize_tagset> ($tagset_name)
+
+=over
+
+=item * $tagset_name (string or undef) 
+
+=back
+
+=head2 atom = $buffer-E<gt>B<register_serialize_format> ($mime_type, $function, $user_data=undef)
+
+=over
+
+=item * $mime_type (string) 
+
+=item * $function (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+=head2 atom = $buffer-E<gt>B<register_serialize_tagset> ($tagset_name)
+
+=over
+
+=item * $tagset_name (string or undef) 
+
+=back
+
+=head2 $buffer-E<gt>B<remove_all_tags> ($start, $end)
+
+=over
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 $buffer-E<gt>B<remove_selection_clipboard> ($clipboard)
+
+=over
+
+=item * $clipboard (Gtk2::Clipboard) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 $buffer-E<gt>B<remove_tag> ($tag, $start, $end)
+
+=over
+
+=item * $tag (Gtk2::TextTag) 
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 $buffer-E<gt>B<remove_tag_by_name> ($name, $start, $end)
+
+=over
+
+=item * $name (string) 
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 $buffer-E<gt>B<select_range> ($ins, $bound)
+
+=over
+
+=item * $ins (Gtk2::TextIter) 
+
+=item * $bound (Gtk2::TextIter) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 textmark = $buffer-E<gt>B<get_selection_bound> 
+
+=head2 (start, end) = $buffer->B<get_selection_bounds>
+
+Returns start and end if some text is selected, empty otherwise; places the
+bounds of the selection in start and end (if the selection has length 0, then
+start and end are filled in with the same value). start and end will be in
+ascending order.  
+
+=head2 scalar = $register_buffer-E<gt>B<serialize> ($content_buffer, $format, $start, $end)
+
+=over
+
+=item * $content_buffer (Gtk2::TextBuffer) 
+
+=item * $format (Gtk2::Gdk::Atom) 
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=back
+
+=head2 list = $buffer-E<gt>B<get_serialize_formats> 
+
+=head2 string = $buffer-E<gt>B<get_slice> ($start, $end, $include_hidden_chars)
+
+=over
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=item * $include_hidden_chars (boolean) 
+
+=back
+
+=head2 textiter = $buffer-E<gt>B<get_start_iter> 
+
+=head2 texttagtable = $buffer-E<gt>B<get_tag_table> 
+
+=head2 string = $buffer-E<gt>B<get_text> ($start, $end, $include_hidden_chars)
+
+=over
+
+=item * $start (Gtk2::TextIter) 
+
+=item * $end (Gtk2::TextIter) 
+
+=item * $include_hidden_chars (boolean) 
+
+=back
+
+=head2 $buffer-E<gt>B<set_text> ($text)
+
+=over
+
+=item * $text (string) 
+
+=back
+
+=head2 $buffer-E<gt>B<unregister_deserialize_format> ($format)
+
+=over
+
+=item * $format (Gtk2::Gdk::Atom) 
+
+=back
+
+=head2 $buffer-E<gt>B<unregister_serialize_format> ($format)
+
+=over
+
+=item * $format (Gtk2::Gdk::Atom) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'copy-target-list' (Gtk2::TargetList : default undef : readable / private)
+
+The list of targets this buffer supports for clipboard copying and DND source
+
+=item 'cursor-position' (integer : default 0 : readable / private)
+
+The position of the insert mark (as offset from the beginning of the buffer)
+
+=item 'has-selection' (boolean : default false : readable / private)
+
+Whether the buffer has some text currently selected
+
+=item 'paste-target-list' (Gtk2::TargetList : default undef : readable / private)
+
+The list of targets this buffer supports for clipboard pasting and DND destination
+
+=item 'tag-table' (Gtk2::TextTagTable : default undef : readable / writable / construct-only / private)
+
+Text Tag Table
+
+=item 'text' (string : default "" : readable / writable / private)
+
+Current text of the buffer
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<changed> (Gtk2::TextBuffer)
+
+=item B<insert-text> (Gtk2::TextBuffer, Gtk2::TextIter, string, integer)
+
+=item B<insert-pixbuf> (Gtk2::TextBuffer, Gtk2::TextIter, Gtk2::Gdk::Pixbuf)
+
+=item B<insert-child-anchor> (Gtk2::TextBuffer, Gtk2::TextIter, Gtk2::TextChildAnchor)
+
+=item B<delete-range> (Gtk2::TextBuffer, Gtk2::TextIter, Gtk2::TextIter)
+
+=item B<modified-changed> (Gtk2::TextBuffer)
+
+=item B<mark-set> (Gtk2::TextBuffer, Gtk2::TextIter, Gtk2::TextMark)
+
+=item B<mark-deleted> (Gtk2::TextBuffer, Gtk2::TextMark)
+
+=item B<apply-tag> (Gtk2::TextBuffer, Gtk2::TextTag, Gtk2::TextIter, Gtk2::TextIter)
+
+=item B<remove-tag> (Gtk2::TextBuffer, Gtk2::TextTag, Gtk2::TextIter, Gtk2::TextIter)
+
+=item B<begin-user-action> (Gtk2::TextBuffer)
+
+=item B<end-user-action> (Gtk2::TextBuffer)
+
+=item B<paste-done> (Gtk2::TextBuffer, Gtk2::Clipboard)
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,493 @@
+=head1 NAME
+
+Gtk2::TreeViewColumn - wrapper for GtkTreeViewColumn
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::TreeViewColumn
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Gtk2::CellLayout
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 treeviewcolumn = Gtk2::TreeViewColumn-E<gt>B<new> 
+
+=head2 treeviewcolumn = Gtk2::TreeViewColumn->B<new_with_attributes> ($title, $cell, $attr1, $col1, ...)
+
+=over
+
+=item * $title (string) 
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=item * ... (list) pairs of attributes and columns
+
+=item * $col1 (integer) the first column
+
+=item * $attr1 (string) the first attribute
+
+=back
+
+
+
+=head2 $tree_column-E<gt>B<add_attribute> ($cell_renderer, $attribute, $column)
+
+=over
+
+=item * $cell_renderer (Gtk2::CellRenderer) 
+
+=item * $attribute (string) 
+
+=item * $column (integer) 
+
+=back
+
+=head2 double = $tree_column-E<gt>B<get_alignment> 
+
+=head2 $tree_column-E<gt>B<set_alignment> ($xalign)
+
+=over
+
+=item * $xalign (double) 
+
+=back
+
+=head2 $tree_column-E<gt>B<set_attributes> ($cell_renderer, ..., $col1, $attr1)
+
+=over
+
+=item * $cell_renderer (Gtk2::CellRenderer) 
+
+=item * ... (list) pairs of attributes and columns
+
+=item * $col1 (integer) the first column
+
+=item * $attr1 (string) the first attribute
+
+=back
+
+
+
+=head2 $tree_column-E<gt>B<set_cell_data_func> ($cell_renderer, $func, $data=undef)
+
+=over
+
+=item * $cell_renderer (Gtk2::CellRenderer) 
+
+=item * $func (subroutine) 
+
+=item * $data (scalar) 
+
+=back
+
+Install I<$func> as the callback to be used whenever I<$column> needs to set up
+I<$cell> to render a cell.  I<$func> should look like this:
+
+  sub cell_data_func {
+    my ($column, $cell, $model, $iter, $func_data) = @_;
+  }
+
+and should set whatever properties of I<$cell> are required for it to draw
+the data properly.  No return value is expected.
+
+=head2 (start_pos, width) = $tree_column-E<gt>B<cell_get_position> ($cell_renderer)
+
+=over
+
+=item * $cell_renderer (Gtk2::CellRenderer) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 list = $tree_column-E<gt>B<cell_get_size> 
+
+=head2 boolean = $tree_column-E<gt>B<cell_is_visible> 
+
+=head2 list = $tree_column-E<gt>B<get_cell_renderers> 
+
+Returns a list of Gtk2::CellRenderer's.
+
+=head2 $tree_column-E<gt>B<cell_set_cell_data> ($tree_model, $iter, $is_expander, $is_expanded)
+
+=over
+
+=item * $tree_model (Gtk2::TreeModel) 
+
+=item * $iter (Gtk2::TreeIter) 
+
+=item * $is_expander (boolean) 
+
+=item * $is_expanded (boolean) 
+
+=back
+
+=head2 $tree_column-E<gt>B<clear> 
+
+=head2 $tree_column-E<gt>B<clear_attributes> ($cell_renderer)
+
+=over
+
+=item * $cell_renderer (Gtk2::CellRenderer) 
+
+=back
+
+=head2 boolean = $tree_column-E<gt>B<get_clickable> 
+
+=head2 $tree_column-E<gt>B<set_clickable> ($clickable)
+
+=over
+
+=item * $clickable (boolean) 
+
+=back
+
+=head2 $tree_column-E<gt>B<clicked> 
+
+=head2 boolean = $tree_column-E<gt>B<get_expand> 
+
+Since: gtk+ 2.4
+
+=head2 $tree_column-E<gt>B<set_expand> ($expand)
+
+=over
+
+=item * $expand (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 integer = $tree_column-E<gt>B<get_fixed_width> 
+
+=head2 $tree_column-E<gt>B<set_fixed_width> ($fixed_width)
+
+=over
+
+=item * $fixed_width (integer) 
+
+=back
+
+=head2 $tree_column-E<gt>B<focus_cell> ($cell)
+
+=over
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 integer = $tree_column-E<gt>B<get_max_width> 
+
+=head2 $tree_column-E<gt>B<set_max_width> ($max_width)
+
+=over
+
+=item * $max_width (integer) 
+
+=back
+
+=head2 integer = $tree_column-E<gt>B<get_min_width> 
+
+=head2 $tree_column-E<gt>B<set_min_width> ($min_width)
+
+=over
+
+=item * $min_width (integer) 
+
+=back
+
+=head2 $tree_column-E<gt>B<pack_end> ($cell, $expand)
+
+=over
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=item * $expand (boolean) 
+
+=back
+
+=head2 $tree_column-E<gt>B<pack_start> ($cell, $expand)
+
+=over
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=item * $expand (boolean) 
+
+=back
+
+=head2 $tree_column-E<gt>B<queue_resize> 
+
+Since: gtk+ 2.8
+
+=head2 boolean = $tree_column-E<gt>B<get_reorderable> 
+
+=head2 $tree_column-E<gt>B<set_reorderable> ($reorderable)
+
+=over
+
+=item * $reorderable (boolean) 
+
+=back
+
+=head2 boolean = $tree_column-E<gt>B<get_resizable> 
+
+=head2 $tree_column-E<gt>B<set_resizable> ($resizable)
+
+=over
+
+=item * $resizable (boolean) 
+
+=back
+
+=head2 treeviewcolumnsizing = $tree_column-E<gt>B<get_sizing> 
+
+=head2 $tree_column-E<gt>B<set_sizing> ($type)
+
+=over
+
+=item * $type (Gtk2::TreeViewColumnSizing) 
+
+=back
+
+=head2 integer = $tree_column-E<gt>B<get_sort_column_id> 
+
+=head2 $tree_column-E<gt>B<set_sort_column_id> ($sort_column_id)
+
+=over
+
+=item * $sort_column_id (integer) 
+
+=back
+
+=head2 boolean = $tree_column-E<gt>B<get_sort_indicator> 
+
+=head2 $tree_column-E<gt>B<set_sort_indicator> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 sorttype = $tree_column-E<gt>B<get_sort_order> 
+
+=head2 $tree_column-E<gt>B<set_sort_order> ($order)
+
+=over
+
+=item * $order (Gtk2::SortType) 
+
+=back
+
+=head2 integer = $tree_column-E<gt>B<get_spacing> 
+
+=head2 $tree_column-E<gt>B<set_spacing> ($spacing)
+
+=over
+
+=item * $spacing (integer) 
+
+=back
+
+=head2 string = $tree_column-E<gt>B<get_title> 
+
+=head2 $tree_column-E<gt>B<set_title> ($title)
+
+=over
+
+=item * $title (string) 
+
+=back
+
+=head2 widget or undef = $tree_column-E<gt>B<get_tree_view> 
+
+Since: gtk+ 2.12
+
+=head2 boolean = $tree_column-E<gt>B<get_visible> 
+
+=head2 $tree_column-E<gt>B<set_visible> ($visible)
+
+=over
+
+=item * $visible (boolean) 
+
+=back
+
+=head2 widget or undef = $tree_column-E<gt>B<get_widget> 
+
+=head2 $tree_column-E<gt>B<set_widget> ($widget)
+
+=over
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=back
+
+=head2 integer = $tree_column-E<gt>B<get_width> 
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'alignment' (float : default 0 : readable / writable / private)
+
+X Alignment of the column header text or widget
+
+=item 'clickable' (boolean : default false : readable / writable / private)
+
+Whether the header can be clicked
+
+=item 'expand' (boolean : default false : readable / writable / private)
+
+Column gets share of extra width allocated to the widget
+
+=item 'fixed-width' (integer : default 1 : readable / writable / private)
+
+Current fixed width of the column
+
+=item 'max-width' (integer : default -1 : readable / writable / private)
+
+Maximum allowed width of the column
+
+=item 'min-width' (integer : default -1 : readable / writable / private)
+
+Minimum allowed width of the column
+
+=item 'reorderable' (boolean : default false : readable / writable / private)
+
+Whether the column can be reordered around the headers
+
+=item 'resizable' (boolean : default false : readable / writable / private)
+
+Column is user-resizable
+
+=item 'sizing' (Gtk2::TreeViewColumnSizing : default "grow-only" : readable / writable / private)
+
+Resize mode of the column
+
+=item 'sort-column-id' (integer : default -1 : readable / writable / private)
+
+Logical sort column ID this column sorts on when selected for sorting
+
+=item 'sort-indicator' (boolean : default false : readable / writable / private)
+
+Whether to show a sort indicator
+
+=item 'sort-order' (Gtk2::SortType : default "ascending" : readable / writable / private)
+
+Sort direction the sort indicator should indicate
+
+=item 'spacing' (integer : default 0 : readable / writable / private)
+
+Space which is inserted between cells
+
+=item 'title' (string : default "" : readable / writable / private)
+
+Title to appear in column header
+
+=item 'visible' (boolean : default true : readable / writable / private)
+
+Whether to display the column
+
+=item 'widget' (Gtk2::Widget : default undef : readable / writable / private)
+
+Widget to put in column header button instead of column title
+
+=item 'width' (integer : default 0 : readable / private)
+
+Current width of the column
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<clicked> (Gtk2::TreeViewColumn)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::SortType
+
+=over
+
+=item * 'ascending' / 'GTK_SORT_ASCENDING'
+
+=item * 'descending' / 'GTK_SORT_DESCENDING'
+
+=back
+
+
+=head2 enum Gtk2::TreeViewColumnSizing
+
+=over
+
+=item * 'grow-only' / 'GTK_TREE_VIEW_COLUMN_GROW_ONLY'
+
+=item * 'autosize' / 'GTK_TREE_VIEW_COLUMN_AUTOSIZE'
+
+=item * 'fixed' / 'GTK_TREE_VIEW_COLUMN_FIXED'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

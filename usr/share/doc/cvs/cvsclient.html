@@ -1,0 +1,2180 @@
+<html lang="en">
+<head>
+<title>Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">CVS Client/Server</h2>
+
+<p>This document describes the client/server protocol used by CVS.  It does
+not describe how to use or administer client/server CVS; see the regular
+CVS manual for that.  This is version 1.12.13 of the protocol
+specification&mdash;See <a href="#Introduction">Introduction</a>, for more on what this version number
+means.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Introduction">Introduction</a>:       What is CVS and what is the client/server protocol for? 
+<li><a accesskey="2" href="#Goals">Goals</a>:              Basic design decisions, requirements, scope, etc. 
+<li><a accesskey="3" href="#Connection-and-Authentication">Connection and Authentication</a>:   Various ways to connect to the server
+<li><a accesskey="4" href="#Password-scrambling">Password scrambling</a>:   Scrambling used by pserver
+<li><a accesskey="5" href="#Protocol">Protocol</a>:           Complete description of the protocol
+<li><a accesskey="6" href="#Protocol-Notes">Protocol Notes</a>:     Possible enhancements, limitations, etc. of the protocol
+</ul>
+
+<div class="node">
+<a name="Introduction"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Goals">Goals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Introduction</h2>
+
+<p>CVS is a version control system (with some additional configuration
+management functionality).  It maintains a central <dfn>repository</dfn>
+which stores files (often source code), including past versions,
+information about who modified them and when, and so on.  People who
+wish to look at or modify those files, known as <dfn>developers</dfn>, use
+CVS to <dfn>check out</dfn> a <dfn>working directory</dfn> from the repository, to
+<dfn>check in</dfn> new versions of files to the repository, and other
+operations such as viewing the modification history of a file.  If
+developers are connected to the repository by a network, particularly a
+slow or flaky one, the most efficient way to use the network is with the
+CVS-specific protocol described in this document.
+
+   <p>Developers, using the machine on which they store their working
+directory, run the CVS <dfn>client</dfn> program.  To perform operations
+which cannot be done locally, it connects to the CVS <dfn>server</dfn>
+program, which maintains the repository.  For more information on how
+to connect see <a href="#Connection-and-Authentication">Connection and Authentication</a>.
+
+   <p>This document describes the CVS protocol.  Unfortunately, it does not
+yet completely document one aspect of the protocol&mdash;the detailed
+operation of each CVS command and option&mdash;and one must look at the CVS
+user documentation, <samp><span class="file">cvs.texinfo</span></samp>, for that information.  The
+protocol is non-proprietary (anyone who wants to is encouraged to
+implement it) and an implementation, known as CVS, is available under
+the GNU General Public License.  The CVS distribution, containing this
+implementation, <samp><span class="file">cvs.texinfo</span></samp>, and a copy (possibly more or less up
+to date than what you are reading now) of this document,
+<samp><span class="file">cvsclient.texi</span></samp>, can be found at the usual GNU FTP sites, with a
+filename such as <samp><span class="file">cvs-</span><var>version</var><span class="file">.tar.gz</span></samp>.
+
+   <p>This is version 1.12.13 of the protocol specification.  This
+version number is intended only to aid in distinguishing different
+versions of this specification.  Although the specification is currently
+maintained in conjunction with the CVS implementation, and carries the
+same version number, it also intends to document what is involved with
+interoperating with other implementations (such as other versions of
+CVS); see <a href="#Requirements">Requirements</a>.  This version number should not be used
+by clients or servers to determine what variant of the protocol to
+speak; they should instead use the <code>valid-requests</code> and
+<code>Valid-responses</code> mechanism (see <a href="#Protocol">Protocol</a>), which is more
+flexible.
+
+<div class="node">
+<a name="Goals"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Connection-and-Authentication">Connection and Authentication</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Goals</h2>
+
+     <ul>
+<li>Do not assume any access to the repository other than via this protocol. 
+It does not depend on NFS, rdist, etc.
+
+     <li>Providing a reliable transport is outside this protocol.  The protocol
+expects a reliable transport that is transparent (that is, there is no
+translation of characters, including characters such as
+linefeeds or carriage returns), and can transmit all 256 octets (for
+example for proper handling of binary files, compression, and
+encryption).  The encoding of characters specified by the protocol (the
+names of requests and so on) is the invariant ISO 646 character set (a
+subset of most popular character sets including ASCII and others).  For
+more details on running the protocol over the TCP reliable transport,
+see <a href="#Connection-and-Authentication">Connection and Authentication</a>.
+
+     <li>Security and authentication are handled outside this protocol (but see
+below about &lsquo;<samp><span class="samp">cvs kserver</span></samp>&rsquo; and &lsquo;<samp><span class="samp">cvs pserver</span></samp>&rsquo;).
+
+     <li>The protocol makes it possible for updates to be atomic with respect to
+checkins; that is if someone commits changes to several files in one cvs
+command, then an update by someone else would either get all the
+changes, or none of them.  The current <span class="sc">cvs</span> server can't do this,
+but that isn't the protocol's fault.
+
+     <li>The protocol is, with a few exceptions, transaction-based.  That is, the
+client sends all its requests (without waiting for server responses),
+and then waits for the server to send back all responses (without
+waiting for further client requests).  This has the advantage of
+minimizing network turnarounds and the disadvantage of sometimes
+transferring more data than would be necessary if there were a richer
+interaction.  Another, more subtle, advantage is that there is no need
+for the protocol to provide locking for features such as making checkins
+atomic with respect to updates.  Any such locking can be handled
+entirely by the server.  A good server implementation (such as the
+current <span class="sc">cvs</span> server) will make sure that it does not have any such
+locks in place whenever it is waiting for communication with the client;
+this prevents one client on a slow or flaky network from interfering
+with the work of others.
+
+     <li>It is a general design goal to provide only one way to do a given
+operation (where possible).  For example, implementations have no choice
+about whether to terminate lines with linefeeds or some other
+character(s), and request and response names are case-sensitive.  This
+is to enhance interoperability.  If a protocol allows more than one way
+to do something, it is all too easy for some implementations to support
+only some of them (perhaps accidentally). 
+<!-- I vaguely remember reading, probably in an RFC, about the problems -->
+<!-- that were caused when some people decided that SMTP should accept -->
+<!-- other line termination (in the message ("DATA")?) than CRLF.  However, I -->
+<!-- can't seem to track down the reference. -->
+</ul>
+
+<div class="node">
+<a name="Connection-and-Authentication"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Password-scrambling">Password scrambling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Goals">Goals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 How to Connect to and Authenticate Oneself to the CVS server</h2>
+
+<p>Connection and authentication occurs before the CVS protocol itself is
+started.  There are several ways to connect.
+
+     <dl>
+<dt>server<dd>If the client has a way to execute commands on the server, and provide
+input to the commands and output from them, then it can connect that
+way.  This could be the usual rsh (port 514) protocol, Kerberos rsh,
+SSH, or any similar mechanism.  The client may allow the user to specify
+the name of the server program; the default is <code>cvs</code>.  It is
+invoked with one argument, <code>server</code>.  Once it invokes the server,
+the client proceeds to start the cvs protocol.
+
+     <br><dt>kserver<dd>The kerberized server listens on a port (in the current implementation,
+by having inetd call "cvs kserver") which defaults to 1999.  The client
+connects, sends the usual kerberos authentication information, and then
+starts the cvs protocol.  Note: port 1999 is officially registered for
+another use, and in any event one cannot register more than one port for
+CVS, so GSS-API (see below) is recommended instead of kserver as a way
+to support kerberos.
+
+     <br><dt>pserver<dd>The name <dfn>pserver</dfn> is somewhat confusing.  It refers to both a
+generic framework which allows the CVS protocol to support several
+authentication mechanisms, and a name for a specific mechanism which
+transfers a username and a cleartext password.  Servers need not support
+all mechanisms, and in fact servers will typically want to support only
+those mechanisms which meet the relevant security needs.
+
+     <p>The pserver server listens on a port (in the current
+implementation, by having inetd call "cvs pserver") which defaults to
+2401 (this port is officially registered).  The client
+connects, and sends the following:
+
+          <ul>
+<li>the string &lsquo;<samp><span class="samp">BEGIN AUTH REQUEST</span></samp>&rsquo;, a linefeed,
+<li>the cvs root, a linefeed,
+<li>the username, a linefeed,
+<li>the password trivially encoded (see <a href="#Password-scrambling">Password scrambling</a>), a
+linefeed,
+<li>the string &lsquo;<samp><span class="samp">END AUTH REQUEST</span></samp>&rsquo;, and a linefeed. 
+</ul>
+
+     <p>The client must send the
+identical string for cvs root both here and later in the
+<code>Root</code> request of the cvs
+protocol itself.  Servers are encouraged to enforce this restriction. 
+The possible server responses (each of which is followed by a linefeed)
+are the following.  Note that although there is a small similarity
+between this authentication protocol and the cvs protocol, they are
+separate.
+
+          <dl>
+<dt><code>I LOVE YOU</code><dd>The authentication is successful.  The client proceeds with the cvs
+protocol itself.
+
+          <br><dt><code>I HATE YOU</code><dd>The authentication fails.  After sending this response, the server may
+close the connection.  It is up to the server to decide whether to give
+this response, which is generic, or a more specific response using
+&lsquo;<samp><span class="samp">E</span></samp>&rsquo; and/or &lsquo;<samp><span class="samp">error</span></samp>&rsquo;.
+
+          <br><dt><code>E </code><var>text</var><dd>Provide a message for the user.  After this reponse, the authentication
+protocol continues with another response.  Typically the server will
+provide a series of &lsquo;<samp><span class="samp">E</span></samp>&rsquo; responses followed by &lsquo;<samp><span class="samp">error</span></samp>&rsquo;. 
+Compatibility note: <span class="sc">cvs</span> 1.9.10 and older clients will print
+<code>unrecognized auth response</code> and <var>text</var>, and then exit, upon
+receiving this response.
+
+          <br><dt><code>error </code><var>code</var> <var>text</var><dd>The authentication fails.  After sending this response, the server may
+close the connection.  The <var>code</var> is a code describing why it
+failed, intended for computer consumption.  The only code currently
+defined is &lsquo;<samp><span class="samp">0</span></samp>&rsquo; which is nonspecific, but clients must silently
+treat any unrecognized codes as nonspecific. 
+The <var>text</var> should be supplied to the
+user.  Compatibility note: <span class="sc">cvs</span> 1.9.10 and older clients will print
+<code>unrecognized auth response</code> and <var>text</var>, and then exit, upon
+receiving this response. 
+Note that <var>text</var> for this response, or the <var>text</var> in an <code>E</code>
+response, is not designed for machine parsing.  More vigorous use of
+<var>code</var>, or future extensions, will be needed to prove a cleaner
+machine-parseable indication of what the error was. 
+</dl>
+
+     <!-- If you are thinking of putting samp or code around BEGIN AUTH REQUEST -->
+     <!-- and friends, watch for overfull hboxes. -->
+     <p>If the client wishes to merely authenticate without starting the cvs
+protocol, the procedure is the same, except BEGIN AUTH REQUEST is
+replaced with BEGIN VERIFICATION REQUEST, END AUTH REQUEST
+is replaced with END VERIFICATION REQUEST, and upon receipt of
+I LOVE YOU the connection is closed rather than continuing.
+
+     <p>Another mechanism is GSSAPI authentication.  GSSAPI is a
+generic interface to security services such as kerberos.  GSSAPI is
+specified in RFC2078 (GSSAPI version 2) and RFC1508 (GSSAPI version 1);
+we are not aware of differences between the two which affect the
+protocol in incompatible ways, so we make no attempt to specify one
+version or the other. 
+The procedure here is to start with &lsquo;<samp><span class="samp">BEGIN
+GSSAPI REQUEST</span></samp>&rsquo;.  GSSAPI authentication information is then exchanged
+between the client and the server.  Each packet of information consists
+of a two byte big endian length, followed by that many bytes of data. 
+After the GSSAPI authentication is complete, the server continues with
+the responses described above (&lsquo;<samp><span class="samp">I LOVE YOU</span></samp>&rsquo;, etc.).
+
+     <br><dt>future possibilities<dd>There are a nearly unlimited number of ways to connect and authenticate. 
+One might want to allow access based on IP address (similar to the usual
+rsh protocol but with different/no restrictions on ports &lt; 1024), to
+adopt mechanisms such as Pluggable Authentication Modules (PAM), to
+allow users to run their own servers under their own usernames without
+root access, or any number of other possibilities.  The way to add
+future mechanisms, for the most part, should be to continue to use port
+2401, but to use different strings in place of &lsquo;<samp><span class="samp">BEGIN AUTH
+REQUEST</span></samp>&rsquo;. 
+</dl>
+
+<div class="node">
+<a name="Password-scrambling"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Protocol">Protocol</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Connection-and-Authentication">Connection and Authentication</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Password scrambling algorithm</h2>
+
+<p>The pserver authentication protocol, as described in <a href="#Connection-and-Authentication">Connection and Authentication</a>, trivially encodes the passwords.  This is only to
+prevent inadvertent compromise; it provides no protection against even a
+relatively unsophisticated attacker.  For comparison, HTTP Basic
+Authentication (as described in RFC2068) uses BASE64 for a similar
+purpose.  CVS uses its own algorithm, described here.
+
+   <p>The scrambled password starts with &lsquo;<samp><span class="samp">A</span></samp>&rsquo;, which serves to identify
+the scrambling algorithm in use.  After that follows a single octet for
+each character in the password, according to a fixed encoding.  The
+values are shown here, with the encoded values in decimal.  Control
+characters, space, and characters outside the invariant ISO 646
+character set are not shown; such characters are not recommended for use
+in passwords.  There is a long discussion of character set issues in
+<a href="#Protocol-Notes">Protocol Notes</a>.
+
+<pre class="example">             0 111           P 125           p  58
+     ! 120   1  52   A  57   Q  55   a 121   q 113
+     "  53   2  75   B  83   R  54   b 117   r  32
+             3 119   C  43   S  66   c 104   s  90
+             4  49   D  46   T 124   d 101   t  44
+     % 109   5  34   E 102   U 126   e 100   u  98
+     &amp;  72   6  82   F  40   V  59   f  69   v  60
+     ' 108   7  81   G  89   W  47   g  73   w  51
+     (  70   8  95   H  38   X  92   h  99   x  33
+     )  64   9  65   I 103   Y  71   i  63   y  97
+     *  76   : 112   J  45   Z 115   j  94   z  62
+     +  67   ;  86   K  50           k  93
+     , 116   &lt; 118   L  42           l  39
+     -  74   = 110   M 123           m  37
+     .  68   &gt; 122   N  91           n  61
+     /  87   ? 105   O  35   _  56   o  48
+</pre>
+   <div class="node">
+<a name="Protocol"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Protocol-Notes">Protocol Notes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Password-scrambling">Password scrambling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 The CVS client/server protocol</h2>
+
+<p>In the following, &lsquo;<samp><span class="samp">\n</span></samp>&rsquo; refers to a linefeed and &lsquo;<samp><span class="samp">\t</span></samp>&rsquo; refers to
+a horizontal tab; <dfn>requests</dfn> are what the client sends and
+<dfn>responses</dfn> are what the server sends.  In general, the connection is
+governed by the client&mdash;the server does not send responses without
+first receiving requests to do so; see <a href="#Response-intro">Response intro</a> for more
+details of this convention.
+
+   <p>It is typical, early in the connection, for the client to transmit a
+<code>Valid-responses</code> request, containing all the responses it
+supports, followed by a <code>valid-requests</code> request, which elicits
+from the server a <code>Valid-requests</code> response containing all the
+requests it understands.  In this way, the client and server each find
+out what the other supports before exchanging large amounts of data
+(such as file contents).
+
+<!-- Hmm, having 3 sections in this menu makes a certain amount of sense -->
+<!-- but that structure gets lost in the printed manual (not sure about -->
+<!-- HTML).  Perhaps there is a better way. -->
+</li></ul>
+<p>General protocol conventions:
+
+<ul class="menu">
+<li><a accesskey="1" href="#Entries-Lines">Entries Lines</a>:                    Transmitting RCS data
+<li><a accesskey="2" href="#File-Modes">File Modes</a>:                       Read, write, execute, and possibly more... 
+<li><a accesskey="3" href="#Filenames">Filenames</a>:                        Conventions regarding filenames
+<li><a accesskey="4" href="#File-transmissions">File transmissions</a>:               How file contents are transmitted
+<li><a accesskey="5" href="#Strings">Strings</a>:                          Strings in various requests and responses
+<li><a accesskey="6" href="#Dates">Dates</a>:                            Times and dates
+
+</li></ul>
+<p>The protocol itself:
+
+</p>
+<ul class="menu">
+<li><a accesskey="7" href="#Request-intro">Request intro</a>:                    General conventions relating to requests
+<li><a accesskey="8" href="#Requests">Requests</a>:                         List of requests
+<li><a accesskey="9" href="#Response-intro">Response intro</a>:                   General conventions relating to responses
+<li><a href="#Response-pathnames">Response pathnames</a>:               The "pathname" in responses
+<li><a href="#Responses">Responses</a>:                        List of responses
+<li><a href="#Text-tags">Text tags</a>:                        More details about the MT response
+
+</li></ul>
+<p>An example session, and some further observations:
+
+</p>
+<ul class="menu">
+<li><a href="#Example">Example</a>:                          A conversation between client and server
+<li><a href="#Requirements">Requirements</a>:                     Things not to omit from an implementation
+<li><a href="#Obsolete">Obsolete</a>:                         Former protocol features
+</ul>
+
+<div class="node">
+<a name="Entries-Lines"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#File-Modes">File Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.1 Entries Lines</h3>
+
+<p>Entries lines are transmitted as:
+
+<pre class="example">     / <var>name</var> / <var>version</var> / <var>conflict</var> / <var>options</var> / <var>tag_or_date</var>
+</pre>
+   <p><var>tag_or_date</var> is either &lsquo;<samp><span class="samp">T</span></samp>&rsquo; <var>tag</var> or &lsquo;<samp><span class="samp">D</span></samp>&rsquo; <var>date</var>
+or empty.  If it is followed by a slash, anything after the slash
+shall be silently ignored.
+
+   <p><var>version</var> can be empty, or start with &lsquo;<samp><span class="samp">0</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-</span></samp>&rsquo;, for no
+user file, new user file, or user file to be removed, respectively.
+
+<!-- FIXME: should distinguish sender and receiver behavior here; the -->
+<!-- "anything else" and "does not start with" are intended for future -->
+<!-- expansion, and we should specify a sender behavior. -->
+   <p><var>conflict</var>, if it starts with &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, indicates that the file had
+conflicts in it.  The rest of <var>conflict</var> is &lsquo;<samp><span class="samp">=</span></samp>&rsquo; if the
+timestamp matches the file, or anything else if it doesn't.  If
+<var>conflict</var> does not start with a &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, it is silently ignored.
+
+   <p><var>options</var> signifies the keyword expansion options (for example
+&lsquo;<samp><span class="samp">-ko</span></samp>&rsquo;).  In an <code>Entry</code> request, this indicates the options
+that were specified with the file from the previous file updating
+response (see <a href="#Response-intro">Response intro</a>, for a list of file updating
+responses); if the client is specifying the &lsquo;<samp><span class="samp">-k</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-A</span></samp>&rsquo;
+option to <code>update</code>, then it is the server which figures out what
+overrides what.
+
+<div class="node">
+<a name="File-Modes"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Filenames">Filenames</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Entries-Lines">Entries Lines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.2 File Modes</h3>
+
+<p>A mode is any number of repetitions of
+
+<pre class="example">     <var>mode-type</var> = <var>data</var>
+</pre>
+   <p>separated by &lsquo;<samp><span class="samp">,</span></samp>&rsquo;.
+
+   <p><var>mode-type</var> is an identifier composed of alphanumeric characters. 
+Currently specified: &lsquo;<samp><span class="samp">u</span></samp>&rsquo; for user, &lsquo;<samp><span class="samp">g</span></samp>&rsquo; for group, &lsquo;<samp><span class="samp">o</span></samp>&rsquo;
+for other (see below for discussion of whether these have their POSIX
+meaning or are more loose).  Unrecognized values of <var>mode-type</var>
+are silently ignored.
+
+   <p><var>data</var> consists of any data not containing &lsquo;<samp><span class="samp">,</span></samp>&rsquo;, &lsquo;<samp><span class="samp">\0</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">\n</span></samp>&rsquo;.  For &lsquo;<samp><span class="samp">u</span></samp>&rsquo;, &lsquo;<samp><span class="samp">g</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">o</span></samp>&rsquo; mode types, data
+consists of alphanumeric characters, where &lsquo;<samp><span class="samp">r</span></samp>&rsquo; means read, &lsquo;<samp><span class="samp">w</span></samp>&rsquo;
+means write, &lsquo;<samp><span class="samp">x</span></samp>&rsquo; means execute, and unrecognized letters are
+silently ignored.
+
+   <p>The two most obvious ways in which the mode matters are: (1) is it
+writeable?  This is used by the developer communication features, and
+is implemented even on OS/2 (and could be implemented on DOS), whose
+notion of mode is limited to a readonly bit. (2) is it executable? 
+Unix CVS users need CVS to store this setting (for shell scripts and
+the like).  The current CVS implementation on unix does a little bit
+more than just maintain these two settings, but it doesn't really have
+a nice general facility to store or version control the mode, even on
+unix, much less across operating systems with diverse protection
+features.  So all the ins and outs of what the mode means across
+operating systems haven't really been worked out (e.g. should the VMS
+port use ACLs to get POSIX semantics for groups?).
+
+<div class="node">
+<a name="Filenames"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#File-transmissions">File transmissions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#File-Modes">File Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.3 Conventions regarding transmission of file names</h3>
+
+<p>In most contexts, &lsquo;<samp><span class="samp">/</span></samp>&rsquo; is used to separate directory and file
+names in filenames, and any use of other conventions (for example,
+that the user might type on the command line) is converted to that
+form.  The only exceptions might be a few cases in which the server
+provides a magic cookie which the client then repeats verbatim, but as
+the server has not yet been ported beyond unix, the two rules provide
+the same answer (and what to do if future server ports are operating
+on a repository like e:/foo or CVS_ROOT:[FOO.BAR] has not been
+carefully thought out).
+
+   <p>Characters outside the invariant ISO 646 character set should be avoided
+in filenames.  This restriction may need to be relaxed to allow for
+characters such as &lsquo;<samp><span class="samp">[</span></samp>&rsquo; and &lsquo;<samp><span class="samp">]</span></samp>&rsquo; (see above about non-unix
+servers); this has not been carefully considered (and currently
+implementations probably use whatever character sets that the operating
+systems they are running on allow, and/or that users specify).  Of
+course the most portable practice is to restrict oneself further, to the
+POSIX portable filename character set as specified in POSIX.1.
+
+<div class="node">
+<a name="File-transmissions"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Strings">Strings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Filenames">Filenames</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.4 File transmissions</h3>
+
+<p>File contents (noted below as <var>file transmission</var>) can be sent in
+one of two forms.  The simpler form is a number of bytes, followed by a
+linefeed, followed by the specified number of bytes of file contents. 
+These are the entire contents of the specified file.  Second, if both
+client and server support &lsquo;<samp><span class="samp">gzip-file-contents</span></samp>&rsquo;, a &lsquo;<samp><span class="samp">z</span></samp>&rsquo; may
+precede the length, and the `file contents' sent are actually compressed
+with &lsquo;<samp><span class="samp">gzip</span></samp>&rsquo; (RFC1952/1951) compression.  The length specified is
+that of the compressed version of the file.
+
+   <p>In neither case are the file content followed by any additional data. 
+The transmission of a file will end with a linefeed iff that file (or its
+compressed form) ends with a linefeed.
+
+   <p>The encoding of file contents depends on the value for the &lsquo;<samp><span class="samp">-k</span></samp>&rsquo;
+option.  If the file is binary (as specified by the &lsquo;<samp><span class="samp">-kb</span></samp>&rsquo; option in
+the appropriate place), then it is just a certain number of octets, and
+the protocol contributes nothing towards determining the encoding (using
+the file name is one widespread, if not universally popular, mechanism). 
+If the file is text (not binary), then the file is sent as a series of
+lines, separated by linefeeds.  If the keyword expansion is set to
+something other than &lsquo;<samp><span class="samp">-ko</span></samp>&rsquo;, then it is expected that the file
+conform to the RCS expectations regarding keyword expansion&mdash;in
+particular, that it is in a character set such as ASCII in which 0x24 is
+a dollar sign (&lsquo;<samp><span class="samp">$</span></samp>&rsquo;).
+
+<div class="node">
+<a name="Strings"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Dates">Dates</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#File-transmissions">File transmissions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.5 Strings</h3>
+
+<p>In various contexts, for example the <code>Argument</code> request and the
+<code>M</code> response, one transmits what is essentially an arbitrary
+string.  Often this will have been supplied by the user (for example,
+the &lsquo;<samp><span class="samp">-m</span></samp>&rsquo; option to the <code>ci</code> request).  The protocol has no
+mechanism to specify the character set of such strings; it would be
+fairly safe to stick to the invariant ISO 646 character set but the
+existing practice is probably to just transmit whatever the user
+specifies, and hope that everyone involved agrees which character set is
+in use, or sticks to a common subset.
+
+<div class="node">
+<a name="Dates"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Request-intro">Request intro</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Strings">Strings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.6 Dates</h3>
+
+<p>The protocol contains times and dates in various places.
+
+   <p>For the &lsquo;<samp><span class="samp">-D</span></samp>&rsquo; option to the <code>annotate</code>, <code>co</code>, <code>diff</code>,
+<code>export</code>, <code>history</code>, <code>rannotate</code>, <code>rdiff</code>,
+<code>rtag</code>, <code>tag</code>,
+and <code>update</code> requests, the server should support two formats:
+
+<pre class="example">     26 May 1997 13:01:40 -0000  ; <span class="roman">RFC 822 as modified by RFC 1123</span>
+     5/26/1997 13:01:40 GMT    ; <span class="roman">traditional</span>
+</pre>
+   <p>The former format is preferred; the latter however is sent by the CVS
+command line client (versions 1.5 through at least 1.9).
+
+   <p>For the &lsquo;<samp><span class="samp">-d</span></samp>&rsquo; option to the <code>log</code> and <code>rlog</code> requests,
+servers should at
+least support RFC 822/1123 format.  Clients are encouraged to use this
+format too (the command line CVS client, version 1.10 and older, just passed
+along the date format specified by the user, however).
+
+   <p>The <code>Mod-time</code> response and <code>Checkin-time</code> request use RFC
+822/1123 format (see the descriptions of that response and request for
+details).
+
+   <p>For <code>Notify</code>, see the description of that request.
+
+<div class="node">
+<a name="Request-intro"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Requests">Requests</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Dates">Dates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.7 Request intro</h3>
+
+<p>By convention, requests which begin with a capital letter do not elicit
+a response from the server, while all others do &ndash; save one.  The
+exception is &lsquo;<samp><span class="samp">gzip-file-contents</span></samp>&rsquo;.  Unrecognized requests will
+always elicit a response from the server, even if that request begins
+with a capital letter.
+
+   <p>The term <dfn>command</dfn> means a request which expects a response (except
+<code>valid-requests</code>).  The general model is that the client transmits
+a great number of requests, but nothing happens until the very end when
+the client transmits a command.  Although the intention is that
+transmitting several commands in one connection should be legal,
+existing servers probably have some bugs with some combinations of more
+than one command, and so clients may find it necessary to make several
+connections in some cases.  This should be thought of as a workaround
+rather than a desired attribute of the protocol.
+
+<div class="node">
+<a name="Requests"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Response-intro">Response intro</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Request-intro">Request intro</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.8 Requests</h3>
+
+<p>Here are the requests:
+
+     <dl>
+<dt><code>Root </code><var>pathname</var><code> \n</code><dd>Response expected: no.  Tell the server which <code>CVSROOT</code> to use. 
+Note that <var>pathname</var> is a local directory and <em>not</em> a fully
+qualified <code>CVSROOT</code> variable.  <var>pathname</var> must
+already exist; if creating a new root, use the <code>init</code> request, not
+<code>Root</code>.  <var>pathname</var> does not include the hostname of the
+server, how to access the server, etc.; by the time the CVS protocol is
+in use, connection, authentication, etc., are already taken care of.
+
+     <p>The <code>Root</code> request must be sent only once, and it must be sent
+before any requests other than <code>Valid-responses</code>,
+<code>valid-requests</code>, <code>UseUnchanged</code>, <code>Set</code>,
+<code>Global_option</code>, <code>init</code>, <code>noop</code>, or <code>version</code>.
+
+     <br><dt><code>Valid-responses </code><var>request-list</var><code> \n</code><dd>Response expected: no. 
+Tell the server what responses the client will accept. 
+request-list is a space separated list of tokens. 
+The <code>Root</code> request need not have been previously sent.
+
+     <br><dt><code>valid-requests \n</code><dd>Response expected: yes. 
+Ask the server to send back a <code>Valid-requests</code> response. 
+The <code>Root</code> request need not have been previously sent.
+
+     <br><dt><code>Command-prep </code><var>command</var><code> \n</code><dd>Response expected: yes. 
+Notify the server of the command that we are leading up to.  Intended to allow
+the server to send a redirect for write operations.  Requires either an
+<code>ok</code> or <code>Redirect</code> respnose.
+
+     <br><dt><code>Referrer </code><var>CVSROOT</var><code> \n</code><dd>Response expected: no. 
+Notify a primary server of a server which referred us.  Intended to allow
+a primary (write) server to update the read-only mirror a client is using
+for reads to minimize races on any subsequent updates from the client.
+
+     <br><dt><code>Directory </code><var>local-directory</var><code> \n</code><dt><code>Relative-directory </code><var>local-directory</var><code> \n</code><dd>Additional data: <var>repository</var> \n.  Response expected: no. 
+Tell the server what directory to use.
+
+     <p>The <var>repository</var> should be a directory name from a previous server
+response and may be specified either relative to the <var>pathname</var> provided
+with the <code>Root</code> request or absolute.  Relative or absolute, it must
+specify a path within <var>pathname</var>.
+
+     <p>Prior to <span class="sc">cvs</span> version <strong>FIXME - release number 1.12.10?</strong>,
+<var>repository</var> had to be absolute and <code>Relative-directory</code> was not a
+valid request.  The <code>Relative-directory</code> request is synonymous with
+<code>Directory</code> and is provided to alert modern clients that a relative
+<var>repository</var> is acceptable.
+
+     <p>Note that this both gives a default for <code>Entry</code> and <code>Modified</code> and
+also for <code>ci</code> and the other commands; normal usage is to send
+<code>Directory</code> for each directory in which there will be an
+<code>Entry</code> or <code>Modified</code>, and then a final <code>Directory</code>
+for the original directory, then the command. 
+The <var>local-directory</var> is relative to
+the top level at which the command is occurring (i.e. the last
+<code>Directory</code> which is sent before the command);
+to indicate that top level, &lsquo;<samp><span class="samp">.</span></samp>&rsquo; should be sent for
+<var>local-directory</var>.
+
+     <p>Here is an example of where a client gets <var>repository</var> and
+<var>local-directory</var>.  Suppose that there is a module defined by
+
+     <pre class="example">          moddir 1dir
+</pre>
+     <p>That is, one can check out <code>moddir</code> and it will take <code>1dir</code> in
+the repository and check it out to <code>moddir</code> in the working
+directory.  Then an initial check out could proceed like this:
+
+     <pre class="example">          C: Root /home/kingdon/zwork/cvsroot
+          . . .
+          C: Argument moddir
+          C: Directory .
+          C: .
+          C: co
+          S: Clear-sticky moddir/
+          S: 1dir/
+          . . .
+          S: ok
+</pre>
+     <p>In this example the response shown is <code>Clear-sticky</code>, but it could
+be another response instead.  Note that it returns two pathnames. 
+The first one, <samp><span class="file">moddir/</span></samp>, indicates the working
+directory to check out into.  The second one, ending in <samp><span class="file">1dir/</span></samp>,
+indicates the directory to pass back to the server in a subsequent
+<code>Directory</code> request.  For example, a subsequent <code>update</code>
+request might look like:
+
+     <pre class="example">          C: Directory moddir
+          C: 1dir
+          . . .
+          C: update
+</pre>
+     <p>For a given <var>local-directory</var>, the repository will be the same for
+each of the responses, so one can use the repository from whichever
+response is most convenient.  Typically a client will store the
+repository along with the sources for each <var>local-directory</var>, use
+that same setting whenever operating on that <var>local-directory</var>, and
+not update the setting as long as the <var>local-directory</var> exists.
+
+     <p>A client is free to rename a <var>local-directory</var> at any time (for
+example, in response to an explicit user request).  While it is true
+that the server supplies a <var>local-directory</var> to the client, as noted
+above, this is only the default place to put the directory.  Of course,
+the various <code>Directory</code> requests for a single command (for example,
+<code>update</code> or <code>ci</code> request) should name a particular directory
+with the same <var>local-directory</var>.
+
+     <p>Each <code>Directory</code> request specifies a brand-new
+<var>local-directory</var> and <var>repository</var>; that is,
+<var>local-directory</var> and <var>repository</var> are never relative to paths
+specified in any previous <code>Directory</code> request.
+
+     <p>Here's a more complex example, in which we request an update of a
+working directory which has been checked out from multiple places in the
+repository.
+
+     <pre class="example">          C: Argument dir1
+          C: Directory dir1
+          C: mod1
+          . . .
+          C: Argument dir2
+          C: Directory dir2
+          C: mod2
+          . . .
+          C: Argument dir3
+          C: Directory dir3/subdir3
+          C: mod3
+          . . .
+          C: update
+</pre>
+     <p>While directories <code>dir1</code> and <code>dir2</code> will be handled in similar
+fashion to the other examples given above, <code>dir3</code> is slightly
+different from the server's standpoint.  Notice that module <code>mod3</code>
+is actually checked out into <code>dir3/subdir3</code>, meaning that directory
+<code>dir3</code> is either empty or does not contain data checked out from
+this repository.
+
+     <p>The above example will work correctly in <span class="sc">cvs</span> 1.10.1 and later.  The
+server will descend the tree starting from all directories mentioned in
+<code>Argument</code> requests and update those directories specifically
+mentioned in <code>Directory</code> requests.
+
+     <p>Previous versions of <span class="sc">cvs</span> (1.10 and earlier) do not behave the same
+way.  While the descent of the tree begins at all directories mentioned
+in <code>Argument</code> requests, descent into subdirectories only occurs if
+a directory has been mentioned in a <code>Directory</code> request. 
+Therefore, the above example would succeed in updating <code>dir1</code> and
+<code>dir2</code>, but would skip <code>dir3</code> because that directory was not
+specifically mentioned in a <code>Directory</code> request.  A functional
+version of the above that would run on a 1.10 or earlier server is as
+follows:
+
+     <pre class="example">          C: Argument dir1
+          C: Directory dir1
+          C: mod1
+          . . .
+          C: Argument dir2
+          C: Directory dir2
+          C: mod2
+          . . .
+          C: Argument dir3
+          C: Directory dir3
+          C: .
+          . . .
+          C: Directory dir3/subdir3
+          C: mod3
+          . . .
+          C: update
+</pre>
+     <p>Note the extra <code>Directory dir3</code> request.  It might be better to use
+<code>Emptydir</code> as the repository for the <code>dir3</code> directory, but the
+above will certainly work.
+
+     <p>One more peculiarity of the 1.10 and earlier protocol is the ordering of
+<code>Directory</code> arguments.  In order for a subdirectory to be
+registered correctly for descent by the recursion processor, its parent
+must be sent first.  For example, the following would not work to update
+<code>dir3/subdir3</code>:
+
+     <pre class="example">          . . .
+          C: Argument dir3
+          C: Directory dir3/subdir3
+          C: mod3
+          . . .
+          C: Directory dir3
+          C: .
+          . . .
+          C: update
+</pre>
+     <p>The implementation of the server in 1.10 and earlier writes the
+administration files for a given directory at the time of the
+<code>Directory</code> request.  It also tries to register the directory with
+its parent to mark it for recursion.  In the above example, at the time
+<code>dir3/subdir3</code> is created, the physical directory for <code>dir3</code>
+will be created on disk, but the administration files will not have been
+created.  Therefore, when the server tries to register
+<code>dir3/subdir3</code> for recursion, the operation will silently fail
+because the administration files do not yet exist for <code>dir3</code>.
+
+     <br><dt><code>Max-dotdot </code><var>level</var><code> \n</code><dd>Response expected: no. 
+Tell the server that <var>level</var> levels of directories above the
+directory which <code>Directory</code> requests are relative to will be
+needed.  For example, if the client is planning to use a
+<code>Directory</code> request for <samp><span class="file">../../foo</span></samp>, it must send a
+<code>Max-dotdot</code> request with a <var>level</var> of at least 2. 
+<code>Max-dotdot</code> must be sent before the first <code>Directory</code>
+request.
+
+     <br><dt><code>Static-directory \n</code><dd>Response expected: no.  Tell the server that the directory most recently
+specified with <code>Directory</code> should not have
+additional files checked out unless explicitly requested.  The client
+sends this if the <code>Entries.Static</code> flag is set, which is controlled
+by the <code>Set-static-directory</code> and <code>Clear-static-directory</code>
+responses.
+
+     <br><dt><code>Sticky </code><var>tagspec</var><code> \n</code><dd>Response expected: no.  Tell the server that the directory most recently
+specified with <code>Directory</code> has a sticky tag or date <var>tagspec</var>. 
+The first character of <var>tagspec</var> is &lsquo;<samp><span class="samp">T</span></samp>&rsquo; for a tag, &lsquo;<samp><span class="samp">D</span></samp>&rsquo;
+for a date, or some other character supplied by a Set-sticky response
+from a previous request to the server.  The remainder of <var>tagspec</var>
+contains the actual tag or date, again as supplied by Set-sticky.
+
+     <p>The server should remember <code>Static-directory</code> and <code>Sticky</code>
+requests for a particular directory; the client need not resend them
+each time it sends a <code>Directory</code> request for a given directory. 
+However, the server is not obliged to remember them beyond the context
+of a single command.
+
+     <br><dt><code>Checkin-prog </code><var>program</var><code> \n</code><dd>Response expected: no.  Tell the server that the directory most recently
+specified with <code>Directory</code> has a checkin program <var>program</var>. 
+Such a program would have been previously set with the
+<code>Set-checkin-prog</code> response.
+
+     <br><dt><code>Update-prog </code><var>program</var><code> \n</code><dd>Response expected: no.  Tell the server that the directory most recently
+specified with <code>Directory</code> has an update program <var>program</var>. 
+Such a program would have been previously set with the
+<code>Set-update-prog</code> response.
+
+     <br><dt><code>Entry </code><var>entry-line</var><code> \n</code><dd>Response expected: no.  Tell the server what version of a file is on the
+local machine.  The name in <var>entry-line</var> is a name relative to the
+directory most recently specified with <code>Directory</code>.  If the user
+is operating on only some files in a directory, <code>Entry</code> requests
+for only those files need be included.  If an <code>Entry</code> request is
+sent without <code>Modified</code>, <code>Is-modified</code>, or <code>Unchanged</code>,
+it means the file is
+lost (does not exist in the working directory).  If both <code>Entry</code>
+and one of <code>Modified</code>, <code>Is-modified</code>, or <code>Unchanged</code> are
+sent for the same file, <code>Entry</code> must be sent first.  For a
+given file, one can send <code>Modified</code>, <code>Is-modified</code>, or
+<code>Unchanged</code>, but not more than one of these three.
+
+     <br><dt><code>Kopt </code><var>option</var><code> \n</code><dd>This indicates to the server which keyword expansion options to use for
+the file specified by the next <code>Modified</code> or <code>Is-modified</code>
+request (for example &lsquo;<samp><span class="samp">-kb</span></samp>&rsquo; for a binary file).  This is similar to
+<code>Entry</code>, but is used for a file for which there is no entries line. 
+Typically this will be a file being added via an <code>add</code> or
+<code>import</code> request.  The client may not send both <code>Kopt</code> and
+<code>Entry</code> for the same file.
+
+     <br><dt><code>Checkin-time </code><var>time</var><code> \n</code><dd>For the file specified by the next <code>Modified</code> request, use
+<var>time</var> as the time of the checkin.  The <var>time</var> is in the format
+specified by RFC822 as modified by RFC1123.  The client may specify any
+timezone it chooses; servers will want to convert that to their own
+timezone as appropriate.  An example of this format is:
+
+     <pre class="example">          26 May 1997 13:01:40 -0400
+</pre>
+     <p>There is no requirement that the client and server clocks be
+synchronized.  The client just sends its recommendation for a timestamp
+(based on file timestamps or whatever), and the server should just believe
+it (this means that the time might be in the future, for example).
+
+     <p>Note that this is not a general-purpose way to tell the server about the
+timestamp of a file; that would be a separate request (if there are
+servers which can maintain timestamp and time of checkin separately).
+
+     <p>This request should affect the <code>import</code> request, and may optionally
+affect the <code>ci</code> request or other relevant requests if any.
+
+     <br><dt><code>Modified </code><var>filename</var><code> \n</code><dd>Response expected: no.  Additional data: mode, \n, file transmission. 
+Send the server a copy of one locally modified file.  <var>filename</var> is
+a file within the most recent directory sent with <code>Directory</code>; it
+must not contain &lsquo;<samp><span class="samp">/</span></samp>&rsquo;.  If
+the user is operating on only some files in a directory, only those
+files need to be included.  This can also be sent without <code>Entry</code>,
+if there is no entry for the file.
+
+     <br><dt><code>Is-modified </code><var>filename</var><code> \n</code><dd>Response expected: no.  Additional data: none.  Like <code>Modified</code>,
+but used if the server only needs
+to know whether the file is modified, not the contents.
+
+     <p>The commands which can take <code>Is-modified</code> instead of
+<code>Modified</code> with no known change in behavior are: <code>admin</code>,
+<code>diff</code> (if and only if two &lsquo;<samp><span class="samp">-r</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-D</span></samp>&rsquo; options are
+specified), <code>watch-on</code>, <code>watch-off</code>, <code>watch-add</code>,
+<code>watch-remove</code>, <code>watchers</code>, <code>editors</code>,
+<code>log</code>, and <code>annotate</code>.
+
+     <p>For the <code>status</code> command, one can send <code>Is-modified</code> but if
+the client is using imperfect mechanisms such as timestamps to determine
+whether to consider a file modified, then the behavior will be
+different.  That is, if one sends <code>Modified</code>, then the server will
+actually compare the contents of the file sent and the one it derives
+from to determine whether the file is genuinely modified.  But if one
+sends <code>Is-modified</code>, then the server takes the client's word for
+it.  A similar situation exists for <code>tag</code>, if the &lsquo;<samp><span class="samp">-c</span></samp>&rsquo; option
+is specified.
+
+     <p>Commands for which <code>Modified</code> is necessary are <code>co</code>,
+<code>ci</code>, <code>update</code>, and <code>import</code>.
+
+     <p>Commands which do not need to inform the server about a working
+directory, and thus should not be sending either <code>Modified</code> or
+<code>Is-modified</code>: <code>rdiff</code>, <code>rtag</code>, <code>history</code>,
+<code>init</code>, and <code>release</code>.
+
+     <p>Commands for which further investigation is warranted are:
+<code>remove</code>, <code>add</code>, and <code>export</code>.  Pending such
+investigation, the more conservative course of action is to stick to
+<code>Modified</code>.
+
+     <br><dt><code>Unchanged </code><var>filename</var><code> \n</code><dd>Response expected: no.  Tell the server that <var>filename</var> has not been
+modified in the checked out directory.  The <var>filename</var> is
+a file within the most recent directory sent with <code>Directory</code>; it
+must not contain &lsquo;<samp><span class="samp">/</span></samp>&rsquo;.
+
+     <br><dt><code>UseUnchanged \n</code><dd>Response expected: no.  To specify the version of the protocol described
+in this document, servers must support this request (although it need
+not do anything) and clients must issue it. 
+The <code>Root</code> request need not have been previously sent.
+
+     <br><dt><code>Notify </code><var>filename</var><code> \n</code><dd>Response expected: no. 
+Tell the server that an <code>edit</code> or <code>unedit</code> command has taken
+place.  The server needs to send a <code>Notified</code> response, but such
+response is deferred until the next time that the server is sending
+responses. 
+The <var>filename</var> is a file within the most recent directory sent with
+<code>Directory</code>; it must not contain &lsquo;<samp><span class="samp">/</span></samp>&rsquo;. 
+Additional data:
+     <pre class="example">          <var>notification-type</var> \t <var>time</var> \t <var>clienthost</var> \t
+          <var>working-dir</var> \t <var>watches</var> \n
+</pre>
+     <p>where <var>notification-type</var> is &lsquo;<samp><span class="samp">E</span></samp>&rsquo; for edit, &lsquo;<samp><span class="samp">U</span></samp>&rsquo; for
+unedit, undefined behavior if &lsquo;<samp><span class="samp">C</span></samp>&rsquo;, and all other letters should be
+silently ignored for future expansion. 
+<var>time</var> is the time at which the edit or unedit took place, in a
+user-readable format of the client's choice (the server should treat the
+time as an opaque string rather than interpreting it). 
+<!-- Might be useful to specify a format, but I don't know if we want to -->
+<!-- specify the status quo (ISO C asctime() format plus timezone) without -->
+<!-- offering the option of ISO8601 and/or RFC822/1123 (see cvs.texinfo -->
+<!-- for much much more on date formats). -->
+<var>clienthost</var> is the name of the host on which the edit or unedit
+took place, and <var>working-dir</var> is the pathname of the working
+directory where the edit or unedit took place.  <var>watches</var> are the
+temporary watches, zero or more of the following characters in the
+following order: &lsquo;<samp><span class="samp">E</span></samp>&rsquo; for edit, &lsquo;<samp><span class="samp">U</span></samp>&rsquo; for unedit, &lsquo;<samp><span class="samp">C</span></samp>&rsquo; for
+commit, and all other letters should be silently ignored for future
+expansion.  If <var>notification-type</var> is &lsquo;<samp><span class="samp">E</span></samp>&rsquo; the temporary watches
+are set; if it is &lsquo;<samp><span class="samp">U</span></samp>&rsquo; they are cleared. 
+If <var>watches</var> is followed by \t then the
+\t and the rest of the line should be ignored, for future expansion.
+
+     <p>The <var>time</var>, <var>clienthost</var>, and <var>working-dir</var> fields may not
+contain the characters &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, &lsquo;<samp><span class="samp">,</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">;</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">=</span></samp>&rsquo;.
+
+     <p>Note that a client may be capable of performing an <code>edit</code> or
+<code>unedit</code> operation without connecting to the server at that time,
+and instead connecting to the server when it is convenient (for example,
+when a laptop is on the net again) to send the <code>Notify</code> requests. 
+Even if a client is capable of deferring notifications, it should
+attempt to send them immediately (one can send <code>Notify</code> requests
+together with a <code>noop</code> request, for example), unless perhaps if
+it can know that a connection would be impossible.
+
+     <br><dt><code>Questionable </code><var>filename</var><code> \n</code><dd>Response expected: no.  Additional data: no.  Tell the server to check
+whether <var>filename</var> should be ignored, and if not, next time the
+server sends responses, send (in a <code>M</code> response) &lsquo;<samp><span class="samp">?</span></samp>&rsquo; followed
+by the directory and filename.  <var>filename</var> must not contain
+&lsquo;<samp><span class="samp">/</span></samp>&rsquo;; it needs to be a file in the directory named by the most
+recent <code>Directory</code> request. 
+<!-- FIXME: the bit about not containing / is true of most of the -->
+<!-- requests, but isn't documented and should be. -->
+
+     <br><dt><code>Case \n</code><dd>Response expected: no.  Tell the server that filenames should be matched
+in a case-insensitive fashion.  Note that this is not the primary
+mechanism for achieving case-insensitivity; for the most part the client
+keeps track of the case which the server wants to use and takes care to
+always use that case regardless of what the user specifies.  For example
+the filenames given in <code>Entry</code> and <code>Modified</code> requests for the
+same file must match in case regardless of whether the <code>Case</code>
+request is sent.  The latter mechanism is more general (it could also be
+used for 8.3 filenames, VMS filenames with more than one &lsquo;<samp><span class="samp">.</span></samp>&rsquo;, and
+any other situation in which there is a predictable mapping between
+filenames in the working directory and filenames in the protocol), but
+there are some situations it cannot handle (ignore patterns, or
+situations where the user specifies a filename and the client does not
+know about that file).
+
+     <p>Though this request will be supported into the forseeable future, it has been
+the source of numerous bug reports in the past due to the complexity of testing
+this functionality via the test suite and client developers are encouraged not
+to use it.  Instead, please consider munging conflicting names and maintaining
+a map for communicating with the server.  For example, suppose the server sends
+files <samp><span class="file">case</span></samp>, <samp><span class="file">CASE</span></samp>, and <samp><span class="file">CaSe</span></samp>.  The client could write all
+three files to names such as, <samp><span class="file">case</span></samp>, <samp><span class="file">case_prefix_case</span></samp>, and
+<samp><span class="file">case_prefix_2_case</span></samp> and maintain a mapping between the file names in, for
+instance a new <samp><span class="file">CVS/Map</span></samp> file.
+
+     <br><dt><code>Argument </code><var>text</var><code> \n</code><dd>Response expected: no. 
+Save argument for use in a subsequent command.  Arguments
+accumulate until an argument-using command is given, at which point
+they are forgotten.
+
+     <br><dt><code>Argumentx </code><var>text</var><code> \n</code><dd>Response expected: no.  Append \n followed by text to the current
+argument being saved.
+
+     <br><dt><code>Global_option </code><var>option</var><code> \n</code><dd>Response expected: no. 
+Transmit one of the global options &lsquo;<samp><span class="samp">-q</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-l</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">-t</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-r</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">-n</span></samp>&rsquo;.  <var>option</var> must be one of those
+strings, no variations (such as combining of options) are allowed.  For
+graceful handling of <code>valid-requests</code>, it is probably better to
+make new global options separate requests, rather than trying to add
+them to this request. 
+The <code>Root</code> request need not have been previously sent.
+
+     <br><dt><code>Gzip-stream </code><var>level</var><code> \n</code><dd>Response expected: no. 
+Use zlib (RFC 1950/1951) compression to compress all further communication
+between the client and the server.  As of <span class="sc">cvs</span> 1.12.13, this request needs
+to be sent as the first non-rootless request if the server is configured
+with compression level restrictions and <var>level</var> is outside the restricted
+range.  After this request is sent, all further communication must be
+compressed.  All further data received from the server will also be
+compressed.  The <var>level</var> argument suggests to the server the level of
+compression that it should apply; it should be an integer between 0 and 9,
+inclusive, where &lsquo;<samp><span class="samp">0</span></samp>&rsquo; means no compression and higher numbers indicate more
+compression.
+
+     <br><dt><code>Kerberos-encrypt \n</code><dd>Response expected: no. 
+Use Kerberos encryption to encrypt all further communication between the
+client and the server.  This will only work if the connection was made
+over Kerberos in the first place.  If both the <code>Gzip-stream</code> and
+the <code>Kerberos-encrypt</code> requests are used, the
+<code>Kerberos-encrypt</code> request should be used first.  This will make
+the client and server encrypt the compressed data, as opposed to
+compressing the encrypted data.  Encrypted data is generally
+incompressible.
+
+     <p>Note that this request does not fully prevent an attacker from hijacking
+the connection, in the sense that it does not prevent hijacking the
+connection between the initial authentication and the
+<code>Kerberos-encrypt</code> request.
+
+     <br><dt><code>Gssapi-encrypt \n</code><dd>Response expected: no. 
+Use GSSAPI encryption to encrypt all further communication between the
+client and the server.  This will only work if the connection was made
+over GSSAPI in the first place.  See <code>Kerberos-encrypt</code>, above, for
+the relation between <code>Gssapi-encrypt</code> and <code>Gzip-stream</code>.
+
+     <p>Note that this request does not fully prevent an attacker from hijacking
+the connection, in the sense that it does not prevent hijacking the
+connection between the initial authentication and the
+<code>Gssapi-encrypt</code> request.
+
+     <br><dt><code>Gssapi-authenticate \n</code><dd>Response expected: no. 
+Use GSSAPI authentication to authenticate all further communication
+between the client and the server.  This will only work if the
+connection was made over GSSAPI in the first place.  Encrypted data is
+automatically authenticated, so using both <code>Gssapi-authenticate</code>
+and <code>Gssapi-encrypt</code> has no effect beyond that of
+<code>Gssapi-encrypt</code>.  Unlike encrypted data, it is reasonable to
+compress authenticated data.
+
+     <p>Note that this request does not fully prevent an attacker from hijacking
+the connection, in the sense that it does not prevent hijacking the
+connection between the initial authentication and the
+<code>Gssapi-authenticate</code> request.
+
+     <br><dt><code>Set </code><var>variable</var><code>=</code><var>value</var><code> \n</code><dd>Response expected: no. 
+Set a user variable <var>variable</var> to <var>value</var>. 
+The <code>Root</code> request need not have been previously sent.
+
+     <br><dt><code>Hostname </code><var>hostname</var><code> \n</code><dd>Response expected: no.  Set the client hostname for an upcoming <code>edit</code>
+request.
+
+     <br><dt><code>LocalDir </code><var>hostname</var><code> \n</code><dd>Response expected: no.  Set the local client directory name for an upcoming
+<code>edit</code> request.
+
+     <br><dt><code>expand-modules \n</code><dd>Response expected: yes.  Expand the modules which are specified in the
+arguments.  Returns the data in <code>Module-expansion</code> responses.  Note
+that the server can assume that this is checkout or export, not rtag or
+rdiff; the latter do not access the working directory and thus have no
+need to expand modules on the client side.
+
+     <p>Expand may not be the best word for what this request does.  It does not
+necessarily tell you all the files contained in a module, for example. 
+Basically it is a way of telling you which working directories the
+server needs to know about in order to handle a checkout of the
+specified modules.
+
+     <p>For example, suppose that the server has a module defined by
+
+     <pre class="example">          aliasmodule -a 1dir
+</pre>
+     <p>That is, one can check out <code>aliasmodule</code> and it will take
+<code>1dir</code> in the repository and check it out to <code>1dir</code> in the
+working directory.  Now suppose the client already has this module
+checked out and is planning on using the <code>co</code> request to update it. 
+Without using <code>expand-modules</code>, the client would have two bad
+choices: it could either send information about <em>all</em> working
+directories under the current directory, which could be unnecessarily
+slow, or it could be ignorant of the fact that <code>aliasmodule</code> stands
+for <code>1dir</code>, and neglect to send information for <code>1dir</code>, which
+would lead to incorrect operation. 
+<!-- Those don't really seem like the only two options.  I mean, what -->
+<!-- about keeping track of the correspondence from when we first checked -->
+<!-- out a fresh directory?  Not that the CVS client does this, or that -->
+<!-- I've really thought about whether it would be a good idea... -->
+
+     <p>With <code>expand-modules</code>, the client would first ask for the module to
+be expanded:
+
+     <pre class="example">          C: Root /home/kingdon/zwork/cvsroot
+          . . .
+          C: Argument aliasmodule
+          C: Directory .
+          C: .
+          C: expand-modules
+          S: Module-expansion 1dir
+          S: ok
+</pre>
+     <p>and then it knows to check the <samp><span class="file">1dir</span></samp> directory and send
+requests such as <code>Entry</code> and <code>Modified</code> for the files in that
+directory.
+
+     <br><dt><code>ci \n</code><dt><code>diff \n</code><dt><code>list \n</code><dt><code>tag \n</code><dt><code>status \n</code><dt><code>admin \n</code><dt><code>history \n</code><dt><code>watchers \n</code><dt><code>editors \n</code><dt><code>annotate \n</code><dd>Response expected: yes.  Actually do a cvs command.  This uses any
+previous <code>Argument</code>, <code>Directory</code>, <code>Entry</code>, or
+<code>Modified</code> requests, if they have been sent.  The
+last <code>Directory</code> sent specifies the working directory at the time
+of the operation.  No provision is made for any input from the user. 
+This means that <code>ci</code> must use a <code>-m</code> argument if it wants to
+specify a log message.
+
+     <br><dt><code>log \n</code><dd>Response expected: yes.  Show information for past revisions.  This uses
+any previous <code>Directory</code>, <code>Entry</code>, or <code>Modified</code>
+requests, if they have been sent.  The last <code>Directory</code> sent
+specifies the working directory at the time of the operation.  Also uses
+previous <code>Argument</code>'s of which the canonical forms are the
+following (<span class="sc">cvs</span> 1.10 and older clients sent what the user specified,
+but clients are encouraged to use the canonical forms and other forms
+are deprecated):
+
+          <dl>
+<dt><code>-b, -h, -l, -N, -R, -t</code><dd>These options go by themselves, one option per <code>Argument</code> request.
+
+          <br><dt><code>-d </code><var>date1</var><code>&lt;</code><var>date2</var><dd>Select revisions between <var>date1</var> and <var>date2</var>.  Either date
+may be omitted in which case there is no date limit at that end of the
+range (clients may specify dates such as 1 Jan 1970 or 1 Jan 2038 for
+similar purposes but this is problematic as it makes assumptions about
+what dates the server supports).  Dates are in RFC822/1123 format.  The
+&lsquo;<samp><span class="samp">-d</span></samp>&rsquo; is one <code>Argument</code> request and the date range is a second
+one.
+
+          <br><dt><code>-d </code><var>date1</var><code>&lt;=</code><var>date2</var><dd>Likewise but compare dates for equality.
+
+          <br><dt><code>-d </code><var>singledate</var><dd>Select the single, latest revision dated <var>singledate</var> or earlier.
+
+          <p>To include several date ranges and/or singledates, repeat the &lsquo;<samp><span class="samp">-d</span></samp>&rsquo;
+option as many times as necessary.
+
+          <br><dt><code>-r</code><var>rev1</var><code>:</code><var>rev2</var><dt><code>-r</code><var>branch</var><dt><code>-r</code><var>branch</var><code>.</code><dt><code>-r</code><dd>Specify revisions (note that <var>rev1</var> or <var>rev2</var> can be omitted, or
+can refer to branches).  Send both the &lsquo;<samp><span class="samp">-r</span></samp>&rsquo; and the revision
+information in a single <code>Argument</code> request.  To include several
+revision selections, repeat the &lsquo;<samp><span class="samp">-r</span></samp>&rsquo; option.
+
+          <br><dt><code>-s </code><var>state</var><dt><code>-w</code><dt><code>-w</code><var>login</var><dd>Select on states or users.  To include more than one state or user,
+repeat the option.  Send the &lsquo;<samp><span class="samp">-s</span></samp>&rsquo; option as a separate argument
+from the state being selected.  Send the &lsquo;<samp><span class="samp">-w</span></samp>&rsquo; option as part of the
+same argument as the user being selected. 
+</dl>
+
+     <br><dt><code>co \n</code><dd>Response expected: yes.  Get files from the repository.  This uses any
+previous <code>Argument</code>, <code>Directory</code>, <code>Entry</code>, or
+<code>Modified</code> requests, if they have been sent.  Arguments to this
+command are module names; the client cannot know what directories they
+correspond to except by (1) just sending the <code>co</code> request, and then
+seeing what directory names the server sends back in its responses, and
+(2) the <code>expand-modules</code> request.
+
+     <br><dt><code>export \n</code><dd>Response expected: yes.  Get files from the repository.  This uses any
+previous <code>Argument</code>, <code>Directory</code>, <code>Entry</code>, or
+<code>Modified</code> requests, if they have been sent.  Arguments to this
+command are module names, as described for the <code>co</code> request.  The
+intention behind this command is that a client can get sources from a
+server without storing CVS information about those sources.  That is, a
+client probably should not count on being able to take the entries line
+returned in the <code>Created</code> response from an <code>export</code> request
+and send it in a future <code>Entry</code> request.  Note that the entries
+line in the <code>Created</code> response must indicate whether the file is
+binary or text, so the client can create it correctly.
+
+     <br><dt><code>ls \n</code><dt><code>rannotate \n</code><dt><code>rdiff \n</code><dt><code>rlist \n</code><dt><code>rlog \n</code><dt><code>rtag \n</code><dd>Response expected: yes.  Actually do a cvs command.  This uses any
+previous <code>Argument</code> requests, if they have been sent.  The client
+should not send <code>Directory</code>, <code>Entry</code>, or <code>Modified</code>
+requests for these commands; they are not used.  Arguments to these
+commands are module names, as described for <code>co</code>.  <code>ls</code> is a
+synonym for <code>rlist</code>, for compatibility with CVSNT.
+
+     <br><dt><code>init </code><var>root-name</var><code> \n</code><dd>Response expected: yes.  If it doesn't already exist, create a <span class="sc">cvs</span>
+repository <var>root-name</var>.  Note that <var>root-name</var> is a local
+directory and <em>not</em> a fully qualified <code>CVSROOT</code> variable. 
+The <code>Root</code> request need not have been previously sent.
+
+     <br><dt><code>update \n</code><dd>Response expected: yes.  Actually do a <code>cvs update</code> command.  This
+uses any previous <code>Argument</code>, <code>Directory</code>, <code>Entry</code>,
+or <code>Modified</code> requests, if they have been sent.  The
+last <code>Directory</code> sent specifies the working directory at the time
+of the operation.  The <code>-I</code> option is not used&ndash;files which the
+client can decide whether to ignore are not mentioned and the client
+sends the <code>Questionable</code> request for others.
+
+     <br><dt><code>import \n</code><dd>Response expected: yes.  Actually do a <code>cvs import</code> command.  This
+uses any previous <code>Argument</code>, <code>Directory</code>, <code>Entry</code>, or
+<code>Modified</code> requests, if they have been sent.  The
+last <code>Directory</code> sent specifies the working directory at the time
+of the operation - unlike most commands, the repository field of each
+<code>Directory</code> request is ignored (it merely must point somewhere
+within the root).  The files to be imported are sent in <code>Modified</code>
+requests (files which the client knows should be ignored are not sent;
+the server must still process the CVSROOT/cvsignore file unless -I ! is
+sent).  A log message must have been specified with a <code>-m</code>
+argument.
+
+     <br><dt><code>add \n</code><dd>Response expected: yes.  Add a file or directory.  This uses any
+previous <code>Argument</code>, <code>Directory</code>, <code>Entry</code>, or
+<code>Modified</code> requests, if they have been sent.  The
+last <code>Directory</code> sent specifies the working directory at the time
+of the operation.
+
+     <p>To add a directory, send the directory to be added using
+<code>Directory</code> and <code>Argument</code> requests.  For example:
+
+     <pre class="example">          C: Root /u/cvsroot
+          . . .
+          C: Argument nsdir
+          C: Directory nsdir
+          C: 1dir/nsdir
+          C: Directory .
+          C: 1dir
+          C: add
+          S: M Directory /u/cvsroot/1dir/nsdir put under version control
+          S: ok
+</pre>
+     <p>You will notice that the server does not signal to the client in any
+particular way that the directory has been successfully added.  The
+client is supposed to just assume that the directory has been added and
+update its records accordingly.  Note also that adding a directory is
+immediate; it does not wait until a <code>ci</code> request as files do.
+
+     <p>To add a file, send the file to be added using a <code>Modified</code>
+request.  For example:
+
+     <pre class="example">          C: Argument nfile
+          C: Directory .
+          C: 1dir
+          C: Modified nfile
+          C: u=rw,g=r,o=r
+          C: 6
+          C: hello
+          C: add
+          S: E cvs server: scheduling file `nfile' for addition
+          S: Mode u=rw,g=r,o=r
+          S: Checked-in ./
+          S: /u/cvsroot/1dir/nfile
+          S: /nfile/0///
+          S: E cvs server: use 'cvs commit' to add this file permanently
+          S: ok
+</pre>
+     <p>Note that the file has not been added to the repository; the only effect
+of a successful <code>add</code> request, for a file, is to supply the client
+with a new entries line containing &lsquo;<samp><span class="samp">0</span></samp>&rsquo; to indicate an added file. 
+In fact, the client probably could perform this operation without
+contacting the server, although using <code>add</code> does cause the server
+to perform a few more checks.
+
+     <p>The client sends a subsequent <code>ci</code> to actually add the file to the
+repository.
+
+     <p>Another quirk of the <code>add</code> request is that with CVS 1.9 and older,
+a pathname specified in
+an <code>Argument</code> request cannot contain &lsquo;<samp><span class="samp">/</span></samp>&rsquo;.  There is no good
+reason for this restriction, and in fact more recent CVS servers don't
+have it. 
+But the way to interoperate with the older servers is to ensure that
+all <code>Directory</code> requests for <code>add</code> (except those used to add
+directories, as described above), use &lsquo;<samp><span class="samp">.</span></samp>&rsquo; for
+<var>local-directory</var>.  Specifying another string for
+<var>local-directory</var> may not get an error, but it will get you strange
+<code>Checked-in</code> responses from the buggy servers.
+
+     <br><dt><code>remove \n</code><dd>Response expected: yes.  Remove a file.  This uses any
+previous <code>Argument</code>, <code>Directory</code>, <code>Entry</code>, or
+<code>Modified</code> requests, if they have been sent.  The
+last <code>Directory</code> sent specifies the working directory at the time
+of the operation.
+
+     <p>Note that this request does not actually do anything to the repository;
+the only effect of a successful <code>remove</code> request is to supply the
+client with a new entries line containing &lsquo;<samp><span class="samp">-</span></samp>&rsquo; to indicate a removed
+file.  In fact, the client probably could perform this operation without
+contacting the server, although using <code>remove</code> may cause the server
+to perform a few more checks.
+
+     <p>The client sends a subsequent <code>ci</code> request to actually record the
+removal in the repository.
+
+     <br><dt><code>edit \n</code><dd>Response expected: yes.  Actually do the <code>cvs edit</code> command.  This uses
+any previous <code>Argument</code>, <code>Directory</code>, <code>Entry</code>, <code>LocalDir</code>,
+or <code>Hostname</code> requests, if they have been sent.  Unless the user has
+requested that edits not be granted unless no one else is editing a file, a
+local edit followed by an attempt to send <code>Notify</code> requests to the
+server is preferred.
+
+     <br><dt><code>watch-on \n</code><dt><code>watch-off \n</code><dt><code>watch-add \n</code><dt><code>watch-remove \n</code><dd>Response expected: yes.  Actually do the <code>cvs watch on</code>, <code>cvs
+watch off</code>, <code>cvs watch add</code>, and <code>cvs watch remove</code> commands,
+respectively.  This uses any previous <code>Argument</code>,
+<code>Directory</code>, <code>Entry</code>, or <code>Modified</code>
+requests, if they have been sent.  The last <code>Directory</code> sent
+specifies the working directory at the time of the operation.
+
+     <br><dt><code>release \n</code><dd>Response expected: yes.  Note that a <code>cvs release</code> command has
+taken place and update the history file accordingly.
+
+     <br><dt><code>global-list-quiet \n</code><dd>Response expected: yes.  This request is a synonym for noop, but its existance
+notifies the client that a <code>-q</code> option to <code>list</code> and <code>rlist</code>
+will be rejected.  This, in a reverse-logic sort of way, is here so that when
+it <em>isn't</em> received, as for instance from CVSNT, the client will know that
+the quiet option has to be sent as a command option rather than a global
+option.
+
+     <br><dt><code>noop \n</code><dd>Response expected: yes.  This request is a null command in the sense
+that it doesn't do anything, but merely (as with any other requests
+expecting a response) sends back any responses pertaining to pending
+errors, pending <code>Notified</code> responses, etc. 
+The <code>Root</code> request need not have been previously sent.
+
+     <br><dt><code>update-patches \n</code><dd>Response expected: yes. 
+This request does not actually do anything.  It is used as a signal that
+the server is able to generate patches when given an <code>update</code>
+request.  The client must issue the <code>-u</code> argument to <code>update</code>
+in order to receive patches.
+
+     <br><dt><code>gzip-file-contents </code><var>level</var><code> \n</code><dd>Response expected: no.  Note that this request does not follow the
+response convention stated above.  <code>Gzip-stream</code> is suggested
+instead of <code>gzip-file-contents</code> as it gives better compression; the
+only reason to implement the latter is to provide compression with
+<span class="sc">cvs</span> 1.8 and earlier.  The <code>gzip-file-contents</code> request asks
+the server to compress files it sends to the client using <code>gzip</code>
+(RFC1952/1951) compression, using the specified level of compression. 
+If this request is not made, the server must not compress files.
+
+     <p>This is only a hint to the server.  It may still decide (for example, in
+the case of very small files, or files that already appear to be
+compressed) not to do the compression.  Compression is indicated by a
+&lsquo;<samp><span class="samp">z</span></samp>&rsquo; preceding the file length.
+
+     <p>Availability of this request in the server indicates to the client that
+it may compress files sent to the server, regardless of whether the
+client actually uses this request.
+
+     <br><dt><code>wrapper-sendme-rcsOptions \n</code><dd>Response expected: yes. 
+Request that the server transmit mappings from filenames to keyword
+expansion modes in <code>Wrapper-rcsOption</code> responses.
+
+     <br><dt><code>version \n</code><dd>Response expected: yes. 
+Request that the server transmit its version message. 
+The <code>Root</code> request need not have been previously sent.
+
+     <br><dt><code>suck \n</code><dd>Response expected: yes. 
+Actually do a cvs command.  This uses a previous <code>Argument</code>
+request (only one, because the cvs command takes only one). 
+This is a MirBSD/MirPorts and Debian specific extension.
+
+     <br><dt><var>other-request</var> <var>text</var><code> \n</code><dd>Response expected: yes. 
+Any unrecognized request expects a response, and does not
+contain any additional data.  The response will normally be something like
+&lsquo;<samp><span class="samp">error  unrecognized request</span></samp>&rsquo;, but it could be a different error if
+a previous request which doesn't expect a response produced an error. 
+</dl>
+
+   <p>When the client is done, it drops the connection.
+
+<div class="node">
+<a name="Response-intro"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Response-pathnames">Response pathnames</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Requests">Requests</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.9 Introduction to Responses</h3>
+
+<p>After a command which expects a response, the server sends however many
+of the following responses are appropriate.  The server should not send
+data at other times (the current implementation may violate this
+principle in a few minor places, where the server is printing an error
+message and exiting&mdash;this should be investigated further).
+
+   <p>Any set of responses always ends with &lsquo;<samp><span class="samp">error</span></samp>&rsquo; or &lsquo;<samp><span class="samp">ok</span></samp>&rsquo;.  This
+indicates that the response is over.
+
+<!-- "file updating response" and "file update modifying response" are -->
+<!-- lame terms (mostly because they are so awkward).  Any better ideas? -->
+   <p>The responses <code>Checked-in</code>, <code>New-entry</code>, <code>Updated</code>,
+<code>Created</code>, <code>Update-existing</code>, <code>Merged</code>, and
+<code>Patched</code> are refered to as <dfn>file updating</dfn> responses, because
+they change the status of a file in the working directory in some way. 
+The responses <code>Mode</code>, <code>Mod-time</code>, and <code>Checksum</code> are
+referred to as <dfn>file update modifying</dfn> responses because they modify
+the next file updating response.  In no case shall a file update
+modifying response apply to a file updating response other than the next
+one.  Nor can the same file update modifying response occur twice for
+a given file updating response (if servers diagnose this problem, it may
+aid in detecting the case where clients send an update modifying
+response without following it by a file updating response).
+
+<div class="node">
+<a name="Response-pathnames"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Responses">Responses</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Response-intro">Response intro</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.10 The "pathname" in responses</h3>
+
+<p>Many of the responses contain something called <var>pathname</var>. 
+<!-- FIXME: should better document when the specified repository needs to -->
+<!-- end in "/.". -->
+The name is somewhat misleading; it actually indicates a pair of
+pathnames.  First, a local directory name
+relative to the directory in which the command was given (i.e. the last
+<code>Directory</code> before the command).  Then a linefeed and a repository
+name.  Then a slash and the filename (without a &lsquo;<samp><span class="samp">,v</span></samp>&rsquo; ending).
+
+   <p>The repository name may be absolute or relative to the <var>pathname</var>
+sent with the <code>Root</code> request.  If absolute, the repository name must begin
+with the <var>pathname</var> sent with the <code>Root</code> request.  Relative or
+absolute, the repository name must specify a path underneath the <code>Root</code>
+<var>pathname</var>.
+
+   <p>For example, for a file <samp><span class="file">i386.mh</span></samp>
+which is in the local directory <samp><span class="file">gas.clean/config</span></samp> and for which
+the repository name is <samp><span class="file">devo/gas/config</span></samp>:
+
+<pre class="example">     gas.clean/config/
+     devo/gas/config/i386.mh
+</pre>
+   <p>If the server wants to tell the client to create a directory, then it
+merely uses the directory in any response, as described above, and the
+client should create the directory if it does not exist.  Note that this
+should only be done one directory at a time, in order to permit the
+client to correctly store the repository for each directory.  Servers
+can use requests such as <code>Clear-sticky</code>,
+<code>Clear-static-directory</code>, or any other requests, to create
+directories. 
+<!-- FIXME: Need example here of how "repository" needs to be sent for -->
+<!-- each directory, and cannot be correctly deduced from, say, the most -->
+<!-- deeply nested directory. -->
+
+   <p>Some server
+implementations may poorly distinguish between a directory which should
+not exist and a directory which contains no files; in order to refrain
+from creating empty directories a client should both send the &lsquo;<samp><span class="samp">-P</span></samp>&rsquo;
+option to <code>update</code> or <code>co</code>, and should also detect the case in
+which the server asks to create a directory but not any files within it
+(in that case the client should remove the directory or refrain from
+creating it in the first place).  Note that servers could clean this up
+greatly by only telling the client to create directories if the
+directory in question should exist, but until servers do this, clients
+will need to offer the &lsquo;<samp><span class="samp">-P</span></samp>&rsquo; behavior described above.
+
+<div class="node">
+<a name="Responses"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Text-tags">Text tags</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Response-pathnames">Response pathnames</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.11 Responses</h3>
+
+<p>Here are the responses:
+
+     <dl>
+<dt><code>Valid-requests </code><var>request-list</var><code> \n</code><dd>Indicate what requests the server will accept.  <var>request-list</var>
+is a space separated list of tokens.  If the server supports sending
+patches, it will include &lsquo;<samp><span class="samp">update-patches</span></samp>&rsquo; in this list.  The
+&lsquo;<samp><span class="samp">update-patches</span></samp>&rsquo; request does not actually do anything.
+
+     <br><dt><code>Force-gzip \n</code><dd>Response expected: no. 
+Indicates that the server requires compression.  The client must send a
+<code>Gzip-stream</code> request, though the requested <var>level</var> may be &lsquo;<samp><span class="samp">0</span></samp>&rsquo;.
+
+     <br><dt><code>Referrer </code><var>CVSROOT</var><dd>Request that the client store <var>CVSROOT</var> as the name of this server and that
+this name be passed via a <code>Referrer</code> <em>request</em> to any subsequent
+servers contacted as a result of a <code>Redirect</code> response.  This can be
+useful to allow the secondary administrator to configure the <code>CVSROOT</code> the
+primary should use to update the secondary in case the client uses a
+non-standard name or even a name that is unique to the client for some reason.
+
+     <br><dt><code>Redirect </code><var>CVSROOT</var><dd>Request that the client redirect its connection to <var>CVSROOT</var> and begin
+again.  This response is only valid in response to a <code>Command-prep</code>
+request.  If a client receives this response, it is expected to notify the
+write server it subsequently contacts of the CVSROOT of the server which
+redirected it using the &lsquo;<samp><span class="samp">Referrer</span></samp>&rsquo; request.  This information makes it
+possible for primary servers to update the client's mirror first, hopefully
+minimizing race conditions on subsequent updates from the same client.
+
+     <br><dt><code>Checked-in </code><var>pathname</var><code> \n</code><dd>Additional data: New Entries line, \n.  This means a file <var>pathname</var>
+has been successfully operated on (checked in, added, etc.).  name in
+the Entries line is the same as the last component of <var>pathname</var>.
+
+     <br><dt><code>New-entry </code><var>pathname</var><code> \n</code><dd>Additional data: New Entries line, \n.  Like <code>Checked-in</code>, but the
+file is not up to date.
+
+     <br><dt><code>Updated </code><var>pathname</var><code> \n</code><dd>Additional data: New Entries line, \n, mode, \n, file transmission.  A
+new copy of the file is enclosed.  This is used for a new revision of an
+existing file, or for a new file, or for any other case in which the
+local (client-side) copy of the file needs to be updated, and after
+being updated it will be up to date.  If any directory in pathname does
+not exist, create it.  This response is not used if <code>Created</code> and
+<code>Update-existing</code> are supported.
+
+     <br><dt><code>Created </code><var>pathname</var><code> \n</code><dd>This is just like <code>Updated</code> and takes the same additional data, but
+is used only if no <code>Entry</code>, <code>Modified</code>, or
+<code>Unchanged</code> request has been sent for the file in question.  The
+distinction between <code>Created</code> and <code>Update-existing</code> is so
+that the client can give an error message in several cases: (1) there is
+a file in the working directory, but not one for which <code>Entry</code>,
+<code>Modified</code>, or <code>Unchanged</code> was sent (for example, a file which
+was ignored, or a file for which <code>Questionable</code> was sent), (2)
+there is a file in the working directory whose name differs from the one
+mentioned in <code>Created</code> in ways that the client is unable to use to
+distinguish files.  For example, the client is case-insensitive and the
+names differ only in case.
+
+     <br><dt><code>Update-existing </code><var>pathname</var><code> \n</code><dd>This is just like <code>Updated</code> and takes the same additional data, but
+is used only if a <code>Entry</code>, <code>Modified</code>, or <code>Unchanged</code>
+request has been sent for the file in question.
+
+     <p>This response, or <code>Merged</code>, indicates that the server has
+determined that it is OK to overwrite the previous contents of the file
+specified by <var>pathname</var>.  Provided that the client has correctly
+sent <code>Modified</code> or <code>Is-modified</code> requests for a modified file,
+and the file was not modified while CVS was running, the server can
+ensure that a user's modifications are not lost.
+
+     <br><dt><code>Merged </code><var>pathname</var><code> \n</code><dd>This is just like <code>Updated</code> and takes the same additional data,
+with the one difference that after the new copy of the file is enclosed,
+it will still not be up to date.  Used for the results of a merge, with
+or without conflicts.
+
+     <p>It is useful to preserve an copy of what the file looked like before the
+merge.  This is basically handled by the server; before sending
+<code>Merged</code> it will send a <code>Copy-file</code> response.  For example, if
+the file is <samp><span class="file">aa</span></samp> and it derives from revision 1.3, the
+<code>Copy-file</code> response will tell the client to copy <samp><span class="file">aa</span></samp> to
+<samp><span class="file">.#aa.1.3</span></samp>.  It is up to the client to decide how long to keep this
+file around; traditionally clients have left it around forever, thus
+letting the user clean it up as desired.  But another answer, such as
+until the next commit, might be preferable.
+
+     <br><dt><code>Rcs-diff </code><var>pathname</var><code> \n</code><dd>This is just like <code>Updated</code> and takes the same additional data,
+with the one difference that instead of sending a new copy of the file,
+the server sends an RCS change text.  This change text is produced by
+&lsquo;<samp><span class="samp">diff -n</span></samp>&rsquo; (the GNU diff &lsquo;<samp><span class="samp">-a</span></samp>&rsquo; option may also be used).  The
+client must apply this change text to the existing file.  This will only
+be used when the client has an exact copy of an earlier revision of a
+file.  This response is only used if the <code>update</code> command is given
+the &lsquo;<samp><span class="samp">-u</span></samp>&rsquo; argument.
+
+     <br><dt><code>Patched </code><var>pathname</var><code> \n</code><dd>This is just like <code>Rcs-diff</code> and takes the same additional data,
+except that it sends a standard patch rather than an RCS change text. 
+The patch is produced by &lsquo;<samp><span class="samp">diff -c</span></samp>&rsquo; for <span class="sc">cvs</span> 1.6 and later (see
+POSIX.2 for a description of this format), or &lsquo;<samp><span class="samp">diff -u</span></samp>&rsquo; for
+previous versions of <span class="sc">cvs</span>; clients are encouraged to accept either
+format.  Like <code>Rcs-diff</code>, this response is only used if the
+<code>update</code> command is given the &lsquo;<samp><span class="samp">-u</span></samp>&rsquo; argument.
+
+     <p>The <code>Patched</code> response is deprecated in favor of the
+<code>Rcs-diff</code> response.  However, older clients (CVS 1.9 and earlier)
+only support <code>Patched</code>.
+
+     <br><dt><code>Edit-file </code><var>pathname</var><code> \n</code><dd>Do the client-side portion of editing a file.
+
+     <br><dt><code>Mode </code><var>mode</var><code> \n</code><dd>This <var>mode</var> applies to the next file mentioned in
+<code>Checked-in</code>.  <code>Mode</code> is a file update modifying response
+as described in <a href="#Response-intro">Response intro</a>.
+
+     <br><dt><code>Mod-time </code><var>time</var><code> \n</code><dd>Set the modification time of the next file sent to <var>time</var>. 
+<code>Mod-time</code> is a file update modifying response
+as described in <a href="#Response-intro">Response intro</a>. 
+The
+<var>time</var> is in the format specified by RFC822 as modified by RFC1123. 
+The server may specify any timezone it chooses; clients will want to
+convert that to their own timezone as appropriate.  An example of this
+format is:
+
+     <pre class="example">          26 May 1997 13:01:40 -0400
+</pre>
+     <p>There is no requirement that the client and server clocks be
+synchronized.  The server just sends its recommendation for a timestamp
+(based on its own clock, presumably), and the client should just believe
+it (this means that the time might be in the future, for example).
+
+     <p>If the server does not send <code>Mod-time</code> for a given file, the client
+should pick a modification time in the usual way (usually, just let the
+operating system set the modification time to the time that the CVS
+command is running).
+
+     <br><dt><code>Checksum </code><var>checksum</var><code>\n</code><dd>The <var>checksum</var> applies to the next file sent (that is,
+<code>Checksum</code> is a file update modifying response
+as described in <a href="#Response-intro">Response intro</a>). 
+In the case of
+<code>Patched</code>, the checksum applies to the file after being patched,
+not to the patch itself.  The client should compute the checksum itself,
+after receiving the file or patch, and signal an error if the checksums
+do not match.  The checksum is the 128 bit MD5 checksum represented as
+32 hex digits (MD5 is described in RFC1321). 
+This response is optional, and is only used if the
+client supports it (as judged by the <code>Valid-responses</code> request).
+
+     <br><dt><code>Copy-file </code><var>pathname</var><code> \n</code><dd>Additional data: <var>newname</var> \n.  Copy file <var>pathname</var> to
+<var>newname</var> in the same directory where it already is.  This does not
+affect <code>CVS/Entries</code>.
+
+     <p>This can optionally be implemented as a rename instead of a copy.  The
+only use for it which currently has been identified is prior to a
+<code>Merged</code> response as described under <code>Merged</code>.  Clients can
+probably assume that is how it is being used, if they want to worry
+about things like how long to keep the <var>newname</var> file around.
+
+     <br><dt><code>Removed </code><var>pathname</var><code> \n</code><dd>The file has been removed from the repository (this is the case where
+cvs prints &lsquo;<samp><span class="samp">file foobar.c is no longer pertinent</span></samp>&rsquo;).
+
+     <br><dt><code>Remove-entry </code><var>pathname</var><code> \n</code><dd>The file needs its entry removed from <code>CVS/Entries</code>, but the file
+itself is already gone (this happens in response to a <code>ci</code> request
+which involves committing the removal of a file).
+
+     <br><dt><code>Set-static-directory </code><var>pathname</var><code> \n</code><dd>This instructs the client to set the <code>Entries.Static</code> flag, which
+it should then send back to the server in a <code>Static-directory</code>
+request whenever the directory is operated on.  <var>pathname</var> ends in a
+slash; its purpose is to specify a directory, not a file within a
+directory.
+
+     <br><dt><code>Clear-static-directory </code><var>pathname</var><code> \n</code><dd>Like <code>Set-static-directory</code>, but clear, not set, the flag.
+
+     <br><dt><code>Set-sticky </code><var>pathname</var><code> \n</code><dd>Additional data: <var>tagspec</var> \n.  Tell the client to set a sticky tag
+or date, which should be supplied with the <code>Sticky</code> request for
+future operations.  <var>pathname</var> ends in a slash; its purpose is to
+specify a directory, not a file within a directory.  The client should
+store <var>tagspec</var> and pass it back to the server as-is, to allow for
+future expansion.  The first character of <var>tagspec</var> is &lsquo;<samp><span class="samp">T</span></samp>&rsquo; for
+a tag, &lsquo;<samp><span class="samp">D</span></samp>&rsquo; for a date, or something else for future expansion.  The
+remainder of <var>tagspec</var> contains the actual tag or date.
+
+     <br><dt><code>Clear-sticky </code><var>pathname</var><code> \n</code><dd>Clear any sticky tag or date set by <code>Set-sticky</code>.
+
+     <br><dt><code>Template </code><var>pathname</var><code> \n</code><dd>Additional data: file transmission (note: compressed file transmissions
+are not supported).  <var>pathname</var> ends in a slash; its purpose is to
+specify a directory, not a file within a directory.  Tell the client to
+store the file transmission as the template log message, and then use
+that template in the future when prompting the user for a log message.
+
+     <br><dt><code>Set-checkin-prog </code><var>dir</var><code> \n</code><dd>Additional data: <var>prog</var> \n.  Tell the client to set a checkin
+program, which should be supplied with the <code>Checkin-prog</code> request
+for future operations.
+
+     <br><dt><code>Set-update-prog </code><var>dir</var><code> \n</code><dd>Additional data: <var>prog</var> \n.  Tell the client to set an update
+program, which should be supplied with the <code>Update-prog</code> request
+for future operations.
+
+     <br><dt><code>Notified </code><var>pathname</var><code> \n</code><dd>Indicate to the client that the notification for <var>pathname</var> has been
+done.  There should be one such response for every <code>Notify</code>
+request; if there are several <code>Notify</code> requests for a single file,
+the requests should be processed in order; the first <code>Notified</code>
+response pertains to the first <code>Notify</code> request, etc.
+
+     <br><dt><code>Module-expansion </code><var>pathname</var><code> \n</code><dd>Return a file or directory
+which is included in a particular module.  <var>pathname</var> is relative
+to cvsroot, unlike most pathnames in responses.  <var>pathname</var> should
+be used to look and see whether some or all of the module exists on
+the client side; it is not necessarily suitable for passing as an
+argument to a <code>co</code> request (for example, if the modules file
+contains the &lsquo;<samp><span class="samp">-d</span></samp>&rsquo; option, it will be the directory specified with
+&lsquo;<samp><span class="samp">-d</span></samp>&rsquo;, not the name of the module).
+
+     <br><dt><code>Wrapper-rcsOption </code><var>pattern</var><code> -k '</code><var>option</var><code>' \n</code><dd>Transmit to the client a filename pattern which implies a certain
+keyword expansion mode.  The <var>pattern</var> is a wildcard pattern (for
+example, &lsquo;<samp><span class="samp">*.exe</span></samp>&rsquo;.  The <var>option</var> is &lsquo;<samp><span class="samp">b</span></samp>&rsquo; for binary, and so
+on.  Note that although the syntax happens to resemble the syntax in
+certain CVS configuration files, it is more constrained; there must be
+exactly one space between <var>pattern</var> and &lsquo;<samp><span class="samp">-k</span></samp>&rsquo; and exactly one
+space between &lsquo;<samp><span class="samp">-k</span></samp>&rsquo; and &lsquo;<samp><span class="samp">'</span></samp>&rsquo;, and no string is permitted in
+place of &lsquo;<samp><span class="samp">-k</span></samp>&rsquo; (extensions should be done with new responses, not by
+extending this one, for graceful handling of <code>Valid-responses</code>).
+
+     <br><dt><code>M </code><var>text</var><code> \n</code><dd>A one-line message for the user. 
+Note that the format of <var>text</var> is not designed for machine parsing. 
+Although sometimes scripts and clients will have little choice, the
+exact text which is output is subject to vary at the discretion of the
+server and the example output given in this document is just that,
+example output.  Servers are encouraged to use the &lsquo;<samp><span class="samp">MT</span></samp>&rsquo; response,
+and future versions of this document will hopefully standardize more of
+the &lsquo;<samp><span class="samp">MT</span></samp>&rsquo; tags; see <a href="#Text-tags">Text tags</a>.
+
+     <br><dt><code>Mbinary \n</code><dd>Additional data: file transmission (note: compressed file transmissions
+are not supported).  This is like &lsquo;<samp><span class="samp">M</span></samp>&rsquo;, except the contents of the
+file transmission are binary and should be copied to standard output
+without translation to local text file conventions.  To transmit a text
+file to standard output, servers should use a series of &lsquo;<samp><span class="samp">M</span></samp>&rsquo; requests.
+
+     <br><dt><code>E </code><var>text</var><code> \n</code><dd>Same as <code>M</code> but send to stderr not stdout.
+
+     <br><dt><code>F \n</code><dd><!-- FIXME: The second sentence, defining "flush", is somewhat off the top -->
+<!-- of my head.  Is there some text we can steal from ANSI C or someplace -->
+<!-- which is more carefully thought out? -->
+Flush stderr.  That is, make it possible for the user to see what has
+been written to stderr (it is up to the implementation to decide exactly
+how far it should go to ensure this).
+
+     <br><dt><code>MT </code><var>tagname</var> <var>data</var><code> \n</code><dd>
+This response provides for tagged text.  It is similar to
+SGML/HTML/XML in that the data is structured and a naive application
+can also make some sense of it without understanding the structure. 
+The syntax is not SGML-like, however, in order to fit into the CVS
+protocol better and (more importantly) to make it easier to parse,
+especially in a language like perl or awk.
+
+     <p>The <var>tagname</var> can have several forms.  If it starts with &lsquo;<samp><span class="samp">a</span></samp>&rsquo;
+to &lsquo;<samp><span class="samp">z</span></samp>&rsquo; or &lsquo;<samp><span class="samp">A</span></samp>&rsquo; to &lsquo;<samp><span class="samp">Z</span></samp>&rsquo;, then it represents tagged text. 
+If the implementation recognizes <var>tagname</var>, then it may interpret
+<var>data</var> in some particular fashion.  If the implementation does not
+recognize <var>tagname</var>, then it should simply treat <var>data</var> as
+text to be sent to the user (similar to an &lsquo;<samp><span class="samp">M</span></samp>&rsquo; response).  There
+are two tags which are general purpose.  The &lsquo;<samp><span class="samp">text</span></samp>&rsquo; tag is
+similar to an unrecognized tag in that it provides text which will
+ordinarily be sent to the user.  The &lsquo;<samp><span class="samp">newline</span></samp>&rsquo; tag is used
+without <var>data</var> and indicates that a newline will ordinarily be
+sent to the user (there is no provision for embedding newlines in the
+<var>data</var> of other tagged text responses).
+
+     <p>If <var>tagname</var> starts with &lsquo;<samp><span class="samp">+</span></samp>&rsquo; it indicates a start tag and if
+it starts with &lsquo;<samp><span class="samp">-</span></samp>&rsquo; it indicates an end tag.  The remainder of
+<var>tagname</var> should be the same for matching start and end tags, and
+tags should be nested (for example one could have tags in the
+following order <code>+bold</code> <code>+italic</code> <code>text</code> <code>-italic</code>
+<code>-bold</code> but not <code>+bold</code> <code>+italic</code> <code>text</code>
+<code>-bold</code> <code>-italic</code>).  A particular start and end tag may be
+documented to constrain the tagged text responses which are valid
+between them.
+
+     <p>Note that if <var>data</var> is present there will always be exactly one
+space between <var>tagname</var> and <var>data</var>; if there is more than one
+space, then the spaces beyond the first are part of <var>data</var>.
+
+     <p>Here is an example of some tagged text responses.  Note that there is
+a trailing space after &lsquo;<samp><span class="samp">Checking in</span></samp>&rsquo; and &lsquo;<samp><span class="samp">initial revision:</span></samp>&rsquo;
+and there are two trailing spaces after &lsquo;<samp><span class="samp">&lt;--</span></samp>&rsquo;.  Such trailing
+spaces are, of course, part of <var>data</var>.
+
+     <pre class="example">          MT +checking-in
+          MT text Checking in
+          MT fname gz.tst
+          MT text ;
+          MT newline
+          MT rcsfile /home/kingdon/zwork/cvsroot/foo/gz.tst,v
+          MT text   &lt;--
+          MT fname gz.tst
+          MT newline
+          MT text initial revision:
+          MT init-rev 1.1
+          MT newline
+          MT text done
+          MT newline
+          MT -checking-in
+</pre>
+     <p>If the client does not support the &lsquo;<samp><span class="samp">MT</span></samp>&rsquo; response, the same
+responses might be sent as:
+
+     <pre class="example">          M Checking in gz.tst;
+          M /home/kingdon/zwork/cvsroot/foo/gz.tst,v  &lt;--  gz.tst
+          M initial revision: 1.1
+          M done
+</pre>
+     <p>For a list of specific tags, see <a href="#Text-tags">Text tags</a>.
+
+     <br><dt><code>error </code><var>errno-code</var><code> &lsquo;</code><samp> </samp><code>&rsquo; </code><var>text</var><code> \n</code><dd>The command completed with an error.  <var>errno-code</var> is a symbolic
+error code (e.g. <code>ENOENT</code>); if the server doesn't support this
+feature, or if it's not appropriate for this particular message, it just
+omits the errno-code (in that case there are two spaces after
+&lsquo;<samp><span class="samp">error</span></samp>&rsquo;).  Text is an error message such as that provided by
+strerror(), or any other message the server wants to use. 
+The <var>text</var> is like the <code>M</code> response, in the sense that it is
+not particularly intended to be machine-parsed; servers may wish to
+print an error message with <code>MT</code> responses, and then issue a
+<code>error</code> response without <var>text</var> (although it should be noted
+that <code>MT</code> currently has no way of flagging the output as intended
+for standard error, the way that the <code>E</code> response does).
+
+     <br><dt><code>ok \n</code><dd>The command completed successfully. 
+</dl>
+
+<div class="node">
+<a name="Text-tags"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Example">Example</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Responses">Responses</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.12 Tags for the MT tagged text response</h3>
+
+<p>The <code>MT</code> response, as described in <a href="#Responses">Responses</a>, offers a
+way for the server to send tagged text to the client.  This section
+describes specific tags.  The intention is to update this section as
+servers add new tags.
+
+   <p>In the following descriptions, <code>text</code> and <code>newline</code> tags are
+omitted.  Such tags contain information which is intended for users (or
+to be discarded), and are subject to change at the whim of the server. 
+To avoid being vulnerable to such whim, clients should look for the tags
+listed here, not <code>text</code>, <code>newline</code>, or other tags.
+
+   <p>The following tag means to indicate to the user that a file has been
+updated.  It is more or less redundant with the <code>Created</code> and
+<code>Update-existing</code> responses, but we don't try to specify here
+whether it occurs in exactly the same circumstances as <code>Created</code>
+and <code>Update-existing</code>.  The <var>name</var> is the pathname of the file
+being updated relative to the directory in which the command is
+occurring (that is, the last <code>Directory</code> request which is sent
+before the command).
+
+<pre class="example">     MT +updated
+     MT fname <var>name</var>
+     MT -updated
+</pre>
+   <p>The <code>importmergecmd</code> tag is used when doing an import which has
+conflicts, or when doing an import with the &lsquo;<samp><span class="samp">-X</span></samp>&rsquo; flag. 
+The client can use it to report how to merge in the newly
+imported changes.  The <var>count</var> is the number of conflicts, or the
+string <code>No</code> if no conflicts occurred.  (The latter will only be
+sent for imports run with the &lsquo;<samp><span class="samp">-X</span></samp>&rsquo; flag.)  The
+newly imported changes can be merged by running the following command:
+<pre class="smallexample">     cvs checkout -j <var>tag1</var> -j <var>tag2</var> <var>repository</var>
+</pre>
+   <pre class="example">     MT +importmergecmd
+     MT conflicts <var>count</var>
+     MT mergetag1 <var>tag1</var>
+     MT mergetag2 <var>tag2</var>
+     MT repository <var>repository</var>
+     MT -importmergecmd
+</pre>
+   <div class="node">
+<a name="Example"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Requirements">Requirements</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Text-tags">Text tags</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.13 Example</h3>
+
+<!-- The C:/S: convention is in imitation of RFC1869 (and presumably -->
+<!-- other RFC's).  In other formatting concerns, we might want to think -->
+<!-- about whether there is an easy way to provide RFC1543 formatting -->
+<!-- (without negating the advantages of texinfo), and whether we should -->
+<!-- use RFC2234 BNF (I fear that would be less clear than -->
+<!-- what we do now, however).  Plus what about RFC2119 terminology (MUST, -->
+<!-- SHOULD, &c) or ISO terminology (shall, should, or whatever they are)? -->
+<p>Here is an example; lines are prefixed by &lsquo;<samp><span class="samp">C: </span></samp>&rsquo; to indicate the
+client sends them or &lsquo;<samp><span class="samp">S: </span></samp>&rsquo; to indicate the server sends them.
+
+   <p>The client starts by connecting, sending the root, and completing the
+protocol negotiation.  In actual practice the lists of valid responses
+and requests would be longer. 
+<!-- The reason that we artificially shorten the lists is to avoid phony -->
+<!-- line breaks.  Any better solutions? -->
+<!-- Other than that, this exchange is taken verbatim from the data -->
+<!-- exchanged by CVS (as of Nov 1996).  That is why some of the requests and -->
+<!-- reponses are not quite what you would pick for pedagogical purposes. -->
+
+<pre class="example">     C: Root /u/cvsroot
+     C: Valid-responses ok error Checked-in M E
+     C: valid-requests
+     S: Valid-requests Root Directory Entry Modified Argument Argumentx ci co
+     S: ok
+     C: UseUnchanged
+</pre>
+   <p>The client wants to check out the <code>supermunger</code> module into a fresh
+working directory.  Therefore it first expands the <code>supermunger</code>
+module; this step would be omitted if the client was operating on a
+directory rather than a module. 
+<!-- Why does it send Directory here?  The description of expand-modules -->
+<!-- doesn't really say much of anything about what use, if any, it makes of -->
+<!-- Directory and similar requests sent previously. -->
+
+<pre class="example">     C: Argument supermunger
+     C: Directory .
+     C: .
+     C: expand-modules
+</pre>
+   <p>The server replies that the <code>supermunger</code> module expands to the
+directory <code>supermunger</code> (the simplest case):
+
+<pre class="example">     S: Module-expansion supermunger
+     S: ok
+</pre>
+   <p>The client then proceeds to check out the directory.  The fact that it
+sends only a single <code>Directory</code> request which specifies &lsquo;<samp><span class="samp">.</span></samp>&rsquo;
+for the working directory means that there is not already a
+<code>supermunger</code> directory on the client. 
+<!-- What is -N doing here? -->
+
+<pre class="example">     C: Argument -N
+     C: Argument supermunger
+     C: Directory .
+     C: .
+     C: co
+</pre>
+   <p>The server replies with the requested files.  In this example, there is
+only one file, <samp><span class="file">mungeall.c</span></samp>.  The <code>Clear-sticky</code> and
+<code>Clear-static-directory</code> requests are sent by the current
+implementation but they have no effect because the default is for those
+settings to be clear when a directory is newly created.
+
+<pre class="example">     S: Clear-sticky supermunger/
+     S: /u/cvsroot/supermunger/
+     S: Clear-static-directory supermunger/
+     S: /u/cvsroot/supermunger/
+     S: E cvs server: Updating supermunger
+     S: M U supermunger/mungeall.c
+     S: Created supermunger/
+     S: /u/cvsroot/supermunger/mungeall.c
+     S: /mungeall.c/1.1///
+     S: u=rw,g=r,o=r
+     S: 26
+     S: int mein () { abort (); }
+     S: ok
+</pre>
+   <p>The current client implementation would break the connection here and make a
+new connection for the next command.  However, the protocol allows it
+to keep the connection open and continue, which is what we show here.
+
+   <p>After the user modifies the file and instructs the client to check it
+back in.  The client sends arguments to specify the log message and file
+to check in:
+
+<pre class="example">     C: Argument -m
+     C: Argument Well, you see, it took me hours and hours to find
+     C: Argumentx this typo and I searched and searched and eventually
+     C: Argumentx had to ask John for help.
+     C: Argument mungeall.c
+</pre>
+   <p>It also sends information about the contents of the working directory,
+including the new contents of the modified file.  Note that the user has
+changed into the <samp><span class="file">supermunger</span></samp> directory before executing this
+command; the top level directory is a user-visible concept because the
+server should print filenames in <code>M</code> and <code>E</code> responses
+relative to that directory. 
+<!-- We are waving our hands about the order of the requests.  "Directory" -->
+<!-- and "Argument" can be in any order, but this probably isn't specified -->
+<!-- very well. -->
+
+<pre class="example">     C: Directory .
+     C: supermunger
+     C: Entry /mungeall.c/1.1///
+     C: Modified mungeall.c
+     C: u=rw,g=r,o=r
+     C: 26
+     C: int main () { abort (); }
+</pre>
+   <p>And finally, the client issues the checkin command (which makes use of
+the data just sent):
+
+<pre class="example">     C: ci
+</pre>
+   <p>And the server tells the client that the checkin succeeded:
+
+<pre class="example">     S: M Checking in mungeall.c;
+     S: E /u/cvsroot/supermunger/mungeall.c,v  &lt;--  mungeall.c
+     S: E new revision: 1.2; previous revision: 1.1
+     S: E done
+     S: Mode u=rw,g=r,o=r
+     S: Checked-in ./
+     S: /u/cvsroot/supermunger/mungeall.c
+     S: /mungeall.c/1.2///
+     S: ok
+</pre>
+   <div class="node">
+<a name="Requirements"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Obsolete">Obsolete</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Example">Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.14 Required versus optional parts of the protocol</h3>
+
+<p>The following are part of every known implementation of the CVS protocol
+(except obsolete, pre-1.5, versions of CVS) and it is considered
+reasonable behavior to completely fail to work if you are connected with
+an implementation which attempts to not support them.  Requests:
+<code>Root</code>, <code>Valid-responses</code>, <code>valid-requests</code>,
+<code>Directory</code>, <code>Entry</code>, <code>Modified</code>, <code>Unchanged</code>,
+<code>Argument</code>, <code>Argumentx</code>, <code>ci</code>, <code>co</code>, <code>update</code>. 
+Responses: <code>ok</code>, <code>error</code>, <code>Valid-requests</code>,
+<code>Checked-in</code>, <code>Updated</code>, <code>Merged</code>, <code>Removed</code>,
+<code>M</code>, <code>E</code>.
+
+   <p>A server need not implement <code>Repository</code>, but in order to interoperate
+with CVS 1.5 through 1.9 it must claim to implement it (in
+<code>Valid-requests</code>).  The client will not actually send the request.
+
+<div class="node">
+<a name="Obsolete"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Requirements">Requirements</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Protocol">Protocol</a>
+
+</div>
+
+<h3 class="section">5.15 Obsolete protocol elements</h3>
+
+<p>This section briefly describes protocol elements which are obsolete. 
+There is no attempt to document them in full detail.
+
+   <p>There was a <code>Repository</code> request which was like <code>Directory</code>
+except it only provided <var>repository</var>, and the local directory was
+assumed to be similarly named.
+
+   <p>If the <code>UseUnchanged</code> request was not sent, there was a <code>Lost</code>
+request which was sent to indicate that a file did not exist in the
+working directory, and the meaning of sending <code>Entries</code> without
+<code>Lost</code> or <code>Modified</code> was different.  All current clients (CVS
+1.5 and later) will send <code>UseUnchanged</code> if it is supported.
+
+<div class="node">
+<a name="Protocol-Notes"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Protocol">Protocol</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">6 Notes on the Protocol</h2>
+
+<p>A number of enhancements are possible.  Also see the file <span class="sc">todo</span> in
+the <span class="sc">cvs</span> source distribution, which has further ideas concerning
+various aspects of <span class="sc">cvs</span>, some of which impact the protocol. 
+Similarly, the <a href="http://www.nongnu.org/cvs/">http://www.nongnu.org/cvs/</a> site, in particular the
+<cite>Development</cite> pages.
+
+     <ul>
+<li>The <code>Modified</code> request could be speeded up by sending diffs rather
+than entire files.  The client would need some way to keep the version
+of the file which was originally checked out; probably requiring the use
+of "cvs edit" in this case is the most sensible course (the "cvs edit"
+could be handled by a package like VC for emacs).  This would also allow
+local operation of <code>cvs diff</code> without arguments.
+
+     <li>The fact that <code>pserver</code> requires an extra network turnaround in
+order to perform authentication would be nice to avoid.  This relates to
+the issue of reporting errors; probably the clean solution is to defer
+the error until the client has issued a request which expects a
+response.  To some extent this might relate to the next item (in terms
+of how easy it is to skip a whole bunch of requests until we get to one
+that expects a response).  I know that the kerberos code doesn't wait in
+this fashion, but that probably can cause network deadlocks and perhaps
+future problems running over a transport which is more transaction
+oriented than TCP.  On the other hand I'm not sure it is wise to make
+the client conduct a lengthy upload only to find there is an
+authentication failure.
+
+     <li>The protocol uses an extra network turnaround for protocol negotiation
+(<code>valid-requests</code>).  It might be nice to avoid this by having the
+client be able to send requests and tell the server to ignore them if
+they are unrecognized (different requests could produce a fatal error if
+unrecognized).  To do this there should be a standard syntax for
+requests.  For example, perhaps all future requests should be a single
+line, with mechanisms analogous to <code>Argumentx</code>, or several requests
+working together, to provide greater amounts of information.  Or there
+might be a standard mechanism for counted data (analogous to that used
+by <code>Modified</code>) or continuation lines (like a generalized
+<code>Argumentx</code>).  It would be useful to compare what HTTP is planning
+in this area; last I looked they were contemplating something called
+Protocol Extension Protocol but I haven't looked at the relevant IETF
+documents in any detail.  Obviously, we want something as simple as
+possible (but no simpler).
+
+     <li>The scrambling algorithm in the CVS client and server actually support
+more characters than those documented in <a href="#Password-scrambling">Password scrambling</a>. 
+Someday we are going to either have to document them all (but this is
+not as easy as it may look, see below), or (gradually and with adequate
+process) phase out the support for other characters in the CVS
+implementation.  This business of having the feature partly undocumented
+isn't a desirable state long-term.
+
+     <p>The problem with documenting other characters is that unless we know
+what character set is in use, there is no way to make a password
+portable from one system to another.  For example, a with a circle on
+top might have different encodings in different character sets.
+
+     <p>It <em>almost</em> works to say that the client picks an arbitrary,
+unknown character set (indeed, having the CVS client know what character
+set the user has in mind is a hard problem otherwise), and scrambles
+according to a certain octet&lt;-&gt;octet mapping.  There are two problems
+with this.  One is that the protocol has no way to transmit character 10
+decimal (linefeed), and the current server and clients have no way to
+handle 0 decimal (NUL).  This may cause problems with certain multibyte
+character sets, in which octets 10 and 0 will appear in the middle of
+other characters.  The other problem, which is more minor and possibly
+not worth worrying about, is that someone can type a password on one
+system and then go to another system which uses a different encoding for
+the same characters, and have their password not work.
+
+     <p>The restriction to the ISO646 invariant subset is the best approach for
+strings which are not particularly significant to users.  Passwords are
+visible enough that this is somewhat doubtful as applied here.  ISO646
+does, however, have the virtue (!?) of offending everyone.  It is easy
+to say "But the $ is right on people's keyboards!  Surely we can't
+forbid that".  From a human factors point of view, that makes quite a
+bit of sense.  The contrary argument, of course, is that a with a circle
+on top, or some of the characters poorly handled by Unicode, are on
+<em>someone</em>'s keyboard.
+
+   </ul>
+
+</body></html>
+

@@ -1,0 +1,457 @@
+=head1 NAME
+
+Gtk2::Dialog - wrapper for GtkDialog
+
+=cut
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  # create a new dialog with some buttons - one stock, one not.
+  $dialog = Gtk2::Dialog->new ($title, $parent_window, $flags,
+                               'gtk-cancel' => 'cancel',
+                               'Do it'      => 'ok');
+  # create window contents for yourself.
+  $dialog->get_content_area ()->add ($some_widget);
+
+  $dialog->set_default_response ('ok');
+
+  # show and interact modally -- blocks until the user
+  # activates a response.
+  $response = $dialog->run;
+  if ($response eq 'ok') {
+      do_the_stuff ();
+  }
+
+  # activating a response does not destroy the window,
+  # that's up to you.
+  $dialog->destroy;
+
+=cut
+
+
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+Dialog boxes are a convenient way to prompt the user for a small amount of
+input, eg. to display a message, ask a question, or anything else that does not
+require extensive effort on the user's part. 
+
+GTK+ treats a dialog as a window split vertically. The top section is a
+Gtk2::VBox, and is where widgets such as a Gtk2::Label or a Gtk2::Entry should
+be packed. The bottom area is known as the "action_area". This is generally
+used for packing buttons into the dialog which may perform functions such as
+cancel, ok, or apply.  The two areas are separated by a Gtk2::HSeparator. 
+
+GtkDialog boxes are created with a call to C<< Gtk2::Dialog->new >>.  The
+multi-argument form (and its alias, C<new_with_buttons> is recommended; it
+allows you to set the dialog title, some convenient flags, and add simple
+buttons all in one go.
+
+If I<$dialog> is a newly created dialog, the two primary areas of the window
+can be accessed as C<< $dialog->get_content_area () >> and
+C<< $dialog->get_action_area () >>, as can be seen from the example, below.
+
+A 'modal' dialog (that is, one which freezes the rest of the application from
+user input), can be created by calling the Gtk2::Window method C<set_modal> on
+the dialog.  You can also pass the 'modal' flag to C<new>.
+
+If you add buttons to GtkDialog using C<new>, C<new_with_buttons>,
+C<add_button>, C<add_buttons>, or C<add_action_widget>, clicking the button
+will emit a signal called "response" with a response ID that you specified.
+GTK+ will never assign a meaning to positive response IDs; these are entirely
+user-defined.  But for convenience, you can use the response IDs in the
+Gtk2::ResponseType enumeration.  If a dialog receives a delete event, the
+"response" signal will be emitted with a response ID of 'delete-event'.
+
+If you want to block waiting for a dialog to return before returning control
+flow to your code, you can call C<< $dialog->run >>.  This function enters a
+recursive main loop and waits for the user to respond to the dialog, returning
+the  response ID corresponding to the button the user clicked. 
+
+For the simple dialog in the following example, in reality you'd probably use
+Gtk2::MessageDialog to save yourself some effort.  But you'd need to create the
+dialog contents manually if you had more than a simple message in the dialog. 
+
+ # Function to open a dialog box displaying the message provided.
+ 
+ sub quick_message {
+    my $message = shift;
+    my $dialog = Gtk2::Dialog->new ('Message', $main_app_window,
+                                    'destroy-with-parent',
+                                    'gtk-ok' => 'none');
+    my $label = Gtk2::Label->new (message);
+    $dialog->get_content_area ()->add ($label);
+
+    # Ensure that the dialog box is destroyed when the user responds.
+    $dialog->signal_connect (response => sub { $_[0]->destroy });
+
+    $dialog->show_all;
+ }
+
+=head2 Delete, Close and Destroy
+
+In the default keybindings the "Esc" key calls the C<close> action
+signal.  The default in that signal is to synthesise a C<delete-event>
+like a window manager close would do.
+
+A delete-event first runs the C<response> signal with ID
+C<"delete-event">, but the handler there can't influence the default
+destroy behaviour of the C<delete-event> signal.  See L<Gtk2::Window>
+for notes on destroy vs hide.
+
+If you add your own "Close" button to the dialog, perhaps using the
+builtin C<close> response ID, you must make your C<response> signal
+handler do whatever's needed for closing.  Often a good thing is just
+to run the C<close> action signal the same as the Esc key.
+
+    sub my_response_handler {
+      my ($dialog, $response) = @_;
+      if ($response eq 'close') {
+        $self->signal_emit ('close');
+
+      } elsif ...
+    }
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Bin
+                           +----Gtk2::Window
+                                +----Gtk2::Dialog
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 $widget = Gtk2::Dialog->B<new>;
+
+=head2 $widget = Gtk2::Dialog->B<new> ($title, $parent, $flags, ...)
+
+=over
+
+=item * ... (list) of button-text => response-id pairs.
+
+=item * $flags (Gtk2::DialogFlags) interesting properties
+
+=item * $parent (Gtk2::Window or undef) make the new dialog transient for this window
+
+=item * $title (string) window title
+
+=back
+
+
+The multi-argument form takes the same list of text => response-id pairs as
+C<< $dialog->add_buttons >>.  Do not pack widgets directly into the window;
+add them to C<< $dialog->get_content_area () >>.
+
+Here's a simple example:
+
+ $dialog = Gtk2::Dialog->new ('A cool dialog',
+                              $main_app_window,
+                              [qw/modal destroy-with-parent/],
+                              'gtk-ok'     => 'accept',
+                              'gtk-cancel' => 'reject');
+
+
+=head2 $widget = Gtk2::Dialog->B<new_with_buttons> ($title, $parent, $flags, ...)
+
+=over
+
+=item * ... (list) of button-text => response-id pairs.
+
+=back
+
+
+Alias for the multi-argument version of C<< Gtk2::Dialog->new >>.
+
+
+=head2 widget = $dialog-E<gt>B<get_action_area> 
+
+=head2 $dialog-E<gt>B<add_action_widget> ($child, $response_id)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $response_id (Gtk2::ResponseType) 
+
+=back
+
+
+
+=head2 widget = $dialog-E<gt>B<add_button> ($button_text, $response_id)
+
+=over
+
+=item * $button_text (string) may be arbitrary text with mnenonics, or stock ids
+
+=item * $response_id (Gtk2::ResponseType) 
+
+=back
+
+Returns the created button.
+
+=head2 $dialog-E<gt>B<add_buttons> (...)
+
+=over
+
+=item * ... (list) of button-text => response-id pairs
+
+=back
+
+Like calling C<< $dialog->add_button >> repeatedly, except you don't get the
+created widgets back.  The buttons go from left to right, so the first button
+added will be the left-most one.
+
+=head2 $dialog-E<gt>B<set_alternative_button_order> (...)
+
+=over
+
+=item * ... (list) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 widget = $dialog-E<gt>B<get_content_area> 
+
+=head2 $dialog-E<gt>B<set_default_response> ($response_id)
+
+=over
+
+=item * $response_id (Gtk2::ResponseType) 
+
+=back
+
+
+
+=head2 boolean = $dialog-E<gt>B<get_has_separator> 
+
+=head2 $dialog-E<gt>B<set_has_separator> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 $dialog-E<gt>B<response> ($response_id)
+
+=over
+
+=item * $response_id (Gtk2::ResponseType) 
+
+=back
+
+Emit the response signal, as though the user had clicked on the button with
+I<$response_id>.
+
+=head2 scalar = $dialog-E<gt>B<get_response_for_widget> ($widget)
+
+=over
+
+=item * $widget (Gtk2::Widget) 
+
+=back
+
+Since: gtk+ 2.8
+
+=head2 $dialog-E<gt>B<set_response_sensitive> ($response_id, $setting)
+
+=over
+
+=item * $response_id (Gtk2::ResponseType) 
+
+=item * $setting (boolean) 
+
+=back
+
+Enable or disable an action button by its I<$response_id>.
+
+=head2 $responsetype = $dialog->B<run>
+
+Blocks in a recursive main loop until the dialog either emits the response
+signal, or is destroyed.  If the dialog is destroyed during the call to
+C<< $dialog->run >>, the function returns 'GTK_RESPONSE_NONE' ('none').
+Otherwise, it returns the response ID from the "response" signal emission.
+Before entering the recursive main loop, C<< $dialog->run >> calls
+C<< $widget->show >> on I<$dialog> for you. Note that you still need to show
+any children of the dialog yourself. 
+
+During C<run>, the default behavior of "delete_event" is disabled; if the
+dialog receives "delete_event", it will not be destroyed as windows usually
+are, and C<run> will return 'delete-event'.
+Also, during C<run> the dialog will be modal.  You can force C<run> to return
+at any time by calling C<< $dialog->response >> to emit the "response" signal.
+Destroying the dialog during C<run> is a very bad idea, because your post-run
+code won't know whether the dialog was destroyed or not. 
+
+After C<run> returns, you are responsible for hiding or destroying the dialog
+if you wish to do so. 
+
+Typical usage of this function might be: 
+
+  if ('accept' eq $dialog->run) {
+         do_application_specific_something ();
+  } else {
+         do_nothing_since_dialog_was_cancelled ();
+  }
+  $dialog->destroy;
+
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'has-separator' (boolean : default false : readable / writable / private)
+
+The dialog has a separator bar above its buttons
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<response> (Gtk2::Dialog, integer)
+
+=item B<close> (Gtk2::Dialog)
+
+=back
+
+
+
+=cut
+
+=for position post_signals
+
+Note that currently in a Perl subclass of C<Gtk2::Dialog> a class
+closure, ie. class default signal handler, for the C<response> signal
+will be called with the response ID just as an integer, it's not
+turned into an enum string like C<"ok"> the way a handler setup with
+C<signal_connect> receives.
+
+Hopefully this will change in the future, so don't count on it.  In
+the interim the easiest thing to do is install your default handler in
+C<INIT_INSTANCE> with a C<signal_connect>.  (The subtleties of what
+order handlers are called in will differ, but often that doesn't
+matter.)
+
+=cut
+
+
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::DialogFlags
+
+
+
+=over
+
+=item * 'modal' / 'GTK_DIALOG_MODAL'
+
+=item * 'destroy-with-parent' / 'GTK_DIALOG_DESTROY_WITH_PARENT'
+
+=item * 'no-separator' / 'GTK_DIALOG_NO_SEPARATOR'
+
+=back
+
+
+=head2 enum Gtk2::ResponseType
+
+
+The response type is somewhat abnormal as far as gtk2-perl enums go.  In C,
+this enum lists named, predefined integer values for a field that is other
+composed of whatever integer values you like.  In Perl, we allow this to
+be either one of the string constants listed here or any positive integer
+value.  For example, 'ok', 'cancel', 4, and 42 are all valid response ids.
+You cannot use arbitrary string values, they must be integers.  Be careful,
+because unknown string values tend to be mapped to 0.
+
+
+=over
+
+=item * 'none' / 'GTK_RESPONSE_NONE'
+
+=item * 'reject' / 'GTK_RESPONSE_REJECT'
+
+=item * 'accept' / 'GTK_RESPONSE_ACCEPT'
+
+=item * 'delete-event' / 'GTK_RESPONSE_DELETE_EVENT'
+
+=item * 'ok' / 'GTK_RESPONSE_OK'
+
+=item * 'cancel' / 'GTK_RESPONSE_CANCEL'
+
+=item * 'close' / 'GTK_RESPONSE_CLOSE'
+
+=item * 'yes' / 'GTK_RESPONSE_YES'
+
+=item * 'no' / 'GTK_RESPONSE_NO'
+
+=item * 'apply' / 'GTK_RESPONSE_APPLY'
+
+=item * 'help' / 'GTK_RESPONSE_HELP'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>, L<Gtk2::Bin>, L<Gtk2::Window>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

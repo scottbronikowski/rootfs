@@ -1,0 +1,306 @@
+=head1 NAME
+
+Gtk2::MessageDialog - wrapper for GtkMessageDialog
+
+=cut
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  #
+  # A modal dialog.  Note that the message is a printf-style format.
+  #
+  $dialog = Gtk2::MessageDialog->new ($main_application_window,
+                                      'destroy-with-parent',
+                                      'question', # message type
+                                      'yes-no', # which set of buttons?
+                                      "Pay me $%.2f?", $amount);
+  $response = $dialog->run;
+  if ($response eq 'yes') {
+      send_bill ();
+  }
+  $dialog->destroy;
+
+  #
+  # A non-modal dialog.
+  #
+  $dialog = Gtk2::MessageDialog->new ($main_application_window,
+                                      'destroy-with-parent',
+                                      'question', # message type
+                                      'ok-cancel', # which set of buttons?
+                                      "Self-destruct now?");
+  # react whenever the user responds.
+  $dialog->signal_connect (response => sub {
+             my ($self, $response) = @_;
+             if ($response eq 'ok') {
+                     do_the_thing ();
+             }
+             $self->destroy;
+  });
+  $dialog->show_all;
+
+=cut
+
+
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+
+Gtk2::MessageDialog is a dialog with an image representing the type of message
+(Error, Question, etc.) alongside some message text.  It's simply a convenience
+widget; you could construct the equivalent of Gtk2::MessageDialog from Gtk2::Dialog
+without too much effort, but Gtk2::MessageDialog saves typing and helps create a
+consistent look and feel for your application.
+
+The easiest way to do a modal message dialog is to use C<< $dialog->run >>, which
+automatically makes your dialog modal and waits for the user to respond to it.
+You can also pass in the GTK_DIALOG_MODAL flag when creating the MessageDialog.
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Bin
+                           +----Gtk2::Window
+                                +----Gtk2::Dialog
+                                     +----Gtk2::MessageDialog
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::MessageDialog-E<gt>B<new> ($parent, $flags, $type, $buttons, $format, ...)
+
+=over
+
+=item * $parent (Gtk2::Window or undef) 
+
+=item * $flags (Gtk2::DialogFlags) 
+
+=item * $type (Gtk2::MessageType) 
+
+=item * $buttons (Gtk2::ButtonsType) 
+
+=item * $format (scalar) 
+
+=item * ... (list) 
+
+=back
+
+=for args format a printf format specifier.  may be undef.
+=for args ... arguments for I<$format>
+Create a new Gtk2::Dialog with a simple message.  It will also include an
+icon, as determined by I<$type>.  If you need buttons not available through
+Gtk2::ButtonsType, use 'none' and add buttons with C<< $dialog->add_buttons >>.
+
+=head2 widget = Gtk2::MessageDialog-E<gt>B<new_with_markup> ($parent, $flags, $type, $buttons, $message)
+
+=over
+
+=item * $parent (Gtk2::Window or undef) 
+
+=item * $flags (Gtk2::DialogFlags) 
+
+=item * $type (Gtk2::MessageType) 
+
+=item * $buttons (Gtk2::ButtonsType) 
+
+=item * $message (string or undef) a string containing Pango markup
+
+=back
+
+Like C<new>, but allowing Pango markup tags in the message.  Note that this
+version is not variadic.
+
+Since: gtk+ 2.4
+
+=head2 $message_dialog-E<gt>B<format_secondary_markup> ($message)
+
+=over
+
+=item * $message (string or undef) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 $message_dialog-E<gt>B<format_secondary_text> ($message_format, ...)
+
+=over
+
+=item * $message_format (scalar) 
+
+=item * ... (list) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 widget = $dialog-E<gt>B<get_image> 
+
+Since: gtk+ 2.14
+
+=head2 $dialog-E<gt>B<set_image> ($image)
+
+=over
+
+=item * $image (Gtk2::Widget) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 $message_dialog-E<gt>B<set_markup> ($str)
+
+=over
+
+=item * $str (string) 
+
+=back
+
+Since: gtk+ 2.4
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'buttons' (Gtk2::ButtonsType : default "none" : writable / construct-only / private)
+
+The buttons shown in the message dialog
+
+=item 'image' (Gtk2::Widget : default undef : readable / writable / private)
+
+The image
+
+=item 'message-area' (Gtk2::Widget : default undef : readable / private)
+
+GtkVBox that holds the dialog's primary and secondary labels
+
+=item 'message-type' (Gtk2::MessageType : default "info" : readable / writable / construct / private)
+
+The type of message
+
+=item 'secondary-text' (string : default undef : readable / writable / private)
+
+The secondary text of the message dialog
+
+=item 'secondary-use-markup' (boolean : default false : readable / writable / private)
+
+The secondary text includes Pango markup.
+
+=item 'text' (string : default "" : readable / writable / private)
+
+The primary text of the message dialog
+
+=item 'use-markup' (boolean : default false : readable / writable / private)
+
+The primary text of the title includes Pango markup.
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::ButtonsType
+
+=over
+
+=item * 'none' / 'GTK_BUTTONS_NONE'
+
+=item * 'ok' / 'GTK_BUTTONS_OK'
+
+=item * 'close' / 'GTK_BUTTONS_CLOSE'
+
+=item * 'cancel' / 'GTK_BUTTONS_CANCEL'
+
+=item * 'yes-no' / 'GTK_BUTTONS_YES_NO'
+
+=item * 'ok-cancel' / 'GTK_BUTTONS_OK_CANCEL'
+
+=back
+
+
+=head2 flags Gtk2::DialogFlags
+
+=over
+
+=item * 'modal' / 'GTK_DIALOG_MODAL'
+
+=item * 'destroy-with-parent' / 'GTK_DIALOG_DESTROY_WITH_PARENT'
+
+=item * 'no-separator' / 'GTK_DIALOG_NO_SEPARATOR'
+
+=back
+
+
+=head2 enum Gtk2::MessageType
+
+=over
+
+=item * 'info' / 'GTK_MESSAGE_INFO'
+
+=item * 'warning' / 'GTK_MESSAGE_WARNING'
+
+=item * 'question' / 'GTK_MESSAGE_QUESTION'
+
+=item * 'error' / 'GTK_MESSAGE_ERROR'
+
+=item * 'other' / 'GTK_MESSAGE_OTHER'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>, L<Gtk2::Bin>, L<Gtk2::Window>, L<Gtk2::Dialog>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

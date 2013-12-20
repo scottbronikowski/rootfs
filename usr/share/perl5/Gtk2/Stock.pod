@@ -1,0 +1,189 @@
+=head1 NAME
+
+Gtk2::Stock
+
+=cut
+
+=head1 Gtk2::StockItem
+
+When a Gtk2::StockItem is returned from a function or required as a parameter a
+hash reference with the following key/value pairs will be required/returned.
+
+  {
+      stock_id => (string),
+      label => (string),
+      modifier => (Gtk2::Gdk::ModifierType),
+      keyval => (integer),
+      translation_domain => (string),
+  }
+
+=cut
+
+
+=head1 Stock Items
+
+  +-----------------------------------+-------------------+-------------+
+  | Stock-Id                          | Label             | Mod-Key     |
+  +-----------------------------------+-------------------+-------------+
+  | gtk-about                         | _About            |             |
+  | gtk-add                           | _Add              |             |
+  | gtk-apply                         | _Apply            |             |
+  | gtk-bold                          | _Bold             |             |
+  | gtk-cancel                        | _Cancel           |             |
+  | gtk-cdrom                         | _CD-Rom           |             |
+  | gtk-clear                         | _Clear            |             |
+  | gtk-close                         | _Close            | <control>-W |
+  | gtk-connect                       | C_onnect          |             |
+  | gtk-convert                       | _Convert          |             |
+  | gtk-copy                          | _Copy             | <control>-C |
+  | gtk-cut                           | Cu_t              | <control>-X |
+  | gtk-delete                        | _Delete           |             |
+  | gtk-dialog-error                  | Error             |             |
+  | gtk-dialog-info                   | Information       |             |
+  | gtk-dialog-question               | Question          |             |
+  | gtk-dialog-warning                | Warning           |             |
+  | gtk-discard                       | _Discard          |             |
+  | gtk-disconnect                    | _Disconnect       |             |
+  | gtk-edit                          | _Edit             |             |
+  | gtk-execute                       | _Execute          |             |
+  | gtk-find                          | _Find             | <control>-F |
+  | gtk-find-and-replace              | Find and _Replace | <control>-R |
+  | gtk-floppy                        | _Floppy           |             |
+  | gtk-fullscreen                    | _Fullscreen       |             |
+  | gtk-go-back                       | _Back             |             |
+  | gtk-go-down                       | _Down             |             |
+  | gtk-go-forward                    | _Forward          |             |
+  | gtk-go-up                         | _Up               |             |
+  | gtk-goto-bottom                   | _Bottom           |             |
+  | gtk-goto-first                    | _First            |             |
+  | gtk-goto-last                     | _Last             |             |
+  | gtk-goto-top                      | _Top              |             |
+  | gtk-harddisk                      | _Harddisk         |             |
+  | gtk-help                          | _Help             | <control>-H |
+  | gtk-home                          | _Home             |             |
+  | gtk-indent                        | Increase Indent   |             |
+  | gtk-index                         | _Index            |             |
+  | gtk-info                          | _Information      |             |
+  | gtk-italic                        | _Italic           |             |
+  | gtk-jump-to                       | _Jump to          |             |
+  | gtk-justify-center                | _Center           |             |
+  | gtk-justify-fill                  | _Fill             |             |
+  | gtk-justify-left                  | _Left             |             |
+  | gtk-justify-right                 | _Right            |             |
+  | gtk-leave-fullscreen              | _Leave Fullscreen |             |
+  | gtk-media-forward                 | _Forward          |             |
+  | gtk-media-next                    | _Next             |             |
+  | gtk-media-pause                   | P_ause            |             |
+  | gtk-media-play                    | _Play             |             |
+  | gtk-media-previous                | Pre_vious         |             |
+  | gtk-media-record                  | _Record           |             |
+  | gtk-media-rewind                  | R_ewind           |             |
+  | gtk-media-stop                    | _Stop             |             |
+  | gtk-network                       | _Network          |             |
+  | gtk-new                           | _New              | <control>-N |
+  | gtk-no                            | _No               |             |
+  | gtk-ok                            | _OK               |             |
+  | gtk-open                          | _Open             | <control>-O |
+  | gtk-orientation-landscape         | Landscape         |             |
+  | gtk-orientation-portrait          | Portrait          |             |
+  | gtk-orientation-reverse-landscape | Reverse landscape |             |
+  | gtk-orientation-reverse-portrait  | Reverse portrait  |             |
+  | gtk-page-setup                    | Page Set_up       |             |
+  | gtk-paste                         | _Paste            | <control>-V |
+  | gtk-preferences                   | _Preferences      |             |
+  | gtk-print                         | _Print            |             |
+  | gtk-print-preview                 | Print Pre_view    |             |
+  | gtk-properties                    | _Properties       |             |
+  | gtk-quit                          | _Quit             | <control>-Q |
+  | gtk-redo                          | _Redo             |             |
+  | gtk-refresh                       | _Refresh          |             |
+  | gtk-remove                        | _Remove           |             |
+  | gtk-revert-to-saved               | _Revert           |             |
+  | gtk-save                          | _Save             | <control>-S |
+  | gtk-save-as                       | Save _As          |             |
+  | gtk-select-all                    | Select _All       |             |
+  | gtk-select-color                  | _Color            |             |
+  | gtk-select-font                   | _Font             |             |
+  | gtk-sort-ascending                | _Ascending        |             |
+  | gtk-sort-descending               | _Descending       |             |
+  | gtk-spell-check                   | _Spell Check      |             |
+  | gtk-stop                          | _Stop             |             |
+  | gtk-strikethrough                 | _Strikethrough    |             |
+  | gtk-undelete                      | _Undelete         |             |
+  | gtk-underline                     | _Underline        |             |
+  | gtk-undo                          | _Undo             |             |
+  | gtk-unindent                      | Decrease Indent   |             |
+  | gtk-yes                           | _Yes              |             |
+  | gtk-zoom-100                      | _Normal Size      |             |
+  | gtk-zoom-fit                      | Best _Fit         |             |
+  | gtk-zoom-in                       | Zoom _In          |             |
+  | gtk-zoom-out                      | Zoom _Out         |             |
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 Gtk2::Stock-E<gt>B<add> (...)
+
+=over
+
+=item * ... (list) of Gtk2::StockItem's to be added
+
+=back
+
+
+
+=head2 list = Gtk2::Stock-E<gt>B<list_ids> 
+
+Returns a list of strings, the stock-ids.
+
+=head2 scalar = Gtk2::Stock-E<gt>B<lookup> ($stock_id)
+
+=over
+
+=item * $stock_id (string) 
+
+=back
+
+Returns a hash reference, a L<Gtk2::StockItem>.
+
+=head2 Gtk2::Stock-E<gt>B<set_translate_func> ($domain, $func, $data=undef)
+
+=over
+
+=item * $domain (string) 
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+Since: gtk+ 2.8
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

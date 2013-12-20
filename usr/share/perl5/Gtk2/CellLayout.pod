@@ -1,0 +1,251 @@
+=head1 NAME
+
+Gtk2::CellLayout - wrapper for GtkCellLayout
+
+=cut
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+ # This is an abstract interface; the CellLayout interface is
+ # implemented by concrete classes like ComboBox and TreeViewColumn.
+ # See the discussion for details on creating your own CellLayout.
+ # This synopsis assumes you already have an instance in $cell_layout.
+
+ # Add a cell renderer that shows the pixbuf in column 2 of the
+ # associated TreeModel.  It will take up only the necessary space
+ # ("expand" => FALSE).
+ my $cell = Gtk2::CellRendererPixbuf->new ();
+ $cell_layout->pack_start ($cell, FALSE);
+ $cell_layout->add_attribute ($cell, pixbuf => 2);
+
+ # Add another cell renderer that gets the "text" property from
+ # column 3 of the associated TreeModel, and takes up all remaining
+ # horizontal space ("expand" => TRUE).
+ my $cell = Gtk2::CellRendererText->new (); 
+ $cell_layout->pack_start ($cell, TRUE);
+ $cell_layout->add_attribute ($cell, text => 3);
+
+=cut
+
+
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+Gtk2::CellLayout is an interface to be implemented by all objects which
+want to provide a Gtk2::TreeViewColumn-like API for packing cells,
+setting attributes and data funcs.
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Interface
+  +----Gtk2::CellLayout
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 $cell_layout-E<gt>B<add_attribute> ($cell, $attribute, $column)
+
+=over
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=item * $attribute (string) 
+
+=item * $column (integer) 
+
+=back
+
+Adds an attribute mapping to the list in I<$cell_layout>.  The I<$column> is
+the column of the model from which to get a value, and the I<$attribute> is
+the property of I<$cell> to be set from the value.  So, for example, if
+column 2 of the model contains strings, you could have the "text" attribute
+of a Gtk2::CellRendererText get its values from column 2.
+
+=head2 $cell_layout-E<gt>B<set_attributes> ($cell, ...)
+
+=over
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=item * ... (list) list of property name and column number pairs.
+
+=back
+
+Sets the pairs in the I<...> list as the attributes of I<$cell_layout>, as
+with repeated calls to C<add_attribute>.  All existing attributes are removed,
+and replaced with the new attributes.
+
+=head2 $cell_layout-E<gt>B<set_cell_data_func> ($cell, $func, $func_data=undef)
+
+=over
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=item * $func (scalar) 
+
+=item * $func_data (scalar) 
+
+=back
+
+Sets up I<$cell_layout> to call I<$func> to set up attributes of I<$cell>,
+instead of the standard attribute mapping.  I<$func> may be undef to remove
+an older callback.  I<$func> will receive these parameters:
+
+=over
+
+=item $cell_layout  The cell layout instance
+
+=item $cell         The cell renderer to set up
+
+=item $model        The tree model
+
+=item $iter         TreeIter of the row for which to set the values
+
+=item $data         The I<$func_data> passed to C<set_cell_data_func>
+
+=back
+
+
+=head2 list = $cell_layout-E<gt>B<get_cells> 
+
+Fetch all of the cell renderers which have been added to I<$cell_layout>.
+
+Since: gtk+ 2.12
+
+=head2 $cell_layout-E<gt>B<clear> 
+
+Unsets all the mappings on all renderers on I<$cell_layout> and removes all
+renderers attached to it.
+
+=head2 $cell_layout-E<gt>B<clear_attributes> ($cell)
+
+=over
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=back
+
+Clears all existing attributes previously set with for I<$cell> with
+C<add_attribute> or C<set_attributes>.
+
+=head2 $cell_layout-E<gt>B<pack_end> ($cell, $expand)
+
+=over
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=item * $expand (boolean) 
+
+=back
+
+Like C<pack_start>, but adds from the end of the layout instead of the
+beginning.
+
+=head2 $cell_layout-E<gt>B<pack_start> ($cell, $expand)
+
+=over
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=item * $expand (boolean) 
+
+=back
+
+Packs I<$cell> into the beginning of I<$cell_layout>.  If I<$expand> is false,
+then I<$cell> is allocated no more space than it needs.  Any unused space is
+divided evenly between cells for which I<$expand> is true.
+
+=head2 $cell_layout-E<gt>B<reorder> ($cell, $position)
+
+=over
+
+=item * $cell (Gtk2::CellRenderer) 
+
+=item * $position (integer) 
+
+=back
+
+Re-insert I<$cell> at I<$position>.  I<$cell> must already be packed into
+I<$cell_layout>.
+
+
+
+=cut
+
+=for position post_methods
+
+=head1 CREATING A CUSTOM CELL LAYOUT
+
+GTK+ provides several CellLayout implementations, such as Gtk2::TreeViewColumn
+and Gtk2::ComboBox.  To create your own object that implements the CellLayout
+interface and therefore can be used to display CellRenderers, you need to
+add Gtk2::CellLayout to your class's "interfaces" list, like this:
+
+  package MyLayout;
+  use Gtk2;
+  use Glib::Object::Subclass
+      Gtk2::Widget::,
+      interfaces => [ Gtk2::CellLayout:: ],
+      ;
+
+This will cause perl to call several virtual methods with ALL_CAPS_NAMES
+when GTK+ attempts to perform certain actions.  You simply provide (or
+override) those methods with perl code.  The methods map rather directly
+to the object interface, so it should be easy to figure out what they
+should do.  Those methods are:
+
+=over
+
+=item PACK_START ($cell_layout, $cell, $expand)
+
+=item PACK_END ($cell_layout, $cell, $expand)
+
+=item CLEAR ($cell_layout)
+
+=item ADD_ATTRIBUTE ($cell_layout, $cell, $attribute, $column)
+
+=item SET_CELL_DATA_FUNC ($cell_layout, $cell, $func, $data)
+
+=item CLEAR_ATTRIBUTES ($cell_layout, $cell)
+
+=item REORDER ($cell_layout, $cell, $position)
+
+=item list = GET_CELLS ($cell_layout)
+
+=back
+
+=cut
+
+
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Interface>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

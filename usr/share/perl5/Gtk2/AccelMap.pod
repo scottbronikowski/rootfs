@@ -1,0 +1,243 @@
+=head1 NAME
+
+Gtk2::AccelMap - wrapper for GtkAccelMap
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::AccelMap
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 Gtk2::AccelMap-E<gt>B<add_entry> ($accel_path, $accel_key, $accel_mods)
+
+=over
+
+=item * $accel_path (string) 
+
+=item * $accel_key (integer) 
+
+=item * $accel_mods (Gtk2::Gdk::ModifierType) 
+
+=back
+
+=head2 Gtk2::AccelMap-E<gt>B<add_filter> ($filter_pattern)
+
+=over
+
+=item * $filter_pattern (string) 
+
+=back
+
+=head2 boolean = Gtk2::AccelMap-E<gt>B<change_entry> ($accel_path, $accel_key, $accel_mods, $replace)
+
+=over
+
+=item * $accel_path (string) 
+
+=item * $accel_key (integer) 
+
+=item * $accel_mods (Gtk2::Gdk::ModifierType) 
+
+=item * $replace (boolean) 
+
+=back
+
+=head2 Gtk2::AccelMap-E<gt>B<foreach> ($data, $foreach_func)
+
+=over
+
+=item * $data (scalar) 
+
+=item * $foreach_func (scalar) 
+
+=back
+
+=head2 Gtk2::AccelMap-E<gt>B<foreach_unfiltered> ($data, $foreach_func)
+
+=over
+
+=item * $data (scalar) 
+
+=item * $foreach_func (scalar) 
+
+=back
+
+=head2 accelmap = Gtk2::AccelMap-E<gt>B<get> 
+
+Since: gtk+ 2.4
+
+=head2 Gtk2::AccelMap-E<gt>B<load> ($file_name)
+
+=over
+
+=item * $file_name (string) 
+
+=back
+
+=head2 Gtk2::AccelMap-E<gt>B<load_fd> ($fd)
+
+=over
+
+=item * $fd (integer) 
+
+=back
+
+=head2 Gtk2::AccelMap-E<gt>B<lock_path> ($accel_path)
+
+=over
+
+=item * $accel_path (string) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 (accel_key, accel_mods, accel_flags) = Gtk2::AccelMap->B<lookup_entry> ($accel_path)
+
+=over
+
+=item * $accel_path (string) 
+
+=back
+
+Returns empty if no accelerator is found for the given path, accel_key
+(integer), accel_mods (Gtk2::Gdk::ModifierType), and accel_flags (integer)
+otherwise.
+
+=head2 Gtk2::AccelMap-E<gt>B<save> ($file_name)
+
+=over
+
+=item * $file_name (string) 
+
+=back
+
+=head2 Gtk2::AccelMap-E<gt>B<save_fd> ($fd)
+
+=over
+
+=item * $fd (integer) 
+
+=back
+
+=head2 Gtk2::AccelMap-E<gt>B<unlock_path> ($accel_path)
+
+=over
+
+=item * $accel_path (string) 
+
+=back
+
+Since: gtk+ 2.4
+
+
+
+=cut
+
+=for position post_methods
+
+=head1 FOREACH CALLBACK
+
+The foreach callbacks ignore any returned values and the following parameters
+are passed to the callback any modifications are ignored.
+
+  accel_path (string)
+  accel_key (integer)
+  GdkModifierType accel_mods (Gtk2::Gdk::ModifierType)
+  changed (boolean)
+  user_date (scalar)
+
+=cut
+
+
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<changed> (Gtk2::AccelMap, string, Glib::UInt, Gtk2::Gdk::ModifierType)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

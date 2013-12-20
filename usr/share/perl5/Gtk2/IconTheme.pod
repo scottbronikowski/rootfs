@@ -1,0 +1,235 @@
+=head1 NAME
+
+Gtk2::IconTheme - wrapper for GtkIconTheme
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::IconTheme
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 icontheme = Gtk2::IconTheme-E<gt>B<new> 
+
+=head2 Gtk2::IconTheme-E<gt>B<add_builtin_icon> ($icon_name, $size, $pixbuf)
+
+=over
+
+=item * $icon_name (string) 
+
+=item * $size (integer) 
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf) 
+
+=back
+
+=head2 $icon_theme-E<gt>B<append_search_path> ($path)
+
+=over
+
+=item * $path (localized file name) 
+
+=back
+
+=head2 iconinfo or undef = $icon_theme-E<gt>B<choose_icon> ($icon_names, $size, $flags)
+
+=over
+
+=item * $icon_names (scalar) 
+
+=item * $size (integer) 
+
+=item * $flags (Gtk2::IconLookupFlags) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 $icon_theme-E<gt>B<set_custom_theme> ($theme_name)
+
+=over
+
+=item * $theme_name (string) 
+
+=back
+
+=head2 icontheme = Gtk2::IconTheme-E<gt>B<get_default> 
+
+=head2 string = $icon_theme-E<gt>B<get_example_icon_name> 
+
+=head2 icontheme = Gtk2::IconTheme-E<gt>B<get_for_screen> ($screen)
+
+=over
+
+=item * $screen (Gtk2::Gdk::Screen) 
+
+=back
+
+=head2 boolean = $icon_theme-E<gt>B<has_icon> ($icon_name)
+
+=over
+
+=item * $icon_name (string) 
+
+=back
+
+=head2 list = $icon_theme-E<gt>B<get_icon_sizes> ($icon_name)
+
+=over
+
+=item * $icon_name (string) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 list = $icon_theme-E<gt>B<list_contexts> 
+
+Since: gtk+ 2.12
+
+=head2 list = $icon_theme-E<gt>B<list_icons> ($context)
+
+=over
+
+=item * $context (string or undef) 
+
+=back
+
+=head2 pixbuf or undef = $icon_theme-E<gt>B<load_icon> ($icon_name, $size, $flags)
+
+=over
+
+=item * $icon_name (string) 
+
+=item * $size (integer) 
+
+=item * $flags (Gtk2::IconLookupFlags) 
+
+=back
+
+
+
+May croak with a L<Glib::Error> in $@ on failure.
+
+=head2 iconinfo or undef = $icon_theme-E<gt>B<lookup_icon> ($icon_name, $size, $flags)
+
+=over
+
+=item * $icon_name (string) 
+
+=item * $size (integer) 
+
+=item * $flags (Gtk2::IconLookupFlags) 
+
+=back
+
+=head2 $icon_theme-E<gt>B<prepend_search_path> ($path)
+
+=over
+
+=item * $path (localized file name) 
+
+=back
+
+=head2 boolean = $icon_theme-E<gt>B<rescan_if_needed> 
+
+=head2 $icon_theme-E<gt>B<set_screen> ($screen)
+
+=over
+
+=item * $screen (Gtk2::Gdk::Screen) 
+
+=back
+
+=head2 list = $icon_theme-E<gt>B<get_search_path> 
+
+=head2 $icon_theme-E<gt>B<set_search_path> (...)
+
+=over
+
+=item * ... (list) 
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<changed> (Gtk2::IconTheme)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::IconLookupFlags
+
+
+
+=over
+
+=item * 'no-svg' / 'GTK_ICON_LOOKUP_NO_SVG'
+
+=item * 'force-svg' / 'GTK_ICON_LOOKUP_FORCE_SVG'
+
+=item * 'use-builtin' / 'GTK_ICON_LOOKUP_USE_BUILTIN'
+
+=item * 'generic-fallback' / 'GTK_ICON_LOOKUP_GENERIC_FALLBACK'
+
+=item * 'force-size' / 'GTK_ICON_LOOKUP_FORCE_SIZE'
+
+=back
+
+
+=head2 enum Gtk2::IconThemeError
+
+
+
+=over
+
+=item * 'not-found' / 'GTK_ICON_THEME_NOT_FOUND'
+
+=item * 'failed' / 'GTK_ICON_THEME_FAILED'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

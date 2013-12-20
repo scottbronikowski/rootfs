@@ -1,0 +1,148 @@
+=head1 NAME
+
+Gtk2::TreePath - wrapper for GtkTreePath
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Boxed
+  +----Gtk2::TreePath
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 treepath or undef = Gtk2::TreePath-E<gt>B<new> ($path=undef)
+
+=over
+
+=item * $path (string) 
+
+=back
+
+Create a new path.  For convenience, if you pass a value for I<$path>,
+this is just an alias for C<new_from_string>.
+
+=head2 treepath = Gtk2::TreePath-E<gt>B<new_first> 
+
+=head2 treepath or undef = Gtk2::TreePath-E<gt>B<new_from_indices> ($first_index, ...)
+
+=over
+
+=item * $first_index (integer) a non-negative index value
+
+=item * ... (list) of zero or more index values
+
+=back
+
+
+The C API reference docs for this function say to mark the end of the list
+with a -1, but Perl doesn't need list terminators, so don't do that.
+
+This is specially implemented to be available for all gtk+ versions.
+
+
+=head2 treepath or undef = Gtk2::TreePath-E<gt>B<new_from_string> ($path=undef)
+
+=over
+
+=item * $path (string) 
+
+=back
+
+=head2 $path-E<gt>B<append_index> ($index_)
+
+=over
+
+=item * $index_ (integer) 
+
+=back
+
+=head2 integer = $a-E<gt>B<compare> ($b)
+
+=over
+
+=item * $b (Gtk2::TreePath) 
+
+=back
+
+Compares two paths.  If I<$a> appears before I<$b> in the three, returns -1.
+If I<$b> appears before I<$a>, returns 1.  If the nodes are equal, returns 0.
+
+=head2 integer = $path-E<gt>B<get_depth> 
+
+=head2 $path-E<gt>B<down> 
+
+Moves I<$path> to point to the first child of the current path.
+
+=head2 list = $path-E<gt>B<get_indices> 
+
+Returns a list of integers describing the current indices of I<$path>.
+
+=head2 boolean = $path-E<gt>B<is_ancestor> ($descendant)
+
+=over
+
+=item * $descendant (Gtk2::TreePath) 
+
+=back
+
+=head2 boolean = $path-E<gt>B<is_descendant> ($ancestor)
+
+=over
+
+=item * $ancestor (Gtk2::TreePath) 
+
+=back
+
+=head2 $path-E<gt>B<next> 
+
+Moves I<$path> to point to the next node at the current depth.
+
+=head2 $path-E<gt>B<prepend_index> ($index_)
+
+=over
+
+=item * $index_ (integer) 
+
+=back
+
+=head2 boolean = $path-E<gt>B<prev> 
+
+Moves I<$path> to point to the previous node at the current depth, if it
+exists.  Returns true if there is a previous node and I<$path> was modified.
+
+=head2 string = $path-E<gt>B<to_string> 
+
+=head2 boolean = $path-E<gt>B<up> 
+
+Moves I<$path> to point to its parent node; returns false if there is no
+parent.
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Boxed>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

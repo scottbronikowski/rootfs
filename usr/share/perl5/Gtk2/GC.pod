@@ -1,0 +1,89 @@
+=head1 NAME
+
+Gtk2::GC
+
+=cut
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+These functions provide access to a shared pool of L<Gtk2::Gdk::GC>
+objects. When a new L<Gtk2::Gdk::GC> is needed, I<Gtk2::Gdk::GC::get> is called
+with the required depth, colormap and I<Gtk2::Gdk::GCValues>. If a
+L<Gtk2::Gdk::GC> with the required properties already exists then that is
+returned. If not, a new L<Gtk2::Gdk::GC> is created.
+
+[From: L<http://developer.gnome.org/doc/API/2.0/gtk/gtk-Graphics-Contexts.html>]
+
+=cut
+
+
+
+=for position post_hierarchy
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Gdk::GC
+       +----Gtk2::GC
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 gc = Gtk2::GC->B<get> ($depth, $colormap, $values)
+
+=over
+
+=item * $depth (integer) 
+
+=item * $colormap (Gtk2::Gdk::Colormap) 
+
+=item * $values (Gtk2::Gdk::GCValues) Values to match
+
+=back
+
+C<$values> is a hashref with keys and values as per
+C<< Gtk2::Gdk::GC->new >> (see L<Gtk2::Gdk::GC>).
+
+
+
+=cut
+
+=for position post_methods
+
+=head2 Compatibility
+
+Before version 1.200 of the Gtk2 perl module, it was necessary to call
+C<Gtk2::GC::release()> on GCs obtained from C<Gtk2::GC::get()>.  As of
+version 1.200, this is no longer necessary; a GC will be released when
+the last perl reference goes away.  Old-style code continues to work,
+but C<Gtk2::GC::release()> is deprecated.
+
+=cut
+
+
+
+
+=head1 SEE ALSO
+
+L<Gtk2>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

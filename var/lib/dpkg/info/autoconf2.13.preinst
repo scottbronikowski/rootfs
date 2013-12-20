@@ -1,0 +1,11 @@
+#! /bin/sh -e
+
+for d in autoconf autoheader autoreconf; do
+    dpkg-divert --package autoconf2.13 --add --rename \
+		--divert /usr/bin/${d}2.50 /usr/bin/${d}
+    dpkg-divert --package autoconf2.13 --add --rename \
+		--divert /usr/share/man/man1/${d}2.50.1.gz \
+			 /usr/share/man/man1/${d}.1.gz
+done
+
+

@@ -1,0 +1,156 @@
+=head1 NAME
+
+Gtk2::ComboBoxEntry - A text entry field with a dropdown list
+
+=cut
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  # the easy way
+  $combo_box_entry = Gtk2::ComboBoxEntry->new_text;
+  foreach (qw(one two three four five)) {
+      $combo_box_entry->append_text ($_);
+  }
+
+  # or the powerful way.  there always has to be at least
+  # one text column in the model, but you can have anything
+  # else in it that you want, just like Gtk2::ComboBox.
+  $combo_box_entry = Gtk2::ComboBoxEntry->new ($model, $text_index);
+
+  # to mess with with entry directly, get the child:
+  $current_text = $combo_box_entry->child->get_text;
+
+=cut
+
+
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+A ComboBoxEntry is a widget that allows the user to choose from a list of valid
+choices or enter a different value.  It is very similar to a ComboBox, but
+displays the selected value in an entry to allow modifying it.
+
+The ComboBoxEntry has a Gtk2::Entry as its child.  To get or set the
+currently-displayed text, just manipulate the entry normally.
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Bin
+                           +----Gtk2::ComboBox
+                                +----Gtk2::ComboBoxEntry
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+  Gtk2::CellLayout
+  Gtk2::CellEditable
+
+
+
+=cut
+
+=for object Gtk2::ComboBoxEntry - A text entry field with a dropdown list
+
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 $entry = Gtk2::ComboBoxEntry->B<new>
+
+=head2 $entry = Gtk2::ComboBoxEntry->B<new> ($model, $text_column)
+
+=over
+
+=item * $text_column (integer) 
+
+=item * $model (Gtk2::TreeModel) 
+
+=back
+
+
+
+=head2 widget = Gtk2::ComboBoxEntry-E<gt>B<new_text> 
+
+Since: gtk+ 2.4
+
+=head2 $entry = Gtk2::ComboBoxEntry->B<new_with_model> ($model, $text_column)
+
+=over
+
+=item * $text_column (integer) 
+
+=item * $model (Gtk2::TreeModel) 
+
+=back
+
+Alias for new, with two arguments.
+
+=head2 integer = $entry_box-E<gt>B<get_text_column> 
+
+=head2 $entry_box-E<gt>B<set_text_column> ($text_column)
+
+=over
+
+=item * $text_column (integer) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'text-column' (integer : default -1 : readable / writable / private)
+
+A column in the data source model to get the strings from
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>, L<Gtk2::Bin>, L<Gtk2::ComboBox>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

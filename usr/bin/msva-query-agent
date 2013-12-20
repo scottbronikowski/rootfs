@@ -1,0 +1,161 @@
+#!/usr/bin/perl -wT
+
+# Monkeysphere Validation Agent Client, Perl version
+# Copyright © 2010 Jameson Greaf Rollins <jrollins@finestructure.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+use warnings;
+use strict;
+
+use Crypt::Monkeysphere::MSVA::Client;
+
+my $context = shift;
+my $peer = shift;
+my $pkctype = shift;
+my $peertype = shift;
+
+# load raw pkc data from stdin
+my $pkcdata = do {
+  local $/; # slurp!
+  <STDIN>;
+};
+
+my $client = Crypt::Monkeysphere::MSVA::Client->new(
+                                                    socket => $ENV{MONKEYSPHERE_VALIDATION_AGENT_SOCKET},
+                                                    log_level => $ENV{MSVA_LOG_LEVEL},
+                                                   );
+
+my ($status,$ret) = $client->query_agent($context,$peer,$peertype,$pkctype,$pkcdata);
+
+$client->log('info', "status: %s\n", $status);
+if (defined $ret) {
+  $client->log('info', "valid: %s\n", $ret->{valid});
+  $client->log('info', "server: %s\n", $ret->{server});
+  printf("%s\n", $ret->{message});
+  exit 0
+    if ($ret->{valid});
+}
+exit 1;
+
+__END__
+
+=head1 NAME
+
+msva-query-agent - query a Monkeysphere Validation Agent
+
+=head1 SYNOPSIS
+
+msva-query-agent CONTEXT PEER PKC_TYPE [PEER_TYPE] < /path/to/public_key_carrier
+
+=head1 ABSTRACT
+
+msva-query-agent validates certificates for a given use by querying a
+running Monkeysphere Validation Agent.
+
+=head1 USAGE
+
+msva-query-agent reads a certificate from standard input, and posts it
+to the running Monkeysphere Validation Agent.  The return code
+indicates the validity (as determined by the agent) of the certificate
+for the specified purpose.  The agent's return message (if any) is
+emitted on stdout.
+
+The first three command-line arguments are all required, supplied in
+order, as follows:
+
+=over 4
+
+=item CONTEXT
+
+Context in which the certificate is being validated (e.g. 'https',
+'ssh', 'ike')
+
+=item PEER
+
+The name of the intended peer.  When validating a certificate for a
+service, supply the host's full DNS name (e.g.  'foo.example.net')
+
+=item PKC_TYPE
+
+The format of public key carrier data provided on standard input
+(e.g. 'x509der', 'x509pem', 'opensshpubkey', 'rfc4716')
+
+=back
+
+The fourth argument is optional:
+
+=over 4
+
+=item PEER_TYPE
+
+The type of peer we are inquiring about (e.g. 'client', 'server')
+
+=back
+
+=head1 RETURN CODE
+
+If the certificate is valid for the requested peer in the given
+context, the return code is 0.  Otherwise, the return code is 1.
+
+=head1 ENVIRONMENT VARIABLES
+
+msva-query-agent's behavior is controlled by environment variables:
+
+=over 4
+
+=item MONKEYSPHERE_VALIDATION_AGENT_SOCKET
+
+Socket over which to query the validation agent.  If unset, the
+default value is 'http://localhost:8901'.
+
+=item MSVA_LOG_LEVEL
+
+Log messages about its operation to stderr.  MSVA_LOG_LEVEL controls
+its verbosity, and should be one of (in increasing verbosity): silent,
+quiet, fatal, error, info, verbose, debug, debug1, debug2, debug3.
+Default is 'error'.
+
+=back
+
+=head1 COMMUNICATION PROTOCOL DETAILS
+
+Communications with the Monkeysphere Validation Agent are in the form
+of JSON requests over plain HTTP.  Responses from the agent are also
+JSON objects.  For details on the structure of the requests and
+responses, please see
+http://web.monkeysphere.info/validation-agent/protocol
+
+=head1 SEE ALSO
+
+msva-perl(1), monkeysphere(1), monkeysphere(7)
+
+=head1 BUGS AND FEEDBACK
+
+Bugs or feature requests for msva-perl and associated tools should be
+filed with the Monkeysphere project's bug tracker at
+https://labs.riseup.net/code/projects/monkeysphere/issues/
+
+=head1 AUTHORS AND CONTRIBUTORS
+
+Jameson Graef Rollins E<lt>jrollins@finestructure.net<gt>
+Daniel Kahn Gillmor E<lt>dkg@fifthhorseman.net<gt>
+
+The Monkeysphere Team http://web.monkeysphere.info/
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright © 2010, Jameson Graef Rollins and others from the Monkeysphere
+team.  msva-query-agent is free software, distributed under the GNU
+Public License, version 3 or later.

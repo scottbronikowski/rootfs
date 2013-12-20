@@ -1,0 +1,118 @@
+#!/bin/sh
+#
+# shutdown -- wrapper script to guard against accidental shutdowns
+#
+# Copyright © martin f. krafft <madduck@madduck.net>
+# Released under the terms of the Artistic Licence 2.0
+#
+set -eu
+
+ME=molly-guard
+VERSION=0.4
+
+SCRIPTSDIR="//etc/molly-guard/run.d"
+
+CMD="${0##*/}"
+EXEC="/sbin/$CMD"
+
+case "$CMD" in
+  halt|reboot|shutdown|poweroff)
+    if [ ! -f $EXEC ]; then
+      echo "E: not a regular file: $EXEC" >&2
+      exit 4
+    fi
+    if [ ! -x $EXEC ]; then
+      echo "E: not an executable: $EXEC" >&2
+      exit 3
+    fi
+    ;;
+  *)
+    echo "E: unsupported command: $CMD" >&2
+    exit 1
+    ;;
+esac
+
+usage()
+{
+  cat <<-_eousage
+	Usage: $ME [options] [-- script options]
+	       (shielding $EXEC)
+	
+	molly-guard's primary goal is to guard against accidental
+	shutdowns/reboots. $ME will run all scripts in $SCRIPTSDIR and only
+	invokes $EXEC if all scripts exited successfully.
+
+	Specifying --molly-guard-do-nothing as argument to the command will
+	make $ME echo the command it would execute rather than actually
+	executing it.
+
+	Options following the double hyphen will be passed unchanged to the
+	scripts.
+
+	Please see molly-guard(8) for more information.
+
+	The actual command's help output follows:
+
+	_eousage
+}
+
+CMDARGS=
+SCRIPTARGS=
+END_OF_ARGS=0
+DO_NOTHING=0
+for arg in "$@"; do
+  case "$arg" in
+    (*-molly-guard-do-nothing) DO_NOTHING=1;;
+    (*-help)
+      usage 2>&1
+      eval $EXEC --help 2>&1
+      exit 0
+      ;;
+    --) END_OF_ARGS=1;;
+    *) 
+      if [ $END_OF_ARGS -eq 0 ]; then
+        CMDARGS="${CMDARGS:+$CMDARGS }$arg"
+      else
+        SCRIPTARGS="${SCRIPTARGS:+$SCRIPTARGS }--arg $arg"
+      fi
+      ;;
+  esac
+done
+
+do_real_cmd()
+{
+  if [ $DO_NOTHING -eq 1 ]; then
+    echo "$ME: would run: $EXEC $CMDARGS"
+    exit 0
+  else
+    eval exec $EXEC "$CMDARGS"
+  fi
+}
+
+if [ $DO_NOTHING -eq 1 ]; then
+  echo "I: demo mode; $ME will not do anything due to --molly-guard-do-nothing." >&2
+fi
+
+# pass through certain commands
+case "$CMD $CMDARGS" in
+  (*shutdown\ *-c*)
+    # allow canceling shutdowns
+    echo "I: executing $CMD $CMDARGS regardless of check results." >&2
+    do_real_cmd
+    ;;
+esac
+
+MOLLYGUARD_CMD=$CMD; export MOLLYGUARD_CMD
+MOLLYGUARD_DO_NOTHING=$DO_NOTHING; export MOLLYGUARD_DO_NOTHING
+MOLLYGUARD_SETTINGS="//etc/molly-guard/rc"; export MOLLYGUARD_SETTINGS
+
+for script in $(run-parts --test $SCRIPTSDIR); do
+  ret=0
+  eval $script $SCRIPTARGS || ret=$?
+  if [ $ret -ne 0 ]; then
+    echo "W: aborting $CMD due to ${script##*/} exiting with code $ret." >&2
+    exit $ret
+  fi
+done
+
+do_real_cmd

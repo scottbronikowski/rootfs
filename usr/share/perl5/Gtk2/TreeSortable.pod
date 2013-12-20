@@ -1,0 +1,177 @@
+=head1 NAME
+
+Gtk2::TreeSortable - wrapper for GtkTreeSortable
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Interface
+  +----Gtk2::TreeSortable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 $sortable-E<gt>B<set_default_sort_func> ($sort_func, $user_data=undef)
+
+=over
+
+=item * $sort_func (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+=head2 boolean = $sortable-E<gt>B<has_default_sort_func> 
+
+=head2 $sortable-E<gt>B<sort_column_changed> 
+
+=head2 (sort_column_id, order) = $sortable->B<get_sort_column_id>
+
+Returns sort_column_id, an integer and order, a Gtk2::SortType.
+
+=head2 $sortable-E<gt>B<set_sort_column_id> ($sort_column_id, $order)
+
+=over
+
+=item * $sort_column_id (integer) 
+
+=item * $order (Gtk2::SortType) 
+
+=back
+
+=head2 $sortable-E<gt>B<set_sort_func> ($sort_column_id, $sort_func, $user_data=undef)
+
+=over
+
+=item * $sort_column_id (integer) 
+
+=item * $sort_func (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+
+
+=cut
+
+=for position post_methods
+
+=head1 IMPLEMENTING THE I<GtkTreeSortable> INTERACE
+
+If you want your custom tree model to be sortable, you need to implement the
+I<GtkTreeSortable> interface.  Just like with other interfaces, this boils down
+to announcing that your subclass implements the interface and providing a few
+virtual methods.  The former is achieved by adding C<Gtk2::TreeSortable> to the
+C<interfaces> key.  For example:
+
+  package MyModel;
+  use Gtk2;
+  use Glib::Object::Subclass
+      Glib::Object::,
+      interfaces => [ Gtk2::TreeModel::, Gtk2::TreeSortable:: ],
+      ;
+
+The virtual methods you need to implement are listed below.
+
+=head2 VIRTUAL METHODS
+
+These virtual methods are called by perl when gtk+ attempts to modify the
+sorting behavior of your model.  Implement them in your model's package.  Note
+that we don't provide a wrapper for I<sort_column_changed> because there is a
+signal for it, which means you can use the normal signal overriding mechanism
+documented in L<Glib::Object::Subclass>.
+
+=over
+
+=item (is_not_special, id, order) = GET_SORT_COLUMN_ID ($model)
+
+Returns a boolean indicating whether the column is a special or normal one, its
+id and its sorting order.
+
+=item SET_SORT_COLUMN_ID ($list, $id, $order)
+
+Sets the sort column to the one specified by I<$id> and the sorting order to
+I<$order>.
+
+=item SET_SORT_FUNC ($list, $id, $func, $data)
+
+Sets the function that is to be used for sorting the column I<$id>.
+
+=item SET_DEFAULT_SORT_FUNC ($list, $func, $data)
+
+Sets the function that is to be used for sorting columns that don't have a
+sorting function attached to them.
+
+The I<$func> and I<$data> arguments passed to these two methods should be
+treated as blackboxes.  They are generic containers for some callback that is
+to be invoked whenever you want to compare two tree iters.  When you call them,
+make sure to always pass I<$data>.  For example:
+
+  $retval = $func->($list, $a, $b, $data);
+
+=item bool = HAS_DEFAULT_SORT_FUNC ($list)
+
+Returns a bool indicating whether I<$list> has a default sorting function.
+
+=back
+
+=cut
+
+
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<sort-column-changed> (Gtk2::TreeSortable)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::SortType
+
+=over
+
+=item * 'ascending' / 'GTK_SORT_ASCENDING'
+
+=item * 'descending' / 'GTK_SORT_DESCENDING'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Interface>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

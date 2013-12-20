@@ -1,0 +1,303 @@
+=head1 NAME
+
+Gtk2::BindingSet - wrapper for GtkBindingSet
+
+=cut
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+A C<Gtk2::BindingSet> is basically a mapping from keyval+modifiers to
+a named action signal to invoke and with argument values for the
+signal.  Bindings are normally run by the C<Gtk2::Widget> default
+C<key-press-event> handler, but can also be activated explicitly.
+
+Binding sets can be populated from program code with
+C<entry_add_signal>, or created from an RC file or string (see
+L<Gtk2::Rc>).  If you use the RC note it doesn't parse and create
+anything until there's someone interested in the result, such as
+C<Gtk2::Settings> for widgets.	This means binding sets in RC files or
+strings don't exist for C<< Gtk2::BindingSet->find >> to retrieve
+until at least one widget has been created (or similar).
+
+Currently there's no Perl-level access to the contents of a
+BindingSet, except for C<set_name>.
+
+=cut
+
+
+
+=head1 HIERARCHY
+
+  Glib::Boxed
+  +----Gtk2::BindingSet
+
+
+
+=cut
+
+=for apidoc Gtk2::BindingSet::find
+=for signature GtkBindingSet_ornull Gtk2::BindingSet->find ($set_name)
+=for arg set_name (string)
+=for arg name (__hide__)
+=cut
+
+=for apidoc Gtk2::BindingSet::by_class
+=for signature GtkBindingSet = Gtk2::BindingSet->by_class ($package_name)
+=for arg package_name (string)
+=for arg name (__hide__)
+=cut
+
+
+
+
+=head1 METHODS
+
+=head2 GtkBindingSet = Gtk2::BindingSet->B<new> ($set_name)
+
+=over
+
+=item * $set_name (string) 
+
+=back
+
+
+
+=head2 boolean = $binding_set-E<gt>B<activate> ($keyval, $modifiers, $object)
+
+=over
+
+=item * $keyval (integer) 
+
+=item * $modifiers (Gtk2::Gdk::ModifierType) 
+
+=item * $object (Gtk2::Object) 
+
+=back
+
+=head2 $binding_set-E<gt>B<add_path> ($path_type, $path_pattern, $priority)
+
+=over
+
+=item * $path_type (Gtk2::PathType) 
+
+=item * $path_pattern (string) 
+
+=item * $priority (integer) 
+
+=back
+
+The following constants are defined for standard priority levels,
+
+    Gtk2::GTK_PATH_PRIO_LOWEST
+    Gtk2::GTK_PATH_PRIO_GTK
+    Gtk2::GTK_PATH_PRIO_APPLICATION
+    Gtk2::GTK_PATH_PRIO_THEME
+    Gtk2::GTK_PATH_PRIO_RC
+    Gtk2::GTK_PATH_PRIO_HIGHEST
+
+LOWEST, which is 0, and HIGHEST, which is 15, are the limits of the
+allowed priorities.  The standard values are from the
+C<Gtk2::PathPriorityType> enum, but the parameter here is an integer,
+not an enum string, so you can give a value for instance a little
+above or below the pre-defined levels.
+
+=head2 bindingset or undef = Gtk2::BindingSet-E<gt>B<by_class> ($name)
+
+=over
+
+=item * $name (string) 
+
+=back
+
+=head2 $binding_set->B<entry_add_signal> ($keyval, $modifiers, $signal_name)
+
+=head2 $binding_set->B<entry_add_signal> ($keyval, $modifiers, $signal_name, $type,$value, ...)
+
+=over
+
+=item * $keyval (integer) 
+
+=item * $modifiers (Gtk2::Gdk::ModifierType) 
+
+=item * $signal_name (string) 
+
+=item * $value (scalar) 
+
+=item * $type (string) 
+
+=back
+
+Add an entry to $binding_set.  $keyval and $modifier are setup as a
+binding for $signal_name and with signal parameters given by $value
+arguments.  Each value is preceded by a type (a string), which must be
+one of
+
+    Glib::Long
+    Glib::Double
+    Glib::String
+    an enum type, ie. subtype of Glib::Enum
+    Glib::Flags, or a flags subtype
+
+For example,
+
+    $binding_set->entry_add_signal
+	(Gtk2->keyval_from_name('Return'),
+	 [ 'control-mask' ],   # modifiers
+	 'some-signal-name',
+	 'Glib::Double', 1.5,
+	 'Glib::String,	 'hello');
+
+A parameter holds one of the three types Long, Double or String.  When
+invoked they're coerced to the parameter types expected by the target
+object or widget.  Use Glib::Long for any integer argument, including
+chars and unichars by ordinal value.  Use Glib::Double for both single
+and double precision floats.
+
+Flags and enums are held as Longs in the BindingSet.  You can pass an
+enum type and string and C<entry_with_signal> will lookup and store
+accordingly.  For example
+
+    $binding_set->entry_add_signal
+	(Gtk2->keyval_from_name('Escape), [],
+	 'set-direction',
+	 'Gtk2::Orientation', 'vertical');
+
+Likewise flags from an arrayref,
+
+    $binding_set->entry_add_signal
+	(Gtk2->keyval_from_name('d'), [],
+	 'initiate-drag',
+	 'Gtk2::Gdk::DragAction', ['move,'ask']);
+
+If you've got a Glib::Flags object, rather than just an arrayref, then
+you can just give Glib::Flags as the type and the value is taken from
+the object.  For example,
+
+    my $flags = Gtk2::DebugFlag->new (['tree', 'updates']);
+    $binding_set->entry_add_signal
+	(Gtk2->keyval_from_name('x'), ['control-mask'],
+	 'change-debug',
+	 'Glib::Flags', $flags);
+
+=head2 $binding_set-E<gt>B<entry_remove> ($keyval, $modifiers)
+
+=over
+
+=item * $keyval (integer) 
+
+=item * $modifiers (Gtk2::Gdk::ModifierType) 
+
+=back
+
+=head2 $binding_set-E<gt>B<entry_skip> ($keyval, $modifiers)
+
+=over
+
+=item * $keyval (integer) 
+
+=item * $modifiers (Gtk2::Gdk::ModifierType) 
+
+=back
+
+Since: gtk+ 2.12
+
+=head2 bindingset or undef = Gtk2::BindingSet-E<gt>B<find> ($name)
+
+=over
+
+=item * $name (string) 
+
+=back
+
+=head2 string = $binding_set-E<gt>B<set_name> 
+
+Return the name of $binding_set.
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+=head2 enum Gtk2::PathType
+
+=over
+
+=item * 'widget' / 'GTK_PATH_WIDGET'
+
+=item * 'widget-class' / 'GTK_PATH_WIDGET_CLASS'
+
+=item * 'class' / 'GTK_PATH_CLASS'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Boxed>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

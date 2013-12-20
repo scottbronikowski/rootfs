@@ -1,0 +1,46 @@
+Autoconf 2.13							-*- text -*-
+-------------
+
+This is the Debian packaging of Autoconf 2.13, an obsolete release of
+the Autoconf system for creating configuration scripts using
+templates.  This version of Autoconf is obsolete and its use is
+deprecated.
+
+It is troublesome to determine which programs need this compatibility
+package and adapt them for it.  As a result, this package has wrappers
+for autoconf, autoheader, and autoreconf.  Each of these attempts to
+detect which Autoconf is needed and run the correct version of the
+tool.
+
+There are no wrappers for autoupdate, autoscan, or ifnames.  These are
+not used during a package build.  Choose the proper version by hand.
+
+The following heuristics are used to choose an Autoconf version:
+
+	* If file `configure.ac' exists, Autoconf 2.50 is used.
+          Autoconf 2.13 used the name `configure.in' instead, but
+          version 2.50 supports both.  
+
+          (Usually autoconf is run without nonoption arguments.  If a
+          filename is supplied on the command line, then version 2.50
+          is used if the filename ends in `.ac'.)
+
+	* Otherwise, `configure.in' (or the file specified on the
+          command line, if any) is read.  It is checked for the
+          presence of an AC_PREREQ directive.  If it specifies a
+          minimum version higher than 2.13, Autoconf 2.50 is used.
+	  `aclocal.m4', if present, is also scanned.
+
+	* Otherwise, Autoconf 2.13 is used.
+
+To force Autoconf 2.13 to be used, name the Autoconf input file
+`configure.in' and omit the use of AC_PREREQ() or specify a minimum
+version of 2.13 or earlier.  To force Autoconf 2.50 to be used, name
+the input file `configure.ac' or use AC_PREREQ(2.50).
+
+I recommend not calling the programs autoconf2.13 or autoconf2.50,
+etc., directly, instead of through the wrappers.  When used with
+programs like Automake, these direct calls won't propagate through
+into the Makefile, so later re-autoconf'ings won't use the correct
+version.  It's better to use one of the methods explained above to
+force a particular version.

@@ -1,0 +1,8 @@
+#!/bin/bash -e
+
+
+
+# delete migrated configuration on purge
+if [ "$1" = purge  -a -e /etc/makejail/makejail.conf ]; then
+  rm -f /etc/makejail/makejail.conf
+fi

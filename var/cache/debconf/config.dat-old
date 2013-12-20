@@ -456,6 +456,18 @@ Template: linux-sound-base/sound_system
 Value: ALSA
 Owners: linux-sound-base
 
+Name: make-ssl-cert/hostname
+Template: make-ssl-cert/hostname
+Owners: ssl-cert
+
+Name: make-ssl-cert/title
+Template: make-ssl-cert/title
+Owners: ssl-cert
+
+Name: make-ssl-cert/vulnerable_prng
+Template: make-ssl-cert/vulnerable_prng
+Owners: ssl-cert
+
 Name: man-db/auto-update
 Template: man-db/auto-update
 Owners: man-db
@@ -543,12 +555,35 @@ Name: resolvconf/reboot-recommended-after-removal
 Template: resolvconf/reboot-recommended-after-removal
 Owners: resolvconf
 
+Name: rssh/chroot_helper_setuid
+Template: rssh/chroot_helper_setuid
+Value: false
+Owners: rssh
+
 Name: shared/default-x-display-manager
 Template: shared/default-x-display-manager
 Value: lightdm
 Owners: lightdm
 Variables:
  choices = lightdm
+
+Name: ssh/disable_cr_auth
+Template: ssh/disable_cr_auth
+Owners: openssh-server
+
+Name: ssh/encrypted_host_key_but_no_keygen
+Template: ssh/encrypted_host_key_but_no_keygen
+Owners: openssh-server
+
+Name: ssh/use_old_init_script
+Template: ssh/use_old_init_script
+Value: true
+Owners: openssh-server
+Flags: seen
+
+Name: ssh/vulnerable_host_keys
+Template: ssh/vulnerable_host_keys
+Owners: openssh-server
 
 Name: sysv-rc/convert-legacy
 Template: sysv-rc/convert-legacy
@@ -560,7 +595,7 @@ Owners: sysv-rc
 
 Name: tzdata/Areas
 Template: tzdata/Areas
-Value: Etc
+Value: US
 Owners: tzdata
 Flags: seen
 
@@ -616,7 +651,9 @@ Owners: tzdata
 
 Name: tzdata/Zones/US
 Template: tzdata/Zones/US
+Value: Eastern
 Owners: tzdata
+Flags: seen
 
 Name: ucf/changeprompt
 Template: ucf/changeprompt
@@ -637,6 +674,23 @@ Owners: ucf
 Name: ucf/title
 Template: ucf/title
 Owners: ucf
+
+Name: ufw/allow_custom_ports
+Template: ufw/allow_custom_ports
+Owners: ufw
+
+Name: ufw/allow_known_ports
+Template: ufw/allow_known_ports
+Owners: ufw
+
+Name: ufw/enable
+Template: ufw/enable
+Value: false
+Owners: ufw
+
+Name: ufw/existing_configuration
+Template: ufw/existing_configuration
+Owners: ufw
 
 Name: user-setup/allow-password-empty
 Template: user-setup/allow-password-empty

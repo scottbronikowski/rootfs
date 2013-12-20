@@ -1,0 +1,284 @@
+=head1 NAME
+
+Gtk2::Clipboard - wrapper for GtkClipboard
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Clipboard
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 $clipboard-E<gt>B<set_can_store> (...)
+
+=over
+
+=item * ... (list) of Gtk2::TargetEntry's
+
+=back
+
+
+
+Since: gtk+ 2.6
+
+=head2 $clipboard-E<gt>B<clear> 
+
+=head2 display = $clipboard-E<gt>B<get_display> 
+
+Since: gtk+ 2.2
+
+=head2 clipboard = Gtk2::Clipboard-E<gt>B<get_for_display> ($display, $selection)
+
+=over
+
+=item * $display (Gtk2::Gdk::Display) 
+
+=item * $selection (Gtk2::Gdk::Atom) 
+
+=back
+
+Since: gtk+ 2.2
+
+=head2 clipboard = Gtk2::Clipboard-E<gt>B<get> ($selection)
+
+=over
+
+=item * $selection (Gtk2::Gdk::Atom) 
+
+=back
+
+=head2 $clipboard-E<gt>B<set_image> ($pixbuf)
+
+=over
+
+=item * $pixbuf (Gtk2::Gdk::Pixbuf) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 object = $clipboard-E<gt>B<get_owner> 
+
+=head2 $clipboard-E<gt>B<request_contents> ($target, $callback, $user_data=undef)
+
+=over
+
+=item * $target (Gtk2::Gdk::Atom) 
+
+=item * $callback (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+=head2 $clipboard-E<gt>B<request_image> ($callback, $user_data=undef)
+
+=over
+
+=item * $callback (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 $clipboard-E<gt>B<request_rich_text> ($buffer, $callback, $user_data=undef)
+
+=over
+
+=item * $buffer (Gtk2::TextBuffer) 
+
+=item * $callback (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 $clipboard-E<gt>B<request_targets> ($callback, $user_data=undef)
+
+=over
+
+=item * $callback (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 $clipboard-E<gt>B<request_text> ($callback, $user_data=undef)
+
+=over
+
+=item * $callback (scalar) 
+
+=item * $user_data (scalar) 
+
+=back
+
+=head2 $clipboard-E<gt>B<request_uris> ($func, $data=undef)
+
+=over
+
+=item * $func (scalar) 
+
+=item * $data (scalar) 
+
+=back
+
+Since: gtk+ 2.14
+
+=head2 $clipboard-E<gt>B<store> 
+
+Since: gtk+ 2.6
+
+=head2 $clipboard-E<gt>B<set_text> ($text)
+
+=over
+
+=item * $text (string) 
+
+=back
+
+=head2 selectiondata or undef = $clipboard-E<gt>B<wait_for_contents> ($target)
+
+=over
+
+=item * $target (Gtk2::Gdk::Atom) 
+
+=back
+
+=head2 pixbuf or undef = $clipboard-E<gt>B<wait_for_image> 
+
+Since: gtk+ 2.6
+
+=head2 list = $clipboard-E<gt>B<wait_for_rich_text> ($buffer)
+
+=over
+
+=item * $buffer (Gtk2::TextBuffer) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 list = $clipboard-E<gt>B<wait_for_targets> 
+
+Returns a list of GdkAtom's.
+
+Since: gtk+ 2.4
+
+=head2 string = $clipboard-E<gt>B<wait_for_text> 
+
+=head2 scalar = $clipboard-E<gt>B<wait_for_uris> 
+
+Since: gtk+ 2.14
+
+=head2 boolean = $clipboard-E<gt>B<wait_is_image_available> 
+
+Since: gtk+ 2.6
+
+=head2 boolean = $clipboard-E<gt>B<wait_is_rich_text_available> ($buffer)
+
+=over
+
+=item * $buffer (Gtk2::TextBuffer) 
+
+=back
+
+Since: gtk+ 2.10
+
+=head2 boolean = $clipboard-E<gt>B<wait_is_target_available> ($target)
+
+=over
+
+=item * $target (Gtk2::Gdk::Atom) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 boolean = $clipboard-E<gt>B<wait_is_text_available> 
+
+=head2 boolean = $clipboard-E<gt>B<wait_is_uris_available> 
+
+Since: gtk+ 2.14
+
+=head2 boolean = $clipboard-E<gt>B<set_with_data> ($get_func, $clear_func, $user_data, ...)
+
+=over
+
+=item * $get_func (scalar) 
+
+=item * $clear_func (scalar) 
+
+=item * $user_data (scalar) 
+
+=item * ... (list) of Gtk2::TargetEntry's
+
+=back
+
+
+
+=head2 boolean = $clipboard-E<gt>B<set_with_owner> ($get_func, $clear_func, $owner, ...)
+
+=over
+
+=item * $get_func (scalar) 
+
+=item * $clear_func (scalar) 
+
+=item * $owner (Glib::Object) 
+
+=item * ... (list) of Gtk2::TargetEntry's
+
+=back
+
+
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<owner-change> (Gtk2::Clipboard, Gtk2::Gdk::Event)
+
+=back
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

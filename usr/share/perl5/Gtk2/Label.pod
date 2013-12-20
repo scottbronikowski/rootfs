@@ -1,0 +1,483 @@
+=head1 NAME
+
+Gtk2::Label - wrapper for GtkLabel
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Misc
+                      +----Gtk2::Label
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::Label-E<gt>B<new> ($str=undef)
+
+=over
+
+=item * $str (string or undef) 
+
+=back
+
+=head2 widget = Gtk2::Label-E<gt>B<new_with_mnemonic> ($str)
+
+=over
+
+=item * $str (string) 
+
+=back
+
+=head2 double = $label-E<gt>B<get_angle> 
+
+Since: gtk+ 2.6
+
+=head2 $label-E<gt>B<set_angle> ($angle)
+
+=over
+
+=item * $angle (double) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 attrlist = $label-E<gt>B<get_attributes> 
+
+=head2 $label-E<gt>B<set_attributes> ($attrs)
+
+=over
+
+=item * $attrs (Pango::AttrList) 
+
+=back
+
+=head2 ellipsizemode = $label-E<gt>B<get_ellipsize> 
+
+Since: gtk+ 2.6
+
+=head2 $label-E<gt>B<set_ellipsize> ($mode)
+
+=over
+
+=item * $mode (Pango::EllipsizeMode) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 justification = $label-E<gt>B<get_justify> 
+
+=head2 $label-E<gt>B<set_justify> ($jtype)
+
+=over
+
+=item * $jtype (Gtk2::Justification) 
+
+=back
+
+=head2 string = $label-E<gt>B<get_label> 
+
+=head2 $label-E<gt>B<set_label> ($str)
+
+=over
+
+=item * $str (string) 
+
+=back
+
+=head2 layout = $label-E<gt>B<get_layout> 
+
+=head2 (x, y) = $label-E<gt>B<get_layout_offsets> 
+
+=head2 boolean = $label-E<gt>B<get_line_wrap> 
+
+=head2 wrapmode = $label-E<gt>B<get_line_wrap_mode> 
+
+Since: gtk+ 2.9
+
+=head2 $label-E<gt>B<set_line_wrap_mode> ($wrap_mode)
+
+=over
+
+=item * $wrap_mode (Pango::WrapMode) 
+
+=back
+
+Since: gtk+ 2.9
+
+=head2 $label-E<gt>B<set_line_wrap> ($wrap)
+
+=over
+
+=item * $wrap (boolean) 
+
+=back
+
+=head2 $label-E<gt>B<set_markup> ($str)
+
+=over
+
+=item * $str (string) 
+
+=back
+
+=head2 $label-E<gt>B<set_markup_with_mnemonic> ($str)
+
+=over
+
+=item * $str (string) 
+
+=back
+
+=head2 integer = $label-E<gt>B<get_max_width_chars> 
+
+Since: gtk+ 2.6
+
+=head2 $label-E<gt>B<set_max_width_chars> ($n_chars)
+
+=over
+
+=item * $n_chars (integer) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 integer = $label-E<gt>B<get_mnemonic_keyval> 
+
+=head2 widget or undef = $label-E<gt>B<get_mnemonic_widget> 
+
+=head2 $label-E<gt>B<set_mnemonic_widget> ($widget)
+
+=over
+
+=item * $widget (Gtk2::Widget or undef) 
+
+=back
+
+=head2 $label-E<gt>B<set_pattern> ($pattern)
+
+=over
+
+=item * $pattern (string) 
+
+=back
+
+=head2 $label-E<gt>B<select_region> ($start_offset=-1, $end_offset=-1)
+
+=over
+
+=item * $start_offset (integer) 
+
+=item * $end_offset (integer) 
+
+=back
+
+=head2 boolean = $label-E<gt>B<get_selectable> 
+
+=head2 $label-E<gt>B<set_selectable> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 (start, end) = $label->B<get_selection_bounds>
+
+Returns integers, start and end.
+
+=head2 boolean = $label-E<gt>B<get_single_line_mode> 
+
+Since: gtk+ 2.6
+
+=head2 $label-E<gt>B<set_single_line_mode> ($single_line_mode)
+
+=over
+
+=item * $single_line_mode (boolean) 
+
+=back
+
+Since: gtk+ 2.6
+
+=head2 string or undef = $label-E<gt>B<get_text> 
+
+=head2 $label-E<gt>B<set_text> ($str)
+
+=over
+
+=item * $str (string or undef) 
+
+=back
+
+=head2 $label-E<gt>B<set_text_with_mnemonic> ($str)
+
+=over
+
+=item * $str (string) 
+
+=back
+
+=head2 boolean = $label-E<gt>B<get_use_markup> 
+
+=head2 $label-E<gt>B<set_use_markup> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 boolean = $label-E<gt>B<get_use_underline> 
+
+=head2 $label-E<gt>B<set_use_underline> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 integer = $label-E<gt>B<get_width_chars> 
+
+Since: gtk+ 2.6
+
+=head2 $label-E<gt>B<set_width_chars> ($n_chars)
+
+=over
+
+=item * $n_chars (integer) 
+
+=back
+
+Since: gtk+ 2.6
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'angle' (double : default 0 : readable / writable / private)
+
+Angle at which the label is rotated
+
+=item 'attributes' (Pango::AttrList : default undef : readable / writable / private)
+
+A list of style attributes to apply to the text of the label
+
+=item 'cursor-position' (integer : default 0 : readable / private)
+
+The current position of the insertion cursor in chars
+
+=item 'ellipsize' (Pango::EllipsizeMode : default "none" : readable / writable / private)
+
+The preferred place to ellipsize the string, if the label does not have enough room to display the entire string
+
+=item 'justify' (Gtk2::Justification : default "left" : readable / writable / private)
+
+The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkMisc::xalign for that
+
+=item 'label' (string : default "" : readable / writable / private)
+
+The text of the label
+
+=item 'max-width-chars' (integer : default -1 : readable / writable / private)
+
+The desired maximum width of the label, in characters
+
+=item 'mnemonic-keyval' (Glib::UInt : default 0xFFFFFF VoidSymbol : readable / private)
+
+The mnemonic accelerator key for this label
+
+=item 'mnemonic-widget' (Gtk2::Widget : default undef : readable / writable / private)
+
+The widget to be activated when the label's mnemonic key is pressed
+
+=item 'pattern' (string : default undef : writable / private)
+
+A string with _ characters in positions correspond to characters in the text to underline
+
+=item 'selectable' (boolean : default false : readable / writable / private)
+
+Whether the label text can be selected with the mouse
+
+=item 'selection-bound' (integer : default 0 : readable / private)
+
+The position of the opposite end of the selection from the cursor in chars
+
+=item 'single-line-mode' (boolean : default false : readable / writable / private)
+
+Whether the label is in single line mode
+
+=item 'track-visited-links' (boolean : default true : readable / writable / private)
+
+Whether visited links should be tracked
+
+=item 'use-markup' (boolean : default false : readable / writable / private)
+
+The text of the label includes XML markup. See pango_parse_markup()
+
+=item 'use-underline' (boolean : default false : readable / writable / private)
+
+If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key
+
+=item 'width-chars' (integer : default -1 : readable / writable / private)
+
+The desired width of the label, in characters
+
+=item 'wrap' (boolean : default false : readable / writable / private)
+
+If set, wrap lines if the text becomes too wide
+
+=item 'wrap-mode' (Pango::WrapMode : default "word" : readable / writable / private)
+
+If wrap is set, controls how linewrapping is done
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<move-cursor> (Gtk2::Label, Gtk2::MovementStep, integer, boolean)
+
+=item B<copy-clipboard> (Gtk2::Label)
+
+=item B<populate-popup> (Gtk2::Label, Gtk2::Menu)
+
+=item B<activate-current-link> (Gtk2::Label)
+
+=item boolean = B<activate-link> (Gtk2::Label, string)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::Justification
+
+
+
+=over
+
+=item * 'left' / 'GTK_JUSTIFY_LEFT'
+
+=item * 'right' / 'GTK_JUSTIFY_RIGHT'
+
+=item * 'center' / 'GTK_JUSTIFY_CENTER'
+
+=item * 'fill' / 'GTK_JUSTIFY_FILL'
+
+=back
+
+
+=head2 enum Gtk2::MovementStep
+
+=over
+
+=item * 'logical-positions' / 'GTK_MOVEMENT_LOGICAL_POSITIONS'
+
+=item * 'visual-positions' / 'GTK_MOVEMENT_VISUAL_POSITIONS'
+
+=item * 'words' / 'GTK_MOVEMENT_WORDS'
+
+=item * 'display-lines' / 'GTK_MOVEMENT_DISPLAY_LINES'
+
+=item * 'display-line-ends' / 'GTK_MOVEMENT_DISPLAY_LINE_ENDS'
+
+=item * 'paragraphs' / 'GTK_MOVEMENT_PARAGRAPHS'
+
+=item * 'paragraph-ends' / 'GTK_MOVEMENT_PARAGRAPH_ENDS'
+
+=item * 'pages' / 'GTK_MOVEMENT_PAGES'
+
+=item * 'buffer-ends' / 'GTK_MOVEMENT_BUFFER_ENDS'
+
+=item * 'horizontal-pages' / 'GTK_MOVEMENT_HORIZONTAL_PAGES'
+
+=back
+
+
+=head2 enum Pango::EllipsizeMode
+
+=over
+
+=item * 'none' / 'PANGO_ELLIPSIZE_NONE'
+
+=item * 'start' / 'PANGO_ELLIPSIZE_START'
+
+=item * 'middle' / 'PANGO_ELLIPSIZE_MIDDLE'
+
+=item * 'end' / 'PANGO_ELLIPSIZE_END'
+
+=back
+
+
+=head2 enum Pango::WrapMode
+
+=over
+
+=item * 'word' / 'PANGO_WRAP_WORD'
+
+=item * 'char' / 'PANGO_WRAP_CHAR'
+
+=item * 'word-char' / 'PANGO_WRAP_WORD_CHAR'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Misc>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,342 @@
+=head1 NAME
+
+Gtk2::SpinButton - wrapper for GtkSpinButton
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Entry
+                      +----Gtk2::SpinButton
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+  Gtk2::Editable
+  Gtk2::CellEditable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::SpinButton-E<gt>B<new> ($adjustment, $climb_rate, $digits)
+
+=over
+
+=item * $adjustment (Gtk2::Adjustment) 
+
+=item * $climb_rate (double) 
+
+=item * $digits (integer) 
+
+=back
+
+=head2 widget = Gtk2::SpinButton-E<gt>B<new_with_range> ($min, $max, $step)
+
+=over
+
+=item * $min (double) 
+
+=item * $max (double) 
+
+=item * $step (double) 
+
+=back
+
+=head2 adjustment = $spin_button-E<gt>B<get_adjustment> 
+
+=head2 $spin_button-E<gt>B<set_adjustment> ($adjustment)
+
+=over
+
+=item * $adjustment (Gtk2::Adjustment) 
+
+=back
+
+=head2 $spin_button-E<gt>B<configure> ($adjustment, $climb_rate, $digits)
+
+=over
+
+=item * $adjustment (Gtk2::Adjustment) 
+
+=item * $climb_rate (double) 
+
+=item * $digits (integer) 
+
+=back
+
+=head2 integer = $spin_button-E<gt>B<get_digits> 
+
+=head2 $spin_button-E<gt>B<set_digits> ($digits)
+
+=over
+
+=item * $digits (integer) 
+
+=back
+
+=head2 (step, page) = $spin_button-E<gt>B<get_increments> 
+
+=head2 $spin_button-E<gt>B<set_increments> ($step, $page)
+
+=over
+
+=item * $step (double) 
+
+=item * $page (double) 
+
+=back
+
+=head2 boolean = $spin_button-E<gt>B<get_numeric> 
+
+=head2 $spin_button-E<gt>B<set_numeric> ($numeric)
+
+=over
+
+=item * $numeric (boolean) 
+
+=back
+
+=head2 (min, max) = $spin_button-E<gt>B<get_range> 
+
+=head2 $spin_button-E<gt>B<set_range> ($min, $max)
+
+=over
+
+=item * $min (double) 
+
+=item * $max (double) 
+
+=back
+
+=head2 boolean = $spin_button-E<gt>B<get_snap_to_ticks> 
+
+=head2 $spin_button-E<gt>B<set_snap_to_ticks> ($snap_to_ticks)
+
+=over
+
+=item * $snap_to_ticks (boolean) 
+
+=back
+
+=head2 $spin_button-E<gt>B<spin> ($direction, $increment)
+
+=over
+
+=item * $direction (Gtk2::SpinType) 
+
+=item * $increment (double) 
+
+=back
+
+=head2 $spin_button-E<gt>B<update> 
+
+=head2 spinbuttonupdatepolicy = $spin_button-E<gt>B<get_update_policy> 
+
+=head2 $spin_button-E<gt>B<set_update_policy> ($policy)
+
+=over
+
+=item * $policy (Gtk2::SpinButtonUpdatePolicy) 
+
+=back
+
+=head2 integer = $spin_button-E<gt>B<get_value_as_int> 
+
+=head2 double = $spin_button-E<gt>B<get_value> 
+
+=head2 $spin_button-E<gt>B<set_value> ($value)
+
+=over
+
+=item * $value (double) 
+
+=back
+
+=head2 boolean = $spin_button-E<gt>B<get_wrap> 
+
+=head2 $spin_button-E<gt>B<set_wrap> ($wrap)
+
+=over
+
+=item * $wrap (boolean) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'adjustment' (Gtk2::Adjustment : default undef : readable / writable / private)
+
+The adjustment that holds the value of the spinbutton
+
+=item 'climb-rate' (double : default 0 : readable / writable / private)
+
+The acceleration rate when you hold down a button
+
+=item 'digits' (Glib::UInt : default 0 : readable / writable / private)
+
+The number of decimal places to display
+
+=item 'numeric' (boolean : default false : readable / writable / private)
+
+Whether non-numeric characters should be ignored
+
+=item 'snap-to-ticks' (boolean : default false : readable / writable / private)
+
+Whether erroneous values are automatically changed to a spin button's nearest step increment
+
+=item 'update-policy' (Gtk2::SpinButtonUpdatePolicy : default "always" : readable / writable / private)
+
+Whether the spin button should update always, or only when the value is legal
+
+=item 'value' (double : default 0 : readable / writable / private)
+
+Reads the current value, or sets a new value
+
+=item 'wrap' (boolean : default false : readable / writable / private)
+
+Whether a spin button should wrap upon reaching its limits
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<value-changed> (Gtk2::SpinButton)
+
+=item B<change-value> (Gtk2::SpinButton, Gtk2::ScrollType)
+
+=item integer = B<input> (Gtk2::SpinButton, gpointer)
+
+=item boolean = B<output> (Gtk2::SpinButton)
+
+=item B<wrapped> (Gtk2::SpinButton)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::ScrollType
+
+=over
+
+=item * 'none' / 'GTK_SCROLL_NONE'
+
+=item * 'jump' / 'GTK_SCROLL_JUMP'
+
+=item * 'step-backward' / 'GTK_SCROLL_STEP_BACKWARD'
+
+=item * 'step-forward' / 'GTK_SCROLL_STEP_FORWARD'
+
+=item * 'page-backward' / 'GTK_SCROLL_PAGE_BACKWARD'
+
+=item * 'page-forward' / 'GTK_SCROLL_PAGE_FORWARD'
+
+=item * 'step-up' / 'GTK_SCROLL_STEP_UP'
+
+=item * 'step-down' / 'GTK_SCROLL_STEP_DOWN'
+
+=item * 'page-up' / 'GTK_SCROLL_PAGE_UP'
+
+=item * 'page-down' / 'GTK_SCROLL_PAGE_DOWN'
+
+=item * 'step-left' / 'GTK_SCROLL_STEP_LEFT'
+
+=item * 'step-right' / 'GTK_SCROLL_STEP_RIGHT'
+
+=item * 'page-left' / 'GTK_SCROLL_PAGE_LEFT'
+
+=item * 'page-right' / 'GTK_SCROLL_PAGE_RIGHT'
+
+=item * 'start' / 'GTK_SCROLL_START'
+
+=item * 'end' / 'GTK_SCROLL_END'
+
+=back
+
+
+=head2 enum Gtk2::SpinButtonUpdatePolicy
+
+=over
+
+=item * 'always' / 'GTK_UPDATE_ALWAYS'
+
+=item * 'if-valid' / 'GTK_UPDATE_IF_VALID'
+
+=back
+
+
+=head2 enum Gtk2::SpinType
+
+=over
+
+=item * 'step-forward' / 'GTK_SPIN_STEP_FORWARD'
+
+=item * 'step-backward' / 'GTK_SPIN_STEP_BACKWARD'
+
+=item * 'page-forward' / 'GTK_SPIN_PAGE_FORWARD'
+
+=item * 'page-backward' / 'GTK_SPIN_PAGE_BACKWARD'
+
+=item * 'home' / 'GTK_SPIN_HOME'
+
+=item * 'end' / 'GTK_SPIN_END'
+
+=item * 'user-defined' / 'GTK_SPIN_USER_DEFINED'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Entry>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

@@ -1,0 +1,170 @@
+=head1 NAME
+
+Gtk2::Object - wrapper for GtkObject
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 object = Gtk2::Object-E<gt>B<new> ($object_class, ...)
+
+=over
+
+=item * $object_class (string) package name of object to create
+
+=item * ... (list) of property-name => value pairs
+
+=back
+
+Create a new object of type I<$object_class>, with some optional initial
+property values.  You may see this used in some code as Gtk2::Widget->new,
+e.g.
+
+ $window = Gtk2::Widget->new ('Gtk2::Window',
+                              title => 'something cool',
+                              allow_grow => TRUE);
+
+This is really just a convenience function that wraps Glib::Object->new.
+
+=head2 boolean = $object-E<gt>B<bindings_activate> ($keyval, $modifiers)
+
+=over
+
+=item * $keyval (integer) 
+
+=item * $modifiers (Gtk2::Gdk::ModifierType) 
+
+=back
+
+Although C<activate> and C<activate_event> are C<Gtk2::Object>
+methods, as of Gtk 2.12 they will only actually invoke signals on a
+C<Gtk2::Widget>.  On a C<Gtk2::Object> the return is always false (no
+binding activated).
+
+=head2 boolean = $object-E<gt>B<bindings_activate_event> ($event)
+
+=over
+
+=item * $event (Gtk2::Gdk::Event) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 $object-E<gt>B<destroy> 
+
+This is an explicit destroy --- NOT the auto destroy; Gtk2::Object
+inherits that from Glib::Object!
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'user-data' (gpointer : default 0 : readable / writable / private)
+
+Anonymous User Data Pointer
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<destroy> (Gtk2::Object)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 flags Gtk2::Gdk::ModifierType
+
+=over
+
+=item * 'shift-mask' / 'GDK_SHIFT_MASK'
+
+=item * 'lock-mask' / 'GDK_LOCK_MASK'
+
+=item * 'control-mask' / 'GDK_CONTROL_MASK'
+
+=item * 'mod1-mask' / 'GDK_MOD1_MASK'
+
+=item * 'mod2-mask' / 'GDK_MOD2_MASK'
+
+=item * 'mod3-mask' / 'GDK_MOD3_MASK'
+
+=item * 'mod4-mask' / 'GDK_MOD4_MASK'
+
+=item * 'mod5-mask' / 'GDK_MOD5_MASK'
+
+=item * 'button1-mask' / 'GDK_BUTTON1_MASK'
+
+=item * 'button2-mask' / 'GDK_BUTTON2_MASK'
+
+=item * 'button3-mask' / 'GDK_BUTTON3_MASK'
+
+=item * 'button4-mask' / 'GDK_BUTTON4_MASK'
+
+=item * 'button5-mask' / 'GDK_BUTTON5_MASK'
+
+=item * 'super-mask' / 'GDK_SUPER_MASK'
+
+=item * 'hyper-mask' / 'GDK_HYPER_MASK'
+
+=item * 'meta-mask' / 'GDK_META_MASK'
+
+=item * 'release-mask' / 'GDK_RELEASE_MASK'
+
+=item * 'modifier-mask' / 'GDK_MODIFIER_MASK'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

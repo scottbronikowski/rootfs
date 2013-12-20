@@ -36,7 +36,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -81,6 +81,22 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias lla='ls -lhA'
+
+alias xtg='xterm -bg black -fg green2 &'
+alias xtw='xterm -bg black -fg white &'
+alias xty='xterm -bg black -fg yellow2 &'
+alias xto='xterm -bg black -fg orange2 &'
+alias xtr='xterm -bg black -fg red2 &'
+alias xtm='xterm -bg black -fg magenta2 &'
+
+alias sshksu='ssh scottb77@cislinux.cis.ksu.edu -p 22 -D 8080'
+alias sshhome='ssh scott@scottbronikowski-2.yourhda.com -p 2222'
+alias sshqobi='ssh -Y sbroniko@upplysingaoflun.ecn.purdue.edu'
+alias sshece13='ssh -Y sbroniko@ecelinux13.ecn.purdue.edu'
+alias sshmin='ssh -Y sbroniko@min.ecn.purdue.edu'
+alias sshece17='ssh -Y sbroniko@ecelinux17.ecn.purdue.edu'
+alias sshseykhl='ssh -Y sbroniko@seykhl.ecn.purdue.edu'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like

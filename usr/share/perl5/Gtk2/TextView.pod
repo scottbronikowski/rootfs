@@ -1,0 +1,710 @@
+=head1 NAME
+
+Gtk2::TextView - wrapper for GtkTextView
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::TextView
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::TextView-E<gt>B<new> 
+
+=head2 widget = Gtk2::TextView-E<gt>B<new_with_buffer> ($buffer)
+
+=over
+
+=item * $buffer (Gtk2::TextBuffer) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<get_accepts_tab> 
+
+Since: gtk+ 2.4
+
+=head2 $text_view-E<gt>B<set_accepts_tab> ($accepts_tab)
+
+=over
+
+=item * $accepts_tab (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 $text_view-E<gt>B<add_child_at_anchor> ($child, $anchor)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $anchor (Gtk2::TextChildAnchor) 
+
+=back
+
+=head2 $text_view-E<gt>B<add_child_in_window> ($child, $which_window, $xpos, $ypos)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $which_window (Gtk2::TextWindowType) 
+
+=item * $xpos (integer) 
+
+=item * $ypos (integer) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<backward_display_line> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<backward_display_line_start> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=back
+
+=head2 integer = $text_view-E<gt>B<get_border_window_size> ($type)
+
+=over
+
+=item * $type (Gtk2::TextWindowType) 
+
+=back
+
+=head2 $text_view-E<gt>B<set_border_window_size> ($type, $size)
+
+=over
+
+=item * $type (Gtk2::TextWindowType) 
+
+=item * $size (integer) 
+
+=back
+
+=head2 textbuffer = $text_view-E<gt>B<get_buffer> 
+
+=head2 $text_view-E<gt>B<set_buffer> ($buffer)
+
+=over
+
+=item * $buffer (Gtk2::TextBuffer) 
+
+=back
+
+=head2 (window_x, window_y) = $text_view-E<gt>B<buffer_to_window_coords> ($win, $buffer_x, $buffer_y)
+
+=over
+
+=item * $win (Gtk2::TextWindowType) 
+
+=item * $buffer_x (integer) 
+
+=item * $buffer_y (integer) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<get_cursor_visible> 
+
+=head2 $text_view-E<gt>B<set_cursor_visible> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 textattributes = $text_view-E<gt>B<get_default_attributes> 
+
+=head2 boolean = $text_view-E<gt>B<get_editable> 
+
+=head2 $text_view-E<gt>B<set_editable> ($setting)
+
+=over
+
+=item * $setting (boolean) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<forward_display_line> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<forward_display_line_end> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=back
+
+=head2 integer = $text_view-E<gt>B<get_indent> 
+
+=head2 $text_view-E<gt>B<set_indent> ($indent)
+
+=over
+
+=item * $indent (integer) 
+
+=back
+
+=head2 textiter = $text_view-E<gt>B<get_iter_at_location> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+=head2 ($iter, $trailing) = $text_view->B<get_iter_at_position> ($x, $y)
+
+=head2 $iter = $text_view->B<get_iter_at_position> ($x, $y)
+
+=over
+
+=item * $x (integer) 
+
+=item * $y (integer) 
+
+=back
+
+Retrieves the iterator pointing to the character at buffer coordinates x and y.
+Buffer coordinates are coordinates for the entire buffer, not just the
+currently-displayed portion.  If you have coordinates from an event, you
+have to convert those to buffer coordinates with
+C<< $text_view->window_to_buffer_coords() >>.
+
+Note that this is different from C<< $text_view->get_iter_at_location() >>,
+which returns cursor locations, i.e. positions between characters.
+
+Since: gtk+ 2.6
+
+=head2 rectangle = $text_view-E<gt>B<get_iter_location> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=back
+
+=head2 justification = $text_view-E<gt>B<get_justification> 
+
+=head2 $text_view-E<gt>B<set_justification> ($justification)
+
+=over
+
+=item * $justification (Gtk2::Justification) 
+
+=back
+
+=head2 integer = $text_view-E<gt>B<get_left_margin> 
+
+=head2 $text_view-E<gt>B<set_left_margin> ($left_margin)
+
+=over
+
+=item * $left_margin (integer) 
+
+=back
+
+=head2 (target_iter, line_top) = $text_view->B<get_line_at_y> ($y)
+
+=over
+
+=item * $y (integer) 
+
+=back
+
+
+
+=head2 (y, height) = $text_view-E<gt>B<get_line_yrange> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=back
+
+=head2 $text_view-E<gt>B<move_child> ($child, $xpos, $ypos)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=item * $xpos (integer) 
+
+=item * $ypos (integer) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<move_mark_onscreen> ($mark)
+
+=over
+
+=item * $mark (Gtk2::TextMark) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<move_visually> ($iter, $count)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $count (integer) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<get_overwrite> 
+
+Since: gtk+ 2.4
+
+=head2 $text_view-E<gt>B<set_overwrite> ($overwrite)
+
+=over
+
+=item * $overwrite (boolean) 
+
+=back
+
+Since: gtk+ 2.4
+
+=head2 integer = $text_view-E<gt>B<get_pixels_above_lines> 
+
+=head2 $text_view-E<gt>B<set_pixels_above_lines> ($pixels_above_lines)
+
+=over
+
+=item * $pixels_above_lines (integer) 
+
+=back
+
+=head2 integer = $text_view-E<gt>B<get_pixels_below_lines> 
+
+=head2 $text_view-E<gt>B<set_pixels_below_lines> ($pixels_below_lines)
+
+=over
+
+=item * $pixels_below_lines (integer) 
+
+=back
+
+=head2 integer = $text_view-E<gt>B<get_pixels_inside_wrap> 
+
+=head2 $text_view-E<gt>B<set_pixels_inside_wrap> ($pixels_inside_wrap)
+
+=over
+
+=item * $pixels_inside_wrap (integer) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<place_cursor_onscreen> 
+
+=head2 integer = $text_view-E<gt>B<get_right_margin> 
+
+=head2 $text_view-E<gt>B<set_right_margin> ($right_margin)
+
+=over
+
+=item * $right_margin (integer) 
+
+=back
+
+=head2 $text_view-E<gt>B<scroll_mark_onscreen> ($mark)
+
+=over
+
+=item * $mark (Gtk2::TextMark) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<scroll_to_iter> ($iter, $within_margin, $use_align, $xalign, $yalign)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=item * $within_margin (double) 
+
+=item * $use_align (boolean) 
+
+=item * $xalign (double) 
+
+=item * $yalign (double) 
+
+=back
+
+=head2 $text_view-E<gt>B<scroll_to_mark> ($mark, $within_margin, $use_align, $xalign, $yalign)
+
+=over
+
+=item * $mark (Gtk2::TextMark) 
+
+=item * $within_margin (double) 
+
+=item * $use_align (boolean) 
+
+=item * $xalign (double) 
+
+=item * $yalign (double) 
+
+=back
+
+=head2 boolean = $text_view-E<gt>B<starts_display_line> ($iter)
+
+=over
+
+=item * $iter (Gtk2::TextIter) 
+
+=back
+
+=head2 tabarray = $text_view-E<gt>B<get_tabs> 
+
+=head2 $text_view-E<gt>B<set_tabs> ($tabs)
+
+=over
+
+=item * $tabs (Pango::TabArray) 
+
+=back
+
+=head2 rectangle = $text_view-E<gt>B<get_visible_rect> 
+
+=head2 window = $text_view-E<gt>B<get_window> ($win)
+
+=over
+
+=item * $win (Gtk2::TextWindowType) 
+
+=back
+
+=head2 (buffer_x, buffer_y) = $text_view-E<gt>B<window_to_buffer_coords> ($win, $window_x, $window_y)
+
+=over
+
+=item * $win (Gtk2::TextWindowType) 
+
+=item * $window_x (integer) 
+
+=item * $window_y (integer) 
+
+=back
+
+=head2 textwindowtype = $text_view-E<gt>B<get_window_type> ($window)
+
+=over
+
+=item * $window (Gtk2::Gdk::Window) 
+
+=back
+
+=head2 wrapmode = $text_view-E<gt>B<get_wrap_mode> 
+
+=head2 $text_view-E<gt>B<set_wrap_mode> ($wrap_mode)
+
+=over
+
+=item * $wrap_mode (Gtk2::WrapMode) 
+
+=back
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'accepts-tab' (boolean : default true : readable / writable / private)
+
+Whether Tab will result in a tab character being entered
+
+=item 'buffer' (Gtk2::TextBuffer : default undef : readable / writable / private)
+
+The buffer which is displayed
+
+=item 'cursor-visible' (boolean : default true : readable / writable / private)
+
+If the insertion cursor is shown
+
+=item 'editable' (boolean : default true : readable / writable / private)
+
+Whether the text can be modified by the user
+
+=item 'im-module' (string : default undef : readable / writable / private)
+
+Which IM module should be used
+
+=item 'indent' (integer : default 0 : readable / writable / private)
+
+Amount to indent the paragraph, in pixels
+
+=item 'justification' (Gtk2::Justification : default "left" : readable / writable / private)
+
+Left, right, or center justification
+
+=item 'left-margin' (integer : default 0 : readable / writable / private)
+
+Width of the left margin in pixels
+
+=item 'overwrite' (boolean : default false : readable / writable / private)
+
+Whether entered text overwrites existing contents
+
+=item 'pixels-above-lines' (integer : default 0 : readable / writable / private)
+
+Pixels of blank space above paragraphs
+
+=item 'pixels-below-lines' (integer : default 0 : readable / writable / private)
+
+Pixels of blank space below paragraphs
+
+=item 'pixels-inside-wrap' (integer : default 0 : readable / writable / private)
+
+Pixels of blank space between wrapped lines in a paragraph
+
+=item 'right-margin' (integer : default 0 : readable / writable / private)
+
+Width of the right margin in pixels
+
+=item 'tabs' (Pango::TabArray : default undef : readable / writable / private)
+
+Custom tabs for this text
+
+=item 'wrap-mode' (Gtk2::WrapMode : default "none" : readable / writable / private)
+
+Whether to wrap lines never, at word boundaries, or at character boundaries
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<preedit-changed> (Gtk2::TextView, string)
+
+=item B<set-scroll-adjustments> (Gtk2::TextView, Gtk2::Adjustment, Gtk2::Adjustment)
+
+=item B<select-all> (Gtk2::TextView, boolean)
+
+=item B<move-cursor> (Gtk2::TextView, Gtk2::MovementStep, integer, boolean)
+
+=item B<page-horizontally> (Gtk2::TextView, integer, boolean)
+
+=item B<move-viewport> (Gtk2::TextView, GtkScrollStep, integer)
+
+=item B<set-anchor> (Gtk2::TextView)
+
+=item B<insert-at-cursor> (Gtk2::TextView, string)
+
+=item B<delete-from-cursor> (Gtk2::TextView, Gtk2::DeleteType, integer)
+
+=item B<backspace> (Gtk2::TextView)
+
+=item B<cut-clipboard> (Gtk2::TextView)
+
+=item B<copy-clipboard> (Gtk2::TextView)
+
+=item B<paste-clipboard> (Gtk2::TextView)
+
+=item B<toggle-overwrite> (Gtk2::TextView)
+
+=item B<populate-popup> (Gtk2::TextView, Gtk2::Menu)
+
+=item B<toggle-cursor-visible> (Gtk2::TextView)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::DeleteType
+
+=over
+
+=item * 'chars' / 'GTK_DELETE_CHARS'
+
+=item * 'word-ends' / 'GTK_DELETE_WORD_ENDS'
+
+=item * 'words' / 'GTK_DELETE_WORDS'
+
+=item * 'display-lines' / 'GTK_DELETE_DISPLAY_LINES'
+
+=item * 'display-line-ends' / 'GTK_DELETE_DISPLAY_LINE_ENDS'
+
+=item * 'paragraph-ends' / 'GTK_DELETE_PARAGRAPH_ENDS'
+
+=item * 'paragraphs' / 'GTK_DELETE_PARAGRAPHS'
+
+=item * 'whitespace' / 'GTK_DELETE_WHITESPACE'
+
+=back
+
+
+=head2 enum Gtk2::Justification
+
+=over
+
+=item * 'left' / 'GTK_JUSTIFY_LEFT'
+
+=item * 'right' / 'GTK_JUSTIFY_RIGHT'
+
+=item * 'center' / 'GTK_JUSTIFY_CENTER'
+
+=item * 'fill' / 'GTK_JUSTIFY_FILL'
+
+=back
+
+
+=head2 enum Gtk2::MovementStep
+
+=over
+
+=item * 'logical-positions' / 'GTK_MOVEMENT_LOGICAL_POSITIONS'
+
+=item * 'visual-positions' / 'GTK_MOVEMENT_VISUAL_POSITIONS'
+
+=item * 'words' / 'GTK_MOVEMENT_WORDS'
+
+=item * 'display-lines' / 'GTK_MOVEMENT_DISPLAY_LINES'
+
+=item * 'display-line-ends' / 'GTK_MOVEMENT_DISPLAY_LINE_ENDS'
+
+=item * 'paragraphs' / 'GTK_MOVEMENT_PARAGRAPHS'
+
+=item * 'paragraph-ends' / 'GTK_MOVEMENT_PARAGRAPH_ENDS'
+
+=item * 'pages' / 'GTK_MOVEMENT_PAGES'
+
+=item * 'buffer-ends' / 'GTK_MOVEMENT_BUFFER_ENDS'
+
+=item * 'horizontal-pages' / 'GTK_MOVEMENT_HORIZONTAL_PAGES'
+
+=back
+
+
+=head2 enum Gtk2::TextWindowType
+
+=over
+
+=item * 'private' / 'GTK_TEXT_WINDOW_PRIVATE'
+
+=item * 'widget' / 'GTK_TEXT_WINDOW_WIDGET'
+
+=item * 'text' / 'GTK_TEXT_WINDOW_TEXT'
+
+=item * 'left' / 'GTK_TEXT_WINDOW_LEFT'
+
+=item * 'right' / 'GTK_TEXT_WINDOW_RIGHT'
+
+=item * 'top' / 'GTK_TEXT_WINDOW_TOP'
+
+=item * 'bottom' / 'GTK_TEXT_WINDOW_BOTTOM'
+
+=back
+
+
+=head2 enum Gtk2::WrapMode
+
+=over
+
+=item * 'none' / 'GTK_WRAP_NONE'
+
+=item * 'char' / 'GTK_WRAP_CHAR'
+
+=item * 'word' / 'GTK_WRAP_WORD'
+
+=item * 'word-char' / 'GTK_WRAP_WORD_CHAR'
+
+=back
+
+
+=head2 enum GtkScrollStep
+
+=over
+
+=item * 'steps' / 'GTK_SCROLL_STEPS'
+
+=item * 'pages' / 'GTK_SCROLL_PAGES'
+
+=item * 'ends' / 'GTK_SCROLL_ENDS'
+
+=item * 'horizontal-steps' / 'GTK_SCROLL_HORIZONTAL_STEPS'
+
+=item * 'horizontal-pages' / 'GTK_SCROLL_HORIZONTAL_PAGES'
+
+=item * 'horizontal-ends' / 'GTK_SCROLL_HORIZONTAL_ENDS'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+

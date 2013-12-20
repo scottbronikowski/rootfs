@@ -1,0 +1,301 @@
+=head1 NAME
+
+Gtk2::ScrolledWindow - wrapper for GtkScrolledWindow
+
+=cut
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Glib::InitiallyUnowned
+       +----Gtk2::Object
+            +----Gtk2::Widget
+                 +----Gtk2::Container
+                      +----Gtk2::Bin
+                           +----Gtk2::ScrolledWindow
+
+
+
+=cut
+
+=head1 INTERFACES
+
+  Glib::Object::_Unregistered::AtkImplementorIface
+  Gtk2::Buildable
+
+
+
+=cut
+
+
+=head1 METHODS
+
+=head2 widget = Gtk2::ScrolledWindow-E<gt>B<new> ($hadjustment=undef, $vadjustment=undef)
+
+=over
+
+=item * $hadjustment (Gtk2::Adjustment or undef) 
+
+=item * $vadjustment (Gtk2::Adjustment or undef) 
+
+=back
+
+=head2 $scrolled_window-E<gt>B<add_with_viewport> ($child)
+
+=over
+
+=item * $child (Gtk2::Widget) 
+
+=back
+
+=head2 adjustment = $scrolled_window-E<gt>B<get_hadjustment> 
+
+=head2 $scrolled_window-E<gt>B<set_hadjustment> ($hadjustment)
+
+=over
+
+=item * $hadjustment (Gtk2::Adjustment) 
+
+=back
+
+=head2 widget or undef = $scrolled_window-E<gt>B<get_hscrollbar> 
+
+Since: gtk+ 2.8
+
+=head2 cornertype = $scrolled_window-E<gt>B<get_placement> 
+
+=head2 $scrolled_window-E<gt>B<set_placement> ($window_placement)
+
+=over
+
+=item * $window_placement (Gtk2::CornerType) 
+
+=back
+
+=head2 list = $scrolled_window-E<gt>B<get_policy> 
+
+=head2 $scrolled_window-E<gt>B<set_policy> ($hscrollbar_policy, $vscrollbar_policy)
+
+=over
+
+=item * $hscrollbar_policy (Gtk2::PolicyType) 
+
+=item * $vscrollbar_policy (Gtk2::PolicyType) 
+
+=back
+
+=head2 shadowtype = $scrolled_window-E<gt>B<get_shadow_type> 
+
+=head2 $scrolled_window-E<gt>B<set_shadow_type> ($type)
+
+=over
+
+=item * $type (Gtk2::ShadowType) 
+
+=back
+
+=head2 $scrolled_window-E<gt>B<unset_placement> 
+
+Since: gtk+ 2.10
+
+=head2 adjustment = $scrolled_window-E<gt>B<get_vadjustment> 
+
+=head2 $scrolled_window-E<gt>B<set_vadjustment> ($hadjustment)
+
+=over
+
+=item * $hadjustment (Gtk2::Adjustment) 
+
+=back
+
+=head2 widget or undef = $scrolled_window-E<gt>B<get_vscrollbar> 
+
+Since: gtk+ 2.8
+
+
+
+=cut
+
+
+=head1 PROPERTIES
+
+=over
+
+=item 'hadjustment' (Gtk2::Adjustment : default undef : readable / writable / construct / private)
+
+The GtkAdjustment for the horizontal position
+
+=item 'hscrollbar-policy' (Gtk2::PolicyType : default "always" : readable / writable / private)
+
+When the horizontal scrollbar is displayed
+
+=item 'shadow-type' (Gtk2::ShadowType : default "none" : readable / writable / private)
+
+Style of bevel around the contents
+
+=item 'vadjustment' (Gtk2::Adjustment : default undef : readable / writable / construct / private)
+
+The GtkAdjustment for the vertical position
+
+=item 'vscrollbar-policy' (Gtk2::PolicyType : default "always" : readable / writable / private)
+
+When the vertical scrollbar is displayed
+
+=item 'window-placement' (Gtk2::CornerType : default "top-left" : readable / writable / private)
+
+Where the contents are located with respect to the scrollbars. This property only takes effect if "window-placement-set" is TRUE.
+
+=item 'window-placement-set' (boolean : default false : readable / writable / private)
+
+Whether "window-placement" should be used to determine the location of the contents with respect to the scrollbars.
+
+=back
+
+
+
+=cut
+
+
+=head1 SIGNALS
+
+=over
+
+=item B<move-focus-out> (Gtk2::ScrolledWindow, Gtk2::DirectionType)
+
+=item boolean = B<scroll-child> (Gtk2::ScrolledWindow, Gtk2::ScrollType, boolean)
+
+=back
+
+
+
+=cut
+
+
+=head1 ENUMS AND FLAGS
+
+=head2 enum Gtk2::CornerType
+
+=over
+
+=item * 'top-left' / 'GTK_CORNER_TOP_LEFT'
+
+=item * 'bottom-left' / 'GTK_CORNER_BOTTOM_LEFT'
+
+=item * 'top-right' / 'GTK_CORNER_TOP_RIGHT'
+
+=item * 'bottom-right' / 'GTK_CORNER_BOTTOM_RIGHT'
+
+=back
+
+
+=head2 enum Gtk2::DirectionType
+
+=over
+
+=item * 'tab-forward' / 'GTK_DIR_TAB_FORWARD'
+
+=item * 'tab-backward' / 'GTK_DIR_TAB_BACKWARD'
+
+=item * 'up' / 'GTK_DIR_UP'
+
+=item * 'down' / 'GTK_DIR_DOWN'
+
+=item * 'left' / 'GTK_DIR_LEFT'
+
+=item * 'right' / 'GTK_DIR_RIGHT'
+
+=back
+
+
+=head2 enum Gtk2::PolicyType
+
+=over
+
+=item * 'always' / 'GTK_POLICY_ALWAYS'
+
+=item * 'automatic' / 'GTK_POLICY_AUTOMATIC'
+
+=item * 'never' / 'GTK_POLICY_NEVER'
+
+=back
+
+
+=head2 enum Gtk2::ScrollType
+
+=over
+
+=item * 'none' / 'GTK_SCROLL_NONE'
+
+=item * 'jump' / 'GTK_SCROLL_JUMP'
+
+=item * 'step-backward' / 'GTK_SCROLL_STEP_BACKWARD'
+
+=item * 'step-forward' / 'GTK_SCROLL_STEP_FORWARD'
+
+=item * 'page-backward' / 'GTK_SCROLL_PAGE_BACKWARD'
+
+=item * 'page-forward' / 'GTK_SCROLL_PAGE_FORWARD'
+
+=item * 'step-up' / 'GTK_SCROLL_STEP_UP'
+
+=item * 'step-down' / 'GTK_SCROLL_STEP_DOWN'
+
+=item * 'page-up' / 'GTK_SCROLL_PAGE_UP'
+
+=item * 'page-down' / 'GTK_SCROLL_PAGE_DOWN'
+
+=item * 'step-left' / 'GTK_SCROLL_STEP_LEFT'
+
+=item * 'step-right' / 'GTK_SCROLL_STEP_RIGHT'
+
+=item * 'page-left' / 'GTK_SCROLL_PAGE_LEFT'
+
+=item * 'page-right' / 'GTK_SCROLL_PAGE_RIGHT'
+
+=item * 'start' / 'GTK_SCROLL_START'
+
+=item * 'end' / 'GTK_SCROLL_END'
+
+=back
+
+
+=head2 enum Gtk2::ShadowType
+
+=over
+
+=item * 'none' / 'GTK_SHADOW_NONE'
+
+=item * 'in' / 'GTK_SHADOW_IN'
+
+=item * 'out' / 'GTK_SHADOW_OUT'
+
+=item * 'etched-in' / 'GTK_SHADOW_ETCHED_IN'
+
+=item * 'etched-out' / 'GTK_SHADOW_ETCHED_OUT'
+
+=back
+
+
+
+
+=cut
+
+
+=head1 SEE ALSO
+
+L<Gtk2>, L<Glib::Object>, L<Glib::InitiallyUnowned>, L<Gtk2::Object>, L<Gtk2::Widget>, L<Gtk2::Container>, L<Gtk2::Bin>
+
+
+=cut
+
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2008 by the gtk2-perl team.
+
+This software is licensed under the LGPL.  See L<Gtk2> for a full notice.
+
+
+
+=cut
+
