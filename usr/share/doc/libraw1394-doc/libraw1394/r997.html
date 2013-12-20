@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>raw1394_new_handle</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="c232.html"><LINK
+REL="PREVIOUS"
+TITLE="raw1394_errcode_to_errno"
+HREF="r953.html"><LINK
+REL="NEXT"
+TITLE="raw1394_destroy_handle"
+HREF="r1035.html"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="r953.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="r1035.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="API-raw1394-new-handle"
+></A
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_new_handle</SPAN
+></SPAN
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN1007"
+></A
+><H2
+>Name</H2
+>raw1394_new_handle&nbsp;--&nbsp;
+     create new handle
+ </DIV
+><DIV
+CLASS="refsynopsisdiv"
+><A
+NAME="AEN1010"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="funcsynopsis"
+><P
+></P
+><A
+NAME="AEN1012"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>raw1394handle_t raw1394_new_handle </CODE
+>( void);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1018"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><CODE
+CLASS="parameter"
+>void</CODE
+></DT
+><DD
+><P
+>&#13;     no arguments
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1026"
+></A
+><H2
+>Description</H2
+><P
+>&#13;   </P
+><P
+>&#13;
+   Creates and returns a new handle which can (after being set up) control one
+   port.  It is not allowed to use the same handle in multiple threads or forked
+   processes.  It is allowed to create and use multiple handles, however.  Use
+   one handle per thread which needs it in the multithreaded case.
+   </P
+><P
+>&#13;
+   The default device node is /dev/raw1394, but one can override the default
+   by setting environment variable RAW1394DEV. However, if RAW1394DEV points to
+   a non-existant or invalid device node, then it also attempts to open the
+   default device node.
+</P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1031"
+></A
+><H2
+>Returns</H2
+><P
+>&#13;   the created handle or <CODE
+CLASS="constant"
+>NULL</CODE
+> when initialization fails. In the latter
+   case errno either contains some OS specific error code or EPROTO if
+   libraw1394 and raw1394 don't support each other's protocol versions.
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="r953.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="r1035.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_errcode_to_errno</SPAN
+></SPAN
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c232.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_destroy_handle</SPAN
+></SPAN
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

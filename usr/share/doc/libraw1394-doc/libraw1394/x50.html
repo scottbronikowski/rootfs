@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Bus Management</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Short Introduction into IEEE 1394"
+HREF="c21.html"><LINK
+REL="PREVIOUS"
+TITLE="Transactions"
+HREF="x44.html"><LINK
+REL="NEXT"
+TITLE="Isochronous Transmissions"
+HREF="x56.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x44.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Short Introduction into IEEE 1394</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x56.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN50"
+>2.4. Bus Management</A
+></H1
+><P
+>&#13;	There are three basic bus service nodes defined in IEEE 1394 (higher
+	level protocols may define more): cycle master, isochronous resource
+	manager and bus manager.  These positions are contended for in and
+	shortly after the bus reset and may all be taken by a single node.  A
+	node does not have to support being any of those but if it is bus
+	manager capable it also has to be iso manager capable, if it is iso
+	manager capable it also has to be cycle master capable.
+      </P
+><P
+>&#13;	The cycle master sends 8000 cycle start packets per second, which
+	initiate an iso cycle.  Without that, no isochronous transmission is
+	possible.  Only the root node is allowed to be cycle master, if it is
+	not capable then no iso transmissions can occur (and the iso or bus
+	manager have to select another node to become root and initiate a bus
+	reset).
+      </P
+><P
+>&#13;	The isochronous resource manager is the central point where channel and
+	bandwidth allocations are stored.  A bit in the SelfID shows whether a
+	node is iso manager capable or not, the iso manager capable node with
+	the highest ID wins the position after a bus reset.  Apart from
+	containing allocation registers, this one doesn't do much.  Only if
+	there is no bus manager, it may determine a cycle master capable node to
+	become root and initiate a bus reset.
+      </P
+><P
+>&#13;	The bus manager has more responsibilities: power management (calculate
+	power provision and consumption on the bus and turn on disabled nodes if
+	enough power is available), bus optimization (calculate an effective gap
+	count, optimize the topology by selecting a better positioned node for
+	root) and some registers relevant to topology (topology map containing
+	the SelfIDs of the last reset and a speed map, which is obsoleted in
+	IEEE 1394a).  The bus manager capable nodes contend for the role by
+	doing a lock transaction on the bus manager ID register in the iso
+	manager, the first to successfully complete the transaction wins the
+	role.
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x44.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x56.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Transactions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c21.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Isochronous Transmissions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Transactions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Short Introduction into IEEE 1394"
+HREF="c21.html"><LINK
+REL="PREVIOUS"
+TITLE="Bus Reset"
+HREF="x40.html"><LINK
+REL="NEXT"
+TITLE="Bus Management"
+HREF="x50.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x40.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Short Introduction into IEEE 1394</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x50.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN44"
+>2.3. Transactions</A
+></H1
+><P
+>&#13;	The packets transmitted on the bus are acknowledged by the receiving end
+	unless they are broadcast packets (broadcast writes and isochronous
+	packets).  The acknowledge code contains an error code, which either
+	signifies error, success or packet pending.  In the first two cases the
+	transaction completes, in the last a response packet will follow at a
+	later time from the targetted node to the source node (this is called a
+	split transaction).  Only writes can succeed and complete in the ack
+	code, reads and locks require a response.  Error and packet pending can
+	happen for every transaction.  The response packets contain a response
+	code (rcode) which signifies success or type of error.
+      </P
+><P
+>&#13;	For read and write there are two different types, quadlet and block.
+	The quadlet types have all their payload (exactly one quadlet) in the
+	packet header, the block types have a variable length data block
+	appended to the header.  Programs using libraw1394 don't have to care
+	about that, quadlet transactions are automatically used when the data
+	length is 4 bytes and block transactions otherwise.
+      </P
+><P
+>&#13;	The lock transaction has several extended transaction codes defined
+	which choose the atomic operation to perform, the most used being the
+	compare-and-swap (code 0x2).  The transaction passes the data value and
+	(depending on the operation) the arg value to the target node and
+	returns the old value at the target address, but only when the
+	transaction does not have an error.  All three values are of the same
+	size, either one quadlet or one octlet.
+      </P
+><P
+>&#13;	In the compare-and-swap case, the data value is written to the target
+	address if the old value is identical to the arg value.  The old value
+	is returned in any case and can be used to find out whether the swap
+	succeeded by repeating the compare locally.  Compare-and-swap
+	is useful for avoiding race conditions when accessing the same
+	address from multiple nodes.  For example, isochronous resource
+	allocation is done using compare-and-swap, as described below.  Since
+	the old value is always returned, it more efficient to do the first
+	attempt with the reset value of the target register as arg instead of
+	reading it first.  Repeat with the returned old value as new arg value
+	if it didn't succeed.
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x40.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x50.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Bus Reset</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c21.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Bus Management</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

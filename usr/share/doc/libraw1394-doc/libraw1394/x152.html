@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Error and Success Codes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Data Structures and Program Flow"
+HREF="c62.html"><LINK
+REL="PREVIOUS"
+TITLE="Generation Numbers"
+HREF="x145.html"><LINK
+REL="NEXT"
+TITLE="Isochronous Transmission and Reception"
+HREF="c161.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x145.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 3. Data Structures and Program Flow</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c161.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN152"
+>3.7. Error and Success Codes</A
+></H1
+><P
+>&#13;	libraw1394 returns the ack/rcode pair in most transaction cases.  The
+	rcode is undefined in cases where the ack code is not equal to
+	<CODE
+CLASS="symbol"
+>ack_pending</CODE
+>.  This is stored in a type
+	<SPAN
+CLASS="type"
+>raw1394_errcode_t</SPAN
+>, from which the ack and rcode parts can
+	be extracted using two macros.
+      </P
+><P
+>&#13;	With the function <CODE
+CLASS="function"
+>raw1394_errcode_to_errno()</CODE
+> it is
+	possible to convert this to an errno number that conveys roughly the
+	same meaning.  Many developers will find that easier to handle.  This is
+	done automatically for the synchronous read/write/lock wrapper
+	functions, i.e. they return 0 for success and a negative value for
+	failure, in which case they also set the <CODE
+CLASS="symbol"
+>errno</CODE
+> variable
+	to the appropriate code.  The raw ack/rcode pair can then still be
+	retrieved using <CODE
+CLASS="function"
+>raw1394_get_errcode()</CODE
+>.
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x145.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c161.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Generation Numbers</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c62.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Isochronous Transmission and Reception</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

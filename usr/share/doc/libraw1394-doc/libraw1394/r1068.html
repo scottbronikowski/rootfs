@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>raw1394_new_handle_on_port</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="c232.html"><LINK
+REL="PREVIOUS"
+TITLE="raw1394_destroy_handle"
+HREF="r1035.html"><LINK
+REL="NEXT"
+TITLE="raw1394_busreset_notify"
+HREF="r1110.html"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="r1035.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="r1110.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="API-raw1394-new-handle-on-port"
+></A
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_new_handle_on_port</SPAN
+></SPAN
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN1078"
+></A
+><H2
+>Name</H2
+>raw1394_new_handle_on_port&nbsp;--&nbsp;
+     create a new handle and bind it to a port
+ </DIV
+><DIV
+CLASS="refsynopsisdiv"
+><A
+NAME="AEN1081"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="funcsynopsis"
+><P
+></P
+><A
+NAME="AEN1083"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>raw1394handle_t raw1394_new_handle_on_port </CODE
+>(int port);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1089"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><CODE
+CLASS="parameter"
+>port</CODE
+></DT
+><DD
+><P
+>&#13;     port to connect to (same as argument to <CODE
+CLASS="function"
+>raw1394_set_port</CODE
+>)
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1098"
+></A
+><H2
+>Description</H2
+><P
+>&#13;   Same as <CODE
+CLASS="function"
+>raw1394_new_handle</CODE
+>, but also binds the handle to the
+   specified 1394 port. Equivalent to <CODE
+CLASS="function"
+>raw1394_new_handle</CODE
+> followed by
+   <CODE
+CLASS="function"
+>raw1394_get_port_info</CODE
+> and <CODE
+CLASS="function"
+>raw1394_set_port</CODE
+>. Useful for
+   command-line programs that already know what port they want. If
+   <CODE
+CLASS="function"
+>raw1394_set_port</CODE
+> returns ESTALE, retries automatically.
+   </P
+><P
+>&#13;
+   The default device node is /dev/raw1394, but one can override the default
+   by setting environment variable RAW1394DEV. However, if RAW1394DEV points to
+   a non-existant or invalid device node, then it also attempts to open the
+   default device node.
+</P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1107"
+></A
+><H2
+>Returns</H2
+><P
+>&#13;   the new handle on success or NULL on failure
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="r1035.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="r1110.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_destroy_handle</SPAN
+></SPAN
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c232.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_busreset_notify</SPAN
+></SPAN
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

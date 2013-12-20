@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Handles</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Data Structures and Program Flow"
+HREF="c62.html"><LINK
+REL="PREVIOUS"
+TITLE="Data Structures and Program Flow"
+HREF="c62.html"><LINK
+REL="NEXT"
+TITLE="Ports"
+HREF="x85.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c62.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 3. Data Structures and Program Flow</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x85.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN69"
+>3.2. Handles</A
+></H1
+><P
+>&#13;	The handle presented to the application for using libraw1394 is the
+	raw1394handle_t, an opaque data structure (which means you don't need to
+	know its internals).  The handle (and with it a connection to the kernel
+	side of raw1394) is obtained using
+	<CODE
+CLASS="function"
+>raw1394_new_handle()</CODE
+>.  Insufficient permissions to
+	access the kernel driver will result in failure of this function, among
+	other possibilities of failure.
+      </P
+><P
+>&#13;	While initializing the handle, a certain order of function calls have to
+	be obeyed or undefined results will occur.  This order reflects the
+	various states of initialization to be done:
+      </P
+><P
+>&#13;	<P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+><CODE
+CLASS="function"
+>raw1394_new_handle()</CODE
+></P
+></LI
+><LI
+><P
+><CODE
+CLASS="function"
+>raw1394_get_port_info()</CODE
+></P
+></LI
+><LI
+><P
+><CODE
+CLASS="function"
+>raw1394_set_port()</CODE
+></P
+></LI
+></OL
+>
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c62.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x85.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Data Structures and Program Flow</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c62.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Ports</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

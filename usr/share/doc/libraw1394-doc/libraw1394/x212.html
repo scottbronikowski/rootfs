@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Receiving Packets</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Isochronous Transmission and Reception"
+HREF="c161.html"><LINK
+REL="PREVIOUS"
+TITLE="Stopping and Starting"
+HREF="x200.html"><LINK
+REL="NEXT"
+TITLE="Transmitting Packets"
+HREF="x218.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x200.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Isochronous Transmission and Reception</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x218.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN212"
+>4.4. Receiving Packets</A
+></H1
+><P
+>&#13;          Raw1394 maintains a fixed-size ringbuffer of packets in
+	  kernel memory. The buffer is filled by the low-level driver
+	  as it receives packets from the bus. It is your
+	  application's job to process each packet, after which the
+	  buffer space it occupied can be re-used for future packets.
+        </P
+><P
+>&#13;	  The isochronous receive handler you provided will be called
+	  from <CODE
+CLASS="function"
+>raw1394_loop_iterate()</CODE
+> after each
+	  packet is received. Your handler is passed a pointer to the
+	  first byte of the packet's data payload, plus the packet's
+	  length in bytes (not counting the isochronous header), the
+	  cycle number at which it was received, the channel on which
+	  it was received, and the "tag" and "sy" fields from the
+	  isochronous header. Note that the packet is at this point
+	  still in the kernel's receive buffer, so the data pointer is
+	  only valid until the receive handler returns. You must make
+	  a copy of the packet's data if you want to keep it.
+	</P
+><P
+>&#13;	  The receive handler is also passed a "packet(s) dropped"
+	  flag. If this flag is nonzero, it means that one or more
+	  incoming packets have been dropped since the last call to
+	  your handler (usually this is because the kernel buffer has
+	  completely filled up with packets or a bus reset has
+	  occurred).
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x200.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x218.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Stopping and Starting</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c161.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Transmitting Packets</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

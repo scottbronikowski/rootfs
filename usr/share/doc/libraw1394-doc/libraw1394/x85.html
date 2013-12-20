@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Ports</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Data Structures and Program Flow"
+HREF="c62.html"><LINK
+REL="PREVIOUS"
+TITLE="Handles"
+HREF="x69.html"><LINK
+REL="NEXT"
+TITLE="The Event Loop"
+HREF="x96.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x69.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 3. Data Structures and Program Flow</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x96.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN85"
+>3.3. Ports</A
+></H1
+><P
+>&#13;	A computer may have multiple 1394 buses connected by having multiple
+	1394 chips.  Each of these is called a port, and the handle has to be
+	connected to one port before it can be used for anything.  Even if no
+	nodes are connected to the chip in question, it forms a complete bus
+	(with just one node, itself).
+      </P
+><P
+>&#13;	A list of available ports together with some information about it (name
+	of the hardware, number of connected nodes) is available via
+	<CODE
+CLASS="function"
+>raw1394_get_port_info()</CODE
+>, which is to be called
+	right after getting a fresh handle.  The user should be presented with a
+	choice of available ports if there is more than one.  It may be good
+	practice to do that even if there is only one port, since that may
+	result from a normally configured port just not being available, making
+	it confusing to be dropped right into the application attached to a port
+	without a choice and notion of anything going wrong.
+      </P
+><P
+>&#13;	The choice of port is then reported using
+	<CODE
+CLASS="function"
+>raw1394_set_port()</CODE
+>.  If this function fails and
+	<CODE
+CLASS="symbol"
+>errno</CODE
+> is set to <CODE
+CLASS="symbol"
+>ESTALE</CODE
+>, then
+	something has changed about the ports (port was added or removed)
+	between getting the port info and trying to set a port.  It is
+	required that the current port list is fetched (presenting the user
+	with the choice again) and setting the port is retried with the new
+	data.
+      </P
+><P
+>&#13;	After a successful <CODE
+CLASS="function"
+>raw1394_set_port()</CODE
+>, the get and
+	set port functions must not be used anymore on this handle.  Undefined
+	results occur if you do so.  To make up for this, all the other
+	functions are allowed now.
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x69.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x96.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Handles</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c62.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>The Event Loop</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

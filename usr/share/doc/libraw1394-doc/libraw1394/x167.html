@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Initialization</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Isochronous Transmission and Reception"
+HREF="c161.html"><LINK
+REL="PREVIOUS"
+TITLE="Isochronous Transmission and Reception"
+HREF="c161.html"><LINK
+REL="NEXT"
+TITLE="Stopping and Starting"
+HREF="x200.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c161.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Isochronous Transmission and Reception</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x200.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN167"
+>4.2. Initialization</A
+></H1
+><P
+>&#13;	  When a raw1394 handle is first created, no isochronous
+	  stream is assocated with it. To begin isochronous
+	  operations, call either
+	  <CODE
+CLASS="function"
+>raw1394_iso_xmit_init()</CODE
+> (transmission) or
+	  <CODE
+CLASS="function"
+>raw1394_iso_recv_init()</CODE
+>
+	  (reception). The parameters to these functions are as follows:
+        </P
+><P
+>&#13;	  <CODE
+CLASS="symbol"
+>handler</CODE
+> is your function for queueing
+	  packets to be sent (transmission) or processing received
+	  packets (reception).
+	</P
+><P
+>&#13;          <CODE
+CLASS="symbol"
+>buf_packets</CODE
+> is the number of packets that
+          will be buffered at the kernel level. A larger packet buffer
+          will be more forgiving of IRQ and application latency,
+          however it will consume more kernel memory. For most
+          applications, it is sufficient to buffer 2000-16000 packets
+          (0.25 seconds to 2.0 seconds maximum latency).
+	</P
+><P
+>&#13;	  <CODE
+CLASS="symbol"
+>max_packet_size</CODE
+> is the size, in bytes, of
+	  the largest isochronous packet you intend to handle. This
+	  size does not include the isochronous header but it does
+	  include the CIP header specified by many isochronous
+	  protocols.
+	</P
+><P
+>&#13;	  <CODE
+CLASS="symbol"
+>channel</CODE
+> is the isochronous channel on which
+	  you wish to receive or transmit. (currently there is no
+	  facility for multi-channel transmission or reception).
+       </P
+><P
+>&#13;         <CODE
+CLASS="symbol"
+>speed</CODE
+> is the isochronous speed at which you
+         wish to operate. Possible values are
+         <CODE
+CLASS="symbol"
+>RAW1394_ISO_SPEED_100</CODE
+>, 
+		 <CODE
+CLASS="symbol"
+>RAW1394_ISO_SPEED_200</CODE
+>, and
+         <CODE
+CLASS="symbol"
+>RAW1394_ISO_SPEED_400</CODE
+>.
+       </P
+><P
+>&#13;         <CODE
+CLASS="symbol"
+>irq_interval</CODE
+> is the maximum latency of the
+         kernel buffer, in packets. (To avoid excessive IRQ rates, the
+         low-level drivers only trigger an interrupt every
+         irq_interval packets). Pass -1 to receive a default value
+         that should be suitable for most applications.
+       </P
+><P
+>&#13;         <CODE
+CLASS="symbol"
+>mode</CODE
+> for <CODE
+CLASS="function"
+>raw1394_iso_recv_init()</CODE
+>
+         sets whether to use packet-per-buffer or buffer-fill receive mode.
+		 Possible values are <CODE
+CLASS="symbol"
+>RAW1394_DMA_DEFAULT</CODE
+> (bufferfill 
+		 on ohci1394), <CODE
+CLASS="symbol"
+>RAW1394_DMA_BUFFERFILL</CODE
+>, and 
+		 <CODE
+CLASS="symbol"
+>RAW1394_DMA_PACKET_PER_BUFFER</CODE
+>.
+       </P
+><P
+>&#13;         If <CODE
+CLASS="function"
+>raw1394_iso_xmit/recv_init()</CODE
+> retuns
+         successfully, then you may start isochronous operations. You
+         may not call
+         <CODE
+CLASS="function"
+>raw1394_iso_xmit/recv_init()</CODE
+> again on
+         the same handle without first shutting down the isochronous
+         operation with <CODE
+CLASS="function"
+>raw1394_iso_shutdown()</CODE
+>.
+       </P
+><P
+>&#13;         Note that <CODE
+CLASS="function"
+>raw1394_iso_xmit_init()</CODE
+> and
+	 <CODE
+CLASS="function"
+>raw1394_iso_recv_init()</CODE
+> involve
+	 potentially time-consuming operations like allocating kernel
+	 and device resources. If you intend to transmit or receive
+	 several isochronous streams simultaneously, it is advisable
+	 to initialize all streams before starting any packet
+	 transmission or reception.
+       </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c161.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x200.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Isochronous Transmission and Reception</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c161.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Stopping and Starting</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

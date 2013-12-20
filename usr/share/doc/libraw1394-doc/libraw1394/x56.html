@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Isochronous Transmissions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Short Introduction into IEEE 1394"
+HREF="c21.html"><LINK
+REL="PREVIOUS"
+TITLE="Bus Management"
+HREF="x50.html"><LINK
+REL="NEXT"
+TITLE="Data Structures and Program Flow"
+HREF="c62.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x50.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Short Introduction into IEEE 1394</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c62.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN56"
+>2.5. Isochronous Transmissions</A
+></H1
+><P
+>&#13;	Nodes can allocate a channel and bandwidth for isochronous transmissions
+	at the iso manager to broadcast timing critical data (e.g. multimedia
+	streams) on the bus.  However these transmissions are unreliable, there
+	is no guarantee that every packet reaches the intended recipients (the
+	software and hardware involved also take iso packets a bit more
+	lightly).  After a cycle start packet, the isochronous cycle begins and
+	every node can transmit iso packets, however only one packet per channel
+	is allowed.  As soon as a gap of a certain length appears (i.e. no node
+	sends anymore), the iso cycle ends and the rest of the time until the
+	next cycle start is reserved for asynchronous packets.
+      </P
+><P
+>&#13;	The channel register on the iso manager consists of 64 bits, each of
+	which signifies one channel.  A channel can be allocated by any node by
+	doing a compare-swap lock request with the new bitmask.  Likewise the
+	bandwidth can be allocated by doing a lock request with the new value.
+	The bandwidth register contains the remaining time available for every
+	iso cycle.  Since you allocate time, the maximum data you are allowed to
+	put into an iso packet depends on the speed you will send at.
+      </P
+><P
+>&#13;	On every bus reset, the resource registers are resetted to their initial
+	values (all channels free, all bandwidth minus some amount set aside for
+	asynchronous communication available), this has to happen since the
+	isochronous manager may have moved to another node.  Isochronous
+	transmissions may continue with the old allocations for 1000ms. During
+	that time, the nodes have to reallocate	their resources and no new
+	allocations are allowed to occur.  Only after this period new
+	allocations may be done, this avoids nodes losing their	allocations over
+	a bus reset.
+      </P
+><P
+>&#13;	libraw1394 does not provide special functions for allocating iso
+	resources nor does it clean up after programs when they exit.  Protocols
+	exist that require the first node to use some resources to allocate it
+	and then leave it for the last node using it to deallocate it.  This may
+	be different nodes, so automatic behaviour would be very undesirable in
+	these cases.
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x50.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c62.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Bus Management</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c21.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Data Structures and Program Flow</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

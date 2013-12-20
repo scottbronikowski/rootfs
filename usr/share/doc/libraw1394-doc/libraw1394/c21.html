@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Short Introduction into IEEE 1394</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Introduction"
+HREF="c9.html"><LINK
+REL="NEXT"
+TITLE="Bus Reset"
+HREF="x40.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c9.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x40.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="intro1394"
+></A
+>Chapter 2. Short Introduction into IEEE 1394</H1
+><P
+>&#13;      IEEE 1394 in fact defines two types of hardware implementations for this
+      bus system, cable and backplane.  The only one described here and
+      supported by the Linux subsystem is the cable implementation.  Most people
+      not familiar with the standard probably don't even know that there is
+      something else than the 1394 cable specification.
+    </P
+><P
+>&#13;      If you are familiar with CSR architectures (as defined in ISO/IEC 13213
+      (ANSI/IEEE 1212)), then you already know quite a bit of 1394, which is a
+      CSR implementation.
+    </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN25"
+>2.1. Bus Structure</A
+></H1
+><P
+>&#13;	The basic data structures defined in the standard and used in this
+	document are the quadlet (32 bit quantity) and the octlet (64 bit
+	quantity) and blocks (any quantity of bytes).  The bus byte ordering is
+	big endian.  A transmission can be sent at one of multiple possible
+	speeds, which are 100, 200 and 400 Mbit/s for the currently mostly used
+	IEEE 1394a spec and up to 3.2 Gbit/s in the recently finalized 1394.b
+	standard (these speeds are also referred to as S100, S200, ...).
+      </P
+><P
+>&#13;	A 1394 bus consists of up to 64 nodes (with multiple buses possibly
+	being connected, but that is outside of the scope of this document and
+	not completely standardized yet).  Each node is addressed with a 16 bit
+	address, which is further divided into a 10 bit bus ID and a 6 bit local
+	node number, the so-called physical ID.  The physical IDs are completely
+	dynamic and determined during the bus reset.  The highest values for
+	both are special values.  Bus ID equal to 1023 means "local bus" (the
+	bus the node is connected to), physical ID equal to 63 means "all nodes"
+	(broadcast).
+      </P
+><P
+>&#13;	The local bus ID 1023 is the only one that can be used unless IEEE
+	1394.1 bridge portals to more buses were available. Therefore the node
+	IDs have to be given as (1023&#60;&#60;6) | phy_ID.  (This is also true
+	if libraw1394 runs at a host which contains multiple 1394 bus adapters.
+	The local ID 1023 is valid on each of these buses. The Linux host
+	itself is no IEEE 1394.1 bridge.)
+      </P
+><P
+>&#13;	Each node has a local address space with 48 bit wide addressing.
+	The whole bus can thus be seen as a linear 64 bit address space by
+	concatenating the node ID (most significant bits) and local
+	address (least significant bits).  libraw1394 treats them separately in
+	function arguments to save the application some fiddling with the bits.
+      </P
+><P
+>&#13;	Unlike other buses there aren't many transactions or commands defined,
+	higher level commands are defined in terms of addresses accessed instead
+	of separate transaction types (comparable to memory mapped registers in
+	hardware).  The 1394 transactions are:
+
+	<P
+></P
+><UL
+><LI
+><P
+>read (quadlets and blocks)</P
+></LI
+><LI
+><P
+>write (quadlets and blocks)</P
+></LI
+><LI
+><P
+>lock (some atomic modifications)</P
+></LI
+></UL
+>
+
+	There is also the isochronous transaction (the above three are called
+	asynchronous transactions), which is a broadcast stream with guaranteed
+	bandwidth.  It doesn't contain any address but is distinguished by a 6
+	bit channel number.
+      </P
+><P
+>&#13;	The bus view is only logical, physically it consists of many
+	point-to-point connections between nodes with every node forwarding data
+	it receives to every other port which is capable of the speed the
+	transaction is sent at (thus a S200 node in the path between two S400
+	nodes would limit their communication speed to S200).  It forms a tree
+	structure with all but one node having a parent and a number of
+	children.  One node is the root node and has no parents.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c9.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x40.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Introduction</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Bus Reset</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

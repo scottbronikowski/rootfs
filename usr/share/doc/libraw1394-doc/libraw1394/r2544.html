@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>raw1394_start_lock64</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="c232.html"><LINK
+REL="PREVIOUS"
+TITLE="raw1394_start_lock"
+HREF="r2458.html"><LINK
+REL="NEXT"
+TITLE="raw1394_start_async_stream"
+HREF="r2630.html"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="r2458.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="r2630.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="API-raw1394-start-lock64"
+></A
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_lock64</SPAN
+></SPAN
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN2554"
+></A
+><H2
+>Name</H2
+>raw1394_start_lock64&nbsp;--&nbsp;
+     initiate a 64-bit compare-swap lock transaction
+ </DIV
+><DIV
+CLASS="refsynopsisdiv"
+><A
+NAME="AEN2557"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="funcsynopsis"
+><P
+></P
+><A
+NAME="AEN2559"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int raw1394_start_lock64 </CODE
+>(raw1394handle_t handle, nodeid_t node, nodeaddr_t addr, unsigned int extcode, octlet_t data, octlet_t arg, octlet_t * result, unsigned long tag);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN2579"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><CODE
+CLASS="parameter"
+>handle</CODE
+></DT
+><DD
+><P
+>&#13;     libraw1394 handle
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>node</CODE
+></DT
+><DD
+><P
+>&#13;     target node ID
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>addr</CODE
+></DT
+><DD
+><P
+>&#13;     address to read from
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>extcode</CODE
+></DT
+><DD
+><P
+>&#13;     extended transaction code determining the lock operation
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>data</CODE
+></DT
+><DD
+><P
+>&#13;     data part of lock parameters
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>arg</CODE
+></DT
+><DD
+><P
+>&#13;     arg part of lock parameters
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>result</CODE
+></DT
+><DD
+><P
+>&#13;     address where return value will be written
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>tag</CODE
+></DT
+><DD
+><P
+>&#13;     data to identify the request to completion handler
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN2622"
+></A
+><H2
+>Description</H2
+><P
+>&#13;   This function starts the specified lock request.
+   The transaction is only started, no success of the transaction is implied
+   with a successful return of this function.  When the transaction completes, a
+   <CODE
+CLASS="function"
+>raw1394_loop_iterate</CODE
+> will call the tag handler and pass it the tag and
+   error code of the transaction.  <CODE
+CLASS="parameter"
+>tag</CODE
+> should therefore be set to something
+   that uniquely identifies this transaction (e.g. a struct pointer casted to
+   unsigned long).
+</P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN2627"
+></A
+><H2
+>Returns</H2
+><P
+>&#13;   0 on success or -1 on failure (sets errno)
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="r2458.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="r2630.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_lock</SPAN
+></SPAN
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c232.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_async_stream</SPAN
+></SPAN
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

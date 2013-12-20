@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+if [ "$1" = "install" -o "$1" = "upgrade" ]; then
+	# Clean up older links from this package
+	update-alternatives --remove gimp /usr/bin/gimp-1.2
+	update-alternatives --remove gimptool /usr/bin/gimptool-1.3
+	update-alternatives --remove gimp /usr/bin/gimp-2.0
+	update-alternatives --remove gimp /usr/bin/gimp-2.2
+fi
+
+

@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Transmitting Packets</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Isochronous Transmission and Reception"
+HREF="c161.html"><LINK
+REL="PREVIOUS"
+TITLE="Receiving Packets"
+HREF="x212.html"><LINK
+REL="NEXT"
+TITLE="Shutting down"
+HREF="x228.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x212.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Isochronous Transmission and Reception</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x228.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN218"
+>4.5. Transmitting Packets</A
+></H1
+><P
+>&#13;          Similar to reception, raw1394 maintains a fixed-size
+	  ringbuffer of packets in kernel memory. The buffer is filled
+	  by your application as it queues packets to be sent. The
+	  buffer is drained by the hardware driver as it transmits
+	  packets on the 1394 bus.
+        </P
+><P
+>&#13;	  The isochronous transmit handler you provided will be called
+	  from <CODE
+CLASS="function"
+>raw1394_loop_iterate()</CODE
+> whenever
+	  there is space in the buffer to queue another packet. The
+	  handler is passed a pointer to the first byte of the buffer
+	  space for the packet's data payload, pointers to words
+	  containing the data length in bytes (not counting the
+	  isochronous header), "tag" and "sy" fields, and the
+	  isochronous cycle number at which this packet will be
+	  transmitted. The handler must write the packet's data
+	  payload into the supplied buffer space, and set the values
+	  pointed to by "len", "tag", and "sy" to the appropriate
+	  values. The handler is permitted to write any number of data
+	  bytes, up and including to the value of
+	  <CODE
+CLASS="symbol"
+>max_packet_size</CODE
+> passed to
+	  <CODE
+CLASS="function"
+>raw1394_iso_xmit_init()</CODE
+>.
+	</P
+><P
+>&#13;	 Note: If you passed -1 as the starting cycle to
+	 <CODE
+CLASS="function"
+>raw1394_iso_xmit_init()</CODE
+>, the cycle
+	 number provided to your handler will be incorrect until after
+	 one buffer's worth of packets have been transmitted.
+	</P
+><P
+>&#13;	  The transmit handler is also passed a "packet(s) dropped"
+	  flag. If this flag is nonzero, it means that one or more
+	  outgoing packets have been dropped since the last call to
+	  your handler (usually this is because the kernel buffer has
+	  gone completely empty or a bus reset has occurred).
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x212.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x228.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Receiving Packets</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c161.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Shutting down</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

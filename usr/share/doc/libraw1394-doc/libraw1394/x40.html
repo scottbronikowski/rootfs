@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Bus Reset</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Short Introduction into IEEE 1394"
+HREF="c21.html"><LINK
+REL="PREVIOUS"
+TITLE="Short Introduction into IEEE 1394"
+HREF="c21.html"><LINK
+REL="NEXT"
+TITLE="Transactions"
+HREF="x44.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c21.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Short Introduction into IEEE 1394</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x44.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN40"
+>2.2. Bus Reset</A
+></H1
+><P
+>&#13;	A bus reset occurs whenever the state of any node changes (including
+	addition and removal of nodes).  At the beginning a root node is chosen,
+	then the tree identification determines for every node which port is
+	connected to a parent, child or nothing.  Then the SelfID phase begins.
+	The root node sends a SelfID grant on its first port connected to a
+	child.  If that is not a leaf node, it will itself forward the grant to
+	its first child.  When a leaf node gets a grant, it will pick the lowest
+	physical ID not yet in use (starting with 0) and send out a SelfID packet
+	with its physical ID and more information, then acknowledge the SelfID
+	grant to its parent, which will send a grant to its next child until it
+	configured all its children, then pick a physical ID itself, send SelfID
+	packet and ack to parent.
+      </P
+><P
+>&#13;	After bus reset the used physical IDs are in a sequential range with no
+	holes starting from 0 up to the root node having the highest ID.  This
+	also means that physical IDs can change for many or all nodes with the
+	insertion of a new node or moving the role of root to another node.  In
+	libraw1394 all transactions are tagged automatically with a generation
+	number which is increased in every bus reset and transactions with an
+	obsolete generation will fail in order to avoid targetting the wrong
+	node.  Nodes have to be identified in a different way than their
+	volatile physical IDs, namely by reading their globally unique ID (GUID)
+	contained in the configuration ROM.
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c21.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x44.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Short Introduction into IEEE 1394</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c21.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Transactions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

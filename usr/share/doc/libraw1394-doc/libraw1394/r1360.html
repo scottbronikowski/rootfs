@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>raw1394_get_port_info</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="c232.html"><LINK
+REL="PREVIOUS"
+TITLE="raw1394_get_nodecount"
+HREF="r1325.html"><LINK
+REL="NEXT"
+TITLE="raw1394_set_port"
+HREF="r1417.html"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="r1325.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="r1417.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="API-raw1394-get-port-info"
+></A
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_port_info</SPAN
+></SPAN
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN1370"
+></A
+><H2
+>Name</H2
+>raw1394_get_port_info&nbsp;--&nbsp;
+     get information about available ports
+ </DIV
+><DIV
+CLASS="refsynopsisdiv"
+><A
+NAME="AEN1373"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="funcsynopsis"
+><P
+></P
+><A
+NAME="AEN1375"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int raw1394_get_port_info </CODE
+>(raw1394handle_t handle, struct raw1394_portinfo * pinf, int maxports);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1385"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><CODE
+CLASS="parameter"
+>handle</CODE
+></DT
+><DD
+><P
+>&#13;     libraw1394 handle
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>pinf</CODE
+></DT
+><DD
+><P
+>&#13;     pointer to an array of struct raw1394_portinfo
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>maxports</CODE
+></DT
+><DD
+><P
+>&#13;     number of elements in <CODE
+CLASS="parameter"
+>pinf</CODE
+>
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1404"
+></A
+><H2
+>Description</H2
+><P
+>&#13;   Before you can set which port to use, you have to use this function to find
+   out which ports exist.
+   </P
+><P
+>&#13;
+   If your program is interactive, you should present the user with this list to
+   let them decide which port to use if there is more than one.  A
+   non-interactive program (and probably interactive ones, too) should provide a
+   command line option to choose the port. If <CODE
+CLASS="parameter"
+>maxports</CODE
+> is <CODE
+CLASS="constant"
+>0</CODE
+>, <CODE
+CLASS="parameter"
+>pinf</CODE
+> can be
+   <CODE
+CLASS="constant"
+>NULL</CODE
+>, too.
+</P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1412"
+></A
+><H2
+>Returns</H2
+><P
+>&#13;   the number of ports and writes information about them into <CODE
+CLASS="parameter"
+>pinf</CODE
+>, but
+   not into more than <CODE
+CLASS="parameter"
+>maxports</CODE
+> elements.
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="r1325.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="r1417.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_nodecount</SPAN
+></SPAN
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c232.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_set_port</SPAN
+></SPAN
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

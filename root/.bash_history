@@ -510,3 +510,150 @@ locate ssh
 find ssh
 find ssh-tunnel.sh
 updatedb
+exit
+emacs &
+top
+clear
+ls
+date -r
+date -R
+date
+time
+cd /usr/share/icons/
+ls
+cd hicolor/
+ls
+cd 48x48/
+ls
+cd /
+lsb_release -a
+rosversion ros
+ros
+rosversion
+rosversion -d
+ls
+cd root
+ls
+cd ros
+ls
+setup
+./setup.bash 
+lla
+more setup.bash 
+ls
+lla
+lsb_release -a
+tar
+man tar
+cd ..
+ls
+mkdir pointgrey
+ls
+/etc/init.d/ssh-tunnel.sh
+ifdown wlan0
+ifup wlan0
+ps -ef 
+ps -ef | grep ssh
+kill 1458
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh
+ps -ef | grep ssh
+ip addr
+service avahi-daemon restart
+cd pointgrey/
+ls
+tar xvf flycapture.2.5.3.5_armhf.tar.gz 
+sudo apt-get install libgtkmm-2.4-dev
+dpkg -l | grep 1394
+ls
+cd flycapture.2.5.3.5_armhf
+cd lib
+ls
+sudo cp libflycapture* /usr/lib
+cd ..
+ls
+sudo sh flycap2-conf 
+ls
+cd bin
+ls
+cd ../src
+ls
+lla
+cd ..
+lla
+cd include/
+ls
+cd ..
+cd bin
+ls
+cd FlyCap2
+ls
+lla
+./FlyCap2
+lla
+FlyCapture2Test 
+./FlyCapture2Test 
+ls
+sudo apt-get install gimp
+ls
+gimp FlyCapture2Test-12262775-0.pgm
+ls
+FlyCapture2Test-12262775-3.pgm  GigEGrabEx
+sudo gimp FlyCapture2Test-13282227-0.pgm
+cd ..
+ls
+cd flycapture.2.5.3.5_armhf
+ls
+cd bin/
+ls
+cd FlyCapture2Test-12262775-3.pgm  GigEGrabEx
+cd C
+ls
+lla
+./FlyCapture2Test_C 
+cd ..
+cd ../src
+ls
+cd AsyncTriggerEx/
+ls
+make
+cd ..
+cd CustomImageEx/
+make
+cd ..
+cd ExtendedShutterEx/
+make
+cd ..
+cd FlyCap2_ARM/
+ls
+make
+cd ../../bin
+ls
+FlyCap2
+./FlyCap2
+cd ../../src
+ls
+cd ../src
+ls
+cd FlyCapture2Test_C/
+ls
+more FlyCapture2Test_C.c
+cd ..
+ls
+cd MultipleCameraEx/
+make
+cd ../../bin
+./MultipleCameraEx 
+ls
+./ImageEventEx 
+./HighDynamicRangeEx 
+ls
+gimp HDR-13282227-0.ppm 
+cd /dev
+ls
+dmesg 
+dmesg | grep video
+dmesg | grep vid
+dmesg | grep dev
+dmesg | tail
+dmesg | less

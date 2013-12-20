@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>The Event Loop</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Data Structures and Program Flow"
+HREF="c62.html"><LINK
+REL="PREVIOUS"
+TITLE="Ports"
+HREF="x85.html"><LINK
+REL="NEXT"
+TITLE="Handlers"
+HREF="x127.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x85.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 3. Data Structures and Program Flow</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x127.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN96"
+>3.4. The Event Loop</A
+></H1
+><P
+>&#13;	All commands in libraw1394 are asynchronous, with some
+	synchronous wrapper functions for some types of transactions.
+	This means that there are two streams of data, one going into
+	raw1394 and one coming out.  With this design you can send out
+	multiple transactions without having to wait for the response
+	before you can continue (sending out other transactions, for
+	example).  The responses and other events (like bus resets and
+	received isochronous packets) are queued, and you can get them
+	with <CODE
+CLASS="function"
+>raw1394_loop_iterate()</CODE
+> or
+	<CODE
+CLASS="function"
+>raw1394_loop_iterate_timeout()</CODE
+> (which
+	always returns after a user-specified timeout if no
+	raw1394 event has occurred).
+      </P
+><P
+>&#13;	This forms an event loop you may already know from similar systems like
+	GUI toolkits.  <CODE
+CLASS="function"
+>raw1394_loop_iterate()</CODE
+> gets one
+	message from the event queue in raw1394, processes it with the
+	configured callback functions and returns the value returned by the
+	callback (so you can signal to the main loop from your callback; the
+	standard callbacks all return 0).  It normally blocks when there are no
+	events and always processes only one event.  If you are only receiving
+	broadcast events like isochronous packets you thus have to set up a loop
+	continuously calling the iterate function to get your callbacks called.
+      </P
+><P
+>&#13;	Often it is necessary to have multiple event loops and combine
+	them, e.g. if your application uses a GUI toolkit which also
+	has its own event loop.  In that case you can use
+	<CODE
+CLASS="function"
+>raw1394_get_fd()</CODE
+> to get the file
+	descriptor used for this handle by libraw1394.  The fd can be
+	used to for <CODE
+CLASS="function"
+>select()</CODE
+> or
+	<CODE
+CLASS="function"
+>poll()</CODE
+> calls together with the other
+	loop's fd. (Most toolkits, like GTK and Qt, have special APIs
+	for integrating file descriptors into their own event loops).
+      </P
+><P
+>&#13;        If using <CODE
+CLASS="function"
+>poll()</CODE
+>, you must test for
+	<CODE
+CLASS="symbol"
+>POLLIN</CODE
+> and <CODE
+CLASS="symbol"
+>POLLPRI</CODE
+>
+	events. If using <CODE
+CLASS="function"
+>select()</CODE
+>, you must test
+	for both read and exception activity.
+      </P
+><P
+> If any of these conditions trigger, you should then call
+        <CODE
+CLASS="function"
+>raw1394_loop_iterate()</CODE
+> to pick up the
+        event. <CODE
+CLASS="function"
+>raw1394_loop_iterate()</CODE
+> is
+        guaranteed not to block when called immediately after select()
+        or poll() indicates activity.  After the first call you
+        continue the main event loop.  If more events wait, the
+        <CODE
+CLASS="function"
+>select()</CODE
+>/<CODE
+CLASS="function"
+>poll()</CODE
+> will
+        immediately return again.
+      </P
+><P
+>&#13;	You can also use the fd to set the <CODE
+CLASS="symbol"
+>O_NONBLOCK</CODE
+> flag with
+	<CODE
+CLASS="function"
+>fcntl()</CODE
+>.  After that, the iterate function will not
+	block anymore but fail with <CODE
+CLASS="symbol"
+>errno</CODE
+> set to
+	<CODE
+CLASS="symbol"
+>EAGAIN</CODE
+> if no events wait.  These are the only legal
+	uses for the fd returned by <CODE
+CLASS="function"
+>raw1394_get_fd()</CODE
+>.
+      </P
+><P
+>&#13;	There are some functions which provide a synchronous wrapper for
+	transactions, note that these will call
+	<CODE
+CLASS="function"
+>raw1394_loop_iterate()</CODE
+> continuously until their
+	transaction is completed, thus having implicit callback invocations
+	during their execution.  The standard transaction functions have names
+	of the form <CODE
+CLASS="function"
+>raw1394_start_xxx</CODE
+>, the synchronous
+	wrappers are called <CODE
+CLASS="function"
+>raw1394_xxx</CODE
+>.
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x85.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x127.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Ports</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c62.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Handlers</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

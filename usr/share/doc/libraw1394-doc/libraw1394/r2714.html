@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>raw1394_start_async_send</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="c232.html"><LINK
+REL="PREVIOUS"
+TITLE="raw1394_start_async_stream"
+HREF="r2630.html"><LINK
+REL="NEXT"
+TITLE="raw1394_read"
+HREF="r2784.html"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="r2630.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="r2784.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="API-raw1394-start-async-send"
+></A
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_async_send</SPAN
+></SPAN
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN2724"
+></A
+><H2
+>Name</H2
+>raw1394_start_async_send&nbsp;--&nbsp;
+     send an asynchronous packet
+ </DIV
+><DIV
+CLASS="refsynopsisdiv"
+><A
+NAME="AEN2727"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="funcsynopsis"
+><P
+></P
+><A
+NAME="AEN2729"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int raw1394_start_async_send </CODE
+>(raw1394handle_t handle, size_t length, size_t header_length, unsigned int expect_response, quadlet_t * data, unsigned long rawtag);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN2745"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><CODE
+CLASS="parameter"
+>handle</CODE
+></DT
+><DD
+><P
+>&#13;     libraw1394 handle
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>length</CODE
+></DT
+><DD
+><P
+>&#13;     the amount of bytes of data to send
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>header_length</CODE
+></DT
+><DD
+><P
+>&#13;     the number of bytes in the header
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>expect_response</CODE
+></DT
+><DD
+><P
+>&#13;     indicate with a 0 or 1 whether to receive a completion event
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>data</CODE
+></DT
+><DD
+><P
+>&#13;     pointer to data to send
+    </P
+></DD
+><DT
+><CODE
+CLASS="parameter"
+>rawtag</CODE
+></DT
+><DD
+><P
+>&#13;     data to identify the request to completion handler
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN2778"
+></A
+><H2
+>Description</H2
+><P
+>&#13;   This starts sending an arbitrary async packet. It gets an array of quadlets 
+   consisting of header and data (without CRC in between). Header information 
+   is always in machine byte order, data (data block as well as quadlet data 
+   in a read response for data quadlet) shall be in big endian byte order. 
+   expect_response indicates, if we expect a response (i.e. if we will get the 
+   tag back after the packet was sent or after a response arrived). length is 
+   the length of the complete packet (header_length + length of the data block).
+   The main purpose of this function is to send responses for incoming 
+   transactions, that are handled by the application.
+   Do not use that function, unless you really know, what you do! Sending 
+   corrupt packet may lead to weird results.
+</P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN2781"
+></A
+><H2
+>Returns</H2
+><P
+>&#13;   0 on success or -1 on failure (sets errno)
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="r2630.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="r2784.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_async_stream</SPAN
+></SPAN
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c232.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_read</SPAN
+></SPAN
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

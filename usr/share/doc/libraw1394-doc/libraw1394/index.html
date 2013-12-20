@@ -1,0 +1,1088 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>libraw1394</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="NEXT"
+TITLE="Introduction"
+HREF="c9.html"></HEAD
+><BODY
+CLASS="book"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="AEN1"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+><A
+NAME="AEN2"
+>libraw1394</A
+></H1
+><H2
+CLASS="subtitle"
+>version 2.0.4</H2
+><P
+CLASS="copyright"
+>Copyright &copy; 2001-2009 Andreas Bombe, Dan Maas, Manfred Weihs, and Christian Toegel</P
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+>1. <A
+HREF="c9.html"
+>Introduction</A
+></DT
+><DT
+>2. <A
+HREF="c21.html"
+>Short Introduction into IEEE 1394</A
+></DT
+><DD
+><DL
+><DT
+>2.1. <A
+HREF="c21.html#AEN25"
+>Bus Structure</A
+></DT
+><DT
+>2.2. <A
+HREF="x40.html"
+>Bus Reset</A
+></DT
+><DT
+>2.3. <A
+HREF="x44.html"
+>Transactions</A
+></DT
+><DT
+>2.4. <A
+HREF="x50.html"
+>Bus Management</A
+></DT
+><DT
+>2.5. <A
+HREF="x56.html"
+>Isochronous Transmissions</A
+></DT
+></DL
+></DD
+><DT
+>3. <A
+HREF="c62.html"
+>Data Structures and Program Flow</A
+></DT
+><DD
+><DL
+><DT
+>3.1. <A
+HREF="c62.html#AEN64"
+>Overview</A
+></DT
+><DT
+>3.2. <A
+HREF="x69.html"
+>Handles</A
+></DT
+><DT
+>3.3. <A
+HREF="x85.html"
+>Ports</A
+></DT
+><DT
+>3.4. <A
+HREF="x96.html"
+>The Event Loop</A
+></DT
+><DT
+>3.5. <A
+HREF="x127.html"
+>Handlers</A
+></DT
+><DT
+>3.6. <A
+HREF="x145.html"
+>Generation Numbers</A
+></DT
+><DT
+>3.7. <A
+HREF="x152.html"
+>Error and Success Codes</A
+></DT
+></DL
+></DD
+><DT
+>4. <A
+HREF="c161.html"
+>Isochronous Transmission and Reception</A
+></DT
+><DD
+><DL
+><DT
+>4.1. <A
+HREF="c161.html#AEN163"
+>Overview</A
+></DT
+><DT
+>4.2. <A
+HREF="x167.html"
+>Initialization</A
+></DT
+><DT
+>4.3. <A
+HREF="x200.html"
+>Stopping and Starting</A
+></DT
+><DT
+>4.4. <A
+HREF="x212.html"
+>Receiving Packets</A
+></DT
+><DT
+>4.5. <A
+HREF="x218.html"
+>Transmitting Packets</A
+></DT
+><DT
+>4.6. <A
+HREF="x228.html"
+>Shutting down</A
+></DT
+></DL
+></DD
+><DT
+>5. <A
+HREF="c232.html"
+>Function Reference</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="r234.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_xmit_init</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+  initialize isochronous transmission
+ </DT
+><DT
+><A
+HREF="r311.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_recv_init</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     initialize isochronous reception
+ </DT
+><DT
+><A
+HREF="r388.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_multichannel_recv_init</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     initialize multi-channel iso reception
+ </DT
+><DT
+><A
+HREF="r451.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_recv_listen_channel</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     listen to a specific channel in multi-channel mode
+ </DT
+><DT
+><A
+HREF="r493.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_recv_unlisten_channel</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     stop listening  to a specific channel in multi-channel mode
+ </DT
+><DT
+><A
+HREF="r532.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_recv_set_channel_mask</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     listen or unlisten to a whole bunch of channels at once
+ </DT
+><DT
+><A
+HREF="r574.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_xmit_start</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     begin isochronous transmission
+ </DT
+><DT
+><A
+HREF="r620.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_recv_start</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     begin isochronous reception
+ </DT
+><DT
+><A
+HREF="r673.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_xmit_write</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     alternative blocking-write API for ISO transmission
+ </DT
+><DT
+><A
+HREF="r738.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_xmit_sync</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     wait until all queued packets have been sent
+ </DT
+><DT
+><A
+HREF="r770.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_recv_flush</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     flush all already received iso packets from kernel into user space
+ </DT
+><DT
+><A
+HREF="r805.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_stop</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     halt isochronous transmission or reception
+ </DT
+><DT
+><A
+HREF="r834.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_iso_shutdown</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     clean up and deallocate all resources for isochronous transmission or reception
+ </DT
+><DT
+><A
+HREF="r863.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_read_cycle_timer</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     get the current value of the cycle timer
+ </DT
+><DT
+><A
+HREF="r914.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_errcode</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     return error code of async transaction
+ </DT
+><DT
+><A
+HREF="r953.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_errcode_to_errno</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     convert libraw1394 errcode to errno
+ </DT
+><DT
+><A
+HREF="r997.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_new_handle</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     create new handle
+ </DT
+><DT
+><A
+HREF="r1035.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_destroy_handle</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     deallocate handle
+ </DT
+><DT
+><A
+HREF="r1068.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_new_handle_on_port</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     create a new handle and bind it to a port
+ </DT
+><DT
+><A
+HREF="r1110.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_busreset_notify</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     Switch off/on busreset-notification for handle
+ </DT
+><DT
+><A
+HREF="r1149.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_fd</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     get the communication file descriptor
+ </DT
+><DT
+><A
+HREF="r1188.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_set_userdata</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     associate user data with a handle
+ </DT
+><DT
+><A
+HREF="r1228.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_userdata</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     retrieve user data from handle
+ </DT
+><DT
+><A
+HREF="r1261.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_local_id</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     get node ID of the current port
+ </DT
+><DT
+><A
+HREF="r1293.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_irm_id</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     get node ID of isochronous resource manager
+ </DT
+><DT
+><A
+HREF="r1325.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_nodecount</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     get number of nodes on the bus
+ </DT
+><DT
+><A
+HREF="r1360.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_port_info</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     get information about available ports
+ </DT
+><DT
+><A
+HREF="r1417.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_set_port</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     choose port for handle
+ </DT
+><DT
+><A
+HREF="r1465.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_reset_bus</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     initiate bus reset
+ </DT
+><DT
+><A
+HREF="r1501.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_reset_bus_new</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     Reset the connected bus (with certain type).
+ </DT
+><DT
+><A
+HREF="r1541.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_loop_iterate</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     get and process one event message
+ </DT
+><DT
+><A
+HREF="r1577.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_set_bus_reset_handler</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     set bus reset handler
+ </DT
+><DT
+><A
+HREF="r1621.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_generation</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     get generation number of handle
+ </DT
+><DT
+><A
+HREF="r1657.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_update_generation</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     set generation number of handle
+ </DT
+><DT
+><A
+HREF="r1698.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_set_tag_handler</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     set request completion handler
+ </DT
+><DT
+><A
+HREF="r1747.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_set_arm_tag_handler</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     set the async request handler
+ </DT
+><DT
+><A
+HREF="r1789.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_set_fcp_handler</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     set FCP handler
+ </DT
+><DT
+><A
+HREF="r1835.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>int</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     This is the general request handler
+ </DT
+><DT
+><A
+HREF="r1867.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>int</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     This is the general arm-request handle
+ </DT
+><DT
+><A
+HREF="r1899.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_arm_register</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     register an AddressRangeMapping
+ </DT
+><DT
+><A
+HREF="r1983.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_arm_unregister</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     unregister an AddressRangeMapping
+ </DT
+><DT
+><A
+HREF="r2022.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_arm_set_buf</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     set the buffer of an AdressRangeMapping
+ </DT
+><DT
+><A
+HREF="r2081.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_arm_get_buf</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     get the buffer of an AdressRangeMapping
+ </DT
+><DT
+><A
+HREF="r2140.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_echo_request</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     send an echo request to the driver
+ </DT
+><DT
+><A
+HREF="r2182.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_wake_up</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     wake up raw1394_loop_iterate
+ </DT
+><DT
+><A
+HREF="r2217.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_phy_packet_write</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     send physical request
+ </DT
+><DT
+><A
+HREF="r2259.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_phy_packet_write</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     initiate sending a physical request
+ </DT
+><DT
+><A
+HREF="r2308.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_read</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     initiate a read transaction
+ </DT
+><DT
+><A
+HREF="r2383.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_write</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     initiate a write transaction
+ </DT
+><DT
+><A
+HREF="r2458.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_lock</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     initiate a 32-bit compare-swap lock transaction
+ </DT
+><DT
+><A
+HREF="r2544.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_lock64</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     initiate a 64-bit compare-swap lock transaction
+ </DT
+><DT
+><A
+HREF="r2630.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_async_stream</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     initiate asynchronous stream
+ </DT
+><DT
+><A
+HREF="r2714.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_async_send</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     send an asynchronous packet
+ </DT
+><DT
+><A
+HREF="r2784.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_read</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     send async read request to a node and wait for response.
+ </DT
+><DT
+><A
+HREF="r2851.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_write</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     send async write request to a node and wait for response.
+ </DT
+><DT
+><A
+HREF="r2918.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_lock</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     send 32-bit compare-swap lock request and wait for response.
+ </DT
+><DT
+><A
+HREF="r2996.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_lock64</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     send 64-bit compare-swap lock request and wait for response.
+ </DT
+><DT
+><A
+HREF="r3074.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_async_stream</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+   </DT
+><DT
+><A
+HREF="r3148.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_async_send</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+   </DT
+><DT
+><A
+HREF="r3208.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_start_fcp_listen</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     enable reception of FCP events
+ </DT
+><DT
+><A
+HREF="r3245.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_stop_fcp_listen</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     disable reception of FCP events
+ </DT
+><DT
+><A
+HREF="r3281.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_libversion</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     Returns the version string
+ </DT
+><DT
+><A
+HREF="r3317.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_update_config_rom</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     updates the configuration ROM of a host
+ </DT
+><DT
+><A
+HREF="r3374.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_config_rom</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     reads the current version of the configuration ROM of a host
+ </DT
+><DT
+><A
+HREF="r3439.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_bandwidth_modify</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     allocate or release bandwidth
+ </DT
+><DT
+><A
+HREF="r3488.html"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_channel_modify</SPAN
+></SPAN
+></A
+>&nbsp;--&nbsp;
+     allocate or release isochronous channel
+ </DT
+></DL
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c9.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Introduction</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

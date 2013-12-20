@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Data Structures and Program Flow</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Isochronous Transmissions"
+HREF="x56.html"><LINK
+REL="NEXT"
+TITLE="Handles"
+HREF="x69.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x56.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x69.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="general"
+></A
+>Chapter 3. Data Structures and Program Flow</H1
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN64"
+>3.1. Overview</A
+></H1
+><P
+>&#13;	The 1394 subsystem in Linux is divided into the classical
+	three layers, like most other interface subsystems in Linux.
+	The in-kernel subsystem consists of the ieee1394 core, which
+	provides basic services like handling of the 1394 protocol
+	(converting the abstract transactions into packets and back),
+	collecting information about bus and nodes and providing some
+	services to the bus that are required to be available for
+	standards conformant nodes (e.g. CSR registers).  Below that
+	are the hardware drivers, which handle converting packets and
+	bus events to and from hardware accesses on specific 1394
+	chipsets.
+      </P
+><P
+>&#13;	Above the core are the highlevel drivers, which use the services
+	provided by the core to implement protocols for certain devices and act
+	as drivers to these.  raw1394 is one such driver, however it is not
+	specialized to handle one kind of device but is designed to accept
+	commands from user space to do any transaction wanted (as far as
+	possible from current core design).  Using raw1394, normal applications
+	can access 1394 nodes on the bus and it is not neccessary to write
+	kernel code just for that.
+      </P
+><P
+>&#13;	raw1394 communicates to user space like most device drivers do, through
+	device files in /dev.  It uses a defined protocol on that device, but
+	applications don't have to and should not care about that.  All of this
+	is taken care of by libraw1394, which provides a set of functions that
+	convert to and from raw1394 protocol packets and are a lot easier to
+	handle than that underlying protocol.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x56.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x69.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Isochronous Transmissions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Handles</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

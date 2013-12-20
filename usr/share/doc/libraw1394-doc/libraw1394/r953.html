@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>raw1394_errcode_to_errno</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="libraw1394"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="c232.html"><LINK
+REL="PREVIOUS"
+TITLE="raw1394_get_errcode"
+HREF="r914.html"><LINK
+REL="NEXT"
+TITLE="raw1394_new_handle"
+HREF="r997.html"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>libraw1394: version 2.0.4</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="r914.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="r997.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="API-raw1394-errcode-to-errno"
+></A
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_errcode_to_errno</SPAN
+></SPAN
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN963"
+></A
+><H2
+>Name</H2
+>raw1394_errcode_to_errno&nbsp;--&nbsp;
+     convert libraw1394 errcode to errno
+ </DIV
+><DIV
+CLASS="refsynopsisdiv"
+><A
+NAME="AEN966"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="funcsynopsis"
+><P
+></P
+><A
+NAME="AEN968"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int raw1394_errcode_to_errno </CODE
+>(raw1394_errcode_t errcode);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN974"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><CODE
+CLASS="parameter"
+>errcode</CODE
+></DT
+><DD
+><P
+>&#13;     the error code to convert
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN982"
+></A
+><H2
+>Description</H2
+><P
+>&#13;   The error code as retrieved by <CODE
+CLASS="function"
+>raw1394_get_errcode</CODE
+> is converted into a
+   roughly equivalent errno number and returned.  <CODE
+CLASS="constant"
+>0xdead</CODE
+> is returned for an
+   illegal errcode.
+   </P
+><P
+>&#13;
+   It is intended to be used to decide what to do (retry, give up, report error)
+   for those programs that aren't interested in details, since these get lost in
+   the conversion.  However the returned errnos are equivalent in source code
+   meaning only, the associated text of e.g. <CODE
+CLASS="function"
+>perror</CODE
+> is not necessarily
+   meaningful.
+</P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN989"
+></A
+><H2
+>Returns</H2
+><P
+>&#13;   <CODE
+CLASS="constant"
+>EAGAIN</CODE
+> (retrying might succeed, also generation number
+   mismatch), <CODE
+CLASS="constant"
+>EREMOTEIO</CODE
+> (other node had internal problems), <CODE
+CLASS="constant"
+>EPERM</CODE
+> (operation
+   not allowed on this address, e.g. write on read-only location), <CODE
+CLASS="constant"
+>EINVAL</CODE
+>
+   (invalid argument) and <CODE
+CLASS="constant"
+>EFAULT</CODE
+> (invalid pointer).
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="r914.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="r997.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_get_errcode</SPAN
+></SPAN
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c232.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><SPAN
+CLASS="phrase"
+><SPAN
+CLASS="phrase"
+>raw1394_new_handle</SPAN
+></SPAN
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
