@@ -1,0 +1,154 @@
+;; yi-yivo.mim -- Yiddish input method with YIVO transliteration
+;; Copyright (C) 2010
+;; Raghav Krishnapriyan (raghav.r.krishnapriyan@gmail.com)
+
+;; This file is part of the m17n contrib; a sub-part of the m17n
+;; library.
+
+;; The m17n library is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU Lesser General Public License
+;; as published by the Free Software Foundation; either version 2.1 of
+;; the License, or (at your option) any later version.
+
+;; The m17n library is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Lesser General Public License for more details.
+
+;; You should have received a copy of the GNU Lesser General Public
+;; License along with the m17n library; if not, write to the Free
+;; Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+(input-method yi yivo)
+											
+(description "Yiddish input method using YIVO transliteration.
+A short description of the YIVO transliteration scheme can be found here: http://www.ibiblio.org/pub/academic/languages/yiddish/mendele/vol4.170
+A description of the YIVO orthography can be found in Mordkhe Schaechter, _Der eynheytlekher Yidisher oysleyg: Takones fun yidishn oysleyg_, New York: Yivo and Yiddish Language Resource Center of the League for Yiddish (6th ed. 1999).
+")
+											
+(title "ייִדיש")
+(map
+  (initials
+	("i" "אי")
+	("u" "או")
+	("ey" "אײ")
+	("ay" "אײַ")
+	("oy" "אױ")
+	("ayo" "אַיאָ")
+  )
+  (initdiph
+	("e" ?ע)
+	("a" "אַ")
+	("o" "אָ")
+  )
+  (otherchars
+	("A") ("b") ("d") ("f") ("g") ("h") ("H") ("k") ("l") ("m") ("n") ("p") ("r") ("s") ("S") ("t") ("u") ("v") ("y") ("z") ("B") ("K") ("T") ("W")
+  )
+  (allchars
+	("A") ("b") ("d") ("f") ("g") ("h") ("H") ("k") ("l") ("m") ("n") ("p") ("r") ("s") ("S") ("t") ("u") ("v") ("y") ("z") ("B") ("K") ("T") ("W") ("a") ("e") ("o") ("i") ("u")
+  )
+  (medials
+	("A" ?א)
+	("b" ?ב)
+	("d" ?ד)
+	("e" ?ע)
+	("ey" "ײ")
+	("f" ?ף)
+	("g" ?ג)
+	("h" ?ה)
+	("H" ?ח)
+	("i" ?י)
+	("k" ?ק)
+	("kh" ?ך)
+	("l" ?ל)
+	("m" ?ם)
+	("n" ?ן)
+	("oy" "ױ")
+	("r" ?ר)
+	("s" ?ס)
+	("sh" ?ש)
+	("S" ?ת)
+	("t" ?ט)
+	("ts" ?ץ)
+	("u" ?ו)
+	("v" "װ")
+	("y" ?י)
+	("z" ?ז)
+	("a" "אַ")
+	("B" "בֿ")
+	("ay" "ײַ")
+	("K" "כּ")
+	("o" "אָ")
+	("p" "פּ")
+	("T" "תּ")
+	("tsh" "טש")
+	("W" "שׂ")
+	("zh" "זש")
+	("uv" "וּװ")
+	("vu" "װוּ")
+	("yi" "ייִ")
+	("ui" "ויִ")
+	("eyi" "ײיִ")
+	("ie" "יִע")
+	("ei" "עיִ")
+	("iu" "יִו")
+	("ii" "יִיִ")
+	("ayi" "ײַיִ")
+	("ayo" "אַיאָ")
+	("ia" "יִאַ")
+	("io" "יִאָ")
+	("uvu" "וּװוּ")	; For words like "tsuvuks!"
+  )
+  (abbreviations
+	("s'" "ס'")
+	("m'" "מ'")
+	("kh'" "כ'")
+  )
+  (openquotes ("\"" "„"))
+  (closequotes ("\"" "‟") ("?\"" "?‟") (".\"" ".‟") ("!\"" "!‟"))
+  (parentheses
+	("\(" "\)")
+	("\)" "\(")
+  )
+  (makef ("-" "־"))
+  (gershayim
+	("`" "׳")
+	("``" "״")
+  )
+  (backspace
+	((BackSpace) (undo)))
+)
+											
+(state 
+  (init
+	(initials (shift subsq))
+	(initdiph)
+	(openquotes)
+	(otherchars (pushback 1) (shift subsq))
+	(backspace)
+	(parentheses)
+  )
+  (subsq
+	(allchars 
+		(pushback 1)
+		(cond
+			((= @-1 ?ף) (delete @-1) (insert "פֿ"))
+			((= @-1 ?ך) (delete @-1) (insert ?כ))
+			((= @-1 ?ם) (delete @-1) (insert ?מ))
+			((= @-1 ?ן) (delete @-1) (insert ?נ))
+			((= @-1 ?ץ) (delete @-1) (insert ?צ))
+		)
+		(shift letters))
+	(closequotes)
+	(gershayim)
+	(makef (shift init))
+	(backspace)
+	(nil (shift init))
+  )
+  (letters
+	(medials (shift subsq))
+	(abbreviations (shift init))
+	(nil (shift subsq))
+  )
+)

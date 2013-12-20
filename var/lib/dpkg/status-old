@@ -603,6 +603,26 @@ Description: GNU core utilities
 Homepage: http://gnu.org/software/coreutils
 Original-Maintainer: Michael Stone <mstone@debian.org>
 
+Package: libopts25
+Status: install ok unpacked
+Priority: optional
+Section: libs
+Installed-Size: 126
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: autogen
+Version: 1:5.12-0.1ubuntu1
+Replaces: autogen, libopts9
+Depends: libc6 (>= 2.7), libgcc1 (>= 1:4.4.0)
+Conflicts: libopts9
+Description: automated option processing library based on autogen
+ This package contains the shared libraries needed by binaries that use
+ autoopts for option processing. The package containing the header files
+ and static libraries is libopts25-dev. The package containing the
+ development tools is autogen.
+Homepage: http://www.gnu.org/software/autogen/
+Original-Maintainer: Bradley Smith <bradsmith@debian.org>
+
 Package: sudo
 Status: install ok installed
 Priority: optional
@@ -1513,6 +1533,23 @@ Description: rich set of graph drawing tools - pathplan library
  This package contains the pathplan library.
 Homepage: http://www.graphviz.org/
 Original-Maintainer: David Claughton <dave@eclecticdave.com>
+
+Package: emacs23-bin-common
+Status: install ok installed
+Priority: optional
+Section: editors
+Installed-Size: 351
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: emacs23
+Version: 23.3+1-1ubuntu9
+Depends: emacs23-common (= 23.3+1-1ubuntu9), libc6 (>= 2.4), liblockfile1 (>= 1.0)
+Description: The GNU Emacs editor's shared, architecture dependent files
+ GNU Emacs is the extensible self-documenting text editor.
+ This package contains the architecture dependent infrastructure
+ that's shared by emacs23, emacs23-lucid, and emacs23-nox.
+Homepage: http://www.gnu.org/software/emacs/
+Original-Maintainer: Rob Browning <rlb@defaultvalue.org>
 
 Package: libtasn1-3
 Status: install ok installed
@@ -6491,6 +6528,30 @@ Description: Shared libraries used by Subversion
 Homepage: http://subversion.apache.org/
 Original-Maintainer: Peter Samuelson <peter@p12n.org>
 
+Package: libotf0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 101
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libotf
+Version: 0.9.12-1
+Depends: libc6 (>= 2.4), libfreetype6 (>= 2.2.1)
+Description: A Library for handling OpenType Font - runtime
+ The libotf library provides the following facilities:
+  - Read Open Type Layout Tables from OTF file.  Currently these
+    tables are supported; head, name, cmap, GDEF, GSUB, and GPOS.
+  - Convert a Unicode character sequence to a glyph code sequence by
+    using the above tables.
+ .
+ The combination of libotf and the FreeType library (Ver.2) realizes
+ CTL (complex text layout) by OpenType fonts.
+ .
+ This package contains the runtime part of libotf.
+Original-Maintainer: Harshula Jayasuriya <harshula@gmail.com>
+Homepage: http://www.m17n.org/
+
 Package: adduser
 Status: install ok installed
 Multi-Arch: foreign
@@ -6975,6 +7036,35 @@ Description: Unico Gtk+ 3 theme engine
  engine for Gtk+ 3.0 and newer. It’s the first Gtk+ engine written with Gtk+
  style context APIs in mind, using CSS as first class citizen.
 Homepage: https://launchpad.net/unico
+
+Package: m17n-db
+Status: install ok installed
+Priority: optional
+Section: utils
+Installed-Size: 6300
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 1.6.3-1
+Recommends: libm17n-0 (>= 1.6.0)
+Suggests: m17n-docs
+Description: multilingual text processing library - database
+ The m17n library is a multilingual text processing library for the C
+ language.  This library has following features:
+  - The m17n library is an open source software.
+  - The m17n library for any Linux/Unix applications.
+  - The m17n library realizes multilingualization of many aspects of
+    applications.
+  - The m17n library represents multilingual text as an object named
+    M-text.  M-text is a string with attributes called text properties,
+    and designed to substitute for string in C.  Text properties carry any
+    information required to input, display and edit the text.
+  - The m17n library supports functions to handle M-texts.
+ .
+ m17n is an abbreviation of Multilingualization.
+ .
+ This package contains the database files used by m17n-lib.
+Original-Maintainer: Harshula Jayasuriya <harshula@gmail.com>
+Homepage: http://www.m17n.org/
 
 Package: python-dev
 Status: install ok installed
@@ -9204,6 +9294,24 @@ Description: Libav video scaling library
 Homepage: http://libav.org/
 Original-Maintainer: Debian multimedia packages maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 
+Package: liblockfile-bin
+Status: install ok installed
+Multi-Arch: foreign
+Priority: standard
+Section: utils
+Installed-Size: 65
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: liblockfile
+Version: 1.09-3
+Replaces: liblockfile1 (<< 1.09-1)
+Depends: libc6 (>= 2.4)
+Breaks: liblockfile1 (<< 1.09-1)
+Description: support binaries for and cli utilities based on liblockfile
+ This package contains support binaries for the liblockfile library,
+ and the command-line utility ``dotlockfile''.
+Original-Maintainer: Miquel van Smoorenburg <miquels@cistron.nl>
+
 Package: libpulse0
 Status: install ok installed
 Multi-Arch: same
@@ -9588,6 +9696,36 @@ Description: library of linear algebra routines 3 - shared version
  use in the scientific community.
 Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
 Homepage: http://www.netlib.org/lapack/
+
+Package: libm17n-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 431
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: m17n-lib
+Version: 1.6.3-1
+Depends: libc6 (>= 2.7), libfontconfig1 (>= 2.8.0), libfreetype6 (>= 2.2.1), libfribidi0 (>= 0.19.2), libgd2-noxpm (>= 2.0.36~rc1~dfsg) | libgd2-xpm (>= 2.0.36~rc1~dfsg), libotf0 (>= 0.9.11), libthai0 (>= 0.1.12), libx11-6, libxft2 (>> 2.1.1), libxml2 (>= 2.7.4), libxt6, m17n-db (>= 1.6.0), m17n-contrib
+Suggests: m17n-docs
+Description: multilingual text processing library - runtime
+ The m17n library is a multilingual text processing library for the C
+ language.  This library has following features:
+  - The m17n library is an open source software.
+  - The m17n library for any Linux/Unix applications.
+  - The m17n library realizes multilingualization of many aspects of
+    applications.
+  - The m17n library represents multilingual text as an object named
+    M-text.  M-text is a string with attributes called text properties,
+    and designed to substitute for string in C.  Text properties carry any
+    information required to input, display and edit the text.
+  - The m17n library  supports functions to handle M-texts.
+ .
+ m17n is an abbreviation of Multilingualization.
+ .
+ This package contains the runtime part of m17n-lib.
+Original-Maintainer: Harshula Jayasuriya <harshula@gmail.com>
+Homepage: http://www.m17n.org/
 
 Package: leafpad
 Status: install ok installed
@@ -10342,6 +10480,45 @@ Description: GNU troff text-formatting system (base system components)
  install the groff package.
 Homepage: http://groff.ffii.org/
 
+Package: ntp
+Status: install ok unpacked
+Priority: optional
+Section: net
+Installed-Size: 1007
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 1:4.2.6.p3+dfsg-1ubuntu3
+Replaces: apparmor (<< 2.3.1+1403-0ubuntu10), apparmor-profiles (<< 2.3.1+1403-0ubuntu10)
+Depends: adduser, lsb-base (>= 3.2-13), netbase, libc6 (>= 2.15), libcap2 (>= 2.10), libedit2 (>= 2.11-20080614-1), libgcc1 (>= 1:4.4.0), libopts25 (>= 1:5.12)
+Pre-Depends: dpkg (>= 1.15.7.2)
+Recommends: perl
+Suggests: ntp-doc, apparmor (>= 2.1+1075-0ubuntu6)
+Breaks: dhcp3-client (<< 4.1.0-1)
+Conflicts: apparmor (<< 2.3.1+1403-0ubuntu10), apparmor-profiles (<< 2.3.1+1403-0ubuntu10)
+Conffiles:
+ /etc/apparmor.d/usr.sbin.ntpd newconffile
+ /etc/apparmor.d/tunables/ntpd newconffile
+ /etc/default/ntp newconffile
+ /etc/ntp.conf newconffile
+ /etc/cron.daily/ntp newconffile
+ /etc/dhcp/dhclient-exit-hooks.d/ntp newconffile
+ /etc/init.d/ntp newconffile
+Description: Network Time Protocol daemon and utility programs
+ NTP, the Network Time Protocol, is used to keep computer clocks
+ accurate by synchronizing them over the Internet or a local network,
+ or by following an accurate hardware receiver that interprets GPS,
+ DCF-77, NIST or similar time signals.
+ .
+ This package contains the NTP daemon and utility programs.  An NTP
+ daemon needs to be running on each host that is to have its clock
+ accuracy controlled by NTP.  The same NTP daemon is also used to
+ provide NTP service to other hosts.
+ .
+ For more information about the NTP protocol and NTP server
+ configuration and operation, install the package "ntp-doc".
+Homepage: http://support.ntp.org/
+Original-Maintainer: Debian NTP Team <pkg-ntp-maintainers@lists.alioth.debian.org>
+
 Package: gnupg
 Status: install ok installed
 Multi-Arch: foreign
@@ -10948,6 +11125,24 @@ Description: Make ssh v2 connections with Python
  are supported.  SFTP client and server mode are both supported too.
 Original-Maintainer: Jeremy T. Bouse <jbouse@debian.org>
 Homepage: http://www.lag.net/paramiko/
+
+Package: emacs23
+Status: install ok installed
+Priority: optional
+Section: editors
+Installed-Size: 8374
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 23.3+1-1ubuntu9
+Replaces: emacs23-gtk, emacs23-lucid, emacs23-nox
+Provides: editor, emacs23-gtk, emacsen, info-browser, mail-reader, news-reader
+Depends: emacs23-bin-common (= 23.3+1-1ubuntu9), gconf-service, libasound2 (>= 1.0.23), libc6 (>= 2.15), libdbus-1-3 (>= 1.1.1), libfontconfig1 (>= 2.8.0), libfreetype6 (>= 2.2.1), libgcc1 (>= 1:4.4.0), libgconf-2-4 (>= 2.31.1), libgdk-pixbuf2.0-0 (>= 2.22.0), libgif4 (>= 4.1.4), libglib2.0-0 (>= 2.12.0), libgpm2 (>= 1.20.4), libgtk2.0-0 (>= 2.24.0), libice6 (>= 1:1.0.0), libjpeg8 (>= 8c), libm17n-0 (>= 1.6.1), libncurses5 (>= 5.5-5~), libotf0 (>= 0.9.11), libpng12-0 (>= 1.2.13-4), librsvg2-2 (>= 2.14.4), libsm6, libtiff4, libtinfo5, libx11-6, libxft2 (>> 2.1.1), libxpm4, libxrender1
+Conflicts: emacs23-gtk, emacs23-lucid, emacs23-nox
+Description: The GNU Emacs editor (with GTK+ user interface)
+ GNU Emacs is the extensible self-documenting text editor.
+ This package contains a version of Emacs with a GTK+ user interface.
+Homepage: http://www.gnu.org/software/emacs/
+Original-Maintainer: Rob Browning <rlb@defaultvalue.org>
 
 Package: glib-networking-services
 Status: install ok installed
@@ -12520,6 +12715,24 @@ Description: LightDM GObject client library
  A GObject based library for LightDM clients to use to interface with LightDM.
 Homepage: https://launchpad.net/lightdm
 
+Package: libbsd0
+Status: install ok unpacked
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 112
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libbsd
+Version: 0.3.0-2
+Depends: libc6 (>= 2.8), libgcc1 (>= 1:4.4.0)
+Pre-Depends: multiarch-support
+Description: utility functions from BSD systems - shared library
+ This library provides some functions commonly available on BSD systems
+ but not on others like GNU systems.
+Original-Maintainer: Debian GNU/kFreeBSD <debian-bsd@lists.debian.org>
+Homepage: http://libbsd.freedesktop.org/
+
 Package: libxft2
 Status: install ok installed
 Multi-Arch: same
@@ -13162,7 +13375,7 @@ Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.aliot
 Homepage: http://live.gnome.org/LibUnique
 
 Package: tmux
-Status: install ok unpacked
+Status: install ok installed
 Priority: optional
 Section: admin
 Installed-Size: 329
@@ -13455,6 +13668,26 @@ Description: simple interprocess messaging system (X11 deps)
  See the dbus description for more information about D-Bus in general.
 Homepage: http://dbus.freedesktop.org/
 Original-Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
+
+Package: emacs23-common
+Status: install ok installed
+Priority: optional
+Section: editors
+Installed-Size: 62108
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: emacs23
+Version: 23.3+1-1ubuntu9
+Replaces: emacs23-common-non-dfsg
+Depends: emacsen-common (>= 1.4.10), dpkg (>= 1.15.4) | install-info
+Suggests: emacs23-el
+Conflicts: emacs23-common-non-dfsg, emacs23-el (<< 23.3+1-1ubuntu9)
+Description: The GNU Emacs editor's shared, architecture independent infrastructure
+ GNU Emacs is the extensible self-documenting text editor.
+ This package contains the architecture independent infrastructure
+ that's shared by emacs23, emacs23-lucid, and emacs23-nox.
+Homepage: http://www.gnu.org/software/emacs/
+Original-Maintainer: Rob Browning <rlb@defaultvalue.org>
 
 Package: libgpm2
 Status: install ok installed
@@ -16092,6 +16325,26 @@ Description: generic font configuration library - configuration
  This package contains the configuration files and scripts for fontconfig.
 Original-Maintainer: Keith Packard <keithp@debian.org>
 
+Package: libedit2
+Status: install ok unpacked
+Multi-Arch: same
+Priority: standard
+Section: libs
+Installed-Size: 121
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libedit
+Version: 2.11-20080614-3ubuntu2
+Depends: libbsd0 (>= 0.0), libc6 (>= 2.11), libtinfo5
+Pre-Depends: multiarch-support
+Description: BSD editline and history libraries
+ The editline library provides generic line editing and
+ history functions.
+ .
+ It slightly resembles GNU readline
+Homepage: http://ftp.netbsd.org/pub/NetBSD/NetBSD-current/src/lib/libedit/
+Original-Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
+
 Package: libxtst6
 Status: install ok installed
 Multi-Arch: same
@@ -16482,6 +16735,37 @@ Description: Terminal emulator widget for GTK+ 2.0 - runtime files
  VTE widget with GTK+ 2.0.
 Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 
+Package: m17n-contrib
+Status: install ok installed
+Priority: optional
+Section: utils
+Installed-Size: 1460
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 1.1.13-1
+Depends: m17n-db (>= 1.6.3)
+Recommends: libm17n-0 (>= 1.6.3)
+Suggests: gawk
+Description: multilingual text processing library - contributed database
+ The m17n library is a multilingual text processing library for the C
+ language.  This library has following features:
+  - The m17n library is an open source software.
+  - The m17n library for any Linux/Unix applications.
+  - The m17n library realizes multilingualization of many aspects of
+    applications.
+  - The m17n library represents multilingual text as an object named
+    M-text.  M-text is a string with attributes called text properties,
+    and designed to substitute for string in C.  Text properties carry any
+    information required to input, display and edit the text.
+  - The m17n library  supports functions to handle M-texts.
+ .
+ m17n is an abbreviation of Multilingualization.
+ .
+ This package contains the database files contributed by the community and
+ used by m17n-lib.
+Original-Maintainer: Harshula Jayasuriya <harshula@gmail.com>
+Homepage: http://www.m17n.org/
+
 Package: libkrb5-dev
 Status: install ok installed
 Priority: extra
@@ -16625,6 +16909,24 @@ Description: low level cryptographic library (symmetric and one-way cryptos)
 Original-Maintainer: Magnus Holmgren <holmgren@debian.org>
 Homepage: http://www.lysator.liu.se/~nisse/nettle/
 
+Package: emacs
+Status: install ok installed
+Priority: optional
+Section: editors
+Installed-Size: 52
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: emacs23
+Version: 23.3+1-1ubuntu9
+Provides: editor, emacsen, mail-reader, news-reader
+Depends: emacs23 | emacs23-lucid | emacs23-nox
+Description: The GNU Emacs editor (metapackage)
+ GNU Emacs is the extensible self-documenting text editor.
+ This is a metapackage which will always depend on the latest Emacs
+ release.
+Homepage: http://www.gnu.org/software/emacs/
+Original-Maintainer: Rob Browning <rlb@defaultvalue.org>
+
 Package: libx11-data
 Status: install ok installed
 Multi-Arch: foreign
@@ -16724,7 +17026,7 @@ Homepage: http://dev.mysql.com/
 Original-Maintainer: Debian MySQL Maintainers <pkg-mysql-maint@lists.alioth.debian.org>
 
 Package: libevent-2.0-5
-Status: install ok unpacked
+Status: install ok installed
 Priority: standard
 Section: libs
 Installed-Size: 211
@@ -18888,6 +19190,22 @@ Description: MIT Kerberos runtime libraries
  used by applications and Kerberos clients.
 Original-Maintainer: Sam Hartman <hartmans@debian.org>
 Homepage: http://web.mit.edu/kerberos/
+
+Package: liblockfile1
+Status: install ok installed
+Multi-Arch: same
+Priority: standard
+Section: libs
+Installed-Size: 51
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: liblockfile
+Version: 1.09-3
+Depends: libc6 (>= 2.4), liblockfile-bin (>= 1.09-3)
+Pre-Depends: multiarch-support
+Description: NFS-safe locking library
+ Liblockfile is a shared library with NFS-safe locking functions.
+Original-Maintainer: Miquel van Smoorenburg <miquels@cistron.nl>
 
 Package: libxau6
 Status: install ok installed

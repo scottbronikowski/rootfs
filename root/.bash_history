@@ -253,3 +253,106 @@ cat /etc/udev/rules.d/70-persistent-net.rules
 vim /etc/wpa_supplicant.conf 
 rm /etc/udev/rules.d/70-persistent-net.rules 
 shutdown -h now
+passwd
+cd /etc/network
+leafpad interfaces &
+ifdown wlan0
+ifup wlan0
+ls -al
+chmod 644 interfaces
+ls -al
+ifdown wlan0
+ifup wlan0
+ip addr
+ping google.com
+git config --global user.name "Scott Bronikowski"
+git config --global user.email "scottbronikowski@gmail.com"
+git config --global credential.helper cache
+git config --global credential.helper 'cache --timeout=360000'
+cd /
+ls -al
+cd etc
+ls
+ls ho*
+more hostname 
+emacs
+vi
+sudo apt-get install emacs
+sudo apt-get install ntp
+date -R
+ntpq -p
+dpkg-reconfigure ntp
+ntpq -p
+date
+date -R
+ntpdate
+emacs ntp.conf &
+date -R
+date
+ntpdate ntp.ubuntu.com
+ntpdate
+ntptrace $servername
+ntptrace
+ping ntp.ubuntu.com
+service stop ntpd
+service ntpd stop
+service ntp stop
+ntpdate ntp.ubuntu.com
+ntpq
+ntpdate pool.ntp.org
+ntpdate -p ntp.ubuntu.com
+ntpdate -d ntp.ubuntu.com
+date
+ls nt*
+ifdown wlan0
+ifup wlan0
+date
+service ntp start
+date
+ntpd -p
+ntpq -p
+ping 129.70.130.70
+init.d/ntp reload
+ntpq -p
+/etc/init.d/ntp reload
+ntpq -p
+service ntp restart
+ntpq -p
+dpkg -;
+dpkg -l
+dpgk -l 
+dpkg -l | grep ntp
+dpkg -i
+apt-get install ntp-bin
+cd init.d
+ls
+ntpdate
+ntpdate start
+ntpdate -s -u us.pool.ntp.org
+date
+ntpq -d
+ntpq -p
+service ntp restart
+date
+ntpq -p
+cd ..
+ls time
+ls ti*
+more timezone 
+dpkg-reconfigure tzdate
+dpkg-reconfigure tzdata
+reboot
+date
+cd /
+ls
+ls -al
+sudo network-manager
+more /etc/hostname 
+emacs /etc/hostname &
+sudo networkmanager
+cd /
+git commit -m "set root pw; edit /etc/network/interfaces, /etc/hostname, /etc/hosts; install emacs, ntp"
+git push origin master
+git add *
+sudo git add *
+reboot

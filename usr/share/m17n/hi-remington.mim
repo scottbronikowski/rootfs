@@ -1,0 +1,193 @@
+;; hi-remington.mim -- Hindi input method for Remington typewriter layout
+;; Copyright (c) 2006-2010 Red Hat, Inc. All Rights Reserved.
+
+;; This file is part of the m17n contrib; a sub-part of the m17n
+;; library.
+
+;; The m17n library is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU Lesser General Public License
+;; as published by the Free Software Foundation; either version 2.1 of
+;; the License, or (at your option) any later version.
+
+;; The m17n library is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Lesser General Public License for more details.
+
+;; You should have received a copy of the GNU Lesser General Public
+;; License along with the m17n library; if not, write to the Free
+;; Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+(input-method hi remington)
+
+(description "Hindi input method for Remington typewriter layout.
+Author: Rajesh Ranjan <rranjan@redhat.com>
+")
+
+(title "क")
+
+(map
+ (starter
+  (".") ("~") ("!") ("@") ("#") ("$") ("%") ("^") ("&") 
+  ("*") ("(") (")") ("{") ("}") ("[") ("]") ("<") (">")
+  (",") ("?") ("/") ("\\") ("\"") (":") (";") ("+") ("=")
+  ("_") ("-") ("0") ("1") ("2") ("3") ("4") ("5") ("6")
+  ("7") ("8") ("9") ("`") ("|") ("'")
+  ("A") ("B")("C") ("D") ("E") ("F") ("G") ("H") ("I") 
+  ("J") ("K") ("L") ("M") ("N") ("O") ("P") ("Q") ("R")
+  ("S") ("T") ("U") ("V") ("W") ("X") ("Y") ("Z")
+  ("a") ("b") ("c") ("d") ("e") ("f") ("g") ("h") ("i")
+  ("j") ("k") ("l") ("m") ("n") ("o") ("p") ("q") ("r")
+  ("s") ("t") ("u") ("v") ("w") ("x") ("y") ("z")
+  ((KP_1)) ((KP_2)) ((KP_3)) ((KP_4)) ((KP_5))
+  ((KP_6)) ((KP_7)) ((KP_8)) ((KP_9)) ((KP_0)))
+
+ (consonant
+  ("{" "क्ष्")
+  ("[" "ख्")
+  (")" "द्घ")
+  ("}" "द्व")
+ ("E" "म्")
+ ("R" "त्")
+ ("T" "ज्")
+ ("Y" "ल्")
+ ("U" "न्")
+ ("I" "प्")
+ ("O" "व्")
+("P" "च्") 
+ ("D" "क्")
+ ("F" "थ्")
+ ("H" "भ्")
+ ("L" "स्")
+  ("\"" "ष्")
+  ("'" "श्")
+ ("z" "्र")
+ ("Z" "र्") 
+ ("X" "ग्")
+ ("C" "ब्")
+  ("." "ण्")
+  ("?" "घ्")
+  ("/" "ध्"))
+
+  (independent
+  ((KP_1) "१")
+  ((KP_2) "२")
+  ((KP_3) "३")
+  ((KP_4) "४")
+  ((KP_5) "५")
+  ((KP_6) "६")
+  ((KP_7) "७")
+  ((KP_8) "८")
+  ((KP_9) "९")
+  ((KP_0) "०")
+  ((KP_Decimal) ".")
+  ((KP_Divide) "/")
+  ((KP_Multiply) "*")
+  ((KP_Add) "+")
+  ((KP_Subtract) "-") 
+  ("vk" "आ")
+  ("Wa" "ँ")
+  ("ks" "ो")
+  ("kS" "ौ")
+  ("vAs" "ओ")
+  ("vAS" "औ")
+  ("`" "ृ")
+ ("~" "`") 
+ ("!" "!")
+  ("1" "१")
+ ("@" "/")
+  ("2" "२")
+  ("#" "रु")
+  ("3" "३")
+ ("$" "+")
+  ("4" "४")
+  ("%" "ः")
+  ("5" "५")
+ ("^" "'")
+  ("6" "६")
+ ("&" "-")
+  ("7" "७")
+ ("*" "'")
+  ("8" "८")
+ ("(" ";")
+  ("9" "९")
+  ("0" "०")
+  ("_" "ऋ")
+ ("-" ".")
+  ("+" "़")
+  ("=" "त्र")
+("q" "ु")
+ ("W" "ॅ")
+ ("w" "ू")
+ ("Q" "फ")
+ ("r" "त")
+ ("e" "म")
+ ("t" "ज")
+ ("y" "ल")
+ ("u" "न")
+ ("i" "प")
+ ("o" "व")
+ ("p" "च")
+ ("]" ",")
+  ("|" "द्य")
+ ("\\" "?")
+ ("A" "।")
+ ("a" "ं")
+ ("S" "ै")
+ ("s" "े")
+ ("d" "क")
+ ("f" "ि")
+ ("G" "ळ")
+ ("g" "ह")
+ ("h" "ी")
+ ("J" "श्र")
+ ("j" "र")
+ ("K" "ज्ञ")
+ ("k" "ा")
+ ("l" "स")
+  (":" "रू")
+  (";" "य")
+ ("x" "ग")
+ ("c" "ब")
+ ("V" "ट")
+ ("v" "अ")
+ ("B" "ठ")
+ ("b" "इ")
+ ("N" "छ")
+ ("n" "द")
+ ("M" "ड")
+ ("m" "उ")
+  ("<" "ढ")
+  ("," "ए")
+  (">" "झ"))
+
+(dependent
+  ("k" (delete @-) ""))
+  
+ (return
+  ((Return)))
+
+ (backspace
+  ((BackSpace) (undo))))
+
+(state
+ (init
+  (starter (pushback 1) (shift intermediate)))
+
+ (intermediate
+  (consonant (shift second))
+  (independent (shift init))
+  (backspace)
+  (return (shift init)))
+
+ (second
+  (consonant)
+  (dependent (shift init))
+  (backspace)
+  (return (shift init))))
+
+;; Local Variables:
+;; coding: utf-8
+;; mode: emacs-lisp
+;; End:

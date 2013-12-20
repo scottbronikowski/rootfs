@@ -1,0 +1,293 @@
+;; ORYA-OTF.flt -- Font Layout Table for Oriya OpenType font
+;; Copyright (C) 2004, 2007, 2008, 2010 AIST (H15PRO112)
+;; See the end for copying conditions.
+
+(font layouter orya-otf nil
+      (version "1.6.0")
+      (font (nil nil unicode-bmp :otf=orya)))
+
+;;; <li> ORYA-OTF.flt
+;;;
+;;; For Oriya OpenType fonts to draw the Oriya script.
+
+(category
+ ;; B: consonants that have a below form
+ ;; C: consonants that do not
+ ;; This table is made for Samyak-Oriya.ttf and utkal.ttf.
+ ;; (lohit_or.ttf has more below form consonants.)
+ (0x0B00 0x0B7F ?X)			; generic
+ (0x0B01	?a)			; SIGN CANDRABINDU
+ (0x0B02 0x0B03	?A)			; SIGN ANUSVARA .. VISARGA
+ (0x0B05 0x0B14	?V)			; LETTER A .. VOCALIC AU
+ (0x0B15 0x0B39	?B)			; LETTER KA .. HA
+ (0x0B18 0x0B1A	?C)			; LETTER GHA .. CA
+ (0x0B1E	?C)			; LETTER NYA
+ (0x0B22	?C)			; LETTER DDHA
+ (0x0B25 0x0B26	?C)			; LETTER THA .. DA
+ (0x0B2F	?Y)			; LETTER YA
+ (0x0B30	?R)			; LETTER RA
+ (0x0B36 0x0B37	?C)			; LETTER SHA .. SSA
+ (0x0B3C	?n)			; SIGN NUKTA
+ (0x0B3E	?p)			; VOWEL SIGN AA
+ (0x0B3F	?u)			; VOWEL SIGN I
+ (0x0B40	?p)			; VOWEL SIGN II
+ (0x0B41 0x0B44	?b)			; VOWEL SIGN U .. VOCALIC RR
+ (0x0B47	?m)			; VOWEL SIGN E
+ (0x0B4D	?H)			; SIGN VIRAMA
+ (0x0B56	?u)			; AI LENGTH MARK
+ (0x0B57	?p)			; AU LENGTH MARK
+ (0x0B5C 0x0B5D	?C)			; LETTER RRA .. RHA
+ (0x0B5F	?Y)			; LETTER YYA
+ (0x0B60 0x0B61	?V)			; LETTER VOCALIC RR .. LL
+ (0x0B62 0x0B63 ?b)			; VOWEL SIGN VOCALIC L .. LL
+ (0x0B71	?C)			; LETTER WA
+
+ (0x200C	?N)			; ZWNJ
+ (0x200D	?J)			; ZWJ
+ (0x25CC	?X)			; DOTTED CIRCLE
+
+ (rphf		?r)
+ (pstf		?P)
+ )
+
+;; Stage 0
+;; Preprocessing
+(generator
+ (0
+  (cond
+   ;; Decompose two-part vowel signs.
+   ((0x0B48)
+    0x0B47 0x0B56)
+   ((0x0B4B)
+    0x0B47 0x0B3E)
+   ((0x0B4C)
+    0x0B47 0x0B57)
+
+   ;; Compose consonant and nukta.
+   ((0x0B21 0x0B3C)
+    0x0B5C)
+   ((0x0B22 0x0B3C)
+    0x0B5D)
+
+   ("." =))
+  *))
+
+;; Stage 1
+;; Syllable identification
+(generator
+ (0
+  (cond
+   ;; Syllables with an independent vowel
+   ("(RH)?(Vn?)((J?H[BYR])?m?u?b?p?n?a?A?)"
+    < | (1 = =) (2 :otf=orya=nukt+) (3 = *) | >)
+
+   ;; Consonant-based syllables
+   ;;1        23                   4
+   ("([CBYR]n?((J?H|HJ?)[CBYR]n?)*)(H[NJ]?|m?u?b?p?n?a?A?)"
+    < |
+    (cond
+     (".+HJ$" :otf=orya=nukt,akhn+)
+     ("(.+)(H)N?$" (1 :otf=orya=nukt,akhn+) (2 =) 0x200C)
+     (".+" :otf=orya=nukt,akhn+))
+    | >)
+
+   ;; Two-part vowel signs
+   ((0x0B47 0x0B56)
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC = >)
+     (".+" [ 0x0B48 ])))
+   ((0x0B47 0x0B3E)
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC = >)
+     (".+" [ 0x0B4B ])))
+   ((0x0B47 0x0B57)
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC = >)
+     (".+" [ 0x0B4C ])))
+
+   ;; Combining marks are displayed with a DOTTED CIRCLE.
+   ("m"
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC >)
+     ("." [ = ])))
+   ("[nHubpaA]"
+    (cond
+     ((font-facility 0x25CC) < 0x25CC = >)
+     ("." [ = ])))
+
+   ;; Isolated blwf and pstf are displayed with a DOTTED CIRCLE in the
+   ;; next stage.
+   ("(J)(H)([BYR])"
+    < | (1 =) (3 =) (2 =) | >)
+
+   ("." =))
+  *))
+
+;; Stage 2
+;; Reorder halant for blwf and pstf
+(generator
+ (0
+  (cond
+   ;; Isolated blwf and pstf
+   (" J([BYR]H) "
+    (cond
+     ((font-facility 0x25CC) < 0x25CC (1 :otf=orya=blwf,pstf+) >)
+     (" J([BYR]H) " [ (1 :otf=orya=blwf,pstf+) ])))
+
+   ;; Syllables with an overt halant
+   (" (RHJ?)?([^ ]+)(HN) "
+    | (1 = *) (2 reorder) (3 = =) |)
+
+   ;; Ordinary syllables
+   (" (RHJ?)?([^mubpaA ]+)(m?u?b?p?n?a?A?) "
+    | (1 = *) (2 reorder) (3 = *) |)
+
+   ("." =))
+  *)
+
+ (reorder
+  ("(.|.+([^YJ]|JY|HJ))((J?HY)*)$"
+   (1 reorder-BR *) (3 reorder-Y *)))
+
+ (reorder-BR
+  (cond
+   ("J?(H)([BR])"
+    (2 =) (1 =))
+   ("." =)))
+
+ (reorder-Y
+  ("J?(H)(Y)"
+   (2 =) (1 =)))
+ )
+
+;; Stage 3
+;; Language forms and matra reordering
+(generator
+ (0
+  (cond
+   ;; Overt halant forms
+   (" (RHJ?)?([^ ]+)(HN) "
+    |
+    (1 (cond ("RHJ" :otf=orya=half+)
+	     ("RH" :otf=orya=rphf+)))
+    (2 b4post) (2 post) (3 = =) |)
+
+   ;; Other syllables
+   ;; 1      2            3     4     5     6     7   8
+   (" (RHJ?)?([^mubpaA ]*)(mn?)?(un?)?(bn?)?(pn?)?(a)?(A)? "
+    | (3 = *)
+    (1 (cond ("RHJ" :otf=orya=half+)
+	     ("RH" :otf=orya=rphf+)))
+    (2 b4post) (5 = *) (4 = *) (7 =) (2 post) (6 = *) (8 =) |)
+
+   ("." =))
+  *)
+
+ ;; Oriya should not have half forms nor vatu forms, but
+ ;; Samyak-Oriya.ttf and utkal.ttf do have them.
+ (b4post
+  (cond
+   ("(.H)J?(.*)"
+    (1 :otf=orya=half+)
+    (2 ("(.|.+([^YH]|JY|[BR]H))((YH)*)$" (1 lang-forms *))))
+   ("(.|.+([^YH]|JY|[BR]H))((YH)*)"
+    (1 lang-forms *))))
+
+ (lang-forms
+  (cond
+   ("(.H)J" (1 :otf=orya=half+))
+   (".H" :otf=orya=blwf,half,vatu+)
+   ("." =)))
+
+ (post
+  ("(.|.+([^YH]|JY|[BR]H))((YH)+)$"
+   (3 :otf=orya=pstf+)))
+ )
+
+;; Stage 4
+;; Final reordering #1 (Move pre-base matra after the last halant)
+(generator
+ (0
+  (cond
+   ;; 1    2         3
+   (" (mn?)([^ ]+HJ?)([^H ]+) "
+    | (2 = *) (1 = *) (3 = *) |)
+
+   ("." =))
+  *))
+
+;; Stage 5
+;; Final reordering #2 (Move reph after the first halant)
+(generator
+ (0
+  (cond
+   ;; Syllables with a reph and an overt halant
+   ;; 1     2  3           4
+   (" (mn?)?(r)([^HP ]+HJ?)([^ ]*) "
+    | (1 = *) (3 = *) (2 =) (4 = *) |)
+
+   ;; A reph without overt halant
+   ;; 1     2  3          4
+   (" (mn?)?(r)([^aPpA ]+)(a?P*(HN)?p?n?A?) "
+    | (1 = *) (3 = *) (2 =) (4 = *) |)
+
+   ("." =))
+  *))
+
+;; Stage 6
+;; Nukta for matra and Presentation forms
+(generator
+ (0
+  (cond
+   (" ([^ ]+) "
+    | (1 :otf=orya=nukt,pres,abvs,blws,psts,haln+) |)
+
+   ("." =))
+  *))
+
+;; Stage 7
+;; Remove ZWNJ/ZWJ
+(generator
+ (0
+  (cond
+   ("[NJ]")
+
+   ("." =))
+  *))
+
+;; Stage 8
+;; GPOS processing
+(generator
+ (0
+  (cond
+   (" ([^ ]+) "
+    (1 :otf=orya=+abvm,blwm,dist))
+
+   ("." =))
+  *))
+
+;; Copyright (C) 2004, 2007, 2008, 2010
+;;   National Institute of Advanced Industrial Science and Technology (AIST)
+;;   Registration Number H15PRO112
+
+;; This file is part of the m17n database; a sub-part of the m17n
+;; library.
+
+;; The m17n library is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU Lesser General Public License
+;; as published by the Free Software Foundation; either version 2.1 of
+;; the License, or (at your option) any later version.
+
+;; The m17n library is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Lesser General Public License for more details.
+
+;; You should have received a copy of the GNU Lesser General Public
+;; License along with the m17n library; if not, write to the Free
+;; Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;; Local Variables:
+;; mode: emacs-lisp
+;; End:

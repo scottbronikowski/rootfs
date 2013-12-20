@@ -1,0 +1,264 @@
+;; KNDA-OTF.flt -- Font Layout Table for Kannada OpenType fonts
+;; Copyright (C) 2004, 2007, 2010 AIST (H15PRO112)
+;; See the end for copying conditions.
+
+(font layouter knda-otf nil
+      (version "1.6.0")
+      (font (nil nil unicode-bmp :otf=knda)))
+
+;;; <li> KNDA-OTF.flt
+;;;
+;;; For Kannada OpenType fonts to draw the Kannada script.
+
+(category
+ ;; b: before subscript matras
+ ;; a: after subscript matras
+ (0x0C80 0x0CFF	?X)			; generic
+ (0x0C82 0x0C83	?A)			; SIGN ANUSVARA .. VISARGA
+ (0x0C85 0x0C94	?V)			; LETTER A .. LETTER AU
+ (0x0C95 0x0CB9	?C)			; LETTER KA .. LETTER HA
+ (0x0CB0	?R)			; LETTER RA
+ (0x0CBC	?n)			; SIGN NUKTA
+ (0x0CBE 0x0CBF	?b)			; VOWEL SIGN AA .. I
+ (0x0CC1 0x0CC2	?b)			; VOWEL SIGN U .. UU
+ (0x0CC3 0x0CC4	?a)			; VOWEL SIGN VOCALIC R .. VOCALIC RR
+ (0x0CC6	?b)			; VOWEL SIGN E
+ (0x0CCC	?b)			; VOWEL SIGN AU
+ (0x0CCD	?H)			; SIGN VIRAMA
+ (0x0CD5 0x0CD6	?a)			; LENGTH MARK .. AI LENGTH MARK
+ (0x0CDE	?C)			; LETTER FA (LLLA)
+ (0x0CE0 0x0CE1	?V)			; LETTER VOCALIC RR .. VOCALIC LL
+ (0x0CE2 0x0CE3	?b)			; VOWEL SIGN VOCALIC L .. VOCALIC LL
+
+ (0x200C	?N)			; ZWNJ
+ (0x200D	?J)			; ZWJ
+ (0x25CC	?X)			; DOTTED CIRCLE
+
+ (blwf		?B)
+ (rphf		?r)
+ )
+
+;; Stage 0
+;; Preprocessing
+(generator
+ (0
+  (cond
+   ;; Decompose multi-part vowel signs.
+   ((0x0CC0)
+    0x0CBF 0x0CD5)
+   ((0x0CC7)
+    0x0CC6 0x0CD5)
+   ((0x0CC8)
+    0x0CC6 0x0CD6)
+   ((0x0CCA)
+    0x0CC6 0x0CC2)
+   ((0x0CCB)
+    0x0CC6 0x0CC2 0x0CD5)
+
+   ("." =))
+  *))
+
+;; Stage 1
+;; Syllable identification
+(generator
+ (0
+  (cond
+   ;; Syllables with an independent vowel
+   ("(RH)?(Vn?)((J?H[CR])?b?b?a?A?)"
+    < | (1 = =) (2 :otf=knda=nukt+) (3 = *) | >)
+
+   ;; Consonant-based syllables
+   ;;1      23                 4
+   ("([CR]n?((J?H|HJ?)[CR]n?)*)(H[NJ]?|b?b?a?n?A?)"
+    < |
+    (cond
+     (".+HJ$" :otf=knda=nukt,akhn+)
+     ("(.+)(H)N?$" (1 :otf=knda=nukt,akhn+) (2 =) 0x200C)
+     (".+" :otf=knda=nukt,akhn+))
+    | >)
+
+   ;; Multi-part vowel signs
+   ((0x0CBF 0x0CD5)
+    (cond
+     ((font-facility 0x25CC) < 0x25CC = = >)
+     (".+" [ 0x0CC0 ])))
+   ((0x0CC6 0x0CD5)
+    (cond
+     ((font-facility 0x25CC) < 0x25CC = = >)
+     (".+" [ 0x0CC7 ])))
+   ((0x0CC6 0x0CD6)
+    (cond
+     ((font-facility 0x25CC) < 0x25CC = = >)
+     (".+" [ 0x0CC8 ])))
+   ((0x0CC6 0x0CC2 0x0CD5)
+    (cond
+     ((font-facility 0x25CC) < 0x25CC = = = >)
+     (".+" [ 0x0CCB ])))
+   ((0x0CC6 0x0CC2)
+    (cond
+     ((font-facility 0x25CC) < 0x25CC = = >)
+     (".+" [ 0x0CCA ])))
+
+   ;; Combining marks are displayed with a DOTTED CIRCLE.
+   ("[nHbaA]"
+    (cond
+     ((font-facility 0x25CC) < 0x25CC = >)
+     ("." [ = ])))
+
+   ;; Isolated blwf is displayed with a DOTTED CIRCLE in the
+   ;; next stage.
+   ("(J)(H)([CR])"
+    < | (1 =) (3 =) (2 =) | >)
+
+   ("." =))
+  *))
+
+;; Stage 2
+;; Reorder halant for blwf
+(generator
+ (0
+  (cond
+   ;; Isolated blwf
+   (" J([CR]H) "
+    (cond
+     ((font-facility 0x25CC) < 0x25CC (1 :otf=knda=blwf+) >)
+     (" J([CR]H) " [ (1 :otf=knda=blwf+) ])))
+
+   ;; Syllables with an overt halant
+   (" (RHJ?)?([^ ]+)(HN) "
+    | (1 = *) (2 reorder *) (3 = =) |)
+
+   ;; Ordinary syllables
+   (" (RHJ?)?([^baA ]+)(b?b?n?a?n?A?) "
+    | (1 = *) (2 reorder *) (3 = *) |)
+
+   ("." =))
+  *)
+
+ (reorder
+  (cond
+   ("J?(H)([CR])" (2 =) (1 =))
+   ("." =)))
+ )
+
+;; Stage 3
+;; Language forms
+;; Although all consonants have a blow form and none has a half form,
+;; we have to prevent the first consonant from forming the below form.
+(generator
+ (0
+  (cond
+   ;; Overt halant forms
+   (" (RHJ?)?([^ ]+)(HN) "
+    |
+    (1 (cond ("RHJ" = =)
+	     ("RH" :otf=knda=rphf+)))
+    (2 (cond ("(.H)J?(.*)" (1 :otf=knda=half+) (2 lang-forms *))
+	     (".+" lang-forms *)))
+    (3 = =) |)
+
+   ;; Other syllables
+   (" (RHJ?)?([^baA ]*)(b?b?n?a?n?A?) "
+    |
+    (1 (cond ("RHJ" = =)
+	     ("RH" :otf=knda=rphf+)))
+    (2 (cond ("(.H)J?(.*)" (1 :otf=knda=half+) (2 lang-forms *))
+	     (".+" lang-forms *)))
+    (3 = *) |)
+
+   ("." =))
+  *)
+
+ (lang-forms
+  (cond
+   ("(.H)J" (1 :otf=knda=half+))
+   (".H" :otf=knda=blwf,half+)
+   ("." =)))
+ )
+
+;; Stage 4
+;; Final reordering #1 (Move before-subscript matras)
+(generator
+ (0
+  (cond
+   (" ([^B ]*[^BJ])J?(B*)(bb?n?)([^ ]*) "
+    | (1 = *) (3 = *) (2 = *) (4 = *) |)
+
+   ("." =))
+  *))
+
+;; Stage 5
+;; Final reordering #2 (Move reph after the first halant)
+(generator
+ (0
+  (cond
+   ;; Syllables with a reph and an explicit halant
+   ;; 1  2           3
+   (" (r)([^H ]+HJ?)([^ ]*) "
+    | (2 = *) (1 =) (3 = *) |)
+
+   ;; A reph without explicit halant
+   ;; 1  2       3
+   (" (r)([^A ]+)(A)? "
+    | (2 = *) (1 =) (3 =) |)
+
+   ("." =))
+  *))
+
+;; Stage 6
+;; Nukta for matra and presentation forms
+(generator
+ (0
+  (cond
+   (" ([^ ]+) "
+    | (1 :otf=knda=nukt,pres,abvs,blws,psts,haln+) |)
+
+   ("." =))
+  *))
+
+;; Stage 7
+;; Remove ZWNJ/ZWJ
+(generator
+ (0
+  (cond
+   ("[NJ]")
+
+   ("." =))
+  *))
+
+;; Stage 8
+;; GPOS processing
+(generator
+ (0
+  (cond
+   (" ([^ ]+) "
+    (1 :otf=knda=+abvm,blwm,dist))
+
+   ("." =))
+  *))
+
+;; Copyright (C) 2004, 2007, 2010
+;;   National Institute of Advanced Industrial Science and Technology (AIST)
+;;   Registration Number H15PRO112
+
+;; This file is part of the m17n database; a sub-part of the m17n
+;; library.
+
+;; The m17n library is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU Lesser General Public License
+;; as published by the Free Software Foundation; either version 2.1 of
+;; the License, or (at your option) any later version.
+
+;; The m17n library is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Lesser General Public License for more details.
+
+;; You should have received a copy of the GNU Lesser General Public
+;; License along with the m17n library; if not, write to the Free
+;; Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;; Local Variables:
+;; mode: emacs-lisp
+;; End:

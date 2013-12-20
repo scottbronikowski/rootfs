@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+FLAVOR=emacs23
+MAJOR=23
+MINOR=3
+FULL=23.3
+ALTERNATIVES="b2m ctags ebrowse emacsclient etags grep-changelog rcs-checkin"
+BIN_PRIORITY=26
+
+# update-alternatives on things that collide with xemacs, other editors
+for i in ${ALTERNATIVES}
+do
+  update-alternatives \
+    --install /usr/bin/$i $i /usr/bin/$i.${FLAVOR} ${BIN_PRIORITY} \
+    --slave /usr/share/man/man1/$i.1.gz $i.1.gz \
+            /usr/share/man/man1/$i.${FLAVOR}.1.gz
+done
+
+

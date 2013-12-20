@@ -1,0 +1,329 @@
+;; BENG-OTF.flt -- Font Layout Table for Bengali OpenType fonts
+;; Copyright (C) 2004, 2007, 2010 AIST (H15PRO112)
+;; See the end for copying conditions.
+
+(font layouter beng-otf nil
+      (version "1.6.0")
+      (font (nil nil unicode-bmp :otf=beng)))
+
+;;; <li> BENG-OTF.flt
+;;;
+;;; For Bengali OpenType fonts to draw the Bengali script.  
+
+;; After-base glyph order for rendering:
+;; 1. below form consonants
+;; 2. below matra
+;; 3. reph
+;; 4. candrabindu (0981)
+;; 5. post form consonants
+;; 6. post matra
+;; 7. anusvara (0982) and visarga (0983)
+
+(category
+ ;; X: generic
+ ;; V: independent vowel
+ ;; C: consonant
+ ;; B: BA
+ ;; Y: YA
+ ;; R: RA
+ ;; T: KHANDA TA
+ ;; n: NUKTA
+ ;; H: HALANT
+ ;; m: vowel sign (pre)
+ ;; b: vowel sign (below)
+ ;; p: vowel sign (post)
+ ;; a: vowel modifier (above)
+ ;; A: vowel modifier (post)
+ ;; N: ZWNJ
+ ;; J: ZWJ
+ (0x0980 0x09FF	?X)			; generic
+ (0x0981	?a)			; SIGN CANDRABINDU
+ (0x0982 0x0983	?A)			; SIGN ANUSVARA .. VISARGA
+ (0x0985 0x0994	?V)			; LETTER A .. AU
+ (0x0995 0x09B9	?C)			; LETTER KA .. HA
+ (0x09AC	?B)			; LETTER BA
+ (0x09AF	?Y)			; LETTER YA
+ (0x09B0	?R)			; LETTER RA
+ (0x09BC	?n)			; SIGN NUKTA
+ (0x09BE	?p)			; VOWEL SIGN AA
+ (0x09BF	?m)			; VOWEL SIGN I
+ (0x09C0	?p)			; VOWEL SIGN II
+ (0x09C1 0x09C4	?b)			; VOWEL SIGN U .. RR
+ (0x09C7 0x09C8	?m)			; VOWEL SIGN E .. AI
+ (0x09CD	?H)			; SIGN VIRAMA
+ (0x09CE	?T)			; LETTER KHANDA TA
+ (0x09D7	?p)			; AU LENGTH MARK
+ (0x09DC 0x09DF	?C)			; LETTER RRA .. YYA
+ (0x09E0 0x09E1	?V)			; LETTER VOCALIC RR, LL
+ (0x09E2 0x09E3	?b)			; VOWEL SIGN L .. LL
+ (0x09F0	?R)			; LETTER RA WITH MIDDLE DIAGONAL
+ (0x09F1	?C)			; LETTER RA WITH LOWER DIAGONAL
+
+ (0x200C	?N)			; ZWNJ
+ (0x200D	?J)			; ZWJ
+ (0x25CC	?X)			; DOTTED CIRCLE
+
+ (rphf		?r)
+ (pstf		?P)
+ )
+
+;; Stage 0
+;; Preprocessing
+(generator
+ (0
+  (cond
+   ;; Decompose two-part vowel signs.
+   ((0x09CB)
+    0x09C7 0x09BE)
+   ((0x09CC)
+    0x09C7 0x09D7)
+
+   ;; Many fonts still do not have KHANDA-TA.
+   ((0x09CE)
+    (cond
+     ((font-facility 0x09CE) =)
+     (".+" 0x09A4 0x09CD 0x200D)))
+
+   ;; consonant + NUKTA
+   ((0x09A1 0x09BC)
+    0x09DC)
+   ((0x09A2 0x09BC)
+    0x09DD)
+   ((0x09AF 0x09BC)
+    0x09DF)
+
+   ("." =))
+  *))
+
+;; Stage 1
+;; Syllable identification
+(generator
+ (0
+  (cond
+   ;; Syllables with an independent vowel
+   ("(RH)?(Vn?)((J?H[BYR])?m?b?p?n?a?A?)"
+    < | (1 = =) (2 :otf=beng=nukt+) (3 = *) | >)
+
+   ;; KHANDA-TA combines only with reph.
+   ("(RH)?(T)"
+    < (2 =) (1 :otf=beng=rphf+) >)
+
+   ;; Consonant-based syllables
+   ;;1        23                   4
+   ("([CBYR]n?((J?H|HJ?)[CBYR]n?)*)(H[NJ]?|m?([NJ]?b)?p?n?a?A?)"
+    < |
+    (cond
+     (".+HJ$" :otf=beng=nukt,akhn+)
+     ("(.+)(H)N?$" (1 :otf=beng=nukt,akhn+) (2 =) 0x200C)
+     (".+" :otf=beng=nukt,akhn+))
+    | >)
+
+   ;; Two-part vowel signs
+   ((0x09C7 0x09BE)
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC = >)
+     (".+" [ 0x09CB ])))
+   ((0x09C7 0x09D7)
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC = >)
+     (".+" [ 0x09CC ])))
+
+   ;; Combining marks are displayed with a DOTTED CIRCLE.
+   ("m"
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC >)
+     ("." [ = ])))
+   ("[nHbpaA]"
+    (cond
+     ((font-facility 0x25CC) < 0x25CC = >)
+     ("." [ = ])))
+
+   ;; Isolated blwf and pstf are displayed with a DOTTED CIRCLE in the
+   ;; next stage.
+   ("(J)(H)([BYR])"
+    < | (1 =) (3 =) (2 =) | >)
+
+   ("." =))
+  *))
+
+;; Stage 2
+;; Reorder halant for blwf and pstf
+(generator
+ (0
+  (cond
+   ;; Isolated blwf and pstf
+   (" J([BYR]H) "
+    (cond
+     ((font-facility 0x25CC) < 0x25CC (1 :otf=beng=blwf,pstf+) >)
+     (" J([BYR]H) " [ (1 :otf=beng=blwf,pstf+) ])))
+
+   ;; Syllables with an overt halant
+   (" (RHJ?)?([^ ]+)(HN) "
+    | (1 = *) (2 reorder) (3 = =) |)
+
+   ;; Syllables with a below matra
+   (" (RHJ?)?([^mbpaA ]*[^mbpaANJ ])(m?[NJ]?bp?n?a?A?) "
+    | (1 = *) (2 reorder) (3 = *) |)
+
+   ;; Other syllables
+   (" (RHJ?)?([^mbpaA ]+)(m?p?n?a?A?) "
+    | (1 = *) (2 reorder) (3 = *) |)
+
+   ("." =))
+  *)
+
+ (reorder
+  ("(.|.+([^YJ]|JY|HJ))((J?HY)*)$"
+   (1 reorder-BR *) (3 reorder-Y *)))
+ 
+ ;; Unlike Devanagari and Gujarati, vattu in Bengali does not have a
+ ;; half form.  Therefore the sequence CHRHC can be safely reordered
+ ;; to CRHHC.  Same for CHBHC.
+ (reorder-BR
+  (cond
+   ("J?(H)([BR])"
+    (2 =) (1 =))
+   ("." =)))
+
+ (reorder-Y
+  ("J?(H)(Y)"
+   (2 =) (1 =)))
+ )
+
+;; Stage 3
+;; Language forms and matra reordering
+(generator
+ (0
+  (cond
+   ;; Overt halant forms
+   (" (RHJ?)?([^ ]+)(HN) "
+    |
+    (1 (cond ("RHJ" :otf=beng=half+)
+	     ("RH" :otf=beng=rphf+)))
+    (2 b4post) (2 post) (3 = =) |)
+
+   ;; Syllables with a below matra
+   ;; 1      2              3     4         5
+   (" (RHJ?)?([^mb]*[^mbNJ])(mn?)?([NJ]?bn?)(p?n?a?A?) "
+    | (3 = *)
+    (1 (cond ("RHJ" :otf=beng=half+)
+	     ("RH" :otf=beng=rphf+)))
+    (2 b4post) (4 = *) (2 post) (5 = *) |)
+
+   ;; Other syllables
+   ;; 1      2          3     4
+   (" (RHJ?)?([^mpaA ]*)(mn?)?(p?n?a?A?) "
+    | (3 = *)
+    (1 (cond ("RHJ" :otf=beng=half+)
+	     ("RH" :otf=beng=rphf+)))
+    (2 b4post) (2 post) (4 = *) |)
+
+   ("." =))
+  *)
+
+ (b4post
+  (cond
+   ("(.H)J?(.*)"
+    (1 :otf=beng=half+)
+    (2 ("(.|.+([^YH]|JY|[BR]H))((YH)*)$" (1 lang-forms *))))
+   ("(.|.+([^YH]|JY|[BR]H))((YH)*)"
+    (1 lang-forms *))))
+
+ (lang-forms
+  (cond
+   ("(.H)J" (1 :otf=beng=half+))
+   (".H" :otf=beng=blwf,half,vatu+)
+   ("." =)))
+
+ (post
+  ("(.|.+([^YH]|JY|[BR]H))((YH)+)$"
+   (3 :otf=beng=pstf+)))
+ )
+
+;; Stage 4
+;; Final reordering #1 (Move pre-base matra after the last halant)
+(generator
+ (0
+  (cond
+   ;; 1    2         3
+   (" (mn?)([^ ]+HJ?)([^H ]+) "
+    | (2 = *) (1 = *) (3 = *) |)
+
+   ("." =))
+  *))
+
+;; Stage 5
+;; Final reordering #2 (Move reph after the first halant)
+(generator
+ (0
+  (cond
+   ;; Syllables with a reph and an explicit halant
+   ;; 1     2  3           4
+   (" (mn?)?(r)([^HP ]+HJ?)([^ ]*) "
+    | (1 = *) (3 = *) (2 =) (4 = *) |)
+
+   ;; A reph without explicit halant
+   ;; 1     2  3          4
+   (" (mn?)?(r)([^PpaA ]+)(P*(HN)?p?n?a?A?) "
+    | (1 = *) (3 = *) (2 =) (4 = *) |)
+
+   ("." =))
+  *))
+
+;; Stage 6
+;; Nukta for matra and Presentation forms
+(generator
+ (0
+  (cond
+   (" (mn?)?([^ ]+) "
+    | (1 :otf=beng=nukt,init+) (2 :otf=beng=nukt,pres,abvs,blws,psts,haln+) |)
+
+   ("." =))
+  *))
+
+;; Stage 7
+;; Remove ZWNJ/ZWJ
+(generator
+ (0
+  (cond
+   ("[NJ]")
+
+   ("." =))
+  *))
+
+;; Stage 8
+;; GPOS processing
+(generator
+ (0
+  (cond
+   (" ([^ ]+) "
+    (1 :otf=beng=+abvm,blwm,dist))
+
+   ("." =))
+  *))
+
+;; Copyright (C) 2004, 2007, 2010
+;;   National Institute of Advanced Industrial Science and Technology (AIST)
+;;   Registration Number H15PRO112
+
+;; This file is part of the m17n database; a sub-part of the m17n
+;; library.
+
+;; The m17n library is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU Lesser General Public License
+;; as published by the Free Software Foundation; either version 2.1 of
+;; the License, or (at your option) any later version.
+
+;; The m17n library is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Lesser General Public License for more details.
+
+;; You should have received a copy of the GNU Lesser General Public
+;; License along with the m17n library; if not, write to the Free
+;; Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;; Local Variables:
+;; mode: emacs-lisp
+;; End:

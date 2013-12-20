@@ -1,0 +1,182 @@
+;; kn-kgp.mim -- Kannada input method with KGP method
+;;   Copyright (C) 2008
+;;   Sridhar M.A., Mysore; mas@mylug.org
+
+;; Modified for better visual appeal by Prasad H. L. hlprasu@gmail.com
+
+
+;; This file is part of the m17n contrib; a sub-part of the m17n
+;; library.
+
+;; The m17n library is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU Lesser General Public License
+;; as published by the Free Software Foundation; either version 2.1 of
+;; the License, or (at your option) any later version.
+
+;; The m17n library is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Lesser General Public License for more details.
+
+;; You should have received a copy of the GNU Lesser General Public
+;; License along with the m17n library; if not, write to the Free
+;; Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+(input-method kn kgp)
+
+(description "Kannada input method by KGP method.
+")
+
+(title "ಕ")
+
+(map
+ (starter
+  ("0") ("1") ("2") ("3") ("4")
+  ("5") ("6") ("7") ("8") ("9")
+  ("A") ("B") ("C") ("D") ("E") ("G") ("H") ("I") ("J") ("K") 
+  ("L") ("M") ("N") ("O") ("P") ("Q") ("R") ("S") ("T") ("U")
+  ("V") ("W") ("Y") ("Z")
+  ("a") ("b") ("c") ("d") ("e") ("g") ("h") ("i")
+  ("j") ("k") ("l") ("m") ("n") ("o") ("p") ("q") ("r")
+  ("s") ("t") ("u") ("v") ("w") ("x") ("y") ("z"))
+
+ (consonant
+  ("k" "ಕ")
+  ("K" "ಖ")
+  ("g" "ಗ")
+  ("G" "ಘ")
+  ("Z" "ಙ")
+  ("c" "ಚ")
+  ("C" "ಛ")
+  ("j" "ಜ")
+  ("jX" "ಜ಼")
+  ("J" "ಝ")
+  ("z" "ಞ")
+  ("q" "ಟ")
+  ("Q" "ಠ")
+  ("w" "ಡ")
+  ("W" "ಢ")
+  ("N" "ಣ")
+  ("t" "ತ")
+  ("T" "ಥ")
+  ("d" "ದ")
+  ("D" "ಧ")
+  ("n" "ನ")
+  ("p" "ಪ")
+  ("P" "ಫ")
+  ("PX" "ಫ಼")
+  ("b" "ಬ")
+  ("B" "ಭ")
+  ("m" "ಮ")
+  ("y" "ಯ")
+  ("r" "ರ")
+  ("rX" "ಱ")
+  ("l" "ಲ")
+  ("v" "ವ")
+  ("S" "ಶ")
+  ("x" "ಷ")
+  ("s" "ಸ")
+  ("h" "ಹ")
+  ("L" "ಳ")
+  ("LX" "ೞ"))
+
+ (independent
+  ("a" "ಅ")
+  ("A" "ಆ")
+  ("i" "ಇ")
+  ("I" "ಈ")
+  ("u" "ಉ")
+  ("U" "ಊ")
+  ("R" "ಋ")
+  ("RU" "ೠ")
+  ("e" "ಎ")
+  ("E" "ಏ")
+  ("Y" "ಐ")
+  ("o" "ಒ")
+  ("O" "ಓ")
+  ("V" "ಔ")
+  ("|" "।")
+  ("||" "॥")
+  ("sX" "ಽ")
+  ("0" "೦")
+  ("1" "೧")
+  ("2" "೨")
+  ("3" "೩")
+  ("4" "೪")
+  ("5" "೫")
+  ("6" "೬")
+  ("7" "೭")
+  ("8" "೮")
+  ("9" "೯"))
+
+ (halantha
+   ("f" "್")
+   ("ff" "್‌"))
+ 
+ (ayogavaaha
+  ("M" "ಂ")
+  ("H" "ಃ"))
+
+ (dependent
+  ("A" "ಾ")
+  ("i" "ಿ")
+  ("I" "ೀ")
+  ("u" "ು")
+  ("U" "ೂ")
+  ("R" "ೃ")
+  ("RX" "ೄ")
+  ("e" "ೆ")
+  ("E" "ೇ")
+  ("Y" "ೈ")
+  ("o" "ೊ")
+  ("O" "ೋ")
+  ("V" "ೌ"))
+
+ (return
+  ((Return)))
+
+ (backspace
+  ((BackSpace) (undo))))
+
+(state
+ (init
+  (starter (pushback 1) (shift start)))
+
+ (start
+  (consonant (shift first))
+  (independent (shift ayogavaaha))
+  (backspace)
+  (return (shift init)))
+
+ (first
+  (consonant (set a @-1) (undo -1) (commit) (pushback a) (shift start))
+  (ayogavaaha (shift finish))
+  (dependent (shift ayogavaaha))
+  (halantha (shift second))
+  (backspace)
+  (return (shift init)))
+
+ (second
+  (consonant (shift first))
+  (backspace)
+  (return (shift init)))
+
+ (ayogavaaha
+  (ayogavaaha (shift ayogavaaha))
+  (backspace)
+  (return (shift init))
+
+ (finish
+  (backspace)
+  (return))
+)
+
+;; (finish
+;;  (return)
+;;  (t (shift init))))
+
+;; Local Variables:
+;; coding: utf-8
+;; mode: lisp
+;; End:

@@ -1,0 +1,190 @@
+;; as-phonetic.mim -- Assamese input method for phonetic layout
+;; Copyright (c) 2004-2006 Red Hat, Inc. All rights reserved.
+
+;; This file is part of the m17n contrib; a sub-part of the m17n
+;; library.
+
+;; The m17n library is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU Lesser General Public License
+;; as published by the Free Software Foundation; either version 2.1 of
+;; the License, or (at your option) any later version.
+
+;; The m17n library is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Lesser General Public License for more details.
+
+;; You should have received a copy of the GNU Lesser General Public
+;; License along with the m17n library; if not, write to the Free
+;; Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+(input-method as phonetic)
+
+(description "Assamese input method for phonetic layout.
+
+Reference URL - http://www.bengalinux.org/images/probhat_layout.png
+
+Key Summary:
+
+The differences between Assamese and Bengali alphabets are:
+
+The 'ra' of Assamese is different from Bengali 'ra'. The Assamese phonetic keyboard layout has made the change in the Bengali keyboard layout but in the same corresponding key of the English keyboard.
+There is an additional alphabet 'wa' which is not there in Bengali.
+
+
+The following are the important key combinations for the Assamese Phonetic keyboard layout:
+
+1. The alphabet 'ৰ' can be obtained by pressing the key 'R' in the English keyboard.
+2. The alphabet 'ৱ' can be obtained by pressing the key '\' in the English keyboard.
+3. There are two ways of typing the Assamese 'আ' . One is typing 'A' followed by 'a'. The other is by typing 'v' only.
+4. The alphabet 'ঞ' can be obtained by pressing '^' i.e 'Shift' and '6' together in the Eglish keyboard.
+5. The '।' is located in '.' in the English keyboard.
+6. The '৺' can be obtained by pressing '|', i.e. 'Shift' and '\'.
+
+Some important combinations are as follows:
+
+1. 'tra' : 'ta' + 'halant' + 'ra'
+   (ত্ৰ) (ত)    (্)    (ৰ)
+              'f'         '/'        'r'
+
+2. 'khya': 'ka' + 'halant' + 'Sha'
+   (ক্ষ)     (ক)      (্)      (ষ)
+	        'k'          '/'         'S' (note the capital S for ষ)
+
+3. 'kra':  'ka' + 'halant' + 'ra'
+   (ক্ৰ)    (ক)      (্)    (ৰ)
+	         'k'          '/'        'r'
+
+4. 'akta': 'ka' + 'halant' + 'ta'
+   (ক্ত)    (ক)      (্)      (ত)
+                'k'          '/'          'f' (note that f is for ত)
+
+5. 'kla'  : 'ka' + 'halant' + 'la'
+   (ক্ল)     (ক)      (্)     (ল)
+               'k'          '/'          'l'
+
+
+Author: Amitakhya Phukan <aphukan@redhat.com>
+Key Summary: Amitakhya Phukan <aphukan@redhat.com>")
+
+(title "ক")
+
+(map
+ (trans
+ 
+  ((KP_1) "১")
+  ((KP_2) "২")
+  ((KP_3) "৩")
+  ((KP_4) "৪")
+  ((KP_5) "৫")
+  ((KP_6) "৬")
+  ((KP_7) "৭")
+  ((KP_8) "৮")
+  ((KP_9) "৯")
+  ((KP_0) "০")
+  ((KP_Decimal) ".")
+  ((KP_Divide) "/")
+  ((KP_Multiply) "*")
+  ((KP_Add) "+")
+  ((KP_Subtract) "-")  
+ 
+  ("!" ?!)
+  ("1" ?১)
+  ("@" ?@)
+  ("2" ?২)
+  ("#" ?#)
+  ("3" ?৩)
+  ("$" ?ৎ)
+  ("4" ?৪)
+  ("%" ?%)
+  ("5" ?৫)
+  ("^" ?ঞ)
+  ("6" ?৬)
+  ("&" ?&)
+  ("7" ?৭)
+  ("*" "*")
+  ("8" ?৮)
+  ("(" ?()
+  ("9" ?৯)
+  (")" ?))
+  ("0" ?০)
+  ("_" ?_)
+  ("-" ?-)
+  ("+" ?+)
+  ("=" ?=)
+  ("Q" ?ধ)
+  ("q" ?দ)
+  ("W" ?ঊ)
+  ("w" ?ূ)
+  ("E" ?ঈ)
+  ("e" ?ী)
+  ("R" ?ড়)
+  ("r" ?ৰ)
+  ("T" ?ঠ)
+  ("t" ?ট)
+  ("Y" ?ঐ)
+  ("y" ?এ)
+  ("U" ?উ)
+  ("u" ?ু)
+  ("I" ?ই)
+  ("i" ?ি)
+  ("O" ?ঔ)
+  ("o" ?ও)
+  ("P" ?ফ)
+  ("p" ?প)
+  ("{" ?ৈ)
+  ("[" ?ে)
+  ("}" ?ৌ)
+  ("]" ?ো)
+  ("A" ?অ)
+  ("a" ?া)
+  ("S" ?ষ)
+  ("s" ?স)
+  ("D" ?ঢ)
+  ("d" ?ড)
+  ("F" ?থ)
+  ("f" ?ত)
+  ("G" ?ঘ)
+  ("g" ?গ)
+  ("H" ?ঃ)
+  ("h" ?হ)
+  ("J" ?ঝ)
+  ("j" ?জ)
+  ("K" ?খ)
+  ("k" ?ক)
+  ("L" ?ং)
+  ("l" ?ল)
+  (":" ?:)
+  (";" ?;)
+  ("\"" ?\")
+  ("'" ?')
+  ("|" ?৺)
+  ("\\" ?ৱ)
+  ("~"?‌)
+  ("`" ?‍)
+  ("Z" ?য)
+  ("z" ?য়)
+  ("X" ?ঢ়)
+  ("x" ?শ)
+  ("C" ?ছ)
+  ("c" ?চ)
+  ("V" ?ঋ)
+  ("v" ?আ)
+  ("B" ?ভ)
+  ("b" ?ব)
+  ("N" ?ণ)
+  ("n" ?ন)
+  ("M" ?ঙ)
+  ("m" ?ম)
+  ("<" ?ৃ)
+  ("," ?,)
+  (">" ?ঁ)
+  ("." ?।)
+  ("?" ??)
+  ("/" ?্)
+  ))
+ 
+(state
+  (init
+    (trans)))

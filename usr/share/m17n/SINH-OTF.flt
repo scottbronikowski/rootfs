@@ -1,0 +1,124 @@
+;; SINH-OTF.flt -- Font Layout Table for Sinhala OpenType fonts
+;; Copyright (C) 2004, 2005, 2007, 2008, 2010 AIST (H15PRO112)
+;; See the end for copying conditions.
+
+(font layouter sinh-otf nil
+      (font (nil nil unicode-bmp :otf=sinh)))
+
+;;; <li> SINH-OTF.flt
+;;;
+;;; For Sinhala OpenType fonts to draw Sinhala.
+;;; A Font is available from <http://sinhala.sourceforge.net/files/>.
+
+(category
+ (0x0D80 0x0DFF ?x)
+ (0x0D82 0x0D83 ?A)
+ (0x0D85 0x0D96 ?V)
+ (0x0D9A 0x0DC6 ?C)
+ (0x0DCA	?H)
+ (0x0DCF 0x0DD1 ?p)
+ (0x0DD2 0x0DD3 ?u)
+ (0x0DD4 0x0DD6 ?b)
+ (0x0DD8	?p)
+ (0x0DD9	?m)
+ (0x0DDB	?m)
+ (0x0DDF	?p)
+ (0x0DF2 0x0DF3 ?p)
+ (0x200D	?J)
+ )
+
+;; Stage 0
+;; Preprocessing
+(generator
+ (0
+  (cond
+   ;; Decompose multi-part vowel signs.
+   ((0x0DDA)	0x0DD9 0x0DCA)
+   ((0x0DDC)	0x0DD9 0x0DCF)
+   ((0x0DDD)	0x0DD9 0x0DCF 0x0DCA)
+   ((0x0DDE)	0x0DD9 0x0DDF)
+   ("." =))
+  *))
+
+;; Step 1
+;; Syllable identification and matra reordering
+(generator
+ (0
+  (cond
+   ;; Consonant-based syllables
+   ;;1 2      3     4
+   ("(C(HJC)*)(mm?)?(u?b?p?H?A?)"
+    < | (3 = *) (1 = *) (4 = *) | >)
+
+   ;; Syllables with an independent vowel
+   ("VA?"
+    < | = * | >)
+
+   ;; Combining marks are displayed with a DOTTED CIRCLE.
+   ((0x0DD9 0x0DCA)
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC = >)
+     (".+" [ 0x0DDA ])))
+
+   ((0x0DD9 0x0DCF 0x0DCA)
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC = = >)
+     (".+" [ 0x0DDD ])))
+
+   ((0x0DD9 0x0DCF)
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC = >)
+     (".+" [ 0x0DDC ])))
+
+   ((0x0DD9 0x0DDF)
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC = >)
+     (".+" [ 0x0DDE ])))
+
+   ("m"
+    (cond
+     ((font-facility 0x25CC) < = 0x25CC >)
+     ("." [ = ])))
+
+   ("[AHubp]"
+    (cond
+     ((font-facility 0x25CC) < 0x25CC = >)
+     ("." [ = ])))
+
+   ("." [ = ]))
+  *))
+
+;; Step 2 : OTF substitutions.
+(generator
+ (0
+  (cond
+   (" ([^ ]+) "
+    (1 :otf=sinh=akhn,vatu,liga,pres,abvs,blws,psts))
+   ("." = ))
+  *))
+
+;; Copyright (C) 2004, 2005, 2007, 2010
+;;   National Institute of Advanced Industrial Science and Technology (AIST)
+;;   Registration Number H15PRO112
+
+;; This file is part of the m17n database; a sub-part of the m17n
+;; library.
+
+;; The m17n library is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU Lesser General Public License
+;; as published by the Free Software Foundation; either version 2.1 of
+;; the License, or (at your option) any later version.
+
+;; The m17n library is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Lesser General Public License for more details.
+
+;; You should have received a copy of the GNU Lesser General Public
+;; License along with the m17n library; if not, write to the Free
+;; Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;; Local Variables:
+;; mode: emacs-lisp
+;; End:

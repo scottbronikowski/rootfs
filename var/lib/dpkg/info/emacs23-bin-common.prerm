@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+FLAVOR=emacs23
+MAJOR=23
+MINOR=3
+FULL=23.3
+ALTERNATIVES="b2m ctags ebrowse emacsclient etags grep-changelog rcs-checkin"
+
+# update-alternatives on things that collide with xemacs, other editors
+if [ "$1" != "upgrade" ]
+then
+  for i in ${ALTERNATIVES}
+  do
+    update-alternatives --remove $i /usr/bin/$i.${FLAVOR}
+  done
+fi
+
+
+
