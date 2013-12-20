@@ -1,0 +1,1 @@
+../init.d/debian.noip2.sh
