@@ -657,3 +657,89 @@ dmesg | grep vid
 dmesg | grep dev
 dmesg | tail
 dmesg | less
+date
+more .gitignore 
+more .bash_history 
+ntpdate -s -u us.pool.ntp.org
+cd /
+git add *
+git status
+git commit -m "sudo apt-get install openssh-server ssh vim avahi-daemon avahi-autoipd libnss-mdns locate wpasupplicant locate geoip-bin geoip-database ssh-askpass keychain monkeysphere openssh-blacklist openssh-blacklist-extra rssh molly-guard ufw ssh-import-id ssl-cert apache2 gnupg-agent monkeysphere-validation-agent cvs rdist makejail apache2-doc apache2-suexec apache2-suexec-custom automake autoconf doxygen autoconf2.13 autoconf-archive gnu-standards autoconf-doc libtool gettext automake1.4 libltdl-dev libtool-doc mksh rcs libio-socket-ssl-perl libnet-ssleay-perl liblwp-protocol-socks-perl pinentry-doc libjson-xs-perl libclass-method-modifiers-perl libgtk2-perl libanyevent-perl liblinux-inotify2-perl liburi-perl libwww-perl libasync-interrupt-perl libev-perl libevent-perl libguard-perl libio-async-perl libpoe-perl libtask-weaken-perl perl-tk libfont-freetype-perl libgtk2-perl-doc pinentry-curses pinentry-qt4 libdata-dump-perl libcrypt-ssleay-perl libauthen-ntlm-perl ed; copy .bashrc, .ssh/* from old /root; edit /etc/apt/sources.list, /etc/apt/sources.list.d/hw; copy ssh-tunnel.sh from old /etc/init.d; run update-rc.d ssh-tunnel.sh defaults 99; run update-rc.d -f network-manager remove; sudo apt-get remove network-manager
+"
+git status
+git status | sed -n '/^# *deleted:/s///p' | xargs git rm
+git status
+git add -u
+git status
+git commit -m "remove deleted files"
+git push origin master
+ps -ef | grep ssh
+kill -9 978
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh
+ps -ef | grep ssh
+sudo apt-get install ros-groovy-camera-drivers
+ros
+sudo apt-get install libglademm-2.4-dev libusb-1.0
+sudo apt-get install libdc1394
+sudo apt-get install libraw1394-11
+sudo apt-get install libraw1394-11-dev libraw1394-11-doc
+sudo apt-get install libraw1394-dev libraw1394-doc
+sudo apt-get install libraw1394-tools
+sudo apt-get install libraw1394-dev
+sudo apt-get install build-essential
+sudo apt-get install xv
+apt-get install imagej
+cd /usr/local/src
+wget http://www.no-ip.com/client/linux/noip-duc-linux.tar.gz
+ifdown wlan0
+ifup wlan0
+ps -ef | grep ssh
+kill 1845
+/etc/init.d/ssh-tunnel.sh
+wget http://www.no-ip.com/client/linux/noip-duc-linux.tar.gz
+tar xzf noip-duc-linux.tar.gz 
+ls
+cd noip-2.1.9-1/
+make
+make install
+cd /dev
+ls v*
+lla v*
+cd ..
+git status
+git add -u
+git status
+git add *
+git status
+git push origin master
+git commit -m "sudo apt-get install libgtkmm-2.4-dev libglademm-2.4-dev libusb-1.0 libraw1394-11 libraw1394-dev libraw1394-doc gimp imagej; download flycapture.2.5.3.5_armhf.tar.gz from Point Grey; follow install instructions in TAN2012001_Getting_Started_FlyCap2.3_ARM.pdf; install noip.com client updater via http://www.noip.com/support/knowledgebase/installing-the-linux-dynamic-update-client/"
+git push origin master
+cd /usr/local/src
+ls
+cd noip-
+cd noip-2.1.9-1/
+ls
+cp debian.noip2.sh /etc/init.d
+cd /etc/init.d
+ls
+chmod 755 debian.noip2.sh 
+lla
+lla d*
+update-rc.d debian.noip2.sh defaults 98
+cd /
+git status
+git add *
+git add -u
+git commit -m "add script for boot launch of noip2"
+git push origin master
+reboot
+date
+cd /
+emacs &
+ps
+ps -ef
+ps -ef | grep noip
+exit
+ls
+exit
