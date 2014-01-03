@@ -1733,30 +1733,6 @@ Description: Manage ASN.1 structures (runtime)
 Homepage: http://www.gnu.org/software/libtasn1/
 Original-Maintainer: Debian GnuTLS Maintainers <pkg-gnutls-maint@lists.alioth.debian.org>
 
-Package: libcurl3-gnutls
-Multi-Arch: same
-Priority: optional
-Section: libs
-Installed-Size: 392
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Source: curl
-Version: 7.22.0-3ubuntu4
-Replaces: libcurl4-gnutls
-Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libgcrypt11 (>= 1.4.5), libgnutls26 (>= 2.12.6.1-0), libgssapi-krb5-2 (>= 1.10+dfsg~), libidn11 (>= 1.13), libldap-2.4-2 (>= 2.4.7), librtmp0 (>= 2.3), zlib1g (>= 1:1.1.4), ca-certificates
-Pre-Depends: multiarch-support
-Conflicts: libcurl4-gnutls
-Size: 201018
-Description: Multi-protocol file transfer library (GnuTLS)
- libcurl is designed to be a solid, usable, reliable and portable
- multi-protocol file transfer library.
- .
- SSL support is provided by GnuTLS.
- .
- This is the shared version of libcurl.
-Homepage: http://curl.haxx.se
-Original-Maintainer: Ramakrishnan Muthukrishnan <rkrishnan@debian.org>
-
 Package: libsoup2.4-1
 Multi-Arch: same
 Priority: optional
@@ -1791,6 +1767,30 @@ Description: HTTP library implementation in C -- Shared library
  .
  This package contains the shared library.
 Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+
+Package: libcurl3-gnutls
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 392
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: curl
+Version: 7.22.0-3ubuntu4
+Replaces: libcurl4-gnutls
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libgcrypt11 (>= 1.4.5), libgnutls26 (>= 2.12.6.1-0), libgssapi-krb5-2 (>= 1.10+dfsg~), libidn11 (>= 1.13), libldap-2.4-2 (>= 2.4.7), librtmp0 (>= 2.3), zlib1g (>= 1:1.1.4), ca-certificates
+Pre-Depends: multiarch-support
+Conflicts: libcurl4-gnutls
+Size: 201018
+Description: Multi-protocol file transfer library (GnuTLS)
+ libcurl is designed to be a solid, usable, reliable and portable
+ multi-protocol file transfer library.
+ .
+ SSL support is provided by GnuTLS.
+ .
+ This is the shared version of libcurl.
+Homepage: http://curl.haxx.se
+Original-Maintainer: Ramakrishnan Muthukrishnan <rkrishnan@debian.org>
 
 Package: fontconfig
 Multi-Arch: foreign
@@ -10614,6 +10614,25 @@ Description: free implementation of the GL API -- shared library
 Homepage: http://mesa3d.sourceforge.net/
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
+Package: libtiff4
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 381
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: tiff
+Version: 3.9.5-2ubuntu1
+Depends: libc6 (>= 2.11), libjpeg8 (>= 8c), zlib1g (>= 1:1.1.4)
+Pre-Depends: multiarch-support
+Size: 120776
+Description: Tag Image File Format (TIFF) library
+ libtiff is a library providing support for the Tag Image File Format
+ (TIFF), a widely used format for storing image data.  This package
+ includes the shared library.
+Homepage: http://libtiff.maptools.org
+Original-Maintainer: Jay Berkenbilt <qjb@debian.org>
+
 Package: librtmp0
 Multi-Arch: same
 Priority: extra
@@ -10635,25 +10654,6 @@ Description: toolkit for RTMP streams (shared library)
  programs that want to use librtmp.
 Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Homepage: http://rtmpdump.mplayerhq.hu/
-
-Package: libtiff4
-Multi-Arch: same
-Priority: optional
-Section: libs
-Installed-Size: 381
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Source: tiff
-Version: 3.9.5-2ubuntu1
-Depends: libc6 (>= 2.11), libjpeg8 (>= 8c), zlib1g (>= 1:1.1.4)
-Pre-Depends: multiarch-support
-Size: 120776
-Description: Tag Image File Format (TIFF) library
- libtiff is a library providing support for the Tag Image File Format
- (TIFF), a widely used format for storing image data.  This package
- includes the shared library.
-Homepage: http://libtiff.maptools.org
-Original-Maintainer: Jay Berkenbilt <qjb@debian.org>
 
 Package: libaudiofile1
 Multi-Arch: same
@@ -13543,6 +13543,28 @@ Description: pthread stubs not provided by native libc, development files
  still obtain correct behavior.
 Original-Maintainer: XCB Developers <xcb@lists.freedesktop.org>
 
+Package: screen
+Priority: optional
+Section: misc
+Installed-Size: 757
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 4.0.3-14ubuntu8
+Depends: libc6 (>= 2.4), libpam0g (>= 0.99.7.1), libtinfo5, dpkg (>= 1.15.4) | install-info, upstart-job
+Suggests: byobu
+Size: 574164
+Description: terminal multiplexor with VT100/ANSI terminal emulation
+ screen is a terminal multiplexor that runs several separate "screens" on a
+ single physical character-based terminal.  Each virtual terminal emulates a
+ DEC VT100 plus several ANSI X3.64 and ISO 2022 functions.  Screen sessions
+ can be detached and resumed later on a different terminal.
+ .
+ Screen also supports a whole slew of other features.  Some of these are:
+ configurable input and output translation, serial port support, configurable
+ logging, multi-user support, and utf8 charset support.
+Homepage: http://savannah.gnu.org/projects/screen
+Original-Maintainer: Jan Christoph Nordholz <hesso@pool.math.tu-berlin.de>
+
 Package: libstartup-notification0
 Multi-Arch: same
 Priority: optional
@@ -14541,6 +14563,24 @@ Description: C++ Wrapper for pango (shared libraries)
 Homepage: http://gtkmm.org
 Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 
+Package: python-gtk2
+Priority: optional
+Section: python
+Installed-Size: 2019
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: pygtk
+Version: 2.24.0-3
+Depends: python2.7, python (>= 2.7.1-0ubuntu2), python (<< 2.8), libatk1.0-0 (>= 1.12.4), libc6 (>= 2.4), libcairo2 (>= 1.2.4), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.24.0), libgtk2.0-0 (>= 2.24.0), libpango1.0-0 (>= 1.22.0), python-cairo (>= 1.0.2-1.1), python-gobject-2 (>= 2.21.3)
+Suggests: python-gtk2-doc
+Breaks: python-gtkglext1 (<< 1.1.0-7~)
+Size: 688026
+Description: Python bindings for the GTK+ widget set
+ This archive contains modules that allow you to use GTK+ in Python
+ programs.
+Original-Maintainer: Sebastien Bacher <seb128@debian.org>
+Homepage: http://www.pygtk.org/
+
 Package: git-man
 Priority: optional
 Section: doc
@@ -14566,24 +14606,6 @@ Description: fast, scalable, distributed revision control system (manual pages)
  utility and the 'git help' command.
 Original-Maintainer: Gerrit Pape <pape@smarden.org>
 Homepage: http://git-scm.com/
-
-Package: python-gtk2
-Priority: optional
-Section: python
-Installed-Size: 2019
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Source: pygtk
-Version: 2.24.0-3
-Depends: python2.7, python (>= 2.7.1-0ubuntu2), python (<< 2.8), libatk1.0-0 (>= 1.12.4), libc6 (>= 2.4), libcairo2 (>= 1.2.4), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.24.0), libgtk2.0-0 (>= 2.24.0), libpango1.0-0 (>= 1.22.0), python-cairo (>= 1.0.2-1.1), python-gobject-2 (>= 2.21.3)
-Suggests: python-gtk2-doc
-Breaks: python-gtkglext1 (<< 1.1.0-7~)
-Size: 688026
-Description: Python bindings for the GTK+ widget set
- This archive contains modules that allow you to use GTK+ in Python
- programs.
-Original-Maintainer: Sebastien Bacher <seb128@debian.org>
-Homepage: http://www.pygtk.org/
 
 Package: lxpanel-indicator-applet-plugin
 Priority: optional
@@ -20007,6 +20029,28 @@ Description: a macro processing language
  generating `configure' scripts, but not for running them.
 Homepage: http://www.gnu.org/software/m4/
 Original-Maintainer: Santiago Vila <sanvila@debian.org>
+
+Package: cu
+Priority: extra
+Section: comm
+Installed-Size: 211
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: uucp
+Version: 1.07-20build1
+Replaces: uucp (<< 1.06.1+1.07beta1-patch2-1)
+Depends: libc6 (>= 2.7)
+Conflicts: uucp (<< 1.06.1+1.07beta1-patch2-1)
+Size: 66908
+Description: call up another system
+ The  cu  command is used to call up another system and act
+ as a dial in terminal.  It can also do simple file
+ transfers with no error checking.
+ .
+ cu is part of the UUCP source but has been split into its
+ own package because it can be useful even if you do not do
+ uucp.
+Original-Maintainer: Richard A Nelson (Rick) <cowboy@debian.org>
 
 Package: libfontenc1
 Priority: optional

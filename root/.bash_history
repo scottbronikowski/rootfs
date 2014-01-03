@@ -743,3 +743,29 @@ ps -ef | grep noip
 exit
 ls
 exit
+ls
+ls /dev/ttyO*
+screen /dev/ttyO1 38400
+screen /dev/ttyO0 38400
+echo 128 > /dev/ttyO0
+echo '1' > /dev/ttyO0
+echo "1" > /dev/ttyO0
+cat /dev/ttyO0
+screen /dev/ttyO0 115200
+ls
+reboot
+cu
+apt-get install cu
+ifdown wlan0
+ifup wlan 0
+ifup wlan0
+/etc/init.d/ssh-tunnel.sh
+apt-get install cu
+cu
+dmesg | grep tty
+setserial
+apt-get install setserial
+setserial
+setserial -g /dev/ttyO[01234]
+cu -l /dev/ttyO0 -s 38400
+cu -l /dev/ttyO1 -s 38400

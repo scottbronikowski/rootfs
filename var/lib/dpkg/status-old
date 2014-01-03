@@ -11954,6 +11954,35 @@ Description: free implementation of the GL API -- shared library
 Homepage: http://mesa3d.sourceforge.net/
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
+Package: setserial
+Status: install ok unpacked
+Priority: extra
+Section: comm
+Installed-Size: 144
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 2.17-46
+Depends: libc6 (>= 2.7), debconf (>= 0.5) | debconf-2.0
+Conffiles:
+ /etc/modutils/setserial newconffile
+ /etc/init.d/setserial newconffile
+ /etc/init.d/etc-setserial newconffile
+Description: controls configuration of serial ports
+ Set and/or report the configuration information associated with
+ a serial port. This information includes what I/O port and which IRQ
+ a particular serial port is using.
+ .
+ This version has a completely new approach to configuration, so if you
+ have a setup other than the standard ttyS0 and 1, you will have to get
+ your hands dirty.
+ .
+ By default, only COM1-4 are configured by the kernel, using IRQ 3 and 4.
+ If you have other serial ports (such as an AST Fourport card), or
+ if you have mapped the IRQs differently (perhaps COM3 and 4 to other
+ IRQs to allow concurrent access with COM1 and 2) then you must have this
+ package.
+Original-Maintainer: Debian QA Group <packages@qa.debian.org>
+
 Package: libtiff4
 Status: install ok installed
 Multi-Arch: same
@@ -15232,7 +15261,7 @@ Description: pthread stubs not provided by native libc, development files
 Original-Maintainer: XCB Developers <xcb@lists.freedesktop.org>
 
 Package: screen
-Status: install ok unpacked
+Status: install ok installed
 Priority: optional
 Section: misc
 Installed-Size: 757
@@ -15242,8 +15271,8 @@ Version: 4.0.3-14ubuntu8
 Depends: libc6 (>= 2.4), libpam0g (>= 0.99.7.1), libtinfo5, dpkg (>= 1.15.4) | install-info, upstart-job
 Suggests: byobu
 Conffiles:
- /etc/screenrc newconffile
- /etc/init/screen-cleanup.conf newconffile
+ /etc/screenrc 12c245238eb8b653625bba27dc81df6a
+ /etc/init/screen-cleanup.conf 441f4a1c5b41d7f23427be5aa6ccbbcc
 Description: terminal multiplexor with VT100/ANSI terminal emulation
  screen is a terminal multiplexor that runs several separate "screens" on a
  single physical character-based terminal.  Each virtual terminal emulates a
@@ -22851,6 +22880,31 @@ Description: a macro processing language
  generating `configure' scripts, but not for running them.
 Homepage: http://www.gnu.org/software/m4/
 Original-Maintainer: Santiago Vila <sanvila@debian.org>
+
+Package: cu
+Status: install ok installed
+Priority: extra
+Section: comm
+Installed-Size: 211
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: uucp
+Version: 1.07-20build1
+Replaces: uucp (<< 1.06.1+1.07beta1-patch2-1)
+Depends: libc6 (>= 2.7)
+Conflicts: uucp (<< 1.06.1+1.07beta1-patch2-1)
+Conffiles:
+ /etc/uucp/sys a1a0811556644e0ff803dd75e24fe294
+ /etc/uucp/config 0bb748bd93e5352d3bd30940578d3985
+Description: call up another system
+ The  cu  command is used to call up another system and act
+ as a dial in terminal.  It can also do simple file
+ transfers with no error checking.
+ .
+ cu is part of the UUCP source but has been split into its
+ own package because it can be useful even if you do not do
+ uucp.
+Original-Maintainer: Richard A Nelson (Rick) <cowboy@debian.org>
 
 Package: libfontenc1
 Status: install ok installed
