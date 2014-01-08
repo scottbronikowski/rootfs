@@ -769,3 +769,39 @@ setserial
 setserial -g /dev/ttyO[01234]
 cu -l /dev/ttyO0 -s 38400
 cu -l /dev/ttyO1 -s 38400
+ls
+cd test_code/
+emacs drive-robot.cc &
+exit
+cd test_code/
+emacs drive-robot.cc &
+ls
+g++ -o motor_test motor_test.cc
+ls
+motor_test
+./motor_test 
+stty -F /dev/ttyO0
+stty -F /dev/ttyO0 38400
+stty -F /dev/ttyO0
+./motor_test 
+stty -F /dev/ttyO0
+stty -F /dev/ttyO0 38400
+stty -F /dev/ttyO0
+./motor_test 
+stty -F /dev/ttyO0
+g++ -o motor_test motor_test.cc
+stty -F /dev/ttyO0
+./motor_test 
+stty -F /dev/ttyO0
+./motor_test 
+g++ -o motor_test motor_test.cc
+./motor_test 
+g++ -o motor_test motor_test.cc
+./motor_test 
+g++ -o motor_test motor_test.cc
+./motor_test 
+g++ -o motor_test motor_test.cc
+./motor_test 
+g++ -o motor_test motor_test.cc
+./motor_test 
+exit
