@@ -1,7 +1,7 @@
 /*
  *
  * Automatically generated file; DO NOT EDIT.
- * Linux/arm 3.5.0-2-linaro-omap Kernel Configuration
+ * Linux/arm 3.5.0 Kernel Configuration
  *
  */
 #define CONFIG_ARCH_OMAP 1

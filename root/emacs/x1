@@ -1,0 +1,651 @@
+(defvar school nil)
+
+;(if (or (string-match "22." emacs-version)
+;	(string-match "21." emacs-version))
+;    (setq school t))    
+;; Extension loading
+
+;;(load-file user-init-file)
+;;(load-file custom-file)
+(load "/usr/share/emacs/site-lisp/site-gentoo")
+(ido-mode)
+;(setq load-path (cons "~/emacs" load-path))
+(load-file (expand-file-name "~/emacs/sourcepair.el"))
+;;(require 'layout-restore)
+(require 'color-theme)
+(color-theme-initialize)
+(require 'dictionary)
+(require 'flymake)
+(load "/usr/share/emacs/site-lisp/haskell-mode/haskell-site-file.el")
+(add-hook 'haskell-mode-hook 'turn-on-haskell-ghci)
+;;(add-to-list 'load-path (expand-file-name "~/.elisp/undo_browse.el"))
+;;(require 'undo-browse)
+;(require 'hen)
+;(require 'cmuscheme)
+;(require 'quack)
+
+;(setq exec-path (cons "/storage/work/xrefactory/xref" exec-path))
+;(setq load-path (cons "/storage/work/xrefactory/xref/emacs" load-path))
+;(load "xrefactory")
+
+(autoload 'mode-compile "mode-compile"
+  "Command to compile current buffer file based on the major mode" t)
+(autoload 'mode-compile-kill "mode-compile"
+  "Command to kill a compilation launched by `mode-compile'" t)
+
+(require 'compile)
+(require 'bytecomp)
+
+(unless school (defun c-ident-command nil '() ))
+
+(setq inhibit-startup-message t)
+(setq debug-on-error nil)
+
+(if (load "mwheel" t)
+    (mwheel-install))
+
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+
+
+;; Video stuff
+
+;; Finally, fullscreen by default - almost works, border at the bottom where this fails
+;(require 'maxframe)
+
+(defun max-frame ()
+  "Maximize frame for my 17 inch PowerBook."
+  (interactive)
+  (set-frame-position (selected-frame) 0 0)
+  (set-frame-size (selected-frame) 199 51))
+
+(add-hook 'window-setup-hook 'max-frame t)
+
+;; ;-bitstream-bitstream vera sans mono-medium-r-normal--13-*-*-*-*-*-fontset-startup,
+;; (create-fontset-from-fontset-spec
+;;  "-andale-andale mono-medium-r-normal--13-*-*-*-*-*-fontset-startup,
+;;  latin-iso8859-2:-*-Courier New-normal-r-*-*-12-*-*-*-c-*-iso8859-2,
+;;  latin-iso8859-3:-*-Courier New-normal-r-*-*-12-*-*-*-c-*-iso8859-3,
+;;  latin-iso8859-4:-*-Courier New-normal-r-*-*-12-*-*-*-c-*-iso8859-4,
+;;  cyrillic-iso8859-5:-*-Courier New-normal-r-*-*-12-*-*-*-c-*-iso8859-5,
+;;  greek-iso8859-7:-andale-andale mono-medium-r-normal--13-*-*-*-*-*-iso8859-7,
+;;  iso-8859-7:-andale-andale mono-medium-r-normal--13-*-*-*-*-*-iso8859-7,
+;;  unicode-mono:-*-Courier New-normal-r-*-*-12-*-*-*-c-*-iso8859-7,
+;;  unicode-wide:-*-Courier New-normal-r-*-*-12-*-*-*-c-*-iso8859-7,
+;;  latin-iso8859-9:-*-Courier New-normal-r-*-*-12-*-*-*-c-*-iso8859-9,
+;;  japanese-jisx0208:-*-MS Gothic-normal-r-*-*-12-*-*-*-c-*-jisx0208-sjis,
+;;  katakana-jisx0201:-*-MS Gothic-normal-r-*-*-12-*-*-*-c-*-jisx0208-sjis,
+;;  latin-jisx0201:-*-MS Gothic-normal-r-*-*-12-*-*-*-c-*-jisx0208-sjis,
+;;  japanese-jisx0208-1978:-*-MS Gothic-normal-r-*-*-12-*-*-*-c-*-jisx0208-sjis,
+;;  korean-ksc5601:-*-Gulim-normal-r-*-*-12-*-*-*-c-*-ksc5601-*,
+;;  chinese-gb2312:-*-MS Song-normal-r-*-*-12-*-*-*-c-*-gb2312-*,
+;;  chinese-big5-1:-*-MingLiU-normal-r-*-*-12-*-*-*-c-*-big5-*,
+;;  chinese-big5-2:-*-MingLiU-normal-r-*-*-12-*-*-*-c-*-big5-*" t)
+
+
+
+;; (set-fontset-font "fontset-startup"
+;; 		  (decode-char 'iso-8859-7 #x3bb)
+;; 		  "-andale-andale mono-medium-r-normal--13-*-*-*-*-*-iso8859-7")
+
+;; (set-default-font "fontset-startup")
+
+;;(set-default-font "Bitstream Vera Sans Mono-11")
+;(set-default-font "Bitstream Vera Sans Mono-12")
+;(set-default-font "Andale Mono-8")
+
+;(set-fontset-font (frame-parameter nil 'font)
+;                      'iso-8859-7
+;		      '("Andale Mono-12" . "unicode-bmp"))
+
+;(set-fontset-font (frame-parameter nil 'font)
+;                      'greek-iso8859-7
+;		      '("Andale Mono-12" . "unicode-bmp"))
+
+;;("-bitstream-bitstream vera sans mono-medium-r-normal--13-*-*-*-*-*-fontset-startup")
+
+;; latest color theme packages needs to run init first
+;(if (boundp 'color-theme-initialize)
+;    (color-theme-initialize))
+
+;; (color-theme-tty-dark)
+(color-theme-dark-laptop)
+;; (color-theme-midnight)
+
+(setq scroll-step 10)
+
+(global-font-lock-mode t)
+(blink-cursor-mode nil)
+(set-scroll-bar-mode 'right)
+(setq transient-mark-mode t)
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq display-time-day-and-date t)
+(display-time)
+(show-paren-mode 1)
+
+(setq browse-url-browser-function 'browse-url-firefox)
+
+(setq frame-title-format (list "emacs@" system-name " - " '(buffer-file-name "%f" "%b")))
+(setq icon-title-format frame-title-format)
+
+(defadvice query-replace-read-args 
+  (before barf-if-buffer-read-only activate)
+  "Signal a `buffer-read-only' error if the current buffer is read-only."
+  (barf-if-buffer-read-only))
+
+(setq truncate-partial-width-windows nil)
+
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+
+(cond (window-system
+       (display-time)
+       (setq line-number-mode t)
+       (setq column-number-mode t)))
+
+(add-hook 'comint-output-filter-functions
+          'comint-watch-for-password-prompt)
+
+(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
+;;(when window-system ; not just X
+;;    (speedbar 1))
+
+;; Maybe..
+(when window-system
+  (global-unset-key "\C-z"))	; iconify-or-deiconify-frame (C-x C-z)
+
+;; The dictionary server is running on the local machine
+(setq dictionary-server "dict.org")
+
+;; copy/paste
+
+(setq backup-by-copying-when-mismatch t)
+(setq backup-by-copying-when-linked t)
+(global-font-lock-mode t)
+(setq x-select-enable-clipboard t)
+
+;; save a list of open files in ~/.emacs.desktop
+;; save the desktop file automatically if it already exists
+(setq desktop-save 'if-exists)
+(desktop-save-mode 1)
+
+;; save a bunch of variables to the desktop file
+(setq desktop-globals-to-save
+      (append '((extended-command-history . 30)
+                (file-name-history        . 100)
+                (grep-history             . 30)
+                (compile-history          . 30)
+                (minibuffer-history       . 50)
+                (query-replace-history    . 60)
+                (read-expression-history  . 60)
+                (regexp-history           . 60)
+                (regexp-search-ring       . 20)
+                (search-ring              . 20)
+                (shell-command-history    . 50)
+                tags-file-name
+                register-alist)))
+
+(setq ibuffer-shrink-to-minimum-size t)
+(setq ibuffer-always-show-last-buffer nil)
+(setq ibuffer-sorting-mode 'recency)
+(setq ibuffer-use-header-line t)
+(global-set-key [(f12)] 'ibuffer)
+
+;; Make *scratch* unkillable
+
+(save-excursion
+  (set-buffer (get-buffer-create "*scratch*"))
+  (lisp-interaction-mode)
+  (make-local-variable 'kill-buffer-query-functions)
+  (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer))
+
+(defun kill-scratch-buffer ()
+  ;; Kill the current (*scratch*) buffer
+  (remove-hook 'kill-buffer-query-functions 'kill-scratch-buffer)
+  (kill-buffer (current-buffer))
+
+  ;; Make a brand new *scratch* buffer
+  (set-buffer (get-buffer-create "*scratch*"))
+  (lisp-interaction-mode)
+  (make-local-variable 'kill-buffer-query-functions)
+  (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer)
+
+  ;; Since we killed it, don't let caller do that.
+  nil)
+
+;; Autocompile the .emacs buffer
+
+(defun autocompile nil
+  ;;  (interactive)
+  (if (string= (buffer-file-name) 
+	       (expand-file-name (concat default-directory ".emacs")))
+      (byte-compile-file (buffer-file-name))))
+
+(add-hook 'after-save-hook 'autocompile)
+
+;; backups
+
+(defconst use-backup-dir t)   
+(setq backup-directory-alist (quote ((".*" . "~/backup/temp/")))
+      version-control t		     ; Use version numbers for backups
+      kept-new-versions 16	   ; Number of newest versions to keep
+      kept-old-versions 2	   ; Number of oldest versions to keep
+      delete-old-versions t    ; Ask to delete excess backup versions?
+      backup-by-copying-when-linked t) ; Copy linked files, don't rename.
+
+;; completions
+
+(unless school
+  (progn
+;    (require 'ido)
+;    (ido-mode t)
+
+    (require 'hippie-exp)
+    (setq hippie-expand-try-functions-list
+	  '(try-expand-dabbrev
+	    try-expand-dabbrev-all-buffers
+	    try-expand-dabbrev-from-kill
+	    try-complete-file-name-partially
+	    try-complete-file-name
+	    try-complete-lisp-symbol-partially
+	    try-complete-lisp-symbol
+	    try-expand-whole-kill))))
+
+;; prolog mode setup
+
+(autoload 'prolog-mode "prolog" nil t)
+
+(setq prolog-program-name "pl") ;; to use SWI-Prolog
+
+(fset 'use-swipl "\C-[xset-variable\C-mprolog-program-name\C-m\"pl\"\C-m")
+
+(setq prolog-program-name "/usr/bin/pl")
+
+(autoload 'run-prolog "prolog" "Start a Prolog sub-process." t)
+(autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
+
+(add-hook 'prolog-mode-hook 'turn-on-font-lock)
+
+;; c mode setup
+
+(if school
+    (defun c-indent-buffer ()
+      "Indent entire buffer of C source code."
+      (interactive)
+      (save-excursion
+	(goto-char (point-min))
+	(while (< (point) (point-max))
+	  (c-indent-command)
+	  (end-of-line)
+	  (forward-char 1))))
+  (defun indent-buffer ()
+    (interactive)
+    (save-excursion
+      (indent-region 0 (buffer-size)))))
+
+(when school  
+  (defun flymake-compile()
+    "kill all flymake syntax checks, start compilation"
+    (interactive)
+    (flymake-stop-all-syntax-checks)
+    (call-interactively 'compile)))
+
+;; Helper for compilation. Close the compilation window if
+;; there was no error at all.
+(unless school
+;  (defun compilation-exit-autoclose (status code msg)
+;    (when (and (eq status 'exit) (zerop code))
+;      (bury-buffer)
+;      (delete-window (get-buffer-window (get-buffer "*compilation*"))))
+;    (cons msg code))
+;  (setq compilation-exit-message-function 'compilation-exit-autoclose)
+
+  (setq mode-compile-expert-p 't)
+  (setq mode-compile-never-edit-command-p 't)
+  (setq mode-compile-prefered-default-makerule 'all)
+  (setq mode-compile-always-save-buffer-p 't)
+  (setq mode-compile-default-make-options "-k -j2")
+  (setq mode-compile-make-options (eval mode-compile-default-make-options)))
+
+;; setup mode hooks
+
+(if school 
+    (defun my-c-mode-hook ()
+      (c-set-offset 'substatement-open 0))
+  (defun my-c-mode-hook ()
+    (unless school (define-key c-mode-map (kbd "C-.") 'c-indent-buffer))
+    (c-set-offset 'substatement-open 0)))
+
+(setq auto-mode-alist
+      (append '(("\\.c$" . c-mode )
+		("\\.cpp$" . c++-mode )
+		("\\.cc$" . c++-mode )
+		("\\.h$" . c++-mode )
+		("\\.m$" . octave-mode)
+		("\\.sc$" . scheme-mode)
+		("\\.pl$" . prolog-or-perl-mode)
+		("\\.chs$" . haskell-mode)
+		("\\.hs$" . haskell-mode)
+		("\\.pro$" . prolog-mode)
+		("\\.scm$" . hen-mode)
+		("\\.sch$" . scheme-mode)
+		("\\.tex$" . latex-mode)
+		("\\.htm$" . html-mode)
+		("\\.bib$" . bibtex-mode)
+		("\\.html$" . html-mode)
+		("\\.emacs$" . lisp-mode)
+		auto-mode-alist)))
+
+(add-hook 'c-mode-hook 'my-c-mode-hook)
+(add-hook 'c++-mode-hook 'my-c-mode-hook)
+
+;; both prolog and perl files are often called .pl;
+;; this tries to do the right thing.
+(defun prolog-or-perl-mode () (interactive)
+  (if
+      (or (string-match "/perl\\b" (buffer-string)) ; file with perl header
+          (= 1 (point-max)))			    ; new file
+      (progn	
+        (cperl-mode)
+        (message "Ambiguous suffix .pl resolved to perl mode."))
+    (progn 
+      (prolog-mode)
+      (message "Ambiguous suffix .pl resolved to prolog mode.")))
+  (sit-for 1))
+
+(defun toggle-selective-display ()
+  (interactive)
+  (set-selective-display (if selective-display nil 1)))
+
+(setq skeleton-pair t)
+(local-set-key (kbd "[") 'skeleton-pair-insert-maybe)
+(local-set-key (kbd "(") 'skeleton-pair-insert-maybe)
+(local-set-key (kbd "{") 'skeleton-pair-insert-maybe) 
+(local-set-key (kbd "<") 'skeleton-pair-insert-maybe)
+
+;; recent files
+
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-saved-items 500)
+(setq recentf-max-menu-items 60)
+(global-set-key [(meta f12)] 'recentf-open-files)
+
+(defun ido-choose-from-recentf ()
+  "Use ido to select a recently opened file from the `recentf-list'"
+  (interactive)
+  (let ((home (expand-file-name (getenv "HOME"))))
+    (find-file
+     (ido-completing-read "Recentf open: "
+                          (mapcar (lambda (path)
+                                    (replace-regexp-in-string home "~" path))
+                                  recentf-list)
+                          nil t))))
+
+(global-set-key [(meta f11)] 'ido-choose-from-recentf)
+
+;; keyboard bindings
+
+(unless school
+  (global-set-key (kbd "C-.") 'indent-buffer))
+
+;; Shift + arrows for moving windows 
+
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
+
+(defun kill-syntax-forward ()
+  "Kill characters with syntax at point."
+  (interactive)
+  (kill-region (point)
+               (progn 
+		 (skip-syntax-forward 
+		  (string (char-syntax (char-after))))
+		 (point))))
+
+(defun kill-syntax-backward ()
+  "Kill characters with syntax at point."
+  (interactive)
+  (kill-region (point)
+               (progn 
+		 (skip-syntax-backward 
+		  (string (char-syntax (char-before))))
+		 (point))))
+
+
+;; Planner stuff
+(unless school
+  (when (and (locate-library "planner")
+	     (locate-library "muse"))
+    (setq planner-project "WikiPlans")
+    (setq planner-directory "~/Plans")
+    (setq planner-default-page "TaskPool")
+    ;; Tell muse about planner.  We use add-hook instead of
+    ;; add-to-list because muse might not be loaded yet.
+    (add-hook 'muse-project-alist
+	      (list planner-project
+		    (list planner-directory
+			  :default planner-default-page
+			  :major-mode 'planner-mode
+			  :visit-link 'planner-visit-link)))))
+
+;; Update this when moving
+(setq calendar-latitude 40.5)
+(setq calendar-longitude -86.9)
+(setq calendar-location-name "West Lafayette, IN")
+
+(unless school
+  (setq scroll-preserve-screen-position t))
+
+(defun move-line (&optional n)
+  "Move current line N (1) lines up/down leaving point in place."
+  (interactive "p")
+  (when (null n) 
+    (setq n 1)) 
+  (let ((col (current-column)))
+    (beginning-of-line)
+    (next-line 1)
+    (transpose-lines n)
+    (previous-line 1)
+    (forward-char col))) 
+
+(defun move-line-up (n)
+  "Moves current line N (1) lines up leaving point in place."
+  (interactive "p")
+  (move-line (if (null n) -1 (- n))))
+
+(defun move-line-down (n)
+  "Moves current line N (1) lines down leaving point in place."
+  (interactive "p")
+  (move-line (if (null n) 1 n)))
+
+(defun match-paren (arg)
+  "Go to the matching parenthesis if on parenthesis otherwise insert %."
+  (interactive "p")
+  (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
+        ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
+        (t '())))
+
+;; Window resizing
+
+(global-set-key (kbd "H-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "H-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "H-<down>") 'shrink-window)
+(global-set-key (kbd "H-<up>") 'enlarge-window)
+
+(global-set-key (kbd "M-<down>") 'move-line-down)
+(global-set-key (kbd "M-<up>") 'move-line-up)
+
+(global-set-key (kbd "H-s") 'layout-save-current)
+;(global-set-key (kbd "H-l") 'layout-restore)
+(global-set-key (kbd "H-L") 'layout-delete-current)
+
+					;(global-set-key [(hyper c)] 'compile)
+					;(global-set-key [(hyper r)] 'recompile)
+(global-set-key (kbd "H-g") 'goto-line)
+(global-set-key (kbd "H-d") 'dictionary-search)
+(global-set-key (kbd "H-S") 'flyspell-mode)
+(global-set-key (kbd "H-e") 'redo)
+(global-set-key (kbd "H-u") 'undo)
+(global-set-key (kbd "H-p") 'woman)
+(global-set-key (kbd "H-z") 'sourcepair-load)
+
+(global-set-key (kbd "H-x") 'next-error)	
+(global-set-key (kbd "H-X") 'previous-error) 
+
+;; Key binding to invoke the dictionary client
+					;(global-set-key (kbd "H-s") 'dictionary-search)
+					;(global-set-key (kbd "H-m") 'dictionary-match-words)
+(global-set-key (kbd "C-;") 'comment-region)
+(global-set-key (kbd "C-:") 'uncomment-region)
+
+(setq elscreen-prefix-key (kbd "H-C"))
+(global-set-key (kbd "H-c") 'mode-compile)
+(global-set-key (kbd "H-a") 'mode-compile-kill)
+(global-set-key (kbd "H-'") 'next-error)
+(global-set-key (kbd "H-;") 'previous-error)
+(global-set-key (kbd "H-r") 'recompile)
+
+(global-set-key (kbd "H-f") 'toggle-selective-display)
+
+(global-set-key (kbd "H-[") 'kill-syntax-backward)
+(global-set-key (kbd "H-]") 'kill-syntax-forward)
+
+(global-set-key (kbd "C-'") 'hippie-expand)
+(global-set-key [(control return)] 'set-mark-command)
+
+(global-set-key (kbd "H-`") 'match-paren)
+
+(global-set-key (kbd "H-w") 'backward-kill-word)
+
+(global-set-key (kbd "H-i") 'haskell-ghci-load-file)
+
+;; While searching with C-s this will run occur
+(define-key isearch-mode-map (kbd "C-o")
+  (lambda ()
+    (interactive)
+    (let ((case-fold-search isearch-case-fold-search))
+      (occur (if isearch-regexp isearch-string
+               (regexp-quote isearch-string))))))
+
+(defalias 'qr 'query-replace)
+(defalias 'qrr 'query-replace-regexp)
+
+;; For some reason despite qr making more sense qq comes more naturally
+(defalias 'qq 'query-replace)
+(defalias 'qqr 'query-replace-regexp)
+
+
+(global-set-key (kbd "s-<up>") 'up-list)
+(global-set-key (kbd "s-<down>") 'down-list)
+(global-set-key (kbd "s-<right>") 'forward-sexp)
+(global-set-key (kbd "s-m") 'mark-sexp)
+(global-set-key (kbd "s-<home>") 'beginning-of-defun)
+(global-set-key (kbd "s-<left>") 'backward-sexp)
+(global-set-key (kbd "s-<end>") 'end-of-defun)
+(global-set-key (kbd "s-t") 'transpose-sexps)
+(global-set-key (kbd "s-h") 'mark-defun)
+(global-set-key (kbd "s-i") 'indent-sexp)
+(global-set-key (kbd "s-k") 'kill-sexp)
+(global-set-key (kbd "s-l") 'backward-kill-sexp)
+(global-set-key (kbd "s-TAB") 'complete-symbol)
+
+;(define-key scheme-mode-map (kbd "s-s") 'quack-view-srfi)
+;(define-key scheme-mode-map (kbd "C-)") 'hen-close-parens-at-point)
+
+(defun fc-eval-and-replace ()
+  "Replace the preceding sexp with its value."
+  (interactive)
+  (backward-kill-sexp)
+  (condition-case nil
+      (prin1 (eval (read (current-kill 0)))
+             (current-buffer))
+    (error (message "Invalid expression")
+           (insert (current-kill 0)))))
+
+(global-set-key (kbd "C-c e") 'fc-eval-and-replace)
+(global-set-key (kbd "C-c C-e") 'eval-last-sexp)
+
+(global-set-key (kbd "C-<tab>") 'semantic-complete-analyze-inline)
+(global-set-key (kbd "H-l") 'semantic-complete-jump)
+
+(global-set-key (kbd "C-c t")
+    (lambda () (interactive)
+        (progn
+            (save-buffer)
+            (move-beginning-of-line nil)
+            (call-process-region
+                (line-beginning-position)
+                (line-end-position)
+                "typeof"
+                nil
+                t
+                nil
+                (buffer-file-name)))))
+
+;; keyboard macros
+(global-set-key [f9]  'start-kbd-macro)
+(global-set-key [f10]  'end-kbd-macro)
+(global-set-key [f11]  'call-last-kbd-macro)
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(chess-default-engine (quote (chess-gnuchess chess-crafty chess-phalanx)))
+ '(safe-local-variable-values (quote ((default-tab-width . 3))))
+ '(xref-class-tree-splits-window-horizontally nil)
+ '(xref-completion-case-sensitive t)
+ '(xref-completion-overload-wizard-deep 3))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
+
+(put 'downcase-region 'disabled nil)
+
+(defun insert-scc-at-point ()
+  "Insert an SCC annotation at point."
+  (interactive)
+  (if (or (looking-at "\b\|[ t]\|$") (and (not (bolp))
+					  (save-excursion
+					    (forward-char -1)
+					    (looking-at "\b\|[ t]"))))
+      (let ((space-at-point (looking-at "[ t]")))
+	(unless (and (not (bolp)) (save-excursion
+				    (forward-char -1)
+				    (looking-at "[ t]")))
+	  (insert " "))
+	(insert "{-# SCC \"\" #-}")
+	(unless space-at-point
+	  (insert " "))
+	(forward-char (if space-at-point -5 -6)))
+    (error "Not over an area of whitespace")))
+
+
+(defun kill-scc-at-point ()
+  "Kill the SCC annotation at point."
+  (interactive)
+  (save-excursion
+    (let ((old-point (point))
+	  (scc "\({-#[ t]*SCC \"[^\"]*\"[ t]*#-}\)[ t]*"))
+      (while (not (or (looking-at scc) (bolp)))
+	(forward-char -1))
+      (if (and (looking-at scc)
+	       (<= (match-beginning 1) old-point)
+	       (> (match-end 1) old-point))
+	  (kill-region (match-beginning 0) (match-end 0))
+	(error "No SCC at point")))))
+
+
+(global-set-key (kbd "H-o") 'insert-scc-at-point)
+(global-set-key (kbd "H-O") 'kill-scc-at-point)
+

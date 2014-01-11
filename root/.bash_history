@@ -805,3 +805,14 @@ g++ -o motor_test motor_test.cc
 g++ -o motor_test motor_test.cc
 ./motor_test 
 exit
+cd /
+top
+ps -ef
+ps -ef | grep git
+top
+emacs &
+cd /
+git status
+git add -A
+rm /.git/index.lock
+git add -A

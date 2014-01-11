@@ -7,29 +7,29 @@
 [    0.000000] Machine: Gumstix Overo
 [    0.000000] Reserving 12582912 bytes SDRAM for VRAM
 [    0.000000] Memory policy: ECC disabled, Data cache writeback
-[    0.000000] On node 0 totalpages: 127744
+[    0.000000] On node 0 totalpages: 62208
 [    0.000000] free_area_init_node: node 0, pgdat c070b85c, node_mem_map c07a7000
-[    0.000000]   Normal zone: 1024 pages used for memmap
+[    0.000000]   Normal zone: 512 pages used for memmap
 [    0.000000]   Normal zone: 0 pages reserved
-[    0.000000]   Normal zone: 126720 pages, LIFO batch:31
+[    0.000000]   Normal zone: 61696 pages, LIFO batch:15
 [    0.000000] OMAP3630 ES1.2 (l2cache iva sgx neon isp 192mhz_clk )
 [    0.000000] Clocking rate (Crystal/Core/MPU): 26.0/400/600 MHz
 [    0.000000] pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
 [    0.000000] pcpu-alloc: [0] 0 
-[    0.000000] Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 126720
+[    0.000000] Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 61696
 [    0.000000] Kernel command line: console=tty0 console=ttyO2,115200n8 root=/dev/mmcblk0p2 rootwait ro earlyprintk mpurate=500 vram=12M omapdss.def_disp=dvi omapfb.mode=dvi:1024x768MR-16@60
-[    0.000000] PID hash table entries: 2048 (order: 1, 8192 bytes)
-[    0.000000] Dentry cache hash table entries: 65536 (order: 6, 262144 bytes)
-[    0.000000] Inode-cache hash table entries: 32768 (order: 5, 131072 bytes)
-[    0.000000] allocated 1048576 bytes of page_cgroup
+[    0.000000] PID hash table entries: 1024 (order: 0, 4096 bytes)
+[    0.000000] Dentry cache hash table entries: 32768 (order: 5, 131072 bytes)
+[    0.000000] Inode-cache hash table entries: 16384 (order: 4, 65536 bytes)
+[    0.000000] allocated 524288 bytes of page_cgroup
 [    0.000000] please try 'cgroup_disable=memory' option if you don't want memory cgroups
-[    0.000000] Memory: 499MB = 499MB total
-[    0.000000] Memory: 495744k/495744k available, 28544k reserved, 0K highmem
+[    0.000000] Memory: 243MB = 243MB total
+[    0.000000] Memory: 236356k/236356k available, 25788k reserved, 0K highmem
 [    0.000000] Virtual kernel memory layout:
 [    0.000000]     vector  : 0xffff0000 - 0xffff1000   (   4 kB)
 [    0.000000]     fixmap  : 0xfff00000 - 0xfffe0000   ( 896 kB)
-[    0.000000]     vmalloc : 0xe0800000 - 0xff000000   ( 488 MB)
-[    0.000000]     lowmem  : 0xc0000000 - 0xe0000000   ( 512 MB)
+[    0.000000]     vmalloc : 0xd0800000 - 0xff000000   ( 744 MB)
+[    0.000000]     lowmem  : 0xc0000000 - 0xd0000000   ( 256 MB)
 [    0.000000]     pkmap   : 0xbfe00000 - 0xc0000000   (   2 MB)
 [    0.000000]     modules : 0xbf000000 - 0xbfe00000   (  14 MB)
 [    0.000000]       .text : 0xc0008000 - 0xc067abfc   (6603 kB)
@@ -50,629 +50,742 @@
 [    0.039428] Mount-cache hash table entries: 512
 [    0.040191] Initializing cgroup subsys debug
 [    0.040252] Initializing cgroup subsys cpuacct
-[    0.040283] Initializing cgroup subsys memory
+[    0.040252] Initializing cgroup subsys memory
 [    0.040344] Initializing cgroup subsys devices
 [    0.040374] Initializing cgroup subsys freezer
-[    0.040405] Initializing cgroup subsys perf_event
+[    0.040374] Initializing cgroup subsys perf_event
 [    0.040527] CPU: Testing write buffer coherency: ok
 [    0.040832] Setting up static identity map for 0x8046ea98 - 0x8046eaf0
 [    0.045837] devtmpfs: initialized
-[    0.050567] dummy: 
+[    0.050598] dummy: 
 [    0.050994] NET: Registered protocol family 16
-[    0.051422] GPMC revision 5.0
-[    0.051483] gpmc: irq-20 could not claim: err -22
+[    0.051452] GPMC revision 5.0
+[    0.051513] gpmc: irq-20 could not claim: err -22
 [    0.053161] gpiochip_add: registered GPIOs 0 to 31 on device: gpio
 [    0.053253] OMAP GPIO hardware version 2.5
-[    0.053497] gpiochip_add: registered GPIOs 32 to 63 on device: gpio
-[    0.053771] gpiochip_add: registered GPIOs 64 to 95 on device: gpio
-[    0.054046] gpiochip_add: registered GPIOs 96 to 127 on device: gpio
-[    0.054321] gpiochip_add: registered GPIOs 128 to 159 on device: gpio
+[    0.053527] gpiochip_add: registered GPIOs 32 to 63 on device: gpio
+[    0.053802] gpiochip_add: registered GPIOs 64 to 95 on device: gpio
+[    0.054077] gpiochip_add: registered GPIOs 96 to 127 on device: gpio
+[    0.054351] gpiochip_add: registered GPIOs 128 to 159 on device: gpio
 [    0.054626] gpiochip_add: registered GPIOs 160 to 191 on device: gpio
-[    0.055664] omap_mux_init: Add partition: #1: core, flags: 0
-[    0.060607] _omap_mux_get_by_name: Could not find signal uart4_rx.uart4_rx
-[    0.066467] Reprogramming SDRC clock to 400000000 Hz
+[    0.055694] omap_mux_init: Add partition: #1: core, flags: 0
+[    0.060668] _omap_mux_get_by_name: Could not find signal uart4_rx.uart4_rx
+[    0.066497] Reprogramming SDRC clock to 400000000 Hz
 [    0.066528] dpll3_m2_clk rate change failed: -22
 [    0.066558] Found NAND on CS0
-[    0.066558] Registering NAND on CS0
+[    0.066589] Registering NAND on CS0
 [    0.067779]  usbhs_omap: alias fck already exists
-[    0.075256] hw-breakpoint: debug architecture 0x4 unsupported.
-[    0.078308]  omap-mcbsp.2: alias fck already exists
-[    0.078552]  omap-mcbsp.3: alias fck already exists
-[    0.079620] Switched to new clocking rate (Crystal/Core/MPU): 26.0/400/500 MHz
-[    0.079864] OMAP DMA hardware revision 5.0
-[    0.089569] bio: create slab <bio-0> at 0
-[    0.090484] fixed-dummy: 
-[    0.090606] reg-fixed-voltage reg-fixed-voltage.0: fixed-dummy supplying 0uV
-[    0.090850] vads7846: override min_uV, 1 -> 3300000
-[    0.090881] vads7846: override max_uV, 2147483647 -> 3300000
-[    0.090911] vads7846: 3300 mV 
-[    0.091033] reg-fixed-voltage reg-fixed-voltage.1: vads7846 supplying 3300000uV
-[    0.091857] SCSI subsystem initialized
-[    0.092254] usbcore: registered new interface driver usbfs
-[    0.092437] usbcore: registered new interface driver hub
-[    0.092712] usbcore: registered new device driver usb
-[    0.101684] omap_i2c omap_i2c.1: bus 1 rev1.4.0 at 2600 kHz
-[    0.104736] twl 1-0048: PIH (irq 7) chaining IRQs 320..328
-[    0.104888] twl 1-0048: power (irq 325) chaining IRQs 328..335
-[    0.105621] twl4030_gpio twl4030_gpio: gpio (irq 320) chaining IRQs 336..353
-[    0.106018] gpiochip_add: registered GPIOs 192 to 211 on device: twl4030
-[    0.106933] VUSB1V5: override min_uV, 1 -> 1500000
-[    0.106964] VUSB1V5: override max_uV, 2147483647 -> 1500000
-[    0.106994] VUSB1V5: 1500 mV normal standby
-[    0.107574] VUSB1V8: override min_uV, 1 -> 1800000
-[    0.107604] VUSB1V8: override max_uV, 2147483647 -> 1800000
-[    0.107604] VUSB1V8: 1800 mV normal standby
-[    0.108154] VUSB3V1: override min_uV, 1 -> 3100000
-[    0.108184] VUSB3V1: override max_uV, 2147483647 -> 3100000
-[    0.108184] VUSB3V1: 3100 mV normal standby
-[    0.109985] twl4030_usb twl4030_usb: HW_CONDITIONS 0x10/16; link 0
-[    0.110260] twl4030_usb twl4030_usb: Initialized TWL4030 USB module
-[    0.110931] vdd_mpu_iva: 600 <--> 1450 mV normal 
-[    0.111480] vdd_core: 600 <--> 1450 mV normal 
-[    0.112121] VMMC1: 1850 <--> 3150 mV at 3150 mV normal standby
-[    0.112823] VDAC: 1800 mV normal standby
-[    0.113464] VDVI: 1800 mV normal standby
-[    0.114013] omap_i2c omap_i2c.3: bus 3 rev1.4.0 at 400 kHz
-[    0.114959] omap-iommu omap-iommu.0: isp registered
-[    0.115234] Advanced Linux Sound Architecture Driver Version 1.0.25.
-[    0.116333] Switching to clocksource 32k_counter
-[    0.149749] usbhs_omap usbhs_omap: xclk60mhsp2_ck set parentfailed error:-22
-[    0.150695] NET: Registered protocol family 2
-[    0.151062] IP route cache hash table entries: 4096 (order: 2, 16384 bytes)
-[    0.151763] TCP established hash table entries: 16384 (order: 5, 131072 bytes)
-[    0.152221] TCP bind hash table entries: 16384 (order: 4, 65536 bytes)
-[    0.152496] TCP: Hash tables configured (established 16384 bind 16384)
-[    0.152526] TCP: reno registered
-[    0.152557] UDP hash table entries: 256 (order: 0, 4096 bytes)
-[    0.152618] UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)
-[    0.153015] NET: Registered protocol family 1
-[    0.153656] RPC: Registered named UNIX socket transport module.
-[    0.153686] RPC: Registered udp transport module.
-[    0.153717] RPC: Registered tcp transport module.
-[    0.153747] RPC: Registered tcp NFSv4.1 backchannel transport module.
-[    0.154083] Trying to unpack rootfs image as initramfs...
-[    0.363708] Freeing initrd memory: 1828K
-[    0.366668] audit: initializing netlink socket (disabled)
-[    0.366760] type=2000 audit(0.359:1): initialized
-[    0.368469] VFS: Disk quotas dquot_6.5.2
-[    0.368591] Dquot-cache hash table entries: 1024 (order 0, 4096 bytes)
-[    0.369110] NFS: Registering the id_resolver key type
-[    0.369232] Key type id_resolver registered
-[    0.369812] jffs2: version 2.2. (NAND) (SUMMARY)  \xffffffc2\xffffffa9 2001-2006 Red Hat, Inc.
-[    0.370666] fuse init (API version 7.19)
-[    0.371337] msgmni has been set to 971
-[    0.373535] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 253)
-[    0.373596] io scheduler noop registered
-[    0.373626] io scheduler deadline registered (default)
-[    0.374755] OMAP DSS rev 2.0
-[    0.378601] omap_uart.0: ttyO0 at MMIO 0x4806a000 (irq = 72) is a OMAP UART0
-[    0.379241] omap_uart.1: ttyO1 at MMIO 0x4806c000 (irq = 73) is a OMAP UART1
-[    0.379821] omap_uart.2: ttyO2 at MMIO 0x49020000 (irq = 74) is a OMAP UART2
-[    1.083557] console [ttyO2] enabled
-[    1.087829] omap_uart.3: ttyO3 at MMIO 0x49042000 (irq = 80) is a OMAP UART3
-[    1.105804] brd: module loaded
-[    1.114440] loop: module loaded
-[    1.120025] twl4030_madc twl4030_madc: clk disabled, enabling
-[    1.128509] NAND device: Manufacturer ID: 0x2c, Chip ID: 0xbc (Micron NAND 512MiB 1,8V 16-bit), page size: 2048, OOB size: 64
-[    1.157318] Creating 5 MTD partitions on "omap2-nand.0":
-[    1.162963] 0x000000000000-0x000000080000 : "xloader"
-[    1.170410] 0x000000080000-0x000000240000 : "uboot"
-[    1.178680] 0x000000240000-0x000000280000 : "uboot environment"
-[    1.186553] 0x000000280000-0x000000680000 : "linux"
-[    1.197052] 0x000000680000-0x000020000000 : "rootfs"
-[    1.708526] smsc911x: Driver version 2008-10-21
-[    1.713897] smsc911x: Driver version 2008-10-21
-[    1.719268] usbcore: registered new interface driver asix
-[    1.725067] usbcore: registered new interface driver cdc_ether
-[    1.731414] usbcore: registered new interface driver cdc_ncm
-[    1.737823] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
-[    1.744781] ehci_hcd: block sizes: qh 64 qtd 96 itd 160 sitd 96
-[    1.744964] ehci-omap ehci-omap.0: failed to get ehci port1 regulator
-[    2.749328] ehci-omap ehci-omap.0: phy reset operation timed out
-[    2.749359] ehci-omap ehci-omap.0: reset hcs_params 0x1313 dbg=0 cc=1 pcc=3 ordered ports=3
-[    2.749389] ehci-omap ehci-omap.0: reset hcc_params 0016 thresh 1 uframes 256/512/1024 park
-[    2.749420] ehci-omap ehci-omap.0: reset command 0080b02  park=3 ithresh=8 period=1024 Reset HALT
-[    2.749450] ehci-omap ehci-omap.0: OMAP-EHCI Host Controller
-[    2.755828] ehci-omap ehci-omap.0: new USB bus registered, assigned bus number 1
-[    2.763793] ehci-omap ehci-omap.0: park 0
-[    2.763854] ehci-omap ehci-omap.0: irq 77, io mem 0x48064800
-[    2.769866] ehci-omap ehci-omap.0: init command 0010005 (park)=0 ithresh=1 period=512 RUN
-[    2.780609] ehci-omap ehci-omap.0: USB 2.0 started, EHCI 1.00
-[    2.786865] usb usb1: default language 0x0409
-[    2.786926] usb usb1: udev 1, busnum 1, minor = 0
-[    2.786926] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002
-[    2.794158] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-[    2.801818] usb usb1: Product: OMAP-EHCI Host Controller
-[    2.807434] usb usb1: Manufacturer: Linux 3.5.0-2-linaro-omap ehci_hcd
-[    2.814361] usb usb1: SerialNumber: ehci-omap.0
-[    2.819854] usb usb1: usb_probe_device
-[    2.819885] usb usb1: configuration #1 chosen from 1 choice
-[    2.819946] usb usb1: adding 1-0:1.0 (config #1, interface 0)
-[    2.820159] hub 1-0:1.0: usb_probe_interface
-[    2.820159] hub 1-0:1.0: usb_probe_interface - got id
-[    2.820190] hub 1-0:1.0: USB hub found
-[    2.824188] hub 1-0:1.0: 3 ports detected
-[    2.828460] hub 1-0:1.0: standalone hub
-[    2.828491] hub 1-0:1.0: individual port power switching
-[    2.828491] hub 1-0:1.0: individual port over-current protection
-[    2.828521] hub 1-0:1.0: power on to power good time: 20ms
-[    2.828552] hub 1-0:1.0: local power source is good
-[    2.828582] hub 1-0:1.0: enabling power on all ports
-[    2.828979] ehci-omap ehci-omap.0: ...powerup ports...
-[    2.858947] Initializing USB Mass Storage driver...
-[    2.864288] usbcore: registered new interface driver usb-storage
-[    2.870666] USB Mass Storage support registered.
-[    2.875579] musb-hdrc: version 6.0, ?dma?, otg (peripheral+host)
-[    2.888549] twl4030_usb twl4030_usb: twl4030_phy_resume
-[    2.888824] musb-hdrc: ConfigData=0xde (UTMI-8, dyn FIFOs, bulk combine, bulk split, HB-ISO Rx, HB-ISO Tx, SoftConn)
-[    2.888854] musb-hdrc: MHDRC RTL version 1.800 
-[    2.888854] musb-hdrc: setup fifo_mode 4
-[    2.888885] musb-hdrc: 28/31 max ep, 16384/16384 memory
-[    2.889465] musb-hdrc musb-hdrc: USB OTG mode controller at fa0ab000 using DMA, IRQ 92
-[    2.899963] twl4030_usb twl4030_usb: twl4030_phy_suspend
-[    2.900634] mousedev: PS/2 mouse device common for all mice
-[    2.907257] twl_rtc twl_rtc: Power up reset detected.
-[    2.912780] twl_rtc twl_rtc: Enabling TWL-RTC
-[    2.920349] twl_rtc twl_rtc: rtc core: registered twl_rtc as rtc0
-[    2.927551] i2c /dev entries driver
-[    2.931365] ehci-omap ehci-omap.0: GetStatus port:2 status 001803 0  ACK POWER sig=j CSC CONNECT
-[    2.931396] hub 1-0:1.0: port 2: status 0501 change 0001
-[    2.933380] voltdm_scale: No voltage scale API registered for vdd_mpu_iva
-[    2.940643] platform mpu.0: omap_target: unable to scale voltage up.
-[    2.947387] cpuidle: using governor ladder
-[    2.951721] cpuidle: using governor menu
-[    2.956481] omap_hsmmc omap_hsmmc.0: Failed to get debounce clk
-[    3.030639] hub 1-0:1.0: state 7 ports 3 chg 0004 evt 0000
-[    3.030700] hub 1-0:1.0: port 2, status 0501, change 0000, 480 Mb/s
-[    3.093170] ehci-omap ehci-omap.0: port 2 reset complete, port enabled
-[    3.093200] ehci-omap ehci-omap.0: GetStatus port:2 status 001005 0  ACK POWER sig=se0 PE CONNECT
-[    3.155609] usb 1-2: new high-speed USB device number 2 using ehci-omap
-[    3.218139] ehci-omap ehci-omap.0: port 2 reset complete, port enabled
-[    3.218200] ehci-omap ehci-omap.0: GetStatus port:2 status 001005 0  ACK POWER sig=se0 PE CONNECT
-[    3.312530] usb 1-2: udev 2, busnum 1, minor = 1
-[    3.312561] usb 1-2: New USB device found, idVendor=0409, idProduct=005a
-[    3.319702] usb 1-2: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-[    3.327789] usb 1-2: usb_probe_device
-[    3.327819] usb 1-2: configuration #1 chosen from 1 choice
-[    3.328124] usb 1-2: adding 1-2:1.0 (config #1, interface 0)
-[    3.328308] hub 1-2:1.0: usb_probe_interface
-[    3.328308] hub 1-2:1.0: usb_probe_interface - got id
-[    3.328338] hub 1-2:1.0: USB hub found
-[    3.332519] hub 1-2:1.0: 4 ports detected
-[    3.337371] omap_hsmmc omap_hsmmc.1: Failed to get debounce clk
-[    3.343780] hub 1-2:1.0: standalone hub
-[    3.343811] hub 1-2:1.0: individual port power switching
-[    3.343811] hub 1-2:1.0: individual port over-current protection
-[    3.343841] hub 1-2:1.0: Single TT
-[    3.343841] hub 1-2:1.0: TT requires at most 16 FS bit times (1332 ns)
-[    3.343872] hub 1-2:1.0: power on to power good time: 100ms
-[    3.344146] hub 1-2:1.0: local power source is good
-[    3.344177] hub 1-2:1.0: enabling power on all ports
-[    3.390533] Registered led device: overo:red:gpio21
-[    3.390716] Registered led device: overo:blue:gpio22
-[    3.391540] Registered led device: overo:blue:COM
-[    3.393524] usbcore: registered new interface driver usbhid
-[    3.399597] usbhid: USB HID core driver
-[    3.404907] usbcore: registered new interface driver snd-usb-audio
-[    3.413085] overo SoC init
-[    3.416229] soc-audio soc-audio: ASoC machine overo should use snd_soc_register_card()
-[    3.444915] hub 1-2:1.0: port 1: status 0101 change 0001
-[    3.445281] hub 1-2:1.0: port 2: status 0101 change 0001
-[    3.445526] hub 1-2:1.0: port 3: status 0101 change 0001
-[    3.445770] hub 1-2:1.0: port 4: status 0101 change 0001
-[    3.502166] twl4030-codec twl4030-codec: ASoC: Failed to create Capture debugfs file
-[    3.514221] asoc: twl4030-hifi <-> omap-mcbsp.2 mapping ok
-[    3.525909] oprofile: hardware counters not available
-[    3.531311] oprofile: using timer interrupt.
-[    3.536315] TCP: cubic registered
-[    3.540008] NET: Registered protocol family 17
-[    3.544982] NET: Registered protocol family 15
-[    3.549926] usb 1-2: link qh256-0001/de6c5b00 start 1 [1/0 us]
-[    3.549987] hub 1-2:1.0: state 7 ports 4 chg 001e evt 0000
-[    3.550170] hub 1-2:1.0: port 1, status 0101, change 0000, 12 Mb/s
-[    3.550445] Key type dns_resolver registered
-[    3.555267] VFP support v0.3: implementor 41 architecture 3 part 30 variant c rev 3
-[    3.569152] ThumbEE CPU extension supported.
-[    3.573974] sr_init: No PMIC hook to init smartreflex
-[    3.580017] smartreflex smartreflex.0: omap_sr_probe: SmartReflex driver initialized
-[    3.588531] smartreflex smartreflex.1: omap_sr_probe: SmartReflex driver initialized
-[    3.605957] clock: disabling unused clocks to save power
-[    3.612792] registered taskstats version 1
-[    3.618103] fbcvt: 1024x768@60: CVT Name - .786M3-R
-[    3.640167] usb 1-2.1: new full-speed USB device number 3 using ehci-omap
-[    3.644897] Console: switching to colour frame buffer device 128x48
-[    3.675628] VDAC: incomplete constraints, leaving on
-[    3.683319] twl_rtc twl_rtc: setting system clock to 2000-01-01 00:00:11 UTC (946684811)
-[    3.692199] ALSA device list:
-[    3.695587]   #0: overo
-[    3.699951] Freeing init memory: 220K
-[    3.713684] mmc0: host does not support reading read-only switch. assuming write-enable.
-[    3.734893] mmc0: new high speed SDXC card at address e624
-[    3.749542] mmcblk0: mmc0:e624 SU64G 59.4 GiB 
-[    3.758422] usb 1-2.1: default language 0x0409
-[    3.758911] usb 1-2.1: udev 3, busnum 1, minor = 2
-[    3.758941] usb 1-2.1: New USB device found, idVendor=067b, idProduct=2303
-[    3.766754]  mmcblk0: p1 p2
-[    3.780792] usb 1-2.1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-[    3.796356] usb 1-2.1: Product: USB-Serial Controller D
-[    3.806884] usb 1-2.1: Manufacturer: Prolific Technology Inc. 
-[    3.821716] usb 1-2.1: usb_probe_device
-[    3.821746] usb 1-2.1: configuration #1 chosen from 1 choice
-[    3.822387] usb 1-2.1: adding 1-2.1:1.0 (config #1, interface 0)
-[    3.824951] hub 1-2:1.0: port 2, status 0101, change 0000, 12 Mb/s
-[    3.830932] mmc1: new SDIO card at address 0001
-[    3.906066] usb 1-2.2: new high-speed USB device number 4 using ehci-omap
-[    3.953277] udevd[79]: starting version 175
-[    4.043701] usb 1-2.2: default language 0x0409
-[    4.052581] usb 1-2.2: udev 4, busnum 1, minor = 3
-[    4.052612] usb 1-2.2: New USB device found, idVendor=1e10, idProduct=2004
-[    4.101013] usb 1-2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[    4.162384] usb 1-2.2: Product: USB 2.0 Digital Imaging Camera
-[    4.216888] usb 1-2.2: Manufacturer: Point Grey Research
-[    4.265106] usb 1-2.2: SerialNumber: 00CAABB3
-[    4.317321] usb 1-2.2: usb_probe_device
-[    4.317352] usb 1-2.2: configuration #1 chosen from 1 choice
-[    4.317718] usb 1-2.2: adding 1-2.2:1.0 (config #1, interface 0)
-[    4.318542] hub 1-2:1.0: port 3, status 0101, change 0000, 12 Mb/s
-[    4.398162] usb 1-2.3: new high-speed USB device number 5 using ehci-omap
-[    4.543670] usb 1-2.3: default language 0x0409
-[    4.552551] usb 1-2.3: udev 5, busnum 1, minor = 4
-[    4.552612] usb 1-2.3: New USB device found, idVendor=1e10, idProduct=2004
-[    4.577545] usb 1-2.3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[    4.606750] usb 1-2.3: Product: USB 2.0 Digital Imaging Camera
-[    4.632263] usb 1-2.3: Manufacturer: Point Grey Research
-[    4.652191] usb 1-2.3: SerialNumber: 00BB1D77
-[    4.676574] usb 1-2.3: usb_probe_device
-[    4.676605] usb 1-2.3: configuration #1 chosen from 1 choice
-[    4.677032] usb 1-2.3: adding 1-2.3:1.0 (config #1, interface 0)
-[    4.677764] hub 1-2:1.0: port 4, status 0101, change 0000, 12 Mb/s
-[    4.757537] usb 1-2.4: new high-speed USB device number 6 using ehci-omap
-[    4.898376] usb 1-2.4: udev 6, busnum 1, minor = 5
-[    4.898437] usb 1-2.4: New USB device found, idVendor=0409, idProduct=005a
-[    4.927917] usb 1-2.4: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-[    4.959045] usb 1-2.4: usb_probe_device
-[    4.959075] usb 1-2.4: configuration #1 chosen from 1 choice
-[    4.960479] usb 1-2.4: adding 1-2.4:1.0 (config #1, interface 0)
-[    4.960754] hub 1-2.4:1.0: usb_probe_interface
-[    4.960754] hub 1-2.4:1.0: usb_probe_interface - got id
-[    4.960784] hub 1-2.4:1.0: USB hub found
-[    4.985290] hub 1-2.4:1.0: 4 ports detected
-[    5.010772] hub 1-2.4:1.0: standalone hub
-[    5.010803] hub 1-2.4:1.0: individual port power switching
-[    5.010803] hub 1-2.4:1.0: individual port over-current protection
-[    5.010833] hub 1-2.4:1.0: Single TT
-[    5.010833] hub 1-2.4:1.0: TT requires at most 16 FS bit times (1332 ns)
-[    5.010864] hub 1-2.4:1.0: power on to power good time: 100ms
-[    5.011779] hub 1-2.4:1.0: local power source is good
-[    5.011810] hub 1-2.4:1.0: enabling power on all ports
-[    5.014343] hub 1-2:1.0: state 7 ports 4 chg 0000 evt 0010
-[    5.109374] hub 1-2.4:1.0: port 2: status 0101 change 0001
-[    5.109741] hub 1-2.4:1.0: port 3: status 0301 change 0001
-[    5.109985] hub 1-2.4:1.0: port 4: status 0301 change 0001
-[    5.201324] EXT3-fs (mmcblk0p2): recovery required on readonly filesystem
-[    5.214508] usb 1-2.4: link qh256-0001/de100ec0 start 2 [1/0 us]
-[    5.214630] hub 1-2.4:1.0: state 7 ports 4 chg 001c evt 0000
-[    5.214965] hub 1-2.4:1.0: port 2, status 0101, change 0000, 12 Mb/s
-[    5.226776] EXT3-fs (mmcblk0p2): write access will be enabled during recovery
-[    5.296630] usb 1-2.4.2: new full-speed USB device number 7 using ehci-omap
-[    5.436950] usb 1-2.4.2: ep0 maxpacket = 8
-[    5.440643] usb 1-2.4.2: default language 0x0409
-[    5.445281] usb 1-2.4.2: udev 7, busnum 1, minor = 6
-[    5.445343] usb 1-2.4.2: New USB device found, idVendor=0403, idProduct=6001
-[    5.475830] usb 1-2.4.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[    5.506317] usb 1-2.4.2: Product: FT232R USB UART
-[    5.530700] usb 1-2.4.2: Manufacturer: FTDI
-[    5.554168] usb 1-2.4.2: SerialNumber: A702LYT7
-[    5.581909] usb 1-2.4.2: usb_probe_device
-[    5.581939] usb 1-2.4.2: configuration #1 chosen from 1 choice
-[    5.582489] usb 1-2.4.2: adding 1-2.4.2:1.0 (config #1, interface 0)
-[    5.585876] hub 1-2.4:1.0: port 3, status 0301, change 0000, 1.5 Mb/s
-[    5.673217] usb 1-2.4.3: new low-speed USB device number 8 using ehci-omap
-[    5.834075] usb 1-2.4.3: skipped 1 descriptor after interface
-[    5.834106] usb 1-2.4.3: skipped 1 descriptor after interface
-[    5.836120] usb 1-2.4.3: default language 0x0409
-[    5.842041] usb 1-2.4.3: udev 8, busnum 1, minor = 7
-[    5.842071] usb 1-2.4.3: New USB device found, idVendor=04d9, idProduct=1702
-[    5.874999] usb 1-2.4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-[    5.912384] usb 1-2.4.3: Product: USB Keyboard
-[    5.938537] usb 1-2.4.3: Manufacturer:  
-[    5.965087] usb 1-2.4.3: usb_probe_device
-[    5.965148] usb 1-2.4.3: configuration #1 chosen from 1 choice
-[    5.969726] usb 1-2.4.3: adding 1-2.4.3:1.0 (config #1, interface 0)
-[    5.970062] usbhid 1-2.4.3:1.0: usb_probe_interface
-[    5.970092] usbhid 1-2.4.3:1.0: usb_probe_interface - got id
-[    5.981323] input:   USB Keyboard as /devices/platform/usbhs_omap/ehci-omap.0/usb1/1-2/1-2.4/1-2.4.3/1-2.4.3:1.0/input/input0
-[    6.031066] usb 1-2.4.3: link qh8-0e01/de100b80 start 3 [1/2 us]
-[    6.031555] hid-generic 0003:04D9:1702.0001: input: USB HID v1.10 Keyboard [  USB Keyboard] on usb-ehci-omap.0-2.4.3/input0
-[    6.080871] usb 1-2.4.3: adding 1-2.4.3:1.1 (config #1, interface 1)
-[    6.081207] usbhid 1-2.4.3:1.1: usb_probe_interface
-[    6.081237] usbhid 1-2.4.3:1.1: usb_probe_interface - got id
-[    6.100982] input:   USB Keyboard as /devices/platform/usbhs_omap/ehci-omap.0/usb1/1-2/1-2.4/1-2.4.3/1-2.4.3:1.1/input/input1
-[    6.147766] usb 1-2.4.3: link qh8-0e01/de100b00 start 4 [1/2 us]
-[    6.148315] hid-generic 0003:04D9:1702.0002: input: USB HID v1.10 Device [  USB Keyboard] on usb-ehci-omap.0-2.4.3/input1
-[    6.195190] hub 1-2.4:1.0: port 4, status 0301, change 0000, 1.5 Mb/s
-[    6.282012] usb 1-2.4.4: new low-speed USB device number 9 using ehci-omap
-[    6.431488] usb 1-2.4.4: skipped 1 descriptor after interface
-[    6.432098] usb 1-2.4.4: default language 0x0409
-[    6.434478] usb 1-2.4.4: udev 9, busnum 1, minor = 8
-[    6.434509] usb 1-2.4.4: New USB device found, idVendor=093a, idProduct=2510
-[    6.467956] usb 1-2.4.4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-[    6.505249] usb 1-2.4.4: Product: USB Optical Mouse
-[    6.536834] usb 1-2.4.4: Manufacturer: PixArt
-[    6.570861] usb 1-2.4.4: usb_probe_device
-[    6.570892] usb 1-2.4.4: configuration #1 chosen from 1 choice
-[    6.571655] usb 1-2.4.4: adding 1-2.4.4:1.0 (config #1, interface 0)
-[    6.571990] usbhid 1-2.4.4:1.0: usb_probe_interface
-[    6.572021] usbhid 1-2.4.4:1.0: usb_probe_interface - got id
-[    6.577148] input: PixArt USB Optical Mouse as /devices/platform/usbhs_omap/ehci-omap.0/usb1/1-2/1-2.4/1-2.4.4/1-2.4.4:1.0/input/input2
-[    6.645538] hid-generic 0003:093A:2510.0003: input: USB HID v1.11 Mouse [PixArt USB Optical Mouse] on usb-ehci-omap.0-2.4.4/input0
-[    6.710815] hub 1-2.4:1.0: state 7 ports 4 chg 0000 evt 0010
-[   11.641357] kjournald starting.  Commit interval 5 seconds
-[   11.656646] EXT3-fs (mmcblk0p2): recovery complete
-[   11.667999] EXT3-fs (mmcblk0p2): mounted filesystem with writeback data mode
-[   12.238586] init: ureadahead main process (199) terminated with status 5
-[   13.392395] udevd[278]: starting version 175
-[   13.449371] end_request: I/O error, dev mtdblock0, sector 0
-[   13.461486] Buffer I/O error on device mtdblock0, logical block 0
-[   13.604644] end_request: I/O error, dev mtdblock0, sector 0
-[   13.616790] Buffer I/O error on device mtdblock0, logical block 0
-[   13.707366] end_request: I/O error, dev mtdblock0, sector 0
-[   13.719543] Buffer I/O error on device mtdblock0, logical block 0
-[   13.796447] end_request: I/O error, dev mtdblock0, sector 0
-[   13.808624] Buffer I/O error on device mtdblock0, logical block 0
-[   13.938201] end_request: I/O error, dev mtdblock0, sector 0
-[   13.950439] Buffer I/O error on device mtdblock0, logical block 0
-[   14.085571] end_request: I/O error, dev mtdblock0, sector 0
-[   14.097839] Buffer I/O error on device mtdblock0, logical block 0
-[   14.173950] end_request: I/O error, dev mtdblock0, sector 0
-[   14.186248] Buffer I/O error on device mtdblock0, logical block 0
-[   14.244476] end_request: I/O error, dev mtdblock0, sector 0
-[   14.256774] Buffer I/O error on device mtdblock0, logical block 0
-[   14.332092] end_request: I/O error, dev mtdblock0, sector 0
-[   14.344482] Buffer I/O error on device mtdblock0, logical block 0
-[   14.405853] end_request: I/O error, dev mtdblock0, sector 0
-[   14.418243] Buffer I/O error on device mtdblock0, logical block 0
-[   14.474853] end_request: I/O error, dev mtdblock0, sector 0
-[   14.510162] end_request: I/O error, dev mtdblock0, sector 0
-[   14.545074] end_request: I/O error, dev mtdblock0, sector 0
-[   14.559356] ads7846 spi1.0: touchscreen, irq 210
-[   14.559661] ads7846 spi1.0: no device detected, test read result was 0x00000FFF
-[   14.578155] Linux media interface: v0.10
-[   14.580505] end_request: I/O error, dev mtdblock0, sector 0
-[   14.610473] end_request: I/O error, dev mtdblock0, sector 0
-[   14.642333] end_request: I/O error, dev mtdblock0, sector 0
-[   14.673034] end_request: I/O error, dev mtdblock0, sector 0
-[   14.697143] Linux video capture interface: v2.00
-[   14.709106] end_request: I/O error, dev mtdblock0, sector 8
-[   14.741760] end_request: I/O error, dev mtdblock0, sector 8
-[   14.778503] end_request: I/O error, dev mtdblock0, sector 8
-[   14.818786] end_request: I/O error, dev mtdblock0, sector 8
-[   14.854675] end_request: I/O error, dev mtdblock0, sector 24
-[   14.891906] end_request: I/O error, dev mtdblock0, sector 24
-[   14.905242] omap3isp omap3isp: Revision 15.0 found
-[   14.909149] omap-iommu omap-iommu.0: isp: version 1.1
-[   14.926208] end_request: I/O error, dev mtdblock0, sector 24
-[   14.965087] end_request: I/O error, dev mtdblock0, sector 24
-[   14.989105] lib80211: common routines for IEEE802.11 drivers
-[   14.989135] lib80211_crypt: registered algorithm 'NULL'
-[   14.998962] end_request: I/O error, dev mtdblock0, sector 56
-[   15.043701] end_request: I/O error, dev mtdblock0, sector 56
-[   15.067535] mt9v032 3-005c: Probing MT9V032 at address 0x5c
-[   15.067779] mt9v032 3-005c: MT9V032 power up failed
-[   15.078338] end_request: I/O error, dev mtdblock0, sector 56
-[   15.102111] end_request: I/O error, dev mtdblock0, sector 56
-[   15.127166] end_request: I/O error, dev mtdblock0, sector 120
-[   15.163665] end_request: I/O error, dev mtdblock0, sector 120
-[   15.194000] end_request: I/O error, dev mtdblock0, sector 120
-[   15.210571] isp_register_subdev_group: Unable to register subdev mt9v032
-[   15.222259] end_request: I/O error, dev mtdblock0, sector 120
-[   15.242279] end_request: I/O error, dev mtdblock0, sector 0
-[   15.266723] end_request: I/O error, dev mtdblock0, sector 0
-[   15.280822] cfg80211: Calling CRDA to update world regulatory domain
-[   15.299591] end_request: I/O error, dev mtdblock0, sector 8
-[   15.327178] end_request: I/O error, dev mtdblock0, sector 8
-[   15.358947] end_request: I/O error, dev mtdblock0, sector 24
-[   15.388092] end_request: I/O error, dev mtdblock0, sector 24
-[   15.404174] libertas_sdio: Libertas SDIO driver
-[   15.404205] libertas_sdio: Copyright Pierre Ossman
-[   15.411773] end_request: I/O error, dev mtdblock0, sector 56
-[   15.441650] end_request: I/O error, dev mtdblock0, sector 56
-[   15.473937] end_request: I/O error, dev mtdblock0, sector 120
-[   15.497985] end_request: I/O error, dev mtdblock0, sector 120
-[   15.526397] end_request: I/O error, dev mtdblock0, sector 0
-[   15.543792] end_request: I/O error, dev mtdblock0, sector 0
-[   15.576324] end_request: I/O error, dev mtdblock0, sector 0
-[   15.590820] end_request: I/O error, dev mtdblock0, sector 0
-[   15.611358] end_request: I/O error, dev mtdblock0, sector 0
-[   15.630157] end_request: I/O error, dev mtdblock0, sector 0
-[   15.654663] end_request: I/O error, dev mtdblock0, sector 64
-[   15.671478] end_request: I/O error, dev mtdblock0, sector 64
-[   15.690582] end_request: I/O error, dev mtdblock0, sector 64
-[   15.710754] end_request: I/O error, dev mtdblock0, sector 64
-[   15.733215] end_request: I/O error, dev mtdblock0, sector 64
-[   15.753173] end_request: I/O error, dev mtdblock0, sector 64
-[   15.774078] end_request: I/O error, dev mtdblock0, sector 64
-[   15.796447] end_request: I/O error, dev mtdblock0, sector 64
-[   15.819885] end_request: I/O error, dev mtdblock0, sector 64
-[   15.839508] end_request: I/O error, dev mtdblock0, sector 0
-[   15.862854] end_request: I/O error, dev mtdblock0, sector 0
-[   15.905029] end_request: I/O error, dev mtdblock0, sector 0
-[   15.946807] end_request: I/O error, dev mtdblock0, sector 0
-[   15.988189] end_request: I/O error, dev mtdblock0, sector 0
-[   16.024353] end_request: I/O error, dev mtdblock0, sector 16
-[   16.058593] end_request: I/O error, dev mtdblock0, sector 0
-[   16.085845] end_request: I/O error, dev mtdblock0, sector 0
-[   16.108947] end_request: I/O error, dev mtdblock0, sector 0
-[   16.124603] end_request: I/O error, dev mtdblock0, sector 0
-[   16.143981] end_request: I/O error, dev mtdblock0, sector 0
-[   16.163635] end_request: I/O error, dev mtdblock0, sector 0
-[   16.179504] end_request: I/O error, dev mtdblock0, sector 0
-[   16.202789] end_request: I/O error, dev mtdblock0, sector 0
-[   16.215911] end_request: I/O error, dev mtdblock0, sector 0
-[   16.240692] end_request: I/O error, dev mtdblock0, sector 0
-[   16.263244] end_request: I/O error, dev mtdblock0, sector 0
-[   16.279052] end_request: I/O error, dev mtdblock0, sector 0
-[   16.301391] end_request: I/O error, dev mtdblock0, sector 0
-[   16.321136] end_request: I/O error, dev mtdblock0, sector 0
-[   16.342193] end_request: I/O error, dev mtdblock0, sector 0
-[   16.358978] end_request: I/O error, dev mtdblock0, sector 0
-[   16.370727] end_request: I/O error, dev mtdblock0, sector 0
-[   16.393341] end_request: I/O error, dev mtdblock0, sector 0
-[   16.411376] end_request: I/O error, dev mtdblock0, sector 8
-[   16.428955] end_request: I/O error, dev mtdblock0, sector 0
-[   16.444854] end_request: I/O error, dev mtdblock0, sector 0
-[   16.460723] end_request: I/O error, dev mtdblock0, sector 0
-[   16.481658] end_request: I/O error, dev mtdblock0, sector 0
-[   16.843261] end_request: I/O error, dev mtdblock0, sector 0
-[   16.866760] end_request: I/O error, dev mtdblock0, sector 0
-[   16.874267] end_request: I/O error, dev mtdblock0, sector 0
-[   16.897308] end_request: I/O error, dev mtdblock0, sector 0
-[   16.912353] end_request: I/O error, dev mtdblock0, sector 0
-[   16.928070] end_request: I/O error, dev mtdblock0, sector 0
-[   16.952697] end_request: I/O error, dev mtdblock0, sector 0
-[   16.964996] end_request: I/O error, dev mtdblock0, sector 0
-[   16.984039] end_request: I/O error, dev mtdblock0, sector 0
-[   17.007415] end_request: I/O error, dev mtdblock0, sector 0
-[   17.028686] end_request: I/O error, dev mtdblock0, sector 0
-[   17.049407] end_request: I/O error, dev mtdblock0, sector 0
-[   17.062072] end_request: I/O error, dev mtdblock0, sector 0
-[   17.086730] end_request: I/O error, dev mtdblock0, sector 0
-[   17.107299] end_request: I/O error, dev mtdblock0, sector 0
-[   17.125091] usbcore: registered new interface driver usbserial
-[   17.125579] end_request: I/O error, dev mtdblock0, sector 0
-[   17.134063] usbcore: registered new interface driver usbserial_generic
-[   17.134429] USB Serial support registered for generic
-[   17.134490] usbserial: USB Serial Driver core
-[   17.152313] end_request: I/O error, dev mtdblock0, sector 0
-[   17.169952] end_request: I/O error, dev mtdblock0, sector 8
-[   17.187042] end_request: I/O error, dev mtdblock0, sector 8
-[   17.202697] end_request: I/O error, dev mtdblock0, sector 8
-[   17.218353] end_request: I/O error, dev mtdblock0, sector 8
-[   17.226043] usbcore: registered new interface driver pl2303
-[   17.226562] USB Serial support registered for pl2303
-[   17.226654] pl2303 1-2.1:1.0: usb_probe_interface
-[   17.226684] pl2303 1-2.1:1.0: usb_probe_interface - got id
-[   17.226715] pl2303 1-2.1:1.0: pl2303 converter detected
-[   17.234008] end_request: I/O error, dev mtdblock0, sector 24
-[   17.250915] usbcore: registered new interface driver ftdi_sio
-[   17.252990] usb 1-2.1: pl2303 converter now attached to ttyUSB0
-[   17.254394] end_request: I/O error, dev mtdblock0, sector 24
-[   17.273010] end_request: I/O error, dev mtdblock0, sector 24
-[   17.280487] USB Serial support registered for FTDI USB Serial Device
-[   17.280944] ftdi_sio 1-2.4.2:1.0: usb_probe_interface
-[   17.280975] ftdi_sio 1-2.4.2:1.0: usb_probe_interface - got id
-[   17.281036] ftdi_sio 1-2.4.2:1.0: FTDI USB Serial Device converter detected
-[   17.288604] end_request: I/O error, dev mtdblock0, sector 24
-[   17.309875] usb 1-2.4.2: Detected FT232RL
-[   17.309906] usb 1-2.4.2: Number of endpoints 2
-[   17.309906] usb 1-2.4.2: Endpoint 1 MaxPacketSize 64
-[   17.309936] usb 1-2.4.2: Endpoint 2 MaxPacketSize 64
-[   17.309967] usb 1-2.4.2: Setting MaxPacketSize 64
-[   17.312103] end_request: I/O error, dev mtdblock0, sector 56
-[   17.320404] usb 1-2.4.2: FTDI USB Serial Device converter now attached to ttyUSB1
-[   17.320739] ftdi_sio: v1.6.0:USB FTDI Serial Converters Driver
-[   17.333984] end_request: I/O error, dev mtdblock0, sector 56
-[   17.357879] end_request: I/O error, dev mtdblock0, sector 56
-[   17.374633] end_request: I/O error, dev mtdblock0, sector 56
-[   17.401336] end_request: I/O error, dev mtdblock0, sector 120
-[   17.433319] end_request: I/O error, dev mtdblock0, sector 120
-[   17.457122] end_request: I/O error, dev mtdblock0, sector 120
-[   17.474273] end_request: I/O error, dev mtdblock0, sector 120
-[   17.490814] end_request: I/O error, dev mtdblock0, sector 0
-[   17.507415] end_request: I/O error, dev mtdblock0, sector 0
-[   17.521911] end_request: I/O error, dev mtdblock0, sector 8
-[   17.538635] end_request: I/O error, dev mtdblock0, sector 8
-[   17.552398] end_request: I/O error, dev mtdblock0, sector 24
-[   17.565155] end_request: I/O error, dev mtdblock0, sector 24
-[   17.584808] end_request: I/O error, dev mtdblock0, sector 56
-[   17.600158] end_request: I/O error, dev mtdblock0, sector 56
-[   17.616760] end_request: I/O error, dev mtdblock0, sector 120
-[   17.626098] end_request: I/O error, dev mtdblock0, sector 120
-[   17.640197] end_request: I/O error, dev mtdblock0, sector 0
-[   17.655822] end_request: I/O error, dev mtdblock0, sector 0
-[   17.671447] end_request: I/O error, dev mtdblock0, sector 0
-[   17.687103] end_request: I/O error, dev mtdblock0, sector 0
-[   17.702728] end_request: I/O error, dev mtdblock0, sector 0
-[   17.718353] end_request: I/O error, dev mtdblock0, sector 0
-[   17.731475] end_request: I/O error, dev mtdblock0, sector 64
-[   17.749267] end_request: I/O error, dev mtdblock0, sector 64
-[   17.765350] end_request: I/O error, dev mtdblock0, sector 64
-[   17.779724] end_request: I/O error, dev mtdblock0, sector 64
-[   17.796508] end_request: I/O error, dev mtdblock0, sector 64
-[   17.812103] end_request: I/O error, dev mtdblock0, sector 64
-[   17.825836] end_request: I/O error, dev mtdblock0, sector 64
-[   17.837707] end_request: I/O error, dev mtdblock0, sector 64
-[   17.857055] end_request: I/O error, dev mtdblock0, sector 64
-[   17.870513] end_request: I/O error, dev mtdblock0, sector 0
-[   17.885528] end_request: I/O error, dev mtdblock0, sector 0
-[   17.903961] end_request: I/O error, dev mtdblock0, sector 0
-[   17.920715] end_request: I/O error, dev mtdblock0, sector 0
-[   17.943817] end_request: I/O error, dev mtdblock0, sector 0
-[   17.960083] end_request: I/O error, dev mtdblock0, sector 16
-[   17.974151] end_request: I/O error, dev mtdblock0, sector 0
-[   17.988403] end_request: I/O error, dev mtdblock0, sector 0
-[   18.003753] end_request: I/O error, dev mtdblock0, sector 0
-[   18.022613] end_request: I/O error, dev mtdblock0, sector 0
-[   18.038665] end_request: I/O error, dev mtdblock0, sector 0
-[   18.054260] end_request: I/O error, dev mtdblock0, sector 0
-[   18.069885] end_request: I/O error, dev mtdblock0, sector 0
-[   18.085510] end_request: I/O error, dev mtdblock0, sector 0
-[   18.101135] end_request: I/O error, dev mtdblock0, sector 0
-[   18.108734] end_request: I/O error, dev mtdblock0, sector 0
-[   18.124572] end_request: I/O error, dev mtdblock0, sector 0
-[   18.140197] end_request: I/O error, dev mtdblock0, sector 0
-[   18.155914] end_request: I/O error, dev mtdblock0, sector 0
-[   18.171447] end_request: I/O error, dev mtdblock0, sector 0
-[   18.187072] end_request: I/O error, dev mtdblock0, sector 0
-[   18.202728] end_request: I/O error, dev mtdblock0, sector 0
-[   18.218322] end_request: I/O error, dev mtdblock0, sector 0
-[   18.233947] end_request: I/O error, dev mtdblock0, sector 0
-[   18.246368] end_request: I/O error, dev mtdblock0, sector 8
-[   18.265197] end_request: I/O error, dev mtdblock0, sector 0
-[   18.272796] end_request: I/O error, dev mtdblock0, sector 0
-[   18.288635] end_request: I/O error, dev mtdblock0, sector 0
-[   18.304473] end_request: I/O error, dev mtdblock0, sector 0
-[   18.759796] EXT3-fs (mmcblk0p2): using internal journal
-[   20.691802] hub 1-2.4:1.0: state 7 ports 4 chg 0000 evt 0002
-[   20.692230] hub 1-2.4:1.0: port 1, status 0101, change 0001, 12 Mb/s
-[   20.843841] hub 1-2.4:1.0: debounce: port 1: total 100ms stable 100ms status 0x101
-[   20.930480] usb 1-2.4.1: new high-speed USB device number 10 using ehci-omap
-[   21.054595] usb 1-2.4.1: default language 0x0409
-[   21.055358] usb 1-2.4.1: udev 10, busnum 1, minor = 9
-[   21.055389] usb 1-2.4.1: New USB device found, idVendor=10a9, idProduct=606f
-[   21.055389] usb 1-2.4.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[   21.055419] usb 1-2.4.1: Product: PANTECH UML295
-[   21.055419] usb 1-2.4.1: Manufacturer: Pantech, Incorporated
-[   21.055450] usb 1-2.4.1: SerialNumber: UML2950123456789ABCDEF
-[   21.056121] usb 1-2.4.1: usb_probe_device
-[   21.056152] usb 1-2.4.1: configuration #1 chosen from 1 choice
-[   21.075988] usb 1-2.4.1: adding 1-2.4.1:1.0 (config #1, interface 0)
-[   21.076873] usb-storage 1-2.4.1:1.0: usb_probe_interface
-[   21.076934] usb-storage 1-2.4.1:1.0: usb_probe_interface - got id
-[   21.087860] scsi0 : usb-storage 1-2.4.1:1.0
-[   21.286590] NET: Registered protocol family 10
-[   22.086608] scsi 0:0:0:0: CD-ROM            PANTECH  CD-ROM           0000 PQ: 0 ANSI: 2
-[   22.584075] cfg80211: World regulatory domain updated:
-[   22.584106] cfg80211:   (start_freq - end_freq @ bandwidth), (max_antenna_gain, max_eirp)
-[   22.584136] cfg80211:   (2402000 KHz - 2472000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
-[   22.584136] cfg80211:   (2457000 KHz - 2482000 KHz @ 20000 KHz), (300 mBi, 2000 mBm)
-[   22.584167] cfg80211:   (2474000 KHz - 2494000 KHz @ 20000 KHz), (300 mBi, 2000 mBm)
-[   22.584167] cfg80211:   (5170000 KHz - 5250000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
-[   22.584197] cfg80211:   (5735000 KHz - 5835000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
-[   22.656372] sr0: scsi3-mmc drive: 24x/24x xa/form2 caddy
-[   22.656402] cdrom: Uniform CD-ROM driver Revision: 3.20
-[   22.665466] sr 0:0:0:0: Attached scsi CD-ROM sr0
-[   23.180419] libertas_sdio mmc1:0001:1: (unregistered net_device): 00:19:88:45:0b:0a, fw 9.70.3p36, cap 0x00000303
-[   23.189208] libertas_sdio mmc1:0001:1: wlan0: Marvell WLAN 802.11 adapter
-[   23.205474] cfg80211: Calling CRDA for country: US
-[   23.545440] cfg80211: Regulatory domain changed to country: US
-[   23.545471] cfg80211:   (start_freq - end_freq @ bandwidth), (max_antenna_gain, max_eirp)
-[   23.545471] cfg80211:   (2402000 KHz - 2472000 KHz @ 40000 KHz), (300 mBi, 2700 mBm)
-[   23.545501] cfg80211:   (5170000 KHz - 5250000 KHz @ 40000 KHz), (300 mBi, 1700 mBm)
-[   23.545501] cfg80211:   (5250000 KHz - 5330000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
-[   23.545532] cfg80211:   (5490000 KHz - 5600000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
-[   23.545532] cfg80211:   (5650000 KHz - 5710000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
-[   23.545562] cfg80211:   (5735000 KHz - 5835000 KHz @ 40000 KHz), (300 mBi, 3000 mBm)
-[   24.371856] IPv6: ADDRCONF(NETDEV_UP): wlan0: link is not ready
-[   24.372161] IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
-[   26.148437] init: failsafe main process (477) killed by TERM signal
+[    0.075286] hw-breakpoint: debug architecture 0x4 unsupported.
+[    0.078338]  omap-mcbsp.2: alias fck already exists
+[    0.078582]  omap-mcbsp.3: alias fck already exists
+[    0.079650] Switched to new clocking rate (Crystal/Core/MPU): 26.0/400/500 MHz
+[    0.079925] OMAP DMA hardware revision 5.0
+[    0.089630] bio: create slab <bio-0> at 0
+[    0.090515] fixed-dummy: 
+[    0.090667] reg-fixed-voltage reg-fixed-voltage.0: fixed-dummy supplying 0uV
+[    0.090911] vads7846: override min_uV, 1 -> 3300000
+[    0.090911] vads7846: override max_uV, 2147483647 -> 3300000
+[    0.090942] vads7846: 3300 mV 
+[    0.091064] reg-fixed-voltage reg-fixed-voltage.1: vads7846 supplying 3300000uV
+[    0.091888] SCSI subsystem initialized
+[    0.092315] usbcore: registered new interface driver usbfs
+[    0.092468] usbcore: registered new interface driver hub
+[    0.092742] usbcore: registered new device driver usb
+[    0.093292] omap_i2c omap_i2c.1: bus 1 rev1.4.0 at 2600 kHz
+[    0.096374] twl 1-0048: PIH (irq 7) chaining IRQs 320..328
+[    0.096527] twl 1-0048: power (irq 325) chaining IRQs 328..335
+[    0.097259] twl4030_gpio twl4030_gpio: gpio (irq 320) chaining IRQs 336..353
+[    0.097656] gpiochip_add: registered GPIOs 192 to 211 on device: twl4030
+[    0.098632] VUSB1V5: override min_uV, 1 -> 1500000
+[    0.098632] VUSB1V5: override max_uV, 2147483647 -> 1500000
+[    0.098663] VUSB1V5: 1500 mV normal standby
+[    0.099243] VUSB1V8: override min_uV, 1 -> 1800000
+[    0.099273] VUSB1V8: override max_uV, 2147483647 -> 1800000
+[    0.099273] VUSB1V8: 1800 mV normal standby
+[    0.099822] VUSB3V1: override min_uV, 1 -> 3100000
+[    0.099853] VUSB3V1: override max_uV, 2147483647 -> 3100000
+[    0.099853] VUSB3V1: 3100 mV normal standby
+[    0.101654] twl4030_usb twl4030_usb: HW_CONDITIONS 0x10/16; link 0
+[    0.101928] twl4030_usb twl4030_usb: Initialized TWL4030 USB module
+[    0.102600] vdd_mpu_iva: 600 <--> 1450 mV normal 
+[    0.103149] vdd_core: 600 <--> 1450 mV normal 
+[    0.103790] VMMC1: 1850 <--> 3150 mV at 3150 mV normal standby
+[    0.104461] VDAC: 1800 mV normal standby
+[    0.105133] VDVI: 1800 mV normal standby
+[    0.117309] omap_i2c omap_i2c.3: bus 3 rev1.4.0 at 400 kHz
+[    0.118286] omap-iommu omap-iommu.0: isp registered
+[    0.118530] Advanced Linux Sound Architecture Driver Version 1.0.25.
+[    0.119628] Switching to clocksource 32k_counter
+[    0.153076] usbhs_omap usbhs_omap: xclk60mhsp2_ck set parentfailed error:-22
+[    0.154022] NET: Registered protocol family 2
+[    0.154388] IP route cache hash table entries: 2048 (order: 1, 8192 bytes)
+[    0.155090] TCP established hash table entries: 8192 (order: 4, 65536 bytes)
+[    0.155334] TCP bind hash table entries: 8192 (order: 3, 32768 bytes)
+[    0.155487] TCP: Hash tables configured (established 8192 bind 8192)
+[    0.155517] TCP: reno registered
+[    0.155548] UDP hash table entries: 256 (order: 0, 4096 bytes)
+[    0.155609] UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)
+[    0.156005] NET: Registered protocol family 1
+[    0.156646] RPC: Registered named UNIX socket transport module.
+[    0.156707] RPC: Registered udp transport module.
+[    0.156707] RPC: Registered tcp transport module.
+[    0.156738] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    0.157073] Trying to unpack rootfs image as initramfs...
+[    0.366119] Freeing initrd memory: 1828K
+[    0.368988] audit: initializing netlink socket (disabled)
+[    0.369079] type=2000 audit(0.359:1): initialized
+[    0.370849] VFS: Disk quotas dquot_6.5.2
+[    0.371002] Dquot-cache hash table entries: 1024 (order 0, 4096 bytes)
+[    0.371490] NFS: Registering the id_resolver key type
+[    0.371612] Key type id_resolver registered
+[    0.372192] jffs2: version 2.2. (NAND) (SUMMARY)  \xffffffc2\xffffffa9 2001-2006 Red Hat, Inc.
+[    0.373046] fuse init (API version 7.19)
+[    0.373718] msgmni has been set to 465
+[    0.375915] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 253)
+[    0.375976] io scheduler noop registered
+[    0.376007] io scheduler deadline registered (default)
+[    0.376983] OMAP DSS rev 2.0
+[    0.380981] omap_uart.0: ttyO0 at MMIO 0x4806a000 (irq = 72) is a OMAP UART0
+[    0.381622] omap_uart.1: ttyO1 at MMIO 0x4806c000 (irq = 73) is a OMAP UART1
+[    0.382232] omap_uart.2: ttyO2 at MMIO 0x49020000 (irq = 74) is a OMAP UART2
+[    1.085052] console [ttyO2] enabled
+[    1.089324] omap_uart.3: ttyO3 at MMIO 0x49042000 (irq = 80) is a OMAP UART3
+[    1.107299] brd: module loaded
+[    1.115966] loop: module loaded
+[    1.121459] twl4030_madc twl4030_madc: clk disabled, enabling
+[    1.129821] NAND device: Manufacturer ID: 0x2c, Chip ID: 0xbc (Micron NAND 512MiB 1,8V 16-bit), page size: 2048, OOB size: 64
+[    1.158508] Creating 5 MTD partitions on "omap2-nand.0":
+[    1.164306] 0x000000000000-0x000000080000 : "xloader"
+[    1.171691] 0x000000080000-0x000000240000 : "uboot"
+[    1.179962] 0x000000240000-0x000000280000 : "uboot environment"
+[    1.187835] 0x000000280000-0x000000680000 : "linux"
+[    1.198364] 0x000000680000-0x000020000000 : "rootfs"
+[    1.709777] smsc911x: Driver version 2008-10-21
+[    1.715148] smsc911x: Driver version 2008-10-21
+[    1.720489] usbcore: registered new interface driver asix
+[    1.726379] usbcore: registered new interface driver cdc_ether
+[    1.732666] usbcore: registered new interface driver cdc_ncm
+[    1.739074] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+[    1.746032] ehci_hcd: block sizes: qh 64 qtd 96 itd 160 sitd 96
+[    1.746246] ehci-omap ehci-omap.0: failed to get ehci port1 regulator
+[    2.752624] ehci-omap ehci-omap.0: phy reset operation timed out
+[    2.752655] ehci-omap ehci-omap.0: reset hcs_params 0x1313 dbg=0 cc=1 pcc=3 ordered ports=3
+[    2.752685] ehci-omap ehci-omap.0: reset hcc_params 0016 thresh 1 uframes 256/512/1024 park
+[    2.752716] ehci-omap ehci-omap.0: reset command 0080b02  park=3 ithresh=8 period=1024 Reset HALT
+[    2.752746] ehci-omap ehci-omap.0: OMAP-EHCI Host Controller
+[    2.759124] ehci-omap ehci-omap.0: new USB bus registered, assigned bus number 1
+[    2.767089] ehci-omap ehci-omap.0: park 0
+[    2.767150] ehci-omap ehci-omap.0: irq 77, io mem 0x48064800
+[    2.773193] ehci-omap ehci-omap.0: init command 0010005 (park)=0 ithresh=1 period=512 RUN
+[    2.783905] ehci-omap ehci-omap.0: USB 2.0 started, EHCI 1.00
+[    2.790130] usb usb1: default language 0x0409
+[    2.790191] usb usb1: udev 1, busnum 1, minor = 0
+[    2.790222] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002
+[    2.797424] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    2.805084] usb usb1: Product: OMAP-EHCI Host Controller
+[    2.810729] usb usb1: Manufacturer: Linux 3.5.0-2-linaro-omap ehci_hcd
+[    2.817626] usb usb1: SerialNumber: ehci-omap.0
+[    2.823120] usb usb1: usb_probe_device
+[    2.823150] usb usb1: configuration #1 chosen from 1 choice
+[    2.823211] usb usb1: adding 1-0:1.0 (config #1, interface 0)
+[    2.823425] hub 1-0:1.0: usb_probe_interface
+[    2.823425] hub 1-0:1.0: usb_probe_interface - got id
+[    2.823455] hub 1-0:1.0: USB hub found
+[    2.827453] hub 1-0:1.0: 3 ports detected
+[    2.831726] hub 1-0:1.0: standalone hub
+[    2.831756] hub 1-0:1.0: individual port power switching
+[    2.831756] hub 1-0:1.0: individual port over-current protection
+[    2.831787] hub 1-0:1.0: power on to power good time: 20ms
+[    2.831817] hub 1-0:1.0: local power source is good
+[    2.831848] hub 1-0:1.0: enabling power on all ports
+[    2.832244] ehci-omap ehci-omap.0: ...powerup ports...
+[    2.862243] Initializing USB Mass Storage driver...
+[    2.867584] usbcore: registered new interface driver usb-storage
+[    2.873962] USB Mass Storage support registered.
+[    2.878875] musb-hdrc: version 6.0, ?dma?, otg (peripheral+host)
+[    2.891784] twl4030_usb twl4030_usb: twl4030_phy_resume
+[    2.892059] musb-hdrc: ConfigData=0xde (UTMI-8, dyn FIFOs, bulk combine, bulk split, HB-ISO Rx, HB-ISO Tx, SoftConn)
+[    2.892089] musb-hdrc: MHDRC RTL version 1.800 
+[    2.892089] musb-hdrc: setup fifo_mode 4
+[    2.892120] musb-hdrc: 28/31 max ep, 16384/16384 memory
+[    2.892700] musb-hdrc musb-hdrc: USB OTG mode controller at fa0ab000 using DMA, IRQ 92
+[    2.903198] twl4030_usb twl4030_usb: twl4030_phy_suspend
+[    2.903869] mousedev: PS/2 mouse device common for all mice
+[    2.910736] twl_rtc twl_rtc: Enabling TWL-RTC
+[    2.918273] twl_rtc twl_rtc: rtc core: registered twl_rtc as rtc0
+[    2.925476] i2c /dev entries driver
+[    2.930999] voltdm_scale: No voltage scale API registered for vdd_mpu_iva
+[    2.938323] ehci-omap ehci-omap.0: GetStatus port:2 status 001803 0  ACK POWER sig=j CSC CONNECT
+[    2.938385] hub 1-0:1.0: port 2: status 0501 change 0001
+[    2.938446] platform mpu.0: omap_target: unable to scale voltage up.
+[    2.945190] cpuidle: using governor ladder
+[    2.949554] cpuidle: using governor menu
+[    2.954284] omap_hsmmc omap_hsmmc.0: Failed to get debounce clk
+[    3.033935] hub 1-0:1.0: state 7 ports 3 chg 0004 evt 0000
+[    3.033996] hub 1-0:1.0: port 2, status 0501, change 0000, 480 Mb/s
+[    3.096435] ehci-omap ehci-omap.0: port 2 reset complete, port enabled
+[    3.096466] ehci-omap ehci-omap.0: GetStatus port:2 status 001005 0  ACK POWER sig=se0 PE CONNECT
+[    3.158905] usb 1-2: new high-speed USB device number 2 using ehci-omap
+[    3.221435] ehci-omap ehci-omap.0: port 2 reset complete, port enabled
+[    3.221466] ehci-omap ehci-omap.0: GetStatus port:2 status 001005 0  ACK POWER sig=se0 PE CONNECT
+[    3.315521] usb 1-2: udev 2, busnum 1, minor = 1
+[    3.315551] usb 1-2: New USB device found, idVendor=0409, idProduct=005a
+[    3.322631] usb 1-2: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+[    3.331329] omap_hsmmc omap_hsmmc.1: Failed to get debounce clk
+[    3.337921] usb 1-2: usb_probe_device
+[    3.337951] usb 1-2: configuration #1 chosen from 1 choice
+[    3.338287] usb 1-2: adding 1-2:1.0 (config #1, interface 0)
+[    3.338562] hub 1-2:1.0: usb_probe_interface
+[    3.339843] hub 1-2:1.0: usb_probe_interface - got id
+[    3.339874] hub 1-2:1.0: USB hub found
+[    3.346405] hub 1-2:1.0: 4 ports detected
+[    3.350708] hub 1-2:1.0: standalone hub
+[    3.350708] hub 1-2:1.0: individual port power switching
+[    3.350738] hub 1-2:1.0: individual port over-current protection
+[    3.350738] hub 1-2:1.0: Single TT
+[    3.350769] hub 1-2:1.0: TT requires at most 16 FS bit times (1332 ns)
+[    3.350769] hub 1-2:1.0: power on to power good time: 100ms
+[    3.351104] hub 1-2:1.0: local power source is good
+[    3.351135] hub 1-2:1.0: enabling power on all ports
+[    3.378234] Registered led device: overo:red:gpio21
+[    3.378417] Registered led device: overo:blue:gpio22
+[    3.379425] Registered led device: overo:blue:COM
+[    3.381408] usbcore: registered new interface driver usbhid
+[    3.387390] usbhid: USB HID core driver
+[    3.392211] usbcore: registered new interface driver snd-usb-audio
+[    3.400299] overo SoC init
+[    3.403442] soc-audio soc-audio: ASoC machine overo should use snd_soc_register_card()
+[    3.448242] hub 1-2:1.0: port 1: status 0101 change 0001
+[    3.448455] hub 1-2:1.0: port 2: status 0101 change 0001
+[    3.448852] hub 1-2:1.0: port 4: status 0101 change 0001
+[    3.479766] twl4030-codec twl4030-codec: ASoC: Failed to create Capture debugfs file
+[    3.492034] asoc: twl4030-hifi <-> omap-mcbsp.2 mapping ok
+[    3.503173] oprofile: hardware counters not available
+[    3.508544] oprofile: using timer interrupt.
+[    3.514160] TCP: cubic registered
+[    3.517700] NET: Registered protocol family 17
+[    3.522491] NET: Registered protocol family 15
+[    3.527374] Key type dns_resolver registered
+[    3.532135] VFP support v0.3: implementor 41 architecture 3 part 30 variant c rev 3
+[    3.546478] ThumbEE CPU extension supported.
+[    3.551177] usb 1-2: link qh256-0001/ce6ad780 start 1 [1/0 us]
+[    3.551269] hub 1-2:1.0: state 7 ports 4 chg 0016 evt 0000
+[    3.551330] sr_init: No PMIC hook to init smartreflex
+[    3.556762] hub 1-2:1.0: port 1, status 0101, change 0000, 12 Mb/s
+[    3.557098] smartreflex smartreflex.0: omap_sr_probe: SmartReflex driver initialized
+[    3.566192] smartreflex smartreflex.1: omap_sr_probe: SmartReflex driver initialized
+[    3.583251] clock: disabling unused clocks to save power
+[    3.590698] registered taskstats version 1
+[    3.595947] fbcvt: 1024x768@60: CVT Name - .786M3-R
+[    3.622924] Console: switching to colour frame buffer device 128x48
+[    3.641418] usb 1-2.1: new full-speed USB device number 3 using ehci-omap
+[    3.653472] VDAC: incomplete constraints, leaving on
+[    3.661132] twl_rtc twl_rtc: setting system clock to 2014-01-10 22:36:16 UTC (1389393376)
+[    3.670654] ALSA device list:
+[    3.674011]   #0: overo
+[    3.678436] Freeing init memory: 220K
+[    3.691345] mmc0: host does not support reading read-only switch. assuming write-enable.
+[    3.712493] mmc0: new high speed SDXC card at address e624
+[    3.729614] mmcblk0: mmc0:e624 SU64G 59.4 GiB 
+[    3.741119]  mmcblk0: p1 p2
+[    3.761566] usb 1-2.1: default language 0x0409
+[    3.762084] usb 1-2.1: udev 3, busnum 1, minor = 2
+[    3.762084] usb 1-2.1: New USB device found, idVendor=067b, idProduct=2303
+[    3.774963] usb 1-2.1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[    3.792205] usb 1-2.1: Product: USB-Serial Controller D
+[    3.803588] mmc1: new SDIO card at address 0001
+[    3.810333] usb 1-2.1: Manufacturer: Prolific Technology Inc. 
+[    3.829620] usb 1-2.1: usb_probe_device
+[    3.829650] usb 1-2.1: configuration #1 chosen from 1 choice
+[    3.835540] usb 1-2.1: adding 1-2.1:1.0 (config #1, interface 0)
+[    3.838684] hub 1-2:1.0: port 2, status 0101, change 0000, 12 Mb/s
+[    3.922698] udevd[79]: starting version 175
+[    3.927734] usb 1-2.2: new high-speed USB device number 4 using ehci-omap
+[    4.070434] usb 1-2.2: default language 0x0409
+[    4.079193] usb 1-2.2: udev 4, busnum 1, minor = 3
+[    4.079223] usb 1-2.2: New USB device found, idVendor=1e10, idProduct=2004
+[    4.142059] usb 1-2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[    4.205841] usb 1-2.2: Product: USB 2.0 Digital Imaging Camera
+[    4.244903] usb 1-2.2: Manufacturer: Point Grey Research
+[    4.281158] usb 1-2.2: SerialNumber: 00CAABB3
+[    4.318023] usb 1-2.2: usb_probe_device
+[    4.318084] usb 1-2.2: configuration #1 chosen from 1 choice
+[    4.320831] usb 1-2.2: adding 1-2.2:1.0 (config #1, interface 0)
+[    4.321777] hub 1-2:1.0: port 4, status 0101, change 0000, 12 Mb/s
+[    4.401489] usb 1-2.4: new high-speed USB device number 5 using ehci-omap
+[    4.448272] hub 1-2:1.0: port 4 not reset yet, waiting 10ms
+[    4.566070] usb 1-2.4: udev 5, busnum 1, minor = 4
+[    4.566131] usb 1-2.4: New USB device found, idVendor=0409, idProduct=005a
+[    4.595123] usb 1-2.4: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+[    4.687225] usb 1-2.4: usb_probe_device
+[    4.687255] usb 1-2.4: configuration #1 chosen from 1 choice
+[    4.697509] usb 1-2.4: adding 1-2.4:1.0 (config #1, interface 0)
+[    4.697814] hub 1-2.4:1.0: usb_probe_interface
+[    4.697814] hub 1-2.4:1.0: usb_probe_interface - got id
+[    4.697845] hub 1-2.4:1.0: USB hub found
+[    4.717102] hub 1-2.4:1.0: 4 ports detected
+[    4.737091] hub 1-2.4:1.0: standalone hub
+[    4.737121] hub 1-2.4:1.0: individual port power switching
+[    4.737152] hub 1-2.4:1.0: individual port over-current protection
+[    4.737152] hub 1-2.4:1.0: Single TT
+[    4.737182] hub 1-2.4:1.0: TT requires at most 16 FS bit times (1332 ns)
+[    4.737182] hub 1-2.4:1.0: power on to power good time: 100ms
+[    4.739318] hub 1-2.4:1.0: local power source is good
+[    4.739349] hub 1-2.4:1.0: enabling power on all ports
+[    4.838989] hub 1-2.4:1.0: port 1: status 0101 change 0001
+[    4.839263] hub 1-2.4:1.0: port 2: status 0101 change 0001
+[    4.839508] hub 1-2.4:1.0: port 3: status 0301 change 0001
+[    4.839752] hub 1-2.4:1.0: port 4: status 0301 change 0001
+[    4.940277] usb 1-2.4: link qh256-0001/ce757140 start 2 [1/0 us]
+[    4.940521] hub 1-2.4:1.0: state 7 ports 4 chg 001e evt 0000
+[    4.940826] hub 1-2.4:1.0: port 1, status 0101, change 0000, 12 Mb/s
+[    5.028381] usb 1-2.4.1: new high-speed USB device number 6 using ehci-omap
+[    5.082122] EXT3-fs (mmcblk0p2): recovery required on readonly filesystem
+[    5.106445] EXT3-fs (mmcblk0p2): write access will be enabled during recovery
+[    5.198120] usb 1-2.4.1: default language 0x0409
+[    5.198852] usb 1-2.4.1: udev 6, busnum 1, minor = 5
+[    5.198883] usb 1-2.4.1: New USB device found, idVendor=10a9, idProduct=606f
+[    5.234313] usb 1-2.4.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[    5.271148] usb 1-2.4.1: Product: PANTECH UML295
+[    5.300842] usb 1-2.4.1: Manufacturer: Pantech, Incorporated
+[    5.330078] usb 1-2.4.1: SerialNumber: UML2950123456789ABCDEF
+[    5.364715] usb 1-2.4.1: usb_probe_device
+[    5.364746] usb 1-2.4.1: configuration #1 chosen from 1 choice
+[    5.384582] usb 1-2.4.1: adding 1-2.4.1:1.0 (config #1, interface 0)
+[    5.385314] usb-storage 1-2.4.1:1.0: usb_probe_interface
+[    5.385375] usb-storage 1-2.4.1:1.0: usb_probe_interface - got id
+[    5.392303] scsi0 : usb-storage 1-2.4.1:1.0
+[    5.420379] hub 1-2.4:1.0: port 2, status 0101, change 0000, 12 Mb/s
+[    5.503082] usb 1-2.4.2: new full-speed USB device number 7 using ehci-omap
+[    5.651184] usb 1-2.4.2: ep0 maxpacket = 8
+[    5.653625] usb 1-2.4.2: default language 0x0409
+[    5.658447] usb 1-2.4.2: udev 7, busnum 1, minor = 6
+[    5.658477] usb 1-2.4.2: New USB device found, idVendor=0403, idProduct=6001
+[    5.682403] usb 1-2.4.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[    5.710449] usb 1-2.4.2: Product: FT232R USB UART
+[    5.732238] usb 1-2.4.2: Manufacturer: FTDI
+[    5.752471] usb 1-2.4.2: SerialNumber: A702LYT7
+[    5.775573] usb 1-2.4.2: usb_probe_device
+[    5.775604] usb 1-2.4.2: configuration #1 chosen from 1 choice
+[    5.776184] usb 1-2.4.2: adding 1-2.4.2:1.0 (config #1, interface 0)
+[    5.779388] hub 1-2.4:1.0: port 3, status 0301, change 0000, 1.5 Mb/s
+[    5.862365] usb 1-2.4.3: new low-speed USB device number 8 using ehci-omap
+[    6.015899] usb 1-2.4.3: skipped 1 descriptor after interface
+[    6.015930] usb 1-2.4.3: skipped 1 descriptor after interface
+[    6.017120] usb 1-2.4.3: default language 0x0409
+[    6.022247] usb 1-2.4.3: udev 8, busnum 1, minor = 7
+[    6.022277] usb 1-2.4.3: New USB device found, idVendor=04d9, idProduct=1702
+[    6.046508] usb 1-2.4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[    6.073791] usb 1-2.4.3: Product: USB Keyboard
+[    6.094787] usb 1-2.4.3: Manufacturer:  
+[    6.114227] usb 1-2.4.3: usb_probe_device
+[    6.114288] usb 1-2.4.3: configuration #1 chosen from 1 choice
+[    6.115386] usb 1-2.4.3: adding 1-2.4.3:1.0 (config #1, interface 0)
+[    6.115722] usbhid 1-2.4.3:1.0: usb_probe_interface
+[    6.115722] usbhid 1-2.4.3:1.0: usb_probe_interface - got id
+[    6.127014] input:   USB Keyboard as /devices/platform/usbhs_omap/ehci-omap.0/usb1/1-2/1-2.4/1-2.4.3/1-2.4.3:1.0/input/input0
+[    6.164459] usb 1-2.4.3: link qh8-0e01/ce119f00 start 3 [1/2 us]
+[    6.164916] hid-generic 0003:04D9:1702.0001: input: USB HID v1.10 Keyboard [  USB Keyboard] on usb-ehci-omap.0-2.4.3/input0
+[    6.200500] usb 1-2.4.3: adding 1-2.4.3:1.1 (config #1, interface 1)
+[    6.200866] usbhid 1-2.4.3:1.1: usb_probe_interface
+[    6.200866] usbhid 1-2.4.3:1.1: usb_probe_interface - got id
+[    6.219329] input:   USB Keyboard as /devices/platform/usbhs_omap/ehci-omap.0/usb1/1-2/1-2.4/1-2.4.3/1-2.4.3:1.1/input/input1
+[    6.240631] usb 1-2.4.3: link qh8-0e01/ce757840 start 4 [1/2 us]
+[    6.241363] hid-generic 0003:04D9:1702.0002: input: USB HID v1.10 Device [  USB Keyboard] on usb-ehci-omap.0-2.4.3/input1
+[    6.264526] hub 1-2.4:1.0: port 4, status 0301, change 0000, 1.5 Mb/s
+[    6.347259] usb 1-2.4.4: new low-speed USB device number 9 using ehci-omap
+[    6.378295] hub 1-2.4:1.0: port 4 not reset yet, waiting 10ms
+[    6.417480] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 1
+[    6.417724] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 2
+[    6.417968] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 3
+[    6.418182] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 4
+[    6.418426] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 5
+[    6.418701] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 6
+[    6.418945] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 7
+[    6.419189] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 8
+[    6.419433] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 9
+[    6.419708] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 10
+[    6.419952] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 11
+[    6.420196] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 12
+[    6.420471] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 13
+[    6.420715] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 14
+[    6.420989] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 15
+[    6.421264] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 16
+[    6.421508] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 17
+[    6.421783] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 18
+[    6.421813] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 19
+[    6.422058] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 20
+[    6.422302] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 21
+[    6.422576] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 22
+[    6.422821] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 23
+[    6.423065] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 24
+[    6.423309] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 25
+[    6.423553] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 26
+[    6.423797] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 27
+[    6.424072] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 28
+[    6.424346] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 29
+[    6.424621] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 30
+[    6.424896] ehci-omap ehci-omap.0: detected XactErr len 0/8 retry 31
+[    6.425140] ehci-omap ehci-omap.0: devpath 2.4.1 ep0in 3strikes
+[    6.425872] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 1
+[    6.426177] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 2
+[    6.426452] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 3
+[    6.426696] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 4
+[    6.426971] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 5
+[    6.427246] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 6
+[    6.427490] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 7
+[    6.427764] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 8
+[    6.428039] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 9
+[    6.428314] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 10
+[    6.428588] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 11
+[    6.428833] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 12
+[    6.429107] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 13
+[    6.429382] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 14
+[    6.429626] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 15
+[    6.429901] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 16
+[    6.430206] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 17
+[    6.430450] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 18
+[    6.430725] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 19
+[    6.430969] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 20
+[    6.431243] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 21
+[    6.431518] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 22
+[    6.431793] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 23
+[    6.431823] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 24
+[    6.432098] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 25
+[    6.432373] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 26
+[    6.432647] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 27
+[    6.432891] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 28
+[    6.433197] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 29
+[    6.433471] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 30
+[    6.433715] ehci-omap ehci-omap.0: detected XactErr len 0/31 retry 31
+[    6.433990] ehci-omap ehci-omap.0: devpath 2.4.1 ep1out 3strikes
+[    6.498809] usb 1-2.4.4: skipped 1 descriptor after interface
+[    6.499572] usb 1-2.4.4: default language 0x0409
+[    6.501678] usb 1-2.4.4: udev 9, busnum 1, minor = 8
+[    6.501708] usb 1-2.4.4: New USB device found, idVendor=093a, idProduct=2510
+[    6.515075] usb 1-2.4.4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[    6.528808] usb 1-2.4.4: Product: USB Optical Mouse
+[    6.539733] usb 1-2.4.4: Manufacturer: PixArt
+[    6.550231] hub 1-2.4:1.0: logical disconnect on port 1
+[    6.555267] usb 1-2.4.4: usb_probe_device
+[    6.555328] usb 1-2.4.4: configuration #1 chosen from 1 choice
+[    6.556030] usb 1-2.4.4: adding 1-2.4.4:1.0 (config #1, interface 0)
+[    6.556365] usbhid 1-2.4.4:1.0: usb_probe_interface
+[    6.556396] usbhid 1-2.4.4:1.0: usb_probe_interface - got id
+[    6.560211] input: PixArt USB Optical Mouse as /devices/platform/usbhs_omap/ehci-omap.0/usb1/1-2/1-2.4/1-2.4.4/1-2.4.4:1.0/input/input2
+[    6.608581] hid-generic 0003:093A:2510.0003: input: USB HID v1.11 Mouse [PixArt USB Optical Mouse] on usb-ehci-omap.0-2.4.4/input0
+[    6.640441] hub 1-2.4:1.0: state 7 ports 4 chg 0002 evt 0002
+[    6.641021] hub 1-2.4:1.0: port 1, status 0101, change 0001, 12 Mb/s
+[    6.641052] usb 1-2.4.1: USB disconnect, device number 6
+[    6.653076] usb 1-2.4.1: unregistering device
+[    6.653076] usb 1-2.4.1: unregistering interface 1-2.4.1:1.0
+[    6.657073] usb 1-2.4.1: usb_disable_device nuking all URBs
+[    6.815856] hub 1-2.4:1.0: debounce: port 1: total 100ms stable 100ms status 0x101
+[    6.901794] usb 1-2.4.1: new high-speed USB device number 10 using ehci-omap
+[    7.039154] usb 1-2.4.1: skipped 3 descriptors after interface
+[    7.039184] usb 1-2.4.1: skipped 1 descriptor after interface
+[    7.039184] usb 1-2.4.1: skipped 1 descriptor after interface
+[    7.039215] usb 1-2.4.1: skipped 1 descriptor after endpoint
+[    7.039245] usb 1-2.4.1: skipped 4 descriptors after interface
+[    7.039245] usb 1-2.4.1: skipped 1 descriptor after endpoint
+[    7.039276] usb 1-2.4.1: skipped 4 descriptors after interface
+[    7.039733] usb 1-2.4.1: default language 0x0409
+[    7.047149] usb 1-2.4.1: udev 10, busnum 1, minor = 9
+[    7.047180] usb 1-2.4.1: New USB device found, idVendor=10a9, idProduct=6064
+[    7.061004] usb 1-2.4.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[    7.075134] usb 1-2.4.1: Product: PANTECH UML295
+[    7.086120] usb 1-2.4.1: Manufacturer: Pantech, Incorporated
+[    7.098236] usb 1-2.4.1: SerialNumber: UML295695770648
+[    7.115325] usb 1-2.4.1: usb_probe_device
+[    7.115356] usb 1-2.4.1: configuration #1 chosen from 1 choice
+[    7.132812] usb 1-2.4.1: adding 1-2.4.1:1.0 (config #1, interface 0)
+[    7.133453] cdc_ether 1-2.4.1:1.0: usb_probe_interface
+[    7.133483] cdc_ether 1-2.4.1:1.0: usb_probe_interface - got id
+[    7.138061] cdc_ether 1-2.4.1:1.0: eth0: register 'cdc_ether' at usb-ehci-omap.0-2.4.1, CDC Ethernet Device, d0:57:85:96:2f:d5
+[    7.167449] usb 1-2.4.1: adding 1-2.4.1:1.1 (config #1, interface 1)
+[    7.170776] usb 1-2.4.1: adding 1-2.4.1:1.2 (config #1, interface 2)
+[    7.178070] usbhid 1-2.4.1:1.2: usb_probe_interface
+[    7.178131] usbhid 1-2.4.1:1.2: usb_probe_interface - got id
+[    7.180297] hid-generic 0003:10A9:6064.0004: claimed by neither input, hiddev nor hidraw
+[    7.204620] usb 1-2.4.1: adding 1-2.4.1:1.3 (config #1, interface 3)
+[    7.213836] usbhid 1-2.4.1:1.3: usb_probe_interface
+[    7.213897] usbhid 1-2.4.1:1.3: usb_probe_interface - got id
+[    7.216308] hid-generic 0003:10A9:6064.0005: claimed by neither input, hiddev nor hidraw
+[    7.238800] usb 1-2.4.1: adding 1-2.4.1:1.4 (config #1, interface 4)
+[    7.250885] usb 1-2.4.1: adding 1-2.4.1:1.5 (config #1, interface 5)
+[    7.251770] usb 1-2.4.1: adding 1-2.4.1:1.6 (config #1, interface 6)
+[    7.252410] usb 1-2.4.1: adding 1-2.4.1:1.7 (config #1, interface 7)
+[    7.253509] hub 1-2.4:1.0: state 7 ports 4 chg 0000 evt 0002
+[   27.831207] EXT3-fs (mmcblk0p2): orphan cleanup on readonly fs
+[   27.843963] kjournald starting.  Commit interval 5 seconds
+[   27.857910] ext3_orphan_cleanup: deleting unreferenced inode 446844
+[   27.859313] ext3_orphan_cleanup: deleting unreferenced inode 3361290
+[   27.859466] ext3_orphan_cleanup: deleting unreferenced inode 3361289
+[   27.859527] ext3_orphan_cleanup: deleting unreferenced inode 3361288
+[   27.859619] ext3_orphan_cleanup: deleting unreferenced inode 3361287
+[   27.859680] ext3_orphan_cleanup: deleting unreferenced inode 3361286
+[   27.859771] ext3_orphan_cleanup: deleting unreferenced inode 3361285
+[   27.859863] ext3_orphan_cleanup: deleting unreferenced inode 3361284
+[   27.859924] ext3_orphan_cleanup: deleting unreferenced inode 3361283
+[   27.860015] ext3_orphan_cleanup: deleting unreferenced inode 3361282
+[   27.860076] ext3_orphan_cleanup: deleting unreferenced inode 3361281
+[   27.862548] ext3_orphan_cleanup: deleting unreferenced inode 416441
+[   27.863922] ext3_orphan_cleanup: deleting unreferenced inode 416436
+[   27.864013] EXT3-fs (mmcblk0p2): 13 orphan inodes deleted
+[   27.910156] EXT3-fs (mmcblk0p2): recovery complete
+[   27.921661] EXT3-fs (mmcblk0p2): mounted filesystem with writeback data mode
+[   28.538330] init: ureadahead main process (204) terminated with status 5
+[   29.720184] udevd[283]: starting version 175
+[   29.771270] end_request: I/O error, dev mtdblock0, sector 0
+[   29.783599] Buffer I/O error on device mtdblock0, logical block 0
+[   29.922698] end_request: I/O error, dev mtdblock0, sector 0
+[   29.935089] Buffer I/O error on device mtdblock0, logical block 0
+[   30.033142] end_request: I/O error, dev mtdblock0, sector 0
+[   30.045562] Buffer I/O error on device mtdblock0, logical block 0
+[   30.120086] end_request: I/O error, dev mtdblock0, sector 0
+[   30.132507] Buffer I/O error on device mtdblock0, logical block 0
+[   30.257385] end_request: I/O error, dev mtdblock0, sector 0
+[   30.269836] Buffer I/O error on device mtdblock0, logical block 0
+[   30.397613] end_request: I/O error, dev mtdblock0, sector 0
+[   30.410095] Buffer I/O error on device mtdblock0, logical block 0
+[   30.507171] end_request: I/O error, dev mtdblock0, sector 0
+[   30.519714] Buffer I/O error on device mtdblock0, logical block 0
+[   30.581695] end_request: I/O error, dev mtdblock0, sector 0
+[   30.594268] Buffer I/O error on device mtdblock0, logical block 0
+[   30.662689] end_request: I/O error, dev mtdblock0, sector 0
+[   30.675323] Buffer I/O error on device mtdblock0, logical block 0
+[   30.737243] end_request: I/O error, dev mtdblock0, sector 0
+[   30.749694] Buffer I/O error on device mtdblock0, logical block 0
+[   30.807312] end_request: I/O error, dev mtdblock0, sector 0
+[   30.843566] end_request: I/O error, dev mtdblock0, sector 0
+[   30.877868] end_request: I/O error, dev mtdblock0, sector 0
+[   30.908599] end_request: I/O error, dev mtdblock0, sector 0
+[   30.921386] Linux media interface: v0.10
+[   30.925079] ads7846 spi1.0: touchscreen, irq 210
+[   30.925384] ads7846 spi1.0: no device detected, test read result was 0x00000FFF
+[   30.945251] end_request: I/O error, dev mtdblock0, sector 0
+[   30.976501] end_request: I/O error, dev mtdblock0, sector 0
+[   31.002838] end_request: I/O error, dev mtdblock0, sector 0
+[   31.028656] Linux video capture interface: v2.00
+[   31.037414] end_request: I/O error, dev mtdblock0, sector 8
+[   31.067016] end_request: I/O error, dev mtdblock0, sector 8
+[   31.104766] end_request: I/O error, dev mtdblock0, sector 8
+[   31.139160] end_request: I/O error, dev mtdblock0, sector 8
+[   31.174743] end_request: I/O error, dev mtdblock0, sector 24
+[   31.209594] end_request: I/O error, dev mtdblock0, sector 24
+[   31.236907] omap3isp omap3isp: Revision 15.0 found
+[   31.242034] omap-iommu omap-iommu.0: isp: version 1.1
+[   31.246124] end_request: I/O error, dev mtdblock0, sector 24
+[   31.279418] end_request: I/O error, dev mtdblock0, sector 24
+[   31.293731] lib80211: common routines for IEEE802.11 drivers
+[   31.293762] lib80211_crypt: registered algorithm 'NULL'
+[   31.309753] end_request: I/O error, dev mtdblock0, sector 56
+[   31.351593] end_request: I/O error, dev mtdblock0, sector 56
+[   31.376342] mt9v032 3-005c: Probing MT9V032 at address 0x5c
+[   31.376525] mt9v032 3-005c: MT9V032 power up failed
+[   31.386444] end_request: I/O error, dev mtdblock0, sector 56
+[   31.410034] end_request: I/O error, dev mtdblock0, sector 56
+[   31.439422] end_request: I/O error, dev mtdblock0, sector 120
+[   31.468170] end_request: I/O error, dev mtdblock0, sector 120
+[   31.495849] end_request: I/O error, dev mtdblock0, sector 120
+[   31.523803] end_request: I/O error, dev mtdblock0, sector 120
+[   31.544006] isp_register_subdev_group: Unable to register subdev mt9v032
+[   31.555572] end_request: I/O error, dev mtdblock0, sector 0
+[   31.571960] cfg80211: Calling CRDA to update world regulatory domain
+[   31.578369] end_request: I/O error, dev mtdblock0, sector 0
+[   31.604248] end_request: I/O error, dev mtdblock0, sector 8
+[   31.633850] end_request: I/O error, dev mtdblock0, sector 8
+[   31.663208] end_request: I/O error, dev mtdblock0, sector 24
+[   31.694244] end_request: I/O error, dev mtdblock0, sector 24
+[   31.714752] libertas_sdio: Libertas SDIO driver
+[   31.714782] libertas_sdio: Copyright Pierre Ossman
+[   31.719940] end_request: I/O error, dev mtdblock0, sector 56
+[   31.748748] end_request: I/O error, dev mtdblock0, sector 56
+[   31.782104] end_request: I/O error, dev mtdblock0, sector 120
+[   31.807586] end_request: I/O error, dev mtdblock0, sector 120
+[   31.832305] end_request: I/O error, dev mtdblock0, sector 0
+[   31.859466] end_request: I/O error, dev mtdblock0, sector 0
+[   31.880218] end_request: I/O error, dev mtdblock0, sector 0
+[   31.903991] end_request: I/O error, dev mtdblock0, sector 0
+[   31.924774] end_request: I/O error, dev mtdblock0, sector 0
+[   31.940399] end_request: I/O error, dev mtdblock0, sector 0
+[   31.962799] end_request: I/O error, dev mtdblock0, sector 64
+[   31.982177] end_request: I/O error, dev mtdblock0, sector 64
+[   32.002197] end_request: I/O error, dev mtdblock0, sector 64
+[   32.026336] end_request: I/O error, dev mtdblock0, sector 64
+[   32.042144] end_request: I/O error, dev mtdblock0, sector 64
+[   32.052581] end_request: I/O error, dev mtdblock0, sector 64
+[   32.078796] end_request: I/O error, dev mtdblock0, sector 64
+[   32.101165] end_request: I/O error, dev mtdblock0, sector 64
+[   32.122283] end_request: I/O error, dev mtdblock0, sector 64
+[   32.149444] end_request: I/O error, dev mtdblock0, sector 0
+[   32.172393] end_request: I/O error, dev mtdblock0, sector 0
+[   32.194915] end_request: I/O error, dev mtdblock0, sector 0
+[   32.217346] end_request: I/O error, dev mtdblock0, sector 0
+[   32.237243] end_request: I/O error, dev mtdblock0, sector 0
+[   32.260681] end_request: I/O error, dev mtdblock0, sector 16
+[   32.300781] end_request: I/O error, dev mtdblock0, sector 0
+[   32.347137] end_request: I/O error, dev mtdblock0, sector 0
+[   32.388427] end_request: I/O error, dev mtdblock0, sector 0
+[   32.425872] end_request: I/O error, dev mtdblock0, sector 0
+[   32.452880] end_request: I/O error, dev mtdblock0, sector 0
+[   32.474487] end_request: I/O error, dev mtdblock0, sector 0
+[   32.492767] end_request: I/O error, dev mtdblock0, sector 0
+[   32.510925] end_request: I/O error, dev mtdblock0, sector 0
+[   32.532470] end_request: I/O error, dev mtdblock0, sector 0
+[   32.552337] end_request: I/O error, dev mtdblock0, sector 0
+[   32.569763] end_request: I/O error, dev mtdblock0, sector 0
+[   32.588806] end_request: I/O error, dev mtdblock0, sector 0
+[   32.612274] end_request: I/O error, dev mtdblock0, sector 0
+[   32.627838] end_request: I/O error, dev mtdblock0, sector 0
+[   32.648437] end_request: I/O error, dev mtdblock0, sector 0
+[   32.666503] end_request: I/O error, dev mtdblock0, sector 0
+[   32.682525] end_request: I/O error, dev mtdblock0, sector 0
+[   32.697296] end_request: I/O error, dev mtdblock0, sector 0
+[   32.715698] end_request: I/O error, dev mtdblock0, sector 8
+[   32.743530] end_request: I/O error, dev mtdblock0, sector 0
+[   32.760650] end_request: I/O error, dev mtdblock0, sector 0
+[   32.776275] end_request: I/O error, dev mtdblock0, sector 0
+[   32.799743] end_request: I/O error, dev mtdblock0, sector 0
+[   33.166107] end_request: I/O error, dev mtdblock0, sector 0
+[   33.180450] end_request: I/O error, dev mtdblock0, sector 0
+[   33.198150] end_request: I/O error, dev mtdblock0, sector 0
+[   33.213806] end_request: I/O error, dev mtdblock0, sector 0
+[   33.224792] end_request: I/O error, dev mtdblock0, sector 0
+[   33.245056] end_request: I/O error, dev mtdblock0, sector 0
+[   33.255157] end_request: I/O error, dev mtdblock0, sector 0
+[   33.276336] end_request: I/O error, dev mtdblock0, sector 0
+[   33.291931] end_request: I/O error, dev mtdblock0, sector 0
+[   33.307556] end_request: I/O error, dev mtdblock0, sector 0
+[   33.322448] end_request: I/O error, dev mtdblock0, sector 0
+[   33.335937] usbcore: registered new interface driver usbserial
+[   33.336486] end_request: I/O error, dev mtdblock0, sector 0
+[   33.354736] end_request: I/O error, dev mtdblock0, sector 0
+[   33.370056] end_request: I/O error, dev mtdblock0, sector 0
+[   33.377410] usbcore: registered new interface driver usbserial_generic
+[   33.385986] end_request: I/O error, dev mtdblock0, sector 0
+[   33.399261] end_request: I/O error, dev mtdblock0, sector 0
+[   33.409637] USB Serial support registered for generic
+[   33.409729] usbserial: USB Serial Driver core
+[   33.416290] usbcore: registered new interface driver pl2303
+[   33.421386] end_request: I/O error, dev mtdblock0, sector 0
+[   33.431579] USB Serial support registered for pl2303
+[   33.431701] pl2303 1-2.1:1.0: usb_probe_interface
+[   33.431732] pl2303 1-2.1:1.0: usb_probe_interface - got id
+[   33.431762] pl2303 1-2.1:1.0: pl2303 converter detected
+[   33.442474] end_request: I/O error, dev mtdblock0, sector 8
+[   33.458435] end_request: I/O error, dev mtdblock0, sector 8
+[   33.479492] end_request: I/O error, dev mtdblock0, sector 8
+[   33.495056] end_request: I/O error, dev mtdblock0, sector 8
+[   33.509552] end_request: I/O error, dev mtdblock0, sector 24
+[   33.518524] usb 1-2.1: pl2303 converter now attached to ttyUSB0
+[   33.537567] end_request: I/O error, dev mtdblock0, sector 24
+[   33.556823] usbcore: registered new interface driver ftdi_sio
+[   33.561798] end_request: I/O error, dev mtdblock0, sector 24
+[   33.580810] end_request: I/O error, dev mtdblock0, sector 24
+[   33.588287] USB Serial support registered for FTDI USB Serial Device
+[   33.588775] ftdi_sio 1-2.4.2:1.0: usb_probe_interface
+[   33.588806] ftdi_sio 1-2.4.2:1.0: usb_probe_interface - got id
+[   33.588867] ftdi_sio 1-2.4.2:1.0: FTDI USB Serial Device converter detected
+[   33.600128] end_request: I/O error, dev mtdblock0, sector 56
+[   33.609252] usb 1-2.4.2: Detected FT232RL
+[   33.609283] usb 1-2.4.2: Number of endpoints 2
+[   33.609313] usb 1-2.4.2: Endpoint 1 MaxPacketSize 64
+[   33.609313] usb 1-2.4.2: Endpoint 2 MaxPacketSize 64
+[   33.609344] usb 1-2.4.2: Setting MaxPacketSize 64
+[   33.610107] cdc_acm 1-2.4.1:1.4: usb_probe_interface
+[   33.610137] cdc_acm 1-2.4.1:1.4: usb_probe_interface - got id
+[   33.610168] cdc_acm 1-2.4.1:1.4: This device cannot do calls on its own. It is not a modem.
+[   33.620727] end_request: I/O error, dev mtdblock0, sector 56
+[   33.630523] end_request: I/O error, dev mtdblock0, sector 56
+[   33.656066] end_request: I/O error, dev mtdblock0, sector 56
+[   33.670349] usb 1-2.4.2: FTDI USB Serial Device converter now attached to ttyUSB1
+[   33.675201] ftdi_sio: v1.6.0:USB FTDI Serial Converters Driver
+[   33.675964] end_request: I/O error, dev mtdblock0, sector 120
+[   33.700958] end_request: I/O error, dev mtdblock0, sector 120
+[   33.721649] end_request: I/O error, dev mtdblock0, sector 120
+[   33.745086] end_request: I/O error, dev mtdblock0, sector 120
+[   33.760742] end_request: I/O error, dev mtdblock0, sector 0
+[   33.772766] end_request: I/O error, dev mtdblock0, sector 0
+[   33.790679] end_request: I/O error, dev mtdblock0, sector 8
+[   33.814575] end_request: I/O error, dev mtdblock0, sector 8
+[   33.844055] end_request: I/O error, dev mtdblock0, sector 24
+[   33.862243] end_request: I/O error, dev mtdblock0, sector 24
+[   33.880340] end_request: I/O error, dev mtdblock0, sector 56
+[   33.894470] cdc_acm 1-2.4.1:1.4: ttyACM0: USB ACM device
+[   33.896545] end_request: I/O error, dev mtdblock0, sector 56
+[   33.908691] cdc_acm 1-2.4.1:1.6: usb_probe_interface
+[   33.908752] cdc_acm 1-2.4.1:1.6: usb_probe_interface - got id
+[   33.908782] cdc_acm 1-2.4.1:1.6: This device cannot do calls on its own. It is not a modem.
+[   33.919708] end_request: I/O error, dev mtdblock0, sector 120
+[   33.936248] end_request: I/O error, dev mtdblock0, sector 120
+[   33.963928] end_request: I/O error, dev mtdblock0, sector 0
+[   33.979431] end_request: I/O error, dev mtdblock0, sector 0
+[   34.010192] end_request: I/O error, dev mtdblock0, sector 0
+[   34.034118] end_request: I/O error, dev mtdblock0, sector 0
+[   34.049743] end_request: I/O error, dev mtdblock0, sector 0
+[   34.069000] end_request: I/O error, dev mtdblock0, sector 0
+[   34.096649] end_request: I/O error, dev mtdblock0, sector 64
+[   34.111755] end_request: I/O error, dev mtdblock0, sector 64
+[   34.131011] cdc_acm 1-2.4.1:1.6: ttyACM1: USB ACM device
+[   34.138641] end_request: I/O error, dev mtdblock0, sector 64
+[   34.154968] end_request: I/O error, dev mtdblock0, sector 64
+[   34.174804] end_request: I/O error, dev mtdblock0, sector 64
+[   34.190063] end_request: I/O error, dev mtdblock0, sector 64
+[   34.205444] end_request: I/O error, dev mtdblock0, sector 64
+[   34.221740] end_request: I/O error, dev mtdblock0, sector 64
+[   34.229888] usbcore: registered new interface driver cdc_acm
+[   34.229919] cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
+[   34.245056] end_request: I/O error, dev mtdblock0, sector 64
+[   34.261474] end_request: I/O error, dev mtdblock0, sector 0
+[   34.284088] end_request: I/O error, dev mtdblock0, sector 0
+[   34.293975] end_request: I/O error, dev mtdblock0, sector 0
+[   34.315673] end_request: I/O error, dev mtdblock0, sector 0
+[   34.325439] end_request: I/O error, dev mtdblock0, sector 0
+[   34.346649] end_request: I/O error, dev mtdblock0, sector 16
+[   34.358489] end_request: I/O error, dev mtdblock0, sector 0
+[   34.385681] end_request: I/O error, dev mtdblock0, sector 0
+[   34.393829] end_request: I/O error, dev mtdblock0, sector 0
+[   34.410858] end_request: I/O error, dev mtdblock0, sector 0
+[   34.427215] end_request: I/O error, dev mtdblock0, sector 0
+[   34.442169] end_request: I/O error, dev mtdblock0, sector 0
+[   34.463806] end_request: I/O error, dev mtdblock0, sector 0
+[   34.479431] end_request: I/O error, dev mtdblock0, sector 0
+[   34.495056] end_request: I/O error, dev mtdblock0, sector 0
+[   34.507141] end_request: I/O error, dev mtdblock0, sector 0
+[   34.526367] end_request: I/O error, dev mtdblock0, sector 0
+[   34.539031] end_request: I/O error, dev mtdblock0, sector 0
+[   34.557586] end_request: I/O error, dev mtdblock0, sector 0
+[   34.573211] end_request: I/O error, dev mtdblock0, sector 0
+[   34.588836] end_request: I/O error, dev mtdblock0, sector 0
+[   34.604461] end_request: I/O error, dev mtdblock0, sector 0
+[   34.620086] end_request: I/O error, dev mtdblock0, sector 0
+[   34.635711] end_request: I/O error, dev mtdblock0, sector 0
+[   34.651367] end_request: I/O error, dev mtdblock0, sector 8
+[   34.667572] end_request: I/O error, dev mtdblock0, sector 0
+[   34.682617] end_request: I/O error, dev mtdblock0, sector 0
+[   34.698242] end_request: I/O error, dev mtdblock0, sector 0
+[   34.713409] end_request: I/O error, dev mtdblock0, sector 0
+[   35.178070] EXT3-fs (mmcblk0p2): using internal journal
+[   37.611602] NET: Registered protocol family 10
+[   39.052215] cfg80211: World regulatory domain updated:
+[   39.052246] cfg80211:   (start_freq - end_freq @ bandwidth), (max_antenna_gain, max_eirp)
+[   39.052276] cfg80211:   (2402000 KHz - 2472000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
+[   39.052307] cfg80211:   (2457000 KHz - 2482000 KHz @ 20000 KHz), (300 mBi, 2000 mBm)
+[   39.052307] cfg80211:   (2474000 KHz - 2494000 KHz @ 20000 KHz), (300 mBi, 2000 mBm)
+[   39.052337] cfg80211:   (5170000 KHz - 5250000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
+[   39.052337] cfg80211:   (5735000 KHz - 5835000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
+[   39.574310] libertas_sdio mmc1:0001:1: (unregistered net_device): 00:19:88:45:0b:0a, fw 9.70.3p36, cap 0x00000303
+[   39.595703] libertas_sdio mmc1:0001:1: wlan0: Marvell WLAN 802.11 adapter
+[   39.597442] cfg80211: Calling CRDA for country: US
+[   39.932861] cfg80211: Regulatory domain changed to country: US
+[   39.932891] cfg80211:   (start_freq - end_freq @ bandwidth), (max_antenna_gain, max_eirp)
+[   39.932922] cfg80211:   (2402000 KHz - 2472000 KHz @ 40000 KHz), (300 mBi, 2700 mBm)
+[   39.932922] cfg80211:   (5170000 KHz - 5250000 KHz @ 40000 KHz), (300 mBi, 1700 mBm)
+[   39.932952] cfg80211:   (5250000 KHz - 5330000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
+[   39.932952] cfg80211:   (5490000 KHz - 5600000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
+[   39.932983] cfg80211:   (5650000 KHz - 5710000 KHz @ 40000 KHz), (300 mBi, 2000 mBm)
+[   39.932983] cfg80211:   (5735000 KHz - 5835000 KHz @ 40000 KHz), (300 mBi, 3000 mBm)
+[   40.767028] IPv6: ADDRCONF(NETDEV_UP): wlan0: link is not ready
+[   40.767211] IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
+[   42.505981] init: failsafe main process (484) killed by TERM signal

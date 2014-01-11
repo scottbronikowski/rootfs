@@ -1,0 +1,53 @@
+(defdialect ee473 "EE473 Course Software" scheme
+ (setq comint-fix-error ":X"
+       ilisp-reset ":A"
+       comint-continue ":C"
+       comint-interrupt-regexp ">>Interrupt:"
+       ilisp-eval-command
+       "(begin (eval (read (open-input-string \"%s\"))) \"%s\" \"%s\")"
+       ilisp-package-command "%s"	;needs work
+       ilisp-block-command "(begin %s)"
+       ilisp-load-command "(ld \"%s\")"
+       ilisp-load-or-send-command "(begin \"%s\" (ld \"%s\"))"
+       ild-abort-string ":A"
+       ild-continue-string ":C"
+       ild-next-string ":N"
+       ild-previous-string ":P"
+       ild-top-string ":<"
+       ild-bottom-string ":>"
+       ild-backtrace-string ":B")
+ (ilisp-load-init 'ee473 (expand-file-name "~/ee473-0.1/ee473-init")))
+(setq ee473-program (expand-file-name "~/bin/i686-Linux-2.4.18-4_72smp/ee473"))
+
+(defun ilisp-buffer ()
+  "Return the current ILISP buffer.  This is the buffer to whose process requests are sent."
+  (if (memq major-mode ilisp-modes)
+      (get-buffer ilisp-buffer)		;patched by Qobi t29sep98
+    (let ((buffer (funcall ilisp-buffer-function)))
+      (or buffer
+	  (error "You must start an inferior LISP with run-ilisp.")))))
+
+(defun scmman ()
+ (interactive)
+ (call-process "~/ee473-0.1/scmman" nil 0))
+
+(defun handin ()
+ (interactive)
+ (let ((current-problem-set
+	(call-process-region
+	 (point-min) (point-max) "~/ee473/handin")))
+  (if (and (numberp current-problem-set) (> current-problem-set 1))
+      (message "Problem set %d was successfully handed in."
+	       (- current-problem-set 1))
+      (error "Your problem set was NOT handed in."))))
+
+(defun check-handin ()
+ (interactive)
+ (switch-to-buffer "*handin*")
+ (kill-region (point-min) (point-max))
+ (let ((current-problem-set
+	(call-process "~/ee473/check-handin" nil t)))
+  (if (and (numberp current-problem-set) (> current-problem-set 1))
+      (message "Problem set %d was successfully handed in."
+	       (- current-problem-set 1))
+      (error "Your problem set was NOT handed in."))))

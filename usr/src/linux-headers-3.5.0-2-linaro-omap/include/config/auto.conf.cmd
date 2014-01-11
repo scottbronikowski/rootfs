@@ -787,7 +787,7 @@ deps_config := \
 include/config/auto.conf: \
 	$(deps_config)
 
-ifneq "$(KERNELVERSION)" "3.5.0-2-linaro-omap"
+ifneq "$(KERNELVERSION)" "3.5.0"
 include/config/auto.conf: FORCE
 endif
 ifneq "$(ARCH)" "arm"

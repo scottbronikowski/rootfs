@@ -1,48 +1,47 @@
-cmd_scripts/kallsyms := gcc -Wp,-MD,scripts/.kallsyms.d -Iscripts -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer   -I/home/adam/Code/linaro-12.10/kernel_build/test_build/linux/tools/include -o scripts/kallsyms /home/adam/Code/linaro-12.10/kernel_build/test_build/linux/scripts/kallsyms.c  
+cmd_scripts/kallsyms := gcc -Wp,-MD,scripts/.kallsyms.d -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer   -I/usr/src/linux-headers-3.5.0-2-linaro-omap/tools/include  -o scripts/kallsyms scripts/kallsyms.c  
 
-source_scripts/kallsyms := /home/adam/Code/linaro-12.10/kernel_build/test_build/linux/scripts/kallsyms.c
+source_scripts/kallsyms := scripts/kallsyms.c
 
 deps_scripts/kallsyms := \
   /usr/include/stdio.h \
   /usr/include/features.h \
-  /usr/include/x86_64-linux-gnu/bits/predefs.h \
-  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
-  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
-  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
-  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
-  /usr/lib/gcc/x86_64-linux-gnu/4.6/include/stddef.h \
-  /usr/include/x86_64-linux-gnu/bits/types.h \
-  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
+  /usr/include/arm-linux-gnueabihf/bits/predefs.h \
+  /usr/include/arm-linux-gnueabihf/sys/cdefs.h \
+  /usr/include/arm-linux-gnueabihf/bits/wordsize.h \
+  /usr/include/arm-linux-gnueabihf/gnu/stubs.h \
+  /usr/lib/gcc/arm-linux-gnueabihf/4.6/include/stddef.h \
+  /usr/include/arm-linux-gnueabihf/bits/types.h \
+  /usr/include/arm-linux-gnueabihf/bits/typesizes.h \
   /usr/include/libio.h \
   /usr/include/_G_config.h \
   /usr/include/wchar.h \
-  /usr/lib/gcc/x86_64-linux-gnu/4.6/include/stdarg.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
+  /usr/lib/gcc/arm-linux-gnueabihf/4.6/include/stdarg.h \
+  /usr/include/arm-linux-gnueabihf/bits/stdio_lim.h \
+  /usr/include/arm-linux-gnueabihf/bits/sys_errlist.h \
+  /usr/include/arm-linux-gnueabihf/bits/stdio.h \
+  /usr/include/arm-linux-gnueabihf/bits/stdio2.h \
   /usr/include/stdlib.h \
-  /usr/include/x86_64-linux-gnu/bits/waitflags.h \
-  /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
+  /usr/include/arm-linux-gnueabihf/bits/waitflags.h \
+  /usr/include/arm-linux-gnueabihf/bits/waitstatus.h \
   /usr/include/endian.h \
-  /usr/include/x86_64-linux-gnu/bits/endian.h \
-  /usr/include/x86_64-linux-gnu/bits/byteswap.h \
-  /usr/include/x86_64-linux-gnu/sys/types.h \
+  /usr/include/arm-linux-gnueabihf/bits/endian.h \
+  /usr/include/arm-linux-gnueabihf/bits/byteswap.h \
+  /usr/include/arm-linux-gnueabihf/sys/types.h \
   /usr/include/time.h \
-  /usr/include/x86_64-linux-gnu/sys/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/sigset.h \
-  /usr/include/x86_64-linux-gnu/bits/time.h \
-  /usr/include/x86_64-linux-gnu/bits/select2.h \
-  /usr/include/x86_64-linux-gnu/sys/sysmacros.h \
-  /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
+  /usr/include/arm-linux-gnueabihf/sys/select.h \
+  /usr/include/arm-linux-gnueabihf/bits/select.h \
+  /usr/include/arm-linux-gnueabihf/bits/sigset.h \
+  /usr/include/arm-linux-gnueabihf/bits/time.h \
+  /usr/include/arm-linux-gnueabihf/bits/select2.h \
+  /usr/include/arm-linux-gnueabihf/sys/sysmacros.h \
+  /usr/include/arm-linux-gnueabihf/bits/pthreadtypes.h \
   /usr/include/alloca.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+  /usr/include/arm-linux-gnueabihf/bits/stdlib.h \
   /usr/include/string.h \
   /usr/include/xlocale.h \
-  /usr/include/x86_64-linux-gnu/bits/string.h \
-  /usr/include/x86_64-linux-gnu/bits/string2.h \
-  /usr/include/x86_64-linux-gnu/bits/string3.h \
+  /usr/include/arm-linux-gnueabihf/bits/string.h \
+  /usr/include/arm-linux-gnueabihf/bits/string2.h \
+  /usr/include/arm-linux-gnueabihf/bits/string3.h \
   /usr/include/ctype.h \
 
 scripts/kallsyms: $(deps_scripts/kallsyms)

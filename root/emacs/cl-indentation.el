@@ -1,0 +1,66 @@
+;;; Changed lisp-indent-hook to lisp-indent-function for emacs-19.
+
+;;; Decrease the default indentation for function bodies.
+
+(setq lisp-body-indent 1)
+
+;;; Change the indentation of some forms
+
+(put 'etypecase 'lisp-indent-function 1)
+(put 'ecase 'lisp-indent-function 1)
+(put 'if 'lisp-indent-function nil)
+(put 'multiple-value-bind 'lisp-indent-function 2)
+(put 'multiple-value-setq 'lisp-indent-function 2)
+(put 'unwind-protect 'lisp-indent-function 1)
+(put 'with-open-file 'lisp-indent-function 1)
+(put 'dotimes 'lisp-indent-function 1)
+(put 'idotimes 'lisp-indent-function 1)
+(put 'dolist 'lisp-indent-function 1)
+(put 'loop 'lisp-indent-function 0)
+(put 'eval-when 'lisp-indent-function 1)
+(put 'when 'lisp-indent-function 1)
+(put 'unless 'lisp-indent-function 1)
+(put 'case 'lisp-indent-function 1)
+(put 'typecase 'lisp-indent-function 1)
+(put 'block 'lisp-indent-function 1)
+(put 'catch 'lisp-indent-function 2)
+(put 'defflavor 'lisp-indent-function 3)
+(put 'defmethod 'lisp-indent-function 2)
+(put 'defun 'lisp-indent-function 2)
+(put 'destructuring-bind 'lisp-indent-function 2)
+(put 'lambda 'lisp-indent-function 1)
+
+(put 'cl:etypecase 'lisp-indent-function 1)
+(put 'cl:ecase 'lisp-indent-function 1)
+(put 'cl:if 'lisp-indent-function nil)
+(put 'cl:multiple-value-bind 'lisp-indent-function 2)
+(put 'cl:multiple-value-setq 'lisp-indent-function 2)
+(put 'cl:unwind-protect 'lisp-indent-function 1)
+(put 'cl:with-open-file 'lisp-indent-function 1)
+(put 'cl:dotimes 'lisp-indent-function 1)
+(put 'cl:dolist 'lisp-indent-function 1)
+(put 'cl:loop 'lisp-indent-function 0)
+(put 'cl:eval-when 'lisp-indent-function 1)
+(put 'cl:when 'lisp-indent-function 1)
+(put 'cl:unless 'lisp-indent-function 1)
+(put 'cl:case 'lisp-indent-function 1)
+(put 'cl:typecase 'lisp-indent-function 1)
+(put 'cl:block 'lisp-indent-function 1)
+(put 'cl:catch 'lisp-indent-function 2)
+(put 'cl:defflavor 'lisp-indent-function 3)
+(put 'cl:defmethod 'lisp-indent-function 2)
+(put 'cl:defun 'lisp-indent-function 2)
+(put 'cl:destructuring-bind 'lisp-indent-function 2)
+(put 'cl:lambda 'lisp-indent-function 1)
+
+;;; For CLX
+(put 'event-case 'lisp-indent-function 1)
+(put 'xlib:event-case 'lisp-indent-function 1)
+
+;;; For CLIM
+(put 'with-output-to-string 'lisp-indent-function 1)
+(put 'with-input-from-string 'lisp-indent-function 1)
+(put 'with-output-to-postscript-stream 'lisp-indent-function 1)
+(put 'with-command-table-keystrokes 'lisp-indent-function 1)
+(put 'with-bounding-box 'lisp-indent-function 1)
+(put 'with-room-for-graphics 'lisp-indent-function 1)
