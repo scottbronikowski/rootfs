@@ -816,3 +816,12 @@ git status
 git add -A
 rm /.git/index.lock
 git add -A
+ps -ef | grep ssh
+cd /
+git status
+git add -A
+rm /.git/index.lock
+git add -A
+git status
+git push origin master
+shutdown now
