@@ -825,3 +825,17 @@ git add -A
 git status
 git push origin master
 shutdown now
+ls /dev/p*
+reboot
+ls
+ls /root/build/linux-omap-3.5/drivers/omap3-pwm/
+insmod /root/build/linux-omap-3.5/drivers/omap3-pwm/pwm.ko servo=1 timers=8,9
+emacs &
+echo 2000 > /dev/pwm8
+echo 20000 > /dev/pwm8
+echo 10000 > /dev/pwm8
+echo 15000 > /dev/pwm8
+reboot
+emacs &
+echo 20000 > /dev/pwm8
+echo 15000 > /dev/pwm8
