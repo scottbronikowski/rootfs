@@ -839,3 +839,46 @@ reboot
 emacs &
 echo 20000 > /dev/pwm8
 echo 15000 > /dev/pwm8
+cd /run
+ls
+more apache2
+more apache2.pid
+cd /
+ls
+cd ros
+ls
+cd ~
+ls
+cd ros
+ls
+./setup.sh
+lla
+cd /dev
+ls gp*
+ls
+ls /sys/class/g*
+cd .
+cd /
+more .git/config 
+ssh -T git@github.com
+git status
+git commit -m "testing SSH access"
+#	dev/char/189:6
+git add -A
+git status
+git commit -m "testing SSH access"
+git push origin master
+echo 11000 > /dev/pwm8
+echo 15000 > /dev/pwm8
+ls
+git status
+git add /root/build/linux-omap-3.5/drivers/gpio-event
+git status
+git add root/.ssh/known_hosts 
+git status
+git add var/log/auth.log
+git add var/log/syslog
+git status
+git commit -m "compile gpio-event-drv.ko using 'make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules'"
+git push
+git commit --amend
