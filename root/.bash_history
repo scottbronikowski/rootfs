@@ -882,3 +882,83 @@ git status
 git commit -m "compile gpio-event-drv.ko using 'make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules'"
 git push
 git commit --amend
+emacs &
+echo 20000 > /dev/pwm8
+echo 10000 > /dev/pwm8
+echo 15000 > /dev/pwm8
+cd ..
+git status
+git add 
+git add --all
+git status
+git commit -m "added /etc/init.d/servo-start.sh to init ('update-rc.d servo-start.sh defaults 98'); added terminal output to /etc/init.d/ssh-tunnel.sh"
+git push origin master
+cd /root/build/linux-omap-3.5/drivers/
+ls g*
+cd gpio/
+lla
+more Kconfig 
+lla
+more Makefile 
+more devres.c 
+lla
+cd ..
+mkdir gpio-event
+cd gpio-event/
+rsync -avz seykhl:~/Dropbox/grad\ school\ stuff/Purdue/research/gpio-event/ .
+rsync -avz seykhl:~gpio-event/ .
+rsync -avz seykhl:~/gpio-event/ .
+lla
+cd /media
+ls
+cd /
+git commit --amend
+git push --force
+cd proc
+ls gp*
+ls
+ls gpio-event
+lla g*
+cd gpio-event/
+ls
+lla
+cat pins
+cat /dev/gpio-event
+echo 20000 > /dev/pwm8
+echo 10000 > /dev/pwm8
+echo 0000 > /dev/pwm8
+echo 10000 > /dev/pwm8
+echo 15000 > /dev/pwm8
+echo 10000 > /dev/pwm8
+echo 20000 > /dev/pwm8
+echo 15000 > /dev/pwm8
+gettimeofday
+gettimeofday()
+cd ~
+cat /dev/gpio-event 
+echo 20000 > /dev/pwm9
+echo 10000 > /dev/pwm9
+echo 15000 > /dev/pwm9
+lsus
+lsusb
+cd test_code/
+./motor_test 
+ls
+man devmem
+man devmem2
+devmem2
+apt-get devmem2
+apt-get install devmem2
+apt-get update
+apt-get upgrade
+apt-get install -f linux-source
+apt-get install devmem2
+apt-get purge linux-source
+apt-get install linux-source
+locate linux-source*
+cd /
+git status
+git add -A
+git status
+git commit -m "apt-get install devmem2"
+git push

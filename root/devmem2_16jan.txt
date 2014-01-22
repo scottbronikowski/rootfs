@@ -1,0 +1,176 @@
+
+
+root@vader-rover:~# devmem2 
+
+Usage:	devmem2 { address } [ type [ data ] ]
+	address : memory address to act upon
+	type    : access operation type : [b]yte, [h]alfword, [w]ord
+	data    : data to be written
+
+root@vader-rover:~# devmem2 0x48002174
+/dev/mem opened.
+Memory mapped at address 0xb6fcb000.
+Value at address 0x48002174 (0xb6fcb174): 0x1040002
+root@vader-rover:~# devmem2 0x4800219c
+/dev/mem opened.
+Memory mapped at address 0xb6f3c000.
+Value at address 0x4800219C (0xb6f3c19c): 0x100011C
+root@vader-rover:~# devmem2 0x4800219c h
+/dev/mem opened.
+Memory mapped at address 0xb6f90000.
+Value at address 0x4800219C (0xb6f9019c): 0x11C
+root@vader-rover:~# devmem2 0x480021a0
+/dev/mem opened.
+Memory mapped at address 0xb6f06000.
+Value at address 0x480021A0 (0xb6f061a0): 0x1000000
+root@vader-rover:~# devmem2 0x480021a0 w 0x1000100
+/dev/mem opened.
+Memory mapped at address 0xb6f5f000.
+Value at address 0x480021A0 (0xb6f5f1a0): 0x1000000
+Written 0x1000100; readback 0x1000100
+root@vader-rover:~# devmem2 0x480021a0 w 0x1000000
+/dev/mem opened.
+Memory mapped at address 0xb6f23000.
+Value at address 0x480021A0 (0xb6f231a0): 0x1000100
+Written 0x1000000; readback 0x1000000
+root@vader-rover:~# devmem2 0x480021a0 w 0x1000004
+/dev/mem opened.
+Memory mapped at address 0xb6fb8000.
+Value at address 0x480021A0 (0xb6fb81a0): 0x1000000
+Written 0x1000004; readback 0x1000004
+root@vader-rover:~# devmem2 0x480021c0
+/dev/mem opened.
+Memory mapped at address 0xb6f7a000.
+Value at address 0x480021C0 (0xb6f7a1c0): 0x100011C
+root@vader-rover:~# devmem2 0x480021c0 w 0x104011c
+/dev/mem opened.
+Memory mapped at address 0xb6f18000.
+Value at address 0x480021C0 (0xb6f181c0): 0x100011C
+Written 0x104011C; readback 0x104011C
+root@vader-rover:~# ls /dev/gpio-event 
+/dev/gpio-event
+root@vader-rover:~# ls /sys/class/gpio
+export  gpio144  gpio145  gpio15  gpio16  gpio164  gpio168  gpiochip0  gpiochip128  gpiochip160  gpiochip192  gpiochip32  gpiochip64  gpiochip96  unexport
+root@vader-rover:~# devmem2 0x480021c0
+/dev/mem opened.
+Memory mapped at address 0xb6f03000.
+Value at address 0x480021C0 (0xb6f031c0): 0x104011C
+root@vader-rover:~# devmem2 0x480021c4
+/dev/mem opened.
+Memory mapped at address 0xb6fee000.
+Value at address 0x480021C4 (0xb6fee1c4): 0x1C0100
+root@vader-rover:~# devmem2 0x480021c4 w 0x1c0104
+/dev/mem opened.
+Memory mapped at address 0xb6f03000.
+Value at address 0x480021C4 (0xb6f031c4): 0x1C0100
+Written 0x1C0104; readback 0x1C0104
+root@vader-rover:~# devmem2 0x4800219c
+/dev/mem opened.
+Memory mapped at address 0xb6f6d000.
+Value at address 0x4800219C (0xb6f6d19c): 0x100011C
+root@vader-rover:~# devmem2 0x4800219c w 0x104011c
+/dev/mem opened.
+
+
+Memory mapped at address 0xb6f24000.
+Value at address 0x4800219C (0xb6f2419c): 0x100011C
+Written 0x104011C; readback 0x104011C
+root@vader-rover:~# 
+root@vader-rover:~# 
+root@vader-rover:~# 
+root@vader-rover:~# devmem2 0x480021a0
+/dev/mem opened.
+Memory mapped at address 0xb6fd1000.
+Value at address 0x480021A0 (0xb6fd11a0): 0x1000004
+root@vader-rover:~# devmem2 0x480021a0 w 0x1000104
+/dev/mem opened.
+Memory mapped at address 0xb6f45000.
+Value at address 0x480021A0 (0xb6f451a0): 0x1000004
+Written 0x1000104; readback 0x1000104
+root@vader-rover:~# devmem2 0x480021a0 w 0x1000104
+/dev/mem opened.
+Memory mapped at address 0xb6f8f000.
+Value at address 0x480021A0 (0xb6f8f1a0): 0x1000104
+Written 0x1000104; readback 0x1000104
+root@vader-rover:~# 
+-----------------------------------
+for gpio 175, 173 (right side)
+root@vader-rover:~# devmem2 0x480021d0
+/dev/mem opened.
+Memory mapped at address 0xb6f80000.
+Value at address 0x480021D0 (0xb6f801d0): 0x1140008
+root@vader-rover:~# devmem2 0x480021d0 w 0x114010C
+/dev/mem opened.
+Memory mapped at address 0xb6f3b000.
+Value at address 0x480021D0 (0xb6f3b1d0): 0x1140008
+Written 0x114010C; readback 0x114010C
+root@vader-rover:~# devmem2 0x480021cc
+/dev/mem opened.
+Memory mapped at address 0xb6f7a000.
+Value at address 0x480021CC (0xb6f7a1cc): 0x1080100
+root@vader-rover:~# devmem2 0x480021cc w 0x1080104
+/dev/mem opened.
+Memory mapped at address 0xb6fee000.
+Value at address 0x480021CC (0xb6fee1cc): 0x1080100
+Written 0x1080104; readback 0x1080104
+root@vader-rover:~#
+
+--------------------------------------
+for gpio 174, 172 (left side)
+root@vader-rover:~# devmem2 0x480021cc
+/dev/mem opened.
+Memory mapped at address 0xb6fb9000.
+Value at address 0x480021CC (0xb6fb91cc): 0x1080104
+root@vader-rover:~# devmem2 0x480021cc w 0x10C0104
+/dev/mem opened.
+Memory mapped at address 0xb6fde000.
+Value at address 0x480021CC (0xb6fde1cc): 0x1080104
+Written 0x10C0104; readback 0x10C0104
+root@vader-rover:~# devmem2 0x480021c8
+/dev/mem opened.
+Memory mapped at address 0xb6f26000.
+Value at address 0x480021C8 (0xb6f261c8): 0x1000100
+root@vader-rover:~# devmem2 0x480021c8 w 0x1040100
+/dev/mem opened.
+Memory mapped at address 0xb6f5d000.
+Value at address 0x480021C8 (0xb6f5d1c8): 0x1000100
+Written 0x1040100; readback 0x1040100
+root@vader-rover:~# 
+
+--------
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# rmmod gpio_event_drv
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# insmod ../module/gpio-event-drv.ko
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# ./gpio-event 165:b:0
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# cat /proc/gpio-event/pins
+GPIO: 165 Edge: Both    Debounce: 0 msec
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# 
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# ./gpio-event 175:b:0
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# cat /proc/gpio-event/pins 
+GPIO: 165 Edge: Both    Debounce: 0 msec
+GPIO: 175 Edge: Both    Debounce: 0 msec
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# ./gpio-event 173:b:0
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# cat /proc/gpio-event/pins 
+GPIO: 165 Edge: Both    Debounce: 0 msec
+GPIO: 175 Edge: Both    Debounce: 0 msec
+GPIO: 173 Edge: Both    Debounce: 0 msec
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# ./gpio-event 174:b:0
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# cat /proc/gpio-event/pins 
+GPIO: 165 Edge: Both    Debounce: 0 msec
+GPIO: 175 Edge: Both    Debounce: 0 msec
+GPIO: 173 Edge: Both    Debounce: 0 msec
+GPIO: 174 Edge: Both    Debounce: 0 msec
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# ./gpio-event 172:b:0
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# cat /proc/gpio-event/pins 
+GPIO: 165 Edge: Both    Debounce: 0 msec
+GPIO: 175 Edge: Both    Debounce: 0 msec
+GPIO: 173 Edge: Both    Debounce: 0 msec
+GPIO: 174 Edge: Both    Debounce: 0 msec
+GPIO: 172 Edge: Both    Debounce: 0 msec
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# 
+
+
+rmmod gpio_event_drv
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# insmod ../module/gpio-event-drv.ko
+root@vader-rover:~/build/linux-omap-3.5/drivers/gpio-event/app# ./gpio-event 172:b:0 173:b:0 174:b:0 175:b:0 145:f:20 146:f:20
+
+getting extra R signals on 175 after stop...seems to not happen when using 64 instead of 0 for stop
