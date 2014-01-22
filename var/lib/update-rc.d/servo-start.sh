@@ -1,1 +1,1 @@
-update-rc.d servo-start.sh defaults 98
+update-rc.d servo-start.sh defaults 97

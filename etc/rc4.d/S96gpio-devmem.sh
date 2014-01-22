@@ -1,0 +1,1 @@
+../init.d/gpio-devmem.sh

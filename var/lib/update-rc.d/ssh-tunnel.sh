@@ -1,1 +1,1 @@
-update-rc.d ssh-tunnel.sh defaults 99
+update-rc.d ssh-tunnel.sh defaults 92
