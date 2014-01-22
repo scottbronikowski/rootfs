@@ -962,3 +962,85 @@ git add -A
 git status
 git commit -m "apt-get install devmem2"
 git push
+cd /etc/init.d
+ls
+chmod a+x gpio-devmem.sh 
+lla
+ls
+./gpio-devmem.sh 
+cat /dev/gpio-event 
+./gpio-devmem.sh 
+cat /dev/gpio-event 
+ls
+cd ~
+ls
+mkdir rotary-encoder
+cd rotary-encoder/
+ls
+lla
+exit
+cd ..
+ls r*
+cd init.d
+update-rc.d -f servo-start.sh defaults 97
+ls ../rc*
+update-rc.d -f servo-start.sh remove
+ls ../rc*
+update-rc.d servo-start.sh defaults 97
+ls ../rc*
+update-rc.d -f ssh-tunnel.sh remove
+update-rc.d ssh-tunnel.sh defaults 92
+ls
+update-rc.d gpio-devmem.sh defaults 96
+exit
+ls
+cd build
+ls
+cd linux-omap-3.5/
+ls
+cd drivers/
+ls
+cd gpio
+ls
+cd ..
+cd gpio-event/
+ls
+echo 17000 > /dev/pwm8
+echo 15000 > /dev/pwm8
+cd ~/test_code/
+./motor_test 
+cd /
+git add -A
+git status
+git commit -m "added rotary_encoder.c and other related files from https://android.googlesource.com/kernel/omap/+/glass-omap-xrr02/drivers/input/misc to ~/rotary-encoder/"
+git push
+exit
+emacs &
+locate *16jan*
+ls
+git status
+cd /
+git status
+git add -A
+git status
+git commit -m "apt-get install tree"
+git push
+git status
+git add -A
+git commit -m "wrote /etc/init.d/gpio-devmem.sh to set up bump switches and encoders--may need to edit after encoder driver finished; update-rc.d -f servo-start.sh remove; update-rc.d servo-start.sh defaults 97; update-rc.d -f ssh-tunnel.sh remove; update-rc.d ssh-tunnel.sh defaults 92; update-rc.d gpio-devmem.sh defaults 96"
+git push
+locate rotary_encoder.h
+cd /usr/src
+ls
+lla
+cd linux-headers-3.5.0-2-linaro-omap/
+lla
+cd include/
+cd linux/
+ls
+cat interrupt.h 
+grep gpio_get_value
+exit
+reboot
+ls
+exit

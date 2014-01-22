@@ -9,10 +9,10 @@ echo "Set up to monitor bump switches on GPIOs 145, 146"
 ##now we make devmem2 calls to change the pinmux mode for GPIOs 172-175
 ##CAN WE REMOVE THESE IF WE CAN WRITE TO THE MEMORY IN ANOTHER KERNEL MODULE?
 
-#for gpio 175, 173 (right side)
+#for gpio 175, 173 (left side)
 devmem2 0x480021d0 w 0x114010C
 devmem2 0x480021cc w 0x1080104
-#for gpio 174, 172 (left side)
+#for gpio 174, 172 (right side)
 devmem2 0x480021cc w 0x10C0104
 devmem2 0x480021c8 w 0x1040100
 echo "Completed devmem2 calls to set up GPIOs 172, 173, 174, 175"
