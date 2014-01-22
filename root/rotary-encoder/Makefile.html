@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><html><head><title>drivers/input/misc/Makefile - kernel/omap - Git at Google</title><link rel="stylesheet" type="text/css" href="//www.google.com/css/go.css" /><link rel="stylesheet" type="text/css" href="/+static/prettify/prettify.vf-M93Ay4IiiWRQSJKPGWQ.cache.css" /><link rel="stylesheet" type="text/css" href="/+static/gitiles.crLPUWVIreWn55oryoTFfA.cache.css" /><script src="/+static/prettify/prettify_compiled.GHRTDQJlSdpNotJivTmj9w.cache.js" type="text/javascript"></script></head><body onload="prettyPrint()"><h1><img src="//www.google.com/images/logo_sm.gif" alt="Google" />Git</h1><div class="menu"> <a href="https://www.google.com/a/SelectSession?service=gerritcodereview&amp;continue=https://android.googlesource.com/login/kernel/omap/%2B/glass-omap-xrr02/drivers/input/misc/Makefile">Sign in</a> </div><div class="breadcrumbs"><a href="/?format=HTML">android</a> / <a href="/kernel/omap/">kernel/omap</a> / <a href="/kernel/omap/+/glass-omap-xrr02">glass-omap-xrr02</a> / <a href="/kernel/omap/+/glass-omap-xrr02/">.</a> / <a href="/kernel/omap/+/glass-omap-xrr02/drivers">drivers</a> / <a href="/kernel/omap/+/glass-omap-xrr02/drivers/input">input</a> / <a href="/kernel/omap/+/glass-omap-xrr02/drivers/input/misc">misc</a> / Makefile</div><div class="sha1">blob: c39ebdebd15e2c5732a89f1efe73d8a9ccc36164 [<a href="/kernel/omap/+log/glass-omap-xrr02/drivers/input/misc/Makefile">file history</a>]</div><pre class="git-blob prettyprint linenums lang-sh">#
+# Makefile for the input misc drivers.
+#
+
+# Each configuration option enables a list of files.
+
+obj-$(CONFIG_INPUT_88PM860X_ONKEY)	+= 88pm860x_onkey.o
+obj-$(CONFIG_INPUT_AB8500_PONKEY)	+= ab8500-ponkey.o
+obj-$(CONFIG_INPUT_AD714X)		+= ad714x.o
+obj-$(CONFIG_INPUT_AD714X_I2C)		+= ad714x-i2c.o
+obj-$(CONFIG_INPUT_AD714X_SPI)		+= ad714x-spi.o
+obj-$(CONFIG_INPUT_ADXL34X)		+= adxl34x.o
+obj-$(CONFIG_INPUT_ADXL34X_I2C)		+= adxl34x-i2c.o
+obj-$(CONFIG_INPUT_ADXL34X_SPI)		+= adxl34x-spi.o
+obj-$(CONFIG_INPUT_APANEL)		+= apanel.o
+obj-$(CONFIG_INPUT_ATI_REMOTE)		+= ati_remote.o
+obj-$(CONFIG_INPUT_ATI_REMOTE2)		+= ati_remote2.o
+obj-$(CONFIG_INPUT_ATLAS_BTNS)		+= atlas_btns.o
+obj-$(CONFIG_INPUT_BFIN_ROTARY)		+= bfin_rotary.o
+obj-$(CONFIG_INPUT_CM109)		+= cm109.o
+obj-$(CONFIG_INPUT_CMA3000)		+= cma3000_d0x.o
+obj-$(CONFIG_INPUT_CMA3000_I2C)		+= cma3000_d0x_i2c.o
+obj-$(CONFIG_INPUT_BH1780)		+= bh1780gli.o
+obj-$(CONFIG_INPUT_BMP085)              += bmp085.o
+obj-$(CONFIG_INPUT_COBALT_BTNS)		+= cobalt_btns.o
+obj-$(CONFIG_INPUT_DM355EVM)		+= dm355evm_keys.o
+obj-$(CONFIG_INPUT_GPIO)		+= gpio_event.o gpio_matrix.o gpio_input.o gpio_output.o gpio_axis.o
+obj-$(CONFIG_HP_SDC_RTC)		+= hp_sdc_rtc.o
+obj-$(CONFIG_INPUT_IXP4XX_BEEPER)	+= ixp4xx-beeper.o
+obj-$(CONFIG_INPUT_KEYCHORD)		+= keychord.o
+obj-$(CONFIG_INPUT_KEYSPAN_REMOTE)	+= keyspan_remote.o
+obj-$(CONFIG_INPUT_M68K_BEEP)		+= m68kspkr.o
+obj-$(CONFIG_INPUT_MAX8925_ONKEY)	+= max8925_onkey.o
+obj-$(CONFIG_INPUT_PCAP)		+= pcap_keys.o
+obj-$(CONFIG_INPUT_PCF50633_PMU)	+= pcf50633-input.o
+obj-$(CONFIG_INPUT_PCF8574)		+= pcf8574_keypad.o
+obj-$(CONFIG_INPUT_PCSPKR)		+= pcspkr.o
+obj-$(CONFIG_INPUT_POWERMATE)		+= powermate.o
+obj-$(CONFIG_INPUT_PWM_BEEPER)		+= pwm-beeper.o
+obj-$(CONFIG_INPUT_PMIC8XXX_PWRKEY)	+= pmic8xxx-pwrkey.o
+obj-$(CONFIG_INPUT_RB532_BUTTON)	+= rb532_button.o
+obj-$(CONFIG_INPUT_GPIO_ROTARY_ENCODER)	+= rotary_encoder.o
+obj-$(CONFIG_INPUT_SGI_BTNS)		+= sgi_btns.o
+obj-$(CONFIG_INPUT_SPARCSPKR)		+= sparcspkr.o
+obj-$(CONFIG_INPUT_TWL4030_PWRBUTTON)	+= twl4030-pwrbutton.o
+obj-$(CONFIG_INPUT_TWL6030_PWRBUTTON)	+= twl6030-pwrbutton.o
+obj-$(CONFIG_INPUT_TWL4030_VIBRA)	+= twl4030-vibra.o
+obj-$(CONFIG_INPUT_UINPUT)		+= uinput.o
+obj-$(CONFIG_INPUT_WISTRON_BTNS)	+= wistron_btns.o
+obj-$(CONFIG_INPUT_WM831X_ON)		+= wm831x-on.o
+obj-$(CONFIG_INPUT_XEN_KBDDEV_FRONTEND)	+= xen-kbdfront.o
+obj-$(CONFIG_INPUT_YEALINK)		+= yealink.o
+obj-$(CONFIG_INPUT_LTR506ALS)		+= ltr506als.o
+obj-$(CONFIG_INPUT_HMC5843)		+= hmc5843.o
+obj-$(CONFIG_INPUT_SFH7741)		+= sfh7741.o
+obj-$(CONFIG_INPUT_BMA180)		+= bma180.o
+obj-$(CONFIG_INPUT_MPU3050)		+= mpu3050.o
+obj-$(CONFIG_INPUT_TSL2771)		+= tsl2771.o
+obj-$(CONFIG_INPUT_SI114X)		+= si114x.o
+obj-$(CONFIG_INPUT_GLASSHUB)	+= glasshub.o
+</pre><div class="footer">Powered by <a href="https://code.google.com/p/gitiles/">Gitiles</a></div></body></html>

@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><html><head><title>Documentation/input/rotary-encoder.txt - kernel/omap - Git at Google</title><link rel="stylesheet" type="text/css" href="//www.google.com/css/go.css" /><link rel="stylesheet" type="text/css" href="/+static/prettify/prettify.vf-M93Ay4IiiWRQSJKPGWQ.cache.css" /><link rel="stylesheet" type="text/css" href="/+static/gitiles.crLPUWVIreWn55oryoTFfA.cache.css" /><script src="/+static/prettify/prettify_compiled.GHRTDQJlSdpNotJivTmj9w.cache.js" type="text/javascript"></script></head><body onload="prettyPrint()"><h1><img src="//www.google.com/images/logo_sm.gif" alt="Google" />Git</h1><div class="menu"> <a href="https://www.google.com/a/SelectSession?service=gerritcodereview&amp;continue=https://android.googlesource.com/login/kernel/omap/%2B/glass-omap-xrr02/Documentation/input/rotary-encoder.txt">Sign in</a> </div><div class="breadcrumbs"><a href="/?format=HTML">android</a> / <a href="/kernel/omap/">kernel/omap</a> / <a href="/kernel/omap/+/glass-omap-xrr02">glass-omap-xrr02</a> / <a href="/kernel/omap/+/glass-omap-xrr02/">.</a> / <a href="/kernel/omap/+/glass-omap-xrr02/Documentation">Documentation</a> / <a href="/kernel/omap/+/glass-omap-xrr02/Documentation/input">input</a> / rotary-encoder.txt</div><div class="sha1">blob: 92e68bce13a40ce2042326d287093c3ad41f7ad2 [<a href="/kernel/omap/+log/glass-omap-xrr02/Documentation/input/rotary-encoder.txt">file history</a>]</div><pre class="git-blob">rotary-encoder - a generic driver for GPIO connected devices
+Daniel Mack &lt;daniel@caiaq.de&gt;, Feb 2009
+
+0. Function
+-----------
+
+Rotary encoders are devices which are connected to the CPU or other
+peripherals with two wires. The outputs are phase-shifted by 90 degrees
+and by triggering on falling and rising edges, the turn direction can
+be determined.
+
+Some encoders have both outputs low in stable states, whereas others also have
+a stable state with both outputs high (half-period mode).
+
+The phase diagram of these two outputs look like this:
+
+                  _____       _____       _____
+                 |     |     |     |     |     |
+  Channel A  ____|     |_____|     |_____|     |____
+
+                 :  :  :  :  :  :  :  :  :  :  :  :
+            __       _____       _____       _____
+              |     |     |     |     |     |     |
+  Channel B   |_____|     |_____|     |_____|     |__
+
+                 :  :  :  :  :  :  :  :  :  :  :  :
+  Event          a  b  c  d  a  b  c  d  a  b  c  d
+
+                |&lt;--------&gt;|
+	          one step
+
+                |&lt;--&gt;|
+	          one step (half-period mode)
+
+For more information, please see
+	http://en.wikipedia.org/wiki/Rotary_encoder
+
+
+1. Events / state machine
+-------------------------
+
+In half-period mode, state a) and c) above are used to determine the
+rotational direction based on the last stable state. Events are reported in
+states b) and d) given that the new stable state is different from the last
+(i.e. the rotation was not reversed half-way).
+
+Otherwise, the following apply:
+
+a) Rising edge on channel A, channel B in low state
+	This state is used to recognize a clockwise turn
+
+b) Rising edge on channel B, channel A in high state
+	When entering this state, the encoder is put into &#39;armed&#39; state,
+	meaning that there it has seen half the way of a one-step transition.
+
+c) Falling edge on channel A, channel B in high state
+	This state is used to recognize a counter-clockwise turn
+
+d) Falling edge on channel B, channel A in low state
+	Parking position. If the encoder enters this state, a full transition
+	should have happened, unless it flipped back on half the way. The
+	&#39;armed&#39; state tells us about that.
+
+2. Platform requirements
+------------------------
+
+As there is no hardware dependent call in this driver, the platform it is
+used with must support gpiolib. Another requirement is that IRQs must be
+able to fire on both edges.
+
+
+3. Board integration
+--------------------
+
+To use this driver in your system, register a platform_device with the
+name &#39;rotary-encoder&#39; and associate the IRQs and some specific platform
+data with it.
+
+struct rotary_encoder_platform_data is declared in
+include/linux/rotary-encoder.h and needs to be filled with the number of
+steps the encoder has and can carry information about externally inverted
+signals (because of an inverting buffer or other reasons). The encoder
+can be set up to deliver input information as either an absolute or relative
+axes. For relative axes the input event returns +/-1 for each step. For
+absolute axes the position of the encoder can either roll over between zero
+and the number of steps or will clamp at the maximum and zero depending on
+the configuration.
+
+Because GPIO to IRQ mapping is platform specific, this information must
+be given in separately to the driver. See the example below.
+
+---------&lt;snip&gt;---------
+
+/* board support file example */
+
+#include &lt;linux/input.h&gt;
+#include &lt;linux/rotary_encoder.h&gt;
+
+#define GPIO_ROTARY_A 1
+#define GPIO_ROTARY_B 2
+
+static struct rotary_encoder_platform_data my_rotary_encoder_info = {
+	.steps		= 24,
+	.axis		= ABS_X,
+	.relative_axis	= false,
+	.rollover	= false,
+	.gpio_a		= GPIO_ROTARY_A,
+	.gpio_b		= GPIO_ROTARY_B,
+	.inverted_a	= 0,
+	.inverted_b	= 0,
+	.half_period	= false,
+};
+
+static struct platform_device rotary_encoder_device = {
+	.name		= &quot;rotary-encoder&quot;,
+	.id		= 0,
+	.dev		= {
+		.platform_data = &amp;my_rotary_encoder_info,
+	}
+};
+
+</pre><div class="footer">Powered by <a href="https://code.google.com/p/gitiles/">Gitiles</a></div></body></html>
