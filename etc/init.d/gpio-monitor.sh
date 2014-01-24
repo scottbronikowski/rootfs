@@ -1,0 +1,43 @@
+#! /bin/bash
+
+### BEGIN INIT INFO
+# Provides:        gpio-monitor
+# Required-Start:  $local_fs $syslog
+# Required-Stop:   $local_fs $syslog
+# Default-Start:   2 3 4 5
+# Default-Stop:    0 1 6
+# Short-Description: Start/stop gpio-event module and monitor
+### END INIT INFO
+
+start(){
+    ##first two commands load kernel module and set up bump switches
+    insmod /root/build/linux-omap-3.5/drivers/gpio-event/module/gpio-event-drv.ko
+    echo "Loaded gpio-event-drv.ko"
+    /root/build/linux-omap-3.5/drivers/gpio-event/app/gpio-event 184:f:20 185:f:20
+    echo "Set up to monitor bump switches on GPIOs 185 (front), 184 (rear)"
+    #now add new gpios to monitoring -- MAY NOT NEED THIS AFTER NEW DRIVER!!
+    /root/build/linux-omap-3.5/drivers/gpio-event/app/gpio-event 172:b:0 173:b:0 174:b:0 175:b:0
+    cat /proc/gpio-event/pins
+    echo "Set up monitoring of encoders on GPIOs 173, 175 (right side) and 172, 174 (left side)"
+
+}
+
+stop(){
+    rmmod gpio-event-drv.ko
+    echo "Removed GPIO event kernel module."
+}
+
+case $1 in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    *)
+	echo "Usage: $0 {start|stop}"
+	RETVAL=1
+	;;
+esac
+exit 0
+

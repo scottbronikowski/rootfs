@@ -1,1 +1,1 @@
-update-rc.d debian.noip2.sh defaults 98
+update-rc.d debian.noip2.sh defaults

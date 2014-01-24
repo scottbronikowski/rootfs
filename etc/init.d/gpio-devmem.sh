@@ -3,18 +3,33 @@
 ##first two commands load kernel module and set up bump switches
 insmod /root/build/linux-omap-3.5/drivers/gpio-event/module/gpio-event-drv.ko
 echo "Loaded gpio-event-drv.ko"
-/root/build/linux-omap-3.5/drivers/gpio-event/app/gpio-event 145:f:20 146:f:20
-echo "Set up to monitor bump switches on GPIOs 145, 146"
+#/root/build/linux-omap-3.5/drivers/gpio-event/app/gpio-event 145:f:20 146:f:20
+#echo "Set up to monitor bump switches on GPIOs 145, 146"
+
+#for gpio 166, 185 (bump switches)
+# sleep 1
+# devmem2 0x480021c4 w 0x1c0104 > /dev/null
+# sleep 1
+# devmem2 0x480021a0 w 0x1000104 > /dev/null
+# echo "Completed devmem2 calls to set up GPIOs 166, 185"
+
+/root/build/linux-omap-3.5/drivers/gpio-event/app/gpio-event 166:f:20 185:f:20
+echo "Set up to monitor bump switches on GPIOs 185 (front), 166 (rear)"
+
+
+##now set up pins 27 & 29 for UART2 to send/receive to/from ultrasonic
+devmem2 0x48002178 w 0x100000 > /dev/null
+echo "Completed devmem2 calls to set up UART2"
 
 ##now we make devmem2 calls to change the pinmux mode for GPIOs 172-175
 ##CAN WE REMOVE THESE IF WE CAN WRITE TO THE MEMORY IN ANOTHER KERNEL MODULE?
 
 #for gpio 175, 173 (left side)
-devmem2 0x480021d0 w 0x114010C
-devmem2 0x480021cc w 0x1080104
+devmem2 0x480021d0 w 0x114010C > /dev/null
+devmem2 0x480021cc w 0x1080104 > /dev/null
 #for gpio 174, 172 (right side)
-devmem2 0x480021cc w 0x10C0104
-devmem2 0x480021c8 w 0x1040100
+devmem2 0x480021cc w 0x10C0104 > /dev/null
+devmem2 0x480021c8 w 0x1040100 > /dev/null
 echo "Completed devmem2 calls to set up GPIOs 172, 173, 174, 175"
 
 #now add new gpios to monitoring -- MAY NOT NEED THIS AFTER NEW DRIVER!!

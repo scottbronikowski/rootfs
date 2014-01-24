@@ -1044,3 +1044,218 @@ exit
 reboot
 ls
 exit
+cat /dev/gpio-event 
+ls
+cat /proc/tty/driver/serial
+cd /proc
+cd tty
+ls
+cat drivers
+cd driver
+ls
+cat OMAP-SERIAL 
+cat sdio_uart 
+cat usbserial 
+ls /dev/tt*
+usbserial            /dev/ttyUSB   188 0-253 serial
+~/test_code/motor_test
+cat /dev/ttyO3
+cd /root/build/linux-omap-3.5/drivers/gpio-event/
+ls
+cd app
+ls
+./gpio-event 185:f:20 166:f:20
+cat /proc/gpio-event/
+cat /proc/gpio-event/pins
+cat /dev/gpio-event 
+cat /dev/ttyO1
+tail /dev/ttyO1
+cat /dev/ttyO2
+cat /dev/ttyO1
+lla /dev/ttyO*
+exit
+cd /
+git status
+git add -A
+git commit -m "update /etc/init.d/gpio-devmem.sh comments to reflect GPIOs 173&175 for LEFT encoder, 172&174 for RIGHT"
+git push
+git status
+git add -A
+git status
+exit
+emacs &
+cd test_code/
+./motor_test 
+exit
+ATZ
+ls
+lsmod
+echo 12000 > /dev/pwm9
+echo 15000 > /dev/pwm9
+echo 12000 > /dev/pwm10
+echo 18000 > /dev/pwm10
+echo 15000 > /dev/pwm10
+reboot
+emacs &
+exit
+ps
+cd /etc/init.d/
+ls
+./ssh-tunnel.sh
+reboot
+ls
+1;2creboot
+         emacs &
+nano /etc/init.d/gpio-devmem.sh 
+vi /etc/init.d/gpio-devmem.sh 
+nano /etc/init.d/gpio-devmem.sh 
+exit
+reboot
+cat /dev/gpio-event 
+exit
+                                                                 ls
+emacs &
+exit
+emacs &
+cat /dev/gpio-event 
+ifdown wlan0
+ifup wlan0
+/etc/init.d/ssh-tunnel.sh
+emacs &
+reboot
+dmesg | tail
+dmesg
+emacs &
+reboot
+cat /dev/gpio-event 
+cat /etc/init.d/gpio-devmem.sh 
+devmem2 0x480021c4 w 0x1c0104
+devmem2 0x480021a0 w 0x1000104
+cat /dev/gpio-event 
+ls
+emacs &
+reboot
+emacs &
+ls /var/run
+lla /var/run
+lla /run
+ls /etc/init.d
+lla /etc/init.d
+man pid
+pid
+ls etc
+ls /etc
+ls /lib/lsb/
+lla /lib/lsb
+cat /lib/lsb/init-functions 
+. /lib/lsb/init-functions 
+ps -ef
+exit
+emacs &
+cd /etc
+ls rc*
+cd init.d/
+update-rc.d -f servo-start.sh remove
+rmmod
+rmmod pwm.ko
+lsmod
+rmmod pwm.ko
+lsmod
+insmod /root/build/linux-omap-3.5/drivers/omap3-pwm/pwm.ko servo=1 timers=9,10
+ls ser*
+chmod a+x servo-control.sh 
+ls ser*
+update-rc.d servo-control.sh defaults 21
+exit
+ps -ef | grep noip
+/etc/init.d/ssh-tunnel.sh
+reboot
+emacs &
+ps -ef | grep ssh
+ps -ef | grep "ssh -f"
+ps -ef | grep "[s]sh -f"
+ps -ef | grep "[s]sh -f" | awk '{print $2}'
+ls /etc/rc*
+exit
+cd /etc/init.d/
+update-rc.d -f ssh-tunnel.sh remove
+update-rc.d ssh-tunnel.sh defaults 24
+reboot
+emacs &
+exit
+emacs &
+exit
+exit
+cd /etc/init.d/
+ls ../rc*
+update-rc.d -f ssh-tunnel.sh remove
+update-rc.d ssh-tunnel.sh defaults 21
+sl
+ls
+ls ../rc*
+update-rc.d -f gpio-devmem.sh remove
+lla
+chmod a+x pinmux.sh
+chmod a+x gpio-monitor.sh 
+lla
+./pinmux.sh 
+./pinmux.sh start
+./gpio-monitor.sh 
+./gpio-monitor.sh start
+cat /dev/gpio-event 
+ls ../rc*
+update-rc.d gpio-monitor.sh defaults 22
+update-rc.d pinmux.sh defaults 20
+exit
+emacs &
+ls
+exit
+ps -ef | grep ssh
+kill 954
+/etc/init.d/ssh-tunnel.sh start
+reboot
+dmesg
+nano /etc/init.d/pinmux.sh 
+reboot
+nano /etc/init.d/pinmux.sh 
+exit
+dmesg
+nano /etc/init.d/pinmux.sh 
+reboot
+cd .ssh
+ls
+lla
+exit
+emacs &
+devmem2 0x480021c4
+cat /dev/gpio-event 
+devmem2 0x480021c4
+devmem2 0x480021a0
+exit
+reboot
+devmem2 0x480021c4
+devmem2 0x480021a0
+emacs &
+devmem2 0x480021a0
+devmem2 0x480021a0 h 0x0104
+devmem2 0x480021a0
+exit
+devmem2 0x480021c4 w 0x1c0104
+devmem2 0x480021a0 w 0x1000104
+reboot
+cat /dev/gpio-event 
+emacs &
+devmem2 0x480021a0
+devmem2 0x480021a0 h 0x0104
+devmem2 0x480021a0
+devmem2 0x480021c0
+devmem2 0x480021c2 h 0x104
+devmem2 0x480021c0
+./build/linux-omap-3.5/drivers/gpio-event/app/gpio-event 184:f:20
+cat /dev/gpio-event 
+devmem2 0x480021c0
+reboot
+nano /etc/init.d/pinmux.sh 
+exit
+cat /dev/gpio-event 
+reboot

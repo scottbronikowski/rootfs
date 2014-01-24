@@ -1,0 +1,34 @@
+#! /bin/bash
+
+### BEGIN INIT INFO
+# Provides:        servo-control
+# Required-Start:  $local_fs $syslog
+# Required-Stop:   $local_fs $syslog
+# Default-Start:   2 3 4 5
+# Default-Stop:    0 1 6
+# Short-Description: Start/stop camera servos
+### END INIT INFO
+
+start(){
+    insmod /root/build/linux-omap-3.5/drivers/omap3-pwm/pwm.ko servo=1 timers=9,10
+    echo -n "Started kernel module for pan (/dev/pwm10) & tilt (/dev/pwm9) camera servos."
+}
+stop(){
+    rmmod pwm.ko
+    echo -n "Removed PWM servo kernel module."
+}
+
+case $1 in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    *)
+	echo "Usage: $0 {start|stop}"
+	RETVAL=1
+	;;
+esac
+exit 0
+

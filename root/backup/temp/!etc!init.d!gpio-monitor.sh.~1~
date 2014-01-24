@@ -1,0 +1,53 @@
+#! /bin/bash
+
+### BEGIN INIT INFO
+# Provides:        pinmux
+# Required-Start:  $local_fs $syslog
+# Required-Stop:   $local_fs $syslog
+# Default-Start:   2 3 4 5
+# Default-Stop:    0 1 6
+# Short-Description: Make pinmux changes to set up GPIOs and UART2
+### END INIT INFO
+
+start(){
+    #for gpio 166, 185 (bump switches)
+    #sleep 1
+    devmem2 0x480021c4 w 0x1c0104 > /dev/null
+    #sleep 1
+    devmem2 0x480021a0 w 0x1000104 > /dev/null
+    echo "Completed devmem2 calls to set up GPIOs 166, 185"
+
+    ##now set up pins 27 & 29 for UART2 to send/receive to/from ultrasonic
+    devmem2 0x48002178 w 0x100000 > /dev/null
+    echo "Completed devmem2 calls to set up UART2"
+
+    ##now we make devmem2 calls to change the pinmux mode for GPIOs 172-175
+    ##CAN WE REMOVE THESE IF WE CAN WRITE TO THE MEMORY IN ANOTHER KERNEL MODULE?
+
+    #for gpio 175, 173 (left side)
+    devmem2 0x480021d0 w 0x114010C > /dev/null
+    devmem2 0x480021cc w 0x1080104 > /dev/null
+    #for gpio 174, 172 (right side)
+    devmem2 0x480021cc w 0x10C0104 > /dev/null
+    devmem2 0x480021c8 w 0x1040100 > /dev/null
+    echo "Completed devmem2 calls to set up GPIOs 172, 173, 174, 175"
+}
+
+stop(){
+    echo "No exit conditions needed for pinmux."
+}
+
+case $1 in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    *)
+	echo "Usage: $0 {start|stop}"
+	RETVAL=1
+	;;
+esac
+exit 0
+
