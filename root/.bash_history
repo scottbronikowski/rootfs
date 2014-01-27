@@ -1259,3 +1259,31 @@ nano /etc/init.d/pinmux.sh
 exit
 cat /dev/gpio-event 
 reboot
+emacs &
+cd /
+git status
+git add -a
+git add -A
+git status
+git commit -m "set up password-less SSH; removed gpio-devmem.sh from startup (broken into pinmux.sh, gpio-monitor.sh); changed back bumper to GPIO 184 vice 166 (166 had issues with console port); fixed servo-control.sh & ssh-tunnel.sh to be LSB-compliant; changed startup order with update-rc.d so that: 
+rc5.d:
+README  S20debian.noip2.sh  S20pinmux.sh  S21servo-control.sh  S21ssh-tunnel.sh  S22gpio-monitor.sh  S23ntp  S50rsync  S75sudo  S91apache2  S99ondemand  S99rc.local"
+git push
+ls
+cd ~
+ls
+cd test_code/
+ls
+cd modules/
+ls
+cd ..
+cp motor_test.cc motor_control.cc
+man g++
+g++ -o motor_control motor_control.cc
+cd /etc
+ls rc*
+cd /
+git status
+git add -A
+git commit -m "first draft of motor_control.cc -- takes 2 cmd line arguments (int) for L and R speed"
+git push
