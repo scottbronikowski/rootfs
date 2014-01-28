@@ -32,38 +32,28 @@ int send_to_motors(int L_speed, int R_speed)
   write(file_desc, &R_speed, write_size);
   tcdrain(file_desc);
   close(file_desc);
-  return 0;
-    
+  return 0;   
 }
 
-int mc_stop(void){
-  return send_to_motors(L_STOP, R_STOP);}
-
-int mc_forward_1(void){
-  return send_to_motors(L_FWD_1, R_FWD_1);}
-
-int mc_forward_2(void){
-  return send_to_motors(L_FWD_2, R_FWD_2);}
-
-int mc_forward_3(void){
-  return send_to_motors(L_FWD_3, R_FWD_3);}
-
-int mc_forward_4(void){
-  return send_to_motors(L_FWD_FULL, R_FWD_FULL);}
-
-int mc_reverse_1(void){
-  return send_to_motors(L_REV_1, R_REV_1);}
-
-int mc_reverse_2(void){
-  return send_to_motors(L_REV_2, R_REV_2);}
-
-int mc_reverse_3(void){
-  return send_to_motors(L_REV_3, R_REV_3);}
-
-int mc_reverse_4(void){
-  return send_to_motors(L_REV_FULL, R_REV_FULL);}
-
- 
+int mc_stop(void){return send_to_motors(L_STOP, R_STOP);}
+int mc_forward_1(void){return send_to_motors(L_FWD_1, R_FWD_1);}
+int mc_forward_2(void){return send_to_motors(L_FWD_2, R_FWD_2);}
+int mc_forward_3(void){return send_to_motors(L_FWD_3, R_FWD_3);}
+int mc_forward_4(void){return send_to_motors(L_FWD_FULL, R_FWD_FULL);}
+int mc_reverse_1(void){return send_to_motors(L_REV_1, R_REV_1);}
+int mc_reverse_2(void){return send_to_motors(L_REV_2, R_REV_2);}
+int mc_reverse_3(void){return send_to_motors(L_REV_3, R_REV_3);}
+int mc_reverse_4(void){return send_to_motors(L_REV_FULL, R_REV_FULL);}
+int mc_forward_right_1(void){return send_to_motors(L_FWD_1, R_STOP);}
+int mc_forward_right_2(void){return send_to_motors(L_FWD_2, R_FWD_1);}
+int mc_forward_left_1(void){return send_to_motors(L_STOP, R_FWD_1);}
+int mc_forward_left_2(void){return send_to_motors(L_FWD_1, R_FWD_2);}
+int mc_reverse_right_1(void){return send_to_motors(L_REV_1, R_STOP);}
+int mc_reverse_right_2(void){return send_to_motors(L_REV_2, R_REV_1);}
+int mc_reverse_left_1(void){return send_to_motors(L_STOP, R_REV_1);}
+int mc_reverse_left_2(void){return send_to_motors(L_REV_1, R_REV_2);}
+int mc_pivot_right(void){return send_to_motors(L_FWD_1, R_REV_1);}
+int mc_pivot_left(void){return send_to_motors(L_REV_1, R_FWD_1);}
 
 int main(int argc, char* argv[])
 {
@@ -79,9 +69,85 @@ int main(int argc, char* argv[])
       mc_stop();
       printf("success.\n");
       return 0;}
+    if (strcmp(argv[1], FWD1) == 0) {
+      mc_forward_1();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], FWD2) == 0) {
+      mc_forward_2();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], FWD3) == 0) {
+      mc_forward_3();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], FWD4) == 0) {
+      mc_forward_4();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], REV1) == 0) {
+      mc_reverse_1();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], REV2) == 0) {
+      mc_reverse_2();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], REV3) == 0) {
+      mc_reverse_3();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], REV4) == 0) {
+      mc_reverse_4();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], FR1) == 0) {
+      mc_forward_right_1();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], FR2) == 0) {
+      mc_forward_right_2();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], FL1) == 0) {
+      mc_forward_left_1();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], FL2) == 0) {
+      mc_forward_left_2();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], RR1) == 0) {
+      mc_reverse_right_1();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], RR2) == 0) {
+      mc_reverse_right_2();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], RL1) == 0) {
+      mc_reverse_left_1();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], RL2) == 0) {
+      mc_reverse_left_2();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], PR) == 0) {
+      mc_pivot_right();
+      printf("success.\n");
+      return 0;}
+    if (strcmp(argv[1], PL) == 0) {
+      mc_pivot_left();
+      printf("success.\n");
+      return 0;}
     else {
+      //if we get here, the command has not been recognized
       printf("FAILED\n");
-      printf("strcmp = %d\n",strcmp(argv[1], STOP));
+      printf("Unrecognized command.  Valid commands are: %s, %s, %s, %s, %s, %s, %s, %s, %s, \
+%s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",STOP,FWD1,FWD2,FWD3,FWD4,REV1,REV2,REV3,REV4,FR1,FR2,
+	     FL1,FL2,RR1,RR2,RL1,RL2,PR,PL);//***TO FINISH
+      //printf("strcmp = %d\n",strcmp(argv[1], STOP));
       return -1;}
     break;
   case 3:

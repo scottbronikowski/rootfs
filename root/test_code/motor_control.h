@@ -21,6 +21,17 @@ static const ssize_t write_size = 1;  //only writing one byte at a time
 #define REV2 "reverse_2"
 #define REV3 "reverse_3"
 #define REV4 "reverse_4"
+#define FR1  "forward_right_1"
+#define FR2  "forward_right_2"
+#define FL1  "forward_left_1"
+#define FL2  "forward_left_2"
+#define RR1  "reverse_right_1"
+#define RR2  "reverse_right_2"
+#define RL1  "reverse_left_1"
+#define RL2  "reverse_left_2"
+#define PR   "pivot_right"
+#define PL   "pivot_left"
+
 
 //constants for integers representing motor commands
 static const int L_STOP = 64;
@@ -62,6 +73,17 @@ int mc_reverse_1(void);
 int mc_reverse_2(void);
 int mc_reverse_3(void);
 int mc_reverse_4(void);
+int mc_forward_right_1(void);
+int mc_forward_right_2(void);
+int mc_forward_left_1(void);
+int mc_forward_left_2(void);
+int mc_reverse_right_1(void);
+int mc_reverse_right_2(void);
+int mc_reverse_left_1(void);
+int mc_reverse_left_2(void);
+int mc_pivot_right(void);
+int mc_pivot_left(void);
+
 
 
 int send_to_motors(int L_speed, int R_speed); //sends integer values to motors
