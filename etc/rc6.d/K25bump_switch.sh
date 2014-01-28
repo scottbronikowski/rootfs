@@ -1,0 +1,1 @@
+../init.d/bump_switch.sh

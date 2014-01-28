@@ -1287,3 +1287,163 @@ git status
 git add -A
 git commit -m "first draft of motor_control.cc -- takes 2 cmd line arguments (int) for L and R speed"
 git push
+top
+cd /sys/class
+cd gpio
+ls
+lla
+echo "184" > ./export
+echo "185" > ./export
+lla
+echo "in" > ./gpio185/direction
+echo "in" > ./gpio184/direction
+cat ./gpio184/value
+cat /dev/gpio-event 
+exit
+cd /
+git add -A
+git status
+git commit -m "improving motor_control.cc and adding motor_control.h...backed up old motor_control.cc to motor_control_old.cc"
+git push
+ls
+git status
+git add -A
+git commit -m "removed apache2 (K09, S91) from init"
+git push
+git status
+git add -A
+git commit -m "completed motor_control.cc/h with all 19 possible speed commands"
+git push
+exit
+ifdown wlan0
+ifup wlan0
+/etc/init.d/ssh-tunnel.sh start
+ls
+emacs &
+man 2 open
+cd test_code/
+ls
+cp motor_control.cc motor_control_old.cc
+g++ -o motor_control motor_control.cc
+./motor_control
+g++ -o motor_control motor_control.cc
+./motor_control 95 223
+./motor_control
+./motor_control 95 223
+./motor_control
+./motor_control 95 223
+./motor_control
+./motor_control 95 223
+./motor_control
+./motor_control 95 223
+./motor_control
+./motor_control 95 223
+./motor_control 64 192
+./motor_control 95 223
+./motor_control 64 192
+./motor_control 95 223
+./motor_control 64 192
+./motor_control 95 223
+./motor_control 64 192
+./motor_control 95 223
+./motor_control 64 192
+./motor_control 95 223
+./motor_control 64 192
+g++ -o motor_control motor_control.cc
+lla
+g++ -o motor_control motor_control.cc
+./motor_control 95 223
+./motor_control 64 192
+./motor_control 95 223
+./motor_control 64 192
+./motor_control 95 223
+./motor_control 64 192
+./motor_control 95 223
+./motor_control 64 192
+./motor_control 95 223
+./motor_control
+g++ -o motor_control motor_control.cc
+./motor_control 95 223
+./motor_control
+./motor_control 95 223
+./motor_control
+./motor_control 95 223
+./motor_control
+./motor_control 95 223
+./motor_control 95 300
+./motor_control 95 223
+./motor_control
+g++ -o motor_control motor_control.cc
+./motor_control
+./motor_control foo
+./motor_control 95 223
+./motor_control
+./motor_control 95 223
+./motor_control
+g++ -o motor_control motor_control.cc
+./motor_control stop
+g++ -o motor_control motor_control.cc
+./motor_control stop
+g++ -o motor_control motor_control.cc
+./motor_control stop
+./motor_control 95 223
+./motor_control stop
+ls
+ps -ef | grep git
+service apache2 stop
+cd /etc/init.d/
+ls
+update-rc.d -f apache2 remove
+cd ~/test_code/
+g++ -o motor_control motor_control.cc
+./motor_control forward_1
+./motor_control forward_7
+./motor_control forward_1
+./motor_control stop
+./motor_control forward_1
+./motor_control forward_2
+./motor_control forward_3
+./motor_control forward_4
+./motor_control stop
+g++ -o motor_control motor_control.cc
+./motor_control forward_1
+./motor_control forward_7
+g++ -o motor_control motor_control.cc
+./motor_control forward_1
+./motor_control forward_7
+g++ -o motor_control motor_control.cc
+./motor_control forward_1
+./motor_control forward_7
+g++ -o motor_control motor_control.cc
+./motor_control forward_7
+g++ -o motor_control motor_control.cc
+./motor_control forward_7
+./motor_control forward_1
+./motor_control stop
+./motor_control forward_1
+./motor_control forward_2
+./motor_control forward_3\
+./motor_control forward_4
+./motor_control stop
+./motor_control reverse_1
+./motor_control reverse_2
+./motor_control reverse_3
+./motor_control reverse_4
+./motor_control stop
+./motor_control forward_right_1
+./motor_control forward_right_2
+./motor_control stop
+./motor_control forward_left_1
+./motor_control forward_left_2
+./motor_control stop
+./motor_control reverse_right_1
+./motor_control reverse_right_2
+./motor_control stop
+./motor_control reverse_left_1
+./motor_control reverse_left_2
+./motor_control stop
+./motor_control pivot_right
+./motor_control stop
+./motor_control pivot_left
+./motor_control stop
+reboot
