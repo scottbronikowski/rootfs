@@ -101,28 +101,20 @@ int main(int argc, char* argv[])
       retval = mc_reverse_left_2();
       return send_message(retval);
     }
-    if (strcmp(argv[1], PR1) == 0) {
-      retval = mc_pivot_right_1();
+    if (strcmp(argv[1], PR) == 0) {
+      retval = mc_pivot_right();
       return send_message(retval);
     }
-    if (strcmp(argv[1], PL1) == 0) {
-      retval = mc_pivot_left_1();
-      return send_message(retval);
-    }
-    if (strcmp(argv[1], PR2) == 0) {
-      retval = mc_pivot_right_2();
-      return send_message(retval);
-    }
-    if (strcmp(argv[1], PL2) == 0) {
-      retval = mc_pivot_left_2();
+    if (strcmp(argv[1], PL) == 0) {
+      retval = mc_pivot_left();
       return send_message(retval);
     }
     else {
       //if we get here, the command has not been recognized
       printf("FAILED\n");
       printf("Unrecognized command.  Valid commands are: %s, %s, %s, %s, %s, %s, %s, %s, %s, \
-%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",STOP,FWD1,FWD2,FWD3,FWD4,REV1,REV2,REV3,REV4,
-	     FR1,FR2,FL1,FL2,RR1,RR2,RL1,RL2,PR1,PR2,PL1,PL2);//***TO FINISH
+%s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",STOP,FWD1,FWD2,FWD3,FWD4,REV1,REV2,REV3,REV4,FR1,FR2,
+	     FL1,FL2,RR1,RR2,RL1,RL2,PR,PL);//***TO FINISH
       //printf("strcmp = %d\n",strcmp(argv[1], STOP));
       return -1;}
     break;

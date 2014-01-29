@@ -1625,3 +1625,20 @@ cat /etc/init.d/ssh-tunnel.sh
 ntpdate
 ntpdate -s -u us.pool.ntp.org
 date
+cd /etc
+ls rc*
+cd init.d/
+ls
+./time-update.sh 
+./time-update.sh start
+update-rc.d -f time-update.sh remove
+update-rc.d -f debian.noip2.sh remove
+update-rc.d debian.noip2.sh defaults 30
+update-rc.d time-update.sh defaults 31
+cd ..
+ls rc*
+cd /
+cd ~/test_code/
+g++ -o bump_switch bump_switch.cc motor_control_functions.cc 
+g++ -o motor_control motor_control.cc motor_control_functions.cc 
+exit
