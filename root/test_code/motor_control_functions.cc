@@ -107,14 +107,17 @@ int initport(void){
         } 
 
     /* change standard input */ 
-    if (tcgetattr(STDIN_FILENO, &term_attr) != 0) 
-        { 
-        perror("ERROR2: terminal: tcgetattr() failed"); 
-        return -1; 
-        } 
+    // if (tcgetattr(STDIN_FILENO, &term_attr) != 0) 
+    //     { 
+    //     perror("ERROR2: terminal: tcgetattr() failed"); 
+    //     return -1; 
+    //     } 
 
-    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &term_attr) != 0) 
-        perror("terminal: tcsetattr() failed"); 
+    // if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &term_attr) != 0) 
+    //     perror("terminal: tcsetattr() failed"); 
+    
+    if (tcgetattr(STDIN_FILENO, &term_attr) == 0)
+      tcsetattr(STDIN_FILENO, TCSAFLUSH, &term_attr);
 
     FD_SET(fd, &input_fdset);                          /* Select the first channel 1 */ 
 
@@ -135,7 +138,7 @@ int mc_print(void) //prints motor control values
 {
   printf("L_FWD_FULL = %i\tR_FWD_FULL = %i\n",L_FWD_FULL,R_FWD_FULL);
   printf("L_FWD_3 = %i\tR_FWD_3 = %i\n",L_FWD_3,R_FWD_3);
-  printf("L_FWD_2 = %i\tR_FWD_3 = %i\n",L_FWD_3,R_FWD_3);
+  printf("L_FWD_2 = %i\tR_FWD_2 = %i\n",L_FWD_2,R_FWD_2);
   printf("L_FWD_1 = %i\tR_FWD_1 = %i\n",L_FWD_1,R_FWD_1);
   printf("L_STOP = %i\tR_STOP = %i\n",L_STOP,R_STOP);
   printf("L_REV_1 = %i\tR_REV_1 = %i\n",L_REV_1,R_REV_1);

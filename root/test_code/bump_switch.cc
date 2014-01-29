@@ -21,15 +21,15 @@ int main(void)
 {
   int file_desc, read_ret, gpio_num;
   char readbuffer[read_size];
-  struct timeval tv;
+  //  struct timeval tv;
 
   file_desc = open(GPIO_FILE, O_RDONLY | O_NONBLOCK);
   if (file_desc < 0) {
     printf("ERROR: failed to open %s\n",GPIO_FILE);
     return -1;
   }
-  tv.tv_sec = 0;
-  tv.tv_usec = 0;
+  //tv.tv_sec = 0;
+  //tv.tv_usec = 0;
 
   while (1) 
   {
@@ -46,14 +46,14 @@ int main(void)
       if (gpio_num == REAR_BUMP){
 	//bumped rear, so stop and go forward
 	mc_stop();
-	mc_forward_1();
+	mc_forward_4();
 	usleep(move_time);
 	mc_stop();
 	printf("I bumped something to the rear.\n");
       } else if (gpio_num == FRONT_BUMP){
 	//bumped front, so stop and go back
 	mc_stop();
-	mc_reverse_1();
+	mc_reverse_4();
 	usleep(move_time);
 	mc_stop();
 	printf("I bumped something to the front.\n");

@@ -1545,4 +1545,42 @@ cd /
 git status
 eixt
 exit
-                                              
+                                              cd /
+git status
+git add -A
+git commit -m "commented out monitoring of encoders (GPIO 172-175) in gpio-monitor.sh"
+
+/etc/init.d/gpio-monitor.sh stop
+/etc/init.d/gpio-monitor.sh start
+/etc/init.d/bump_switch.sh stop
+/etc/init.d/gpio-monitor.sh stop
+/etc/init.d/gpio-monitor.sh start
+/etc/init.d/bump_switch.sh start
+/etc/init.d/bump_switch.sh start &
+git status
+git add -A
+git commit -m "added debugging code to motor_control.cc & motor_control_functions.cc"
+exit
+/etc/init.d/bump_switch.sh start
+emacs &
+ls
+cd test_code/
+g++ -o motor_control motor_control.cc motor_control_functions.cc
+./motor_control stop
+./motor_control print
+./motor_control forward_1
+./motor_control stop
+./motor_control forward_1
+./motor_control stop
+./motor_control forward_1
+./motor_control stop
+./motor_control forward_1
+./motor_control stop
+reboot
+emacs &
+cd test_code/
+./motor_control forward_1
+./motor_control stop
+g++ -o motor_control motor_control.cc motor_control_functions.cc
+./motor_control forward_1
+cd test_code/
