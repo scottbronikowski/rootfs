@@ -1604,3 +1604,24 @@ exit
 ps -ef | grep bump
 /etc/init.d/bump_switch.sh start
 shutdown now
+cd /etc
+ls rc*
+cd init.d/
+update-rc.d -f ssh-tunnel.sh remove
+update-rc.d ssh-tunnel.sh defaults 24
+cd /
+git status
+top
+git status
+git add -A
+git commit -m "moved ssh-tunnel.sh in startup order so it starts after ntpd"
+git push
+date
+ntpd
+date
+reboot
+date
+cat /etc/init.d/ssh-tunnel.sh
+ntpdate
+ntpdate -s -u us.pool.ntp.org
+date
