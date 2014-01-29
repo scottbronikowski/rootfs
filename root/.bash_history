@@ -1584,3 +1584,23 @@ cd test_code/
 g++ -o motor_control motor_control.cc motor_control_functions.cc
 ./motor_control forward_1
 cd test_code/
+g++ -o motor_control motor_control.cc motor_control_functions.cc
+./motor_control forward_1
+./motor_control stop
+g++ -o motor_control motor_control.cc motor_control_functions.cc
+./motor_control forward_1
+./motor_control stop
+ls
+g++ -o bump_switch bump_switch.cc motor_control_functions.cc
+exit
+emacs &
+cd /
+git status
+git add -A
+git commit -m "fixed ioctl bug in motor_control_functions.cc (initport()); changed backoff speed in bump_switch.cc"
+git push
+exit
+/etc/init.d/bump_switch.sh stop
+ps -ef | grep bump
+/etc/init.d/bump_switch.sh start
+shutdown now
