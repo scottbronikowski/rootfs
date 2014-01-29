@@ -90,4 +90,7 @@ int send_to_motors(int L_speed, int R_speed); //sends integer values to motors
 
 int initport(void); //initializes UART port to send data to motors
 
+int send_message(int retval); //sends success or failure message
+
+int mc_print(void); //prints motor control values
 #endif

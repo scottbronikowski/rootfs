@@ -69,7 +69,7 @@ int initport(void){
     /* configure RS232 */ 
     if (tcgetattr(fd, &term_attr) != 0) 
         { 
-        perror("terminal: tcgetattr() failed"); 
+        perror("ERROR1: terminal: tcgetattr() failed"); 
         return -1; 
         } 
     /* save old flags */ 
@@ -109,7 +109,7 @@ int initport(void){
     /* change standard input */ 
     if (tcgetattr(STDIN_FILENO, &term_attr) != 0) 
         { 
-        perror("terminal: tcgetattr() failed"); 
+        perror("ERROR2: terminal: tcgetattr() failed"); 
         return -1; 
         } 
 
@@ -121,4 +121,26 @@ int initport(void){
     return fd; 
 }
 
+int send_message(int retval) //sends success or failure message
+{
+  if (retval == 0) {
+    printf("success.\n");
+  } else {
+    printf("FAILURE to execute.\n");
+  }
+  return retval;
+}
 
+int mc_print(void) //prints motor control values
+{
+  printf("L_FWD_FULL = %i\tR_FWD_FULL = %i\n",L_FWD_FULL,R_FWD_FULL);
+  printf("L_FWD_3 = %i\tR_FWD_3 = %i\n",L_FWD_3,R_FWD_3);
+  printf("L_FWD_2 = %i\tR_FWD_3 = %i\n",L_FWD_3,R_FWD_3);
+  printf("L_FWD_1 = %i\tR_FWD_1 = %i\n",L_FWD_1,R_FWD_1);
+  printf("L_STOP = %i\tR_STOP = %i\n",L_STOP,R_STOP);
+  printf("L_REV_1 = %i\tR_REV_1 = %i\n",L_REV_1,R_REV_1);
+  printf("L_REV_2 = %i\tR_REV_2 = %i\n",L_REV_2,R_REV_2);
+  printf("L_REV_3 = %i\tR_REV_3 = %i\n",L_REV_3,R_REV_3);
+  printf("L_REV_FULL = %i\tR_REV_FULL = %i\n",L_REV_FULL,R_REV_FULL);
+  return 0;
+}
