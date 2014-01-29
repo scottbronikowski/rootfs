@@ -1447,3 +1447,102 @@ g++ -o motor_control motor_control.cc
 ./motor_control pivot_left
 ./motor_control stop
 reboot
+cd /
+cat /etc/init.d/gpio-monitor.sh 
+/root/build/linux-omap-3.5/drivers/gpio-event/app/gpio-event 172:b:0 173:b:0 174:b:0 175:b:0
+/root/build/linux-omap-3.5/drivers/gpio-event/app/gpio-event -b 172:b:0 173:b:0 174:b:0 175:b:0 184:f:20 185:f:20
+cat /dev/gpio-event 
+ps -ef | grep "rear"
+ps -ef | grep "/root/test_code/rear_bump_switch"
+ps -ef | grep "[/]root/test_code/rear_bump_switch"
+ps -ef | grep "[/]root/test_code/bump_switch"
+ps -ef | grep "bump_switch"
+git status
+git add -A
+git commit -m "split motor_control.cc into motor_control.cc (main) and motor_control_functions.cc (everything else) in order to compile functions into bump_switch.cc; added bump_switch.sh to startup"
+git push
+exit
+cat /dev/gpio-event 
+cat /proc/sys/debug/gpio
+cat /proc/sys/debug
+ls /proc/sys/debug
+ls /proc/sys
+ls /proc/sys/gpio-event/
+cat /proc/interrupts
+cat /proc/devices
+update-rc.d /etc/init.d/bump_switch.sh defaults 25
+chmod a+x /etc/init.d/bump_switch.sh 
+update-rc.d /etc/init.d/bump_switch.sh defaults 25
+update-rc.d bump_switch.sh defaults 25
+/root/test_code/bump_switch &
+/root/test_code/bump_switch
+exit
+emacs &
+cd test_code/
+g++ -o rear_bump_switch rear_bump_switch.cc
+./rear_bump_switch 
+g++ -o rear_bump_switch rear_bump_switch.cc
+./rear_bump_switch 
+g++ -o rear_bump_switch rear_bump_switch.cc
+./rear_bump_switch 
+g++ -o rear_bump_switch rear_bump_switch.cc
+./rear_bump_switch 
+g++ -o rear_bump_switch rear_bump_switch.cc
+./rear_bump_switch 
+g++ -o rear_bump_switch rear_bump_switch.cc
+./rear_bump_switch 
+ls
+g++ -o rear_bump_switch rear_bump_switch.cc
+ls
+./rear_bump_switch 
+g++ -o rear_bump_switch rear_bump_switch.cc
+./rear_bump_switch 
+g++ -o rear_bump_switch rear_bump_switch.cc
+g++ -o rear_bump_switch rear_bump_switch.cc motor_control.cc
+cp motor_control.cc motor_control_functions.cc
+g++ -o motor_control motor_control.cc motor_control_functions.cc
+g++ -o rear_bump_switch rear_bump_switch.cc motor_control_functions.cc
+./rear_bump_switch 
+g++ -o rear_bump_switch rear_bump_switch.cc motor_control_functions.cc
+./rear_bump_switch 
+/root/test_code/rear_bump_switch 
+cp rear_bump_switch.cc bump_switch.cc
+g++ -o bump_switch bump_switch.cc motor_control_functions.cc 
+ls
+rm rear_bump_switch
+./bump_switch 
+./motor_control forward_1
+./motor_control stop
+./motor_control forward_1
+./motor_control reverse_1
+exit
+cat /dev/gpio-event 
+shutdown now
+cd test_code/
+./motor_control forward_1
+./motor_control stop
+./motor_control pivot_right
+./motor_control stop
+./motor_control turn_right_1
+./motor_control forward_right_1
+./motor_control forward_right_2
+./motor_control reverse_2
+./motor_control stop
+./motor_control forward_right_2
+./motor_control reverse_left_2
+./motor_control stop
+./motor_control forward_right_2
+./motor_control stop
+./motor_control forward_1
+./motor_control forward_left_2
+./motor_control stop
+./motor_control pivot_left
+./motor_control stop
+./motor_control pivot_right
+./motor_control stop
+git status
+cd /
+git status
+eixt
+exit
+                                              

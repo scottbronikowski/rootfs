@@ -16,9 +16,10 @@ start(){
     /root/build/linux-omap-3.5/drivers/gpio-event/app/gpio-event 184:f:20 185:f:20
     echo "Set up to monitor bump switches on GPIOs 185 (front), 184 (rear)"
     #now add new gpios to monitoring -- MAY NOT NEED THIS AFTER NEW DRIVER!!
-    /root/build/linux-omap-3.5/drivers/gpio-event/app/gpio-event 172:b:0 173:b:0 174:b:0 175:b:0
+   # /root/build/linux-omap-3.5/drivers/gpio-event/app/gpio-event 172:b:0 173:b:0 174:b:0 175:b:0
+   # echo "Set up monitoring of encoders on GPIOs 173, 175 (right side) and 172, 174 (left side)"
     cat /proc/gpio-event/pins
-    echo "Set up monitoring of encoders on GPIOs 173, 175 (right side) and 172, 174 (left side)"
+
 
 }
 
