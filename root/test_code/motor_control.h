@@ -31,8 +31,8 @@ static const ssize_t write_size = 1;  //only writing one byte at a time
 #define RL2  "reverse_left_2"
 #define PR1  "pivot_right_1"
 #define PR2  "pivot_right_2"
-#define PL1  "pivot_left1"
-#define PL2  "pivot_left2"
+#define PL1  "pivot_left_1"
+#define PL2  "pivot_left_2"
 
 
 //constants for integers representing motor commands
