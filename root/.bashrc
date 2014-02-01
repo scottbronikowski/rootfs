@@ -110,6 +110,28 @@ fi
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
-#if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-#    . /etc/bash_completion
-#fi
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+
+###
+#    # See if we can use extended characters to look nicer.
+#    
+#    typeset -A altchar
+#    set -A altchar ${(s..)terminfo[acsc]}
+#    PR_SET_CHARSET="%{$terminfo[enacs]%}"
+#    PR_SHIFT_IN="%{$terminfo[smacs]%}"
+#    PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
+#    PR_HBAR=${altchar[q]:--}
+#    PR_ULCORNER=${altchar[l]:--}
+#    PR_LLCORNER=${altchar[m]:--}
+#    PR_LRCORNER=${altchar[j]:--}
+#    PR_URCORNER=${altchar[k]:--}
+export PATH=~/bin/:$PATH
+export QINSTALLDIR=${HOME}
+export ARCHITECTURE_PATH=`~/bin/architecture-path`
+export QARCHITECTURE_PATH=${ARCHITECTURE_PATH}
+export PATH=${PATH}:~/bin
+export PATH=${PATH}:~/bin/${ARCHITECTURE_PATH}
+export LD_LIBRARY_PATH=${HOME}/lib/${ARCHITECTURE_PATH}:${HOME}/include/$(architecture-path):${HOME}/lib/$(architecture-path)/include:${HOME}/lib/$(architecture-path):$LD_LIBRARY_PATH

@@ -1,0 +1,1 @@
+../../test/alltests.sc

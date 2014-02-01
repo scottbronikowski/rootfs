@@ -1,0 +1,1 @@
+../../scrt/scrt6.sc

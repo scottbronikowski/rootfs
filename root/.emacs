@@ -108,7 +108,7 @@
 
 ;;(set-default-font "Bitstream Vera Sans Mono-8")
 ;;(set-default-font "Andale Mono-8")
-(set-default-font "DejaVu Sans Mono-8")
+(set-default-font "DejaVu Sans Mono-12")
 
 (setq scroll-step 10)
 

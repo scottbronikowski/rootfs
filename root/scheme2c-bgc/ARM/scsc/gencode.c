@@ -1,0 +1,1 @@
+../../scsc/gencode.c

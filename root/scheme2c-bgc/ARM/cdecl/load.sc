@@ -1,0 +1,1 @@
+../../cdecl/load.sc
