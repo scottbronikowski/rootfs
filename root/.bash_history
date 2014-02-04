@@ -1799,6 +1799,8 @@ make
 echo $LD_LIBRARY_PATH
 locate gc.h
 updatedb
+<<<<<<< HEAD
+=======
 /etc/init.d/ssh-tunnel.sh stop
 /etc/init.d/ssh-tunnel.sh start
 df -h
@@ -1807,3 +1809,4 @@ blkid
 fsck -N /dev/mmcblk0p1
 fsck -n /dev/mmcblk0p2
 init 1
+>>>>>>> first commit from Lexar card
