@@ -1642,4 +1642,160 @@ cd ~/test_code/
 g++ -o bump_switch bump_switch.cc motor_control_functions.cc 
 g++ -o motor_control motor_control.cc motor_control_functions.cc 
 exit
-                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                            csi
+emacs -nw
+emacs -nw
+cd rotary-encoder/
+ls
+cp rotary_encoder.c rotary_encoder.c.original
+cd ../tes
+cd ../test_code/
+g++ -o motor_control motor_control.cc motor_control_functions.cc
+./motor_control pivot_left_1
+./motor_control pivot_left_2
+./motor_control stop
+./motor_control pivot_right_1
+./motor_control stop
+nano
+cd ~
+ls
+cd ..
+ls
+cd bin
+ls
+ls a*
+cd ..
+locate architecture*
+cd ~
+ls
+rsync seykhl:~abarbu/new-install/scc ~/bin/${architecture-path}/
+echo $architecture-path
+lla
+rsync sbroniko@seykhl.ecn.purdue.edu:~abarbu/new-install/scc ~/bin/${architecture-path}/
+mkdir bin
+mkdir bin/path
+rsync seykhl:~abarbu/new-install/scc ~/bin/${architecture-path}/
+rsync -avz --progress seykhl:~abarbu/pkg/gc-7.2alpha4.tar.gz ~/pkg/
+cd ~/pkg
+tar xvf gc-7.2alpha4.tar.gz 
+cd gc-7.2alpha4
+ls
+lla
+./configure --enable-option-checking --enable-large-config --enable-threads=pthreads
+make -j30
+cd ../..
+cd bin
+ls
+rsync seykhl:~/bin/architecture-path .
+lla
+./architecture-path 
+cd path/
+ls
+cat scc 
+rsync ~abarbu/new-install/scc ~/bin/$(architecture-path)/
+rsync seykhl:~abarbu/new-install/scc ~/bin/$(architecture-path)/
+
+ls
+rsync seykhl:~abarbu/new-install/scc ~/bin/$(architecture-path)/
+ls
+cd ~/pkg/gc-7.2alpha4/
+ls
+cd include/
+ls gc*
+apt-cache search boehm
+apt-get install boehm-gc
+apt-get update
+make
+rsync -avz include/* ${HOME}/include/$(architecture-path)/gc/
+rsync -avz include/* ${HOME}/lib/$(architecture-path)/include/gc/
+locate gc.h
+LD_LIBRARY_PATH=~/lib/armv7l-Linux-3.5.0-2-linaro-omap/:~/lib/armv7l-Linux-3.5.0-2-linaro-omap/include/gc make
+LD_LIBRARY_PATH=~/lib/armv7l-Linux-3.5.0-2-linaro-omap/:$LD_LIBRARY_PATH make
+./configure --enable-option-checking --enable-large-config --enable-threads=pthreads
+source ~/.bashrc
+echo $LD_LIBRARY_PATH
+cd ~/include/armv7l-Linux-3.5.0-2-linaro-omap/
+ls
+lla
+cd ~/lib/armv7l-Linux-3.5.0-2-linaro-omap/
+lla
+cd ~/scheme2c-bgc/ARM/
+source ~/.bashrc
+echo $LD_LIBRARY_PATH
+make
+ls he*
+cd scrt/
+ls
+cat heap.h
+source ~/.bashrc
+echo $LD_LIBRARY_PATH
+cd ..
+make
+locate gc.h
+emacs &
+date
+cd /
+git status
+git config --global core.editor emacs
+git config list
+git config --list
+git add -A
+git commit
+git status
+git config --global core.editor nano
+git push
+git add -A
+git commit -m "began install of scheme2c"
+git push
+apt-cache search chicken
+apt-get install chicken-bin
+mkdir -p ${HOME}/include/$(architecture-path)/gc/
+echo $PAHT
+echo $PATH
+source .bashrc
+source ~/.bashrc
+echo $PATH
+mkdir -p ${HOME}/include/$(architecture-path)/gc/
+cd ~/
+cd include/armv7l-Linux-3.5.0-2-linaro-omap/gc
+cd ..
+cd..
+cd ..
+mkdir -p ${HOME}/lib/$(architecture-path)/include/gc/
+rsync -avz include/* ${HOME}/include/$(architecture-path)/gc/
+rsync -avz include/* ${HOME}/lib/$(architecture-path)/include/gc/
+mkdir -p ${HOME}/lib/$(architecture-path)
+rsync -avz .libs/*.so* ${HOME}/lib/$(architecture-path)
+cd pkg/gc-7.2alpha4
+ls
+rsync -avz include/* ${HOME}/include/$(architecture-path)/gc/
+rsync -avz include/* ${HOME}/lib/$(architecture-path)/include/gc/
+rsync -avz .libs/*.so* ${HOME}/lib/$(architecture-path)
+rsync -avz .libs/*.a ${HOME}/lib/$(architecture-path)
+ls .libs/
+echo $LD_LIBRARY_PATH
+source .bashrc
+source ~/.bashrc
+echo $LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=${HOME}/lib/$(architecture-path):$LD_LIBRARY_PATH
+echo $LD_LIBRARY_PATH
+rsync -avz --progress seykhl:~abarbu/scheme2c-bgc ~/ --exclude .git
+cd ~/scheme2c-bgc/
+ls
+cat makefile 
+make forARM
+cd ARM/
+make -j20
+make
+echo $LD_LIBRARY_PATH
+cd ~/pkg
+ls
+cd gc
+cd gc-7.2alpha4
+ls
+export LD_LIBRARY_PATH=${HOME}/lib/$(architecture-path)/include/gc:${HOME}/include/$(architecture-path)/gc:$LD_LIBRARY_PATH
+cd ~/scheme2c-bgc/ARM/
+make
+echo $LD_LIBRARY_PATH
+locate gc.h
+updatedb
