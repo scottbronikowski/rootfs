@@ -1810,3 +1810,17 @@ fsck -N /dev/mmcblk0p1
 fsck -n /dev/mmcblk0p2
 init 1
 >>>>>>> first commit from Lexar card
+cd /
+git mergetool -y
+git add .
+git commit -m "first attempt at merge"
+git commit -a
+git push
+touch newtestfile
+git add .
+git commit -m "test commit after merge"
+git push
+exit
+emacs &
+ping google.com
+exit
