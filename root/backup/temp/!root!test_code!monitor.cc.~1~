@@ -1,7 +1,6 @@
-//Implementation for monitor of rear bump switch and send data over socket
-//client code adapted from http://www.linuxhowtos.org/C_C++/socket.htm
+//Implementation for monitor of rear bump switch
 //Author: Scott Bronikowski
-//Date: 6 February 2014
+//Date: 28 January 2014
 
 #include <stdio.h>   /* Standard input/output definitions */
 #include <string.h>  /* String function definitions */
@@ -14,58 +13,24 @@
 #include <iostream>
 #include <stdlib.h>
 #include "motor_control.h"
-//#include "bump_switch.h"
-#include "monitor.h"
-#include <stdlib.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-
+#include "bump_switch.h"
 using namespace std;
 
-void error(const char *msg)
-{
-    perror(msg);
-    exit(EXIT_FAILURE);
-}
 
 int main(void)
 {
-  int file_desc, read_ret, gpio_num, sockfd, n;
+  int file_desc, read_ret, gpio_num;
   char readbuffer[read_size];
-  struct sockaddr_in serv_addr;
-  struct hostent* server;
-  char tempmsg[256];
+  //  struct timeval tv;
 
-  //open GPIO file
   file_desc = open(GPIO_FILE, O_RDONLY | O_NONBLOCK);
   if (file_desc < 0) {
     printf("ERROR: failed to open %s\n",GPIO_FILE);
     return -1;
   }
-  //open socket
-  sockfd = socket(AF_INET, SOCK_STREAM, 0);
-  if (sockfd < 0) 
-      error("ERROR opening socket");
-  server = gethostbyname(SERVER);
-  if (server == NULL) {
-      fprintf(stderr,"ERROR, no such host\n");
-      exit(EXIT_FAILURE);
-  }
-  bzero((char *) &serv_addr, sizeof(serv_addr));
-  serv_addr.sin_family = AF_INET;
-  bcopy((char *)server->h_addr, 
-       (char *)&serv_addr.sin_addr.s_addr,
-       server->h_length);
-  serv_addr.sin_port = htons(port_no);
-  //now connect to server
-  if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
-  {
-    strcpy(tempmsg, "Error connecting to server ");
-    strcat(tempmsg, SERVER);
-    error(tempmsg);
-    //error("ERROR connecting");
-  }
+  //tv.tv_sec = 0;
+  //tv.tv_usec = 0;
+
   while (1) 
   {
     read_ret = read(file_desc,readbuffer,read_size);
@@ -73,8 +38,11 @@ int main(void)
       //printf("Looping on read error.");
       continue;
     } else {
+      //printf("Read '%s'\n", readbuffer);
       //now we have a string in readbuffer, must parse it
+      //printf("test: %i\n",readbuffer[0]);
       gpio_num = atoi(strtok(readbuffer," "));
+      //printf("test2: %i\n",gpio_num);
       if (gpio_num == REAR_BUMP){
 	//bumped rear, so stop and go forward
 	mc_stop();
