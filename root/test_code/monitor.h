@@ -20,4 +20,8 @@ const int read_size = 24;
 #define BUMP_MSG_REAR  "I bumped something to the rear.\n"
 #define BUF_LEN 256
 
+//prototypes
+void error(const char *msg);
+int send_and_receive(const char *msg);
+
 #endif
