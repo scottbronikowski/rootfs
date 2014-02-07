@@ -1,74 +1,3 @@
-vi /etc/wpa_supplicant.conf
-shutdown -r now
-ifup wlan0
-rm /var/run/wpa_supplicant/wlan0 
-ifup wlan0
-ping google.com
-ifdown wlan0
-ifup wlan0
-apt-get update
-sudo apt-get install python-pip  build-essential python-yaml cmake subversion wget python-setuptools mercurial git-core  install python-yaml libapr1-dev libaprutil1-dev libbz2-dev python-dev python-empy python-nose libgtest-dev python-paramiko libboost-all-dev liblog4cxx10-dev pkg-config libqt4-dev qt4-qmake
-sudo apt-get install python-pip  build-essential python-yaml cmake subversion wget python-setuptools mercurial git-core  python-yaml libapr1-dev libaprutil1-dev libbz2-dev python-dev python-empy python-nose libgtest-dev python-paramiko libboost-all-dev liblog4cxx10-dev pkg-config libqt4-dev qt4-qmake
-pip install rospkg rosdep rosinstall catkin-pkg wstool
-sudo rosdep init
-rosdep update
-mkdir -p ~/ros_core_ws
-cd ~/ros_core_ws
-wstool init src https://raw.github.com/gist/4129582/e8889c0fc3af2f95892190e0fabc2bd535208355/base.rosinstall
-./src/catkin/bin/catkin_make
-shutdown -h now
-ls
-. ./setup.sh
-exit
-ls
-cd ros_core_ws/
-ls
-./src/catkin/bin/catkin_make install
-setterm -rest
-setterm -reset
-mkdir ~/ros
-cd ~/ros
-rosws init . ~/ros_core_ws/install/
-roslocate info kdl > kdl.rosinstall
-ifup wlan0
-rm /var/run/wpa_supplicant/wlan0 
-ifup wlan0
-ifdown wlan0
-ifup wlan0
-roslocate info kdl > kdl.rosinstall
-rosws merge kdl
-rosws merge kdl.rosinstall 
-rosws update
-rosdep install kdl
-rosdep update
-rosdep install kdl
-rosws update
-ls
-. ./setup.sh
-rosdep install kdl
-sudo apt-get install vim
-. ./setup.sh
-rosdep install kdl
-. ./setup.sh
-sudo apt-get install vim
-rosdep install kdl
-rosmake kdl
-roslocate info bullet > bullet.rosinstall
-rosws merge bullet.rosinstall 
-rosdep install bullet
-rosws update
-rosdep kdl
-rosdep install kdl
-rosmake kdl
-roslocate info bullet > bullet.rosinstall
-rosws merge bullet.rosinstall
-roslocate info geometry > geometry.rosinstall
-rosws update
-ls
-vim geometry.rosinstall 
-rosws merge geometry.rosinstall 
-rosws update
-rosdep install geometry
 rosmake geometry
 ls
 rosws udpate
@@ -1997,4 +1926,75 @@ exit
 ps -ef | grep ping
 date
 ps -ef | grep no
+reboot
+ps -ef | grep ssh
+/etc/init.d/servo-control.sh start
+echo 1000 > /dev/pwm10
+echo 10000 > /dev/pwm10
+echo 15000 > /dev/pwm10
+/etc/init.d/monitor.sh start
+ls /etc/rc*
+update-rc.d
+cd /
+git reset --hard
+git pull
+ls /etc/rc*
+rm -f /etc/rc0.d/K0*
+ls /etc/rc0.d/
+rm -f /etc/rc0.d/S0*
+ls /etc/rc1.d/
+rm -f /etc/rc1.d/S0*
+rm -f /etc/rc1.d/K0*
+ls /etc/rc2.d/
+rm -f /etc/rc2.d/S0*
+ls /etc/rc3.d/
+rm -f /etc/rc3.d/S0*
+ls /etc/rc3.d/
+ls /etc/rc4.d/
+rm -f /etc/rc4.d/S0*
+ls /etc/rc4.d/
+ls /etc/rc5.d/
+rm -f /etc/rc5.d/S0*
+ls /etc/rc5.d/
+ls /etc/rc6.d/
+rm -f /etc/rc5.d/K0*
+rm -f /etc/rc5.d/S0*
+ls /etc/rc6.d/
+rm -f /etc/rc6.d/S0*
+rm -f /etc/rc6.d/K0*
+ls /etc/rc6.d/
+git status
+rm -f /etc/rcS.d/S0*
+rm -f /etc/init.d/.depend.*
+ls /etc/rc*
+cd /etc/init.d
+update-rc.d -f keepalive-ping.sh remove
+cd /
+git status
+git add -A
+git commit -m "removed keepalive-ping.sh from startup"
+git push
+cd /etc/rcS.d/
+touch S05keymap.sh
+chmod a+x S05keymap.sh 
+vi S05keymap.sh 
+reboot
+ls /etc/rc5.d
+ps -ef | grep ssh
+date
+ps -ef | grep moni
+ps -ef | grep noi
+cd /etc/init.d/
+update-rc.d keepalive-ping.sh defaults
+reboot
+cd /etc/init.d/
+update-rc.d -f keepalive-ping.sh remove
+/etc/init.d/keepalive-ping.sh start
+vi /etc/init.d/keepalive-ping.sh 
+ls ke*
+lla ../rcS.d/
+cd ../rcS.d/
+rm S05keymap.sh 
+ln -s ../init.d/keymap.sh S05keymap.sh
+lla
 reboot
