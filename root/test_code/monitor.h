@@ -16,5 +16,8 @@ const int port_no = 2222;
 const int move_time = 25000;
 const int read_size = 24;
 
+#define BUMP_MSG_FRONT "I bumped something to the front.\n"
+#define BUMP_MSG_REAR  "I bumped something to the rear.\n"
+#define BUF_LEN 256
 
 #endif
