@@ -1,1 +1,1 @@
-update-rc.d keepalive-ping.sh defaults 90
+update-rc.d keepalive-ping.sh defaults 23

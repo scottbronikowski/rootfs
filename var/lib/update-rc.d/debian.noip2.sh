@@ -1,1 +1,1 @@
-update-rc.d debian.noip2.sh defaults 30
+update-rc.d debian.noip2.sh defaults 23

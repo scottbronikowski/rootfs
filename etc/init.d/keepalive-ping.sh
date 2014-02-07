@@ -11,8 +11,7 @@
 
 start(){
     echo "Starting keep alive ping to pudue.edu"
-    ping -i 5 purdue.edu > /dev/null &
-
+    ping -i 5 purdue.edu > /dev/null
 }
 
 stop(){

@@ -1,9 +1,3 @@
-ls
-vim /etc/network/interfaces 
-vi /etc/network/interfaces 
-:q
-ls
-vim /etc/wpa_supplicant.conf
 vi /etc/wpa_supplicant.conf
 shutdown -r now
 ifup wlan0
@@ -1824,3 +1818,183 @@ exit
 emacs &
 ping google.com
 exit
+ls
+locate socket*
+locate *client*
+locate *client*.sc
+cd test_code/
+ls
+cd ..
+ls
+cd .
+cd /
+ls
+cd root/test_code/
+touch server.c
+ls
+rm server.c 
+touch client.c
+ls
+gcc -o test_client client.c
+./test_client seykhl.ecn.purdue.edu 2222
+ls
+cd ..
+ls
+updatedb
+locate socket-client.sc
+cd test_code/
+ls
+./test_client seykhl message
+./test_client seykhl.ecn.purdue.edu message
+./test_client seykhl.ecn.purdue.edu 2222
+./test_client seykhl.ecn.purdue.edu message
+./test_client seykhl.ecn.purdue.edu 2222
+./test_client seykhl.ecn.purdue.edu 2223
+./test_client seykhl.ecn.purdue.edu 2222
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+ls
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+ls
+cp bump_switch.cc monitor2.cc
+cp monitor.cc monitor_old.cc
+ls
+cp monitor2.cc monitor.cc
+rm monitor2.cc
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+./monitor 
+g++ -o monitor monitor.cc motor_control_functions.cc 
+/root/test_code/monitor 
+ps -ef | grep "ping"
+ps -ef | grep "[p]ing"
+ps -ef | grep "[p]ing -i 5 purdue.edu"
+exit
+emacs &
+cd /
+git status
+git add -A
+git commit -m "push before attempting to add client.c code into monitor.cc"
+git push
+git status
+git add -A
+git commit -m "part way through monitor.cc -- got to connection to server"
+git push
+git status
+git add -A
+git commit -m "monitor.cc only sending correctly once--going to try something else"
+git push
+ping purdue.edu
+git status
+git add -A
+git commit -m "demo version of monitor.cc"
+git push
+ping -i 5 purdue.edu
+git status
+git add -A
+git commit -m "removed bump_switch.sh from startup, added monitor.sh, keepalive-ping.sh to startup"
+"
+"
+git push
+exit
+date
+ping google.com
+ping -i 5 google.com
+ls
+ps -ef | grep ssh
+ping -i 5 google.com
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ping -i 5 google.com
+ps -ef
+kill -9 7894
+/etc/init.d/bump_switch.sh stop
+cat /etc/
+cat /etc/init.d/bump_switch.sh 
+ping -i 5 google.com > /dev/null
+ping -i 5 google.com > /dev/null &
+ps -ef | grep ping
+kill 7982
+ls
+reboot
+ps
+ps -ef | grep ping
+cd /etc
+ls rc*
+cd init.d/
+update-rc.d -f keepalive-ping.sh remove
+update-rc.d keepalive-ping.sh defaults 99
+update-rc.d -f time-update.sh remove
+update-rc.d time-update.sh defaults 98
+ls ../rc*
+update-rc.d -f debian.noip2.sh remove
+update-rc.d debian.noip2.sh defaults 97
+exit
+date
+ps -ef 
+/etc/init.d/keepalive-ping.sh start
+ps -ef | grep ping
+reboot
+cd /etc/init
+cd ../init.d
+ls ../rc*
+update-rc.d -f keepalive-ping.sh remove
+update-rc.d -f debian.noip2.sh remove
+update-rc.d -f time-update.sh remove
+update-rc.d time-update.sh defaults 25
+update-rc.d keepalive-ping.sh defaults 23
+update-rc.d debian.noip2.sh defaults 23
+nano keepalive-ping.sh 
+exit
+ps -ef | grep ping
+date
+ps -ef | grep no
+reboot
