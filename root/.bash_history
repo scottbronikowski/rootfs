@@ -1,25 +1,3 @@
-rosmake geometry
-ls
-rosws udpate
-rosws update
-rosdep install geometry
-rosws update
-rosmake geometry
-rospack profile
-rosdep install geometry
-rosws update
-vim .rosinstall
-ls
-vim geometry.rosinstall 
-rosmake update
-rosmake geometry
-ls
-. ./setup.sh
-rosdep install geometry
-rosmake geometry
-roslocate info irobot_create_2_1 > irobot_Create_2_1.rosinstall
-rosws merge irobot_Create_2_1.rosinstall 
-rosws update
 rosdep install irobot_create_2_1
 rosws update
 rosdep install irobot_create_2_1
@@ -1998,3 +1976,25 @@ rm S05keymap.sh
 ln -s ../init.d/keymap.sh S05keymap.sh
 lla
 reboot
+/etc/init.d/keepalive-ping.sh 
+/etc/init.d/keepalive-ping.sh start
+ps -ef | grep ping
+cd /
+git status
+git add -A
+git commit -m 
+git commit -m "commit before demo--keepalive-ping.sh NOT in startup"
+git push
+ps -ef | grep ssh
+ps -ef | grep ping
+reboot
+]
+hald
+halt
+daTE
+date
+emacs &
+date
+/etc/init.d/time-update.sh start
+emacs &
+exit
