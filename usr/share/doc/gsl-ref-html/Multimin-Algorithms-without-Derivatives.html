@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Multimin Algorithms without Derivatives - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Multidimensional-Minimization.html" title="Multidimensional Minimization">
+<link rel="prev" href="Multimin-Algorithms-with-Derivatives.html" title="Multimin Algorithms with Derivatives">
+<link rel="next" href="Multimin-Examples.html" title="Multimin Examples">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Multimin-Algorithms-without-Derivatives"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multimin-Examples.html">Multimin Examples</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Multimin-Algorithms-with-Derivatives.html">Multimin Algorithms with Derivatives</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Multidimensional-Minimization.html">Multidimensional Minimization</a>
+<hr>
+</div>
+
+<h3 class="section">36.8 Algorithms without Derivatives</h3>
+
+<p>The algorithms described in this section use only the value of the function
+at each evaluation point.
+
+<div class="defun">
+&mdash; Minimizer: <b>gsl_multimin_fminimizer_nmsimplex2</b><var><a name="index-gsl_005fmultimin_005ffminimizer_005fnmsimplex2-2554"></a></var><br>
+&mdash; Minimizer: <b>gsl_multimin_fminimizer_nmsimplex</b><var><a name="index-gsl_005fmultimin_005ffminimizer_005fnmsimplex-2555"></a></var><br>
+<blockquote><p><a name="index-Nelder_002dMead-simplex-algorithm-for-minimization-2556"></a><a name="index-simplex-algorithm_002c-minimization-2557"></a><a name="index-minimization_002c-simplex-algorithm-2558"></a>These methods use the Simplex algorithm of Nelder and Mead. 
+Starting from the initial vector <var>x</var> = p_0, the algorithm
+constructs an additional n vectors p_i
+using the step size vector <!-- {$s = \var{step\_size}$} -->
+s = <var>step_size</var> as follows:
+     These vectors form the n+1 vertices of a simplex in n
+dimensions.  On each iteration the algorithm uses simple geometrical
+transformations to update the vector corresponding to the highest
+function value.  The geometric transformations are reflection,
+reflection followed by expansion, contraction and multiple
+contraction.  Using these transformations the simplex moves through
+the space towards the minimum, where it contracts itself.
+
+        <p>After each iteration, the best vertex is returned.  Note, that due to
+the nature of the algorithm not every step improves the current
+best parameter vector.  Usually several iterations are required.
+
+        <p>The minimizer-specific characteristic size is calculated as the
+average distance from the geometrical center of the simplex to all its
+vertices.  This size can be used as a stopping criteria, as the
+simplex contracts itself near the minimum. The size is returned by the
+function <code>gsl_multimin_fminimizer_size</code>.
+
+        <p>The <code>nmsimplex2</code> version of this minimiser is a new O(N) operations
+implementation of the earlier O(N^2) operations <code>nmsimplex</code>
+minimiser.  It uses the same underlying algorithm, but the simplex
+updates are computed more efficiently for high-dimensional problems. 
+In addition, the size of simplex is calculated as the <span class="sc">rms</span>
+distance of each vertex from the center rather than the mean distance,
+allowing a linear update of this quantity on each step.  The memory usage is
+O(N^2) for both algorithms. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Minimizer: <b>gsl_multimin_fminimizer_nmsimplex2rand</b><var><a name="index-gsl_005fmultimin_005ffminimizer_005fnmsimplex2rand-2559"></a></var><br>
+<blockquote><p>This method is a variant of <code>nmsimplex2</code> which initialises the
+simplex around the starting point <var>x</var> using a randomly-oriented
+set of basis vectors instead of the fixed coordinate axes. The
+final dimensions of the simplex are scaled along the coordinate axes by the
+vector <var>step_size</var>.  The randomisation uses a simple deterministic
+generator so that repeated calls to <code>gsl_multimin_fminimizer_set</code> for
+a given solver object will vary the orientation in a well-defined way. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

@@ -1,0 +1,245 @@
+<html lang="en">
+<head>
+<title>Multimin Examples - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Multidimensional-Minimization.html" title="Multidimensional Minimization">
+<link rel="prev" href="Multimin-Algorithms-without-Derivatives.html" title="Multimin Algorithms without Derivatives">
+<link rel="next" href="Multimin-References-and-Further-Reading.html" title="Multimin References and Further Reading">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Multimin-Examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multimin-References-and-Further-Reading.html">Multimin References and Further Reading</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Multimin-Algorithms-without-Derivatives.html">Multimin Algorithms without Derivatives</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Multidimensional-Minimization.html">Multidimensional Minimization</a>
+<hr>
+</div>
+
+<h3 class="section">36.9 Examples</h3>
+
+<p>This example program finds the minimum of the paraboloid function
+defined earlier.  The location of the minimum is offset from the origin
+in x and y, and the function value at the minimum is
+non-zero. The main program is given below, it requires the example
+function given earlier in this chapter.
+
+<pre class="smallexample"><pre class="verbatim">     int
+     main (void)
+     {
+       size_t iter = 0;
+       int status;
+     
+       const gsl_multimin_fdfminimizer_type *T;
+       gsl_multimin_fdfminimizer *s;
+     
+       /* Position of the minimum (1,2), scale factors 
+          10,20, height 30. */
+       double par[5] = { 1.0, 2.0, 10.0, 20.0, 30.0 };
+     
+       gsl_vector *x;
+       gsl_multimin_function_fdf my_func;
+     
+       my_func.n = 2;
+       my_func.f = my_f;
+       my_func.df = my_df;
+       my_func.fdf = my_fdf;
+       my_func.params = par;
+     
+       /* Starting point, x = (5,7) */
+       x = gsl_vector_alloc (2);
+       gsl_vector_set (x, 0, 5.0);
+       gsl_vector_set (x, 1, 7.0);
+     
+       T = gsl_multimin_fdfminimizer_conjugate_fr;
+       s = gsl_multimin_fdfminimizer_alloc (T, 2);
+     
+       gsl_multimin_fdfminimizer_set (s, &amp;my_func, x, 0.01, 1e-4);
+     
+       do
+         {
+           iter++;
+           status = gsl_multimin_fdfminimizer_iterate (s);
+     
+           if (status)
+             break;
+     
+           status = gsl_multimin_test_gradient (s->gradient, 1e-3);
+     
+           if (status == GSL_SUCCESS)
+             printf ("Minimum found at:\n");
+     
+           printf ("%5d %.5f %.5f %10.5f\n", iter,
+                   gsl_vector_get (s->x, 0), 
+                   gsl_vector_get (s->x, 1), 
+                   s->f);
+     
+         }
+       while (status == GSL_CONTINUE &amp;&amp; iter &lt; 100);
+     
+       gsl_multimin_fdfminimizer_free (s);
+       gsl_vector_free (x);
+     
+       return 0;
+     }
+</pre></pre>
+   <p class="noindent">The initial step-size is chosen as 0.01, a conservative estimate in this
+case, and the line minimization parameter is set at 0.0001.  The program
+terminates when the norm of the gradient has been reduced below
+0.001. The output of the program is shown below,
+
+<pre class="example"><pre class="verbatim">              x       y         f
+         1 4.99629 6.99072  687.84780
+         2 4.98886 6.97215  683.55456
+         3 4.97400 6.93501  675.01278
+         4 4.94429 6.86073  658.10798
+         5 4.88487 6.71217  625.01340
+         6 4.76602 6.41506  561.68440
+         7 4.52833 5.82083  446.46694
+         8 4.05295 4.63238  261.79422
+         9 3.10219 2.25548   75.49762
+        10 2.85185 1.62963   67.03704
+        11 2.19088 1.76182   45.31640
+        12 0.86892 2.02622   30.18555
+     Minimum found at:
+        13 1.00000 2.00000   30.00000
+</pre></pre>
+   <p class="noindent">Note that the algorithm gradually increases the step size as it
+successfully moves downhill, as can be seen by plotting the successive
+points.
+
+<p class="noindent">The conjugate gradient algorithm finds the minimum on its second
+direction because the function is purely quadratic. Additional
+iterations would be needed for a more complicated function.
+
+   <p>Here is another example using the Nelder-Mead Simplex algorithm to
+minimize the same example object function, as above.
+
+<pre class="smallexample"><pre class="verbatim">     int 
+     main(void)
+     {
+       double par[5] = {1.0, 2.0, 10.0, 20.0, 30.0};
+     
+       const gsl_multimin_fminimizer_type *T = 
+         gsl_multimin_fminimizer_nmsimplex2;
+       gsl_multimin_fminimizer *s = NULL;
+       gsl_vector *ss, *x;
+       gsl_multimin_function minex_func;
+     
+       size_t iter = 0;
+       int status;
+       double size;
+     
+       /* Starting point */
+       x = gsl_vector_alloc (2);
+       gsl_vector_set (x, 0, 5.0);
+       gsl_vector_set (x, 1, 7.0);
+     
+       /* Set initial step sizes to 1 */
+       ss = gsl_vector_alloc (2);
+       gsl_vector_set_all (ss, 1.0);
+     
+       /* Initialize method and iterate */
+       minex_func.n = 2;
+       minex_func.f = my_f;
+       minex_func.params = par;
+     
+       s = gsl_multimin_fminimizer_alloc (T, 2);
+       gsl_multimin_fminimizer_set (s, &amp;minex_func, x, ss);
+     
+       do
+         {
+           iter++;
+           status = gsl_multimin_fminimizer_iterate(s);
+           
+           if (status) 
+             break;
+     
+           size = gsl_multimin_fminimizer_size (s);
+           status = gsl_multimin_test_size (size, 1e-2);
+     
+           if (status == GSL_SUCCESS)
+             {
+               printf ("converged to minimum at\n");
+             }
+     
+           printf ("%5d %10.3e %10.3e f() = %7.3f size = %.3f\n", 
+                   iter,
+                   gsl_vector_get (s->x, 0), 
+                   gsl_vector_get (s->x, 1), 
+                   s->fval, size);
+         }
+       while (status == GSL_CONTINUE &amp;&amp; iter &lt; 100);
+       
+       gsl_vector_free(x);
+       gsl_vector_free(ss);
+       gsl_multimin_fminimizer_free (s);
+     
+       return status;
+     }
+</pre></pre>
+   <p class="noindent">The minimum search stops when the Simplex size drops to 0.01. The output is
+shown below.
+
+<pre class="example"><pre class="verbatim">         1  6.500e+00  5.000e+00 f() = 512.500 size = 1.130
+         2  5.250e+00  4.000e+00 f() = 290.625 size = 1.409
+         3  5.250e+00  4.000e+00 f() = 290.625 size = 1.409
+         4  5.500e+00  1.000e+00 f() = 252.500 size = 1.409
+         5  2.625e+00  3.500e+00 f() = 101.406 size = 1.847
+         6  2.625e+00  3.500e+00 f() = 101.406 size = 1.847
+         7  0.000e+00  3.000e+00 f() =  60.000 size = 1.847
+         8  2.094e+00  1.875e+00 f() =  42.275 size = 1.321
+         9  2.578e-01  1.906e+00 f() =  35.684 size = 1.069
+        10  5.879e-01  2.445e+00 f() =  35.664 size = 0.841
+        11  1.258e+00  2.025e+00 f() =  30.680 size = 0.476
+        12  1.258e+00  2.025e+00 f() =  30.680 size = 0.367
+        13  1.093e+00  1.849e+00 f() =  30.539 size = 0.300
+        14  8.830e-01  2.004e+00 f() =  30.137 size = 0.172
+        15  8.830e-01  2.004e+00 f() =  30.137 size = 0.126
+        16  9.582e-01  2.060e+00 f() =  30.090 size = 0.106
+        17  1.022e+00  2.004e+00 f() =  30.005 size = 0.063
+        18  1.022e+00  2.004e+00 f() =  30.005 size = 0.043
+        19  1.022e+00  2.004e+00 f() =  30.005 size = 0.043
+        20  1.022e+00  2.004e+00 f() =  30.005 size = 0.027
+        21  1.022e+00  2.004e+00 f() =  30.005 size = 0.022
+        22  9.920e-01  1.997e+00 f() =  30.001 size = 0.016
+        23  9.920e-01  1.997e+00 f() =  30.001 size = 0.013
+     converged to minimum at
+        24  9.920e-01  1.997e+00 f() =  30.001 size = 0.008
+</pre></pre>
+   <p class="noindent">The simplex size first increases, while the simplex moves towards the
+minimum. After a while the size begins to decrease as the simplex
+contracts around the minimum.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

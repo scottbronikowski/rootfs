@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>QAWF adaptive integration for Fourier integrals - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Numerical-Integration.html" title="Numerical Integration">
+<link rel="prev" href="QAWO-adaptive-integration-for-oscillatory-functions.html" title="QAWO adaptive integration for oscillatory functions">
+<link rel="next" href="CQUAD-doubly_002dadaptive-integration.html" title="CQUAD doubly-adaptive integration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="QAWF-adaptive-integration-for-Fourier-integrals"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="CQUAD-doubly_002dadaptive-integration.html">CQUAD doubly-adaptive integration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="QAWO-adaptive-integration-for-oscillatory-functions.html">QAWO adaptive integration for oscillatory functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Numerical-Integration.html">Numerical Integration</a>
+<hr>
+</div>
+
+<h3 class="section">17.10 QAWF adaptive integration for Fourier integrals</h3>
+
+<p><a name="index-QAWF-quadrature-algorithm-1561"></a><a name="index-Fourier-integrals_002c-numerical-1562"></a>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_integration_qawf</b> (<var>gsl_function * f, const double a, const double epsabs, const size_t limit, gsl_integration_workspace * workspace, gsl_integration_workspace * cycle_workspace, gsl_integration_qawo_table * wf, double * result, double * abserr</var>)<var><a name="index-gsl_005fintegration_005fqawf-1563"></a></var><br>
+<blockquote>
+        <p>This function attempts to compute a Fourier integral of the function
+<var>f</var> over the semi-infinite interval [a,+\infty).
+
+        <p>The parameter \omega and choice of \sin or \cos is
+taken from the table <var>wf</var> (the length <var>L</var> can take any value,
+since it is overridden by this function to a value appropriate for the
+Fourier integration).  The integral is computed using the QAWO algorithm
+over each of the subintervals,
+     where
+<!-- {$c = (2 \,\hbox{floor}(|\omega|) + 1) \pi/|\omega|$} -->
+c = (2 floor(|\omega|) + 1) \pi/|\omega|.  The width c is
+chosen to cover an odd number of periods so that the contributions from
+the intervals alternate in sign and are monotonically decreasing when
+<var>f</var> is positive and monotonically decreasing.  The sum of this
+sequence of contributions is accelerated using the epsilon-algorithm.
+
+        <p>This function works to an overall absolute tolerance of
+<var>abserr</var>.  The following strategy is used: on each interval
+C_k the algorithm tries to achieve the tolerance
+     where
+<!-- {$u_k = (1 - p)p^{k-1}$} -->
+u_k = (1 - p)p^{k-1} and p = 9/10. 
+The sum of the geometric series of contributions from each interval
+gives an overall tolerance of <var>abserr</var>.
+
+        <p>If the integration of a subinterval leads to difficulties then the
+accuracy requirement for subsequent intervals is relaxed,
+     where E_k is the estimated error on the interval C_k.
+
+        <p>The subintervals and their results are stored in the memory provided by
+<var>workspace</var>.  The maximum number of subintervals is given by
+<var>limit</var>, which may not exceed the allocated size of the workspace. 
+The integration over each subinterval uses the memory provided by
+<var>cycle_workspace</var> as workspace for the QAWO algorithm.
+
+        </blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

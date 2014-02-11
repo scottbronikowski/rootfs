@@ -1,0 +1,281 @@
+<html lang="en">
+<head>
+<title>Fitting Examples - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Least_002dSquares-Fitting.html" title="Least-Squares Fitting">
+<link rel="prev" href="Multi_002dparameter-fitting.html" title="Multi-parameter fitting">
+<link rel="next" href="Fitting-References-and-Further-Reading.html" title="Fitting References and Further Reading">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Fitting-Examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fitting-References-and-Further-Reading.html">Fitting References and Further Reading</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Multi_002dparameter-fitting.html">Multi-parameter fitting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Least_002dSquares-Fitting.html">Least-Squares Fitting</a>
+<hr>
+</div>
+
+<h3 class="section">37.5 Examples</h3>
+
+<p>The following program computes a least squares straight-line fit to a
+simple dataset, and outputs the best-fit line and its
+associated one standard-deviation error bars.
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;gsl/gsl_fit.h>
+     
+     int
+     main (void)
+     {
+       int i, n = 4;
+       double x[4] = { 1970, 1980, 1990, 2000 };
+       double y[4] = {   12,   11,   14,   13 };
+       double w[4] = {  0.1,  0.2,  0.3,  0.4 };
+     
+       double c0, c1, cov00, cov01, cov11, chisq;
+     
+       gsl_fit_wlinear (x, 1, w, 1, y, 1, n, 
+                        &amp;c0, &amp;c1, &amp;cov00, &amp;cov01, &amp;cov11, 
+                        &amp;chisq);
+     
+       printf ("# best fit: Y = %g + %g X\n", c0, c1);
+       printf ("# covariance matrix:\n");
+       printf ("# [ %g, %g\n#   %g, %g]\n", 
+               cov00, cov01, cov01, cov11);
+       printf ("# chisq = %g\n", chisq);
+     
+       for (i = 0; i &lt; n; i++)
+         printf ("data: %g %g %g\n", 
+                        x[i], y[i], 1/sqrt(w[i]));
+     
+       printf ("\n");
+     
+       for (i = -30; i &lt; 130; i++)
+         {
+           double xf = x[0] + (i/100.0) * (x[n-1] - x[0]);
+           double yf, yf_err;
+     
+           gsl_fit_linear_est (xf, 
+                               c0, c1, 
+                               cov00, cov01, cov11, 
+                               &amp;yf, &amp;yf_err);
+     
+           printf ("fit: %g %g\n", xf, yf);
+           printf ("hi : %g %g\n", xf, yf + yf_err);
+           printf ("lo : %g %g\n", xf, yf - yf_err);
+         }
+       return 0;
+     }
+</pre></pre>
+   <p class="noindent">The following commands extract the data from the output of the program
+and display it using the <span class="sc">gnu</span> plotutils <code>graph</code> utility,
+
+<pre class="example">     $ ./demo &gt; tmp
+     $ more tmp
+     # best fit: Y = -106.6 + 0.06 X
+     # covariance matrix:
+     # [ 39602, -19.9
+     #   -19.9, 0.01]
+     # chisq = 0.8
+     
+     $ for n in data fit hi lo ;
+        do
+          grep "^$n" tmp | cut -d: -f2 &gt; $n ;
+        done
+     $ graph -T X -X x -Y y -y 0 20 -m 0 -S 2 -Ie data
+          -S 0 -I a -m 1 fit -m 2 hi -m 2 lo
+</pre>
+   <p>The next program performs a quadratic fit y = c_0 + c_1 x + c_2
+x^2 to a weighted dataset using the generalised linear fitting function
+<code>gsl_multifit_wlinear</code>.  The model matrix X for a quadratic
+fit is given by,
+where the column of ones corresponds to the constant term c_0. 
+The two remaining columns corresponds to the terms c_1 x and
+c_2 x^2.
+
+   <p>The program reads <var>n</var> lines of data in the format (<var>x</var>, <var>y</var>,
+<var>err</var>) where <var>err</var> is the error (standard deviation) in the
+value <var>y</var>.
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;gsl/gsl_multifit.h>
+     
+     int
+     main (int argc, char **argv)
+     {
+       int i, n;
+       double xi, yi, ei, chisq;
+       gsl_matrix *X, *cov;
+       gsl_vector *y, *w, *c;
+     
+       if (argc != 2)
+         {
+           fprintf (stderr,"usage: fit n &lt; data\n");
+           exit (-1);
+         }
+     
+       n = atoi (argv[1]);
+     
+       X = gsl_matrix_alloc (n, 3);
+       y = gsl_vector_alloc (n);
+       w = gsl_vector_alloc (n);
+     
+       c = gsl_vector_alloc (3);
+       cov = gsl_matrix_alloc (3, 3);
+     
+       for (i = 0; i &lt; n; i++)
+         {
+           int count = fscanf (stdin, "%lg %lg %lg",
+                               &amp;xi, &amp;yi, &amp;ei);
+     
+           if (count != 3)
+             {
+               fprintf (stderr, "error reading file\n");
+               exit (-1);
+             }
+     
+           printf ("%g %g +/- %g\n", xi, yi, ei);
+           
+           gsl_matrix_set (X, i, 0, 1.0);
+           gsl_matrix_set (X, i, 1, xi);
+           gsl_matrix_set (X, i, 2, xi*xi);
+           
+           gsl_vector_set (y, i, yi);
+           gsl_vector_set (w, i, 1.0/(ei*ei));
+         }
+     
+       {
+         gsl_multifit_linear_workspace * work 
+           = gsl_multifit_linear_alloc (n, 3);
+         gsl_multifit_wlinear (X, w, y, c, cov,
+                               &amp;chisq, work);
+         gsl_multifit_linear_free (work);
+       }
+     
+     #define C(i) (gsl_vector_get(c,(i)))
+     #define COV(i,j) (gsl_matrix_get(cov,(i),(j)))
+     
+       {
+         printf ("# best fit: Y = %g + %g X + %g X^2\n", 
+                 C(0), C(1), C(2));
+     
+         printf ("# covariance matrix:\n");
+         printf ("[ %+.5e, %+.5e, %+.5e  \n",
+                    COV(0,0), COV(0,1), COV(0,2));
+         printf ("  %+.5e, %+.5e, %+.5e  \n", 
+                    COV(1,0), COV(1,1), COV(1,2));
+         printf ("  %+.5e, %+.5e, %+.5e ]\n", 
+                    COV(2,0), COV(2,1), COV(2,2));
+         printf ("# chisq = %g\n", chisq);
+       }
+     
+       gsl_matrix_free (X);
+       gsl_vector_free (y);
+       gsl_vector_free (w);
+       gsl_vector_free (c);
+       gsl_matrix_free (cov);
+     
+       return 0;
+     }
+</pre></pre>
+   <p class="noindent">A suitable set of data for fitting can be generated using the following
+program.  It outputs a set of points with gaussian errors from the curve
+y = e^x in the region 0 &lt; x &lt; 2.
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;math.h>
+     #include &lt;gsl/gsl_randist.h>
+     
+     int
+     main (void)
+     {
+       double x;
+       const gsl_rng_type * T;
+       gsl_rng * r;
+       
+       gsl_rng_env_setup ();
+       
+       T = gsl_rng_default;
+       r = gsl_rng_alloc (T);
+     
+       for (x = 0.1; x &lt; 2; x+= 0.1)
+         {
+           double y0 = exp (x);
+           double sigma = 0.1 * y0;
+           double dy = gsl_ran_gaussian (r, sigma);
+     
+           printf ("%g %g %g\n", x, y0 + dy, sigma);
+         }
+     
+       gsl_rng_free(r);
+     
+       return 0;
+     }
+</pre></pre>
+   <p class="noindent">The data can be prepared by running the resulting executable program,
+
+<pre class="example">     $ ./generate &gt; exp.dat
+     $ more exp.dat
+     0.1 0.97935 0.110517
+     0.2 1.3359 0.12214
+     0.3 1.52573 0.134986
+     0.4 1.60318 0.149182
+     0.5 1.81731 0.164872
+     0.6 1.92475 0.182212
+     ....
+</pre>
+   <p class="noindent">To fit the data use the previous program, with the number of data points
+given as the first argument.  In this case there are 19 data points.
+
+<pre class="example">     $ ./fit 19 &lt; exp.dat
+     0.1 0.97935 +/- 0.110517
+     0.2 1.3359 +/- 0.12214
+     ...
+     # best fit: Y = 1.02318 + 0.956201 X + 0.876796 X^2
+     # covariance matrix:
+     [ +1.25612e-02, -3.64387e-02, +1.94389e-02
+       -3.64387e-02, +1.42339e-01, -8.48761e-02
+       +1.94389e-02, -8.48761e-02, +5.60243e-02 ]
+     # chisq = 23.0987
+</pre>
+   <p class="noindent">The parameters of the quadratic fit match the coefficients of the
+expansion of e^x, taking into account the errors on the
+parameters and the O(x^3) difference between the exponential and
+quadratic functions for the larger values of x.  The errors on
+the parameters are given by the square-root of the corresponding
+diagonal elements of the covariance matrix.  The chi-squared per degree
+of freedom is 1.4, indicating a reasonable fit to the data.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "upgrade" ]
+then
+    # remove old inetd.conf entries and disable current ones
+    if [ -x "/usr/sbin/update-inetd" ]; then
+	update-inetd --remove "^391002/1-2.*"
+	update-inetd --disable "^sgi_fam/1-2.*"
+    fi
+fi
+
+

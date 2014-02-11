@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>Minimization Overview - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="One-dimensional-Minimization.html" title="One dimensional Minimization">
+<link rel="next" href="Minimization-Caveats.html" title="Minimization Caveats">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Minimization-Overview"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Minimization-Caveats.html">Minimization Caveats</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="One-dimensional-Minimization.html">One dimensional Minimization</a>
+<hr>
+</div>
+
+<h3 class="section">34.1 Overview</h3>
+
+<p><a name="index-minimization_002c-overview-2433"></a>
+The minimization algorithms begin with a bounded region known to contain
+a minimum.  The region is described by a lower bound a and an
+upper bound b, with an estimate of the location of the minimum
+x.
+
+<p class="noindent">The value of the function at x must be less than the value of the
+function at the ends of the interval,
+This condition guarantees that a minimum is contained somewhere within
+the interval.  On each iteration a new point x' is selected using
+one of the available algorithms.  If the new point is a better estimate
+of the minimum, i.e. where f(x') &lt; f(x), then the current
+estimate of the minimum x is updated.  The new point also allows
+the size of the bounded interval to be reduced, by choosing the most
+compact set of points which satisfies the constraint f(a) &gt; f(x) &lt;
+f(b).  The interval is reduced until it encloses the true minimum to a
+desired tolerance.  This provides a best estimate of the location of the
+minimum and a rigorous error estimate.
+
+   <p>Several bracketing algorithms are available within a single framework. 
+The user provides a high-level driver for the algorithm, and the
+library provides the individual functions necessary for each of the
+steps.  There are three main phases of the iteration.  The steps are,
+
+     <ul>
+<li>initialize minimizer state, <var>s</var>, for algorithm <var>T</var>
+
+     <li>update <var>s</var> using the iteration <var>T</var>
+
+     <li>test <var>s</var> for convergence, and repeat iteration if necessary
+</ul>
+
+<p class="noindent">The state for the minimizers is held in a <code>gsl_min_fminimizer</code>
+struct.  The updating procedure uses only function evaluations (not
+derivatives).
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

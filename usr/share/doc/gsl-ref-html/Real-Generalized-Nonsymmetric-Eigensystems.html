@@ -1,0 +1,181 @@
+<html lang="en">
+<head>
+<title>Real Generalized Nonsymmetric Eigensystems - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Eigensystems.html" title="Eigensystems">
+<link rel="prev" href="Complex-Generalized-Hermitian_002dDefinite-Eigensystems.html" title="Complex Generalized Hermitian-Definite Eigensystems">
+<link rel="next" href="Sorting-Eigenvalues-and-Eigenvectors.html" title="Sorting Eigenvalues and Eigenvectors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Real-Generalized-Nonsymmetric-Eigensystems"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sorting-Eigenvalues-and-Eigenvectors.html">Sorting Eigenvalues and Eigenvectors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Complex-Generalized-Hermitian_002dDefinite-Eigensystems.html">Complex Generalized Hermitian-Definite Eigensystems</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Eigensystems.html">Eigensystems</a>
+<hr>
+</div>
+
+<h3 class="section">15.6 Real Generalized Nonsymmetric Eigensystems</h3>
+
+<p><a name="index-generalized-eigensystems-1449"></a>
+Given two square matrices (A, B), the generalized
+nonsymmetric eigenvalue problem is to find eigenvalues \lambda and
+eigenvectors x such that
+We may also define the problem as finding eigenvalues \mu and
+eigenvectors y such that
+Note that these two problems are equivalent (with \lambda = 1/\mu)
+if neither \lambda nor \mu is zero. If say, \lambda
+is zero, then it is still a well defined eigenproblem, but its alternate
+problem involving \mu is not. Therefore, to allow for zero
+(and infinite) eigenvalues, the problem which is actually solved is
+The eigensolver routines below will return two values \alpha
+and \beta and leave it to the user to perform the divisions
+\lambda = \alpha / \beta and \mu = \beta / \alpha.
+
+   <p>If the determinant of the matrix pencil A - \lambda B is zero
+for all \lambda, the problem is said to be singular; otherwise
+it is called regular.  Singularity normally leads to some
+\alpha = \beta = 0 which means the eigenproblem is ill-conditioned
+and generally does not have well defined eigenvalue solutions. The
+routines below are intended for regular matrix pencils and could yield
+unpredictable results when applied to singular pencils.
+
+   <p>The solution of the real generalized nonsymmetric eigensystem problem for a
+matrix pair (A, B) involves computing the generalized Schur
+decomposition
+where Q and Z are orthogonal matrices of left and right
+Schur vectors respectively, and (S, T) is the generalized Schur
+form whose diagonal elements give the \alpha and \beta
+values. The algorithm used is the QZ method due to Moler and Stewart
+(see references).
+
+<div class="defun">
+&mdash; Function: gsl_eigen_gen_workspace * <b>gsl_eigen_gen_alloc</b> (<var>const size_t n</var>)<var><a name="index-gsl_005feigen_005fgen_005falloc-1450"></a></var><br>
+<blockquote><p><a name="index-gsl_005feigen_005fgen_005fworkspace-1451"></a>This function allocates a workspace for computing eigenvalues of
+<var>n</var>-by-<var>n</var> real generalized nonsymmetric eigensystems. The
+size of the workspace is O(n). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_eigen_gen_free</b> (<var>gsl_eigen_gen_workspace * w</var>)<var><a name="index-gsl_005feigen_005fgen_005ffree-1452"></a></var><br>
+<blockquote><p>This function frees the memory associated with the workspace <var>w</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_eigen_gen_params</b> (<var>const int compute_s, const int compute_t, const int balance, gsl_eigen_gen_workspace * w</var>)<var><a name="index-gsl_005feigen_005fgen_005fparams-1453"></a></var><br>
+<blockquote><p>This function sets some parameters which determine how the eigenvalue
+problem is solved in subsequent calls to <code>gsl_eigen_gen</code>.
+
+        <p>If <var>compute_s</var> is set to 1, the full Schur form S will be
+computed by <code>gsl_eigen_gen</code>. If it is set to 0,
+S will not be computed (this is the default setting). S
+is a quasi upper triangular matrix with 1-by-1 and 2-by-2 blocks
+on its diagonal. 1-by-1 blocks correspond to real eigenvalues, and
+2-by-2 blocks correspond to complex eigenvalues.
+
+        <p>If <var>compute_t</var> is set to 1, the full Schur form T will be
+computed by <code>gsl_eigen_gen</code>. If it is set to 0,
+T will not be computed (this is the default setting). T
+is an upper triangular matrix with non-negative elements on its diagonal. 
+Any 2-by-2 blocks in S will correspond to a 2-by-2 diagonal
+block in T.
+
+        <p>The <var>balance</var> parameter is currently ignored, since generalized
+balancing is not yet implemented. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_eigen_gen</b> (<var>gsl_matrix * A, gsl_matrix * B, gsl_vector_complex * alpha, gsl_vector * beta, gsl_eigen_gen_workspace * w</var>)<var><a name="index-gsl_005feigen_005fgen-1454"></a></var><br>
+<blockquote><p>This function computes the eigenvalues of the real generalized nonsymmetric
+matrix pair (<var>A</var>, <var>B</var>), and stores them as pairs in
+(<var>alpha</var>, <var>beta</var>), where <var>alpha</var> is complex and <var>beta</var> is
+real. If \beta_i is non-zero, then
+\lambda = \alpha_i / \beta_i is an eigenvalue. Likewise,
+if \alpha_i is non-zero, then
+\mu = \beta_i / \alpha_i is an eigenvalue of the alternate
+problem \mu A y = B y. The elements of <var>beta</var> are normalized
+to be non-negative.
+
+        <p>If S is desired, it is stored in <var>A</var> on output. If T
+is desired, it is stored in <var>B</var> on output. The ordering of
+eigenvalues in (<var>alpha</var>, <var>beta</var>) follows the ordering
+of the diagonal blocks in the Schur forms S and T. In rare
+cases, this function may fail to find all eigenvalues. If this occurs, an
+error code is returned. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_eigen_gen_QZ</b> (<var>gsl_matrix * A, gsl_matrix * B, gsl_vector_complex * alpha, gsl_vector * beta, gsl_matrix * Q, gsl_matrix * Z, gsl_eigen_gen_workspace * w</var>)<var><a name="index-gsl_005feigen_005fgen_005fQZ-1455"></a></var><br>
+<blockquote><p>This function is identical to <code>gsl_eigen_gen</code> except that it also
+computes the left and right Schur vectors and stores them into <var>Q</var>
+and <var>Z</var> respectively. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_eigen_genv_workspace * <b>gsl_eigen_genv_alloc</b> (<var>const size_t n</var>)<var><a name="index-gsl_005feigen_005fgenv_005falloc-1456"></a></var><br>
+<blockquote><p><a name="index-gsl_005feigen_005fgenv_005fworkspace-1457"></a>This function allocates a workspace for computing eigenvalues and
+eigenvectors of <var>n</var>-by-<var>n</var> real generalized nonsymmetric
+eigensystems. The size of the workspace is O(7n). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_eigen_genv_free</b> (<var>gsl_eigen_genv_workspace * w</var>)<var><a name="index-gsl_005feigen_005fgenv_005ffree-1458"></a></var><br>
+<blockquote><p>This function frees the memory associated with the workspace <var>w</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_eigen_genv</b> (<var>gsl_matrix * A, gsl_matrix * B, gsl_vector_complex * alpha, gsl_vector * beta, gsl_matrix_complex * evec, gsl_eigen_genv_workspace * w</var>)<var><a name="index-gsl_005feigen_005fgenv-1459"></a></var><br>
+<blockquote><p>This function computes eigenvalues and right eigenvectors of the
+<var>n</var>-by-<var>n</var> real generalized nonsymmetric matrix pair
+(<var>A</var>, <var>B</var>). The eigenvalues are stored in (<var>alpha</var>, <var>beta</var>)
+and the eigenvectors are stored in <var>evec</var>. It first calls
+<code>gsl_eigen_gen</code> to compute the eigenvalues, Schur forms, and
+Schur vectors. Then it finds eigenvectors of the Schur forms and
+backtransforms them using the Schur vectors. The Schur vectors are
+destroyed in the process, but can be saved by using
+<code>gsl_eigen_genv_QZ</code>. The computed eigenvectors are normalized
+to have unit magnitude. On output, (<var>A</var>, <var>B</var>) contains
+the generalized Schur form (S, T). If <code>gsl_eigen_gen</code>
+fails, no eigenvectors are computed, and an error code is returned. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_eigen_genv_QZ</b> (<var>gsl_matrix * A, gsl_matrix * B, gsl_vector_complex * alpha, gsl_vector * beta, gsl_matrix_complex * evec, gsl_matrix * Q, gsl_matrix * Z, gsl_eigen_genv_workspace * w</var>)<var><a name="index-gsl_005feigen_005fgenv_005fQZ-1460"></a></var><br>
+<blockquote><p>This function is identical to <code>gsl_eigen_genv</code> except that it also
+computes the left and right Schur vectors and stores them into <var>Q</var>
+and <var>Z</var> respectively. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

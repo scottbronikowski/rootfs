@@ -1,0 +1,192 @@
+<html lang="en">
+<head>
+<title>QR Decomposition - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Linear-Algebra.html" title="Linear Algebra">
+<link rel="prev" href="LU-Decomposition.html" title="LU Decomposition">
+<link rel="next" href="QR-Decomposition-with-Column-Pivoting.html" title="QR Decomposition with Column Pivoting">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="QR-Decomposition"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="QR-Decomposition-with-Column-Pivoting.html">QR Decomposition with Column Pivoting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="LU-Decomposition.html">LU Decomposition</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Linear-Algebra.html">Linear Algebra</a>
+<hr>
+</div>
+
+<h3 class="section">14.2 QR Decomposition</h3>
+
+<p><a name="index-QR-decomposition-1312"></a>
+A general rectangular M-by-N matrix A has a
+QR decomposition into the product of an orthogonal
+M-by-M square matrix Q (where Q^T Q = I) and
+an M-by-N right-triangular matrix R,
+This decomposition can be used to convert the linear system A x =
+b into the triangular system R x = Q^T b, which can be solved by
+back-substitution. Another use of the QR decomposition is to
+compute an orthonormal basis for a set of vectors. The first N
+columns of Q form an orthonormal basis for the range of A,
+ran(A), when A has full column rank.
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_decomp</b> (<var>gsl_matrix * A, gsl_vector * tau</var>)<var><a name="index-gsl_005flinalg_005fQR_005fdecomp-1313"></a></var><br>
+<blockquote><p>This function factorizes the M-by-N matrix <var>A</var> into
+the QR decomposition A = Q R.  On output the diagonal and
+upper triangular part of the input matrix contain the matrix
+R. The vector <var>tau</var> and the columns of the lower triangular
+part of the matrix <var>A</var> contain the Householder coefficients and
+Householder vectors which encode the orthogonal matrix <var>Q</var>.  The
+vector <var>tau</var> must be of length k=\min(M,N). The matrix
+Q is related to these components by, Q = Q_k ... Q_2 Q_1
+where Q_i = I - \tau_i v_i v_i^T and v_i is the
+Householder vector v_i =
+(0,...,1,A(i+1,i),A(i+2,i),...,A(m,i)). This is the same storage scheme
+as used by <span class="sc">lapack</span>.
+
+        <p>The algorithm used to perform the decomposition is Householder QR (Golub
+&amp; Van Loan, <cite>Matrix Computations</cite>, Algorithm 5.2.1). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_solve</b> (<var>const gsl_matrix * QR, const gsl_vector * tau, const gsl_vector * b, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fQR_005fsolve-1314"></a></var><br>
+<blockquote><p>This function solves the square system A x = b using the QR
+decomposition of A held in (<var>QR</var>, <var>tau</var>) which must
+have been computed previously with <code>gsl_linalg_QR_decomp</code>. 
+The least-squares solution for
+rectangular systems can be found using <code>gsl_linalg_QR_lssolve</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_svx</b> (<var>const gsl_matrix * QR, const gsl_vector * tau, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fQR_005fsvx-1315"></a></var><br>
+<blockquote><p>This function solves the square system A x = b in-place using
+the QR decomposition of A held in (<var>QR</var>,<var>tau</var>)
+which must have been computed previously by
+<code>gsl_linalg_QR_decomp</code>.  On input <var>x</var> should contain the
+right-hand side b, which is replaced by the solution on output. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_lssolve</b> (<var>const gsl_matrix * QR, const gsl_vector * tau, const gsl_vector * b, gsl_vector * x, gsl_vector * residual</var>)<var><a name="index-gsl_005flinalg_005fQR_005flssolve-1316"></a></var><br>
+<blockquote><p>This function finds the least squares solution to the overdetermined
+system A x = b where the matrix <var>A</var> has more rows than
+columns.  The least squares solution minimizes the Euclidean norm of the
+residual, ||Ax - b||.The routine requires as input
+the QR decomposition
+of A into (<var>QR</var>, <var>tau</var>) given by
+<code>gsl_linalg_QR_decomp</code>.  The solution is returned in <var>x</var>.  The
+residual is computed as a by-product and stored in <var>residual</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_QTvec</b> (<var>const gsl_matrix * QR, const gsl_vector * tau, gsl_vector * v</var>)<var><a name="index-gsl_005flinalg_005fQR_005fQTvec-1317"></a></var><br>
+<blockquote><p>This function applies the matrix Q^T encoded in the decomposition
+(<var>QR</var>,<var>tau</var>) to the vector <var>v</var>, storing the result Q^T
+v in <var>v</var>.  The matrix multiplication is carried out directly using
+the encoding of the Householder vectors without needing to form the full
+matrix Q^T. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_Qvec</b> (<var>const gsl_matrix * QR, const gsl_vector * tau, gsl_vector * v</var>)<var><a name="index-gsl_005flinalg_005fQR_005fQvec-1318"></a></var><br>
+<blockquote><p>This function applies the matrix Q encoded in the decomposition
+(<var>QR</var>,<var>tau</var>) to the vector <var>v</var>, storing the result Q
+v in <var>v</var>.  The matrix multiplication is carried out directly using
+the encoding of the Householder vectors without needing to form the full
+matrix Q. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_QTmat</b> (<var>const gsl_matrix * QR, const gsl_vector * tau, gsl_matrix * A</var>)<var><a name="index-gsl_005flinalg_005fQR_005fQTmat-1319"></a></var><br>
+<blockquote><p>This function applies the matrix Q^T encoded in the decomposition
+(<var>QR</var>,<var>tau</var>) to the matrix <var>A</var>, storing the result Q^T
+A in <var>A</var>.  The matrix multiplication is carried out directly using
+the encoding of the Householder vectors without needing to form the full
+matrix Q^T. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_Rsolve</b> (<var>const gsl_matrix * QR, const gsl_vector * b, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fQR_005fRsolve-1320"></a></var><br>
+<blockquote><p>This function solves the triangular system R x = b for
+<var>x</var>. It may be useful if the product b' = Q^T b has already
+been computed using <code>gsl_linalg_QR_QTvec</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_Rsvx</b> (<var>const gsl_matrix * QR, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fQR_005fRsvx-1321"></a></var><br>
+<blockquote><p>This function solves the triangular system R x = b for <var>x</var>
+in-place. On input <var>x</var> should contain the right-hand side b
+and is replaced by the solution on output. This function may be useful if
+the product b' = Q^T b has already been computed using
+<code>gsl_linalg_QR_QTvec</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_unpack</b> (<var>const gsl_matrix * QR, const gsl_vector * tau, gsl_matrix * Q, gsl_matrix * R</var>)<var><a name="index-gsl_005flinalg_005fQR_005funpack-1322"></a></var><br>
+<blockquote><p>This function unpacks the encoded QR decomposition
+(<var>QR</var>,<var>tau</var>) into the matrices <var>Q</var> and <var>R</var>, where
+<var>Q</var> is M-by-M and <var>R</var> is M-by-N. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_QRsolve</b> (<var>gsl_matrix * Q, gsl_matrix * R, const gsl_vector * b, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fQR_005fQRsolve-1323"></a></var><br>
+<blockquote><p>This function solves the system R x = Q^T b for <var>x</var>. It can
+be used when the QR decomposition of a matrix is available in
+unpacked form as (<var>Q</var>, <var>R</var>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QR_update</b> (<var>gsl_matrix * Q, gsl_matrix * R, gsl_vector * w, const gsl_vector * v</var>)<var><a name="index-gsl_005flinalg_005fQR_005fupdate-1324"></a></var><br>
+<blockquote><p>This function performs a rank-1 update w v^T of the QR
+decomposition (<var>Q</var>, <var>R</var>). The update is given by Q'R' = Q
+(R + w v^T) where the output matrices Q' and R' are also
+orthogonal and right triangular. Note that <var>w</var> is destroyed by the
+update. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_R_solve</b> (<var>const gsl_matrix * R, const gsl_vector * b, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fR_005fsolve-1325"></a></var><br>
+<blockquote><p>This function solves the triangular system R x = b for the
+N-by-N matrix <var>R</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_R_svx</b> (<var>const gsl_matrix * R, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fR_005fsvx-1326"></a></var><br>
+<blockquote><p>This function solves the triangular system R x = b in-place. On
+input <var>x</var> should contain the right-hand side b, which is
+replaced by the solution on output. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

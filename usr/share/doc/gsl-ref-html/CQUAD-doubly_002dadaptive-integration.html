@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>CQUAD doubly-adaptive integration - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Numerical-Integration.html" title="Numerical Integration">
+<link rel="prev" href="QAWF-adaptive-integration-for-Fourier-integrals.html" title="QAWF adaptive integration for Fourier integrals">
+<link rel="next" href="Fixed-order-Gauss_002dLegendre-integration.html" title="Fixed order Gauss-Legendre integration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="CQUAD-doubly-adaptive-integration"></a>
+<a name="CQUAD-doubly_002dadaptive-integration"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fixed-order-Gauss_002dLegendre-integration.html">Fixed order Gauss-Legendre integration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="QAWF-adaptive-integration-for-Fourier-integrals.html">QAWF adaptive integration for Fourier integrals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Numerical-Integration.html">Numerical Integration</a>
+<hr>
+</div>
+
+<h3 class="section">17.11 CQUAD doubly-adaptive integration</h3>
+
+<p><a name="index-cquad_002c-doubly_002dadaptive-integration-1564"></a>
+<span class="sc">cquad</span> is a new doubly-adaptive general-purpose quadrature
+routine which can handle most types of singularities,
+non-numerical function values such as <code>Inf</code> or <code>NaN</code>,
+as well as some divergent integrals. It generally requires more
+function evaluations than the integration routines in
+<span class="sc">quadpack</span>, yet fails less often for difficult integrands.
+
+   <p>The underlying algorithm uses a doubly-adaptive scheme in which
+Clenshaw-Curtis quadrature rules of increasing degree are used
+to compute the integral in each interval. The L_2-norm of
+the difference between the underlying interpolatory polynomials
+of two successive rules is used as an error estimate. The
+interval is subdivided if the difference between two successive
+rules is too large or a rule of maximum degree has been reached.
+
+<div class="defun">
+&mdash; Function: gsl_integration_cquad_workspace * <b>gsl_integration_cquad_workspace_alloc</b> (<var>size_t n</var>)<var><a name="index-gsl_005fintegration_005fcquad_005fworkspace_005falloc-1565"></a></var><br>
+<blockquote><p><a name="index-gsl_005fintegration_005fcquad_005fworkspace-1566"></a>This function allocates a workspace sufficient to hold the data for
+<var>n</var> intervals. The number <var>n</var> is not the maximum number of
+intervals that will be evaluated. If the workspace is full, intervals
+with smaller error estimates will be discarded. A minimum of 3
+intervals is required and or most functions, a workspace of size 100
+is sufficient. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_integration_cquad_workspace_free</b> (<var>gsl_integration_cquad_workspace * w</var>)<var><a name="index-gsl_005fintegration_005fcquad_005fworkspace_005ffree-1567"></a></var><br>
+<blockquote><p>This function frees the memory associated with the workspace <var>w</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_integration_cquad</b> (<var>const gsl_function * f, double a, double b, double epsabs, double epsrel, gsl_integration_cquad_workspace * workspace, double * result, double * abserr, size_t * nevals</var>)<var><a name="index-gsl_005fintegration_005fcquad-1568"></a></var><br>
+<blockquote><p>This function computes the integral of f over (a,b)
+within the desired absolute and relative error limits, <var>epsabs</var>
+and <var>epsrel</var> using the <span class="sc">cquad</span> algorithm.  The function returns
+the final approximation, <var>result</var>, an estimate of the absolute
+error, <var>abserr</var>, and the number of function evaluations required,
+<var>nevals</var>.
+
+        <p>The <span class="sc">cquad</span> algorithm divides the integration region into
+subintervals, and in each iteration, the subinterval with the largest
+estimated error is processed.  The algorithm uses Clenshaw-Curits
+quadrature rules of degree 4, 8, 16 and 32 over 5, 9, 17 and 33 nodes
+respectively. Each interval is initialized with the lowest-degree
+rule. When an interval is processed, the next-higher degree rule is
+evaluated and an error estimate is computed based on the
+L_2-norm of the difference between the underlying interpolating
+polynomials of both rules. If the highest-degree rule has already been
+used, or the interpolatory polynomials differ significantly, the
+interval is bisected.
+
+        <p>The subintervals and their results are stored in the memory
+provided by <var>workspace</var>. If the error estimate or the number of
+function evaluations is not needed, the pointers <var>abserr</var> and <var>nevals</var>
+can be set to <code>NULL</code>. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

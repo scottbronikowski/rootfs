@@ -1,0 +1,20 @@
+#!/bin/sh -e
+
+case "$1" in
+  configure)
+    update-alternatives --install /usr/bin/dia dia /usr/bin/dia-gnome 50
+    update-alternatives --install /usr/bin/dia dia /usr/bin/dia-gnome-integrated 55
+    ;;
+esac
+
+# Automatically added by dh_installmenu
+if [ "$1" = "configure" ] && [ -x "`which update-menus 2>/dev/null`" ]; then
+	update-menus
+fi
+# End automatically added section
+# Automatically added by dh_installmime
+if [ "$1" = "configure" ] && [ -x "`which update-mime 2>/dev/null`" ]; then
+	update-mime
+fi
+# End automatically added section
+

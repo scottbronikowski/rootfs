@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Regular Modified Cylindrical Bessel Functions - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Bessel-Functions.html" title="Bessel Functions">
+<link rel="prev" href="Irregular-Cylindrical-Bessel-Functions.html" title="Irregular Cylindrical Bessel Functions">
+<link rel="next" href="Irregular-Modified-Cylindrical-Bessel-Functions.html" title="Irregular Modified Cylindrical Bessel Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Regular-Modified-Cylindrical-Bessel-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Irregular-Modified-Cylindrical-Bessel-Functions.html">Irregular Modified Cylindrical Bessel Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Irregular-Cylindrical-Bessel-Functions.html">Irregular Cylindrical Bessel Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Bessel-Functions.html">Bessel Functions</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.5.3 Regular Modified Cylindrical Bessel Functions</h4>
+
+<p><a name="index-Modified-Cylindrical-Bessel-Functions-301"></a><a name="index-Regular-Modified-Cylindrical-Bessel-Functions-302"></a><a name="index-I_0028x_0029_002c-Bessel-Functions-303"></a>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_bessel_I0</b> (<var>double x</var>)<var><a name="index-gsl_005fsf_005fbessel_005fI0-304"></a></var><br>
+&mdash; Function: int <b>gsl_sf_bessel_I0_e</b> (<var>double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fbessel_005fI0_005fe-305"></a></var><br>
+<blockquote><p>These routines compute the regular modified cylindrical Bessel function
+of zeroth order, I_0(x). 
+<!-- Exceptional Return Values: GSL_EOVRFLW -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_bessel_I1</b> (<var>double x</var>)<var><a name="index-gsl_005fsf_005fbessel_005fI1-306"></a></var><br>
+&mdash; Function: int <b>gsl_sf_bessel_I1_e</b> (<var>double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fbessel_005fI1_005fe-307"></a></var><br>
+<blockquote><p>These routines compute the regular modified cylindrical Bessel function
+of first order, I_1(x). 
+<!-- Exceptional Return Values: GSL_EOVRFLW, GSL_EUNDRFLW -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_bessel_In</b> (<var>int n, double x</var>)<var><a name="index-gsl_005fsf_005fbessel_005fIn-308"></a></var><br>
+&mdash; Function: int <b>gsl_sf_bessel_In_e</b> (<var>int n, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fbessel_005fIn_005fe-309"></a></var><br>
+<blockquote><p>These routines compute the regular modified cylindrical Bessel function
+of order <var>n</var>, I_n(x). 
+<!-- Exceptional Return Values: GSL_EOVRFLW, GSL_EUNDRFLW -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_sf_bessel_In_array</b> (<var>int nmin, int nmax, double x, double result_array</var>[])<var><a name="index-gsl_005fsf_005fbessel_005fIn_005farray-310"></a></var><br>
+<blockquote><p>This routine computes the values of the regular modified cylindrical
+Bessel functions I_n(x) for n from <var>nmin</var> to
+<var>nmax</var> inclusive, storing the results in the array
+<var>result_array</var>.  The start of the range <var>nmin</var> must be positive
+or zero.  The values are computed using recurrence relations for
+efficiency, and therefore may differ slightly from the exact values. 
+<!-- Domain: nmin >=0, nmax >= nmin -->
+<!-- Conditions: n=nmin,...,nmax, nmin >=0, nmax >= nmin -->
+<!-- Exceptional Return Values: GSL_EDOM, GSL_EOVRFLW, GSL_EUNDRFLW -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_bessel_I0_scaled</b> (<var>double x</var>)<var><a name="index-gsl_005fsf_005fbessel_005fI0_005fscaled-311"></a></var><br>
+&mdash; Function: int <b>gsl_sf_bessel_I0_scaled_e</b> (<var>double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fbessel_005fI0_005fscaled_005fe-312"></a></var><br>
+<blockquote><p>These routines compute the scaled regular modified cylindrical Bessel
+function of zeroth order \exp(-|x|) I_0(x). 
+<!-- Exceptional Return Values: none -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_bessel_I1_scaled</b> (<var>double x</var>)<var><a name="index-gsl_005fsf_005fbessel_005fI1_005fscaled-313"></a></var><br>
+&mdash; Function: int <b>gsl_sf_bessel_I1_scaled_e</b> (<var>double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fbessel_005fI1_005fscaled_005fe-314"></a></var><br>
+<blockquote><p>These routines compute the scaled regular modified cylindrical Bessel
+function of first order \exp(-|x|) I_1(x). 
+<!-- Exceptional Return Values: GSL_EUNDRFLW -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_bessel_In_scaled</b> (<var>int n, double x</var>)<var><a name="index-gsl_005fsf_005fbessel_005fIn_005fscaled-315"></a></var><br>
+&mdash; Function: int <b>gsl_sf_bessel_In_scaled_e</b> (<var>int n, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fbessel_005fIn_005fscaled_005fe-316"></a></var><br>
+<blockquote><p>These routines compute the scaled regular modified cylindrical Bessel
+function of order <var>n</var>, \exp(-|x|) I_n(x)
+<!-- Exceptional Return Values: GSL_EUNDRFLW -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_sf_bessel_In_scaled_array</b> (<var>int nmin, int nmax, double x, double result_array</var>[])<var><a name="index-gsl_005fsf_005fbessel_005fIn_005fscaled_005farray-317"></a></var><br>
+<blockquote><p>This routine computes the values of the scaled regular cylindrical
+Bessel functions \exp(-|x|) I_n(x) for n from
+<var>nmin</var> to <var>nmax</var> inclusive, storing the results in the array
+<var>result_array</var>. The start of the range <var>nmin</var> must be positive
+or zero.  The values are computed using recurrence relations for
+efficiency, and therefore may differ slightly from the exact values. 
+<!-- Domain: nmin >=0, nmax >= nmin -->
+<!-- Conditions:  n=nmin,...,nmax -->
+<!-- Exceptional Return Values: GSL_EUNDRFLW -->
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

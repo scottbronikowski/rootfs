@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Radix-2 FFT routines for complex data - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fast-Fourier-Transforms.html" title="Fast Fourier Transforms">
+<link rel="prev" href="Overview-of-complex-data-FFTs.html" title="Overview of complex data FFTs">
+<link rel="next" href="Mixed_002dradix-FFT-routines-for-complex-data.html" title="Mixed-radix FFT routines for complex data">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Radix-2-FFT-routines-for-complex-data"></a>
+<a name="Radix_002d2-FFT-routines-for-complex-data"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mixed_002dradix-FFT-routines-for-complex-data.html">Mixed-radix FFT routines for complex data</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Overview-of-complex-data-FFTs.html">Overview of complex data FFTs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fast-Fourier-Transforms.html">Fast Fourier Transforms</a>
+<hr>
+</div>
+
+<h3 class="section">16.3 Radix-2 FFT routines for complex data</h3>
+
+<p><a name="index-FFT-of-complex-data_002c-radix_002d2-algorithm-1476"></a><a name="index-Radix_002d2-FFT_002c-complex-data-1477"></a>
+The radix-2 algorithms described in this section are simple and compact,
+although not necessarily the most efficient.  They use the Cooley-Tukey
+algorithm to compute in-place complex FFTs for lengths which are a power
+of 2&mdash;no additional storage is required.  The corresponding
+self-sorting mixed-radix routines offer better performance at the
+expense of requiring additional working space.
+
+   <p>All the functions described in this section are declared in the header file <samp><span class="file">gsl_fft_complex.h</span></samp>.
+
+<div class="defun">
+&mdash; Function: int <b>gsl_fft_complex_radix2_forward</b> (<var>gsl_complex_packed_array data, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005fcomplex_005fradix2_005fforward-1478"></a></var><br>
+
+   &mdash; Function: int <b>gsl_fft_complex_radix2_transform</b> (<var>gsl_complex_packed_array data, size_t stride, size_t n, gsl_fft_direction sign</var>)<var><a name="index-gsl_005ffft_005fcomplex_005fradix2_005ftransform-1479"></a></var><br>
+
+   &mdash; Function: int <b>gsl_fft_complex_radix2_backward</b> (<var>gsl_complex_packed_array data, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005fcomplex_005fradix2_005fbackward-1480"></a></var><br>
+
+   &mdash; Function: int <b>gsl_fft_complex_radix2_inverse</b> (<var>gsl_complex_packed_array data, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005fcomplex_005fradix2_005finverse-1481"></a></var><br>
+<blockquote>
+        <p>These functions compute forward, backward and inverse FFTs of length
+<var>n</var> with stride <var>stride</var>, on the packed complex array <var>data</var>
+using an in-place radix-2 decimation-in-time algorithm.  The length of
+the transform <var>n</var> is restricted to powers of two.  For the
+<code>transform</code> version of the function the <var>sign</var> argument can be
+either <code>forward</code> (-1) or <code>backward</code> (+1).
+
+        <p>The functions return a value of <code>GSL_SUCCESS</code> if no errors were
+detected, or <code>GSL_EDOM</code> if the length of the data <var>n</var> is not a
+power of two. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_fft_complex_radix2_dif_forward</b> (<var>gsl_complex_packed_array data, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005fcomplex_005fradix2_005fdif_005fforward-1482"></a></var><br>
+
+   &mdash; Function: int <b>gsl_fft_complex_radix2_dif_transform</b> (<var>gsl_complex_packed_array data, size_t stride, size_t n, gsl_fft_direction sign</var>)<var><a name="index-gsl_005ffft_005fcomplex_005fradix2_005fdif_005ftransform-1483"></a></var><br>
+
+   &mdash; Function: int <b>gsl_fft_complex_radix2_dif_backward</b> (<var>gsl_complex_packed_array data, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005fcomplex_005fradix2_005fdif_005fbackward-1484"></a></var><br>
+
+   &mdash; Function: int <b>gsl_fft_complex_radix2_dif_inverse</b> (<var>gsl_complex_packed_array data, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005fcomplex_005fradix2_005fdif_005finverse-1485"></a></var><br>
+<blockquote>
+        <p>These are decimation-in-frequency versions of the radix-2 FFT functions.
+
+        </blockquote></div>
+
+<!-- @node Example of using radix-2 FFT routines for complex data -->
+<!-- @subsection Example of using radix-2 FFT routines for complex data -->
+   <p>Here is an example program which computes the FFT of a short pulse in a
+sample of length 128.  To make the resulting Fourier transform real the
+pulse is defined for equal positive and negative times (-10
+<small class="dots">...</small> 10), where the negative times wrap around the end of the
+array.
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;math.h>
+     #include &lt;gsl/gsl_errno.h>
+     #include &lt;gsl/gsl_fft_complex.h>
+     
+     #define REAL(z,i) ((z)[2*(i)])
+     #define IMAG(z,i) ((z)[2*(i)+1])
+     
+     int
+     main (void)
+     {
+       int i; double data[2*128];
+     
+       for (i = 0; i &lt; 128; i++)
+         {
+            REAL(data,i) = 0.0; IMAG(data,i) = 0.0;
+         }
+     
+       REAL(data,0) = 1.0;
+     
+       for (i = 1; i &lt;= 10; i++)
+         {
+            REAL(data,i) = REAL(data,128-i) = 1.0;
+         }
+     
+       for (i = 0; i &lt; 128; i++)
+         {
+           printf ("%d %e %e\n", i, 
+                   REAL(data,i), IMAG(data,i));
+         }
+       printf ("\n");
+     
+       gsl_fft_complex_radix2_forward (data, 1, 128);
+     
+       for (i = 0; i &lt; 128; i++)
+         {
+           printf ("%d %e %e\n", i, 
+                   REAL(data,i)/sqrt(128), 
+                   IMAG(data,i)/sqrt(128));
+         }
+     
+       return 0;
+     }
+</pre></pre>
+   <p class="noindent">Note that we have assumed that the program is using the default error
+handler (which calls <code>abort</code> for any errors).  If you are not using
+a safe error handler you would need to check the return status of
+<code>gsl_fft_complex_radix2_forward</code>.
+
+   <p>The transformed data is rescaled by 1/\sqrt n so that it fits on
+the same plot as the input.  Only the real part is shown, by the choice
+of the input data the imaginary part is zero.  Allowing for the
+wrap-around of negative times at t=128, and working in units of
+k/n, the DFT approximates the continuum Fourier transform, giving
+a modulated sine function.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Minimization Examples - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="One-dimensional-Minimization.html" title="One dimensional Minimization">
+<link rel="prev" href="Minimization-Algorithms.html" title="Minimization Algorithms">
+<link rel="next" href="Minimization-References-and-Further-Reading.html" title="Minimization References and Further Reading">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Minimization-Examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Minimization-References-and-Further-Reading.html">Minimization References and Further Reading</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minimization-Algorithms.html">Minimization Algorithms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="One-dimensional-Minimization.html">One dimensional Minimization</a>
+<hr>
+</div>
+
+<h3 class="section">34.8 Examples</h3>
+
+<p>The following program uses the Brent algorithm to find the minimum of
+the function f(x) = \cos(x) + 1, which occurs at x = \pi. 
+The starting interval is (0,6), with an initial guess for the
+minimum of 2.
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;gsl/gsl_errno.h>
+     #include &lt;gsl/gsl_math.h>
+     #include &lt;gsl/gsl_min.h>
+     
+     double fn1 (double x, void * params)
+     {
+       return cos(x) + 1.0;
+     }
+     
+     int
+     main (void)
+     {
+       int status;
+       int iter = 0, max_iter = 100;
+       const gsl_min_fminimizer_type *T;
+       gsl_min_fminimizer *s;
+       double m = 2.0, m_expected = M_PI;
+       double a = 0.0, b = 6.0;
+       gsl_function F;
+     
+       F.function = &amp;fn1;
+       F.params = 0;
+     
+       T = gsl_min_fminimizer_brent;
+       s = gsl_min_fminimizer_alloc (T);
+       gsl_min_fminimizer_set (s, &amp;F, m, a, b);
+     
+       printf ("using %s method\n",
+               gsl_min_fminimizer_name (s));
+     
+       printf ("%5s [%9s, %9s] %9s %10s %9s\n",
+               "iter", "lower", "upper", "min",
+               "err", "err(est)");
+     
+       printf ("%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
+               iter, a, b,
+               m, m - m_expected, b - a);
+     
+       do
+         {
+           iter++;
+           status = gsl_min_fminimizer_iterate (s);
+     
+           m = gsl_min_fminimizer_x_minimum (s);
+           a = gsl_min_fminimizer_x_lower (s);
+           b = gsl_min_fminimizer_x_upper (s);
+     
+           status 
+             = gsl_min_test_interval (a, b, 0.001, 0.0);
+     
+           if (status == GSL_SUCCESS)
+             printf ("Converged:\n");
+     
+           printf ("%5d [%.7f, %.7f] "
+                   "%.7f %+.7f %.7f\n",
+                   iter, a, b,
+                   m, m - m_expected, b - a);
+         }
+       while (status == GSL_CONTINUE &amp;&amp; iter &lt; max_iter);
+     
+       gsl_min_fminimizer_free (s);
+     
+       return status;
+     }
+</pre></pre>
+   <p class="noindent">Here are the results of the minimization procedure.
+
+<pre class="smallexample">     $ ./a.out
+<pre class="verbatim">         0 [0.0000000, 6.0000000] 2.0000000 -1.1415927 6.0000000
+         1 [2.0000000, 6.0000000] 3.2758640 +0.1342713 4.0000000
+         2 [2.0000000, 3.2831929] 3.2758640 +0.1342713 1.2831929
+         3 [2.8689068, 3.2831929] 3.2758640 +0.1342713 0.4142862
+         4 [2.8689068, 3.2831929] 3.2758640 +0.1342713 0.4142862
+         5 [2.8689068, 3.2758640] 3.1460585 +0.0044658 0.4069572
+         6 [3.1346075, 3.2758640] 3.1460585 +0.0044658 0.1412565
+         7 [3.1346075, 3.1874620] 3.1460585 +0.0044658 0.0528545
+         8 [3.1346075, 3.1460585] 3.1460585 +0.0044658 0.0114510
+         9 [3.1346075, 3.1460585] 3.1424060 +0.0008133 0.0114510
+        10 [3.1346075, 3.1424060] 3.1415885 -0.0000041 0.0077985
+     Converged:                            
+        11 [3.1415885, 3.1424060] 3.1415927 -0.0000000 0.0008175
+</pre></pre>
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Initializing the Minimizer - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="One-dimensional-Minimization.html" title="One dimensional Minimization">
+<link rel="prev" href="Minimization-Caveats.html" title="Minimization Caveats">
+<link rel="next" href="Providing-the-function-to-minimize.html" title="Providing the function to minimize">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Initializing-the-Minimizer"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Providing-the-function-to-minimize.html">Providing the function to minimize</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minimization-Caveats.html">Minimization Caveats</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="One-dimensional-Minimization.html">One dimensional Minimization</a>
+<hr>
+</div>
+
+<h3 class="section">34.3 Initializing the Minimizer</h3>
+
+<div class="defun">
+&mdash; Function: gsl_min_fminimizer * <b>gsl_min_fminimizer_alloc</b> (<var>const gsl_min_fminimizer_type * T</var>)<var><a name="index-gsl_005fmin_005ffminimizer_005falloc-2435"></a></var><br>
+<blockquote><p><a name="index-gsl_005fmin_005ffminimizer-2436"></a><a name="index-gsl_005fmin_005ffminimizer_005ftype-2437"></a>This function returns a pointer to a newly allocated instance of a
+minimizer of type <var>T</var>.  For example, the following code
+creates an instance of a golden section minimizer,
+
+     <pre class="example">          const gsl_min_fminimizer_type * T
+            = gsl_min_fminimizer_goldensection;
+          gsl_min_fminimizer * s
+            = gsl_min_fminimizer_alloc (T);
+</pre>
+        <p>If there is insufficient memory to create the minimizer then the function
+returns a null pointer and the error handler is invoked with an error
+code of <code>GSL_ENOMEM</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_min_fminimizer_set</b> (<var>gsl_min_fminimizer * s, gsl_function * f, double x_minimum, double x_lower, double x_upper</var>)<var><a name="index-gsl_005fmin_005ffminimizer_005fset-2438"></a></var><br>
+<blockquote><p>This function sets, or resets, an existing minimizer <var>s</var> to use the
+function <var>f</var> and the initial search interval [<var>x_lower</var>,
+<var>x_upper</var>], with a guess for the location of the minimum
+<var>x_minimum</var>.
+
+        <p>If the interval given does not contain a minimum, then the function
+returns an error code of <code>GSL_EINVAL</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_min_fminimizer_set_with_values</b> (<var>gsl_min_fminimizer * s, gsl_function * f, double x_minimum, double f_minimum, double x_lower, double f_lower, double x_upper, double f_upper</var>)<var><a name="index-gsl_005fmin_005ffminimizer_005fset_005fwith_005fvalues-2439"></a></var><br>
+<blockquote><p>This function is equivalent to <code>gsl_min_fminimizer_set</code> but uses
+the values <var>f_minimum</var>, <var>f_lower</var> and <var>f_upper</var> instead of
+computing <code>f(x_minimum)</code>, <code>f(x_lower)</code> and <code>f(x_upper)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_min_fminimizer_free</b> (<var>gsl_min_fminimizer * s</var>)<var><a name="index-gsl_005fmin_005ffminimizer_005ffree-2440"></a></var><br>
+<blockquote><p>This function frees all the memory associated with the minimizer
+<var>s</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: const char * <b>gsl_min_fminimizer_name</b> (<var>const gsl_min_fminimizer * s</var>)<var><a name="index-gsl_005fmin_005ffminimizer_005fname-2441"></a></var><br>
+<blockquote><p>This function returns a pointer to the name of the minimizer.  For example,
+
+     <pre class="example">          printf ("s is a '%s' minimizer\n",
+                  gsl_min_fminimizer_name (s));
+</pre>
+        <p class="noindent">would print something like <code>s is a 'brent' minimizer</code>. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

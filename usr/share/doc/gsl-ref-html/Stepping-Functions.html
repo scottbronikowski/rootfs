@@ -1,0 +1,221 @@
+<html lang="en">
+<head>
+<title>Stepping Functions - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Ordinary-Differential-Equations.html" title="Ordinary Differential Equations">
+<link rel="prev" href="Defining-the-ODE-System.html" title="Defining the ODE System">
+<link rel="next" href="Adaptive-Step_002dsize-Control.html" title="Adaptive Step-size Control">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Stepping-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Adaptive-Step_002dsize-Control.html">Adaptive Step-size Control</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-the-ODE-System.html">Defining the ODE System</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Ordinary-Differential-Equations.html">Ordinary Differential Equations</a>
+<hr>
+</div>
+
+<h3 class="section">26.2 Stepping Functions</h3>
+
+<p>The lowest level components are the <dfn>stepping functions</dfn> which
+advance a solution from time t to t+h for a fixed
+step-size h and estimate the resulting local error.
+
+<div class="defun">
+&mdash; Function: gsl_odeiv2_step * <b>gsl_odeiv2_step_alloc</b> (<var>const gsl_odeiv2_step_type * T, size_t dim</var>)<var><a name="index-gsl_005fodeiv2_005fstep_005falloc-2163"></a></var><br>
+<blockquote><p><a name="index-gsl_005fodeiv2_005fstep-2164"></a><a name="index-gsl_005fodeiv2_005fstep_005ftype-2165"></a>This function returns a pointer to a newly allocated instance of a
+stepping function of type <var>T</var> for a system of <var>dim</var>
+dimensions. Please note that if you use a stepper method that
+requires access to a driver object, it is advisable to use a driver
+allocation method, which automatically allocates a stepper, too. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_odeiv2_step_reset</b> (<var>gsl_odeiv2_step * s</var>)<var><a name="index-gsl_005fodeiv2_005fstep_005freset-2166"></a></var><br>
+<blockquote><p>This function resets the stepping function <var>s</var>.  It should be used
+whenever the next use of <var>s</var> will not be a continuation of a
+previous step. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_odeiv2_step_free</b> (<var>gsl_odeiv2_step * s</var>)<var><a name="index-gsl_005fodeiv2_005fstep_005ffree-2167"></a></var><br>
+<blockquote><p>This function frees all the memory associated with the stepping function
+<var>s</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: const char * <b>gsl_odeiv2_step_name</b> (<var>const gsl_odeiv2_step * s</var>)<var><a name="index-gsl_005fodeiv2_005fstep_005fname-2168"></a></var><br>
+<blockquote><p>This function returns a pointer to the name of the stepping function. 
+For example,
+
+     <pre class="example">          printf ("step method is '%s'\n",
+                   gsl_odeiv2_step_name (s));
+</pre>
+        <p class="noindent">would print something like <code>step method is 'rkf45'</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: unsigned int <b>gsl_odeiv2_step_order</b> (<var>const gsl_odeiv2_step * s</var>)<var><a name="index-gsl_005fodeiv2_005fstep_005forder-2169"></a></var><br>
+<blockquote><p>This function returns the order of the stepping function on the previous
+step. The order can vary if the stepping function itself is adaptive. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_odeiv2_step_set_driver</b> (<var>gsl_odeiv2_step * s, const gsl_odeiv2_driver * d</var>)<var><a name="index-gsl_005fodeiv2_005fstep_005fset_005fdriver-2170"></a></var><br>
+<blockquote><p>This function sets a pointer of the driver object <var>d</var> for stepper
+<var>s</var>, to allow the stepper to access control (and evolve) object
+through the driver object. This is a requirement for some steppers, to
+get the desired error level for internal iteration of
+stepper. Allocation of a driver object calls this function
+automatically. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_odeiv2_step_apply</b> (<var>gsl_odeiv2_step * s, double t, double h, double y</var>[]<var>, double yerr</var>[]<var>, const double dydt_in</var>[]<var>, double dydt_out</var>[]<var>, const gsl_odeiv2_system * sys</var>)<var><a name="index-gsl_005fodeiv2_005fstep_005fapply-2171"></a></var><br>
+<blockquote><p>This function applies the stepping function <var>s</var> to the system of
+equations defined by <var>sys</var>, using the step-size <var>h</var> to advance
+the system from time <var>t</var> and state <var>y</var> to time <var>t</var>+<var>h</var>. 
+The new state of the system is stored in <var>y</var> on output, with an
+estimate of the absolute error in each component stored in <var>yerr</var>. 
+If the argument <var>dydt_in</var> is not null it should point an array
+containing the derivatives for the system at time <var>t</var> on input. This
+is optional as the derivatives will be computed internally if they are
+not provided, but allows the reuse of existing derivative information. 
+On output the new derivatives of the system at time <var>t</var>+<var>h</var> will
+be stored in <var>dydt_out</var> if it is not null.
+
+        <p>The stepping function returns <code>GSL_FAILURE</code> if it is unable to
+compute the requested step. Also, if the user-supplied functions
+defined in the system <var>sys</var> return a status other than
+<code>GSL_SUCCESS</code> the step will be aborted. In that case, the
+elements of <var>y</var> will be restored to their pre-step values and the
+error code from the user-supplied function will be returned. Failure
+may be due to a singularity in the system or too large step-size
+<var>h</var>. In that case the step should be attempted again with a
+smaller step-size, e.g. <var>h</var>/2.
+
+        <p>If the driver object is not appropriately set via
+<code>gsl_odeiv2_step_set_driver</code> for those steppers that need it, the
+stepping function returns <code>GSL_EFAULT</code>. If the user-supplied
+functions defined in the system <var>sys</var> returns <code>GSL_EBADFUNC</code>,
+the function returns immediately with the same return code. In this
+case the user must call <code>gsl_odeiv2_step_reset</code> before calling
+this function again.
+
+        </blockquote></div>
+
+   <p>The following algorithms are available,
+
+<div class="defun">
+&mdash; Step Type: <b>gsl_odeiv2_step_rk2</b><var><a name="index-gsl_005fodeiv2_005fstep_005frk2-2172"></a></var><br>
+<blockquote><p><a name="index-RK2_002c-Runge_002dKutta-method-2173"></a><a name="index-Runge_002dKutta-methods_002c-ordinary-differential-equations-2174"></a>Explicit embedded Runge-Kutta (2, 3) method. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Step Type: <b>gsl_odeiv2_step_rk4</b><var><a name="index-gsl_005fodeiv2_005fstep_005frk4-2175"></a></var><br>
+<blockquote><p><a name="index-RK4_002c-Runge_002dKutta-method-2176"></a>Explicit 4th order (classical) Runge-Kutta. Error estimation is
+carried out by the step doubling method. For more efficient estimate
+of the error, use the embedded methods described below. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Step Type: <b>gsl_odeiv2_step_rkf45</b><var><a name="index-gsl_005fodeiv2_005fstep_005frkf45-2177"></a></var><br>
+<blockquote><p><a name="index-Fehlberg-method_002c-differential-equations-2178"></a><a name="index-RKF45_002c-Runge_002dKutta_002dFehlberg-method-2179"></a>Explicit embedded Runge-Kutta-Fehlberg (4, 5) method.  This method is
+a good general-purpose integrator. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Step Type: <b>gsl_odeiv2_step_rkck</b><var><a name="index-gsl_005fodeiv2_005fstep_005frkck-2180"></a></var><br>
+<blockquote><p><a name="index-Runge_002dKutta-Cash_002dKarp-method-2181"></a><a name="index-Cash_002dKarp_002c-Runge_002dKutta-method-2182"></a>Explicit embedded Runge-Kutta Cash-Karp (4, 5) method. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Step Type: <b>gsl_odeiv2_step_rk8pd</b><var><a name="index-gsl_005fodeiv2_005fstep_005frk8pd-2183"></a></var><br>
+<blockquote><p><a name="index-Runge_002dKutta-Prince_002dDormand-method-2184"></a><a name="index-Prince_002dDormand_002c-Runge_002dKutta-method-2185"></a>Explicit embedded Runge-Kutta Prince-Dormand (8, 9) method. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Step Type: <b>gsl_odeiv2_step_rk1imp</b><var><a name="index-gsl_005fodeiv2_005fstep_005frk1imp-2186"></a></var><br>
+<blockquote><p><a name="index-Implicit-Euler-method-2187"></a>Implicit Gaussian first order Runge-Kutta. Also known as implicit
+Euler or backward Euler method. Error estimation is carried out by the
+step doubling method. This algorithm requires the Jacobian and
+access to the driver object via <code>gsl_odeiv2_step_set_driver</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Step Type: <b>gsl_odeiv2_step_rk2imp</b><var><a name="index-gsl_005fodeiv2_005fstep_005frk2imp-2188"></a></var><br>
+<blockquote><p><a name="index-Implicit-Runge_002dKutta-method-2189"></a>Implicit Gaussian second order Runge-Kutta. Also known as implicit
+mid-point rule. Error estimation is carried out by the step doubling
+method. This stepper requires the Jacobian and access to the driver
+object via <code>gsl_odeiv2_step_set_driver</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Step Type: <b>gsl_odeiv2_step_rk4imp</b><var><a name="index-gsl_005fodeiv2_005fstep_005frk4imp-2190"></a></var><br>
+<blockquote><p>Implicit Gaussian 4th order Runge-Kutta. Error estimation is carried
+out by the step doubling method. This algorithm requires the Jacobian
+and access to the driver object via <code>gsl_odeiv2_step_set_driver</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Step Type: <b>gsl_odeiv2_step_bsimp</b><var><a name="index-gsl_005fodeiv2_005fstep_005fbsimp-2191"></a></var><br>
+<blockquote><p><a name="index-Bulirsch_002dStoer-method-2192"></a><a name="index-Bader-and-Deuflhard_002c-Bulirsch_002dStoer-method_002e-2193"></a><a name="index-Deuflhard-and-Bader_002c-Bulirsch_002dStoer-method_002e-2194"></a>Implicit Bulirsch-Stoer method of Bader and Deuflhard. The method is
+generally suitable for stiff problems. This stepper requires the
+Jacobian. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Step Type: <b>gsl_odeiv2_step_msadams</b><var><a name="index-gsl_005fodeiv2_005fstep_005fmsadams-2195"></a></var><br>
+<blockquote><p><a name="index-Adams-method-2196"></a><a name="index-multistep-methods_002c-ODEs-2197"></a><a name="index-predictor_002dcorrector-method_002c-ODEs-2198"></a><a name="index-Nordsieck-form-2199"></a>A variable-coefficient linear multistep Adams method in Nordsieck
+form. This stepper uses explicit Adams-Bashforth (predictor) and
+implicit Adams-Moulton (corrector) methods in P(EC)^m
+functional iteration mode. Method order varies dynamically between 1
+and 12. This stepper requires the access to the driver object via
+<code>gsl_odeiv2_step_set_driver</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Step Type: <b>gsl_odeiv2_step_msbdf</b><var><a name="index-gsl_005fodeiv2_005fstep_005fmsbdf-2200"></a></var><br>
+<blockquote><p><a name="index-BDF-method-2201"></a>A variable-coefficient linear multistep backward differentiation
+formula (BDF) method in Nordsieck form. This stepper uses the explicit
+BDF formula as predictor and implicit BDF formula as corrector. A
+modified Newton iteration method is used to solve the system of
+non-linear equations. Method order varies dynamically between 1 and
+5. The method is generally suitable for stiff problems. This stepper
+requires the Jacobian and the access to the driver object via
+<code>gsl_odeiv2_step_set_driver</code>. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

@@ -1,0 +1,166 @@
+<html lang="en">
+<head>
+<title>Providing a function to minimize - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Multidimensional-Minimization.html" title="Multidimensional Minimization">
+<link rel="prev" href="Initializing-the-Multidimensional-Minimizer.html" title="Initializing the Multidimensional Minimizer">
+<link rel="next" href="Multimin-Iteration.html" title="Multimin Iteration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Providing-a-function-to-minimize"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multimin-Iteration.html">Multimin Iteration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Initializing-the-Multidimensional-Minimizer.html">Initializing the Multidimensional Minimizer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Multidimensional-Minimization.html">Multidimensional Minimization</a>
+<hr>
+</div>
+
+<h3 class="section">36.4 Providing a function to minimize</h3>
+
+<p>You must provide a parametric function of n variables for the
+minimizers to operate on.  You may also need to provide a routine which
+calculates the gradient of the function and a third routine which
+calculates both the function value and the gradient together.  In order
+to allow for general parameters the functions are defined by the
+following data types:
+
+<div class="defun">
+&mdash; Data Type: <b>gsl_multimin_function_fdf</b><var><a name="index-gsl_005fmultimin_005ffunction_005ffdf-2527"></a></var><br>
+<blockquote><p>This data type defines a general function of n variables with
+parameters and the corresponding gradient vector of derivatives,
+
+          <dl>
+<dt><code>double (* f) (const gsl_vector * </code><var>x</var><code>, void * </code><var>params</var><code>)</code><dd>this function should return the result
+<!-- {$f(x,\hbox{\it params})$} -->
+f(x,params) for argument <var>x</var> and parameters <var>params</var>. 
+If the function cannot be computed, an error value of <code>GSL_NAN</code>
+should be returned.
+
+          <br><dt><code>void (* df) (const gsl_vector * </code><var>x</var><code>, void * </code><var>params</var><code>, gsl_vector * </code><var>g</var><code>)</code><dd>this function should store the <var>n</var>-dimensional gradient
+<!-- {$g_i = \partial f(x,\hbox{\it params}) / \partial x_i$} -->
+g_i = d f(x,params) / d x_i in the vector <var>g</var> for argument <var>x</var>
+and parameters <var>params</var>, returning an appropriate error code if the
+function cannot be computed.
+
+          <br><dt><code>void (* fdf) (const gsl_vector * </code><var>x</var><code>, void * </code><var>params</var><code>, double * f, gsl_vector * </code><var>g</var><code>)</code><dd>This function should set the values of the <var>f</var> and <var>g</var> as above,
+for arguments <var>x</var> and parameters <var>params</var>.  This function
+provides an optimization of the separate functions for f(x) and
+g(x)&mdash;it is always faster to compute the function and its
+derivative at the same time.
+
+          <br><dt><code>size_t n</code><dd>the dimension of the system, i.e. the number of components of the
+vectors <var>x</var>.
+
+          <br><dt><code>void * params</code><dd>a pointer to the parameters of the function. 
+</dl>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Data Type: <b>gsl_multimin_function</b><var><a name="index-gsl_005fmultimin_005ffunction-2528"></a></var><br>
+<blockquote><p>This data type defines a general function of n variables with
+parameters,
+
+          <dl>
+<dt><code>double (* f) (const gsl_vector * </code><var>x</var><code>, void * </code><var>params</var><code>)</code><dd>this function should return the result
+<!-- {$f(x,\hbox{\it params})$} -->
+f(x,params) for argument <var>x</var> and parameters <var>params</var>. 
+If the function cannot be computed, an error value of <code>GSL_NAN</code>
+should be returned.
+
+          <br><dt><code>size_t n</code><dd>the dimension of the system, i.e. the number of components of the
+vectors <var>x</var>.
+
+          <br><dt><code>void * params</code><dd>a pointer to the parameters of the function. 
+</dl>
+        </p></blockquote></div>
+
+<p class="noindent">The following example function defines a simple two-dimensional
+paraboloid with five parameters,
+
+<pre class="example"><pre class="verbatim">     /* Paraboloid centered on (p[0],p[1]), with  
+        scale factors (p[2],p[3]) and minimum p[4] */
+     
+     double
+     my_f (const gsl_vector *v, void *params)
+     {
+       double x, y;
+       double *p = (double *)params;
+       
+       x = gsl_vector_get(v, 0);
+       y = gsl_vector_get(v, 1);
+      
+       return p[2] * (x - p[0]) * (x - p[0]) +
+                p[3] * (y - p[1]) * (y - p[1]) + p[4]; 
+     }
+     
+     /* The gradient of f, df = (df/dx, df/dy). */
+     void 
+     my_df (const gsl_vector *v, void *params, 
+            gsl_vector *df)
+     {
+       double x, y;
+       double *p = (double *)params;
+       
+       x = gsl_vector_get(v, 0);
+       y = gsl_vector_get(v, 1);
+      
+       gsl_vector_set(df, 0, 2.0 * p[2] * (x - p[0]));
+       gsl_vector_set(df, 1, 2.0 * p[3] * (y - p[1]));
+     }
+     
+     /* Compute both f and df together. */
+     void 
+     my_fdf (const gsl_vector *x, void *params, 
+             double *f, gsl_vector *df) 
+     {
+       *f = my_f(x, params); 
+       my_df(x, params, df);
+     }
+</pre></pre>
+   <p class="noindent">The function can be initialized using the following code,
+
+<pre class="example">     gsl_multimin_function_fdf my_func;
+     
+     /* Paraboloid center at (1,2), scale factors (10, 20),
+        minimum value 30 */
+     double p[5] = { 1.0, 2.0, 10.0, 20.0, 30.0 };
+     
+     my_func.n = 2;  /* number of function components */
+     my_func.f = &amp;my_f;
+     my_func.df = &amp;my_df;
+     my_func.fdf = &amp;my_fdf;
+     my_func.params = (void *)p;
+</pre>
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

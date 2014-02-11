@@ -1,0 +1,268 @@
+<html lang="en">
+<head>
+<title>Vector views - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Vectors.html" title="Vectors">
+<link rel="prev" href="Reading-and-writing-vectors.html" title="Reading and writing vectors">
+<link rel="next" href="Copying-vectors.html" title="Copying vectors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Vector-views"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Copying-vectors.html">Copying vectors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reading-and-writing-vectors.html">Reading and writing vectors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Vectors.html">Vectors</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.3.5 Vector views</h4>
+
+<p>In addition to creating vectors from slices of blocks it is also
+possible to slice vectors and create vector views.  For example, a
+subvector of another vector can be described with a view, or two views
+can be made which provide access to the even and odd elements of a
+vector.
+
+   <p><a name="index-gsl_005fvector_005fview-906"></a><a name="index-gsl_005fvector_005fconst_005fview-907"></a>A vector view is a temporary object, stored on the stack, which can be
+used to operate on a subset of vector elements.  Vector views can be
+defined for both constant and non-constant vectors, using separate types
+that preserve constness.  A vector view has the type
+<code>gsl_vector_view</code> and a constant vector view has the type
+<code>gsl_vector_const_view</code>.  In both cases the elements of the view
+can be accessed as a <code>gsl_vector</code> using the <code>vector</code> component
+of the view object.  A pointer to a vector of type <code>gsl_vector *</code>
+or <code>const gsl_vector *</code> can be obtained by taking the address of
+this component with the <code>&amp;</code> operator.
+
+   <p>When using this pointer it is important to ensure that the view itself
+remains in scope&mdash;the simplest way to do so is by always writing the
+pointer as <code>&amp;</code><var>view</var><code>.vector</code>, and never storing this value
+in another variable.
+
+<div class="defun">
+&mdash; Function: gsl_vector_view <b>gsl_vector_subvector</b> (<var>gsl_vector * v, size_t offset, size_t n</var>)<var><a name="index-gsl_005fvector_005fsubvector-908"></a></var><br>
+&mdash; Function: gsl_vector_const_view <b>gsl_vector_const_subvector</b> (<var>const gsl_vector * v, size_t offset, size_t n</var>)<var><a name="index-gsl_005fvector_005fconst_005fsubvector-909"></a></var><br>
+<blockquote><p>These functions return a vector view of a subvector of another vector
+<var>v</var>.  The start of the new vector is offset by <var>offset</var> elements
+from the start of the original vector.  The new vector has <var>n</var>
+elements.  Mathematically, the <var>i</var>-th element of the new vector
+<var>v'</var> is given by,
+
+     <pre class="example">          v'(i) = v-&gt;data[(offset + i)*v-&gt;stride]
+</pre>
+        <p class="noindent">where the index <var>i</var> runs from 0 to <code>n-1</code>.
+
+        <p>The <code>data</code> pointer of the returned vector struct is set to null if
+the combined parameters (<var>offset</var>,<var>n</var>) overrun the end of the
+original vector.
+
+        <p>The new vector is only a view of the block underlying the original
+vector, <var>v</var>.  The block containing the elements of <var>v</var> is not
+owned by the new vector.  When the view goes out of scope the original
+vector <var>v</var> and its block will continue to exist.  The original
+memory can only be deallocated by freeing the original vector.  Of
+course, the original vector should not be deallocated while the view is
+still in use.
+
+        <p>The function <code>gsl_vector_const_subvector</code> is equivalent to
+<code>gsl_vector_subvector</code> but can be used for vectors which are
+declared <code>const</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_vector_view <b>gsl_vector_subvector_with_stride</b> (<var>gsl_vector * v, size_t offset, size_t stride, size_t n</var>)<var><a name="index-gsl_005fvector_005fsubvector_005fwith_005fstride-910"></a></var><br>
+&mdash; Function: gsl_vector_const_view <b>gsl_vector_const_subvector_with_stride</b> (<var>const gsl_vector * v, size_t offset, size_t stride, size_t n</var>)<var><a name="index-gsl_005fvector_005fconst_005fsubvector_005fwith_005fstride-911"></a></var><br>
+<blockquote><p>These functions return a vector view of a subvector of another vector
+<var>v</var> with an additional stride argument. The subvector is formed in
+the same way as for <code>gsl_vector_subvector</code> but the new vector has
+<var>n</var> elements with a step-size of <var>stride</var> from one element to
+the next in the original vector.  Mathematically, the <var>i</var>-th element
+of the new vector <var>v'</var> is given by,
+
+     <pre class="example">          v'(i) = v-&gt;data[(offset + i*stride)*v-&gt;stride]
+</pre>
+        <p class="noindent">where the index <var>i</var> runs from 0 to <code>n-1</code>.
+
+        <p>Note that subvector views give direct access to the underlying elements
+of the original vector. For example, the following code will zero the
+even elements of the vector <code>v</code> of length <code>n</code>, while leaving the
+odd elements untouched,
+
+     <pre class="example">          gsl_vector_view v_even
+            = gsl_vector_subvector_with_stride (v, 0, 2, n/2);
+          gsl_vector_set_zero (&amp;v_even.vector);
+</pre>
+        <p class="noindent">A vector view can be passed to any subroutine which takes a vector
+argument just as a directly allocated vector would be, using
+<code>&amp;</code><var>view</var><code>.vector</code>.  For example, the following code
+computes the norm of the odd elements of <code>v</code> using the <span class="sc">blas</span>
+routine <span class="sc">dnrm2</span>,
+
+     <pre class="example">          gsl_vector_view v_odd
+            = gsl_vector_subvector_with_stride (v, 1, 2, n/2);
+          double r = gsl_blas_dnrm2 (&amp;v_odd.vector);
+</pre>
+        <p>The function <code>gsl_vector_const_subvector_with_stride</code> is equivalent
+to <code>gsl_vector_subvector_with_stride</code> but can be used for vectors
+which are declared <code>const</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_vector_view <b>gsl_vector_complex_real</b> (<var>gsl_vector_complex * v</var>)<var><a name="index-gsl_005fvector_005fcomplex_005freal-912"></a></var><br>
+&mdash; Function: gsl_vector_const_view <b>gsl_vector_complex_const_real</b> (<var>const gsl_vector_complex * v</var>)<var><a name="index-gsl_005fvector_005fcomplex_005fconst_005freal-913"></a></var><br>
+<blockquote><p>These functions return a vector view of the real parts of the complex
+vector <var>v</var>.
+
+        <p>The function <code>gsl_vector_complex_const_real</code> is equivalent to
+<code>gsl_vector_complex_real</code> but can be used for vectors which are
+declared <code>const</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_vector_view <b>gsl_vector_complex_imag</b> (<var>gsl_vector_complex * v</var>)<var><a name="index-gsl_005fvector_005fcomplex_005fimag-914"></a></var><br>
+&mdash; Function: gsl_vector_const_view <b>gsl_vector_complex_const_imag</b> (<var>const gsl_vector_complex * v</var>)<var><a name="index-gsl_005fvector_005fcomplex_005fconst_005fimag-915"></a></var><br>
+<blockquote><p>These functions return a vector view of the imaginary parts of the
+complex vector <var>v</var>.
+
+        <p>The function <code>gsl_vector_complex_const_imag</code> is equivalent to
+<code>gsl_vector_complex_imag</code> but can be used for vectors which are
+declared <code>const</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_vector_view <b>gsl_vector_view_array</b> (<var>double * base, size_t n</var>)<var><a name="index-gsl_005fvector_005fview_005farray-916"></a></var><br>
+&mdash; Function: gsl_vector_const_view <b>gsl_vector_const_view_array</b> (<var>const double * base, size_t n</var>)<var><a name="index-gsl_005fvector_005fconst_005fview_005farray-917"></a></var><br>
+<blockquote><p>These functions return a vector view of an array.  The start of the new
+vector is given by <var>base</var> and has <var>n</var> elements.  Mathematically,
+the <var>i</var>-th element of the new vector <var>v'</var> is given by,
+
+     <pre class="example">          v'(i) = base[i]
+</pre>
+        <p class="noindent">where the index <var>i</var> runs from 0 to <code>n-1</code>.
+
+        <p>The array containing the elements of <var>v</var> is not owned by the new
+vector view.  When the view goes out of scope the original array will
+continue to exist.  The original memory can only be deallocated by
+freeing the original pointer <var>base</var>.  Of course, the original array
+should not be deallocated while the view is still in use.
+
+        <p>The function <code>gsl_vector_const_view_array</code> is equivalent to
+<code>gsl_vector_view_array</code> but can be used for arrays which are
+declared <code>const</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_vector_view <b>gsl_vector_view_array_with_stride</b> (<var>double * base, size_t stride, size_t n</var>)<var><a name="index-gsl_005fvector_005fview_005farray_005fwith_005fstride-918"></a></var><br>
+&mdash; Function: gsl_vector_const_view <b>gsl_vector_const_view_array_with_stride</b> (<var>const double * base, size_t stride, size_t n</var>)<var><a name="index-gsl_005fvector_005fconst_005fview_005farray_005fwith_005fstride-919"></a></var><br>
+<blockquote><p>These functions return a vector view of an array <var>base</var> with an
+additional stride argument. The subvector is formed in the same way as
+for <code>gsl_vector_view_array</code> but the new vector has <var>n</var> elements
+with a step-size of <var>stride</var> from one element to the next in the
+original array.  Mathematically, the <var>i</var>-th element of the new
+vector <var>v'</var> is given by,
+
+     <pre class="example">          v'(i) = base[i*stride]
+</pre>
+        <p class="noindent">where the index <var>i</var> runs from 0 to <code>n-1</code>.
+
+        <p>Note that the view gives direct access to the underlying elements of the
+original array.  A vector view can be passed to any subroutine which
+takes a vector argument just as a directly allocated vector would be,
+using <code>&amp;</code><var>view</var><code>.vector</code>.
+
+        <p>The function <code>gsl_vector_const_view_array_with_stride</code> is
+equivalent to <code>gsl_vector_view_array_with_stride</code> but can be used
+for arrays which are declared <code>const</code>. 
+</p></blockquote></div>
+
+<!-- @node Modifying subvector views -->
+<!-- @subsection Modifying subvector views -->
+<!-- @deftypefun int gsl_vector_view_from_vector (gsl_vector * @var{v}, gsl_vector * @var{base}, size_t @var{offset}, size_t @var{n}, size_t @var{stride}) -->
+<!-- This function modifies and existing vector view @var{v} to form a new -->
+<!-- view of a vector @var{base}, starting from element @var{offset}.  The -->
+<!-- vector has @var{n} elements separated by stride @var{stride}.  Any -->
+<!-- existing view in @var{v} will be lost as a result of this function. -->
+<!-- @end deftypefun -->
+<!-- @deftypefun int gsl_vector_view_from_array (gsl_vector * @var{v}, double * @var{base}, size_t @var{offset}, size_t @var{n}, size_t @var{stride}) -->
+<!-- This function modifies and existing vector view @var{v} to form a new -->
+<!-- view of an array @var{base}, starting from element @var{offset}.  The -->
+<!-- vector has @var{n} elements separated by stride @var{stride}.  Any -->
+<!-- existing view in @var{v} will be lost as a result of this function. -->
+<!-- @end deftypefun -->
+<!-- @deftypefun {gsl_vector *} gsl_vector_alloc_from_block (gsl_block * @var{b}, size_t @var{offset}, size_t @var{n}, size_t @var{stride}) -->
+<!-- This function creates a vector as a slice of an existing block @var{b}, -->
+<!-- returning a pointer to a newly initialized vector struct.  The start of -->
+<!-- the vector is offset by @var{offset} elements from the start of the -->
+<!-- block.  The vector has @var{n} elements, with a step-size of @var{stride} -->
+<!-- from one element to the next.  Mathematically, the @var{i}-th element of -->
+<!-- the vector is given by, -->
+<!-- @example -->
+<!-- v(i) = b->data[offset + i*stride] -->
+<!-- @end example -->
+<!-- @noindent -->
+<!-- where the index @var{i} runs from 0 to @code{n-1}. -->
+<!-- A null pointer is returned if the combined parameters -->
+<!-- (@var{offset},@var{n},@var{stride}) overrun the end of the block or if -->
+<!-- insufficient memory is available to store the vector. -->
+<!-- The vector is only a view of the block @var{b}, and the block is not -->
+<!-- owned by the vector.  When the vector is deallocated the block @var{b} -->
+<!-- will continue to exist.  This memory can only be deallocated by freeing -->
+<!-- the block itself.  Of course, this block should not be deallocated while -->
+<!-- the vector is still in use. -->
+<!-- @end deftypefun -->
+<!-- @deftypefun {gsl_vector *} gsl_vector_alloc_from_vector (gsl_vector * @var{v}, size_t @var{offset}, size_t @var{n}, size_t @var{stride}) -->
+<!-- This function creates a vector as a slice of another vector @var{v}, -->
+<!-- returning a pointer to a newly initialized vector struct.  The start of -->
+<!-- the new vector is offset by @var{offset} elements from the start of the -->
+<!-- original vector.  The new vector has @var{n} elements, with a step-size -->
+<!-- of @var{stride} from one element to the next in the original vector. -->
+<!-- Mathematically, the @var{i}-th element of the new vector @var{v'} is -->
+<!-- given by, -->
+<!-- @example -->
+<!-- v'(i) = v->data[(offset + i*stride)*v->stride] -->
+<!-- @end example -->
+<!-- @noindent -->
+<!-- where the index @var{i} runs from 0 to @code{n-1}. -->
+<!-- A null pointer is returned if the combined parameters -->
+<!-- (@var{offset},@var{n},@var{stride}) overrun the end of the original -->
+<!-- vector or if insufficient memory is available store the new vector. -->
+<!-- The new vector is only a view of the block underlying the original -->
+<!-- vector, @var{v}.  The block is not owned by the new vector.  When the new -->
+<!-- vector is deallocated the original vector @var{v} and its block will -->
+<!-- continue to exist.  The original memory can only be deallocated by -->
+<!-- freeing the original vector.  Of course, the original vector should not -->
+<!-- be deallocated while the new vector is still in use. -->
+<!-- @end deftypefun -->
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

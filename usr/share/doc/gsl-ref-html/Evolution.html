@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+<title>Evolution - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Ordinary-Differential-Equations.html" title="Ordinary Differential Equations">
+<link rel="prev" href="Adaptive-Step_002dsize-Control.html" title="Adaptive Step-size Control">
+<link rel="next" href="Driver.html" title="Driver">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Evolution"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Driver.html">Driver</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Adaptive-Step_002dsize-Control.html">Adaptive Step-size Control</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Ordinary-Differential-Equations.html">Ordinary Differential Equations</a>
+<hr>
+</div>
+
+<h3 class="section">26.4 Evolution</h3>
+
+<p>The evolution function combines the results of a stepping function and
+control function to reliably advance the solution forward one step
+using an acceptable step-size.
+
+<div class="defun">
+&mdash; Function: gsl_odeiv2_evolve * <b>gsl_odeiv2_evolve_alloc</b> (<var>size_t dim</var>)<var><a name="index-gsl_005fodeiv2_005fevolve_005falloc-2216"></a></var><br>
+<blockquote><p><a name="index-gsl_005fodeiv2_005fevolve-2217"></a>This function returns a pointer to a newly allocated instance of an
+evolution function for a system of <var>dim</var> dimensions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_odeiv2_evolve_apply</b> (<var>gsl_odeiv2_evolve * e, gsl_odeiv2_control * con, gsl_odeiv2_step * step, const gsl_odeiv2_system * sys, double * t, double t1, double * h, double y</var>[])<var><a name="index-gsl_005fodeiv2_005fevolve_005fapply-2218"></a></var><br>
+<blockquote><p>This function advances the system (<var>e</var>, <var>sys</var>) from time
+<var>t</var> and position <var>y</var> using the stepping function <var>step</var>. 
+The new time and position are stored in <var>t</var> and <var>y</var> on output.
+
+        <p>The initial step-size is taken as <var>h</var>. The control function
+<var>con</var> is applied to check whether the local error estimated by the
+stepping function <var>step</var> using step-size <var>h</var> exceeds the
+required error tolerance. If the error is too high, the step is
+retried by calling <var>step</var> with a decreased step-size. This process
+is continued until an acceptable step-size is found. An estimate of
+the local error for the step can be obtained from the components of
+the array <var>e</var><code>-&gt;yerr[]</code>.
+
+        <p>If the user-supplied functions defined in the system <var>sys</var> returns
+<code>GSL_EBADFUNC</code>, the function returns immediately with the same
+return code. In this case the user must call
+<code>gsl_odeiv2_step_reset</code> and
+<code>gsl_odeiv2_evolve_reset</code> before calling this function again.
+
+        <p>Otherwise, if the user-supplied functions defined in the system
+<var>sys</var> or the stepping function <var>step</var> return a status other
+than <code>GSL_SUCCESS</code>, the step is retried with a decreased
+step-size. If the step-size decreases below machine precision, a
+status of <code>GSL_FAILURE</code> is returned if the user functions
+returned <code>GSL_SUCCESS</code>. Otherwise the value returned by user
+function is returned. If no acceptable step can be made, <var>t</var> and
+<var>y</var> will be restored to their pre-step values and <var>h</var> contains
+the final attempted step-size.
+
+        <p>If the step is successful the function returns a suggested step-size
+for the next step in <var>h</var>. The maximum time <var>t1</var> is guaranteed
+not to be exceeded by the time-step. On the final time-step the value
+of <var>t</var> will be set to <var>t1</var> exactly. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_odeiv2_evolve_apply_fixed_step</b> (<var>gsl_odeiv2_evolve * e, gsl_odeiv2_control * con, gsl_odeiv2_step * step, const gsl_odeiv2_system * sys, double * t, const double h, double y</var>[])<var><a name="index-gsl_005fodeiv2_005fevolve_005fapply_005ffixed_005fstep-2219"></a></var><br>
+<blockquote><p>This function advances the ODE-system (<var>e</var>, <var>sys</var>, <var>con</var>)
+from time <var>t</var> and position <var>y</var> using the stepping function
+<var>step</var> by a specified step size <var>h</var>. If the local error
+estimated by the stepping function exceeds the desired error level,
+the step is not taken and the function returns
+<code>GSL_FAILURE</code>. Otherwise the value returned by user function is
+returned. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_odeiv2_evolve_reset</b> (<var>gsl_odeiv2_evolve * e</var>)<var><a name="index-gsl_005fodeiv2_005fevolve_005freset-2220"></a></var><br>
+<blockquote><p>This function resets the evolution function <var>e</var>.  It should be used
+whenever the next use of <var>e</var> will not be a continuation of a
+previous step. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_odeiv2_evolve_free</b> (<var>gsl_odeiv2_evolve * e</var>)<var><a name="index-gsl_005fodeiv2_005fevolve_005ffree-2221"></a></var><br>
+<blockquote><p>This function frees all the memory associated with the evolution function
+<var>e</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_odeiv2_evolve_set_driver</b> (<var>gsl_odeiv2_evolve * e, const gsl_odeiv2_driver * d</var>)<var><a name="index-gsl_005fodeiv2_005fevolve_005fset_005fdriver-2222"></a></var><br>
+<blockquote><p>This function sets a pointer of the driver object <var>d</var> for evolve
+object <var>e</var>. 
+</p></blockquote></div>
+
+   <p><a name="index-discontinuities_002c-in-ODE-systems-2223"></a>If a system has discontinuous changes in the derivatives at known
+points, it is advisable to evolve the system between each discontinuity
+in sequence.  For example, if a step-change in an external driving
+force occurs at times t_a, t_b and t_c then evolution
+should be carried out over the ranges (t_0,t_a),
+(t_a,t_b), (t_b,t_c), and (t_c,t_1) separately
+and not directly over the range (t_0,t_1).
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

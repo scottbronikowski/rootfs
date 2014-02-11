@@ -1,0 +1,1 @@
+../../../../../../share/pyshared/uniconvertor/app/conf/configurator.py

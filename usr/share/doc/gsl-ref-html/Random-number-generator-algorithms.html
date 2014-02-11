@@ -1,0 +1,302 @@
+<html lang="en">
+<head>
+<title>Random number generator algorithms - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Random-Number-Generation.html" title="Random Number Generation">
+<link rel="prev" href="Reading-and-writing-random-number-generator-state.html" title="Reading and writing random number generator state">
+<link rel="next" href="Unix-random-number-generators.html" title="Unix random number generators">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Random-number-generator-algorithms"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Unix-random-number-generators.html">Unix random number generators</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reading-and-writing-random-number-generator-state.html">Reading and writing random number generator state</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Random-Number-Generation.html">Random Number Generation</a>
+<hr>
+</div>
+
+<h3 class="section">18.9 Random number generator algorithms</h3>
+
+<p>The functions described above make no reference to the actual algorithm
+used.  This is deliberate so that you can switch algorithms without
+having to change any of your application source code.  The library
+provides a large number of generators of different types, including
+simulation quality generators, generators provided for compatibility
+with other libraries and historical generators from the past.
+
+   <p>The following generators are recommended for use in simulation.  They
+have extremely long periods, low correlation and pass most statistical
+tests.  For the most reliable source of uncorrelated numbers, the
+second-generation <span class="sc">ranlux</span> generators have the strongest proof of
+randomness.
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_mt19937</b><var><a name="index-gsl_005frng_005fmt19937-1603"></a></var><br>
+<blockquote><p><a name="index-MT19937-random-number-generator-1604"></a>The MT19937 generator of Makoto Matsumoto and Takuji Nishimura is a
+variant of the twisted generalized feedback shift-register algorithm,
+and is known as the &ldquo;Mersenne Twister&rdquo; generator.  It has a Mersenne
+prime period of
+<!-- {$2^{19937} - 1$} -->
+2^19937 - 1 (about
+<!-- {$10^{6000}$} -->
+10^6000) and is
+equi-distributed in 623 dimensions.  It has passed the <span class="sc">diehard</span>
+statistical tests.  It uses 624 words of state per generator and is
+comparable in speed to the other generators.  The original generator used
+a default seed of 4357 and choosing <var>s</var> equal to zero in
+<code>gsl_rng_set</code> reproduces this.  Later versions switched to 5489
+as the default seed, you can choose this explicitly via <code>gsl_rng_set</code>
+instead if you require it.
+
+        <p>For more information see,
+          <ul>
+<li>Makoto Matsumoto and Takuji Nishimura, &ldquo;Mersenne Twister: A
+623-dimensionally equidistributed uniform pseudorandom number
+generator&rdquo;. <cite>ACM Transactions on Modeling and Computer
+Simulation</cite>, Vol. 8, No. 1 (Jan. 1998), Pages 3&ndash;30
+</ul>
+
+     <p class="noindent">The generator <code>gsl_rng_mt19937</code> uses the second revision of the
+seeding procedure published by the two authors above in 2002.  The
+original seeding procedures could cause spurious artifacts for some seed
+values. They are still available through the alternative generators
+<code>gsl_rng_mt19937_1999</code> and <code>gsl_rng_mt19937_1998</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_ranlxs0</b><var><a name="index-gsl_005frng_005franlxs0-1605"></a></var><br>
+&mdash; Generator: <b>gsl_rng_ranlxs1</b><var><a name="index-gsl_005frng_005franlxs1-1606"></a></var><br>
+&mdash; Generator: <b>gsl_rng_ranlxs2</b><var><a name="index-gsl_005frng_005franlxs2-1607"></a></var><br>
+<blockquote><p><a name="index-RANLXS-random-number-generator-1608"></a>
+The generator <code>ranlxs0</code> is a second-generation version of the
+<span class="sc">ranlux</span> algorithm of L&uuml;scher, which produces &ldquo;luxury random
+numbers&rdquo;.  This generator provides single precision output (24 bits) at
+three luxury levels <code>ranlxs0</code>, <code>ranlxs1</code> and <code>ranlxs2</code>,
+in increasing order of strength. 
+It uses double-precision floating point arithmetic internally and can be
+significantly faster than the integer version of <code>ranlux</code>,
+particularly on 64-bit architectures.  The period of the generator is
+about <!-- {$10^{171}$} -->
+10^171.  The algorithm has mathematically proven properties and
+can provide truly decorrelated numbers at a known level of randomness. 
+The higher luxury levels provide increased decorrelation between samples
+as an additional safety margin.
+
+        <p>Note that the range of allowed seeds for this generator is <!-- {$[0,2^{31}-1]$} -->
+[0,2^31-1]. Higher seed values are wrapped modulo <!-- {$2^{31}$} -->
+2^31. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_ranlxd1</b><var><a name="index-gsl_005frng_005franlxd1-1609"></a></var><br>
+&mdash; Generator: <b>gsl_rng_ranlxd2</b><var><a name="index-gsl_005frng_005franlxd2-1610"></a></var><br>
+<blockquote><p><a name="index-RANLXD-random-number-generator-1611"></a>
+These generators produce double precision output (48 bits) from the
+<span class="sc">ranlxs</span> generator.  The library provides two luxury levels
+<code>ranlxd1</code> and <code>ranlxd2</code>, in increasing order of strength. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_ranlux</b><var><a name="index-gsl_005frng_005franlux-1612"></a></var><br>
+&mdash; Generator: <b>gsl_rng_ranlux389</b><var><a name="index-gsl_005frng_005franlux389-1613"></a></var><br>
+<blockquote>
+        <p><a name="index-RANLUX-random-number-generator-1614"></a>The <code>ranlux</code> generator is an implementation of the original
+algorithm developed by L&uuml;scher.  It uses a
+lagged-fibonacci-with-skipping algorithm to produce &ldquo;luxury random
+numbers&rdquo;.  It is a 24-bit generator, originally designed for
+single-precision IEEE floating point numbers.  This implementation is
+based on integer arithmetic, while the second-generation versions
+<span class="sc">ranlxs</span> and <span class="sc">ranlxd</span> described above provide floating-point
+implementations which will be faster on many platforms. 
+The period of the generator is about <!-- {$10^{171}$} -->
+10^171.  The algorithm has mathematically proven properties and
+it can provide truly decorrelated numbers at a known level of
+randomness.  The default level of decorrelation recommended by L&uuml;scher
+is provided by <code>gsl_rng_ranlux</code>, while <code>gsl_rng_ranlux389</code>
+gives the highest level of randomness, with all 24 bits decorrelated. 
+Both types of generator use 24 words of state per generator.
+
+        <p>For more information see,
+          <ul>
+<li>M. L&uuml;scher, &ldquo;A portable high-quality random number generator for
+lattice field theory calculations&rdquo;, <cite>Computer Physics
+Communications</cite>, 79 (1994) 100&ndash;110. 
+<li>F. James, &ldquo;RANLUX: A Fortran implementation of the high-quality
+pseudo-random number generator of L&uuml;scher&rdquo;, <cite>Computer Physics
+Communications</cite>, 79 (1994) 111&ndash;114
+</ul>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_cmrg</b><var><a name="index-gsl_005frng_005fcmrg-1615"></a></var><br>
+<blockquote><p><a name="index-CMRG_002c-combined-multiple-recursive-random-number-generator-1616"></a>This is a combined multiple recursive generator by L'Ecuyer. 
+Its sequence is,
+     where the two underlying generators x_n and y_n are,
+     with coefficients
+a_1 = 0,
+a_2 = 63308,
+a_3 = -183326,
+b_1 = 86098,
+b_2 = 0,
+b_3 = -539608,
+and moduli
+<!-- {$m_1 = 2^{31} - 1 = 2147483647$} -->
+m_1 = 2^31 - 1 = 2147483647
+and
+<!-- {$m_2 = 2145483479$} -->
+m_2 = 2145483479.
+
+        <p>The period of this generator is
+<!-- {$\hbox{lcm}(m_1^3-1, m_2^3-1)$} -->
+lcm(m_1^3-1, m_2^3-1),
+which is approximately
+<!-- {$2^{185}$} -->
+2^185
+(about
+<!-- {$10^{56}$} -->
+10^56).  It uses
+6 words of state per generator.  For more information see,
+
+          <ul>
+<li>P. L'Ecuyer, &ldquo;Combined Multiple Recursive Random Number
+Generators&rdquo;, <cite>Operations Research</cite>, 44, 5 (1996), 816&ndash;822. 
+</ul>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_mrg</b><var><a name="index-gsl_005frng_005fmrg-1617"></a></var><br>
+<blockquote><p><a name="index-MRG_002c-multiple-recursive-random-number-generator-1618"></a>This is a fifth-order multiple recursive generator by L'Ecuyer, Blouin
+and Coutre.  Its sequence is,
+     with
+a_1 = 107374182,
+a_2 = a_3 = a_4 = 0,
+a_5 = 104480
+and
+<!-- {$m = 2^{31}-1$} -->
+m = 2^31 - 1.
+
+        <p>The period of this generator is about
+<!-- {$10^{46}$} -->
+10^46.  It uses 5 words
+of state per generator.  More information can be found in the following
+paper,
+          <ul>
+<li>P. L'Ecuyer, F. Blouin, and R. Coutre, &ldquo;A search for good multiple
+recursive random number generators&rdquo;, <cite>ACM Transactions on Modeling and
+Computer Simulation</cite> 3, 87&ndash;98 (1993). 
+</ul>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_taus</b><var><a name="index-gsl_005frng_005ftaus-1619"></a></var><br>
+&mdash; Generator: <b>gsl_rng_taus2</b><var><a name="index-gsl_005frng_005ftaus2-1620"></a></var><br>
+<blockquote><p><a name="index-Tausworthe-random-number-generator-1621"></a>This is a maximally equidistributed combined Tausworthe generator by
+L'Ecuyer.  The sequence is,
+     where,
+     computed modulo
+<!-- {$2^{32}$} -->
+2^32.  In the formulas above
+<!-- {$\oplus$} -->
+^^
+denotes &ldquo;exclusive-or&rdquo;.  Note that the algorithm relies on the properties
+of 32-bit unsigned integers and has been implemented using a bitmask
+of <code>0xFFFFFFFF</code> to make it work on 64 bit machines.
+
+        <p>The period of this generator is <!-- {$2^{88}$} -->
+2^88 (about
+<!-- {$10^{26}$} -->
+10^26).  It uses 3 words of state per generator.  For more
+information see,
+
+          <ul>
+<li>P. L'Ecuyer, &ldquo;Maximally Equidistributed Combined Tausworthe
+Generators&rdquo;, <cite>Mathematics of Computation</cite>, 65, 213 (1996), 203&ndash;213. 
+</ul>
+
+     <p class="noindent">The generator <code>gsl_rng_taus2</code> uses the same algorithm as
+<code>gsl_rng_taus</code> but with an improved seeding procedure described in
+the paper,
+
+          <ul>
+<li>P. L'Ecuyer, &ldquo;Tables of Maximally Equidistributed Combined LFSR
+Generators&rdquo;, <cite>Mathematics of Computation</cite>, 68, 225 (1999), 261&ndash;269
+</ul>
+
+     <p class="noindent">The generator <code>gsl_rng_taus2</code> should now be used in preference to
+<code>gsl_rng_taus</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_gfsr4</b><var><a name="index-gsl_005frng_005fgfsr4-1622"></a></var><br>
+<blockquote><p><a name="index-Four_002dtap-Generalized-Feedback-Shift-Register-1623"></a>The <code>gfsr4</code> generator is like a lagged-fibonacci generator, and
+produces each number as an <code>xor</code>'d sum of four previous values.
+
+        <p>Ziff (ref below) notes that &ldquo;it is now widely known&rdquo; that two-tap
+registers (such as R250, which is described below)
+have serious flaws, the most obvious one being the three-point
+correlation that comes from the definition of the generator.  Nice
+mathematical properties can be derived for GFSR's, and numerics bears
+out the claim that 4-tap GFSR's with appropriately chosen offsets are as
+random as can be measured, using the author's test.
+
+        <p>This implementation uses the values suggested the example on p392 of
+Ziff's article: A=471, B=1586, C=6988, D=9689.
+
+        <p>If the offsets are appropriately chosen (such as the one ones in this
+implementation), then the sequence is said to be maximal; that means
+that the period is 2^D - 1, where D is the longest lag. 
+(It is one less than 2^D because it is not permitted to have all
+zeros in the <code>ra[]</code> array.)  For this implementation with
+D=9689 that works out to about <!-- {$10^{2917}$} -->
+10^2917.
+
+        <p>Note that the implementation of this generator using a 32-bit
+integer amounts to 32 parallel implementations of one-bit
+generators.  One consequence of this is that the period of this
+32-bit generator is the same as for the one-bit generator. 
+Moreover, this independence means that all 32-bit patterns are
+equally likely, and in particular that 0 is an allowed random
+value.  (We are grateful to Heiko Bauke for clarifying for us these
+properties of GFSR random number generators.)
+
+        <p>For more information see,
+          <ul>
+<li>Robert M. Ziff, &ldquo;Four-tap shift-register-sequence random-number
+generators&rdquo;, <cite>Computers in Physics</cite>, 12(4), Jul/Aug
+1998, pp 385&ndash;392. 
+</ul>
+        </p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>QR Decomposition with Column Pivoting - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Linear-Algebra.html" title="Linear Algebra">
+<link rel="prev" href="QR-Decomposition.html" title="QR Decomposition">
+<link rel="next" href="Singular-Value-Decomposition.html" title="Singular Value Decomposition">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="QR-Decomposition-with-Column-Pivoting"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Singular-Value-Decomposition.html">Singular Value Decomposition</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="QR-Decomposition.html">QR Decomposition</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Linear-Algebra.html">Linear Algebra</a>
+<hr>
+</div>
+
+<h3 class="section">14.3 QR Decomposition with Column Pivoting</h3>
+
+<p><a name="index-QR-decomposition-with-column-pivoting-1327"></a>
+The QR decomposition can be extended to the rank deficient case
+by introducing a column permutation P,
+The first r columns of Q form an orthonormal basis
+for the range of A for a matrix with column rank r.  This
+decomposition can also be used to convert the linear system A x =
+b into the triangular system R y = Q^T b, x = P y, which can be
+solved by back-substitution and permutation.  We denote the QR
+decomposition with column pivoting by QRP^T since A = Q R
+P^T.
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QRPT_decomp</b> (<var>gsl_matrix * A, gsl_vector * tau, gsl_permutation * p, int * signum, gsl_vector * norm</var>)<var><a name="index-gsl_005flinalg_005fQRPT_005fdecomp-1328"></a></var><br>
+<blockquote><p>This function factorizes the M-by-N matrix <var>A</var> into
+the QRP^T decomposition A = Q R P^T.  On output the
+diagonal and upper triangular part of the input matrix contain the
+matrix R. The permutation matrix P is stored in the
+permutation <var>p</var>.  The sign of the permutation is given by
+<var>signum</var>. It has the value (-1)^n, where n is the
+number of interchanges in the permutation. The vector <var>tau</var> and the
+columns of the lower triangular part of the matrix <var>A</var> contain the
+Householder coefficients and vectors which encode the orthogonal matrix
+<var>Q</var>.  The vector <var>tau</var> must be of length k=\min(M,N). The
+matrix Q is related to these components by, Q = Q_k ... Q_2
+Q_1 where Q_i = I - \tau_i v_i v_i^T and v_i is the
+Householder vector v_i =
+(0,...,1,A(i+1,i),A(i+2,i),...,A(m,i)). This is the same storage scheme
+as used by <span class="sc">lapack</span>.  The vector <var>norm</var> is a workspace of length
+<var>N</var> used for column pivoting.
+
+        <p>The algorithm used to perform the decomposition is Householder QR with
+column pivoting (Golub &amp; Van Loan, <cite>Matrix Computations</cite>, Algorithm
+5.4.1). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QRPT_decomp2</b> (<var>const gsl_matrix * A, gsl_matrix * q, gsl_matrix * r, gsl_vector * tau, gsl_permutation * p, int * signum, gsl_vector * norm</var>)<var><a name="index-gsl_005flinalg_005fQRPT_005fdecomp2-1329"></a></var><br>
+<blockquote><p>This function factorizes the matrix <var>A</var> into the decomposition
+A = Q R P^T without modifying <var>A</var> itself and storing the
+output in the separate matrices <var>q</var> and <var>r</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QRPT_solve</b> (<var>const gsl_matrix * QR, const gsl_vector * tau, const gsl_permutation * p, const gsl_vector * b, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fQRPT_005fsolve-1330"></a></var><br>
+<blockquote><p>This function solves the square system A x = b using the QRP^T
+decomposition of A held in (<var>QR</var>, <var>tau</var>, <var>p</var>) which must
+have been computed previously by <code>gsl_linalg_QRPT_decomp</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QRPT_svx</b> (<var>const gsl_matrix * QR, const gsl_vector * tau, const gsl_permutation * p, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fQRPT_005fsvx-1331"></a></var><br>
+<blockquote><p>This function solves the square system A x = b in-place using the
+QRP^T decomposition of A held in
+(<var>QR</var>,<var>tau</var>,<var>p</var>). On input <var>x</var> should contain the
+right-hand side b, which is replaced by the solution on output. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QRPT_QRsolve</b> (<var>const gsl_matrix * Q, const gsl_matrix * R, const gsl_permutation * p, const gsl_vector * b, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fQRPT_005fQRsolve-1332"></a></var><br>
+<blockquote><p>This function solves the square system R P^T x = Q^T b for
+<var>x</var>. It can be used when the QR decomposition of a matrix is
+available in unpacked form as (<var>Q</var>, <var>R</var>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QRPT_update</b> (<var>gsl_matrix * Q, gsl_matrix * R, const gsl_permutation * p, gsl_vector * w, const gsl_vector * v</var>)<var><a name="index-gsl_005flinalg_005fQRPT_005fupdate-1333"></a></var><br>
+<blockquote><p>This function performs a rank-1 update w v^T of the QRP^T
+decomposition (<var>Q</var>, <var>R</var>, <var>p</var>). The update is given by
+Q'R' = Q (R + w v^T P) where the output matrices Q' and
+R' are also orthogonal and right triangular. Note that <var>w</var> is
+destroyed by the update. The permutation <var>p</var> is not changed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QRPT_Rsolve</b> (<var>const gsl_matrix * QR, const gsl_permutation * p, const gsl_vector * b, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fQRPT_005fRsolve-1334"></a></var><br>
+<blockquote><p>This function solves the triangular system R P^T x = b for the
+N-by-N matrix R contained in <var>QR</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_linalg_QRPT_Rsvx</b> (<var>const gsl_matrix * QR, const gsl_permutation * p, gsl_vector * x</var>)<var><a name="index-gsl_005flinalg_005fQRPT_005fRsvx-1335"></a></var><br>
+<blockquote><p>This function solves the triangular system R P^T x = b in-place
+for the N-by-N matrix R contained in <var>QR</var>. On
+input <var>x</var> should contain the right-hand side b, which is
+replaced by the solution on output. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

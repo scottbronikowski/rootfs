@@ -1,0 +1,1 @@
+../../../../../share/pyshared/reportlab/pdfgen/pathobject.py

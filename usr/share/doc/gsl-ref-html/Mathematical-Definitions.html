@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Mathematical Definitions - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fast-Fourier-Transforms.html" title="Fast Fourier Transforms">
+<link rel="next" href="Overview-of-complex-data-FFTs.html" title="Overview of complex data FFTs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mathematical-Definitions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Overview-of-complex-data-FFTs.html">Overview of complex data FFTs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fast-Fourier-Transforms.html">Fast Fourier Transforms</a>
+<hr>
+</div>
+
+<h3 class="section">16.1 Mathematical Definitions</h3>
+
+<p><a name="index-FFT-mathematical-definition-1474"></a>
+Fast Fourier Transforms are efficient algorithms for
+calculating the discrete Fourier transform (DFT),
+
+   <p>The DFT usually arises as an approximation to the continuous Fourier
+transform when functions are sampled at discrete intervals in space or
+time.  The naive evaluation of the discrete Fourier transform is a
+matrix-vector multiplication
+<!-- {$W\vec{z}$} -->
+W\vec{z}. A general matrix-vector multiplication takes
+O(n^2) operations for n data-points.  Fast Fourier
+transform algorithms use a divide-and-conquer strategy to factorize the
+matrix W into smaller sub-matrices, corresponding to the integer
+factors of the length n.  If n can be factorized into a
+product of integers
+<!-- {$f_1 f_2 \ldots f_m$} -->
+f_1 f_2 ... f_m then the DFT can be computed in O(n \sum
+f_i) operations.  For a radix-2 FFT this gives an operation count of
+O(n \log_2 n).
+
+   <p>All the FFT functions offer three types of transform: forwards, inverse
+and backwards, based on the same mathematical definitions.  The
+definition of the <dfn>forward Fourier transform</dfn>,
+<!-- {$x = \hbox{FFT}(z)$} -->
+x = FFT(z), is,
+and the definition of the <dfn>inverse Fourier transform</dfn>,
+<!-- {$x = \hbox{IFFT}(z)$} -->
+x = IFFT(z), is,
+The factor of 1/n makes this a true inverse.  For example, a call
+to <code>gsl_fft_complex_forward</code> followed by a call to
+<code>gsl_fft_complex_inverse</code> should return the original data (within
+numerical errors).
+
+   <p>In general there are two possible choices for the sign of the
+exponential in the transform/ inverse-transform pair. GSL follows the
+same convention as <span class="sc">fftpack</span>, using a negative exponential for the forward
+transform.  The advantage of this convention is that the inverse
+transform recreates the original function with simple Fourier
+synthesis.  Numerical Recipes uses the opposite convention, a positive
+exponential in the forward transform.
+
+   <p>The <dfn>backwards FFT</dfn> is simply our terminology for an unscaled
+version of the inverse FFT,
+When the overall scale of the result is unimportant it is often
+convenient to use the backwards FFT instead of the inverse to save
+unnecessary divisions.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

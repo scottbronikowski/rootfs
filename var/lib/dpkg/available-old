@@ -59,6 +59,25 @@ Original-Maintainer: Matthias Klose <doko@debian.org>
 Homepage: http://packages.python.org/distribute
 Python-Version: 2.6, 2.7
 
+Package: hp2xx
+Priority: optional
+Section: graphics
+Installed-Size: 495
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 3.4.4-8build1
+Depends: libc6 (>= 2.7), libjpeg8 (>= 8c), libpng12-0 (>= 1.2.13-4), libtiff4, libx11-6, dpkg (>= 1.15.4) | install-info
+Size: 340490
+Description: HPGL converter into some vector- and raster formats
+ HP2XX reads HPGL ASCII source files, interprets them, and converts them
+ into either another vector-oriented format or one of several rasterfile
+ formats. Currently, its HPGL parser recognizes a subset of the HP 7550A
+ command set. Some high-level functions are missing. Also, only some of the
+ fixed space vector fonts and none of the variable space arc fonts are
+ supported. Beside these limitations, hp2xx has proven to work with many
+ HP-GL sources without any trouble.
+Original-Maintainer: Christian T. Steigies <cts@debian.org>
+
 Package: linux-source
 Priority: optional
 Section: devel
@@ -72,6 +91,34 @@ Size: 2468
 Description: Linux kernel source with Ubuntu patches
  This package will always depend on the latest Linux kernel source code
  available. The Ubuntu patches have been applied.
+
+Package: sane-utils
+Priority: optional
+Section: graphics
+Installed-Size: 434
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: sane-backends
+Version: 1.0.22-7ubuntu1
+Replaces: libsane (<< 1.0.11-4)
+Depends: adduser (>= 3.47), update-inetd (>= 4.31), libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.4), libieee1284-3, libsane (>= 1.0.11-3), libusb-0.1-4 (>= 2:0.1.12), debconf (>= 0.5) | debconf-2.0
+Suggests: avahi-daemon, unpaper
+Size: 186072
+Description: API library for scanners -- utilities
+ SANE stands for "Scanner Access Now Easy" and is an application
+ programming interface (API) that provides standardized access to any
+ raster image scanner hardware (flatbed scanner, hand-held scanner,
+ video- and still-cameras, frame-grabbers, etc.). The SANE standard is
+ free and its discussion and development are open to everybody. The
+ current source code is written to support several operating systems,
+ including GNU/Linux, OS/2, Win32 and various Unices and is available
+ under the GNU General Public License (commercial applications and
+ backends are welcome, too, however).
+ .
+ This package includes the command line frontend scanimage, the saned
+ server and the sane-find-scanner utility, along with their documentation.
+Homepage: http://www.sane-project.org
+Original-Maintainer: Julien BLACHE <jblache@debian.org>
 
 Package: python-yaml
 Priority: optional
@@ -882,6 +929,40 @@ Description: automated option processing library based on autogen
 Homepage: http://www.gnu.org/software/autogen/
 Original-Maintainer: Bradley Smith <bradsmith@debian.org>
 
+Package: libsane
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 6246
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: sane-backends
+Version: 1.0.22-7ubuntu1
+Replaces: libsane-extras (<< 1.0.18.14)
+Depends: adduser (>= 3.47), libsane-common (= 1.0.22-7ubuntu1), udev (>= 0.88-1), acl (>= 2.2.49-4), libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.11), libgcc1 (>= 1:4.4.0), libgphoto2-2 (>= 2.4.10.1), libgphoto2-port0 (>= 2.4.10.1), libieee1284-3, libjpeg8 (>= 8c), libtiff4, libusb-0.1-4 (>= 2:0.1.12), libv4l-0 (>= 0.5.0)
+Pre-Depends: multiarch-support
+Suggests: avahi-daemon, hpoj, hplip, libsane-extras (>= 1.0.22.1), sane-utils (>= 1.0.22-7ubuntu1)
+Size: 3187210
+Description: API library for scanners
+ SANE stands for "Scanner Access Now Easy" and is an application
+ programming interface (API) that provides standardized access to any
+ raster image scanner hardware (flatbed scanner, hand-held scanner,
+ video- and still-cameras, frame-grabbers, etc.). The SANE standard is
+ free and its discussion and development are open to everybody. The
+ current source code is written to support several operating systems,
+ including GNU/Linux, OS/2, Win32 and various Unices and is available
+ under the GNU General Public License (commercial applications and
+ backends are welcome, too, however).
+ .
+ This package includes the backends for many scanners. A libsane-extras
+ package containing some not-yet-included backends is available separately.
+ .
+ Graphical frontends for sane are available in the packages sane and
+ xsane. Command line frontend scanimage, saned and sane-find-scanner are
+ available in the sane-utils package.
+Homepage: http://www.sane-project.org
+Original-Maintainer: Julien BLACHE <jblache@debian.org>
+
 Package: sudo
 Priority: optional
 Section: admin
@@ -1004,6 +1085,30 @@ Description: OpenPrinting printer support - PostScript PPD files
 Original-Maintainer: Debian Printing Group <debian-printing@lists.debian.org>
 Homepage: http://www.openprinting.org/
 
+Package: libwxgtk2.8-0
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 6077
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: wxwidgets2.8
+Version: 2.8.12.1-6ubuntu2
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libgdk-pixbuf2.0-0 (>= 2.22.0), libgl1-mesa-glx | libgl1, libglib2.0-0 (>= 2.24.0), libgstreamer-plugins-base0.10-0 (>= 0.10.0), libgstreamer0.10-0 (>= 0.10.0), libgtk2.0-0 (>= 2.24.0), libjpeg8 (>= 8c), libpango1.0-0 (>= 1.14.0), libpng12-0 (>= 1.2.13-4), libsm6, libstdc++6 (>= 4.4.0), libtiff4, libwxbase2.8-0 (>= 2.8.12.1), libxinerama1
+Pre-Depends: multiarch-support
+Suggests: libgnomeprintui2.2-0
+Size: 2713044
+Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ runtime)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).  For more information see http://wxwidgets.org
+ .
+ This package provides the shared libraries needed to run programs linked
+ against wxWidgets.  To use the (optional) glcanvas library you will need
+ to have Mesa or OpenGL installed.
+Homepage: http://www.wxwidgets.org/
+Original-Maintainer: wxWidgets Maintainers <freewx-maint@lists.alioth.debian.org>
+
 Package: libxcb-shm0
 Multi-Arch: same
 Priority: optional
@@ -1101,6 +1206,48 @@ Description: regular expression library for C++
  libraries can not do.
 Homepage: http://www.boost.org/libs/regex/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
+
+Package: grads
+Priority: optional
+Section: science
+Installed-Size: 7743
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 2.0.a9-4
+Depends: libc6 (>= 2.7), libgd2-xpm (>= 2.0.36~rc1~dfsg), libgeotiff2, libgrib2c0d, libhdf4-0, libhdf5-serial-1.8.4 | libhdf5-1.8.4, libnetcdf6, libreadline6 (>= 6.0), libshp1, libtiff4, libudunits2-0, libx11-6
+Size: 4441352
+Description: Grid Analysis and Display System for earth science data
+ The Grid Analysis and Display System (GrADS) is an interactive desktop tool
+ that is used for easy access, manipulation, and visualization of earth
+ science data. The format of the data may be either binary, GRIB, NetCDF, or
+ HDF-SDS (Scientific Data Sets). GrADS has been implemented worldwide on
+ a variety of commonly used operating systems and is freely distributed
+ over the Internet.
+ .
+ GrADS uses a 4-Dimensional data environment: longitude, latitude,
+ vertical level, and time. Data sets are placed within the 4-D space
+ by use of a data descriptor file. GrADS interprets station data as well as
+ gridded data, and the grids may be regular, non-linearly spaced, gaussian, or
+ of variable resolution. Data from different data sets may be graphically
+ overlaid, with correct spatial and time registration. Operations are executed
+ interactively by entering FORTRAN-like expressions at the command line.
+ A rich set of built-in functions are provided, but users may also add their
+ own functions as external routines written in any programming language.
+ .
+ Data may be displayed using a variety of graphical techniques: line and
+ bar graphs, scatter plots, smoothed contours, shaded contours, streamlines,
+ wind vectors, grid boxes, shaded grid boxes, and station model plots.
+ Graphics may be output in PostScript or image formats. GrADS provides
+ geophysically intuitive defaults, but the user has the option to control
+ all aspects of graphics output.
+ .
+ GrADS has a programmable interface (scripting language) that allows for
+ sophisticated analysis and display applications. Use scripts to display
+ buttons and dropmenus as well as graphics, and then take action based on user
+ point-and-clicks. GrADS can be run in batch mode, and the scripting language
+ facilitates using GrADS to do long overnight batch jobs.
+Original-Maintainer: Alastair McKinstry <mckinstry@debian.org>
+Homepage: http://www.iges.org/grads/
 
 Package: x11proto-input-dev
 Multi-Arch: foreign
@@ -1340,6 +1487,26 @@ Description: Vertical Blanking Interval decoder (VBI) - common files
  This package contains internationalization files.
 Original-Maintainer: Christian Marillat <marillat@debian.org>
 Homepage: http://zapping.sourceforge.net/ZVBI/index.html
+
+Package: libperl5.14
+Priority: optional
+Section: libs
+Installed-Size: 29
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: perl
+Version: 5.14.2-6ubuntu2
+Replaces: perl-base (<= 5.8.7-4)
+Depends: libc6 (>= 2.11), libgcc1 (>= 1:4.4.0), perl-base (= 5.14.2-6ubuntu2)
+Conflicts: doc-base (<< 0.10.3)
+Size: 1240
+Description: shared Perl library
+ This package is required by programs which embed a Perl interpreter to
+ ensure that the correct version of `perl-base' is installed.  It
+ additionally contains the shared Perl library on architectures where the
+ perl binary is linked to libperl.a (currently only i386, for performance
+ reasons).  In other cases the actual library is in the `perl-base' package.
+Original-Maintainer: Niko Tyni <ntyni@debian.org>
 
 Package: libvorbisfile3
 Multi-Arch: same
@@ -1624,6 +1791,28 @@ Description: library to parse EXIF files
  allows you to parse an EXIF file and read the data from those tags.
 Original-Maintainer: Debian PhotoTools Maintainers <pkg-phototools-devel@lists.alioth.debian.org>
 Homepage: http://libexif.sourceforge.net/
+
+Package: enscript
+Priority: optional
+Section: text
+Installed-Size: 1912
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 1.6.5.90-1
+Replaces: octave3.0
+Depends: dpkg (>= 1.15.4) | install-info, libc6 (>= 2.11), libpaper1, perl
+Suggests: gv | postscript-viewer, lpr
+Size: 452704
+Description: converts text to Postscript, HTML or RTF with syntax highlighting
+ GNU Enscript takes ASCII files (often source code) and converts them
+ to PostScript, HTML or RTF.  It can store generated output to a file
+ or send it directly to the printer.
+ .
+ It is often used for its syntax highlighting, as it comes with rules
+ for a wide range of programming languages.  New rules can be added
+ using an awk-like stateful scripting language.
+Original-Maintainer: Tim Retout <diocles@debian.org>
+Homepage: http://www.gnu.org/software/enscript/
 
 Package: libavcodec53
 Multi-Arch: same
@@ -2050,6 +2239,26 @@ Description: remote file distribution client and server
 Original-Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
 Homepage: http://www.magnicomp.com/rdist/
 
+Package: tk8.4
+Priority: optional
+Section: libs
+Installed-Size: 2037
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 8.4.19-4
+Provides: wish
+Depends: libc6 (>= 2.7), libx11-6, tcl8.4 (>= 8.4.16)
+Recommends: xterm | x-terminal-emulator
+Conflicts: libtk-img (<< 1.2.5), tk40 (<= 4.0p3-2)
+Size: 734748
+Description: Tk toolkit for Tcl and X11, v8.4 - run-time files
+ Tk is a cross-platform graphical toolkit which provides the Motif
+ look-and-feel and is implemented using the Tcl scripting language.
+ This package contains everything you need to run Tk (wish) scripts
+ and Tk-enabled apps.
+Original-Maintainer: Debian Tcl/Tk Packagers <pkg-tcltk-devel@lists.alioth.debian.org>
+Homepage: http://www.tcl.tk/
+
 Package: libpathplan4
 Priority: optional
 Section: libs
@@ -2388,6 +2597,33 @@ Description: Set up initial user and password
  responsible for creating the initial user in the installer. It is only
  likely to be of any use if your system has no non-system users at all.
 Original-Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
+
+Package: gnuplot-nox
+Priority: optional
+Section: math
+Installed-Size: 1985
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gnuplot
+Version: 4.4.3-0ubuntu3
+Replaces: gnuplot (<< 4.0.0)
+Depends: libc6 (>= 2.11), libcairo2 (>= 1.2.4), libedit2 (>= 2.11-20080614-1), libgcc1 (>= 1:4.4.0), libgd2-noxpm (>= 2.0.36~rc1~dfsg) | libgd2-xpm (>= 2.0.36~rc1~dfsg), libglib2.0-0 (>= 2.12.0), liblua5.1-0, libpango1.0-0 (>= 1.14.0)
+Recommends: groff, ttf-liberation
+Suggests: gnuplot-x11 (>= 4.4.3-0ubuntu3), gnuplot-doc (>= 4.4.3-0ubuntu3)
+Size: 913380
+Description: A command-line driven interactive plotting program
+ Gnuplot is a portable command-line driven interactive data and function
+ plotting utility that supports lots of output formats, including drivers
+ for many printers, (La)TeX, (x)fig, Postscript, and so on. The X11-output
+ is packaged in gnuplot-x11.
+ .
+ Data files and self-defined functions can be manipulated by the internal
+ C-like language. Can perform smoothing, spline-fitting, or nonlinear fits,
+ and can work with complex numbers.
+ .
+ This package is for working without an X server.
+Homepage: http://gnuplot.sourceforge.net/
+Original-Maintainer: Bradley Smith <bradsmith@debian.org>
 
 Package: dwww
 Priority: optional
@@ -2779,6 +3015,31 @@ Description: set of date-time libraries based on generic programming concepts
 Homepage: http://www.boost.org/libs/date_time/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
 
+Package: libav-tools
+Priority: optional
+Section: video
+Installed-Size: 1661
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libav
+Version: 4:0.8.1-0ubuntu1
+Replaces: ffmpeg (<< 4:0.8~), libavcodec-extra-53 (<< 4:0.6~), libavcodec53 (<< 4:0.8.1-0ubuntu1)
+Depends: libavcodec53 (>= 4:0.8.1-0ubuntu1) | libavcodec-extra-53 (>= 4:0.8.1), libavcodec53 (<< 4:0.8.1-99) | libavcodec-extra-53 (<< 4:0.8.1.99), libavdevice53 (>= 4:0.8.1-0ubuntu1) | libavdevice-extra-53 (>= 4:0.8.1), libavdevice53 (<< 4:0.8.1-99) | libavdevice-extra-53 (<< 4:0.8.1.99), libavfilter2 (>= 4:0.8.1-0ubuntu1) | libavfilter-extra-2 (>= 4:0.8.1), libavfilter2 (<< 4:0.8.1-99) | libavfilter-extra-2 (<< 4:0.8.1.99), libavformat53 (>= 4:0.8.1-0ubuntu1) | libavformat-extra-53 (>= 4:0.8.1), libavformat53 (<< 4:0.8.1-99) | libavformat-extra-53 (<< 4:0.8.1.99), libavutil51 (>= 4:0.8.1-0ubuntu1) | libavutil-extra-51 (>= 4:0.8.1), libavutil51 (<< 4:0.8.1-99) | libavutil-extra-51 (<< 4:0.8.1.99), libc6 (>= 2.7), libgcc1 (>= 1:4.4.0), libpostproc52 (>= 4:0.8.1-0ubuntu1) | libpostproc-extra-52 (>= 4:0.8.1), libpostproc52 (<< 4:0.8.1-99) | libpostproc-extra-52 (<< 4:0.8.1.99), libsdl1.2debian (>= 1.2.10-1), libswscale2 (>= 4:0.8.1-0ubuntu1) | libswscale-extra-2 (>= 4:0.8.1), libswscale2 (<< 4:0.8.1-99) | libswscale-extra-2 (<< 4:0.8.1.99)
+Breaks: ffmpeg (<< 4:0.8~)
+Conflicts: ffprobe
+Size: 632794
+Description: Multimedia player, server, encoder and transcoder
+ Libav is a complete, cross-platform solution to decode, encode, record,
+ convert and stream audio and video.
+ .
+ This package contains the avplay multimedia player, the avserver
+ streaming server, the avconv audio and video encoder, and the avprobe
+ stream analyzer.  They support most existing file formats (AVI, MPEG,
+ OGG, Matroska, ASF...) and encoding formats (MPEG, DivX, MPEG4, AC3,
+ DV...).
+Homepage: http://libav.org/
+Original-Maintainer: Debian multimedia packages maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+
 Package: mpi-default-dev
 Priority: extra
 Section: libdevel
@@ -2830,6 +3091,25 @@ Size: 3424
 Description: GnuPG keys of the Ubuntu extras archive
  The Ubuntu project digitally signs its Release files. This package
  contains the archive keys used for the extras.ubuntu.com repository.
+
+Package: tcl8.4
+Priority: optional
+Section: interpreters
+Installed-Size: 2589
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 8.4.19-4ubuntu3
+Provides: tclsh
+Depends: libc6 (>= 2.7), libgcc1 (>= 1:4.4.0)
+Suggests: tclreadline
+Conflicts: tcl74 (<= 7.4p3-2)
+Size: 803910
+Description: Tcl (the Tool Command Language) v8.4 - run-time files
+ Tcl is a powerful, easy to use, embeddable, cross-platform interpreted
+ scripting language.  This package contains everything you need to run
+ Tcl scripts and Tcl-enabled apps.  This version includes thread support.
+Homepage: http://www.tcl.tk/
+Original-Maintainer: Debian Tcl/Tk Packagers <pkg-tcltk-devel@lists.alioth.debian.org>
 
 Package: python-pip
 Priority: optional
@@ -3791,6 +4071,25 @@ Description: helper programs for debian/rules
 Homepage: http://kitenet.net/~joey/code/debhelper/
 Original-Maintainer: Joey Hess <joeyh@debian.org>
 
+Package: update-inetd
+Priority: optional
+Section: admin
+Installed-Size: 101
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 4.41
+Replaces: netbase (<< 4.27)
+Depends: debconf (>= 0.5) | debconf-2.0, libfile-temp-perl, libfile-copy-recursive-perl
+Breaks: netbase (<< 4.27)
+Size: 19468
+Description: inetd configuration file updater
+ This package provides a program used by other packages to
+ automatically update /etc/inetd.conf, the configuration file shared
+ by all implementations of the Internet super-server.
+ .
+ Note that xinetd is not supported by this package.
+Original-Maintainer: Serafeim Zanikolas <sez@debian.org>
+
 Package: krb5-multidev
 Priority: optional
 Section: libdevel
@@ -4292,6 +4591,24 @@ Description: Secure Socket Layer (SSL) binary and related cryptographic tools
   -  SSL/TLS client and server tests;
   -  Handling of S/MIME signed or encrypted mail.
 Original-Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
+
+Package: imagemagick-doc
+Priority: optional
+Section: doc
+Installed-Size: 21224
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: imagemagick
+Version: 8:6.6.9.7-5ubuntu3
+Recommends: www-browser
+Suggests: imagemagick
+Conflicts: imagemagick (<= 7:6.4.0)
+Size: 5549718
+Description: document files of ImageMagick
+ This package contains the document files shipped with ImageMagick, a software
+ suite to create, edit, and compose bitmap images.
+Homepage: http://www.imagemagick.org/
+Original-Maintainer: ImageMagick Packaging Team <pkg-gmagick-im-team@lists.alioth.debian.org>
 
 Package: libcommon-sense-perl
 Priority: optional
@@ -5584,6 +5901,42 @@ Description: C++ wrappers for GTK+ (development files)
 Homepage: http://www.gtkmm.org/
 Original-Maintainer: Deng Xiyue <manphiz-guest@users.alioth.debian.org>
 
+Package: html2ps
+Priority: optional
+Section: text
+Installed-Size: 278
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 1.0b7-1
+Depends: perl, perlmagick, libwww-perl, libhtml-parser-perl, libpaper-utils
+Suggests: ghostscript, weblint-perl, texlive-base, postscript-viewer, xhtml2ps
+Size: 104468
+Description: HTML to PostScript converter
+ This program converts HTML directly to PostScript. The HTML code can be
+ retrieved from one or more URLs or local files, specified as parameters
+ on the command line. A comprehensive level of HTML is supported,
+ including inline images, CSS 1.0, and some features of HTML 4.0.
+ .
+ This is our justification for the suggests list:
+ .
+ We suggest ghostscript since it is required in order to output DSC
+ compliant PS (--dsc option) and make cross references at links within
+ the set of converted documents (--xref option).
+ .
+ We suggest weblint-perl because it's the default method for checking
+ HTML syntax (use the -c option).
+ .
+ We suggest texlive-base because we need TeX hyphenation pattern in
+ order to hyphenate text (use -H option).
+ .
+ We suggest postscript-viewer because this package generates postscripts
+ that can be viewed on a postscript-viewer.
+ .
+ We suggest xhtml2ps because it's a interesting graphical interface for
+ this package.
+Original-Maintainer: Rafael Cunha de Almeida <rafael@kontesti.me>
+Homepage: http://user.it.uu.se/~jan/html2ps.html
+
 Package: glib-networking
 Multi-Arch: same
 Priority: optional
@@ -5712,6 +6065,29 @@ Description: Qt 4 development files
  used for building Qt 4 applications.
 Homepage: http://qt.nokia.com/
 Original-Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
+
+Package: transfig
+Priority: optional
+Section: graphics
+Installed-Size: 977
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 1:3.2.5.d-1
+Depends: libc6 (>= 2.7), libpng12-0 (>= 1.2.13-4), libxpm4, x11-common, gawk
+Recommends: netpbm (>= 2:10.0-4), ghostscript
+Suggests: xfig
+Size: 576188
+Description: Utilities for converting XFig figure files
+ This package contains utilities (mainly fig2dev) to handle XFig
+ (Facility for Interactive Generation of figures) files.
+ .
+ It can convert them to box, cgm, epic, eepic, eepicemu, emf, eps,
+ gif, ibmgl, jpeg, latex, map (HTML image map), mf (MetaFont), mp
+ (MetaPost), mmp (Multi-Meta-Post), pcx, pdf, pdftex, pdftex_t, pic,
+ pictex, png, ppm, ps, pstex, pstex_t, ptk (Perl/tk), sld (AutoCad
+ slide format), textyl, tiff, tk (Tcl/Tk), tpic, xbm and xpm.
+Original-Maintainer: Roland Rosenfeld <roland@debian.org>
+Homepage: http://www-epb.lbl.gov/xfig/
 
 Package: libboost-all-dev
 Priority: optional
@@ -7474,6 +7850,31 @@ Description: GNOME configuration database system (common files)
 Homepage: http://projects.gnome.org/gconf/
 Original-Maintainer: Josselin Mouette <joss@debian.org>
 
+Package: gawk
+Multi-Arch: foreign
+Priority: optional
+Section: interpreters
+Installed-Size: 1032
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 1:3.1.8+dfsg-0.1ubuntu1
+Provides: awk
+Pre-Depends: libc6 (>= 2.11), libgcc1 (>= 1:4.4.0), libsigsegv2 (>= 2.9)
+Size: 404288
+Description: GNU awk, a pattern scanning and processing language
+ `awk', a program that you can use to select particular records in a
+ file and perform operations upon them.
+ .
+ Gawk is the GNU Project's implementation of the AWK programming language.
+ It conforms to the definition of the language in the POSIX 1003.2 Command
+ Language And Utilities Standard. This version in turn is based on the
+ description in The AWK Programming Language, by Aho, Kernighan, and
+ Weinberger, with the additional features defined in the System V Release
+ 4 version of UNIX awk. Gawk also provides more recent Bell Labs awk
+ extensions, and some GNU-specific extensions.
+Original-Maintainer: Arthur Loiret <aloiret@debian.org>
+Homepage: http://www.gnu.org/software/gawk/
+
 Package: linux-libc-dev
 Multi-Arch: same
 Priority: optional
@@ -8172,6 +8573,26 @@ Description: An ATK implementation for Java using JNI (jni bindings)
 Homepage: http://ftp.gnome.org/pub/GNOME/sources/java-atk-wrapper/
 Original-Maintainer: Debian Accessibility Team <debian-accessibility@lists.debian.org>
 
+Package: libshp1
+Priority: optional
+Section: libs
+Installed-Size: 54
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: shapelib
+Version: 1.2.10-5
+Depends: libc6 (>= 2.13)
+Size: 16718
+Description: A library for reading and writing ArcView Shapefiles
+ The Shapefile format is a working and interchange format promoted by
+ ESRI for simple vector data with attributes. It is apparently the only
+ file format that can be edited in ARCView 2/3, and can also be exported
+ and imported in Arc/Info.
+ .
+ This package includes the shared library.
+Original-Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
+Homepage: http://shapelib.maptools.org/
+
 Package: libio-socket-inet6-perl
 Priority: optional
 Section: perl
@@ -8339,6 +8760,25 @@ Description: OpenGL Utility Toolkit
  toolkits like GTK+ or Motif.
 Original-Maintainer: Bradley Smith <bradsmith@debian.org>
 Homepage: http://freeglut.sourceforge.net/
+
+Package: ffmpeg
+Priority: extra
+Section: oldlibs
+Installed-Size: 66
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: libav
+Version: 4:0.8.1-0ubuntu1
+Depends: libav-tools
+Size: 2220
+Description: Multimedia player, server, encoder and transcoder (transitional package)
+ Libav is a complete, cross-platform solution to decode, encode, record,
+ convert and stream audio and video.
+ .
+ This package is only used for transitional purposes and can be safely
+ removed when no other packages depend on this package.
+Homepage: http://libav.org/
+Original-Maintainer: Debian multimedia packages maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 
 Package: libvpx1
 Multi-Arch: same
@@ -8520,6 +8960,34 @@ Description: GD Graphics Library version 2 (without XPM support)
 Homepage: http://www.libgd.org/
 Original-Maintainer: GD team <pkg-gd-devel@lists.alioth.debian.org>
 
+Package: gnuplot-x11
+Priority: optional
+Section: math
+Installed-Size: 1179
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gnuplot
+Version: 4.4.3-0ubuntu3
+Replaces: gnuplot (<< 4.0.0)
+Depends: gnuplot-nox (>= 4.4.3-0ubuntu3), libc6 (>= 2.15), libcairo2 (>= 1.2.4), libedit2 (>= 2.11-20080614-1), libgcc1 (>= 1:4.4.0), libgd2-noxpm (>= 2.0.36~rc1~dfsg) | libgd2-xpm (>= 2.0.36~rc1~dfsg), libglib2.0-0 (>= 2.12.0), liblua5.1-0, libpango1.0-0 (>= 1.14.0), libstdc++6 (>= 4.6), libwxbase2.8-0 (>= 2.8.12.1), libwxgtk2.8-0 (>= 2.8.12.1), libx11-6
+Size: 606004
+Description: A command-line driven interactive plotting program
+ Gnuplot is a portable command-line driven interactive data and function
+ plotting utility that supports lots of output formats, including drivers
+ for many printers, (La)TeX, (x)fig, Postscript, and so on. The X11-output
+ is packaged in gnuplot-x11.
+ .
+ Data files and self-defined functions can be manipulated by the internal
+ C-like language. Can perform smoothing, spline-fitting, or nonlinear fits,
+ and can work with complex numbers.
+ .
+ This package contains the terminal driver that enables gnuplot to plot
+ images interactively under X11. Most users will want this, it is however
+ packaged separately so that low-end systems don't need X installed to use
+ gnuplot.
+Homepage: http://gnuplot.sourceforge.net/
+Original-Maintainer: Bradley Smith <bradsmith@debian.org>
+
 Package: libboost-graph-dev
 Priority: optional
 Section: libdevel
@@ -8543,6 +9011,30 @@ Description: generic graph components and algorithms in C++ (default version)
  Boost version (currently 1.46).
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
 Homepage: http://www.boost.org/libs/graph/
+
+Package: texlive-binaries
+Priority: optional
+Section: tex
+Installed-Size: 13725
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: texlive-bin
+Version: 2009-11ubuntu2
+Replaces: dvi2tty, dvipdfmx, freetype1-tools, texlive-base-bin, texlive-extra-utils (<< 2008), texlive-font-utils (<< 2008), texlive-formats-extra (<< 2008), texlive-lang-cyrillic (<< 2008), texlive-lang-indic (<< 2008), texlive-metapost (<< 2008), texlive-omega (<< 2008), texlive-xetex (<< 2008)
+Provides: dvi2tty, texlive-base-bin
+Depends: libc6 (>= 2.11), libfontconfig1 (>= 2.8.0), libfreetype6 (>= 2.2.1), libgcc1 (>= 1:4.4.0), libkpathsea5, libncurses5 (>= 5.5-5~), libpng12-0 (>= 1.2.13-4), libpoppler19, libstdc++6 (>= 4.6), libtinfo5, libx11-6, libxaw7, libxmu6, libxpm4, libxt6, zlib1g (>= 1:1.1.4), texlive-common (>= 2009), tex-common (>= 2.00), ed, perl
+Recommends: texlive-base
+Breaks: texlive-base (<< 2009-12)
+Conflicts: dvi2tty, texlive-base-bin
+Size: 7306398
+Description: Binaries for TeX Live
+ This package contains all the binaries of TeX Live packages.
+ .
+ Note that this package alone has hardly any functionality.  Rather,
+ choose the texlive-* packages you want to use, e.g.
+ texlive-latex-recommended or context
+Homepage: http://www.tug.org/texlive
+Original-Maintainer: Debian TeX Maintainers <debian-tex-maint@lists.debian.org>
 
 Package: libxrandr2
 Multi-Arch: same
@@ -9649,6 +10141,29 @@ Description: Get a file from an HTTP, HTTPS or FTP server
 Homepage: http://curl.haxx.se
 Original-Maintainer: Ramakrishnan Muthukrishnan <rkrishnan@debian.org>
 
+Package: libhdf5-serial-1.8.4
+Priority: optional
+Section: libs
+Installed-Size: 3633
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: hdf5
+Version: 1.8.4-patch1-3ubuntu2
+Replaces: libhdf5-1.8.3
+Provides: libhdf5-1.8, libhdf5-1.8.4
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libgfortran3 (>= 4.3), libstdc++6 (>= 4.4.0), zlib1g (>= 1:1.1.4)
+Conflicts: libhdf5-1.8, libhdf5-1.8.3, libhdf5-1.8.4
+Size: 1296878
+Description: Hierarchical Data Format 5 (HDF5) - runtime files - serial version
+ HDF5 is a file format and library for storing scientific data.
+ HDF5 was designed and implemented to address the deficiencies of
+ HDF4.x. It has a more powerful and flexible data model, supports
+ files larger than 2 GB, and supports parallel I/O.
+ .
+ This package contains runtime files for serial platforms.
+Original-Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
+Homepage: http://hdfgroup.org/HDF5/
+
 Package: libgirepository-1.0-1
 Priority: optional
 Section: libs
@@ -9785,6 +10300,34 @@ Description: library to access CDDB data - runtime files
 Homepage: http://libcddb.sourceforge.net
 Original-Maintainer: Eugene V. Lyubimkin <jackyf@debian.org>
 
+Package: libwxbase2.8-0
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 1096
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: wxwidgets2.8
+Version: 2.8.12.1-6ubuntu2
+Depends: libc6 (>= 2.15), libexpat1 (>= 1.95.8), libgcc1 (>= 1:4.4.0), libstdc++6 (>= 4.4.0), zlib1g (>= 1:1.1.4)
+Pre-Depends: multiarch-support
+Size: 477920
+Description: wxBase library (runtime) - non-GUI support classes of wxWidgets toolkit
+ wxBase is a collection of C++ classes providing basic data structures
+ (strings, lists, arrays), powerful wxDateTime class for date manipulations,
+ portable wrappers around many OS-specific functions allowing the same
+ program to be work for all supported platforms, wxThread class for writing
+ multithreaded programs, and much more.
+ .
+ wxBase currently supports the following platforms: Generic Unix (Linux,
+ FreeBSD, Solaris, HP-UX, ...), Microsoft Windows, and Mac OS X.
+ .
+ This package is only useful for non-GUI apps.  It offers a subset of the
+ classes in libwx_gtk2.8 for use in console apps and daemons.  You do not need
+ this package to build or use wxWidgets GUI apps.
+Homepage: http://www.wxwidgets.org/
+Original-Maintainer: wxWidgets Maintainers <freewx-maint@lists.alioth.debian.org>
+
 Package: libasound2
 Multi-Arch: same
 Priority: optional
@@ -9806,6 +10349,27 @@ Description: shared library for ALSA applications
  ALSA is the Advanced Linux Sound Architecture.
 Homepage: http://www.alsa-project.org/
 Original-Maintainer: Debian ALSA Maintainers <pkg-alsa-devel@lists.alioth.debian.org>
+
+Package: libieee1284-3
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 71
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libieee1284
+Version: 0.2.11-10build1
+Depends: libc6 (>= 2.4)
+Pre-Depends: multiarch-support
+Size: 18406
+Description: cross-platform library for parallel port access
+ This library was designed to ease the use of the parallel port. It will
+ automatically figure out which access method is available, depending on the
+ running kernel and the permissions of the process.
+ .
+ It handles particular queries to the devices, like fetching the Device ID of
+ a device.
+Original-Maintainer: Julien BLACHE <jblache@debian.org>
 
 Package: libsmbclient
 Multi-Arch: same
@@ -11725,6 +12289,27 @@ Description: decoding library for DTS Coherent Acoustics streams
 Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Homepage: http://www.videolan.org/developers/libdca.html
 
+Package: libudunits2-0
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 208
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: udunits
+Version: 2.1.23-3
+Depends: libc6 (>= 2.4), libexpat1 (>= 1.95.8), dpkg (>= 1.15.4) | install-info
+Pre-Depends: multiarch-support
+Size: 63112
+Description: Library for handling of units of physical quantities
+ The UDUNITS package supports units of physical quantities (e.g., meters,
+ seconds).  Specifically, it supports conversion between string and binary
+ representations of units, arithmetic manipulation of units, and conversion of
+ numeric values between compatible units. The package is written in the
+ C programming language.
+Original-Maintainer: Alastair McKinstry <mckinstry@debian.org>
+Homepage: http://www.unidata.ucar.edu/software/udunits/
+
 Package: libass4
 Multi-Arch: same
 Priority: extra
@@ -11934,6 +12519,24 @@ Description: Linux USB utilities
  http://www.linux-usb.org/ .
 Original-Maintainer: Aurelien Jarno <aurel32@debian.org>
 
+Package: libpstoedit0c2a
+Priority: optional
+Section: libs
+Installed-Size: 775
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: pstoedit
+Version: 3.60-1build2
+Replaces: libpstoedit-dev (<= 3.32-3), libpstoedit0, libpstoedit0c2
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libmagick++4 (>= 8:6.6.9.7), libplot2c2, libstdc++6 (>= 4.6)
+Conflicts: libpstoedit0, libpstoedit0c2
+Size: 334904
+Description: PostScript to editable vector graphics library (runtime files)
+ pstoedit is a framework for converting Postscript and PDF files to various
+ editable vector graphic formats.
+Original-Maintainer: Roland Stigge <stigge@antcom.de>
+Homepage: http://www.pstoedit.net/
+
 Package: libruby1.8
 Priority: optional
 Section: libs
@@ -11985,6 +12588,25 @@ Description: Boost.Math Library development files (default version)
  Boost version (currently 1.46).
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
 Homepage: http://www.boost.org/libs/math/
+
+Package: perlmagick
+Priority: optional
+Section: perl
+Installed-Size: 408
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: imagemagick
+Version: 8:6.6.9.7-5ubuntu3
+Provides: libimage-magick-perl
+Depends: perl (>= 5.14.2-6ubuntu1), perlapi-5.14.2, libc6 (>= 2.4), libmagickcore4 (>= 8:6.6.9.7), libperl5.14 (>= 5.14.2)
+Suggests: imagemagick-doc
+Size: 158822
+Description: Perl interface to the ImageMagick graphics routines
+ PerlMagick is an objected-oriented Perl interface to ImageMagick.
+ Use the module to read, manipulate, or write an image or image sequence from
+ within a Perl script. This makes it very suitable for Web CGI scripts.
+Homepage: http://www.imagemagick.org/
+Original-Maintainer: ImageMagick Packaging Team <pkg-gmagick-im-team@lists.alioth.debian.org>
 
 Package: ttf-freefont
 Priority: optional
@@ -12827,6 +13449,26 @@ Description: Common data for VLC
 Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Homepage: http://www.videolan.org/vlc/
 
+Package: libavdevice53
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 201
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libav
+Version: 4:0.8.1-0ubuntu1
+Depends: libasound2 (>= 1.0.23), libavcodec53 (>= 4:0.8.1-0ubuntu1) | libavcodec-extra-53 (>= 4:0.8.1), libavcodec53 (<< 4:0.8.1-99) | libavcodec-extra-53 (<< 4:0.8.1.99), libavformat53 (>= 4:0.8.1-0ubuntu1) | libavformat-extra-53 (>= 4:0.8.1), libavformat53 (<< 4:0.8.1-99) | libavformat-extra-53 (<< 4:0.8.1.99), libavutil51 (>= 4:0.8.1-0ubuntu1) | libavutil-extra-51 (>= 4:0.8.1), libavutil51 (<< 4:0.8.1-99) | libavutil-extra-51 (<< 4:0.8.1.99), libc6 (>= 2.7), libdc1394-22, libgcc1 (>= 1:4.4.0), libjack-jackd2-0 (>= 1.9.5~dfsg-14) | libjack-0.116, libx11-6 (>= 2:1.4.99.1), libxext6, libxfixes3
+Pre-Depends: multiarch-support
+Size: 55070
+Description: Libav device handling library
+ Libav is a complete, cross-platform solution to decode, encode, record,
+ convert and stream audio and video.
+ .
+ This is the device handling library from Libav.
+Homepage: http://libav.org/
+Original-Maintainer: Debian multimedia packages maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+
 Package: libxcb-glx0
 Multi-Arch: same
 Priority: optional
@@ -13397,6 +14039,30 @@ Description: Perl module to help dump data structures
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Homepage: http://search.cpan.org/dist/Data-Dump/
 
+Package: libplot2c2
+Priority: optional
+Section: libs
+Installed-Size: 1968
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: plotutils
+Version: 2.6-2ubuntu1
+Replaces: libplot, libplot2, plotutils (<< 2.4.1)
+Depends: libc6 (>= 2.11), libgcc1 (>= 1:4.4.0), libpng12-0 (>= 1.2.13-4), libstdc++6 (>= 4.4.0), libx11-6, libxaw7, libxext6, libxt6
+Conflicts: libplot, libplot2
+Size: 777450
+Description: The GNU plotutils libraries
+ The GNU plotting utilities include programs for plotting
+ two-dimensional scientific data.  They are built on top of GNU
+ `libplot', a library for device-independent two-dimensional vector
+ graphics.
+ .
+ This package contains the shared libraries used by the programmes in
+ plotutils to alleviate the need for packages to depend on the entire
+ plotutils package.
+Original-Maintainer: Floris Bruynooghe <flub@devork.be>
+Homepage: http://www.gnu.org/software/plotutils/
+
 Package: libassuan0
 Multi-Arch: same
 Priority: optional
@@ -13724,6 +14390,24 @@ Description: free implementation of the OpenGL API -- GLX runtime
  libgl1-mesa-swx11 package.
 Homepage: http://mesa3d.sourceforge.net/
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: libautotrace3
+Priority: optional
+Section: libs
+Installed-Size: 166
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: autotrace
+Version: 0.31.1-16build1
+Depends: libc6 (>= 2.7), libmagickcore4 (>= 8:6.6.9.7), libpng12-0 (>= 1.2.13-4), libpstoedit0c2a
+Size: 79586
+Description: bitmap to vector graphics converter, shared library files
+ Runtime shared library files needed by programs that link with the
+ AutoTrace bitmap-to-vector graphics converter.
+ About the usage of the library
+ see http://autotrace.sourceforge.net/frontline
+Original-Maintainer: Edgar Antonio Palma de la Cruz <xbytemx@gmail.com>
+Homepage: http://autotrace.sourceforge.net/
 
 Package: libutouch-geis1
 Multi-Arch: same
@@ -14078,6 +14762,42 @@ Size: 151840
 Description: Ubuntu Wallpapers
  The default Ubuntu wallpaper. This is also a meta-package depending on the
  other default wallpapers for the current Ubuntu release.
+
+Package: libnetpbm10
+Priority: optional
+Section: libs
+Installed-Size: 144
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: netpbm-free
+Version: 2:10.0-15
+Depends: libc6 (>= 2.7)
+Size: 54588
+Description: Graphics conversion tools shared libraries
+ This package contains the shared libraries used by netpbm.
+Original-Maintainer: Andreas Barth <aba@not.so.argh.org>
+Homepage: http://netpbm.alioth.debian.org
+
+Package: libpaper-utils
+Priority: optional
+Section: utils
+Installed-Size: 69
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libpaper
+Version: 1.1.24+nmu1build1
+Replaces: libpaper1 (<< 1.1.10), libpaperg (<< 1.1.9)
+Depends: libc6 (>= 2.4), libpaper1
+Size: 8584
+Description: library for handling paper characteristics (utilities)
+ The libpaper paper-handling library automates recognition of many
+ different paper types and sizes for programs that need to deal with
+ printed output.
+ .
+ This package contains utilities for setting the system's default
+ paper type and for accessing paper type information from shell
+ scripts.
+Original-Maintainer: Giuseppe Sacco <eppesuig@debian.org>
 
 Package: linaro-overlay
 Priority: optional
@@ -14464,6 +15184,26 @@ Description: GNU privacy guard - a free PGP replacement
 Homepage: http://www.gnupg.org
 Original-Maintainer: Debian GnuPG-Maintainers <pkg-gnupg-maint@lists.alioth.debian.org>
 
+Package: libgeotiff2
+Priority: extra
+Section: libs
+Installed-Size: 171
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libgeotiff-dfsg
+Version: 1.3.0+dfsg-1
+Depends: libc6 (>= 2.7), libproj0, libtiff4
+Suggests: geotiff-bin, gdal-bin, libgeotiff-epsg
+Size: 57044
+Description: the GeoTIFF library -- run-time files
+ This C library supports TIFF 6.0 based interchange format for georeferenced
+ raster imagery. The GeoTIFF standard has been developed for reading, and
+ writing geographic meta-information tags on top of TIFF raster.
+ .
+ This package contains the shared library only.
+Original-Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
+Homepage: http://geotiff.osgeo.org/
+
 Package: libkcmutils4
 Priority: optional
 Section: libs
@@ -14623,6 +15363,24 @@ Description: X applications
  The xbiff, xcalc, xconsole, xedit and xman programs use bitmap images
  provided by the xbitmaps package.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: libgrib2c0d
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 169
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: g2clib
+Version: 1.2.2-2
+Depends: libc6 (>= 2.4), libjasper1, libpng12-0 (>= 1.2.13-4), zlib1g (>= 1:1.1.4)
+Pre-Depends: multiarch-support
+Size: 42126
+Description: NCEP GRIB2 encoder/decoder library
+ This is the libgrib2c library from NCEP for encoding and decoding 'GRIB2'
+ data formats.
+Original-Maintainer: Alastair McKinstry <mckinstry@debian.org>
+Homepage: http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/
 
 Package: libgail18
 Multi-Arch: same
@@ -15869,6 +16627,33 @@ Description: X11 damaged region extension library
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXdamage
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: radiance
+Priority: extra
+Section: graphics
+Installed-Size: 5784
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 4R0+20110410-1build1
+Depends: libc6 (>= 2.11), libgcc1 (>= 1:4.4.0), libgl1-mesa-glx | libgl1, libglu1-mesa | libglu1, libtiff4, libx11-6, tcsh | c-shell, tk8.4
+Recommends: radiance-materials
+Suggests: radiance-doc
+Conflicts: rcalc (<= 0.5.0-1.1)
+Size: 3385904
+Description: Lighting Simulation and Rendering System
+ Radiance is intended to aid lighting designers and architects by
+ predicting the light levels and appearance of a space prior to
+ construction. The package includes programs for modeling and translating
+ scene geometry, luminaire data and material properties, all of which are
+ needed as input to the simulation. The lighting simulation itself uses
+ ray tracing techniques to compute radiance values (ie. the quantity of
+ light passing through a specific point in a specific direction), which
+ are typically arranged to form a photographic quality image. The
+ resulting image may be analyzed, displayed and manipulated within the
+ package, and converted to other popular image file formats for export to
+ other packages, facilitating the production of hard copy output.
+Original-Maintainer: Bernd Zeimetz <bzed@debian.org>
+Homepage: http://radsite.lbl.gov/radiance
 
 Package: x11-xserver-utils
 Priority: optional
@@ -17191,6 +17976,31 @@ Description: Double-array trie library
 Original-Maintainer: Theppitak Karoonboonyanan <thep@debian.org>
 Homepage: http://linux.thai.net/projects/libthai
 
+Package: texlive-common
+Priority: optional
+Section: tex
+Installed-Size: 218
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: texlive-base
+Version: 2009-15
+Depends: tex-common (>= 2.0)
+Conflicts: texlive (<< 2009-1), texlive-base (<< 2009-1), texlive-base-bin (<< 2008), texlive-bibtex-extra (<< 2009-1), texlive-binaries (<< 2009-1), texlive-common (<< 2009-1), texlive-doc-base (<< 2009-1), texlive-doc-bg (<< 2009-1), texlive-doc-cs+sk (<< 2009-1), texlive-doc-de (<< 2009-1), texlive-doc-en (<< 2009-1), texlive-doc-es (<< 2009-1), texlive-doc-fi (<< 2009-1), texlive-doc-fr (<< 2009-1), texlive-doc-it (<< 2009-1), texlive-doc-ja (<< 2009-1), texlive-doc-ko (<< 2009-1), texlive-doc-mn (<< 2009-1), texlive-doc-nl (<< 2009-1), texlive-doc-pl (<< 2009-1), texlive-doc-pt (<< 2009-1), texlive-doc-ru (<< 2009-1), texlive-doc-si (<< 2009-1), texlive-doc-th (<< 2009-1), texlive-doc-tr (<< 2009-1), texlive-doc-uk (<< 2009-1), texlive-doc-vi (<< 2009-1), texlive-doc-zh (<< 2009-1), texlive-extra-utils (<< 2009-1), texlive-font-utils (<< 2009-1), texlive-fonts-extra (<< 2009-1), texlive-fonts-extra-doc (<< 2009-1), texlive-fonts-recommended (<< 2009-1), texlive-fonts-recommended-doc (<< 2009-1), texlive-formats-extra (<< 2009-1), texlive-full (<< 2009-1), texlive-games (<< 2009-1), texlive-generic-extra (<< 2009-1), texlive-generic-recommended (<< 2009-1), texlive-humanities (<< 2009-1), texlive-humanities-doc (<< 2009-1), texlive-lang-african (<< 2009-1), texlive-lang-all (<< 2009-1), texlive-lang-arabic (<< 2009-1), texlive-lang-armenian (<< 2009-1), texlive-lang-croatian (<< 2009-1), texlive-lang-cyrillic (<< 2009-1), texlive-lang-czechslovak (<< 2009-1), texlive-lang-danish (<< 2009-1), texlive-lang-dutch (<< 2009-1), texlive-lang-finnish (<< 2009-1), texlive-lang-french (<< 2009-1), texlive-lang-german (<< 2009-1), texlive-lang-greek (<< 2009-1), texlive-lang-hebrew (<< 2009-1), texlive-lang-hungarian (<< 2009-1), texlive-lang-indic (<< 2009-1), texlive-lang-italian (<< 2009-1), texlive-lang-latin (<< 2009-1), texlive-lang-latvian (<< 2009-1), texlive-lang-lithuanian (<< 2009-1), texlive-lang-mongolian (<< 2009-1), texlive-lang-norwegian (<< 2009-1), texlive-lang-other (<< 2009-1), texlive-lang-polish (<< 2009-1), texlive-lang-portuguese (<< 2009-1), texlive-lang-spanish (<< 2009-1), texlive-lang-swedish (<< 2009-1), texlive-lang-tibetan (<< 2009-1), texlive-lang-ukenglish (<< 2009-1), texlive-lang-vietnamese (<< 2009-1), texlive-latex-base (<< 2009-1), texlive-latex-base-doc (<< 2009-1), texlive-latex-extra (<< 2009-1), texlive-latex-extra-doc (<< 2009-1), texlive-latex-recommended (<< 2009-1), texlive-latex-recommended-doc (<< 2009-1), texlive-latex3 (<< 2009-1), texlive-luatex (<< 2009-1), texlive-math-extra (<< 2009-1), texlive-metapost (<< 2009-1), texlive-metapost-doc (<< 2009-1), texlive-music (<< 2009-1), texlive-omega (<< 2009-1), texlive-pictures (<< 2009-1), texlive-pictures-doc (<< 2009-1), texlive-plain-extra (<< 2009-1), texlive-pstricks (<< 2009-1), texlive-pstricks-doc (<< 2009-1), texlive-publishers (<< 2009-1), texlive-publishers-doc (<< 2009-1), texlive-science (<< 2009-1), texlive-science-doc (<< 2009-1), texlive-xetex (<< 2009-1)
+Size: 94410
+Description: TeX Live: Base component
+ The TeX Live software distribution offers a complete TeX system.
+ It encompasses programs for typesetting, previewing and printing
+ of TeX documents in many different languages, and a large collection
+ of TeX macros and font libraries.
+ .
+ The distribution also includes extensive general documentation about
+ TeX, as well as the documentation accompanying the included software
+ packages.
+ .
+ This package provides a common base for all TeX Live packages.
+Original-Maintainer: Debian TeX Maintainers <debian-tex-maint@lists.debian.org>
+Homepage: http://www.tug.org/texlive/
+
 Package: libgeoclue0
 Priority: optional
 Section: libs
@@ -17559,6 +18369,33 @@ Description: X11 authorisation library (development headers)
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXau
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: proj-data
+Priority: extra
+Section: libs
+Installed-Size: 4785
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: proj
+Version: 4.7.0-1
+Replaces: proj (<= 4.6.1-3)
+Conflicts: proj (<= 4.6.1-3)
+Size: 2920410
+Description: Cartographic projection filter and library (transitional package)
+ Proj and invproj perform respective forward and inverse transformation
+ of cartographic data to or from Cartesian data with a wide range of
+ selectable projection functions (over 100 projections).
+ .
+ Geod and invgeod perform geodesic (Great Circle) computations for
+ determining latitude, longitude and back azimuth of a terminus point given
+ a initial point latitude, longitude, azimuth and distance (direct) or the
+ forward and back azimuths and distance between an initial and terminus
+ point latitudes and longitudes (inverse).
+ .
+ This package contains auxiliary projection datum grids used by the
+ library and tools.
+Original-Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
+Homepage: http://trac.osgeo.org/proj/
 
 Package: libtidy-0.99-0
 Priority: optional
@@ -18091,6 +18928,32 @@ Description: fast, scalable, distributed revision control system (manual pages)
 Original-Maintainer: Gerrit Pape <pape@smarden.org>
 Homepage: http://git-scm.com/
 
+Package: ufraw-batch
+Priority: optional
+Section: graphics
+Installed-Size: 672
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: ufraw
+Version: 0.18-1.1build1
+Replaces: ufraw (<< 0.16-2)
+Depends: libbz2-1.0, libc6 (>= 2.11), libexiv2-11, libgcc1 (>= 1:4.4.0), libglib2.0-0 (>= 2.24.0), libgomp1 (>= 4.2.1), libjpeg8 (>= 8c), liblcms1 (>= 1.15-1), libpng12-0 (>= 1.2.13-4), libstdc++6 (>= 4.6), libtiff4, zlib1g (>= 1:1.1.4)
+Suggests: ufraw
+Size: 304928
+Description: batch importer for raw camera images
+ This is a command-line batch tool to import raw data from high-end digital
+ cameras.
+ .
+ The Unidentified Flying Raw (UFRaw) is a utility for converting and
+ manipulating raw images from digital cameras. It can be used as a
+ stand-alone tool or as a Gimp plug-in, and images can be batch
+ processed using the command-line interface. UFRaw reads most existing
+ raw formats using Dave Coffin's raw conversion utility DCRaw, and it
+ supports basic color management using Little CMS, allowing the user to
+ apply color profiles.
+Original-Maintainer: Hubert Chathi <uhoreg@debian.org>
+Homepage: http://ufraw.sourceforge.net/
+
 Package: lxpanel-indicator-applet-plugin
 Priority: optional
 Section: x11
@@ -18217,6 +19080,22 @@ Description: network management framework (GNOME dialogs for wifi and mobile)
  or mobile connections.
 Homepage: http://www.gnome.org/projects/NetworkManager/
 Original-Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
+
+Package: acl
+Multi-Arch: foreign
+Priority: optional
+Section: utils
+Installed-Size: 164
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 2.2.51-5ubuntu1
+Depends: libacl1 (>= 2.2.51-5), libc6 (>= 2.4)
+Size: 40074
+Description: Access control list utilities
+ This package contains the getfacl and setfacl utilities needed for
+ manipulating access control lists.
+Homepage: http://savannah.nongnu.org/projects/acl/
+Original-Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
 
 Package: openssh-server
 Multi-Arch: foreign
@@ -18559,6 +19438,26 @@ Description: PNG library - development
 Homepage: http://libpng.org/pub/png/libpng.html
 Original-Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
 
+Package: libwmf-bin
+Priority: optional
+Section: graphics
+Installed-Size: 86
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libwmf
+Version: 0.2.8.4-10ubuntu1
+Depends: libc6 (>= 2.7), libwmf0.2-7 (>= 0.2.8.4), libx11-6, zlib1g (>= 1:1.1.4)
+Size: 18764
+Description: Windows metafile conversion tools
+ Windows metafile (WMF) is a picture format used by many Windows
+ programs, e.g. Microsoft Word.  libwmf is a library for interpreting
+ metafile images and either displaying them using X or converting them
+ to standard formats such as PNG, JPEG, PS, EPS and SVG(Z)...
+ .
+ This package contains several frontends to libwmf (wmf2x, wmf2gd,
+ wmf2fig, wmf2eps, wmf2svg).
+Original-Maintainer: Loïc Minier <lool@debian.org>
+
 Package: libkadm5clnt-mit8
 Multi-Arch: same
 Priority: standard
@@ -18584,6 +19483,26 @@ Description: MIT Kerberos runtime libraries - Administration Clients
  administration protocol.
 Original-Maintainer: Sam Hartman <hartmans@debian.org>
 Homepage: http://web.mit.edu/kerberos/
+
+Package: libavfilter2
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 373
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libav
+Version: 4:0.8.1-0ubuntu1
+Depends: libavcodec53 (>= 4:0.8.1-0ubuntu1) | libavcodec-extra-53 (>= 4:0.8.1), libavcodec53 (<< 4:0.8.1-99) | libavcodec-extra-53 (<< 4:0.8.1.99), libavformat53 (>= 4:0.8.1-0ubuntu1) | libavformat-extra-53 (>= 4:0.8.1), libavformat53 (<< 4:0.8.1-99) | libavformat-extra-53 (<< 4:0.8.1.99), libavutil51 (>= 4:0.8.1-0ubuntu1) | libavutil-extra-51 (>= 4:0.8.1), libavutil51 (<< 4:0.8.1-99) | libavutil-extra-51 (<< 4:0.8.1.99), libc6 (>= 2.7), libfreetype6 (>= 2.2.1), libgcc1 (>= 1:4.4.0), libswscale2 (>= 4:0.8.1-0ubuntu1) | libswscale-extra-2 (>= 4:0.8.1), libswscale2 (<< 4:0.8.1-99) | libswscale-extra-2 (<< 4:0.8.1.99)
+Pre-Depends: multiarch-support
+Size: 142560
+Description: Libav video filtering library
+ Libav is a complete, cross-platform solution to decode, encode, record,
+ convert and stream audio and video.
+ .
+ This is the video filtering library from Libav.
+Homepage: http://libav.org/
+Original-Maintainer: Debian multimedia packages maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 
 Package: libcroco3
 Multi-Arch: same
@@ -19010,6 +19929,23 @@ Description: Perl module for Secure Sockets Layer (SSL)
  need this - your web browser already knows to do that.
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Homepage: http://search.cpan.org/dist/Net-SSLeay/
+
+Package: tcsh
+Priority: optional
+Section: shells
+Installed-Size: 1228
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 6.17.06-2
+Provides: c-shell
+Depends: libc6 (>= 2.11), libgcc1 (>= 1:4.4.0), libtinfo5
+Size: 495390
+Description: TENEX C Shell, an enhanced version of Berkeley csh
+ The TENEX C Shell is an enhanced version of the Berkeley Unix C shell.
+ It includes all features of 4.4BSD C shell, plus a command-line editor,
+ programmable word completion, spelling correction and more.
+Original-Maintainer: Thomas Lange <lange@debian.org>
+Homepage: http://www.tcsh.org/
 
 Package: libxvidcore4
 Multi-Arch: same
@@ -19824,6 +20760,22 @@ Description: SSL development libraries, header files and documentation
  It is part of the OpenSSL implementation of SSL.
 Original-Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
 
+Package: libfile-copy-recursive-perl
+Priority: optional
+Section: perl
+Installed-Size: 88
+Maintainer: Ubuntu MOTU Developers <ubuntu-motu@lists.ubuntu.com>
+Architecture: all
+Version: 0.38-1
+Depends: perl (>= 5.6.0-16)
+Size: 20586
+Description: Perl extension for recursively copying files and directories
+ File::Copy::Recursive module copies and moves directories recursively
+ (or single files, well... singley) to an optional depth and attempts
+ to preserve each file or directory's mode.
+Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Homepage: http://search.cpan.org/dist/File-Copy-Recursive/
+
 Package: libmtdev1
 Priority: optional
 Section: libs
@@ -20057,6 +21009,29 @@ Description: cryptographic algorithms and protocols for Python
 Original-Maintainer: Sebastian Ramacher <s.ramacher@gmx.at>
 Homepage: http://www.pycrypto.org/
 
+Package: libnetcdf6
+Priority: optional
+Section: libs
+Installed-Size: 1255
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: netcdf
+Version: 1:4.1.1-6
+Depends: libc6 (>= 2.7), libcurl3-gnutls (>= 7.16.2-1), libgcc1 (>= 1:4.4.0), libgfortran3 (>= 4.3), libhdf5-serial-1.8.4 | libhdf5-1.8.4, libstdc++6 (>= 4.4.0)
+Size: 403944
+Description: An interface for scientific data access to large binary data
+ NetCDF (network Common Data Form) is an interface for scientific
+ data access and a freely-distributed software library that provides an
+ implementation of the interface.  The netCDF library also defines a
+ machine-independent format for representing scientific data.
+ Together, the interface, library, and format support the creation,
+ access, and sharing of scientific data.
+ .
+ This package contains the C, C++ and Fortran77/90 run-time shared
+ libraries required by programs.
+Original-Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
+Homepage: http://www.unidata.ucar.edu/software/netcdf/
+
 Package: lightdm
 Priority: optional
 Section: x11
@@ -20263,6 +21238,24 @@ Homepage: http://httpd.apache.org/
 Original-Maintainer: Debian Apache Maintainers <debian-apache@lists.debian.org>
 Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-apache/apache2.git
 Original-Vcs-Git: git://git.debian.org/git/pkg-apache/apache2.git
+
+Package: autotrace
+Priority: optional
+Section: graphics
+Installed-Size: 77
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 0.31.1-16build1
+Depends: libautotrace3 (>= 0.31.1), libc6 (>= 2.4)
+Size: 24724
+Description: bitmap to vector graphics converter
+ AutoTrace is a program for converting bitmaps to vector graphics. The aim
+ of the AutoTrace project is the development of a freely-available
+ application similar to CorelTrace or Adobe Streamline. In some aspects it
+ is already better. Originally created as a plugin for the GIMP,
+ AutoTrace is now a standalone program.
+Original-Maintainer: Edgar Antonio Palma de la Cruz <xbytemx@gmail.com>
+Homepage: http://autotrace.sourceforge.net/
 
 Package: ttf-dejavu-core
 Multi-Arch: foreign
@@ -21528,6 +22521,33 @@ Size: 21290
 Description: default settings for Lubuntu
  Various system settings tailored for Lubuntu.
 Homepage: https://launchpad.net/~lubuntu-desktop
+
+Package: libgphoto2-2
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 2563
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libgphoto2
+Version: 2.4.13-1ubuntu1
+Depends: libc6 (>= 2.15), libexif12, libgcc1 (>= 1:4.4.0), libgd2-xpm (>= 2.0.36~rc1~dfsg), libgphoto2-port0 (>= 2.4.10.1), libjpeg8 (>= 8c), libltdl7 (>= 2.4.2), adduser
+Pre-Depends: dpkg (>= 1.15.7.2), multiarch-support
+Recommends: udev (>= 0.175), libgphoto2-l10n (>= 2.4.13-1ubuntu1)
+Suggests: gphoto2 (>= 2.1.1)
+Breaks: gphoto2 (<= 2.1.1)
+Size: 859320
+Description: gphoto2 digital camera library
+ The gphoto2 library can be used by applications to access various
+ digital camera models, via standard protocols such as USB Mass Storage
+ and PTP, or vendor-specific protocols.
+ .
+ This package contains the library.
+ .
+ The gphoto2 command-line frontend is shipped separately, in the gphoto2
+ package.
+Homepage: http://www.gphoto.org/proj/libgphoto2/
+Original-Maintainer: Debian PhotoTools Maintainers <pkg-phototools-devel@lists.alioth.debian.org>
 
 Package: apache2.2-common
 Priority: optional
@@ -22843,6 +23863,26 @@ Description: base library for VLC and its modules
 Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Homepage: http://www.videolan.org/vlc/
 
+Package: tex-common
+Priority: optional
+Section: tex
+Installed-Size: 1552
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 2.10
+Replaces: dvipdfmx, tetex-base (<= 3.0-10)
+Depends: debconf (>= 0.5) | debconf-2.0, ucf, debconf (>= 1.4.69) | cdebconf (>= 0.39), dpkg (>= 1.14.18)
+Suggests: debhelper (>= 7.0.8)
+Conflicts: tetex-base (<< 2007), texlive-common (<< 2009)
+Size: 709050
+Description: common infrastructure for building and installing TeX
+ This package contains a number of scripts and common configuration
+ files that are needed to install a TeX System.
+ .
+ It also contains debhelper-like programs useful for building TeX
+ packages.
+Original-Maintainer: Debian TeX maintainers <debian-tex-maint@lists.debian.org>
+
 Package: libjson0
 Multi-Arch: same
 Priority: extra
@@ -23649,6 +24689,24 @@ Description: multimedia player and streamer
 Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Homepage: http://www.videolan.org/vlc/
 
+Package: libmagickcore4-extra
+Priority: optional
+Section: libs
+Installed-Size: 168
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: imagemagick
+Version: 8:6.6.9.7-5ubuntu3
+Provides: libmagickcore-extra
+Depends: libc6 (>= 2.4), libcairo2 (>= 1.2.4), libdjvulibre21 (>= 3.5.24), libglib2.0-0 (>= 2.12.0), libgraph4, libgvc5, libmagickcore4 (>= 8:6.6.9.7), libopenexr6 (>= 1.6.1), librsvg2-2 (>= 2.14.4), libwmf0.2-7 (>= 0.2.8.4), libxml2 (>= 2.7.4)
+Enhances: libmagickcore4
+Size: 45268
+Description: low-level image manipulation library - extra codecs
+ This package adds support for SVG, WMF, OpenEXR, DjVu and Graphviz to
+ MagickCore.
+Homepage: http://www.imagemagick.org/
+Original-Maintainer: ImageMagick Packaging Team <pkg-gmagick-im-team@lists.alioth.debian.org>
+
 Package: libpam-ck-connector
 Priority: optional
 Section: admin
@@ -24388,6 +25446,28 @@ Original-Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers
 Homepage: http://rubyforge.org/projects/optionparser/
 Ruby-Versions: ruby1.8 ruby1.9.1
 
+Package: netpbm
+Priority: optional
+Section: graphics
+Installed-Size: 2953
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: netpbm-free
+Version: 2:10.0-15
+Replaces: netpbm-dev, netpbm-nonfree, pbmwbmp, pnmtopng
+Provides: pbmwbmp, pnmtopng
+Depends: libnetpbm10 (= 2:10.0-15), libc6 (>= 2.11), libjpeg8 (>= 8c), libpng12-0 (>= 1.2.13-4), libtiff4, zlib1g (>= 1:1.1.4)
+Recommends: ghostscript
+Conflicts: netpbm-dev (<= 2:9.10), netpbm-nonfree (<= 1:19940301.1-3), pbmwbmp, pnmtopng, ucbmpeg (<= 1r2-6)
+Size: 1191620
+Description: Graphics conversion tools between image formats
+ Netpbm is a toolkit for manipulation of graphic images, including
+ conversion of images between a variety of different formats. There
+ are over 220 separate tools in the package including converters for
+ more than 80 graphics formats.
+Original-Maintainer: Andreas Barth <aba@not.so.argh.org>
+Homepage: http://netpbm.alioth.debian.org
+
 Package: libboost-python1.46.1
 Priority: optional
 Section: python
@@ -24628,6 +25708,35 @@ Description: Alternative JVM for OpenJDK, using Cacao
  The VM is started with the option `-cacao'. See the README.Debian for details.
 Original-Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
 Homepage: http://openjdk.java.net/
+
+Package: libproj0
+Priority: extra
+Section: libs
+Installed-Size: 203
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: proj
+Version: 4.7.0-1
+Replaces: proj (<= 4.6.1-3)
+Depends: proj-data, libc6 (>= 2.7)
+Suggests: proj-bin
+Conflicts: proj (<= 4.6.1-3)
+Size: 89878
+Description: Cartographic projection library
+ Proj and invproj perform respective forward and inverse transformation
+ of cartographic data to or from Cartesian data with a wide range of
+ selectable projection functions (over 100 projections).
+ .
+ Geod and invgeod perform geodesic (Great Circle) computations for
+ determining latitude, longitude and back azimuth of a terminus point given
+ a initial point latitude, longitude, azimuth and distance (direct) or the
+ forward and back azimuths and distance between an initial and terminus
+ point latitudes and longitudes (inverse).
+ .
+ This package provides the PROJ4 shared library used by tools and third
+ parties programs.
+Original-Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
+Homepage: http://trac.osgeo.org/proj/
 
 Package: po-debconf
 Multi-Arch: foreign
@@ -25272,6 +26381,30 @@ Description: program options library for C++
 Homepage: http://www.boost.org/libs/program_options/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
 
+Package: libhdf4-0
+Priority: optional
+Section: libs
+Installed-Size: 503
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libhdf4
+Version: 4.2r4-12build1
+Depends: libc6 (>= 2.7), libgcc1 (>= 1:4.4.0), libjpeg8 (>= 8c), zlib1g (>= 1:1.1.4)
+Suggests: libhdf4-doc, libhdf4-dev, hdf4-tools
+Size: 282774
+Description: The Hierarchical Data Format library -- library package
+ HDF is a multi-object file format for storing and transferring
+ graphical and numerical data mainly used in scientific computing. HDF
+ supports several different data models, including multidimensional
+ arrays, raster images, and tables. Each defines a specific aggregate
+ data type and provides an API for reading, writing, and organizing the
+ data and metadata. New data models can be added by the HDF developers
+ or users.
+ .
+ This package contains the HDF run-time libraries.
+Original-Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
+Homepage: http://www.hdfgroup.com/
+
 Package: libgoffice-0.8-8-common
 Priority: optional
 Section: libs
@@ -25727,6 +26860,32 @@ Description: FreeType 2 font engine, development files
 Homepage: http://www.freetype.org
 Original-Maintainer: Steve Langasek <vorlon@debian.org>
 
+Package: libgphoto2-port0
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 200
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libgphoto2
+Version: 2.4.13-1ubuntu1
+Replaces: libgphoto2port
+Provides: libgphoto2port
+Depends: libc6 (>= 2.15), libltdl7 (>= 2.4.2), libusb-0.1-4 (>= 2:0.1.12)
+Pre-Depends: multiarch-support
+Suggests: gphoto2 (>> 2.1.0), gtkam
+Breaks: gphoto2 (<= 2.1.1)
+Conflicts: libgphoto2port
+Size: 37272
+Description: gphoto2 digital camera port library
+ The gphoto2 library can be used by applications to access various
+ digital camera models, via standard protocols such as USB Mass Storage
+ and PTP, or vendor-specific protocols.
+ .
+ This package contains the runtime code for port access.
+Homepage: http://www.gphoto.org/proj/libgphoto2/
+Original-Maintainer: Debian PhotoTools Maintainers <pkg-phototools-devel@lists.alioth.debian.org>
+
 Package: libboost-date-time-dev
 Priority: optional
 Section: libdevel
@@ -25766,6 +26925,33 @@ Description: Asynchronous name service query library
  getnameinfo(3), res_query(3) and res_search(3) from libc and libresolv.
 Original-Maintainer: Tanguy Ortolo <tanguy+debian@ortolo.eu>
 Homepage: http://0pointer.de/lennart/projects/libasyncns/
+
+Package: libsane-common
+Multi-Arch: foreign
+Priority: optional
+Section: libs
+Installed-Size: 3016
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: sane-backends
+Version: 1.0.22-7ubuntu1
+Replaces: libsane (<< 1.0.22-4~)
+Size: 506752
+Description: API library for scanners -- documentation and support files
+ SANE stands for "Scanner Access Now Easy" and is an application
+ programming interface (API) that provides standardized access to any
+ raster image scanner hardware (flatbed scanner, hand-held scanner,
+ video- and still-cameras, frame-grabbers, etc.). The SANE standard is
+ free and its discussion and development are open to everybody. The
+ current source code is written to support several operating systems,
+ including GNU/Linux, OS/2, Win32 and various Unices and is available
+ under the GNU General Public License (commercial applications and
+ backends are welcome, too, however).
+ .
+ This package includes documentation for libsane, such as the man pages
+ and list of supported scanners, and support files (i18n data).
+Homepage: http://www.sane-project.org
+Original-Maintainer: Julien BLACHE <jblache@debian.org>
 
 Package: libgomp1
 Multi-Arch: same
@@ -26112,6 +27298,31 @@ Description: ID3 tag reading library from the MAD project
  ID3v2.2, ID3v2.3, and ID3v2.4 tags, as well as support for writing ID3v1,
  ID3v1.1, and ID3v2.4 tags.
 Original-Maintainer: Mad Maintainers <pkg-mad-maintainers@lists.alioth.debian.org>
+
+Package: gnuplot
+Priority: optional
+Section: math
+Installed-Size: 21
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 4.4.3-0ubuntu3
+Depends: gnuplot-nox (>= 4.4.3-0ubuntu3), gnuplot-x11 (>= 4.4.3-0ubuntu3)
+Suggests: gnuplot-doc (>= 4.4.3-0ubuntu3)
+Size: 1068
+Description: A command-line driven interactive plotting program
+ Gnuplot is a portable command-line driven interactive data and function
+ plotting utility that supports lots of output formats, including drivers
+ for many printers, (La)TeX, (x)fig, Postscript, and so on. The X11-output
+ is packaged in gnuplot-x11.
+ .
+ Data files and self-defined functions can be manipulated by the internal
+ C-like language. Can perform smoothing, spline-fitting, or nonlinear fits,
+ and can work with complex numbers.
+ .
+ This package is for transition and to install a full-featured gnuplot
+ supporting the X11-output.
+Homepage: http://gnuplot.sourceforge.net/
+Original-Maintainer: Bradley Smith <bradsmith@debian.org>
 
 Package: libcupsimage2
 Multi-Arch: same

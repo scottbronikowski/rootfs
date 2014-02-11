@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>GSL CBLAS Examples - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="GSL-CBLAS-Library.html" title="GSL CBLAS Library">
+<link rel="prev" href="Level-3-CBLAS-Functions.html" title="Level 3 CBLAS Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="GSL-CBLAS-Examples"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Level-3-CBLAS-Functions.html">Level 3 CBLAS Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="GSL-CBLAS-Library.html">GSL CBLAS Library</a>
+<hr>
+</div>
+
+<h3 class="section">D.4 Examples</h3>
+
+<p>The following program computes the product of two matrices using the
+Level-3 <span class="sc">blas</span> function <span class="sc">sgemm</span>,
+The matrices are stored in row major order but could be stored in column
+major order if the first argument of the call to <code>cblas_sgemm</code> was
+changed to <code>CblasColMajor</code>.
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;gsl/gsl_cblas.h>
+     
+     int
+     main (void)
+     {
+       int lda = 3;
+     
+       float A[] = { 0.11, 0.12, 0.13,
+                     0.21, 0.22, 0.23 };
+     
+       int ldb = 2;
+       
+       float B[] = { 1011, 1012,
+                     1021, 1022,
+                     1031, 1032 };
+     
+       int ldc = 2;
+     
+       float C[] = { 0.00, 0.00,
+                     0.00, 0.00 };
+     
+       /* Compute C = A B */
+     
+       cblas_sgemm (CblasRowMajor, 
+                    CblasNoTrans, CblasNoTrans, 2, 2, 3,
+                    1.0, A, lda, B, ldb, 0.0, C, ldc);
+     
+       printf ("[ %g, %g\n", C[0], C[1]);
+       printf ("  %g, %g ]\n", C[2], C[3]);
+     
+       return 0;  
+     }
+</pre></pre>
+   <p class="noindent">To compile the program use the following command line,
+
+<pre class="example">     $ gcc -Wall demo.c -lgslcblas
+</pre>
+   <p class="noindent">There is no need to link with the main library <code>-lgsl</code> in this
+case as the <span class="sc">cblas</span> library is an independent unit. Here is the output
+from the program,
+
+<pre class="example">     $ ./a.out
+<pre class="verbatim">     [ 367.76, 368.12
+       674.06, 674.72 ]
+</pre></pre>
+   <!-- @node  Copyright, GNU General Public License, Contributors to GSL, Top -->
+<!-- @unnumbered Copyright -->
+<!-- @include science.texi -->
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

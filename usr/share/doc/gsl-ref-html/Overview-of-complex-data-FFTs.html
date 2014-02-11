@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Overview of complex data FFTs - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fast-Fourier-Transforms.html" title="Fast Fourier Transforms">
+<link rel="prev" href="Mathematical-Definitions.html" title="Mathematical Definitions">
+<link rel="next" href="Radix_002d2-FFT-routines-for-complex-data.html" title="Radix-2 FFT routines for complex data">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Overview-of-complex-data-FFTs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Radix_002d2-FFT-routines-for-complex-data.html">Radix-2 FFT routines for complex data</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mathematical-Definitions.html">Mathematical Definitions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fast-Fourier-Transforms.html">Fast Fourier Transforms</a>
+<hr>
+</div>
+
+<h3 class="section">16.2 Overview of complex data FFTs</h3>
+
+<p><a name="index-FFT_002c-complex-data-1475"></a>
+The inputs and outputs for the complex FFT routines are <dfn>packed
+arrays</dfn> of floating point numbers.  In a packed array the real and
+imaginary parts of each complex number are placed in alternate
+neighboring elements.  For example, the following definition of a packed
+array of length 6,
+
+<pre class="example">     double x[3*2];
+     gsl_complex_packed_array data = x;
+</pre>
+   <p class="noindent">can be used to hold an array of three complex numbers, <code>z[3]</code>, in
+the following way,
+
+<pre class="example">     data[0] = Re(z[0])
+     data[1] = Im(z[0])
+     data[2] = Re(z[1])
+     data[3] = Im(z[1])
+     data[4] = Re(z[2])
+     data[5] = Im(z[2])
+</pre>
+   <p class="noindent">The array indices for the data have the same ordering as those
+in the definition of the DFT&mdash;i.e. there are no index transformations
+or permutations of the data.
+
+   <p>A <dfn>stride</dfn> parameter allows the user to perform transforms on the
+elements <code>z[stride*i]</code> instead of <code>z[i]</code>.  A stride greater
+than 1 can be used to take an in-place FFT of the column of a matrix. A
+stride of 1 accesses the array without any additional spacing between
+elements.
+
+   <p>To perform an FFT on a vector argument, such as <code>gsl_vector_complex
+* v</code>, use the following definitions (or their equivalents) when calling
+the functions described in this chapter:
+
+<pre class="example">     gsl_complex_packed_array data = v-&gt;data;
+     size_t stride = v-&gt;stride;
+     size_t n = v-&gt;size;
+</pre>
+   <p>For physical applications it is important to remember that the index
+appearing in the DFT does not correspond directly to a physical
+frequency.  If the time-step of the DFT is \Delta then the
+frequency-domain includes both positive and negative frequencies,
+ranging from -1/(2\Delta) through 0 to +1/(2\Delta).  The
+positive frequencies are stored from the beginning of the array up to
+the middle, and the negative frequencies are stored backwards from the
+end of the array.
+
+   <p>Here is a table which shows the layout of the array <var>data</var>, and the
+correspondence between the time-domain data z, and the
+frequency-domain data x.
+
+<pre class="example">     index    z               x = FFT(z)
+     
+     0        z(t = 0)        x(f = 0)
+     1        z(t = 1)        x(f = 1/(n Delta))
+     2        z(t = 2)        x(f = 2/(n Delta))
+     .        ........        ..................
+     n/2      z(t = n/2)      x(f = +1/(2 Delta),
+                                    -1/(2 Delta))
+     .        ........        ..................
+     n-3      z(t = n-3)      x(f = -3/(n Delta))
+     n-2      z(t = n-2)      x(f = -2/(n Delta))
+     n-1      z(t = n-1)      x(f = -1/(n Delta))
+</pre>
+   <p class="noindent">When n is even the location n/2 contains the most positive
+and negative frequencies (+1/(2 \Delta), -1/(2 \Delta))
+which are equivalent.  If n is odd then general structure of the
+table above still applies, but n/2 does not appear.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

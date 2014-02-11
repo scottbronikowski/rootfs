@@ -1,0 +1,170 @@
+<html lang="en">
+<head>
+<title>Hypergeometric Functions - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Special-Functions.html" title="Special Functions">
+<link rel="prev" href="Gegenbauer-Functions.html" title="Gegenbauer Functions">
+<link rel="next" href="Laguerre-Functions.html" title="Laguerre Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Hypergeometric-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Laguerre-Functions.html">Laguerre Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Gegenbauer-Functions.html">Gegenbauer Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Special-Functions.html">Special Functions</a>
+<hr>
+</div>
+
+<h3 class="section">7.21 Hypergeometric Functions</h3>
+
+<p><a name="index-hypergeometric-functions-659"></a><a name="index-confluent-hypergeometric-functions-660"></a>
+Hypergeometric functions are described in Abramowitz &amp; Stegun, Chapters
+13 and 15.  These functions are declared in the header file
+<samp><span class="file">gsl_sf_hyperg.h</span></samp>.
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_hyperg_0F1</b> (<var>double c, double x</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f0F1-661"></a></var><br>
+&mdash; Function: int <b>gsl_sf_hyperg_0F1_e</b> (<var>double c, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f0F1_005fe-662"></a></var><br>
+<blockquote><p>These routines compute the hypergeometric function <!-- {${}_0F_1(c,x)$} -->
+0F1(c,x). 
+<!-- It is related to Bessel functions -->
+<!-- 0F1[c,x] = -->
+<!-- Gamma[c]    x^(1/2(1-c)) I_(c-1)(2 Sqrt[x]) -->
+<!-- Gamma[c] (-x)^(1/2(1-c)) J_(c-1)(2 Sqrt[-x]) -->
+<!-- exceptions: GSL_EOVRFLW, GSL_EUNDRFLW -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_hyperg_1F1_int</b> (<var>int m, int n, double x</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f1F1_005fint-663"></a></var><br>
+&mdash; Function: int <b>gsl_sf_hyperg_1F1_int_e</b> (<var>int m, int n, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f1F1_005fint_005fe-664"></a></var><br>
+<blockquote><p>These routines compute the confluent hypergeometric function
+<!-- {${}_1F_1(m,n,x) = M(m,n,x)$} -->
+1F1(m,n,x) = M(m,n,x) for integer parameters <var>m</var>, <var>n</var>. 
+<!-- exceptions: -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_hyperg_1F1</b> (<var>double a, double b, double x</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f1F1-665"></a></var><br>
+&mdash; Function: int <b>gsl_sf_hyperg_1F1_e</b> (<var>double a, double b, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f1F1_005fe-666"></a></var><br>
+<blockquote><p>These routines compute the confluent hypergeometric function
+<!-- {${}_1F_1(a,b,x) = M(a,b,x)$} -->
+1F1(a,b,x) = M(a,b,x) for general parameters <var>a</var>, <var>b</var>. 
+<!-- exceptions: -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_hyperg_U_int</b> (<var>int m, int n, double x</var>)<var><a name="index-gsl_005fsf_005fhyperg_005fU_005fint-667"></a></var><br>
+&mdash; Function: int <b>gsl_sf_hyperg_U_int_e</b> (<var>int m, int n, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005fU_005fint_005fe-668"></a></var><br>
+<blockquote><p>These routines compute the confluent hypergeometric function
+U(m,n,x) for integer parameters <var>m</var>, <var>n</var>. 
+<!-- exceptions: -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_sf_hyperg_U_int_e10_e</b> (<var>int m, int n, double x, gsl_sf_result_e10 * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005fU_005fint_005fe10_005fe-669"></a></var><br>
+<blockquote><p>This routine computes the confluent hypergeometric function
+U(m,n,x) for integer parameters <var>m</var>, <var>n</var> using the
+<code>gsl_sf_result_e10</code> type to return a result with extended range. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_hyperg_U</b> (<var>double a, double b, double x</var>)<var><a name="index-gsl_005fsf_005fhyperg_005fU-670"></a></var><br>
+&mdash; Function: int <b>gsl_sf_hyperg_U_e</b> (<var>double a, double b, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005fU_005fe-671"></a></var><br>
+<blockquote><p>These routines compute the confluent hypergeometric function U(a,b,x). 
+<!-- exceptions: -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_sf_hyperg_U_e10_e</b> (<var>double a, double b, double x, gsl_sf_result_e10 * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005fU_005fe10_005fe-672"></a></var><br>
+<blockquote><p>This routine computes the confluent hypergeometric function
+U(a,b,x) using the <code>gsl_sf_result_e10</code> type to return a
+result with extended range. 
+<!-- exceptions: -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_hyperg_2F1</b> (<var>double a, double b, double c, double x</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f2F1-673"></a></var><br>
+&mdash; Function: int <b>gsl_sf_hyperg_2F1_e</b> (<var>double a, double b, double c, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f2F1_005fe-674"></a></var><br>
+<blockquote><p>These routines compute the Gauss hypergeometric function
+<!-- {${}_2F_1(a,b,c,x) = F(a,b,c,x)$} -->
+2F1(a,b,c,x) = F(a,b,c,x) for |x| &lt; 1.
+
+        <p>If the arguments (a,b,c,x) are too close to a singularity then
+the function can return the error code <code>GSL_EMAXITER</code> when the
+series approximation converges too slowly.  This occurs in the region of
+x=1, c - a - b = m for integer m. 
+<!-- exceptions: -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_hyperg_2F1_conj</b> (<var>double aR, double aI, double c, double x</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f2F1_005fconj-675"></a></var><br>
+&mdash; Function: int <b>gsl_sf_hyperg_2F1_conj_e</b> (<var>double aR, double aI, double c, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f2F1_005fconj_005fe-676"></a></var><br>
+<blockquote><p>These routines compute the Gauss hypergeometric function
+<!-- {${}_2F_1(a_R + i a_I, aR - i aI, c, x)$} -->
+2F1(a_R + i a_I, a_R - i a_I, c, x) with complex parameters
+for |x| &lt; 1. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_hyperg_2F1_renorm</b> (<var>double a, double b, double c, double x</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f2F1_005frenorm-677"></a></var><br>
+&mdash; Function: int <b>gsl_sf_hyperg_2F1_renorm_e</b> (<var>double a, double b, double c, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f2F1_005frenorm_005fe-678"></a></var><br>
+<blockquote><p>These routines compute the renormalized Gauss hypergeometric function
+<!-- {${}_2F_1(a,b,c,x) / \Gamma(c)$} -->
+2F1(a,b,c,x) / \Gamma(c) for |x| &lt; 1. 
+<!-- exceptions: -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_hyperg_2F1_conj_renorm</b> (<var>double aR, double aI, double c, double x</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f2F1_005fconj_005frenorm-679"></a></var><br>
+&mdash; Function: int <b>gsl_sf_hyperg_2F1_conj_renorm_e</b> (<var>double aR, double aI, double c, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f2F1_005fconj_005frenorm_005fe-680"></a></var><br>
+<blockquote><p>These routines compute the renormalized Gauss hypergeometric function
+<!-- {${}_2F_1(a_R + i a_I, a_R - i a_I, c, x) / \Gamma(c)$} -->
+2F1(a_R + i a_I, a_R - i a_I, c, x) / \Gamma(c) for |x| &lt; 1. 
+<!-- exceptions: -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_hyperg_2F0</b> (<var>double a, double b, double x</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f2F0-681"></a></var><br>
+&mdash; Function: int <b>gsl_sf_hyperg_2F0_e</b> (<var>double a, double b, double x, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fhyperg_005f2F0_005fe-682"></a></var><br>
+<blockquote><p>These routines compute the hypergeometric function <!-- {${}_2F_0(a,b,x)$} -->
+2F0(a,b,x).  The series representation
+is a divergent hypergeometric series.  However, for x &lt; 0 we
+have
+<!-- {${}_2F_0(a,b,x) = (-1/x)^a U(a,1+a-b,-1/x)$} -->
+2F0(a,b,x) = (-1/x)^a U(a,1+a-b,-1/x)
+<!-- exceptions: GSL_EDOM -->
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Vectors - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Vectors-and-Matrices.html" title="Vectors and Matrices">
+<link rel="prev" href="Blocks.html" title="Blocks">
+<link rel="next" href="Matrices.html" title="Matrices">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Vectors"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Matrices.html">Matrices</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Blocks.html">Blocks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Vectors-and-Matrices.html">Vectors and Matrices</a>
+<hr>
+</div>
+
+<h3 class="section">8.3 Vectors</h3>
+
+<p><a name="index-vectors-879"></a><a name="index-stride_002c-of-vector-index-880"></a>
+Vectors are defined by a <code>gsl_vector</code> structure which describes a
+slice of a block.  Different vectors can be created which point to the
+same block.  A vector slice is a set of equally-spaced elements of an
+area of memory.
+
+   <p><a name="index-gsl_005fvector-881"></a>The <code>gsl_vector</code> structure contains five components, the
+<dfn>size</dfn>, the <dfn>stride</dfn>, a pointer to the memory where the elements
+are stored, <var>data</var>, a pointer to the block owned by the vector,
+<var>block</var>, if any, and an ownership flag, <var>owner</var>.  The structure
+is very simple and looks like this,
+
+<pre class="example">     typedef struct
+     {
+       size_t size;
+       size_t stride;
+       double * data;
+       gsl_block * block;
+       int owner;
+     } gsl_vector;
+</pre>
+   <p class="noindent">The <var>size</var> is simply the number of vector elements.  The range of
+valid indices runs from 0 to <code>size-1</code>.  The <var>stride</var> is the
+step-size from one element to the next in physical memory, measured in
+units of the appropriate datatype.  The pointer <var>data</var> gives the
+location of the first element of the vector in memory.  The pointer
+<var>block</var> stores the location of the memory block in which the vector
+elements are located (if any).  If the vector owns this block then the
+<var>owner</var> field is set to one and the block will be deallocated when the
+vector is freed.  If the vector points to a block owned by another
+object then the <var>owner</var> field is zero and any underlying block will not be
+deallocated with the vector.
+
+   <p>The functions for allocating and accessing vectors are defined in
+<samp><span class="file">gsl_vector.h</span></samp>
+
+<ul class="menu">
+<li><a accesskey="1" href="Vector-allocation.html">Vector allocation</a>
+<li><a accesskey="2" href="Accessing-vector-elements.html">Accessing vector elements</a>
+<li><a accesskey="3" href="Initializing-vector-elements.html">Initializing vector elements</a>
+<li><a accesskey="4" href="Reading-and-writing-vectors.html">Reading and writing vectors</a>
+<li><a accesskey="5" href="Vector-views.html">Vector views</a>
+<li><a accesskey="6" href="Copying-vectors.html">Copying vectors</a>
+<li><a accesskey="7" href="Exchanging-elements.html">Exchanging elements</a>
+<li><a accesskey="8" href="Vector-operations.html">Vector operations</a>
+<li><a accesskey="9" href="Finding-maximum-and-minimum-elements-of-vectors.html">Finding maximum and minimum elements of vectors</a>
+<li><a href="Vector-properties.html">Vector properties</a>
+<li><a href="Example-programs-for-vectors.html">Example programs for vectors</a>
+</ul>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

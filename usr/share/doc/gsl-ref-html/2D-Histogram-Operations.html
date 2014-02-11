@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>2D Histogram Operations - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Histograms.html" title="Histograms">
+<link rel="prev" href="2D-Histogram-Statistics.html#g_t2D-Histogram-Statistics" title="2D Histogram Statistics">
+<link rel="next" href="Reading-and-writing-2D-histograms.html" title="Reading and writing 2D histograms">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="g_t2D-Histogram-Operations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Reading-and-writing-2D-histograms.html">Reading and writing 2D histograms</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="2D-Histogram-Statistics.html#g_t2D-Histogram-Statistics">2D Histogram Statistics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Histograms.html">Histograms</a>
+<hr>
+</div>
+
+<h3 class="section">22.19 2D Histogram Operations</h3>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_equal_bins_p</b> (<var>const gsl_histogram2d * h1, const gsl_histogram2d * h2</var>)<var><a name="index-gsl_005fhistogram2d_005fequal_005fbins_005fp-2065"></a></var><br>
+<blockquote><p>This function returns 1 if all the individual bin ranges of the two
+histograms are identical, and 0 otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_add</b> (<var>gsl_histogram2d * h1, const gsl_histogram2d * h2</var>)<var><a name="index-gsl_005fhistogram2d_005fadd-2066"></a></var><br>
+<blockquote><p>This function adds the contents of the bins in histogram <var>h2</var> to the
+corresponding bins of histogram <var>h1</var>,
+i.e. h'_1(i,j) = h_1(i,j) + h_2(i,j). 
+The two histograms must have identical bin ranges. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_sub</b> (<var>gsl_histogram2d * h1, const gsl_histogram2d * h2</var>)<var><a name="index-gsl_005fhistogram2d_005fsub-2067"></a></var><br>
+<blockquote><p>This function subtracts the contents of the bins in histogram <var>h2</var> from the
+corresponding bins of histogram <var>h1</var>,
+i.e. h'_1(i,j) = h_1(i,j) - h_2(i,j). 
+The two histograms must have identical bin ranges. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_mul</b> (<var>gsl_histogram2d * h1, const gsl_histogram2d * h2</var>)<var><a name="index-gsl_005fhistogram2d_005fmul-2068"></a></var><br>
+<blockquote><p>This function multiplies the contents of the bins of histogram <var>h1</var>
+by the contents of the corresponding bins in histogram <var>h2</var>,
+i.e. h'_1(i,j) = h_1(i,j) * h_2(i,j). 
+The two histograms must have identical bin ranges. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_div</b> (<var>gsl_histogram2d * h1, const gsl_histogram2d * h2</var>)<var><a name="index-gsl_005fhistogram2d_005fdiv-2069"></a></var><br>
+<blockquote><p>This function divides the contents of the bins of histogram <var>h1</var>
+by the contents of the corresponding bins in histogram <var>h2</var>,
+i.e. h'_1(i,j) = h_1(i,j) / h_2(i,j). 
+The two histograms must have identical bin ranges. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_scale</b> (<var>gsl_histogram2d * h, double scale</var>)<var><a name="index-gsl_005fhistogram2d_005fscale-2070"></a></var><br>
+<blockquote><p>This function multiplies the contents of the bins of histogram <var>h</var>
+by the constant <var>scale</var>, i.e. <!-- {$h'_1(i,j) = h_1(i,j) * \hbox{\it scale}$} -->
+h'_1(i,j) = h_1(i,j) scale. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_shift</b> (<var>gsl_histogram2d * h, double offset</var>)<var><a name="index-gsl_005fhistogram2d_005fshift-2071"></a></var><br>
+<blockquote><p>This function shifts the contents of the bins of histogram <var>h</var>
+by the constant <var>offset</var>, i.e. <!-- {$h'_1(i,j) = h_1(i,j) + \hbox{\it offset}$} -->
+h'_1(i,j) = h_1(i,j) + offset. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

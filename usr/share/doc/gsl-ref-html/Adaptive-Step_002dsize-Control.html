@@ -1,0 +1,172 @@
+<html lang="en">
+<head>
+<title>Adaptive Step-size Control - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Ordinary-Differential-Equations.html" title="Ordinary Differential Equations">
+<link rel="prev" href="Stepping-Functions.html" title="Stepping Functions">
+<link rel="next" href="Evolution.html" title="Evolution">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Adaptive-Step-size-Control"></a>
+<a name="Adaptive-Step_002dsize-Control"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Evolution.html">Evolution</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Stepping-Functions.html">Stepping Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Ordinary-Differential-Equations.html">Ordinary Differential Equations</a>
+<hr>
+</div>
+
+<h3 class="section">26.3 Adaptive Step-size Control</h3>
+
+<p><a name="index-Adaptive-step_002dsize-control_002c-differential-equations-2202"></a>
+The control function examines the proposed change to the solution
+produced by a stepping function and attempts to determine the optimal
+step-size for a user-specified level of error.
+
+<div class="defun">
+&mdash; Function: gsl_odeiv2_control * <b>gsl_odeiv2_control_standard_new</b> (<var>double eps_abs, double eps_rel, double a_y, double a_dydt</var>)<var><a name="index-gsl_005fodeiv2_005fcontrol_005fstandard_005fnew-2203"></a></var><br>
+<blockquote><p><a name="index-gsl_005fodeiv2_005fcontrol-2204"></a><a name="index-gsl_005fodeiv2_005fcontrol_005ftype-2205"></a>The standard control object is a four parameter heuristic based on
+absolute and relative errors <var>eps_abs</var> and <var>eps_rel</var>, and
+scaling factors <var>a_y</var> and <var>a_dydt</var> for the system state
+y(t) and derivatives y'(t) respectively.
+
+        <p>The step-size adjustment procedure for this method begins by computing
+the desired error level D_i for each component,
+     and comparing it with the observed error E_i = |yerr_i|.  If the
+observed error <var>E</var> exceeds the desired error level <var>D</var> by more
+than 10% for any component then the method reduces the step-size by an
+appropriate factor,
+     where q is the consistency order of the method (e.g. q=4 for
+4(5) embedded RK), and S is a safety factor of 0.9. The ratio
+E/D is taken to be the maximum of the ratios
+E_i/D_i.
+
+        <p>If the observed error E is less than 50% of the desired error
+level <var>D</var> for the maximum ratio E_i/D_i then the algorithm
+takes the opportunity to increase the step-size to bring the error in
+line with the desired level,
+     This encompasses all the standard error scaling methods. To avoid
+uncontrolled changes in the stepsize, the overall scaling factor is
+limited to the range 1/5 to 5. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_odeiv2_control * <b>gsl_odeiv2_control_y_new</b> (<var>double eps_abs, double eps_rel</var>)<var><a name="index-gsl_005fodeiv2_005fcontrol_005fy_005fnew-2206"></a></var><br>
+<blockquote><p>This function creates a new control object which will keep the local
+error on each step within an absolute error of <var>eps_abs</var> and
+relative error of <var>eps_rel</var> with respect to the solution y_i(t). 
+This is equivalent to the standard control object with <var>a_y</var>=1 and
+<var>a_dydt</var>=0. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_odeiv2_control * <b>gsl_odeiv2_control_yp_new</b> (<var>double eps_abs, double eps_rel</var>)<var><a name="index-gsl_005fodeiv2_005fcontrol_005fyp_005fnew-2207"></a></var><br>
+<blockquote><p>This function creates a new control object which will keep the local
+error on each step within an absolute error of <var>eps_abs</var> and
+relative error of <var>eps_rel</var> with respect to the derivatives of the
+solution y'_i(t).  This is equivalent to the standard control
+object with <var>a_y</var>=0 and <var>a_dydt</var>=1. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_odeiv2_control * <b>gsl_odeiv2_control_scaled_new</b> (<var>double eps_abs, double eps_rel, double a_y, double a_dydt, const double scale_abs</var>[]<var>, size_t dim</var>)<var><a name="index-gsl_005fodeiv2_005fcontrol_005fscaled_005fnew-2208"></a></var><br>
+<blockquote><p>This function creates a new control object which uses the same algorithm
+as <code>gsl_odeiv2_control_standard_new</code> but with an absolute error
+which is scaled for each component by the array <var>scale_abs</var>. 
+The formula for D_i for this control object is,
+     where s_i is the i-th component of the array <var>scale_abs</var>. 
+The same error control heuristic is used by the Matlab <span class="sc">ode</span> suite. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_odeiv2_control * <b>gsl_odeiv2_control_alloc</b> (<var>const gsl_odeiv2_control_type * T</var>)<var><a name="index-gsl_005fodeiv2_005fcontrol_005falloc-2209"></a></var><br>
+<blockquote><p>This function returns a pointer to a newly allocated instance of a
+control function of type <var>T</var>.  This function is only needed for
+defining new types of control functions.  For most purposes the standard
+control functions described above should be sufficient. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_odeiv2_control_init</b> (<var>gsl_odeiv2_control * c, double eps_abs, double eps_rel, double a_y, double a_dydt</var>)<var><a name="index-gsl_005fodeiv2_005fcontrol_005finit-2210"></a></var><br>
+<blockquote><p>This function initializes the control function <var>c</var> with the
+parameters <var>eps_abs</var> (absolute error), <var>eps_rel</var> (relative
+error), <var>a_y</var> (scaling factor for y) and <var>a_dydt</var> (scaling
+factor for derivatives). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_odeiv2_control_free</b> (<var>gsl_odeiv2_control * c</var>)<var><a name="index-gsl_005fodeiv2_005fcontrol_005ffree-2211"></a></var><br>
+<blockquote><p>This function frees all the memory associated with the control function
+<var>c</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_odeiv2_control_hadjust</b> (<var>gsl_odeiv2_control * c, gsl_odeiv2_step * s, const double y</var>[]<var>, const double yerr</var>[]<var>, const double dydt</var>[]<var>, double * h</var>)<var><a name="index-gsl_005fodeiv2_005fcontrol_005fhadjust-2212"></a></var><br>
+<blockquote><p>This function adjusts the step-size <var>h</var> using the control function
+<var>c</var>, and the current values of <var>y</var>, <var>yerr</var> and <var>dydt</var>. 
+The stepping function <var>step</var> is also needed to determine the order
+of the method.  If the error in the y-values <var>yerr</var> is found to be
+too large then the step-size <var>h</var> is reduced and the function returns
+<code>GSL_ODEIV_HADJ_DEC</code>.  If the error is sufficiently small then
+<var>h</var> may be increased and <code>GSL_ODEIV_HADJ_INC</code> is returned.  The
+function returns <code>GSL_ODEIV_HADJ_NIL</code> if the step-size is
+unchanged.  The goal of the function is to estimate the largest
+step-size which satisfies the user-specified accuracy requirements for
+the current point. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: const char * <b>gsl_odeiv2_control_name</b> (<var>const gsl_odeiv2_control * c</var>)<var><a name="index-gsl_005fodeiv2_005fcontrol_005fname-2213"></a></var><br>
+<blockquote><p>This function returns a pointer to the name of the control function. 
+For example,
+
+     <pre class="example">          printf ("control method is '%s'\n",
+                  gsl_odeiv2_control_name (c));
+</pre>
+        <p class="noindent">would print something like <code>control method is 'standard'</code>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_odeiv2_control_errlevel</b> (<var>gsl_odeiv2_control * c, const double y, const double dydt, const double h, const size_t ind, double * errlev</var>)<var><a name="index-gsl_005fodeiv2_005fcontrol_005ferrlevel-2214"></a></var><br>
+<blockquote><p>This function calculates the desired error level of the <var>ind</var>th component to <var>errlev</var>. It requires the value (<var>y</var>) and value of the derivative (<var>dydt</var>) of the component, and the current step size <var>h</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_odeiv2_control_set_driver</b> (<var>gsl_odeiv2_control * c, const gsl_odeiv2_driver * d</var>)<var><a name="index-gsl_005fodeiv2_005fcontrol_005fset_005fdriver-2215"></a></var><br>
+<blockquote><p>This function sets a pointer of the driver object <var>d</var> for control
+object <var>c</var>. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

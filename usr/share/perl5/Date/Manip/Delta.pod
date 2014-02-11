@@ -1,0 +1,534 @@
+# Copyright (c) 1995-2011 Sullivan Beck. All rights reserved.
+# This program is free software; you can redistribute it and/or modify it
+# under the same terms as Perl itself.
+
+=pod
+
+=head1 NAME
+
+Date::Manip::Delta - Methods for working with deltas
+
+=head1 SYNOPSIS
+
+   use Date::Manip::Delta;
+   $date = new Date::Manip::Delta;
+
+=head1 DESCRIPTION
+
+This module contains functions useful in parsing and manipulating
+deltas.  As used in this module, a delta refers only to the amount of
+time elapsed.  It includes no information about a starting or ending
+time.
+
+There are several concepts involved in understanding the properties
+of a delta.
+
+=over 4
+
+=item B<fields>
+
+A delta consists of 7 fields: years, months, weeks, days, hours,
+minutes, and seconds, usually expressed as a colon-separated string.
+For example:
+
+   1:2:3:4:5:6:7
+
+refers to an elapsed amount of time 1 year, 2 months, 3 weeks, 4 days,
+5 hours, 6 minutes, and 7 seconds long.
+
+=item B<normalized>
+
+A delta can be normalized or not. A normalized delta has values which
+have been made consistent with the type of data they represent. For
+example, a delta of:
+
+   0:0:0:0:0:10:70
+
+is not normalized since 70 seconds is better expressed as 1 minute
+10 seconds. The normalized form of this delta would be:
+
+   0:0:0:0:0:11:10
+
+Deltas are automatically converted to a normalized form in almost all
+functions.
+
+=item B<sets of fields>
+
+When normalizing a delta, fields are grouped together in sets where
+the exact relationship is known between all fields in the set.
+
+For example, in a normal delta, it is known that there are exactly
+60 seconds in a minute, exactly 60 minutes in an hour, etc.
+
+It is NOT known how many weeks are in a month however. So, the
+year and month fields form one set, and the weeks, days, hours,
+minutes, and seconds form a second set.
+
+When normalizing a delta, no data from one set will ever be mixed
+with data from another set.
+
+As a result, the following delta is normalized:
+
+   0:3:8:0:0:0:0
+
+Although 8 weeks is clearly more than 1 month, we don't know the
+relationship between the two, so they don't mix.
+
+=item B<exact deltas>
+
+An exact delta is one which does not include any fields which cannot
+be exactly written in terms of seconds. For example, a delta which
+includes a year or month field can never be exact since there is no
+exact length for either.
+
+So, the delta:
+
+   0:3:8:0:0:0:0
+
+is not exact, but the delta:
+
+   0:0:0:12:30:0:0
+
+is exact.
+
+=item B<business delta>
+
+Deltas can refer to changes in either the full calendar, or they can
+refer to a business calendar.
+
+Business deltas have the added complexity that there is no definite
+relationship between the number of work days in a work week (there may
+be a holiday during the week). As a result, there are three sets of
+fields: year/month, week, day/hour/minute/second.  An exact business
+delta will not have a year, month, or week field.
+
+There IS a definite relationship between hours and days, but it is
+probably not 24 hours = 1 day. Common definitions of a work day
+include 8 hours long (09:00-17:00) or 9 hours long (08:00-17:00), and
+any other definition may be included may be defined as long as the
+start time is earlier in the day than the end time. The config
+variables WorkDayBeg, WorkDayEnd, and WorkDay24Hr can be used to
+defined the length of the work day.
+
+=item B<signs>
+
+Each set of fields has a sign associated with it. For example, the
+delta "1 year ago" is written as:
+
+   -1:0:0:0:0:0:0
+
+Since there is no mixing of data between sets of fields, you can
+end up with a delta with two (or three in the case of business
+deltas) signs. So, the following is a fully normalized business
+delta:
+
+   +1:0:-3:+3:0:0:0
+
+Note that for a fully normalized delta, the leading field in each
+set of fields will always have a sign, even when it is redundant
+or unnecessary.
+
+For example:
+
+   +2:1:+2:6:23:51:30
+   +0:0:+0:0:0:0:10
+
+In a normalized delta, all fields in a set will have the same sign.
+
+=back
+
+=head1 METHODS
+
+=over 4
+
+=item B<new>
+
+=item B<new_config>
+
+=item B<new_date>
+
+=item B<new_delta>
+
+=item B<new_recur>
+
+=item B<base>
+
+=item B<tz>
+
+=item B<is_date>
+
+=item B<is_delta>
+
+=item B<is_recur>
+
+=item B<config>
+
+=item B<err>
+
+Please refer to the Date::Manip::Obj documentation for these methods.
+
+=item B<parse>
+
+   $err = $delta->parse($string [,$business]);
+
+This takes a string and parses it to see if it is a valid delta. If it is,
+an error code of 0 is returned and $delta now contains the value of the
+delta. Otherwise, an error code of 1 is returned.
+
+A valid delta is in one of two forms: colon or expanded.
+
+The colon format is:
+
+   +Y:+M:+W:+D:+H:+MN:+S
+      examples:
+         0:0:0:0:4:3:-2
+         +4:3:-2
+         +4::3
+
+In the colon format, from 1 to 7 of the fields may be given.  For
+example +D:+H:+MN:+S may be given to specify only four of the fields.
+No spaces may be present in the colon format. It is allowed to omit
+some of the fields. For example 5::3:30 is valid. In this case,
+missing fields default to the value 0.
+
+The expanded format is:
+
+   +Yy +Mm +Ww +Dd +Hh +MNmn +Ss
+      examples:
+         +4 hours +3mn -2second
+         + 4 hr 3 minutes -2
+         4 hour + 3 min -2 s
+         4 hr 2 s       (note that minutes are omitted)
+
+A field in the expanded format (+Yy) is a sign, a number, and a string
+specifying the type of field.  The sign is "+", "-", or absent
+(defaults to the next larger element).  The valid strings (in English)
+specifying the field type are:
+
+   y:  y, yr, year, years
+   m:  m, mon, month, months
+   w:  w, wk, ws, wks, week, weeks
+   d:  d, day, days
+   h:  h, hr, hour, hours
+   mn: mn, min, minute, minutes
+   s:  s, sec, second, seconds
+
+Other languages have similar abbreviations.
+
+Also, the "seconds" string may be omitted.  The sign, number, and
+string may all be separated from each other by any number of
+whitespace. The string specifying the unit must be separated
+from a following number by whitespace or a comma, so the following example
+will NOT work:
+
+   4hours3minutes
+
+At minimum, it must be expressed as:
+
+   4hours 3minutes
+   4 hours, 3 minutes
+
+In the the expanded format, all fields must be given in the order: Y M
+W D H MN S.  Any number of them may be omitted provided the rest
+remain in the correct order. Numbers may be spelled out, so
+
+   in two weeks
+   in 2 weeks
+
+both work.
+
+Most languages also allow a word to specify whether the delta is an
+amount of time after or before a fixed point. In English, the word "in"
+refers to a time after a fixed point, and "ago" refers to a point before
+a fixed point. So, the following deltas are equivalent:
+
+  1:0:0:0:0:0:0
+  in 1 year
+
+and the following are equivalent
+
+  -1:0:0:0:0:0:0
+  1 year ago
+
+The word "in" is completely ignored. The word "ago" has the affect of
+reversing all signs that appear in front of the components of the
+delta.  In other words, the following two strings are identical:
+
+   -12 yr  6 mon ago
+   +12 yr +6 mon
+
+(don't forget that there is an implied minus sign in front of the 6 in
+the first string because when no sign is explicitly given, it carries
+the previously entered sign).
+
+The in/ago words only apply to the expanded format, so the following
+is invalid:
+
+   1:0:0 ago
+
+A delta may be business mode, or non-business mode. By default, a delta
+is treated as a non-business mode delta, but this can be changed in two
+different ways.
+
+The first way to make a delta be business mode is to pass in the 2nd
+argument to the function that is non-zero. If this is done, the delta
+will be a business delta by default.
+
+The second way to specify whether a delta is business or non-business
+is to include a key word in the string that is parsed. When this is
+done, these strings override any value of the $business argument.
+
+Most languages include a word like "business" which can be used to
+specify that the resulting delta is a business mode delta or a
+non-business delta. Other languages have equivalent words. The
+placement of the word is not important. Also, the "business" word can
+be included with both types of deltas, so the following are valid and
+equivalent:
+
+   in 4 hours business
+   4:0:0 business
+   business 0:0:0:0:4:0:0
+
+There are also words "exact" or "approximate" which serve to force the
+delta to be non-business mode. For backward compatibility, both are
+available and serve the same purpose (they no longer determine whether
+the delta is exact or not... that is determined only by the fields
+that are included as described above).
+
+=item B<input>
+
+   $str = $delta->input();
+
+This returns the string that was parsed to form the delta.
+
+=item B<set>
+
+   $err = $delta->set($field,$val);
+
+This explicitly sets one or more fields in a delta.
+
+$field can be any of the following:
+
+   $field   $val
+
+   delta    [Y,M,W,D,H,MN,S]  sets the entire delta
+   business [Y,M,W,D,H,MN,S]  sets the entire delta
+   normal   [Y,M,W,D,H,MN,S]  sets the entire delta
+   y        YEAR              sets one field
+   M        MONTH
+   w        WEEK
+   d        DAY
+   h        HOUR
+   m        MINUTE
+   s        SECOND
+
+   mode     business, normal
+
+An error is returned if an invalid value is passed in.
+
+When setting the entire delta with "business" or "normal", it flags the
+delta as a business or non-business delta respectively. When setting
+the entire delta with "delta", the flag is left unchanged.
+
+=item B<printf>
+
+   $out = $delta->printf($in);
+   @out = $delta->printf(@in);
+
+This takes a string or list of strings which may contain any number of
+special formatting directives. These directives are replaced with
+information contained in the delta. Everything else in the string is
+returned unmodified.
+
+A directive always begins with '%'. They are described in the section
+below in the section PRINTF DIRECTIVES.
+
+=item B<calc>
+
+   $date2  = $delta->calc($date1 [,$subtract]);
+   $delta3 = $delta1->calc($delta2 [,$subtract]);
+
+Please refer to the Date::Manip::Calc documentation for details.
+
+=item B<type>
+
+   $flag = $delta->type($op);
+
+This tests to see if a delta is of a certain type. $op can be;
+
+   business  : returns 1 if it is a business delta
+   exact     : returns 1 if it is exact
+
+=item B<value>
+
+   $val = $delta->value();
+   @val = $delta->value();
+
+This returns the value of the delta. In scalar context, it returns
+the printable string (equivalent to the printf directive '%Dt'). In
+list context, it returns a list of fields.
+
+undef is returned if there is no valid delta stored in $delta.
+
+=back
+
+=head1 PRINTF DIRECTIVES
+
+The following printf directives are replaced with information
+from the delta. Directives may be replaced by the values of a
+single field in the delta (i.e. the hours or weeks field),
+the value of several fields expressed in terms of one of them
+(i.e. the number of years and months expressed in terms of
+months), or the directive may format either the entire delta,
+or portions of it.
+
+=over 4
+
+=item B<Simple directives>
+
+These are directives which print simple characters. Currently, the only one is:
+
+   %%    Replaced by a single '%'
+
+As an example:
+
+  $delta->printf('|A %% B|');
+     => |A % B|
+
+=item B<Directives to print out a single field>
+
+The following directive is used to print out the value of a single
+field. Spaces are included here for clarity, but are not in the
+actual directive.
+
+   % [+] [pad] [width] Xv
+
+Here, X is one of (y,M,w,d,h,m,s). The directive will print out the
+value for that field (in the normalized delta).
+
+If a '+' is included immediately after the '%', a sign will always be
+included. By default, only negative values will include a sign.
+
+'width' is any positive integer (without a sign). If 'width' is
+included, it sets the length of the output string (unless the string
+is already longer than that, in which case the 'width' is ignored).
+
+If 'pad' is included, it may be the character '<', '>', or '0'. It
+will be ignored unless 'width' is included.  If the formatted delta
+field is shorter than 'width', it will be padded with spaces on the
+left (if 'pad' is '<'), or right (if 'pad' is '>'), or it will be
+padded on the left (after any sign) with zeroes (if 'pad' is '0').
+
+In the following examples, $delta contains the delta: 1:2:3:4:5:6:7
+
+   $delta->printf('|Month: %Mv|');
+      => |Month: 2|
+
+   $delta->printf('|Day: %+05dv|');
+      => |Day: +0004|
+
+   $delta->printf('|Day: %+<5dv|');
+      => |Day:    +4|
+
+   $delta->printf('|Day: %>5sv|');
+      => |Day: 7    |
+
+=item B<Directives to print out several fields in terms of one of them>
+
+The following directive is used to print out the value of several
+different fields, expressed in terms of a single field.
+
+   % [+] [pad] [width] [.precision] XYZ
+
+Here, X, Y, and Z are each one of (y,M,w,d,h,m,s). The directive will
+print out the value for fields Y through Z expressed in terms of field X.
+
+Y must come before Z in the sequence (y,M,w,d,h,m,s) or it can be the
+same as Z.
+
+So, to print the day and hour fields in terms of seconds, use the directive:
+
+   %sdh
+
+Any time all of X, Y, and Z are from a single set of fields, exact
+relationships are used.
+
+If the X, Y, and Z fields do not all belong to the same set of fields,
+approximate relationships are used.
+
+For non-business deltas, an approximate relationship is needed to
+link the Y/M part of the delta to the W/D/H/Mn/S part. The relationship
+used is that a year is assigned a length of 365.2425 days.
+
+For business deltas, the relationship between weeks and days is
+set to be the length of the business week (as defined using the
+WorkWeekBeg and WorkWeekEnd config variables). Also, a factor of
+X/7 * 365.2425 (where X is the number of days in a work week) is used
+to determine the number of work days in a year.
+
+If 'precision' is included, it is the number of decimal places to
+print. If it is not included, but 'width' is included, precision will
+be set automatically to display the maximum number of decimal places
+given 'width'.
+
+If 'pad' is included, it may be the character '<', '>', or '0', and is
+used in the same way as printing out a single field.
+
+In the following examples, $delta contains the delta: 1:2:3:4:5:6:7
+
+   $delta->printf('|%.4Myw|');
+      => |14.6900|
+      1 year, 2 months, 3 weeks is approximately
+      14.6900 months
+
+=item B<Directives to print out portions of the delta>
+
+The following directives may be used to print out some or all of a delta.
+
+   % [+] [pad] [width] Dt
+   % [+] [pad] [width] DXY
+
+The first directive will print out the entire delta.
+
+The second will print out the delta from the X to Y fields inclusive
+(where X and Y are each one of (y,M,w,d,h,m,s) and X must come before
+Y in the sequence).
+
+'pad' is optional and can be either '<' or '>' meaning to pad on the
+left or right with spaces. It defaults to '<'.
+
+If a '+' is included immediately following the '%', every field will
+have a sign attached. Otherwise, only the leftmost field in each set
+of fields will include a sign.
+
+    $delta->printf('|%Dt|');
+       => |+1:2:+3:+4:5:6:7|
+
+    $delta->printf('|%+Dyd|');
+       => |+1:+2:+3:+4|
+
+=back
+
+=head1 KNOWN BUGS
+
+None known.
+
+=head1 BUGS AND QUESTIONS
+
+Please refer to the Date::Manip::Problems documentation for
+information on submitting bug reports or questions to the author.
+
+=head1 SEE ALSO
+
+Date::Manip        - main module documentation
+
+=head1 LICENSE
+
+This script is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+=head1 AUTHOR
+
+Sullivan Beck (sbeck@cpan.org)
+
+=cut

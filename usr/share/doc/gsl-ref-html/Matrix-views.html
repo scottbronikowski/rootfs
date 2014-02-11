@@ -1,0 +1,264 @@
+<html lang="en">
+<head>
+<title>Matrix views - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Matrices.html" title="Matrices">
+<link rel="prev" href="Reading-and-writing-matrices.html" title="Reading and writing matrices">
+<link rel="next" href="Creating-row-and-column-views.html" title="Creating row and column views">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Matrix-views"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Creating-row-and-column-views.html">Creating row and column views</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reading-and-writing-matrices.html">Reading and writing matrices</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Matrices.html">Matrices</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.4.5 Matrix views</h4>
+
+<p><a name="index-gsl_005fmatrix_005fview-971"></a><a name="index-gsl_005fmatrix_005fconst_005fview-972"></a>
+A matrix view is a temporary object, stored on the stack, which can be
+used to operate on a subset of matrix elements.  Matrix views can be
+defined for both constant and non-constant matrices using separate types
+that preserve constness.  A matrix view has the type
+<code>gsl_matrix_view</code> and a constant matrix view has the type
+<code>gsl_matrix_const_view</code>.  In both cases the elements of the view
+can by accessed using the <code>matrix</code> component of the view object.  A
+pointer <code>gsl_matrix *</code> or <code>const gsl_matrix *</code> can be obtained
+by taking the address of the <code>matrix</code> component with the <code>&amp;</code>
+operator.  In addition to matrix views it is also possible to create
+vector views of a matrix, such as row or column views.
+
+<div class="defun">
+&mdash; Function: gsl_matrix_view <b>gsl_matrix_submatrix</b> (<var>gsl_matrix * m, size_t k1, size_t k2, size_t n1, size_t n2</var>)<var><a name="index-gsl_005fmatrix_005fsubmatrix-973"></a></var><br>
+&mdash; Function: gsl_matrix_const_view <b>gsl_matrix_const_submatrix</b> (<var>const gsl_matrix * m, size_t k1, size_t k2, size_t n1, size_t n2</var>)<var><a name="index-gsl_005fmatrix_005fconst_005fsubmatrix-974"></a></var><br>
+<blockquote><p>These functions return a matrix view of a submatrix of the matrix
+<var>m</var>.  The upper-left element of the submatrix is the element
+(<var>k1</var>,<var>k2</var>) of the original matrix.  The submatrix has <var>n1</var>
+rows and <var>n2</var> columns.  The physical number of columns in memory
+given by <var>tda</var> is unchanged.  Mathematically, the
+(i,j)-th element of the new matrix is given by,
+
+     <pre class="example">          m'(i,j) = m-&gt;data[(k1*m-&gt;tda + k2) + i*m-&gt;tda + j]
+</pre>
+        <p class="noindent">where the index <var>i</var> runs from 0 to <code>n1-1</code> and the index <var>j</var>
+runs from 0 to <code>n2-1</code>.
+
+        <p>The <code>data</code> pointer of the returned matrix struct is set to null if
+the combined parameters (<var>i</var>,<var>j</var>,<var>n1</var>,<var>n2</var>,<var>tda</var>)
+overrun the ends of the original matrix.
+
+        <p>The new matrix view is only a view of the block underlying the existing
+matrix, <var>m</var>.  The block containing the elements of <var>m</var> is not
+owned by the new matrix view.  When the view goes out of scope the
+original matrix <var>m</var> and its block will continue to exist.  The
+original memory can only be deallocated by freeing the original matrix. 
+Of course, the original matrix should not be deallocated while the view
+is still in use.
+
+        <p>The function <code>gsl_matrix_const_submatrix</code> is equivalent to
+<code>gsl_matrix_submatrix</code> but can be used for matrices which are
+declared <code>const</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_matrix_view <b>gsl_matrix_view_array</b> (<var>double * base, size_t n1, size_t n2</var>)<var><a name="index-gsl_005fmatrix_005fview_005farray-975"></a></var><br>
+&mdash; Function: gsl_matrix_const_view <b>gsl_matrix_const_view_array</b> (<var>const double * base, size_t n1, size_t n2</var>)<var><a name="index-gsl_005fmatrix_005fconst_005fview_005farray-976"></a></var><br>
+<blockquote><p>These functions return a matrix view of the array <var>base</var>.  The
+matrix has <var>n1</var> rows and <var>n2</var> columns.  The physical number of
+columns in memory is also given by <var>n2</var>.  Mathematically, the
+(i,j)-th element of the new matrix is given by,
+
+     <pre class="example">          m'(i,j) = base[i*n2 + j]
+</pre>
+        <p class="noindent">where the index <var>i</var> runs from 0 to <code>n1-1</code> and the index <var>j</var>
+runs from 0 to <code>n2-1</code>.
+
+        <p>The new matrix is only a view of the array <var>base</var>.  When the view
+goes out of scope the original array <var>base</var> will continue to exist. 
+The original memory can only be deallocated by freeing the original
+array.  Of course, the original array should not be deallocated while
+the view is still in use.
+
+        <p>The function <code>gsl_matrix_const_view_array</code> is equivalent to
+<code>gsl_matrix_view_array</code> but can be used for matrices which are
+declared <code>const</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_matrix_view <b>gsl_matrix_view_array_with_tda</b> (<var>double * base, size_t n1, size_t n2, size_t tda</var>)<var><a name="index-gsl_005fmatrix_005fview_005farray_005fwith_005ftda-977"></a></var><br>
+&mdash; Function: gsl_matrix_const_view <b>gsl_matrix_const_view_array_with_tda</b> (<var>const double * base, size_t n1, size_t n2, size_t tda</var>)<var><a name="index-gsl_005fmatrix_005fconst_005fview_005farray_005fwith_005ftda-978"></a></var><br>
+<blockquote><p>These functions return a matrix view of the array <var>base</var> with a
+physical number of columns <var>tda</var> which may differ from the corresponding
+dimension of the matrix.  The matrix has <var>n1</var> rows and <var>n2</var>
+columns, and the physical number of columns in memory is given by
+<var>tda</var>.  Mathematically, the (i,j)-th element of the new
+matrix is given by,
+
+     <pre class="example">          m'(i,j) = base[i*tda + j]
+</pre>
+        <p class="noindent">where the index <var>i</var> runs from 0 to <code>n1-1</code> and the index <var>j</var>
+runs from 0 to <code>n2-1</code>.
+
+        <p>The new matrix is only a view of the array <var>base</var>.  When the view
+goes out of scope the original array <var>base</var> will continue to exist. 
+The original memory can only be deallocated by freeing the original
+array.  Of course, the original array should not be deallocated while
+the view is still in use.
+
+        <p>The function <code>gsl_matrix_const_view_array_with_tda</code> is equivalent
+to <code>gsl_matrix_view_array_with_tda</code> but can be used for matrices
+which are declared <code>const</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_matrix_view <b>gsl_matrix_view_vector</b> (<var>gsl_vector * v, size_t n1, size_t n2</var>)<var><a name="index-gsl_005fmatrix_005fview_005fvector-979"></a></var><br>
+&mdash; Function: gsl_matrix_const_view <b>gsl_matrix_const_view_vector</b> (<var>const gsl_vector * v, size_t n1, size_t n2</var>)<var><a name="index-gsl_005fmatrix_005fconst_005fview_005fvector-980"></a></var><br>
+<blockquote><p>These functions return a matrix view of the vector <var>v</var>.  The matrix
+has <var>n1</var> rows and <var>n2</var> columns. The vector must have unit
+stride. The physical number of columns in memory is also given by
+<var>n2</var>.  Mathematically, the (i,j)-th element of the new
+matrix is given by,
+
+     <pre class="example">          m'(i,j) = v-&gt;data[i*n2 + j]
+</pre>
+        <p class="noindent">where the index <var>i</var> runs from 0 to <code>n1-1</code> and the index <var>j</var>
+runs from 0 to <code>n2-1</code>.
+
+        <p>The new matrix is only a view of the vector <var>v</var>.  When the view
+goes out of scope the original vector <var>v</var> will continue to exist. 
+The original memory can only be deallocated by freeing the original
+vector.  Of course, the original vector should not be deallocated while
+the view is still in use.
+
+        <p>The function <code>gsl_matrix_const_view_vector</code> is equivalent to
+<code>gsl_matrix_view_vector</code> but can be used for matrices which are
+declared <code>const</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_matrix_view <b>gsl_matrix_view_vector_with_tda</b> (<var>gsl_vector * v, size_t n1, size_t n2, size_t tda</var>)<var><a name="index-gsl_005fmatrix_005fview_005fvector_005fwith_005ftda-981"></a></var><br>
+&mdash; Function: gsl_matrix_const_view <b>gsl_matrix_const_view_vector_with_tda</b> (<var>const gsl_vector * v, size_t n1, size_t n2, size_t tda</var>)<var><a name="index-gsl_005fmatrix_005fconst_005fview_005fvector_005fwith_005ftda-982"></a></var><br>
+<blockquote><p>These functions return a matrix view of the vector <var>v</var> with a
+physical number of columns <var>tda</var> which may differ from the
+corresponding matrix dimension.  The vector must have unit stride. The
+matrix has <var>n1</var> rows and <var>n2</var> columns, and the physical number
+of columns in memory is given by <var>tda</var>.  Mathematically, the
+(i,j)-th element of the new matrix is given by,
+
+     <pre class="example">          m'(i,j) = v-&gt;data[i*tda + j]
+</pre>
+        <p class="noindent">where the index <var>i</var> runs from 0 to <code>n1-1</code> and the index <var>j</var>
+runs from 0 to <code>n2-1</code>.
+
+        <p>The new matrix is only a view of the vector <var>v</var>.  When the view
+goes out of scope the original vector <var>v</var> will continue to exist. 
+The original memory can only be deallocated by freeing the original
+vector.  Of course, the original vector should not be deallocated while
+the view is still in use.
+
+        <p>The function <code>gsl_matrix_const_view_vector_with_tda</code> is equivalent
+to <code>gsl_matrix_view_vector_with_tda</code> but can be used for matrices
+which are declared <code>const</code>. 
+</p></blockquote></div>
+
+<!-- @node Modifying matrix views -->
+<!-- @subsection Modifying matrix views -->
+<!-- @deftypefun int gsl_matrix_view_from_matrix (gsl_matrix * @var{m}, gsl_matrix * @var{mm}, const size_t @var{k1}, const size_t @var{k2}, const size_t @var{n1}, const size_t @var{n2}) -->
+<!-- This function modifies and existing matrix view @var{m} to form a new -->
+<!-- view of a matrix @var{mm}, starting from element (@var{k1},@var{k2}). -->
+<!-- The matrix view has @var{n1} rows and @var{n2} columns.  Any existing -->
+<!-- view in @var{m} will be lost as a result of this function. -->
+<!-- @end deftypefun -->
+<!-- @deftypefun int gsl_matrix_view_from_vector (gsl_matrix * @var{m}, gsl_vector * @var{v}, const size_t @var{offset}, const size_t @var{n1}, const size_t @var{n2}) -->
+<!-- This function modifies and existing matrix view @var{m} to form a new -->
+<!-- view of a vector @var{v}, starting from element @var{offset}.  The -->
+<!-- vector has @var{n1} rows and @var{n2} columns.  Any -->
+<!-- existing view in @var{m} will be lost as a result of this function. -->
+<!-- @end deftypefun -->
+<!-- @deftypefun int gsl_matrix_view_from_array (gsl_matrix * @var{m}, double * @var{base}, const size_t @var{offset}, const size_t @var{n1}, const size_t @var{n2}) -->
+<!-- This function modifies and existing matrix view @var{m} to form a new -->
+<!-- view of an array @var{base}, starting from element @var{offset}.  The -->
+<!-- matrix has @var{n1} rows and @var{n2} columns.  Any -->
+<!-- existing view in @var{m} will be lost as a result of this function. -->
+<!-- @end deftypefun -->
+<!-- @deftypefun {gsl_matrix *} gsl_matrix_alloc_from_block (gsl_block * @var{b}, size_t @var{offset}, size_t @var{n1}, size_t @var{n2}, size_t @var{tda}) -->
+<!-- This function creates a matrix as a slice of the block @var{b}, -->
+<!-- returning a pointer to a newly initialized matrix struct.  The start of -->
+<!-- the matrix is offset by @var{offset} elements from the start of the -->
+<!-- block.  The matrix has @var{n1} rows and @var{n2} columns, with the -->
+<!-- physical number of columns in memory given by @var{tda}. -->
+<!-- Mathematically, the (@var{i},@var{j})-th element of the matrix is given by, -->
+<!-- @example -->
+<!-- m(i,j) = b->data[offset + i*tda + j] -->
+<!-- @end example -->
+<!-- @noindent -->
+<!-- where the index @var{i} runs from 0 to @code{n1-1} and the index @var{j} -->
+<!-- runs from 0 to @code{n2-1}. -->
+<!-- A null pointer is returned if the combined parameters -->
+<!-- (@var{offset},@var{n1},@var{n2},@var{tda}) overrun the end of the block -->
+<!-- or if insufficient memory is available to store the matrix. -->
+<!-- The matrix is only a view of the block @var{b}, and the block is not -->
+<!-- owned by the matrix.  When the matrix is deallocated the block @var{b} -->
+<!-- will continue to exist.  This memory can only be deallocated by freeing -->
+<!-- the block itself.  Of course, this block should not be deallocated while -->
+<!-- the matrix is still in use. -->
+<!-- @end deftypefun -->
+<!-- @deftypefun {gsl_matrix *} gsl_matrix_alloc_from_matrix (gsl_matrix * @var{m}, size_t @var{k1}, size_t @var{k2}, size_t @var{n1}, size_t @var{n2}) -->
+<!-- This function creates a matrix as a submatrix of the matrix @var{m}, -->
+<!-- returning a pointer to a newly initialized matrix struct.  The upper-left -->
+<!-- element of the submatrix is the element (@var{k1},@var{k2}) of the -->
+<!-- original matrix.  The submatrix has @var{n1} rows and @var{n2} columns. -->
+<!-- The physical number of columns in memory given by @var{tda} is -->
+<!-- unchanged.  Mathematically, the (@var{i},@var{j})-th element of the -->
+<!-- new matrix is given by, -->
+<!-- @example -->
+<!-- m'(i,j) = m->data[(k1*m->tda + k2) + i*m->tda + j] -->
+<!-- @end example -->
+<!-- @noindent -->
+<!-- where the index @var{i} runs from 0 to @code{n1-1} and the index @var{j} -->
+<!-- runs from 0 to @code{n2-1}. -->
+<!-- A null pointer is returned if the combined parameters -->
+<!-- (@var{k1},@var{k2},@var{n1},@var{n2},@var{tda}) overrun the end of the -->
+<!-- original matrix or if insufficient memory is available to store the matrix. -->
+<!-- The new matrix is only a view of the block underlying the existing -->
+<!-- matrix, @var{m}.  The block is not owned by the new matrix.  When the new -->
+<!-- matrix is deallocated the original matrix @var{m} and its block will -->
+<!-- continue to exist.  The original memory can only be deallocated by -->
+<!-- freeing the original matrix.  Of course, the original matrix should not -->
+<!-- be deallocated while the new matrix is still in use. -->
+<!-- @end deftypefun -->
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

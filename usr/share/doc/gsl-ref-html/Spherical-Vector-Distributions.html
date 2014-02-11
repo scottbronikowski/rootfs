@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Spherical Vector Distributions - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Random-Number-Distributions.html" title="Random Number Distributions">
+<link rel="prev" href="The-Pareto-Distribution.html" title="The Pareto Distribution">
+<link rel="next" href="The-Weibull-Distribution.html" title="The Weibull Distribution">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Spherical-Vector-Distributions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="The-Weibull-Distribution.html">The Weibull Distribution</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-Pareto-Distribution.html">The Pareto Distribution</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Random-Number-Distributions.html">Random Number Distributions</a>
+<hr>
+</div>
+
+<h3 class="section">20.23 Spherical Vector Distributions</h3>
+
+<p>The spherical distributions generate random vectors, located on a
+spherical surface.  They can be used as random directions, for example in
+the steps of a random walk.
+
+<div class="defun">
+&mdash; Function: void <b>gsl_ran_dir_2d</b> (<var>const gsl_rng * r, double * x, double * y</var>)<var><a name="index-gsl_005fran_005fdir_005f2d-1828"></a></var><br>
+&mdash; Function: void <b>gsl_ran_dir_2d_trig_method</b> (<var>const gsl_rng * r, double * x, double * y</var>)<var><a name="index-gsl_005fran_005fdir_005f2d_005ftrig_005fmethod-1829"></a></var><br>
+<blockquote><p><a name="index-g_t2D-random-direction-vector-1830"></a><a name="index-direction-vector_002c-random-2D-1831"></a><a name="index-spherical-random-variates_002c-2D-1832"></a>This function returns a random direction vector v =
+(<var>x</var>,<var>y</var>) in two dimensions.  The vector is normalized such that
+|v|^2 = x^2 + y^2 = 1.  The obvious way to do this is to take a
+uniform random number between 0 and 2\pi and let <var>x</var> and
+<var>y</var> be the sine and cosine respectively.  Two trig functions would
+have been expensive in the old days, but with modern hardware
+implementations, this is sometimes the fastest way to go.  This is the
+case for the Pentium (but not the case for the Sun Sparcstation). 
+One can avoid the trig evaluations by choosing <var>x</var> and
+<var>y</var> in the interior of a unit circle (choose them at random from the
+interior of the enclosing square, and then reject those that are outside
+the unit circle), and then dividing by <!-- {$\sqrt{x^2 + y^2}$} -->
+\sqrt{x^2 + y^2}. 
+A much cleverer approach, attributed to von Neumann (See Knuth, v2, 3rd
+ed, p140, exercise 23), requires neither trig nor a square root.  In
+this approach, <var>u</var> and <var>v</var> are chosen at random from the
+interior of a unit circle, and then x=(u^2-v^2)/(u^2+v^2) and
+y=2uv/(u^2+v^2). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_ran_dir_3d</b> (<var>const gsl_rng * r, double * x, double * y, double * z</var>)<var><a name="index-gsl_005fran_005fdir_005f3d-1833"></a></var><br>
+<blockquote><p><a name="index-g_t3D-random-direction-vector-1834"></a><a name="index-direction-vector_002c-random-3D-1835"></a><a name="index-spherical-random-variates_002c-3D-1836"></a>This function returns a random direction vector v =
+(<var>x</var>,<var>y</var>,<var>z</var>) in three dimensions.  The vector is normalized
+such that |v|^2 = x^2 + y^2 + z^2 = 1.  The method employed is
+due to Robert E. Knop (CACM 13, 326 (1970)), and explained in Knuth, v2,
+3rd ed, p136.  It uses the surprising fact that the distribution
+projected along any axis is actually uniform (this is only true for 3
+dimensions). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_ran_dir_nd</b> (<var>const gsl_rng * r, size_t n, double * x</var>)<var><a name="index-gsl_005fran_005fdir_005fnd-1837"></a></var><br>
+<blockquote><p><a name="index-N_002ddimensional-random-direction-vector-1838"></a><a name="index-direction-vector_002c-random-N_002ddimensional-1839"></a><a name="index-spherical-random-variates_002c-N_002ddimensional-1840"></a>
+This function returns a random direction vector
+<!-- {$v = (x_1,x_2,\ldots,x_n)$} -->
+v = (x_1,x_2,...,x_n) in <var>n</var> dimensions.  The vector is normalized
+such that
+<!-- {$|v|^2 = x_1^2 + x_2^2 + \cdots + x_n^2 = 1$} -->
+|v|^2 = x_1^2 + x_2^2 + ... + x_n^2 = 1.  The method
+uses the fact that a multivariate Gaussian distribution is spherically
+symmetric.  Each component is generated to have a Gaussian distribution,
+and then the components are normalized.  The method is described by
+Knuth, v2, 3rd ed, p135&ndash;136, and attributed to G. W. Brown, Modern
+Mathematics for the Engineer (1956). 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

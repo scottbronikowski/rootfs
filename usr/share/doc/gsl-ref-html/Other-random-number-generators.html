@@ -1,0 +1,335 @@
+<html lang="en">
+<head>
+<title>Other random number generators - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Random-Number-Generation.html" title="Random Number Generation">
+<link rel="prev" href="Unix-random-number-generators.html" title="Unix random number generators">
+<link rel="next" href="Random-Number-Generator-Performance.html" title="Random Number Generator Performance">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Other-random-number-generators"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Random-Number-Generator-Performance.html">Random Number Generator Performance</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Unix-random-number-generators.html">Unix random number generators</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Random-Number-Generation.html">Random Number Generation</a>
+<hr>
+</div>
+
+<h3 class="section">18.11 Other random number generators</h3>
+
+<p>The generators in this section are provided for compatibility with
+existing libraries.  If you are converting an existing program to use GSL
+then you can select these generators to check your new implementation
+against the original one, using the same random number generator.  After
+verifying that your new program reproduces the original results you can
+then switch to a higher-quality generator.
+
+   <p>Note that most of the generators in this section are based on single
+linear congruence relations, which are the least sophisticated type of
+generator.  In particular, linear congruences have poor properties when
+used with a non-prime modulus, as several of these routines do (e.g. 
+with a power of two modulus,
+<!-- {$2^{31}$} -->
+2^31 or
+<!-- {$2^{32}$} -->
+2^32).  This
+leads to periodicity in the least significant bits of each number,
+with only the higher bits having any randomness.  Thus if you want to
+produce a random bitstream it is best to avoid using the least
+significant bits.
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_ranf</b><var><a name="index-gsl_005frng_005franf-1634"></a></var><br>
+<blockquote><p><a name="index-RANF-random-number-generator-1635"></a><a name="index-CRAY-random-number-generator_002c-RANF-1636"></a>This is the CRAY random number generator <code>RANF</code>.  Its sequence is
+     defined on 48-bit unsigned integers with a = 44485709377909 and
+<!-- {$m = 2^{48}$} -->
+m = 2^48.  The seed specifies the lower
+32 bits of the initial value,
+x_1, with the lowest bit set to
+prevent the seed taking an even value.  The upper 16 bits of
+x_1
+are set to 0. A consequence of this procedure is that the pairs of seeds
+2 and 3, 4 and 5, etc. produce the same sequences.
+
+        <p>The generator compatible with the CRAY MATHLIB routine RANF. It
+produces double precision floating point numbers which should be
+identical to those from the original RANF.
+
+        <p>There is a subtlety in the implementation of the seeding.  The initial
+state is reversed through one step, by multiplying by the modular
+inverse of a mod m.  This is done for compatibility with
+the original CRAY implementation.
+
+        <p>Note that you can only seed the generator with integers up to
+<!-- {$2^{32}$} -->
+2^32, while the original CRAY implementation uses
+non-portable wide integers which can cover all
+<!-- {$2^{48}$} -->
+2^48 states of the generator.
+
+        <p>The function <code>gsl_rng_get</code> returns the upper 32 bits from each term
+of the sequence.  The function <code>gsl_rng_uniform</code> uses the full 48
+bits to return the double precision number x_n/m.
+
+        <p>The period of this generator is <!-- {$2^{46}$} -->
+2^46. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_ranmar</b><var><a name="index-gsl_005frng_005franmar-1637"></a></var><br>
+<blockquote><p><a name="index-RANMAR-random-number-generator-1638"></a>This is the RANMAR lagged-fibonacci generator of Marsaglia, Zaman and
+Tsang.  It is a 24-bit generator, originally designed for
+single-precision IEEE floating point numbers.  It was included in the
+CERNLIB high-energy physics library. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_r250</b><var><a name="index-gsl_005frng_005fr250-1639"></a></var><br>
+<blockquote><p><a name="index-shift_002dregister-random-number-generator-1640"></a><a name="index-R250-shift_002dregister-random-number-generator-1641"></a>This is the shift-register generator of Kirkpatrick and Stoll.  The
+sequence is based on the recurrence
+     where
+<!-- {$\oplus$} -->
+^^ denotes &ldquo;exclusive-or&rdquo;, defined on
+32-bit words.  The period of this generator is about <!-- {$2^{250}$} -->
+2^250 and it
+uses 250 words of state per generator.
+
+        <p>For more information see,
+          <ul>
+<li>S. Kirkpatrick and E. Stoll, &ldquo;A very fast shift-register sequence random
+number generator&rdquo;, <cite>Journal of Computational Physics</cite>, 40, 517&ndash;526
+(1981)
+</ul>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_tt800</b><var><a name="index-gsl_005frng_005ftt800-1642"></a></var><br>
+<blockquote><p><a name="index-TT800-random-number-generator-1643"></a>This is an earlier version of the twisted generalized feedback
+shift-register generator, and has been superseded by the development of
+MT19937.  However, it is still an acceptable generator in its own
+right.  It has a period of
+<!-- {$2^{800}$} -->
+2^800 and uses 33 words of storage
+per generator.
+
+        <p>For more information see,
+          <ul>
+<li>Makoto Matsumoto and Yoshiharu Kurita, &ldquo;Twisted GFSR Generators
+II&rdquo;, <cite>ACM Transactions on Modelling and Computer Simulation</cite>,
+Vol. 4, No. 3, 1994, pages 254&ndash;266. 
+</ul>
+        </p></blockquote></div>
+
+<!-- The following generators are included only for historical reasons, so -->
+<!-- that you can reproduce results from old programs which might have used -->
+<!-- them.  These generators should not be used for real simulations since -->
+<!-- they have poor statistical properties by modern standards. -->
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_vax</b><var><a name="index-gsl_005frng_005fvax-1644"></a></var><br>
+<blockquote><p><a name="index-VAX-random-number-generator-1645"></a>This is the VAX generator <code>MTH$RANDOM</code>.  Its sequence is,
+     with
+a = 69069, c = 1 and
+<!-- {$m = 2^{32}$} -->
+m = 2^32.  The seed specifies the initial value,
+x_1.  The
+period of this generator is
+<!-- {$2^{32}$} -->
+2^32 and it uses 1 word of storage per
+generator. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_transputer</b><var><a name="index-gsl_005frng_005ftransputer-1646"></a></var><br>
+<blockquote><p>This is the random number generator from the INMOS Transputer
+Development system.  Its sequence is,
+     with a = 1664525 and
+<!-- {$m = 2^{32}$} -->
+m = 2^32. 
+The seed specifies the initial value,
+<!-- {$x_1$} -->
+x_1. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_randu</b><var><a name="index-gsl_005frng_005frandu-1647"></a></var><br>
+<blockquote><p><a name="index-RANDU-random-number-generator-1648"></a>This is the IBM <code>RANDU</code> generator.  Its sequence is
+     with a = 65539 and
+<!-- {$m = 2^{31}$} -->
+m = 2^31.  The
+seed specifies the initial value,
+x_1.  The period of this
+generator was only
+<!-- {$2^{29}$} -->
+2^29.  It has become a textbook example of a
+poor generator. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_minstd</b><var><a name="index-gsl_005frng_005fminstd-1649"></a></var><br>
+<blockquote><p><a name="index-RANMAR-random-number-generator-1650"></a>This is Park and Miller's &ldquo;minimal standard&rdquo; <span class="sc">minstd</span> generator, a
+simple linear congruence which takes care to avoid the major pitfalls of
+such algorithms.  Its sequence is,
+     with a = 16807 and
+<!-- {$m = 2^{31} - 1 = 2147483647$} -->
+m = 2^31 - 1 = 2147483647. 
+The seed specifies the initial value,
+<!-- {$x_1$} -->
+x_1.  The period of this
+generator is about
+<!-- {$2^{31}$} -->
+2^31.
+
+        <p>This generator is used in the IMSL Library (subroutine RNUN) and in
+MATLAB (the RAND function).  It is also sometimes known by the acronym
+&ldquo;GGL&rdquo; (I'm not sure what that stands for).
+
+        <p>For more information see,
+          <ul>
+<li>Park and Miller, &ldquo;Random Number Generators: Good ones are hard to find&rdquo;,
+<cite>Communications of the ACM</cite>, October 1988, Volume 31, No 10, pages
+1192&ndash;1201. 
+</ul>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_uni</b><var><a name="index-gsl_005frng_005funi-1651"></a></var><br>
+&mdash; Generator: <b>gsl_rng_uni32</b><var><a name="index-gsl_005frng_005funi32-1652"></a></var><br>
+<blockquote><p>This is a reimplementation of the 16-bit SLATEC random number generator
+RUNIF. A generalization of the generator to 32 bits is provided by
+<code>gsl_rng_uni32</code>.  The original source code is available from NETLIB. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_slatec</b><var><a name="index-gsl_005frng_005fslatec-1653"></a></var><br>
+<blockquote><p>This is the SLATEC random number generator RAND. It is ancient.  The
+original source code is available from NETLIB. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_zuf</b><var><a name="index-gsl_005frng_005fzuf-1654"></a></var><br>
+<blockquote><p>This is the ZUFALL lagged Fibonacci series generator of Peterson.  Its
+sequence is,
+
+        <p>The original source code is available from NETLIB.  For more information
+see,
+          <ul>
+<li>W. Petersen, &ldquo;Lagged Fibonacci Random Number Generators for the NEC
+SX-3&rdquo;, <cite>International Journal of High Speed Computing</cite> (1994). 
+</ul>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_knuthran2</b><var><a name="index-gsl_005frng_005fknuthran2-1655"></a></var><br>
+<blockquote><p>This is a second-order multiple recursive generator described by Knuth
+in <cite>Seminumerical Algorithms</cite>, 3rd Ed., page 108.  Its sequence is,
+     with
+a_1 = 271828183,
+a_2 = 314159269,
+and
+<!-- {$m = 2^{31}-1$} -->
+m = 2^31 - 1. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_knuthran2002</b><var><a name="index-gsl_005frng_005fknuthran2002-1656"></a></var><br>
+&mdash; Generator: <b>gsl_rng_knuthran</b><var><a name="index-gsl_005frng_005fknuthran-1657"></a></var><br>
+<blockquote><p>This is a second-order multiple recursive generator described by Knuth
+in <cite>Seminumerical Algorithms</cite>, 3rd Ed., Section 3.6.  Knuth
+provides its C code.  The updated routine <code>gsl_rng_knuthran2002</code>
+is from the revised 9th printing and corrects some weaknesses in the
+earlier version, which is implemented as <code>gsl_rng_knuthran</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_borosh13</b><var><a name="index-gsl_005frng_005fborosh13-1658"></a></var><br>
+&mdash; Generator: <b>gsl_rng_fishman18</b><var><a name="index-gsl_005frng_005ffishman18-1659"></a></var><br>
+&mdash; Generator: <b>gsl_rng_fishman20</b><var><a name="index-gsl_005frng_005ffishman20-1660"></a></var><br>
+&mdash; Generator: <b>gsl_rng_lecuyer21</b><var><a name="index-gsl_005frng_005flecuyer21-1661"></a></var><br>
+&mdash; Generator: <b>gsl_rng_waterman14</b><var><a name="index-gsl_005frng_005fwaterman14-1662"></a></var><br>
+<blockquote><p>These multiplicative generators are taken from Knuth's
+<cite>Seminumerical Algorithms</cite>, 3rd Ed., pages 106&ndash;108. Their sequence
+is,
+     where the seed specifies the initial value, <!-- {$x_1$} -->
+x_1. 
+The parameters a and m are as follows,
+Borosh-Niederreiter:
+a = 1812433253, <!-- {$m = 2^{32}$} -->
+m = 2^32,
+Fishman18:
+a = 62089911,
+<!-- {$m = 2^{31}-1$} -->
+m = 2^31 - 1,
+Fishman20:
+a = 48271,
+<!-- {$m = 2^{31}-1$} -->
+m = 2^31 - 1,
+L'Ecuyer:
+a = 40692,
+<!-- {$m = 2^{31}-249$} -->
+m = 2^31 - 249,
+Waterman:
+a = 1566083941,
+<!-- {$m = 2^{32}$} -->
+m = 2^32. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_fishman2x</b><var><a name="index-gsl_005frng_005ffishman2x-1663"></a></var><br>
+<blockquote><p>This is the L'Ecuyer&ndash;Fishman random number generator. It is taken from
+Knuth's <cite>Seminumerical Algorithms</cite>, 3rd Ed., page 108. Its sequence
+is,
+     with <!-- {$m = 2^{31}-1$} -->
+m = 2^31 - 1. 
+x_n and y_n are given by the <code>fishman20</code>
+and <code>lecuyer21</code> algorithms. 
+The seed specifies the initial value,
+<!-- {$x_1$} -->
+x_1.
+
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Generator: <b>gsl_rng_coveyou</b><var><a name="index-gsl_005frng_005fcoveyou-1664"></a></var><br>
+<blockquote><p>This is the Coveyou random number generator. It is taken from Knuth's
+<cite>Seminumerical Algorithms</cite>, 3rd Ed., Section 3.2.2. Its sequence
+is,
+     with <!-- {$m = 2^{32}$} -->
+m = 2^32. 
+The seed specifies the initial value,
+<!-- {$x_1$} -->
+x_1. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

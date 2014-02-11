@@ -1,0 +1,54 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          fam
+# Required-Start:    $remote_fs $portmap
+# Required-Stop:     $remote_fs $portmap
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: File Alteration Monitor
+# Description:       Debian init script for File Alteration Monitor
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON="/usr/sbin/famd"
+NAME="FAM"
+DESC="file alteration monitor"
+
+FAMOPTS="-T 0"
+
+test -x $DAEMON || exit 0
+
+# Stop if we are running from inetd
+egrep -qs "^(sgi_fam|391002)" /etc/inetd.conf
+
+
+. /lib/lsb/init-functions
+set -e
+
+case "$1" in
+  start)
+        status_of_proc $DAEMON $NAME > /dev/null && exit 0
+	log_daemon_msg "Starting $DESC" "$NAME"
+	start-stop-daemon --start --quiet --exec $DAEMON -- $FAMOPTS < /dev/null
+	log_end_msg $?
+	;;
+  stop)
+	log_daemon_msg "Stopping $DESC" "$NAME"
+	start-stop-daemon --stop --oknodo --quiet --exec $DAEMON
+	log_end_msg $?
+	;;
+  restart|force-reload)
+	$0 stop
+	sleep 1
+	$0 start
+	;;
+  status)
+	status_of_proc $DAEMON $NAME
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|force-reload|status}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

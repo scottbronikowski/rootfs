@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>Legendre Form of Incomplete Elliptic Integrals - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Elliptic-Integrals.html" title="Elliptic Integrals">
+<link rel="prev" href="Legendre-Form-of-Complete-Elliptic-Integrals.html" title="Legendre Form of Complete Elliptic Integrals">
+<link rel="next" href="Carlson-Forms.html" title="Carlson Forms">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Legendre-Form-of-Incomplete-Elliptic-Integrals"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Carlson-Forms.html">Carlson Forms</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Legendre-Form-of-Complete-Elliptic-Integrals.html">Legendre Form of Complete Elliptic Integrals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Elliptic-Integrals.html">Elliptic Integrals</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.13.4 Legendre Form of Incomplete Elliptic Integrals</h4>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_ellint_F</b> (<var>double phi, double k, gsl_mode_t mode</var>)<var><a name="index-gsl_005fsf_005fellint_005fF-471"></a></var><br>
+&mdash; Function: int <b>gsl_sf_ellint_F_e</b> (<var>double phi, double k, gsl_mode_t mode, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fellint_005fF_005fe-472"></a></var><br>
+<blockquote><p>These routines compute the incomplete elliptic integral F(\phi,k)
+to the accuracy specified by the mode variable <var>mode</var>. 
+Note that Abramowitz &amp; Stegun define this function in terms of the
+parameter m = k^2. 
+<!-- Exceptional Return Values: GSL_EDOM -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_ellint_E</b> (<var>double phi, double k, gsl_mode_t mode</var>)<var><a name="index-gsl_005fsf_005fellint_005fE-473"></a></var><br>
+&mdash; Function: int <b>gsl_sf_ellint_E_e</b> (<var>double phi, double k, gsl_mode_t mode, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fellint_005fE_005fe-474"></a></var><br>
+<blockquote><p>These routines compute the incomplete elliptic integral E(\phi,k)
+to the accuracy specified by the mode variable <var>mode</var>. 
+Note that Abramowitz &amp; Stegun define this function in terms of the
+parameter m = k^2. 
+<!-- Exceptional Return Values: GSL_EDOM -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_ellint_P</b> (<var>double phi, double k, double n, gsl_mode_t mode</var>)<var><a name="index-gsl_005fsf_005fellint_005fP-475"></a></var><br>
+&mdash; Function: int <b>gsl_sf_ellint_P_e</b> (<var>double phi, double k, double n, gsl_mode_t mode, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fellint_005fP_005fe-476"></a></var><br>
+<blockquote><p>These routines compute the incomplete elliptic integral \Pi(\phi,k,n)
+to the accuracy specified by the mode variable <var>mode</var>. 
+Note that Abramowitz &amp; Stegun define this function in terms of the
+parameters m = k^2 and \sin^2(\alpha) = k^2, with the
+change of sign n \to -n. 
+<!-- Exceptional Return Values: GSL_EDOM -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_ellint_D</b> (<var>double phi, double k, double n, gsl_mode_t mode</var>)<var><a name="index-gsl_005fsf_005fellint_005fD-477"></a></var><br>
+&mdash; Function: int <b>gsl_sf_ellint_D_e</b> (<var>double phi, double k, double n, gsl_mode_t mode, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005fellint_005fD_005fe-478"></a></var><br>
+<blockquote><p>These functions compute the incomplete elliptic integral
+D(\phi,k) which is defined through the Carlson form RD(x,y,z)
+by the following relation,
+The argument <var>n</var> is not used and will be removed in a future release.
+
+     <!-- Exceptional Return Values: GSL_EDOM -->
+        </blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

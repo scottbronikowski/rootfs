@@ -1,0 +1,183 @@
+<html lang="en">
+<head>
+<title>Level 3 GSL BLAS Interface - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="GSL-BLAS-Interface.html" title="GSL BLAS Interface">
+<link rel="prev" href="Level-2-GSL-BLAS-Interface.html" title="Level 2 GSL BLAS Interface">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Level-3-GSL-BLAS-Interface"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Level-2-GSL-BLAS-Interface.html">Level 2 GSL BLAS Interface</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="GSL-BLAS-Interface.html">GSL BLAS Interface</a>
+<hr>
+</div>
+
+<h4 class="subsection">13.1.3 Level 3</h4>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_sgemm</b> (<var>CBLAS_TRANSPOSE_t TransA, CBLAS_TRANSPOSE_t TransB, float alpha, const gsl_matrix_float * A, const gsl_matrix_float * B, float beta, gsl_matrix_float * C</var>)<var><a name="index-gsl_005fblas_005fsgemm-1242"></a></var><br>
+&mdash; Function: int <b>gsl_blas_dgemm</b> (<var>CBLAS_TRANSPOSE_t TransA, CBLAS_TRANSPOSE_t TransB, double alpha, const gsl_matrix * A, const gsl_matrix * B, double beta, gsl_matrix * C</var>)<var><a name="index-gsl_005fblas_005fdgemm-1243"></a></var><br>
+&mdash; Function: int <b>gsl_blas_cgemm</b> (<var>CBLAS_TRANSPOSE_t TransA, CBLAS_TRANSPOSE_t TransB, const gsl_complex_float alpha, const gsl_matrix_complex_float * A, const gsl_matrix_complex_float * B, const gsl_complex_float beta, gsl_matrix_complex_float * C</var>)<var><a name="index-gsl_005fblas_005fcgemm-1244"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zgemm</b> (<var>CBLAS_TRANSPOSE_t TransA, CBLAS_TRANSPOSE_t TransB, const gsl_complex alpha, const gsl_matrix_complex * A, const gsl_matrix_complex * B, const gsl_complex beta, gsl_matrix_complex * C</var>)<var><a name="index-gsl_005fblas_005fzgemm-1245"></a></var><br>
+<blockquote><p><a name="index-GEMM_002c-Level_002d3-BLAS-1246"></a>These functions compute the matrix-matrix product and sum C =
+\alpha op(A) op(B) + \beta C where op(A) = A, A^T,
+A^H for <var>TransA</var> = <code>CblasNoTrans</code>, <code>CblasTrans</code>,
+<code>CblasConjTrans</code> and similarly for the parameter <var>TransB</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_ssymm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, float alpha, const gsl_matrix_float * A, const gsl_matrix_float * B, float beta, gsl_matrix_float * C</var>)<var><a name="index-gsl_005fblas_005fssymm-1247"></a></var><br>
+&mdash; Function: int <b>gsl_blas_dsymm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, double alpha, const gsl_matrix * A, const gsl_matrix * B, double beta, gsl_matrix * C</var>)<var><a name="index-gsl_005fblas_005fdsymm-1248"></a></var><br>
+&mdash; Function: int <b>gsl_blas_csymm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, const gsl_complex_float alpha, const gsl_matrix_complex_float * A, const gsl_matrix_complex_float * B, const gsl_complex_float beta, gsl_matrix_complex_float * C</var>)<var><a name="index-gsl_005fblas_005fcsymm-1249"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zsymm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, const gsl_complex alpha, const gsl_matrix_complex * A, const gsl_matrix_complex * B, const gsl_complex beta, gsl_matrix_complex * C</var>)<var><a name="index-gsl_005fblas_005fzsymm-1250"></a></var><br>
+<blockquote><p><a name="index-SYMM_002c-Level_002d3-BLAS-1251"></a>These functions compute the matrix-matrix product and sum C =
+\alpha A B + \beta C for <var>Side</var> is <code>CblasLeft</code> and C =
+\alpha B A + \beta C for <var>Side</var> is <code>CblasRight</code>, where the
+matrix <var>A</var> is symmetric.  When <var>Uplo</var> is <code>CblasUpper</code> then
+the upper triangle and diagonal of <var>A</var> are used, and when <var>Uplo</var>
+is <code>CblasLower</code> then the lower triangle and diagonal of <var>A</var> are
+used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_chemm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, const gsl_complex_float alpha, const gsl_matrix_complex_float * A, const gsl_matrix_complex_float * B, const gsl_complex_float beta, gsl_matrix_complex_float * C</var>)<var><a name="index-gsl_005fblas_005fchemm-1252"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zhemm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, const gsl_complex alpha, const gsl_matrix_complex * A, const gsl_matrix_complex * B, const gsl_complex beta, gsl_matrix_complex * C</var>)<var><a name="index-gsl_005fblas_005fzhemm-1253"></a></var><br>
+<blockquote><p><a name="index-HEMM_002c-Level_002d3-BLAS-1254"></a>These functions compute the matrix-matrix product and sum C =
+\alpha A B + \beta C for <var>Side</var> is <code>CblasLeft</code> and C =
+\alpha B A + \beta C for <var>Side</var> is <code>CblasRight</code>, where the
+matrix <var>A</var> is hermitian.  When <var>Uplo</var> is <code>CblasUpper</code> then
+the upper triangle and diagonal of <var>A</var> are used, and when <var>Uplo</var>
+is <code>CblasLower</code> then the lower triangle and diagonal of <var>A</var> are
+used.  The imaginary elements of the diagonal are automatically set to
+zero. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_strmm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t TransA, CBLAS_DIAG_t Diag, float alpha, const gsl_matrix_float * A, gsl_matrix_float * B</var>)<var><a name="index-gsl_005fblas_005fstrmm-1255"></a></var><br>
+&mdash; Function: int <b>gsl_blas_dtrmm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t TransA, CBLAS_DIAG_t Diag, double alpha, const gsl_matrix * A, gsl_matrix * B</var>)<var><a name="index-gsl_005fblas_005fdtrmm-1256"></a></var><br>
+&mdash; Function: int <b>gsl_blas_ctrmm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t TransA, CBLAS_DIAG_t Diag, const gsl_complex_float alpha, const gsl_matrix_complex_float * A, gsl_matrix_complex_float * B</var>)<var><a name="index-gsl_005fblas_005fctrmm-1257"></a></var><br>
+&mdash; Function: int <b>gsl_blas_ztrmm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t TransA, CBLAS_DIAG_t Diag, const gsl_complex alpha, const gsl_matrix_complex * A, gsl_matrix_complex * B</var>)<var><a name="index-gsl_005fblas_005fztrmm-1258"></a></var><br>
+<blockquote><p><a name="index-TRMM_002c-Level_002d3-BLAS-1259"></a>These functions compute the matrix-matrix product B = \alpha op(A)
+B for <var>Side</var> is <code>CblasLeft</code> and B = \alpha B op(A) for
+<var>Side</var> is <code>CblasRight</code>.  The matrix <var>A</var> is triangular and
+op(A) = A, A^T, A^H for <var>TransA</var> =
+<code>CblasNoTrans</code>, <code>CblasTrans</code>, <code>CblasConjTrans</code>. When
+<var>Uplo</var> is <code>CblasUpper</code> then the upper triangle of <var>A</var> is
+used, and when <var>Uplo</var> is <code>CblasLower</code> then the lower triangle
+of <var>A</var> is used.  If <var>Diag</var> is <code>CblasNonUnit</code> then the
+diagonal of <var>A</var> is used, but if <var>Diag</var> is <code>CblasUnit</code> then
+the diagonal elements of the matrix <var>A</var> are taken as unity and are
+not referenced. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_strsm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t TransA, CBLAS_DIAG_t Diag, float alpha, const gsl_matrix_float * A, gsl_matrix_float * B</var>)<var><a name="index-gsl_005fblas_005fstrsm-1260"></a></var><br>
+&mdash; Function: int <b>gsl_blas_dtrsm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t TransA, CBLAS_DIAG_t Diag, double alpha, const gsl_matrix * A, gsl_matrix * B</var>)<var><a name="index-gsl_005fblas_005fdtrsm-1261"></a></var><br>
+&mdash; Function: int <b>gsl_blas_ctrsm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t TransA, CBLAS_DIAG_t Diag, const gsl_complex_float alpha, const gsl_matrix_complex_float * A, gsl_matrix_complex_float * B</var>)<var><a name="index-gsl_005fblas_005fctrsm-1262"></a></var><br>
+&mdash; Function: int <b>gsl_blas_ztrsm</b> (<var>CBLAS_SIDE_t Side, CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t TransA, CBLAS_DIAG_t Diag, const gsl_complex alpha, const gsl_matrix_complex * A, gsl_matrix_complex * B</var>)<var><a name="index-gsl_005fblas_005fztrsm-1263"></a></var><br>
+<blockquote><p><a name="index-TRSM_002c-Level_002d3-BLAS-1264"></a>These functions compute the inverse-matrix matrix product
+B = \alpha op(inv(A))B for <var>Side</var> is
+<code>CblasLeft</code> and B = \alpha B op(inv(A)) for
+<var>Side</var> is <code>CblasRight</code>.  The matrix <var>A</var> is triangular and
+op(A) = A, A^T, A^H for <var>TransA</var> =
+<code>CblasNoTrans</code>, <code>CblasTrans</code>, <code>CblasConjTrans</code>. When
+<var>Uplo</var> is <code>CblasUpper</code> then the upper triangle of <var>A</var> is
+used, and when <var>Uplo</var> is <code>CblasLower</code> then the lower triangle
+of <var>A</var> is used.  If <var>Diag</var> is <code>CblasNonUnit</code> then the
+diagonal of <var>A</var> is used, but if <var>Diag</var> is <code>CblasUnit</code> then
+the diagonal elements of the matrix <var>A</var> are taken as unity and are
+not referenced. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_ssyrk</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, float alpha, const gsl_matrix_float * A, float beta, gsl_matrix_float * C</var>)<var><a name="index-gsl_005fblas_005fssyrk-1265"></a></var><br>
+&mdash; Function: int <b>gsl_blas_dsyrk</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, double alpha, const gsl_matrix * A, double beta, gsl_matrix * C</var>)<var><a name="index-gsl_005fblas_005fdsyrk-1266"></a></var><br>
+&mdash; Function: int <b>gsl_blas_csyrk</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, const gsl_complex_float alpha, const gsl_matrix_complex_float * A, const gsl_complex_float beta, gsl_matrix_complex_float * C</var>)<var><a name="index-gsl_005fblas_005fcsyrk-1267"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zsyrk</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, const gsl_complex alpha, const gsl_matrix_complex * A, const gsl_complex beta, gsl_matrix_complex * C</var>)<var><a name="index-gsl_005fblas_005fzsyrk-1268"></a></var><br>
+<blockquote><p><a name="index-SYRK_002c-Level_002d3-BLAS-1269"></a>These functions compute a rank-k update of the symmetric matrix <var>C</var>,
+C = \alpha A A^T + \beta C when <var>Trans</var> is
+<code>CblasNoTrans</code> and C = \alpha A^T A + \beta C when
+<var>Trans</var> is <code>CblasTrans</code>.  Since the matrix <var>C</var> is symmetric
+only its upper half or lower half need to be stored.  When <var>Uplo</var> is
+<code>CblasUpper</code> then the upper triangle and diagonal of <var>C</var> are
+used, and when <var>Uplo</var> is <code>CblasLower</code> then the lower triangle
+and diagonal of <var>C</var> are used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_cherk</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, float alpha, const gsl_matrix_complex_float * A, float beta, gsl_matrix_complex_float * C</var>)<var><a name="index-gsl_005fblas_005fcherk-1270"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zherk</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, double alpha, const gsl_matrix_complex * A, double beta, gsl_matrix_complex * C</var>)<var><a name="index-gsl_005fblas_005fzherk-1271"></a></var><br>
+<blockquote><p><a name="index-HERK_002c-Level_002d3-BLAS-1272"></a>These functions compute a rank-k update of the hermitian matrix <var>C</var>,
+C = \alpha A A^H + \beta C when <var>Trans</var> is
+<code>CblasNoTrans</code> and C = \alpha A^H A + \beta C when
+<var>Trans</var> is <code>CblasConjTrans</code>.  Since the matrix <var>C</var> is hermitian
+only its upper half or lower half need to be stored.  When <var>Uplo</var> is
+<code>CblasUpper</code> then the upper triangle and diagonal of <var>C</var> are
+used, and when <var>Uplo</var> is <code>CblasLower</code> then the lower triangle
+and diagonal of <var>C</var> are used.  The imaginary elements of the
+diagonal are automatically set to zero. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_ssyr2k</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, float alpha, const gsl_matrix_float * A, const gsl_matrix_float * B, float beta, gsl_matrix_float * C</var>)<var><a name="index-gsl_005fblas_005fssyr2k-1273"></a></var><br>
+&mdash; Function: int <b>gsl_blas_dsyr2k</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, double alpha, const gsl_matrix * A, const gsl_matrix * B, double beta, gsl_matrix * C</var>)<var><a name="index-gsl_005fblas_005fdsyr2k-1274"></a></var><br>
+&mdash; Function: int <b>gsl_blas_csyr2k</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, const gsl_complex_float alpha, const gsl_matrix_complex_float * A, const gsl_matrix_complex_float * B, const gsl_complex_float beta, gsl_matrix_complex_float * C</var>)<var><a name="index-gsl_005fblas_005fcsyr2k-1275"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zsyr2k</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, const gsl_complex alpha, const gsl_matrix_complex * A, const gsl_matrix_complex * B, const gsl_complex beta, gsl_matrix_complex * C</var>)<var><a name="index-gsl_005fblas_005fzsyr2k-1276"></a></var><br>
+<blockquote><p><a name="index-SYR2K_002c-Level_002d3-BLAS-1277"></a>These functions compute a rank-2k update of the symmetric matrix <var>C</var>,
+C = \alpha A B^T + \alpha B A^T + \beta C when <var>Trans</var> is
+<code>CblasNoTrans</code> and C = \alpha A^T B + \alpha B^T A + \beta C when
+<var>Trans</var> is <code>CblasTrans</code>.  Since the matrix <var>C</var> is symmetric
+only its upper half or lower half need to be stored.  When <var>Uplo</var> is
+<code>CblasUpper</code> then the upper triangle and diagonal of <var>C</var> are
+used, and when <var>Uplo</var> is <code>CblasLower</code> then the lower triangle
+and diagonal of <var>C</var> are used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_cher2k</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, const gsl_complex_float alpha, const gsl_matrix_complex_float * A, const gsl_matrix_complex_float * B, float beta, gsl_matrix_complex_float * C</var>)<var><a name="index-gsl_005fblas_005fcher2k-1278"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zher2k</b> (<var>CBLAS_UPLO_t Uplo, CBLAS_TRANSPOSE_t Trans, const gsl_complex alpha, const gsl_matrix_complex * A, const gsl_matrix_complex * B, double beta, gsl_matrix_complex * C</var>)<var><a name="index-gsl_005fblas_005fzher2k-1279"></a></var><br>
+<blockquote><p><a name="index-HER2K_002c-Level_002d3-BLAS-1280"></a>These functions compute a rank-2k update of the hermitian matrix <var>C</var>,
+C = \alpha A B^H + \alpha^* B A^H + \beta C when <var>Trans</var> is
+<code>CblasNoTrans</code> and C = \alpha A^H B + \alpha^* B^H A + \beta C when
+<var>Trans</var> is <code>CblasConjTrans</code>.  Since the matrix <var>C</var> is hermitian
+only its upper half or lower half need to be stored.  When <var>Uplo</var> is
+<code>CblasUpper</code> then the upper triangle and diagonal of <var>C</var> are
+used, and when <var>Uplo</var> is <code>CblasLower</code> then the lower triangle
+and diagonal of <var>C</var> are used.  The imaginary elements of the
+diagonal are automatically set to zero. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

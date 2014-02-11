@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Representation of complex numbers - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Complex-Numbers.html" title="Complex Numbers">
+<link rel="next" href="Properties-of-complex-numbers.html" title="Properties of complex numbers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Representation-of-complex-numbers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Properties-of-complex-numbers.html">Properties of complex numbers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Complex-Numbers.html">Complex Numbers</a>
+<hr>
+</div>
+
+<h3 class="section">5.1 Representation of complex numbers</h3>
+
+<p><a name="index-representations-of-complex-numbers-144"></a><a name="index-polar-form-of-complex-numbers-145"></a><a name="index-gsl_005fcomplex-146"></a>
+Complex numbers are represented using the type <code>gsl_complex</code>. The
+internal representation of this type may vary across platforms and
+should not be accessed directly. The functions and macros described
+below allow complex numbers to be manipulated in a portable way.
+
+   <p>For reference, the default form of the <code>gsl_complex</code> type is
+given by the following struct,
+
+<pre class="example">     typedef struct
+     {
+       double dat[2];
+     } gsl_complex;
+</pre>
+   <p class="noindent">The real and imaginary part are stored in contiguous elements of a two
+element array. This eliminates any padding between the real and
+imaginary parts, <code>dat[0]</code> and <code>dat[1]</code>, allowing the struct to
+be mapped correctly onto packed complex arrays.
+
+<div class="defun">
+&mdash; Function: gsl_complex <b>gsl_complex_rect</b> (<var>double x, double y</var>)<var><a name="index-gsl_005fcomplex_005frect-147"></a></var><br>
+<blockquote><p>This function uses the rectangular Cartesian components
+(<var>x</var>,<var>y</var>) to return the complex number z = x + i y.  An inline version of this function is used when <code>HAVE_INLINE</code> is defined. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_complex <b>gsl_complex_polar</b> (<var>double r, double theta</var>)<var><a name="index-gsl_005fcomplex_005fpolar-148"></a></var><br>
+<blockquote><p>This function returns the complex number z = r \exp(i \theta) = r
+(\cos(\theta) + i \sin(\theta)) from the polar representation
+(<var>r</var>,<var>theta</var>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>GSL_REAL</b> (<var>z</var>)<var><a name="index-GSL_005fREAL-149"></a></var><br>
+&mdash; Macro: <b>GSL_IMAG</b> (<var>z</var>)<var><a name="index-GSL_005fIMAG-150"></a></var><br>
+<blockquote><p>These macros return the real and imaginary parts of the complex number
+<var>z</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>GSL_SET_COMPLEX</b> (<var>zp, x, y</var>)<var><a name="index-GSL_005fSET_005fCOMPLEX-151"></a></var><br>
+<blockquote><p>This macro uses the Cartesian components (<var>x</var>,<var>y</var>) to set the
+real and imaginary parts of the complex number pointed to by <var>zp</var>. 
+For example,
+
+     <pre class="example">          GSL_SET_COMPLEX(&amp;z, 3, 4)
+</pre>
+        <p class="noindent">sets <var>z</var> to be 3 + 4i. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>GSL_SET_REAL</b> (<var>zp,x</var>)<var><a name="index-GSL_005fSET_005fREAL-152"></a></var><br>
+&mdash; Macro: <b>GSL_SET_IMAG</b> (<var>zp,y</var>)<var><a name="index-GSL_005fSET_005fIMAG-153"></a></var><br>
+<blockquote><p>These macros allow the real and imaginary parts of the complex number
+pointed to by <var>zp</var> to be set independently. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+<title>Initializing the Multidimensional Solver - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Multidimensional-Root_002dFinding.html" title="Multidimensional Root-Finding">
+<link rel="prev" href="Overview-of-Multidimensional-Root-Finding.html" title="Overview of Multidimensional Root Finding">
+<link rel="next" href="Providing-the-multidimensional-system-of-equations-to-solve.html" title="Providing the multidimensional system of equations to solve">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Initializing-the-Multidimensional-Solver"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Providing-the-multidimensional-system-of-equations-to-solve.html">Providing the multidimensional system of equations to solve</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Overview-of-Multidimensional-Root-Finding.html">Overview of Multidimensional Root Finding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Multidimensional-Root_002dFinding.html">Multidimensional Root-Finding</a>
+<hr>
+</div>
+
+<h3 class="section">35.2 Initializing the Solver</h3>
+
+<p>The following functions initialize a multidimensional solver, either
+with or without derivatives.  The solver itself depends only on the
+dimension of the problem and the algorithm and can be reused for
+different problems.
+
+<div class="defun">
+&mdash; Function: gsl_multiroot_fsolver * <b>gsl_multiroot_fsolver_alloc</b> (<var>const gsl_multiroot_fsolver_type * T, size_t n</var>)<var><a name="index-gsl_005fmultiroot_005ffsolver_005falloc-2465"></a></var><br>
+<blockquote><p><a name="index-gsl_005fmultiroot_005ffsolver-2466"></a><a name="index-gsl_005fmultiroot_005ffsolver_005ftype-2467"></a>This function returns a pointer to a newly allocated instance of a
+solver of type <var>T</var> for a system of <var>n</var> dimensions. 
+For example, the following code creates an instance of a hybrid solver,
+to solve a 3-dimensional system of equations.
+
+     <pre class="example">          const gsl_multiroot_fsolver_type * T
+              = gsl_multiroot_fsolver_hybrid;
+          gsl_multiroot_fsolver * s
+              = gsl_multiroot_fsolver_alloc (T, 3);
+</pre>
+        <p class="noindent">If there is insufficient memory to create the solver then the function
+returns a null pointer and the error handler is invoked with an error
+code of <code>GSL_ENOMEM</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_multiroot_fdfsolver * <b>gsl_multiroot_fdfsolver_alloc</b> (<var>const gsl_multiroot_fdfsolver_type * T, size_t n</var>)<var><a name="index-gsl_005fmultiroot_005ffdfsolver_005falloc-2468"></a></var><br>
+<blockquote><p><a name="index-gsl_005fmultiroot_005ffdfsolver-2469"></a><a name="index-gsl_005fmultiroot_005ffdfsolver_005ftype-2470"></a>This function returns a pointer to a newly allocated instance of a
+derivative solver of type <var>T</var> for a system of <var>n</var> dimensions. 
+For example, the following code creates an instance of a Newton-Raphson solver,
+for a 2-dimensional system of equations.
+
+     <pre class="example">          const gsl_multiroot_fdfsolver_type * T
+              = gsl_multiroot_fdfsolver_newton;
+          gsl_multiroot_fdfsolver * s =
+              gsl_multiroot_fdfsolver_alloc (T, 2);
+</pre>
+        <p class="noindent">If there is insufficient memory to create the solver then the function
+returns a null pointer and the error handler is invoked with an error
+code of <code>GSL_ENOMEM</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_multiroot_fsolver_set</b> (<var>gsl_multiroot_fsolver * s, gsl_multiroot_function * f, const gsl_vector * x</var>)<var><a name="index-gsl_005fmultiroot_005ffsolver_005fset-2471"></a></var><br>
+&mdash; Function: int <b>gsl_multiroot_fdfsolver_set</b> (<var>gsl_multiroot_fdfsolver * s, gsl_multiroot_function_fdf * fdf, const gsl_vector * x</var>)<var><a name="index-gsl_005fmultiroot_005ffdfsolver_005fset-2472"></a></var><br>
+<blockquote><p>These functions set, or reset, an existing solver <var>s</var> to use the
+function <var>f</var> or function and derivative <var>fdf</var>, and the initial
+guess <var>x</var>.  Note that the initial position is copied from <var>x</var>, this
+argument is not modified by subsequent iterations. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_multiroot_fsolver_free</b> (<var>gsl_multiroot_fsolver * s</var>)<var><a name="index-gsl_005fmultiroot_005ffsolver_005ffree-2473"></a></var><br>
+&mdash; Function: void <b>gsl_multiroot_fdfsolver_free</b> (<var>gsl_multiroot_fdfsolver * s</var>)<var><a name="index-gsl_005fmultiroot_005ffdfsolver_005ffree-2474"></a></var><br>
+<blockquote><p>These functions free all the memory associated with the solver <var>s</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: const char * <b>gsl_multiroot_fsolver_name</b> (<var>const gsl_multiroot_fsolver * s</var>)<var><a name="index-gsl_005fmultiroot_005ffsolver_005fname-2475"></a></var><br>
+&mdash; Function: const char * <b>gsl_multiroot_fdfsolver_name</b> (<var>const gsl_multiroot_fdfsolver * s</var>)<var><a name="index-gsl_005fmultiroot_005ffdfsolver_005fname-2476"></a></var><br>
+<blockquote><p>These functions return a pointer to the name of the solver.  For example,
+
+     <pre class="example">          printf ("s is a '%s' solver\n",
+                  gsl_multiroot_fdfsolver_name (s));
+</pre>
+        <p class="noindent">would print something like <code>s is a 'newton' solver</code>. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

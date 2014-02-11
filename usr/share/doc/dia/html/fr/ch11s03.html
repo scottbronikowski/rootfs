@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>11.3. Description de forme</title><link rel="stylesheet" type="text/css" href="css/dia.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /><link rel="home" href="index.html" title="Dia" /><link rel="up" href="ch11.html" title="Chapitre 11. Module Custom Shape" /><link rel="prev" href="ch11s02.html" title="11.2. Forme" /><link rel="next" href="ch11s04.html" title="11.4. Description de feuille (sheet)" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">11.3. Description de forme</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch11s02.html">Précédent</a> </td><th width="60%" align="center">Chapitre 11. Module Custom Shape</th><td width="20%" align="right"> <a accesskey="n" href="ch11s04.html">Suivant</a></td></tr></table><hr /></div><div class="sect1" title="11.3. Description de forme"><div class="titlepage"><div><div><h2 class="title" style="clear: both" id="custom-chapes-shape-desc">11.3. Description de forme</h2></div></div></div><p>
+        Le format SVG (Scalable Vector Graphics) est utilisé pour décrire la
+        forme. C'est pourquoi un espace de noms séparé est utilisé pour
+        cette partie du fichier.
+     </p><div class="sect2" title="11.3.1. Attribut style"><div class="titlepage"><div><div><h3 class="title" id="custom-shapes-shape-style-attribute">11.3.1. Attribut style</h3></div></div></div><p>
+        Chaque élément du dessin SVG prend en compte l'attribut
+        « <code class="literal">style</code> ».  L'attribut doit être de la forme :
+     </p><div class="literallayout"><p><br />
+    <code class="literal"><br />
+  &lt;svg:toto style="name1: value1; name2: value2; ... name42: value42"/&gt;<br />
+    </code><br />
+     </p></div><p>
+     </p><p>
+        Actuellement, seuls les styles suivants sont interprétés :
+     </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <code class="literal">stroke-width</code> : La largeur de ligne, 
+                    relative à la largeur spécifiée
+                    par l'utilisateur dans le tag svg.
+         </p></li><li class="listitem"><p>
+          <code class="literal">stroke-linecap</code> : Le style des bouts de ligne.
+                      Un parmi
+                      <code class="literal">butt</code>, 
+                      <code class="literal">round</code>,
+                      <code class="literal">square</code>,
+                      <code class="literal">projecting</code> (un synonyme de 
+                      <code class="literal">square</code>),
+                      ou <code class="literal">default</code>.
+         </p></li><li class="listitem"><p>
+            <code class="literal">stroke-linejoin</code> : Le style des jointures.
+                      Un parmi 
+                      <code class="literal">miter</code>,
+                      <code class="literal">round</code>,
+                      <code class="literal">bevel</code>
+                      ou <code class="literal">default</code>.
+         </p></li><li class="listitem"><p>
+            <code class="literal">stroke-pattern</code> : Le motif de points.
+                    Un parmi, 
+                    <code class="literal">dashed</code>,
+                    <code class="literal">dash-dot</code>,
+                    <code class="literal">dash-dot-dot</code>,
+                    <code class="literal">dotted</code>
+                    ou <code class="literal">default</code>.
+         </p></li><li class="listitem"><p>
+            <code class="literal">stroke-dashlength</code> : 
+            La longueur des traits dans le motif précédent, en
+                      relation avec la valeur spécifiée par
+                      l'utilisateur 
+                      (<code class="literal">default</code> est un synonyme pour 1.0).
+         </p></li><li class="listitem"><p>
+            <code class="literal">stroke</code> : La couleur de ligne. 
+                Vous pouvez utiliser un des noms
+                 symboliques
+                 <code class="literal">foreground</code>,
+                 <code class="literal">fg</code>,
+                 <code class="literal">default</code>,
+                 <code class="literal">background</code>,
+                 <code class="literal">bg</code>,
+                 <code class="literal">inverse</code>,
+                 <code class="literal">text</code> ou
+                 <code class="literal">none</code>, ou utiliser une couleur
+                 hexadécimale de forme <code class="literal">#rrggbb</code>.
+         </p></li><li class="listitem"><p>
+            <code class="literal">fill</code>  : La couleur de remplissage. 
+                Mêmes valeurs que pour
+                 <code class="literal">stroke</code>, excepté que la signification 
+                 de <code class="literal">default</code> et
+                 <code class="literal">inverse</code> sont échangées.
+                 Par défaut, les éléments ne
+                 sont pas remplis, aussi, pour obtenir le remplissage
+                 par défaut, utilisez "<code class="literal">fill: default</code>"
+         </p></li></ul></div><p>
+       </p><div class="tip" title="Astuce"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Astuce]" src="images/tip.png" /></td><th align="left"></th></tr><tr><td align="left" valign="top"><p>
+            Pour dessiner un rectangle avec une ligne de largeur minimale
+            (hairline), cette astuce devrait fontionner :
+	</p><div class="literallayout"><p><br />
+            <code class="literal"><br />
+  &lt;svg:rect style="stroke-width: 0" x="..." y="..." width="..." height="..."/&gt;<br />
+            </code><br />
+            </p></div></td></tr></table></div><p>
+        </p><p>
+            Les ordonnées x et y grandissent comme dans Dia.
+        </p></div><div class="sect2" title="11.3.2. Éléments svg reconnus"><div class="titlepage"><div><div><h3 class="title" id="custom-shapes-shape-elements">11.3.2. Éléments svg reconnus</h3></div></div></div><p> 
+        Les éléments de dessin reconnus sont :
+       </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p class="simpara">
+               <code class="literal">
+        &lt;svg:g&gt;
+               </code>
+            </p><p>
+        Ceci est l'élément groupe. Vous pouvez y placer d'autres
+        éléments. Le contenu de l'attribut style de l'élément g est
+        propagé aux éléments contenus (à moins qu'ils ne les modifient).
+             </p></li><li class="listitem"><p class="simpara">
+               <code class="literal">
+        &lt;svg:line x1="..." y1="..." x2="..." y2="..."/&gt;
+               </code>
+            </p><p>
+        Cet élément est une ligne.
+             </p></li><li class="listitem"><p class="simpara">
+                 <code class="literal">
+        &lt;svg:polyline points="...."/&gt;
+                 </code>
+            </p><p>
+        Ceci est une ligne brisée (une collection de segments de droite
+        connectés). L'attribut « points » contient les coordonnées des
+        extrémités des segments. Les coordonnées sont séparées par un
+        blanc ou des virgules. Le format suggéré est 
+        "<code class="literal">x1,y1 x2,y2 x3,y3 ...</code>".
+              </p></li><li class="listitem"><p class="simpara">
+                <code class="literal">
+        &lt;svg:polygon points="...."/&gt;
+                </code>
+            </p><p>
+        Ceci est un polygone. L'argument « points » est du même format
+        que celui de l'élément « polyline ».
+              </p></li><li class="listitem"><p class="simpara">
+                 <code class="literal">
+        &lt;svg:rect x1="..." y1="..." width="..." height="..."/&gt;
+                 </code>
+            </p><p>
+        Ceci est un rectangle. Le coin supérieur gauche est (x1,y1), et
+        le coin inférieur droit est (x1+width,y1+height).
+              </p></li><li class="listitem"><p class="simpara">
+                 <code class="literal">
+        &lt;svg:image x1="..." y1="..." width="..." height="..." xlink:href="..." /&gt;
+                 </code>
+            </p><p>
+        Ceci est une image externe.  Le supérieur gauche est
+        (x1,y1), et le coin inférieur droit est (x1+width,y1+height).
+        Deux formes de lien sont pris en charge : un chemin absolu de la forme
+        "<code class="literal">file:///home/user/image.png</code>", ou relatif sans le préfixe
+        <code class="literal">file://</code> comme dans "<code class="literal">image.png</code>".
+        La dernière forme est préférable
+        car indépendante de l'installation. Le nom de fichier est
+        relatif à l'emplacement du fichier de forme (xxx.shape). Dans
+        l'exemple ci-dessus les fichiers PNG et shape doivent être dans
+        le même répertoire.
+        
+              </p><div class="note" title="Note"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png" /></td><th align="left"></th></tr><tr><td align="left" valign="top"><p>
+    pour les unices, on parle bien de répertoire (directory) et non de
+    dossier (folder). Par exemple les commande « <code class="literal">cd</code> »
+    (change directory),
+    et, sous Windows, « <code class="literal">dir</code> ».
+        </p></td></tr></table></div></li><li class="listitem"><p class="simpara">
+                 <code class="literal">
+        &lt;svg:circle cx="..." cy="..." r="..."/&gt;
+                 </code>
+            </p><p>
+        Ceci est un cercle de centre (cx,cy) et de rayon r.
+              </p></li><li class="listitem"><p class="simpara">
+                 <code class="literal">
+        &lt;svg:ellipse cx="..." cy="..." rx="..." ry="..."/&gt;
+                 </code>
+            </p><p>
+        Ceci est une ellipse de centre (cx, cy), de rayon rx dans la
+        direction x, et de rayon ry dans la direction y.
+              </p></li><li class="listitem"><p class="simpara">
+                 <code class="literal">
+        &lt;svg:path d="...."/&gt;
+                 </code>
+            </p><p>
+        Ceci est l'élément de dessin le plus complexe. Il décrit un
+        chemin fait de segments de droite et de courbes de bézier.
+        Actuellement, il ne prend en charge ni l'arc elliptique ni les courbes
+        de bézier quadratiques. La chaîne « d  » est faite de commandes
+        de la forme "x arg1 arg2 ..." où « x » est le code de caractère
+        identifiant la commande, et où les arguments sont des nombres séparés
+        par
+        un blanc ou des virgules.  Chaque commande a une variante
+        absolue et relative. Les commandes relatives sont données par une
+        lettre
+        minuscule. Elles utilisent le point d'extrémité de la commande
+        précédente comme point d'origine.
+              </p><p>
+        Les commandes prises en charge sont :
+                 </p><div class="itemizedlist"><ul class="itemizedlist" type="circle"><li class="listitem"><p>
+            <code class="literal">M x,y</code> :  Bouge le curseur
+                       </p></li><li class="listitem"><p>
+            <code class="literal">L x,y</code> : Dessine une ligne jusqu'à (x,y)
+                       </p></li><li class="listitem"><p>
+            <code class="literal">H x</code> : Dessine une ligne horizontale jusqu'à x
+                       </p></li><li class="listitem"><p>
+            <code class="literal">V y</code> : Dessine une ligne verticale jusqu'à y
+                       </p></li><li class="listitem"><p>
+            <code class="literal">C x1,y1 x2,y2, x3,y3</code> : Dessine une courbe de bézier jusqu'à (x3,y3)
+                          avec (x1,y1) et (x2,y2) comme points de
+                          contrôle.
+                       </p></li><li class="listitem"><p>
+            <code class="literal">S x1,y1 x2,y2</code> : Même chose qu'au-dessus, mais dessine un
+                          bézier lisse : le premier point de
+                          contrôle est déduit du bézier précédent.
+                       </p></li><li class="listitem"><p>
+            <code class="literal">Z</code> : Ferme le chemin.
+                       </p></li></ul></div><p>
+        
+            Si le chemin est fermé avec <code class="literal">z</code> ou <code class="literal">Z</code>, il peut être rempli.
+            Autrement, il est juste dessiné.
+              </p></li><li class="listitem"><p class="simpara">
+                <code class="literal">
+            &lt;svg:text x="..." y="..." style="..."&gt;...&lt;/svg:text&gt;
+                </code>
+            </p><p>
+            Un texte dans la forme. Le texte doit se situer entre les balises.
+              </p><p>
+            Les paramètres sont :
+                </p><div class="itemizedlist"><ul class="itemizedlist" type="circle"><li class="listitem"><p>
+            <code class="literal">x,y</code> : La position du texte
+                    </p></li><li class="listitem"><p>
+            <code class="literal">style</code> : Les options de formatage de texte
+                    </p><p>
+            Les options de style sont les suivantes :
+                       </p><div class="itemizedlist"><ul class="itemizedlist" type="square"><li class="listitem"><p>
+                <code class="literal">font-size</code> : Taille de la fonte en « pt » (point)
+                
+                            </p></li></ul></div><p>
+                    </p></li></ul></div><p>
+              </p></li></ul></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch11s02.html">Précédent</a> </td><td width="20%" align="center"><a accesskey="u" href="ch11.html">Niveau supérieur</a></td><td width="40%" align="right"> <a accesskey="n" href="ch11s04.html">Suivant</a></td></tr><tr><td width="40%" align="left" valign="top">11.2. Forme </td><td width="20%" align="center"><a accesskey="h" href="index.html">Sommaire</a></td><td width="40%" align="right" valign="top"> 11.4. Description de feuille (sheet)</td></tr></table></div></body></html>

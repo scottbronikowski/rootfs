@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Reading and writing 2D histograms - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Histograms.html" title="Histograms">
+<link rel="prev" href="2D-Histogram-Operations.html#g_t2D-Histogram-Operations" title="2D Histogram Operations">
+<link rel="next" href="Resampling-from-2D-histograms.html" title="Resampling from 2D histograms">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Reading-and-writing-2D-histograms"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Resampling-from-2D-histograms.html">Resampling from 2D histograms</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="2D-Histogram-Operations.html#g_t2D-Histogram-Operations">2D Histogram Operations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Histograms.html">Histograms</a>
+<hr>
+</div>
+
+<h3 class="section">22.20 Reading and writing 2D histograms</h3>
+
+<p>The library provides functions for reading and writing two dimensional
+histograms to a file as binary data or formatted text.
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_fwrite</b> (<var>FILE * stream, const gsl_histogram2d * h</var>)<var><a name="index-gsl_005fhistogram2d_005ffwrite-2072"></a></var><br>
+<blockquote><p>This function writes the ranges and bins of the histogram <var>h</var> to the
+stream <var>stream</var> in binary format.  The return value is 0 for success
+and <code>GSL_EFAILED</code> if there was a problem writing to the file.  Since
+the data is written in the native binary format it may not be portable
+between different architectures. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_fread</b> (<var>FILE * stream, gsl_histogram2d * h</var>)<var><a name="index-gsl_005fhistogram2d_005ffread-2073"></a></var><br>
+<blockquote><p>This function reads into the histogram <var>h</var> from the stream
+<var>stream</var> in binary format.  The histogram <var>h</var> must be
+preallocated with the correct size since the function uses the number of
+x and y bins in <var>h</var> to determine how many bytes to read.  The return
+value is 0 for success and <code>GSL_EFAILED</code> if there was a problem
+reading from the file.  The data is assumed to have been written in the
+native binary format on the same architecture. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_fprintf</b> (<var>FILE * stream, const gsl_histogram2d * h, const char * range_format, const char * bin_format</var>)<var><a name="index-gsl_005fhistogram2d_005ffprintf-2074"></a></var><br>
+<blockquote><p>This function writes the ranges and bins of the histogram <var>h</var>
+line-by-line to the stream <var>stream</var> using the format specifiers
+<var>range_format</var> and <var>bin_format</var>.  These should be one of the
+<code>%g</code>, <code>%e</code> or <code>%f</code> formats for floating point
+numbers.  The function returns 0 for success and <code>GSL_EFAILED</code> if
+there was a problem writing to the file.  The histogram output is
+formatted in five columns, and the columns are separated by spaces,
+like this,
+
+     <pre class="smallexample">          xrange[0] xrange[1] yrange[0] yrange[1] bin(0,0)
+          xrange[0] xrange[1] yrange[1] yrange[2] bin(0,1)
+          xrange[0] xrange[1] yrange[2] yrange[3] bin(0,2)
+          ....
+          xrange[0] xrange[1] yrange[ny-1] yrange[ny] bin(0,ny-1)
+          
+          xrange[1] xrange[2] yrange[0] yrange[1] bin(1,0)
+          xrange[1] xrange[2] yrange[1] yrange[2] bin(1,1)
+          xrange[1] xrange[2] yrange[1] yrange[2] bin(1,2)
+          ....
+          xrange[1] xrange[2] yrange[ny-1] yrange[ny] bin(1,ny-1)
+          
+          ....
+          
+          xrange[nx-1] xrange[nx] yrange[0] yrange[1] bin(nx-1,0)
+          xrange[nx-1] xrange[nx] yrange[1] yrange[2] bin(nx-1,1)
+          xrange[nx-1] xrange[nx] yrange[1] yrange[2] bin(nx-1,2)
+          ....
+          xrange[nx-1] xrange[nx] yrange[ny-1] yrange[ny] bin(nx-1,ny-1)
+</pre>
+        <p class="noindent">Each line contains the lower and upper limits of the bin and the
+contents of the bin.  Since the upper limits of the each bin are the
+lower limits of the neighboring bins there is duplication of these
+values but this allows the histogram to be manipulated with
+line-oriented tools. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_fscanf</b> (<var>FILE * stream, gsl_histogram2d * h</var>)<var><a name="index-gsl_005fhistogram2d_005ffscanf-2075"></a></var><br>
+<blockquote><p>This function reads formatted data from the stream <var>stream</var> into the
+histogram <var>h</var>.  The data is assumed to be in the five-column format
+used by <code>gsl_histogram2d_fprintf</code>.  The histogram <var>h</var> must be
+preallocated with the correct lengths since the function uses the sizes
+of <var>h</var> to determine how many numbers to read.  The function returns 0
+for success and <code>GSL_EFAILED</code> if there was a problem reading from
+the file. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

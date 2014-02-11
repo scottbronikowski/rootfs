@@ -1,0 +1,164 @@
+<html lang="en">
+<head>
+<title>Real Nonsymmetric Matrices - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Eigensystems.html" title="Eigensystems">
+<link rel="prev" href="Complex-Hermitian-Matrices.html" title="Complex Hermitian Matrices">
+<link rel="next" href="Real-Generalized-Symmetric_002dDefinite-Eigensystems.html" title="Real Generalized Symmetric-Definite Eigensystems">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Real-Nonsymmetric-Matrices"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Real-Generalized-Symmetric_002dDefinite-Eigensystems.html">Real Generalized Symmetric-Definite Eigensystems</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Complex-Hermitian-Matrices.html">Complex Hermitian Matrices</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Eigensystems.html">Eigensystems</a>
+<hr>
+</div>
+
+<h3 class="section">15.3 Real Nonsymmetric Matrices</h3>
+
+<p><a name="index-nonsymmetric-matrix_002c-real_002c-eigensystem-1417"></a><a name="index-real-nonsymmetric-matrix_002c-eigensystem-1418"></a>
+The solution of the real nonsymmetric eigensystem problem for a
+matrix A involves computing the Schur decomposition
+where Z is an orthogonal matrix of Schur vectors and T,
+the Schur form, is quasi upper triangular with diagonal
+1-by-1 blocks which are real eigenvalues of A, and
+diagonal 2-by-2 blocks whose eigenvalues are complex
+conjugate eigenvalues of A. The algorithm used is the double-shift
+Francis method.
+
+<div class="defun">
+&mdash; Function: gsl_eigen_nonsymm_workspace * <b>gsl_eigen_nonsymm_alloc</b> (<var>const size_t n</var>)<var><a name="index-gsl_005feigen_005fnonsymm_005falloc-1419"></a></var><br>
+<blockquote><p><a name="index-gsl_005feigen_005fnonsymm_005fworkspace-1420"></a>This function allocates a workspace for computing eigenvalues of
+<var>n</var>-by-<var>n</var> real nonsymmetric matrices. The size of the workspace
+is O(2n). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_eigen_nonsymm_free</b> (<var>gsl_eigen_nonsymm_workspace * w</var>)<var><a name="index-gsl_005feigen_005fnonsymm_005ffree-1421"></a></var><br>
+<blockquote><p>This function frees the memory associated with the workspace <var>w</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_eigen_nonsymm_params</b> (<var>const int compute_t, const int balance, gsl_eigen_nonsymm_workspace * w</var>)<var><a name="index-gsl_005feigen_005fnonsymm_005fparams-1422"></a></var><br>
+<blockquote><p>This function sets some parameters which determine how the eigenvalue
+problem is solved in subsequent calls to <code>gsl_eigen_nonsymm</code>.
+
+        <p>If <var>compute_t</var> is set to 1, the full Schur form T will be
+computed by <code>gsl_eigen_nonsymm</code>. If it is set to 0,
+T will not be computed (this is the default setting). Computing
+the full Schur form T requires approximately 1.5&ndash;2 times the
+number of flops.
+
+        <p>If <var>balance</var> is set to 1, a balancing transformation is applied
+to the matrix prior to computing eigenvalues. This transformation is
+designed to make the rows and columns of the matrix have comparable
+norms, and can result in more accurate eigenvalues for matrices
+whose entries vary widely in magnitude. See <a href="Balancing.html">Balancing</a> for more
+information. Note that the balancing transformation does not preserve
+the orthogonality of the Schur vectors, so if you wish to compute the
+Schur vectors with <code>gsl_eigen_nonsymm_Z</code> you will obtain the Schur
+vectors of the balanced matrix instead of the original matrix. The
+relationship will be
+     where <var>Q</var> is the matrix of Schur vectors for the balanced matrix, and
+<var>D</var> is the balancing transformation. Then <code>gsl_eigen_nonsymm_Z</code>
+will compute a matrix <var>Z</var> which satisfies
+     with Z = D Q. Note that <var>Z</var> will not be orthogonal. For
+this reason, balancing is not performed by default. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_eigen_nonsymm</b> (<var>gsl_matrix * A, gsl_vector_complex * eval, gsl_eigen_nonsymm_workspace * w</var>)<var><a name="index-gsl_005feigen_005fnonsymm-1423"></a></var><br>
+<blockquote><p>This function computes the eigenvalues of the real nonsymmetric matrix
+<var>A</var> and stores them in the vector <var>eval</var>. If T is
+desired, it is stored in the upper portion of <var>A</var> on output. 
+Otherwise, on output, the diagonal of <var>A</var> will contain the
+1-by-1 real eigenvalues and 2-by-2
+complex conjugate eigenvalue systems, and the rest of <var>A</var> is
+destroyed. In rare cases, this function may fail to find all
+eigenvalues. If this happens, an error code is returned
+and the number of converged eigenvalues is stored in <code>w-&gt;n_evals</code>. 
+The converged eigenvalues are stored in the beginning of <var>eval</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_eigen_nonsymm_Z</b> (<var>gsl_matrix * A, gsl_vector_complex * eval, gsl_matrix * Z, gsl_eigen_nonsymm_workspace * w</var>)<var><a name="index-gsl_005feigen_005fnonsymm_005fZ-1424"></a></var><br>
+<blockquote><p>This function is identical to <code>gsl_eigen_nonsymm</code> except that it also
+computes the Schur vectors and stores them into <var>Z</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_eigen_nonsymmv_workspace * <b>gsl_eigen_nonsymmv_alloc</b> (<var>const size_t n</var>)<var><a name="index-gsl_005feigen_005fnonsymmv_005falloc-1425"></a></var><br>
+<blockquote><p><a name="index-gsl_005feigen_005fnonsymmv_005fworkspace-1426"></a>This function allocates a workspace for computing eigenvalues and
+eigenvectors of <var>n</var>-by-<var>n</var> real nonsymmetric matrices. The
+size of the workspace is O(5n). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_eigen_nonsymmv_free</b> (<var>gsl_eigen_nonsymmv_workspace * w</var>)<var><a name="index-gsl_005feigen_005fnonsymmv_005ffree-1427"></a></var><br>
+<blockquote><p>This function frees the memory associated with the workspace <var>w</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_eigen_nonsymmv_params</b> (<var>const int balance, gsl_eigen_nonsymm_workspace * w</var>)<var><a name="index-gsl_005feigen_005fnonsymmv_005fparams-1428"></a></var><br>
+<blockquote><p>This function sets parameters which determine how the eigenvalue
+problem is solved in subsequent calls to <code>gsl_eigen_nonsymmv</code>. 
+If <var>balance</var> is set to 1, a balancing transformation is applied
+to the matrix. See <code>gsl_eigen_nonsymm_params</code> for more information. 
+Balancing is turned off by default since it does not preserve the
+orthogonality of the Schur vectors. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_eigen_nonsymmv</b> (<var>gsl_matrix * A, gsl_vector_complex * eval, gsl_matrix_complex * evec, gsl_eigen_nonsymmv_workspace * w</var>)<var><a name="index-gsl_005feigen_005fnonsymmv-1429"></a></var><br>
+<blockquote><p>This function computes eigenvalues and right eigenvectors of the
+<var>n</var>-by-<var>n</var> real nonsymmetric matrix <var>A</var>. It first calls
+<code>gsl_eigen_nonsymm</code> to compute the eigenvalues, Schur form T, and
+Schur vectors. Then it finds eigenvectors of T and backtransforms
+them using the Schur vectors. The Schur vectors are destroyed in the
+process, but can be saved by using <code>gsl_eigen_nonsymmv_Z</code>. The
+computed eigenvectors are normalized to have unit magnitude. On
+output, the upper portion of <var>A</var> contains the Schur form
+T. If <code>gsl_eigen_nonsymm</code> fails, no eigenvectors are
+computed, and an error code is returned. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_eigen_nonsymmv_Z</b> (<var>gsl_matrix * A, gsl_vector_complex * eval, gsl_matrix_complex * evec, gsl_matrix * Z, gsl_eigen_nonsymmv_workspace * w</var>)<var><a name="index-gsl_005feigen_005fnonsymmv_005fZ-1430"></a></var><br>
+<blockquote><p>This function is identical to <code>gsl_eigen_nonsymmv</code> except that it also saves
+the Schur vectors into <var>Z</var>. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

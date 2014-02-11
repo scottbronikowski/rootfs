@@ -1,0 +1,188 @@
+<html lang="en">
+<head>
+<title>Level 1 GSL BLAS Interface - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="GSL-BLAS-Interface.html" title="GSL BLAS Interface">
+<link rel="next" href="Level-2-GSL-BLAS-Interface.html" title="Level 2 GSL BLAS Interface">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Level-1-GSL-BLAS-Interface"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Level-2-GSL-BLAS-Interface.html">Level 2 GSL BLAS Interface</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="GSL-BLAS-Interface.html">GSL BLAS Interface</a>
+<hr>
+</div>
+
+<h4 class="subsection">13.1.1 Level 1</h4>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_sdsdot</b> (<var>float alpha, const gsl_vector_float * x, const gsl_vector_float * y, float * result</var>)<var><a name="index-gsl_005fblas_005fsdsdot-1140"></a></var><br>
+<blockquote><p><a name="index-DOT_002c-Level_002d1-BLAS-1141"></a>This function computes the sum \alpha + x^T y for the vectors
+<var>x</var> and <var>y</var>, returning the result in <var>result</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_sdot</b> (<var>const gsl_vector_float * x, const gsl_vector_float * y, float * result</var>)<var><a name="index-gsl_005fblas_005fsdot-1142"></a></var><br>
+&mdash; Function: int <b>gsl_blas_dsdot</b> (<var>const gsl_vector_float * x, const gsl_vector_float * y, double * result</var>)<var><a name="index-gsl_005fblas_005fdsdot-1143"></a></var><br>
+&mdash; Function: int <b>gsl_blas_ddot</b> (<var>const gsl_vector * x, const gsl_vector * y, double * result</var>)<var><a name="index-gsl_005fblas_005fddot-1144"></a></var><br>
+<blockquote><p>These functions compute the scalar product x^T y for the vectors
+<var>x</var> and <var>y</var>, returning the result in <var>result</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_cdotu</b> (<var>const gsl_vector_complex_float * x, const gsl_vector_complex_float * y, gsl_complex_float * dotu</var>)<var><a name="index-gsl_005fblas_005fcdotu-1145"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zdotu</b> (<var>const gsl_vector_complex * x, const gsl_vector_complex * y, gsl_complex * dotu</var>)<var><a name="index-gsl_005fblas_005fzdotu-1146"></a></var><br>
+<blockquote><p>These functions compute the complex scalar product x^T y for the
+vectors <var>x</var> and <var>y</var>, returning the result in <var>dotu</var>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_cdotc</b> (<var>const gsl_vector_complex_float * x, const gsl_vector_complex_float * y, gsl_complex_float * dotc</var>)<var><a name="index-gsl_005fblas_005fcdotc-1147"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zdotc</b> (<var>const gsl_vector_complex * x, const gsl_vector_complex * y, gsl_complex * dotc</var>)<var><a name="index-gsl_005fblas_005fzdotc-1148"></a></var><br>
+<blockquote><p>These functions compute the complex conjugate scalar product x^H
+y for the vectors <var>x</var> and <var>y</var>, returning the result in
+<var>dotc</var>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: float <b>gsl_blas_snrm2</b> (<var>const gsl_vector_float * x</var>)<var><a name="index-gsl_005fblas_005fsnrm2-1149"></a></var><br>
+&mdash; Function: double <b>gsl_blas_dnrm2</b> (<var>const gsl_vector * x</var>)<var><a name="index-gsl_005fblas_005fdnrm2-1150"></a></var><br>
+<blockquote><p><a name="index-NRM2_002c-Level_002d1-BLAS-1151"></a>These functions compute the Euclidean norm
+<!-- {$||x||_2 = \sqrt{\sum x_i^2}$} -->
+||x||_2 = \sqrt {\sum x_i^2} of the vector <var>x</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: float <b>gsl_blas_scnrm2</b> (<var>const gsl_vector_complex_float * x</var>)<var><a name="index-gsl_005fblas_005fscnrm2-1152"></a></var><br>
+&mdash; Function: double <b>gsl_blas_dznrm2</b> (<var>const gsl_vector_complex * x</var>)<var><a name="index-gsl_005fblas_005fdznrm2-1153"></a></var><br>
+<blockquote><p>These functions compute the Euclidean norm of the complex vector <var>x</var>,
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: float <b>gsl_blas_sasum</b> (<var>const gsl_vector_float * x</var>)<var><a name="index-gsl_005fblas_005fsasum-1154"></a></var><br>
+&mdash; Function: double <b>gsl_blas_dasum</b> (<var>const gsl_vector * x</var>)<var><a name="index-gsl_005fblas_005fdasum-1155"></a></var><br>
+<blockquote><p><a name="index-ASUM_002c-Level_002d1-BLAS-1156"></a>These functions compute the absolute sum \sum |x_i| of the
+elements of the vector <var>x</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: float <b>gsl_blas_scasum</b> (<var>const gsl_vector_complex_float * x</var>)<var><a name="index-gsl_005fblas_005fscasum-1157"></a></var><br>
+&mdash; Function: double <b>gsl_blas_dzasum</b> (<var>const gsl_vector_complex * x</var>)<var><a name="index-gsl_005fblas_005fdzasum-1158"></a></var><br>
+<blockquote><p>These functions compute the sum of the magnitudes of the real and
+imaginary parts of the complex vector <var>x</var>,
+<!-- {$\sum \left( |\Re(x_i)| + |\Im(x_i)| \right)$} -->
+\sum |\Re(x_i)| + |\Im(x_i)|. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: CBLAS_INDEX_t <b>gsl_blas_isamax</b> (<var>const gsl_vector_float * x</var>)<var><a name="index-gsl_005fblas_005fisamax-1159"></a></var><br>
+&mdash; Function: CBLAS_INDEX_t <b>gsl_blas_idamax</b> (<var>const gsl_vector * x</var>)<var><a name="index-gsl_005fblas_005fidamax-1160"></a></var><br>
+&mdash; Function: CBLAS_INDEX_t <b>gsl_blas_icamax</b> (<var>const gsl_vector_complex_float * x</var>)<var><a name="index-gsl_005fblas_005ficamax-1161"></a></var><br>
+&mdash; Function: CBLAS_INDEX_t <b>gsl_blas_izamax</b> (<var>const gsl_vector_complex * x</var>)<var><a name="index-gsl_005fblas_005fizamax-1162"></a></var><br>
+<blockquote><p><a name="index-AMAX_002c-Level_002d1-BLAS-1163"></a>These functions return the index of the largest element of the vector
+<var>x</var>. The largest element is determined by its absolute magnitude for
+real vectors and by the sum of the magnitudes of the real and imaginary
+parts |\Re(x_i)| + |\Im(x_i)| for complex vectors.  If the
+largest value occurs several times then the index of the first
+occurrence is returned. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_sswap</b> (<var>gsl_vector_float * x, gsl_vector_float * y</var>)<var><a name="index-gsl_005fblas_005fsswap-1164"></a></var><br>
+&mdash; Function: int <b>gsl_blas_dswap</b> (<var>gsl_vector * x, gsl_vector * y</var>)<var><a name="index-gsl_005fblas_005fdswap-1165"></a></var><br>
+&mdash; Function: int <b>gsl_blas_cswap</b> (<var>gsl_vector_complex_float * x, gsl_vector_complex_float * y</var>)<var><a name="index-gsl_005fblas_005fcswap-1166"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zswap</b> (<var>gsl_vector_complex * x, gsl_vector_complex * y</var>)<var><a name="index-gsl_005fblas_005fzswap-1167"></a></var><br>
+<blockquote><p><a name="index-SWAP_002c-Level_002d1-BLAS-1168"></a>These functions exchange the elements of the vectors <var>x</var> and <var>y</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_scopy</b> (<var>const gsl_vector_float * x, gsl_vector_float * y</var>)<var><a name="index-gsl_005fblas_005fscopy-1169"></a></var><br>
+&mdash; Function: int <b>gsl_blas_dcopy</b> (<var>const gsl_vector * x, gsl_vector * y</var>)<var><a name="index-gsl_005fblas_005fdcopy-1170"></a></var><br>
+&mdash; Function: int <b>gsl_blas_ccopy</b> (<var>const gsl_vector_complex_float * x, gsl_vector_complex_float * y</var>)<var><a name="index-gsl_005fblas_005fccopy-1171"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zcopy</b> (<var>const gsl_vector_complex * x, gsl_vector_complex * y</var>)<var><a name="index-gsl_005fblas_005fzcopy-1172"></a></var><br>
+<blockquote><p><a name="index-COPY_002c-Level_002d1-BLAS-1173"></a>These functions copy the elements of the vector <var>x</var> into the vector
+<var>y</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_saxpy</b> (<var>float alpha, const gsl_vector_float * x, gsl_vector_float * y</var>)<var><a name="index-gsl_005fblas_005fsaxpy-1174"></a></var><br>
+&mdash; Function: int <b>gsl_blas_daxpy</b> (<var>double alpha, const gsl_vector * x, gsl_vector * y</var>)<var><a name="index-gsl_005fblas_005fdaxpy-1175"></a></var><br>
+&mdash; Function: int <b>gsl_blas_caxpy</b> (<var>const gsl_complex_float alpha, const gsl_vector_complex_float * x, gsl_vector_complex_float * y</var>)<var><a name="index-gsl_005fblas_005fcaxpy-1176"></a></var><br>
+&mdash; Function: int <b>gsl_blas_zaxpy</b> (<var>const gsl_complex alpha, const gsl_vector_complex * x, gsl_vector_complex * y</var>)<var><a name="index-gsl_005fblas_005fzaxpy-1177"></a></var><br>
+<blockquote><p><a name="index-AXPY_002c-Level_002d1-BLAS-1178"></a><a name="index-DAXPY_002c-Level_002d1-BLAS-1179"></a><a name="index-SAXPY_002c-Level_002d1-BLAS-1180"></a>These functions compute the sum y = \alpha x + y for the vectors
+<var>x</var> and <var>y</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_blas_sscal</b> (<var>float alpha, gsl_vector_float * x</var>)<var><a name="index-gsl_005fblas_005fsscal-1181"></a></var><br>
+&mdash; Function: void <b>gsl_blas_dscal</b> (<var>double alpha, gsl_vector * x</var>)<var><a name="index-gsl_005fblas_005fdscal-1182"></a></var><br>
+&mdash; Function: void <b>gsl_blas_cscal</b> (<var>const gsl_complex_float alpha, gsl_vector_complex_float * x</var>)<var><a name="index-gsl_005fblas_005fcscal-1183"></a></var><br>
+&mdash; Function: void <b>gsl_blas_zscal</b> (<var>const gsl_complex alpha, gsl_vector_complex * x</var>)<var><a name="index-gsl_005fblas_005fzscal-1184"></a></var><br>
+&mdash; Function: void <b>gsl_blas_csscal</b> (<var>float alpha, gsl_vector_complex_float * x</var>)<var><a name="index-gsl_005fblas_005fcsscal-1185"></a></var><br>
+&mdash; Function: void <b>gsl_blas_zdscal</b> (<var>double alpha, gsl_vector_complex * x</var>)<var><a name="index-gsl_005fblas_005fzdscal-1186"></a></var><br>
+<blockquote><p><a name="index-SCAL_002c-Level_002d1-BLAS-1187"></a>These functions rescale the vector <var>x</var> by the multiplicative factor
+<var>alpha</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_srotg</b> (<var>float a</var>[]<var>, float b</var>[]<var>, float c</var>[]<var>, float s</var>[])<var><a name="index-gsl_005fblas_005fsrotg-1188"></a></var><br>
+&mdash; Function: int <b>gsl_blas_drotg</b> (<var>double a</var>[]<var>, double b</var>[]<var>, double c</var>[]<var>, double s</var>[])<var><a name="index-gsl_005fblas_005fdrotg-1189"></a></var><br>
+<blockquote><p><a name="index-ROTG_002c-Level_002d1-BLAS-1190"></a><a name="index-Givens-Rotation_002c-BLAS-1191"></a>These functions compute a Givens rotation (c,s) which zeroes the
+vector (a,b),
+     The variables <var>a</var> and <var>b</var> are overwritten by the routine. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_srot</b> (<var>gsl_vector_float * x, gsl_vector_float * y, float c, float s</var>)<var><a name="index-gsl_005fblas_005fsrot-1192"></a></var><br>
+&mdash; Function: int <b>gsl_blas_drot</b> (<var>gsl_vector * x, gsl_vector * y, const double c, const double s</var>)<var><a name="index-gsl_005fblas_005fdrot-1193"></a></var><br>
+<blockquote><p>These functions apply a Givens rotation (x', y') = (c x + s y, -s
+x + c y) to the vectors <var>x</var>, <var>y</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_srotmg</b> (<var>float d1</var>[]<var>, float d2</var>[]<var>, float b1</var>[]<var>, float b2, float P</var>[])<var><a name="index-gsl_005fblas_005fsrotmg-1194"></a></var><br>
+&mdash; Function: int <b>gsl_blas_drotmg</b> (<var>double d1</var>[]<var>, double d2</var>[]<var>, double b1</var>[]<var>, double b2, double P</var>[])<var><a name="index-gsl_005fblas_005fdrotmg-1195"></a></var><br>
+<blockquote><p><a name="index-Modified-Givens-Rotation_002c-BLAS-1196"></a><a name="index-Givens-Rotation_002c-Modified_002c-BLAS-1197"></a>These functions compute a modified Givens transformation.  The modified
+Givens transformation is defined in the original Level-1 <span class="sc">blas</span>
+specification, given in the references. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_blas_srotm</b> (<var>gsl_vector_float * x, gsl_vector_float * y, const float P</var>[])<var><a name="index-gsl_005fblas_005fsrotm-1198"></a></var><br>
+&mdash; Function: int <b>gsl_blas_drotm</b> (<var>gsl_vector * x, gsl_vector * y, const double P</var>[])<var><a name="index-gsl_005fblas_005fdrotm-1199"></a></var><br>
+<blockquote><p>These functions apply a modified Givens transformation. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

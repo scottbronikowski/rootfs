@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Median and Percentiles - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Statistics.html" title="Statistics">
+<link rel="prev" href="Maximum-and-Minimum-values.html" title="Maximum and Minimum values">
+<link rel="next" href="Example-statistical-programs.html" title="Example statistical programs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Median-and-Percentiles"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Example-statistical-programs.html">Example statistical programs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Maximum-and-Minimum-values.html">Maximum and Minimum values</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Statistics.html">Statistics</a>
+<hr>
+</div>
+
+<h3 class="section">21.9 Median and Percentiles</h3>
+
+<p>The median and percentile functions described in this section operate on
+sorted data.  For convenience we use <dfn>quantiles</dfn>, measured on a scale
+of 0 to 1, instead of percentiles (which use a scale of 0 to 100).
+
+<div class="defun">
+&mdash; Function: double <b>gsl_stats_median_from_sorted_data</b> (<var>const double sorted_data</var>[]<var>, size_t stride, size_t n</var>)<var><a name="index-gsl_005fstats_005fmedian_005ffrom_005fsorted_005fdata-1976"></a></var><br>
+<blockquote><p>This function returns the median value of <var>sorted_data</var>, a dataset
+of length <var>n</var> with stride <var>stride</var>.  The elements of the array
+must be in ascending numerical order.  There are no checks to see
+whether the data are sorted, so the function <code>gsl_sort</code> should
+always be used first.
+
+        <p>When the dataset has an odd number of elements the median is the value
+of element (n-1)/2.  When the dataset has an even number of
+elements the median is the mean of the two nearest middle values,
+elements (n-1)/2 and n/2.  Since the algorithm for
+computing the median involves interpolation this function always returns
+a floating-point number, even for integer data types. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_stats_quantile_from_sorted_data</b> (<var>const double sorted_data</var>[]<var>, size_t stride, size_t n, double f</var>)<var><a name="index-gsl_005fstats_005fquantile_005ffrom_005fsorted_005fdata-1977"></a></var><br>
+<blockquote><p>This function returns a quantile value of <var>sorted_data</var>, a
+double-precision array of length <var>n</var> with stride <var>stride</var>.  The
+elements of the array must be in ascending numerical order.  The
+quantile is determined by the <var>f</var>, a fraction between 0 and 1.  For
+example, to compute the value of the 75th percentile <var>f</var> should have
+the value 0.75.
+
+        <p>There are no checks to see whether the data are sorted, so the function
+<code>gsl_sort</code> should always be used first.
+
+        <p>The quantile is found by interpolation, using the formula
+     where i is <code>floor</code>((n - 1)f) and \delta is
+(n-1)f - i.
+
+        <p>Thus the minimum value of the array (<code>data[0*stride]</code>) is given by
+<var>f</var> equal to zero, the maximum value (<code>data[(n-1)*stride]</code>) is
+given by <var>f</var> equal to one and the median value is given by <var>f</var>
+equal to 0.5.  Since the algorithm for computing quantiles involves
+interpolation this function always returns a floating-point number, even
+for integer data types. 
+</p></blockquote></div>
+
+<!-- @node Statistical tests -->
+<!-- @section Statistical tests -->
+<!-- FIXME, do more work on the statistical tests -->
+<!-- @deftypefun double gsl_stats_ttest (const double @var{data1}[], double @var{data2}[], size_t @var{n1}, size_t @var{n2}) -->
+<!-- @deftypefunx Statistics double gsl_stats_int_ttest (const double @var{data1}[], double @var{data2}[], size_t @var{n1}, size_t @var{n2}) -->
+<!-- The function @code{gsl_stats_ttest} computes the t-test statistic for -->
+<!-- the two arrays @var{data1}[] and @var{data2}[], of lengths @var{n1} and -->
+<!-- @var{n2} respectively. -->
+<!-- The t-test statistic measures the difference between the means of two -->
+<!-- datasets. -->
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

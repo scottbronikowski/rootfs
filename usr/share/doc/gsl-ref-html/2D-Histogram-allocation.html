@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>2D Histogram allocation - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Histograms.html" title="Histograms">
+<link rel="prev" href="The-2D-histogram-struct.html" title="The 2D histogram struct">
+<link rel="next" href="Copying-2D-Histograms.html" title="Copying 2D Histograms">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="g_t2D-Histogram-allocation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Copying-2D-Histograms.html">Copying 2D Histograms</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-2D-histogram-struct.html">The 2D histogram struct</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Histograms.html">Histograms</a>
+<hr>
+</div>
+
+<h3 class="section">22.14 2D Histogram allocation</h3>
+
+<p>The functions for allocating memory to a 2D histogram follow the style
+of <code>malloc</code> and <code>free</code>.  In addition they also perform their
+own error checking.  If there is insufficient memory available to
+allocate a histogram then the functions call the error handler (with
+an error number of <code>GSL_ENOMEM</code>) in addition to returning a null
+pointer.  Thus if you use the library error handler to abort your program
+then it isn't necessary to check every 2D histogram <code>alloc</code>.
+
+<div class="defun">
+&mdash; Function: gsl_histogram2d * <b>gsl_histogram2d_alloc</b> (<var>size_t nx, size_t ny</var>)<var><a name="index-gsl_005fhistogram2d_005falloc-2036"></a></var><br>
+<blockquote><p>This function allocates memory for a two-dimensional histogram with
+<var>nx</var> bins in the x direction and <var>ny</var> bins in the y direction. 
+The function returns a pointer to a newly created <code>gsl_histogram2d</code>
+struct. If insufficient memory is available a null pointer is returned
+and the error handler is invoked with an error code of
+<code>GSL_ENOMEM</code>. The bins and ranges must be initialized with one of
+the functions below before the histogram is ready for use. 
+</p></blockquote></div>
+
+<!-- @deftypefun {gsl_histogram2d *} gsl_histogram2d_calloc (size_t @var{nx}, size_t @var{ny}) -->
+<!-- This function allocates memory for a two-dimensional histogram with -->
+<!-- @var{nx} bins in the x direction and @var{ny} bins in the y -->
+<!-- direction.  The function returns a pointer to a newly initialized -->
+<!-- @code{gsl_histogram2d} struct.  The bins are uniformly spaced with a -->
+<!-- total range of -->
+<!-- @c{$0 \le  x < nx$} -->
+<!-- @math{0 <= x < nx} in the x-direction and -->
+<!-- @c{$0 \le  y < ny$} -->
+<!-- @math{0 <=  y < ny} in the y-direction, as shown in the table below. -->
+<!-- The bins are initialized to zero so the histogram is ready for use. -->
+<!-- If insufficient memory is available a null pointer is returned and the -->
+<!-- error handler is invoked with an error code of @code{GSL_ENOMEM}. -->
+<!-- @end deftypefun -->
+<!-- @deftypefun {gsl_histogram2d *} gsl_histogram2d_calloc_uniform (size_t @var{nx}, size_t @var{ny}, double @var{xmin}, double @var{xmax}, double @var{ymin}, double @var{ymax}) -->
+<!-- This function allocates a histogram of size @var{nx}-by-@var{ny} which -->
+<!-- uniformly covers the ranges @var{xmin} to @var{xmax} and @var{ymin} to -->
+<!-- @var{ymax} in the @math{x} and @math{y} directions respectively. -->
+<!-- @end deftypefun -->
+<!-- @deftypefun {gsl_histogram2d *} gsl_histogram2d_calloc_range (size_t @var{nx}, size_t @var{ny}, double * @var{xrange}, double * @var{yrange}) -->
+<!-- This function allocates a histogram of size @var{nx}-by-@var{ny} using -->
+<!-- the @math{nx+1} and @math{ny+1} bin ranges specified by the arrays -->
+<!-- @var{xrange} and @var{yrange}. -->
+<!-- @end deftypefun -->
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_set_ranges</b> (<var>gsl_histogram2d * h, const double xrange</var>[]<var>, size_t xsize, const double yrange</var>[]<var>, size_t ysize</var>)<var><a name="index-gsl_005fhistogram2d_005fset_005franges-2037"></a></var><br>
+<blockquote><p>This function sets the ranges of the existing histogram <var>h</var> using
+the arrays <var>xrange</var> and <var>yrange</var> of size <var>xsize</var> and
+<var>ysize</var> respectively.  The values of the histogram bins are reset to
+zero. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_histogram2d_set_ranges_uniform</b> (<var>gsl_histogram2d * h, double xmin, double xmax, double ymin, double ymax</var>)<var><a name="index-gsl_005fhistogram2d_005fset_005franges_005funiform-2038"></a></var><br>
+<blockquote><p>This function sets the ranges of the existing histogram <var>h</var> to cover
+the ranges <var>xmin</var> to <var>xmax</var> and <var>ymin</var> to <var>ymax</var>
+uniformly.  The values of the histogram bins are reset to zero. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_histogram2d_free</b> (<var>gsl_histogram2d * h</var>)<var><a name="index-gsl_005fhistogram2d_005ffree-2039"></a></var><br>
+<blockquote><p>This function frees the 2D histogram <var>h</var> and all of the memory
+associated with it. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

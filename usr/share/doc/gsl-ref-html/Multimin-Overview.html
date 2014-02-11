@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Multimin Overview - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Multidimensional-Minimization.html" title="Multidimensional Minimization">
+<link rel="next" href="Multimin-Caveats.html" title="Multimin Caveats">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Multimin-Overview"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multimin-Caveats.html">Multimin Caveats</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Multidimensional-Minimization.html">Multidimensional Minimization</a>
+<hr>
+</div>
+
+<h3 class="section">36.1 Overview</h3>
+
+<p>The problem of multidimensional minimization requires finding a point
+x such that the scalar function,
+takes a value which is lower than at any neighboring point. For smooth
+functions the gradient g = \nabla f vanishes at the minimum. In
+general there are no bracketing methods available for the
+minimization of n-dimensional functions.  The algorithms
+proceed from an initial guess using a search algorithm which attempts
+to move in a downhill direction.
+
+   <p>Algorithms making use of the gradient of the function perform a
+one-dimensional line minimisation along this direction until the lowest
+point is found to a suitable tolerance.  The search direction is then
+updated with local information from the function and its derivatives,
+and the whole process repeated until the true n-dimensional
+minimum is found.
+
+   <p>Algorithms which do not require the gradient of the function use
+different strategies.  For example, the Nelder-Mead Simplex algorithm
+maintains n+1 trial parameter vectors as the vertices of a
+n-dimensional simplex.  On each iteration it tries to improve
+the worst vertex of the simplex by geometrical transformations.  The
+iterations are continued until the overall size of the simplex has
+decreased sufficiently.
+
+   <p>Both types of algorithms use a standard framework. The user provides a
+high-level driver for the algorithms, and the library provides the
+individual functions necessary for each of the steps.  There are three
+main phases of the iteration.  The steps are,
+
+     <ul>
+<li>initialize minimizer state, <var>s</var>, for algorithm <var>T</var>
+
+     <li>update <var>s</var> using the iteration <var>T</var>
+
+     <li>test <var>s</var> for convergence, and repeat iteration if necessary
+</ul>
+
+<p class="noindent">Each iteration step consists either of an improvement to the
+line-minimisation in the current direction or an update to the search
+direction itself.  The state for the minimizers is held in a
+<code>gsl_multimin_fdfminimizer</code> struct or a
+<code>gsl_multimin_fminimizer</code> struct.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

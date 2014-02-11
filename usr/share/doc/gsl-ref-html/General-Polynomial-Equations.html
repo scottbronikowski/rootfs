@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>General Polynomial Equations - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Polynomials.html" title="Polynomials">
+<link rel="prev" href="Cubic-Equations.html" title="Cubic Equations">
+<link rel="next" href="Roots-of-Polynomials-Examples.html" title="Roots of Polynomials Examples">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="General-Polynomial-Equations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Roots-of-Polynomials-Examples.html">Roots of Polynomials Examples</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Cubic-Equations.html">Cubic Equations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Polynomials.html">Polynomials</a>
+<hr>
+</div>
+
+<h3 class="section">6.5 General Polynomial Equations</h3>
+
+<p><a name="index-general-polynomial-equations_002c-solving-244"></a>
+The roots of polynomial equations cannot be found analytically beyond
+the special cases of the quadratic, cubic and quartic equation.  The
+algorithm described in this section uses an iterative method to find the
+approximate locations of roots of higher order polynomials.
+
+<div class="defun">
+&mdash; Function: gsl_poly_complex_workspace * <b>gsl_poly_complex_workspace_alloc</b> (<var>size_t n</var>)<var><a name="index-gsl_005fpoly_005fcomplex_005fworkspace_005falloc-245"></a></var><br>
+<blockquote><p><a name="index-gsl_005fpoly_005fcomplex_005fworkspace-246"></a>This function allocates space for a <code>gsl_poly_complex_workspace</code>
+struct and a workspace suitable for solving a polynomial with <var>n</var>
+coefficients using the routine <code>gsl_poly_complex_solve</code>.
+
+        <p>The function returns a pointer to the newly allocated
+<code>gsl_poly_complex_workspace</code> if no errors were detected, and a null
+pointer in the case of error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_poly_complex_workspace_free</b> (<var>gsl_poly_complex_workspace * w</var>)<var><a name="index-gsl_005fpoly_005fcomplex_005fworkspace_005ffree-247"></a></var><br>
+<blockquote><p>This function frees all the memory associated with the workspace
+<var>w</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_poly_complex_solve</b> (<var>const double * a, size_t n, gsl_poly_complex_workspace * w, gsl_complex_packed_ptr z</var>)<var><a name="index-gsl_005fpoly_005fcomplex_005fsolve-248"></a></var><br>
+<blockquote><p>This function computes the roots of the general polynomial
+<!-- {$P(x) = a_0 + a_1 x + a_2 x^2 + ... + a_{n-1} x^{n-1}$} -->
+P(x) = a_0 + a_1 x + a_2 x^2 + ... + a_{n-1} x^{n-1} using
+balanced-QR reduction of the companion matrix.  The parameter <var>n</var>
+specifies the length of the coefficient array.  The coefficient of the
+highest order term must be non-zero.  The function requires a workspace
+<var>w</var> of the appropriate size.  The n-1 roots are returned in
+the packed complex array <var>z</var> of length 2(n-1), alternating
+real and imaginary parts.
+
+        <p>The function returns <code>GSL_SUCCESS</code> if all the roots are found. If
+the QR reduction does not converge, the error handler is invoked with
+an error code of <code>GSL_EFAILED</code>.  Note that due to finite precision,
+roots of higher multiplicity are returned as a cluster of simple roots
+with reduced accuracy.  The solution of polynomials with higher-order
+roots requires specialized algorithms that take the multiplicity
+structure into account (see e.g. Z. Zeng, Algorithm 835, ACM
+Transactions on Mathematical Software, Volume 30, Issue 2 (2004), pp
+218&ndash;236). 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

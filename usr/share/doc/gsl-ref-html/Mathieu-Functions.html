@@ -1,0 +1,186 @@
+<html lang="en">
+<head>
+<title>Mathieu Functions - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Special-Functions.html" title="Special Functions">
+<link rel="prev" href="Logarithm-and-Related-Functions.html" title="Logarithm and Related Functions">
+<link rel="next" href="Power-Function.html" title="Power Function">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mathieu-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Power-Function.html">Power Function</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Logarithm-and-Related-Functions.html">Logarithm and Related Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Special-Functions.html">Special Functions</a>
+<hr>
+</div>
+
+<h3 class="section">7.26 Mathieu Functions</h3>
+
+<p><a name="index-Mathieu-functions-758"></a>
+The routines described in this section compute the angular and radial
+Mathieu functions, and their characteristic values.  Mathieu
+functions are the solutions of the following two differential
+equations:
+The angular Mathieu functions ce_r(x,q), se_r(x,q) are
+the even and odd periodic solutions of the first equation, which is known as Mathieu's equation. These exist
+only for the discrete sequence of  characteristic values a=a_r(q)
+(even-periodic) and a=b_r(q) (odd-periodic).
+
+   <p>The radial Mathieu functions <!-- {$Mc^{(j)}_{r}(z,q)$} -->
+Mc^{(j)}_{r}(z,q), <!-- {$Ms^{(j)}_{r}(z,q)$} -->
+Ms^{(j)}_{r}(z,q) are the solutions of the second equation,
+which is referred to as Mathieu's modified equation.  The
+radial Mathieu functions of the first, second, third and fourth kind
+are denoted by the parameter j, which takes the value 1, 2, 3
+or 4.
+
+<!-- The angular Mathieu functions can be divided into four types as -->
+<!-- @tex -->
+<!-- \beforedisplay -->
+<!-- $$ -->
+<!-- \eqalign{ -->
+<!-- x & = \sum_{m=0}^\infty A_{2m+p} \cos(2m+p)\phi, \quad p = 0, 1, \cr -->
+<!-- x & = \sum_{m=0}^\infty B_{2m+p} \sin(2m+p)\phi, \quad p = 0, 1. -->
+<!-- } -->
+<!-- $$ -->
+<!-- \afterdisplay -->
+<!-- @end tex -->
+<!-- @ifinfo -->
+<!-- @example -->
+<!-- x = \sum_(m=0)^\infty A_(2m+p) \cos(2m+p)\phi,   p = 0, 1, -->
+<!-- x = \sum_(m=0)^\infty B_(2m+p) \sin(2m+p)\phi,   p = 0, 1. -->
+<!-- @end example -->
+<!-- @end ifinfo -->
+<!-- @noindent -->
+<!-- The nomenclature used for the angular Mathieu functions is @math{ce_n} -->
+<!-- for the first solution and @math{se_n} for the second. -->
+<!-- Similar solutions exist for the radial Mathieu functions by replacing -->
+<!-- the trigonometric functions with their corresponding hyperbolic -->
+<!-- functions as shown below. -->
+<!-- @tex -->
+<!-- \beforedisplay -->
+<!-- $$ -->
+<!-- \eqalign{ -->
+<!-- x & = \sum_{m=0}^\infty A_{2m+p} \cosh(2m+p)u, \quad p = 0, 1, \cr -->
+<!-- x & = \sum_{m=0}^\infty B_{2m+p} \sinh(2m+p)u, \quad p = 0, 1. -->
+<!-- } -->
+<!-- $$ -->
+<!-- \afterdisplay -->
+<!-- @end tex -->
+<!-- @ifinfo -->
+<!-- @example -->
+<!-- x = \sum_(m=0)^\infty A_(2m+p) \cosh(2m+p)u,   p = 0, 1, -->
+<!-- x = \sum_(m=0)^\infty B_(2m+p) \sinh(2m+p)u,   p = 0, 1. -->
+<!-- @end example -->
+<!-- @end ifinfo -->
+<!-- @noindent -->
+<!-- The nomenclature used for the radial Mathieu functions is @math{Mc_n} -->
+<!-- for the first solution and @math{Ms_n} for the second.  The hyperbolic -->
+<!-- series do not always converge at an acceptable rate.  Therefore most -->
+<!-- texts on the subject suggest using the following equivalent equations -->
+<!-- that are expanded in series of Bessel and Hankel functions. -->
+<!-- @tex -->
+<!-- \beforedisplay -->
+<!-- $$ -->
+<!-- \eqalign{ -->
+<!-- Mc_{2n}^{(j)}(x,q) & = \sum_{m=0}^\infty (-1)^{r+k} -->
+<!-- A_{2m}^{2n}(q)\left[J_m(u_1)Z_m^{(j)}(u_2) + -->
+<!-- J_m(u_1)Z_m^{(j)}(u_2)\right]/A_2^{2n} \cr -->
+<!-- Mc_{2n+1}^{(j)}(x,q) & = \sum_{m=0}^\infty (-1)^{r+k} -->
+<!-- A_{2m+1}^{2n+1}(q)\left[J_m(u_1)Z_{m+1}^{(j)}(u_2) + -->
+<!-- J_{m+1}(u_1)Z_m^{(j)}(u_2)\right]/A_1^{2n+1} \cr -->
+<!-- Ms_{2n}^{(j)}(x,q) & = \sum_{m=1}^\infty (-1)^{r+k} -->
+<!-- B_{2m}^{2n}(q)\left[J_{m-1}(u_1)Z_{m+1}^{(j)}(u_2) + -->
+<!-- J_{m+1}(u_1)Z_{m-1}^{(j)}(u_2)\right]/B_2^{2n} \cr -->
+<!-- Ms_{2n+1}^{(j)}(x,q) & = \sum_{m=0}^\infty (-1)^{r+k} -->
+<!-- B_{2m+1}^{2n+1}(q)\left[J_m(u_1)Z_{m+1}^{(j)}(u_2) + -->
+<!-- J_{m+1}(u_1)Z_m^{(j)}(u_2)\right]/B_1^{2n+1} -->
+<!-- } -->
+<!-- $$ -->
+<!-- \afterdisplay -->
+<!-- @end tex -->
+<!-- @ifinfo -->
+<!-- @example -->
+<!-- Mc_(2n)^(j)(x,q) = \sum_(m=0)^\infty (-1)^(r+k) A_(2m)^(2n)(q) -->
+<!-- [J_m(u_1)Z_m^(j)(u_2) + J_m(u_1)Z_m^(j)(u_2)]/A_2^(2n) -->
+<!-- Mc_(2n+1)^(j)(x,q) = \sum_(m=0)^\infty (-1)^(r+k) A_(2m+1)^(2n+1)(q) -->
+<!-- [J_m(u_1)Z_(m+1)^(j)(u_2) + J_(m+1)(u_1)Z_m^(j)(u_2)]/A_1^(2n+1) -->
+<!-- Ms_(2n)^(j)(x,q) = \sum_(m=1)^\infty (-1)^(r+k) B_(2m)^(2n)(q) -->
+<!-- [J_(m-1)(u_1)Z_(m+1)^(j)(u_2) + J_(m+1)(u_1)Z_(m-1)^(j)(u_2)]/B_2^(2n) -->
+<!-- Ms_(2n+1)^(j)(x,q) = \sum_(m=0)^\infty (-1)^(r+k) B_(2m+1)^(2n+1)(q) -->
+<!-- [J_m(u_1)Z_(m+1)^(j)(u_2) + J_(m+1)(u_1)Z_m^(j)(u_2)]/B_1^(2n+1) -->
+<!-- @end example -->
+<!-- @end ifinfo -->
+<!-- @noindent -->
+<!-- where @c{$u_1 = \sqrt{q} \exp(-x)$} -->
+<!-- @math{u_1 = \sqrt@{q@} \exp(-x)} and @c{$u_2 = \sqrt@{q@} \exp(x)$} -->
+<!-- @math{u_2 = \sqrt@{q@} \exp(x)} and -->
+<!-- @tex -->
+<!-- \beforedisplay -->
+<!-- $$ -->
+<!-- \eqalign{ -->
+<!-- Z_m^{(1)}(u) & = J_m(u) \cr -->
+<!-- Z_m^{(2)}(u) & = Y_m(u) \cr -->
+<!-- Z_m^{(3)}(u) & = H_m^{(1)}(u) \cr -->
+<!-- Z_m^{(4)}(u) & = H_m^{(2)}(u) -->
+<!-- } -->
+<!-- $$ -->
+<!-- \afterdisplay -->
+<!-- @end tex -->
+<!-- @ifinfo -->
+<!-- @example -->
+<!-- Z_m^(1)(u) = J_m(u) -->
+<!-- Z_m^(2)(u) = Y_m(u) -->
+<!-- Z_m^(3)(u) = H_m^(1)(u) -->
+<!-- Z_m^(4)(u) = H_m^(2)(u) -->
+<!-- @end example -->
+<!-- @end ifinfo -->
+<!-- @noindent -->
+<!-- where @math{J_m(u)}, @math{Y_m(u)}, @math{H_m^{(1)}(u)}, and -->
+<!-- @math{H_m^{(2)}(u)} are the regular and irregular Bessel functions and -->
+<!-- the Hankel functions, respectively. -->
+   <p>For more information on the Mathieu functions, see Abramowitz and
+Stegun, Chapter 20.  These functions are defined in the header file
+<samp><span class="file">gsl_sf_mathieu.h</span></samp>.
+
+<ul class="menu">
+<li><a accesskey="1" href="Mathieu-Function-Workspace.html">Mathieu Function Workspace</a>
+<li><a accesskey="2" href="Mathieu-Function-Characteristic-Values.html">Mathieu Function Characteristic Values</a>
+<li><a accesskey="3" href="Angular-Mathieu-Functions.html">Angular Mathieu Functions</a>
+<li><a accesskey="4" href="Radial-Mathieu-Functions.html">Radial Mathieu Functions</a>
+</ul>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

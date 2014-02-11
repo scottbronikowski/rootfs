@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Interpolation Types - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Interpolation.html" title="Interpolation">
+<link rel="prev" href="Interpolation-Functions.html" title="Interpolation Functions">
+<link rel="next" href="Index-Look_002dup-and-Acceleration.html" title="Index Look-up and Acceleration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Interpolation-Types"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Index-Look_002dup-and-Acceleration.html">Index Look-up and Acceleration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Interpolation-Functions.html">Interpolation Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Interpolation.html">Interpolation</a>
+<hr>
+</div>
+
+<h3 class="section">27.3 Interpolation Types</h3>
+
+<p><a name="index-gsl_005finterp_005ftype-2242"></a>The interpolation library provides six interpolation types:
+
+<div class="defun">
+&mdash; Interpolation Type: <b>gsl_interp_linear</b><var><a name="index-gsl_005finterp_005flinear-2243"></a></var><br>
+<blockquote><p><a name="index-linear-interpolation-2244"></a>Linear interpolation.  This interpolation method does not require any
+additional memory. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Interpolation Type: <b>gsl_interp_polynomial</b><var><a name="index-gsl_005finterp_005fpolynomial-2245"></a></var><br>
+<blockquote><p><a name="index-polynomial-interpolation-2246"></a>Polynomial interpolation.  This method should only be used for
+interpolating small numbers of points because polynomial interpolation
+introduces large oscillations, even for well-behaved datasets.  The
+number of terms in the interpolating polynomial is equal to the number
+of points. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Interpolation Type: <b>gsl_interp_cspline</b><var><a name="index-gsl_005finterp_005fcspline-2247"></a></var><br>
+<blockquote><p><a name="index-cubic-splines-2248"></a>Cubic spline with natural boundary conditions.  The resulting curve is
+piecewise cubic on each interval, with matching first and second
+derivatives at the supplied data-points.  The second derivative is
+chosen to be zero at the first point and last point. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Interpolation Type: <b>gsl_interp_cspline_periodic</b><var><a name="index-gsl_005finterp_005fcspline_005fperiodic-2249"></a></var><br>
+<blockquote><p>Cubic spline with periodic boundary conditions.  The resulting curve
+is piecewise cubic on each interval, with matching first and second
+derivatives at the supplied data-points.  The derivatives at the first
+and last points are also matched.  Note that the last point in the
+data must have the same y-value as the first point, otherwise the
+resulting periodic interpolation will have a discontinuity at the
+boundary.
+
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Interpolation Type: <b>gsl_interp_akima</b><var><a name="index-gsl_005finterp_005fakima-2250"></a></var><br>
+<blockquote><p><a name="index-Akima-splines-2251"></a>Non-rounded Akima spline with natural boundary conditions.  This method
+uses the non-rounded corner algorithm of Wodicka. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Interpolation Type: <b>gsl_interp_akima_periodic</b><var><a name="index-gsl_005finterp_005fakima_005fperiodic-2252"></a></var><br>
+<blockquote><p>Non-rounded Akima spline with periodic boundary conditions.  This method
+uses the non-rounded corner algorithm of Wodicka. 
+</p></blockquote></div>
+
+   <p>The following related functions are available:
+
+<div class="defun">
+&mdash; Function: const char * <b>gsl_interp_name</b> (<var>const gsl_interp * interp</var>)<var><a name="index-gsl_005finterp_005fname-2253"></a></var><br>
+<blockquote><p>This function returns the name of the interpolation type used by <var>interp</var>. 
+For example,
+
+     <pre class="example">          printf ("interp uses '%s' interpolation.\n",
+                  gsl_interp_name (interp));
+</pre>
+        <p class="noindent">would print something like,
+
+     <pre class="example">          interp uses 'cspline' interpolation.
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: unsigned int <b>gsl_interp_min_size</b> (<var>const gsl_interp * interp</var>)<var><a name="index-gsl_005finterp_005fmin_005fsize-2254"></a></var><br>
+&mdash; Function: unsigned int <b>gsl_interp_type_min_size</b> (<var>const gsl_interp_type * T</var>)<var><a name="index-gsl_005finterp_005ftype_005fmin_005fsize-2255"></a></var><br>
+<blockquote><p>These functions return the minimum number of points required by the
+interpolation object <var>interp</var> or interpolation type <var>T</var>.  For
+example, Akima spline interpolation requires a minimum of 5 points. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

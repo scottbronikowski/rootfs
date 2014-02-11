@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Example of accelerating a series - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Series-Acceleration.html" title="Series Acceleration">
+<link rel="prev" href="Acceleration-functions-without-error-estimation.html" title="Acceleration functions without error estimation">
+<link rel="next" href="Series-Acceleration-References.html" title="Series Acceleration References">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Example-of-accelerating-a-series"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Series-Acceleration-References.html">Series Acceleration References</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Acceleration-functions-without-error-estimation.html">Acceleration functions without error estimation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Series-Acceleration.html">Series Acceleration</a>
+<hr>
+</div>
+
+<h3 class="section">30.3 Examples</h3>
+
+<p>The following code calculates an estimate of \zeta(2) = \pi^2 / 6
+using the series,
+After <var>N</var> terms the error in the sum is O(1/N), making direct
+summation of the series converge slowly.
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;gsl/gsl_math.h>
+     #include &lt;gsl/gsl_sum.h>
+     
+     #define N 20
+     
+     int
+     main (void)
+     {
+       double t[N];
+       double sum_accel, err;
+       double sum = 0;
+       int n;
+       
+       gsl_sum_levin_u_workspace * w 
+         = gsl_sum_levin_u_alloc (N);
+     
+       const double zeta_2 = M_PI * M_PI / 6.0;
+       
+       /* terms for zeta(2) = \sum_{n=1}^{\infty} 1/n^2 */
+     
+       for (n = 0; n &lt; N; n++)
+         {
+           double np1 = n + 1.0;
+           t[n] = 1.0 / (np1 * np1);
+           sum += t[n];
+         }
+       
+       gsl_sum_levin_u_accel (t, N, w, &amp;sum_accel, &amp;err);
+     
+       printf ("term-by-term sum = % .16f using %d terms\n", 
+               sum, N);
+     
+       printf ("term-by-term sum = % .16f using %d terms\n", 
+               w->sum_plain, w->terms_used);
+     
+       printf ("exact value      = % .16f\n", zeta_2);
+       printf ("accelerated sum  = % .16f using %d terms\n", 
+               sum_accel, w->terms_used);
+     
+       printf ("estimated error  = % .16f\n", err);
+       printf ("actual error     = % .16f\n", 
+               sum_accel - zeta_2);
+     
+       gsl_sum_levin_u_free (w);
+       return 0;
+     }
+</pre></pre>
+   <p class="noindent">The output below shows that the Levin u-transform is able to obtain an
+estimate of the sum to 1 part in
+<!-- {$10^{10}$} -->
+10^10 using the first eleven terms of the series.  The
+error estimate returned by the function is also accurate, giving
+the correct number of significant digits.
+
+<pre class="example">     $ ./a.out
+<pre class="verbatim">     term-by-term sum =  1.5961632439130233 using 20 terms
+     term-by-term sum =  1.5759958390005426 using 13 terms
+     exact value      =  1.6449340668482264
+     accelerated sum  =  1.6449340668166479 using 13 terms
+     estimated error  =  0.0000000000508580
+     actual error     = -0.0000000000315785
+</pre></pre>
+   <p class="noindent">Note that a direct summation of this series would require
+<!-- {$10^{10}$} -->
+10^10 terms to achieve the same precision as the accelerated
+sum does in 13 terms.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

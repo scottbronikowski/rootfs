@@ -1,0 +1,205 @@
+<html lang="en">
+<head>
+<title>MISER - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Monte-Carlo-Integration.html" title="Monte Carlo Integration">
+<link rel="prev" href="PLAIN-Monte-Carlo.html" title="PLAIN Monte Carlo">
+<link rel="next" href="VEGAS.html" title="VEGAS">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="MISER"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="VEGAS.html">VEGAS</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="PLAIN-Monte-Carlo.html">PLAIN Monte Carlo</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Monte-Carlo-Integration.html">Monte Carlo Integration</a>
+<hr>
+</div>
+
+<h3 class="section">24.3 MISER</h3>
+
+<p><a name="index-MISER-monte-carlo-integration-2108"></a><a name="index-recursive-stratified-sampling_002c-MISER-2109"></a>
+The <span class="sc">miser</span> algorithm of Press and Farrar is based on recursive
+stratified sampling.  This technique aims to reduce the overall
+integration error by concentrating integration points in the regions of
+highest variance.
+
+   <p>The idea of stratified sampling begins with the observation that for two
+disjoint regions a and b with Monte Carlo estimates of the
+integral E_a(f) and E_b(f) and variances
+\sigma_a^2(f) and \sigma_b^2(f), the variance
+\Var(f) of the combined estimate
+<!-- {$E(f) = {1\over 2} (E_a(f) + E_b(f))$} -->
+E(f) = (1/2) (E_a(f) + E_b(f))
+is given by,
+It can be shown that this variance is minimized by distributing the
+points such that,
+Hence the smallest error estimate is obtained by allocating sample
+points in proportion to the standard deviation of the function in each
+sub-region.
+
+   <p>The <span class="sc">miser</span> algorithm proceeds by bisecting the integration region
+along one coordinate axis to give two sub-regions at each step.  The
+direction is chosen by examining all d possible bisections and
+selecting the one which will minimize the combined variance of the two
+sub-regions.  The variance in the sub-regions is estimated by sampling
+with a fraction of the total number of points available to the current
+step.  The same procedure is then repeated recursively for each of the
+two half-spaces from the best bisection. The remaining sample points are
+allocated to the sub-regions using the formula for N_a and
+N_b.  This recursive allocation of integration points continues
+down to a user-specified depth where each sub-region is integrated using
+a plain Monte Carlo estimate.  These individual values and their error
+estimates are then combined upwards to give an overall result and an
+estimate of its error.
+
+   <p>The functions described in this section are declared in the header file
+<samp><span class="file">gsl_monte_miser.h</span></samp>.
+
+<div class="defun">
+&mdash; Function: gsl_monte_miser_state * <b>gsl_monte_miser_alloc</b> (<var>size_t dim</var>)<var><a name="index-gsl_005fmonte_005fmiser_005falloc-2110"></a></var><br>
+<blockquote><p><a name="index-gsl_005fmonte_005fmiser_005fstate-2111"></a>This function allocates and initializes a workspace for Monte Carlo
+integration in <var>dim</var> dimensions.  The workspace is used to maintain
+the state of the integration. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_monte_miser_init</b> (<var>gsl_monte_miser_state* s</var>)<var><a name="index-gsl_005fmonte_005fmiser_005finit-2112"></a></var><br>
+<blockquote><p>This function initializes a previously allocated integration state. 
+This allows an existing workspace to be reused for different
+integrations. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_monte_miser_integrate</b> (<var>gsl_monte_function * f, const double xl</var>[]<var>, const double xu</var>[]<var>, size_t dim, size_t calls, gsl_rng * r, gsl_monte_miser_state * s, double * result, double * abserr</var>)<var><a name="index-gsl_005fmonte_005fmiser_005fintegrate-2113"></a></var><br>
+<blockquote><p>This routines uses the <span class="sc">miser</span> Monte Carlo algorithm to integrate the
+function <var>f</var> over the <var>dim</var>-dimensional hypercubic region
+defined by the lower and upper limits in the arrays <var>xl</var> and
+<var>xu</var>, each of size <var>dim</var>.  The integration uses a fixed number
+of function calls <var>calls</var>, and obtains random sampling points using
+the random number generator <var>r</var>. A previously allocated workspace
+<var>s</var> must be supplied.  The result of the integration is returned in
+<var>result</var>, with an estimated absolute error <var>abserr</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_monte_miser_free</b> (<var>gsl_monte_miser_state * s</var>)<var><a name="index-gsl_005fmonte_005fmiser_005ffree-2114"></a></var><br>
+<blockquote><p>This function frees the memory associated with the integrator state
+<var>s</var>. 
+</p></blockquote></div>
+
+   <p>The <span class="sc">miser</span> algorithm has several configurable parameters which can
+be changed using the following two functions.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_monte_miser_params_get</b> (<var>const gsl_monte_miser_state * s, gsl_monte_miser_params * params</var>)<var><a name="index-gsl_005fmonte_005fmiser_005fparams_005fget-2115"></a></var><br>
+<blockquote><p>This function copies the parameters of the integrator state into the
+user-supplied <var>params</var> structure. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_monte_miser_params_set</b> (<var>gsl_monte_miser_state * s, const gsl_monte_miser_params * params</var>)<var><a name="index-gsl_005fmonte_005fmiser_005fparams_005fset-2116"></a></var><br>
+<blockquote><p>This function sets the integrator parameters based on values provided
+in the <var>params</var> structure. 
+</p></blockquote></div>
+
+   <p>Typically the values of the parameters are first read using
+<code>gsl_monte_miser_params_get</code>, the necessary changes are made to
+the fields of the <var>params</var> structure, and the values are copied
+back into the integrator state using
+<code>gsl_monte_miser_params_set</code>.  The functions use the
+<code>gsl_monte_miser_params</code> structure which contains the following
+fields:
+
+<div class="defun">
+&mdash; Variable: double <b>estimate_frac</b><var><a name="index-estimate_005ffrac-2117"></a></var><br>
+<blockquote><p>This parameter specifies the fraction of the currently available number of
+function calls which are allocated to estimating the variance at each
+recursive step. The default value is 0.1. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: size_t <b>min_calls</b><var><a name="index-min_005fcalls-2118"></a></var><br>
+<blockquote><p>This parameter specifies the minimum number of function calls required
+for each estimate of the variance. If the number of function calls
+allocated to the estimate using <var>estimate_frac</var> falls below
+<var>min_calls</var> then <var>min_calls</var> are used instead.  This ensures
+that each estimate maintains a reasonable level of accuracy.  The
+default value of <var>min_calls</var> is <code>16 * dim</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: size_t <b>min_calls_per_bisection</b><var><a name="index-min_005fcalls_005fper_005fbisection-2119"></a></var><br>
+<blockquote><p>This parameter specifies the minimum number of function calls required
+to proceed with a bisection step.  When a recursive step has fewer calls
+available than <var>min_calls_per_bisection</var> it performs a plain Monte
+Carlo estimate of the current sub-region and terminates its branch of
+the recursion.  The default value of this parameter is <code>32 *
+min_calls</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: double <b>alpha</b><var><a name="index-alpha-2120"></a></var><br>
+<blockquote><p>This parameter controls how the estimated variances for the two
+sub-regions of a bisection are combined when allocating points.  With
+recursive sampling the overall variance should scale better than
+1/N, since the values from the sub-regions will be obtained using
+a procedure which explicitly minimizes their variance.  To accommodate
+this behavior the <span class="sc">miser</span> algorithm allows the total variance to
+depend on a scaling parameter \alpha,
+     The authors of the original paper describing <span class="sc">miser</span> recommend the
+value \alpha = 2 as a good choice, obtained from numerical
+experiments, and this is used as the default value in this
+implementation. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: double <b>dither</b><var><a name="index-dither-2121"></a></var><br>
+<blockquote><p>This parameter introduces a random fractional variation of size
+<var>dither</var> into each bisection, which can be used to break the
+symmetry of integrands which are concentrated near the exact center of
+the hypercubic integration region.  The default value of dither is zero,
+so no variation is introduced. If needed, a typical value of
+<var>dither</var> is 0.1. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The previous
+method of accessing these fields directly through the
+<code>gsl_monte_miser_state</code> struct is now deprecated.</p>
+
+   <hr></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

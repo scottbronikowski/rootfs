@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Radial Functions for Hyperbolic Space - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Legendre-Functions-and-Spherical-Harmonics.html" title="Legendre Functions and Spherical Harmonics">
+<link rel="prev" href="Conical-Functions.html" title="Conical Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Radial-Functions-for-Hyperbolic-Space"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Conical-Functions.html">Conical Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Legendre-Functions-and-Spherical-Harmonics.html">Legendre Functions and Spherical Harmonics</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.24.4 Radial Functions for Hyperbolic Space</h4>
+
+<p>The following spherical functions are specializations of Legendre
+functions which give the regular eigenfunctions of the Laplacian on a
+3-dimensional hyperbolic space H3d.  Of particular interest is
+the flat limit, \lambda \to \infty, \eta \to 0,
+\lambda\eta fixed.
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_legendre_H3d_0</b> (<var>double lambda, double eta</var>)<var><a name="index-gsl_005fsf_005flegendre_005fH3d_005f0-741"></a></var><br>
+&mdash; Function: int <b>gsl_sf_legendre_H3d_0_e</b> (<var>double lambda, double eta, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005flegendre_005fH3d_005f0_005fe-742"></a></var><br>
+<blockquote><p>These routines compute the zeroth radial eigenfunction of the Laplacian on the
+3-dimensional hyperbolic space,
+<!-- {$$L^{H3d}_0(\lambda,\eta) := {\sin(\lambda\eta) \over \lambda\sinh(\eta)}$$} -->
+L^{H3d}_0(\lambda,\eta) := \sin(\lambda\eta)/(\lambda\sinh(\eta))
+for <!-- {$\eta \ge 0$} -->
+\eta &gt;= 0. 
+In the flat limit this takes the form
+<!-- {$L^{H3d}_0(\lambda,\eta) = j_0(\lambda\eta)$} -->
+L^{H3d}_0(\lambda,\eta) = j_0(\lambda\eta). 
+<!-- Exceptional Return Values: GSL_EDOM -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_legendre_H3d_1</b> (<var>double lambda, double eta</var>)<var><a name="index-gsl_005fsf_005flegendre_005fH3d_005f1-743"></a></var><br>
+&mdash; Function: int <b>gsl_sf_legendre_H3d_1_e</b> (<var>double lambda, double eta, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005flegendre_005fH3d_005f1_005fe-744"></a></var><br>
+<blockquote><p>These routines compute the first radial eigenfunction of the Laplacian on
+the 3-dimensional hyperbolic space,
+<!-- {$$L^{H3d}_1(\lambda,\eta) := {1\over\sqrt{\lambda^2 + 1}} {\left(\sin(\lambda \eta)\over \lambda \sinh(\eta)\right)} \left(\coth(\eta) - \lambda \cot(\lambda\eta)\right)$$} -->
+L^{H3d}_1(\lambda,\eta) := 1/\sqrt{\lambda^2 + 1} \sin(\lambda \eta)/(\lambda \sinh(\eta)) (\coth(\eta) - \lambda \cot(\lambda\eta))
+for <!-- {$\eta \ge 0$} -->
+\eta &gt;= 0. 
+In the flat limit this takes the form
+<!-- {$L^{H3d}_1(\lambda,\eta) = j_1(\lambda\eta)$} -->
+L^{H3d}_1(\lambda,\eta) = j_1(\lambda\eta). 
+<!-- Exceptional Return Values: GSL_EDOM -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_sf_legendre_H3d</b> (<var>int l, double lambda, double eta</var>)<var><a name="index-gsl_005fsf_005flegendre_005fH3d-745"></a></var><br>
+&mdash; Function: int <b>gsl_sf_legendre_H3d_e</b> (<var>int l, double lambda, double eta, gsl_sf_result * result</var>)<var><a name="index-gsl_005fsf_005flegendre_005fH3d_005fe-746"></a></var><br>
+<blockquote><p>These routines compute the <var>l</var>-th radial eigenfunction of the
+Laplacian on the 3-dimensional hyperbolic space <!-- {$\eta \ge 0$} -->
+\eta &gt;= 0, <!-- {$l \ge 0$} -->
+l &gt;= 0. In the flat limit this takes the form
+<!-- {$L^{H3d}_l(\lambda,\eta) = j_l(\lambda\eta)$} -->
+L^{H3d}_l(\lambda,\eta) = j_l(\lambda\eta). 
+<!-- Exceptional Return Values: GSL_EDOM -->
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_sf_legendre_H3d_array</b> (<var>int lmax, double lambda, double eta, double result_array</var>[])<var><a name="index-gsl_005fsf_005flegendre_005fH3d_005farray-747"></a></var><br>
+<blockquote><p>This function computes an array of radial eigenfunctions
+<!-- {$L^{H3d}_l( \lambda, \eta)$} -->
+L^{H3d}_l(\lambda, \eta)
+for <!-- {$0 \le l \le lmax$} -->
+0 &lt;= l &lt;= lmax. 
+<!-- Exceptional Return Values: -->
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

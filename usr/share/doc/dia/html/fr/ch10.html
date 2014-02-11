@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapitre 10. Gérer les calques</title><link rel="stylesheet" type="text/css" href="css/dia.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /><link rel="home" href="index.html" title="Dia" /><link rel="up" href="index.html" title="Dia" /><link rel="prev" href="ch09.html" title="Chapitre 9. Personnalisation" /><link rel="next" href="ch10s02.html" title="10.2. Bases de la gestion des calques" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapitre 10. Gérer les calques</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09.html">Précédent</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch10s02.html">Suivant</a></td></tr></table><hr /></div><div class="chapter" title="Chapitre 10. Gérer les calques" id="layers-chapter"><div class="titlepage"><div><div><h2 class="title">Chapitre 10. Gérer les calques</h2></div></div></div><div class="toc"><p><strong>Table des matières</strong></p><dl><dt><span class="sect1"><a href="ch10.html#layers-introduction">10.1. Introduction aux calques</a></span></dt><dt><span class="sect1"><a href="ch10s02.html">10.2. Bases de la gestion des calques</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch10s02.html#create-layers">10.2.1. Créer un nouveau calque</a></span></dt><dt><span class="sect2"><a href="ch10s02.html#selecting-layers">10.2.2. Sélectionner les calques</a></span></dt><dt><span class="sect2"><a href="ch10s02.html#ordering-layers">10.2.3. Ordonner les calques</a></span></dt><dt><span class="sect2"><a href="ch10s02.html#deleting-layers">10.2.4. Supprimer des calques</a></span></dt><dt><span class="sect2"><a href="ch10s02.html#renaming-layers">10.2.5. Renommer les calques</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch10s03.html">10.3. Voir les calques</a></span></dt></dl></div><div class="sect1" title="10.1. Introduction aux calques"><div class="titlepage"><div><div><h2 class="title" style="clear: both" id="layers-introduction">10.1. Introduction aux calques</h2></div></div></div><p>
+      Dans <span class="application">Dia</span>, les diagrammes consistent en l'objet
+      canevas, en objets calques, et en objets éléments de diagramme. L'objet
+      calque peut être comparé à une feuille se situant au-dessus du canevas.
+      Chaque feuille peut posséder des éléments de diagramme y-ajoutés pour
+      fabriquer un diagramme. Chaque diagramme consiste en au moins un calque
+      et chaque diagramme peut consister en autant de calques que requiert
+      l'auteur du diagramme.
+    </p><p>
+      Comme usage générique, les calques visent à être un raccourci pour
+      grouper des objets en relation à l'intérieur d'un diagramme. Ils
+      permettent d'isoler les différentes parties d'un diagramme, dans une voie
+      qui vous permet de décider de montrer seulement certaines de ses parties,
+      et pas d'autres qui resteront cachées même lors de l'exportation ou de
+      l'impression du diagramme.
+    </p><div class="tip" title="Astuce"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Astuce]" src="images/tip.png" /></td><th align="left"></th></tr><tr><td align="left" valign="top"><p>
+        Utilisez l'option <span class="command"><strong>--show-layers</strong></span> de la ligne de
+        commande pour contrôler quels calques seront visibles lors d'une
+        exportation par lot.
+    </p></td></tr></table></div><p>
+      Dans un calque, toute opération que vous voudriez faire sur des objets
+      sont possible à travers le Menu popup standard, vous pouvez influer sur
+      les objets exactement de la même manière que d'habitude.
+    </p><div class="tip" title="Astuce"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Astuce]" src="images/tip.png" /></td><th align="left"></th></tr><tr><td align="left" valign="top"><p>
+        Seul les objets présents dans le calque courant peuvent être
+        sélectionnnés.  Si un objet ne veut décidément pas être sélectionné,
+        vous devriez vérifier si il est affecté au calque courant ou non.
+      </p></td></tr></table></div><p>
+      Chaque nouveau diagramme vient avec un calque par défaut étiqueté
+      « Arrière-plan ».  Vous pouvez bien-sûr changer son nom et ses
+      réglages à vos besoins comme vous pouvez le faire pour n'importe quel
+      autre calque.
+    </p><p>
+      Vous pouvez utiliser les calques pour créer un diaporama par
+      recouvrement, en dessinant chaque diapo augmentée dans un calque et
+      manipulant la visibilité des calques. Si vous voulez automatiser un
+      post-processus comme un diaporama, vous pouvez utiliser l'option
+      <span class="command"><strong>--show-layers</strong></span> de la ligne de commande.  Par exemple :
+      <span class="command"><strong>dia --show-layers="Arrière-plan",Dia3 --filter=eps-builtin --export=foo.eps foo.dia</strong></span>
+      Exportera les calques « Arrière-plan » et « Dia3 »,
+      càd. que la sortie EPS aura seulement ces deux calques et pas d'autres.
+      Vous voudrez alors répéter l'exportation pour chaque combinaison de
+      calques dont vous avez besoin pour produire vos diapos. En utilisant
+      cette option et un script shell ou un Makefile, vous pouvez correctement
+      automatiser le processus d'exportation.
+    </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09.html">Précédent</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch10s02.html">Suivant</a></td></tr><tr><td width="40%" align="left" valign="top">Chapitre 9. Personnalisation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Sommaire</a></td><td width="40%" align="right" valign="top"> 10.2. Bases de la gestion des calques</td></tr></table></div></body></html>

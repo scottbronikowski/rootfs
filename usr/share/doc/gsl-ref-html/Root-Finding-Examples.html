@@ -1,0 +1,283 @@
+<html lang="en">
+<head>
+<title>Root Finding Examples - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="One-dimensional-Root_002dFinding.html" title="One dimensional Root-Finding">
+<link rel="prev" href="Root-Finding-Algorithms-using-Derivatives.html" title="Root Finding Algorithms using Derivatives">
+<link rel="next" href="Root-Finding-References-and-Further-Reading.html" title="Root Finding References and Further Reading">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Root-Finding-Examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Root-Finding-References-and-Further-Reading.html">Root Finding References and Further Reading</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Root-Finding-Algorithms-using-Derivatives.html">Root Finding Algorithms using Derivatives</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="One-dimensional-Root_002dFinding.html">One dimensional Root-Finding</a>
+<hr>
+</div>
+
+<h3 class="section">33.10 Examples</h3>
+
+<p>For any root finding algorithm we need to prepare the function to be
+solved.  For this example we will use the general quadratic equation
+described earlier.  We first need a header file (<samp><span class="file">demo_fn.h</span></samp>) to
+define the function parameters,
+
+<pre class="example"><pre class="verbatim">     struct quadratic_params
+       {
+         double a, b, c;
+       };
+     
+     double quadratic (double x, void *params);
+     double quadratic_deriv (double x, void *params);
+     void quadratic_fdf (double x, void *params, 
+                         double *y, double *dy);
+</pre></pre>
+   <p class="noindent">We place the function definitions in a separate file (<samp><span class="file">demo_fn.c</span></samp>),
+
+<pre class="example"><pre class="verbatim">     double
+     quadratic (double x, void *params)
+     {
+       struct quadratic_params *p 
+         = (struct quadratic_params *) params;
+     
+       double a = p->a;
+       double b = p->b;
+       double c = p->c;
+     
+       return (a * x + b) * x + c;
+     }
+     
+     double
+     quadratic_deriv (double x, void *params)
+     {
+       struct quadratic_params *p 
+         = (struct quadratic_params *) params;
+     
+       double a = p->a;
+       double b = p->b;
+       double c = p->c;
+     
+       return 2.0 * a * x + b;
+     }
+     
+     void
+     quadratic_fdf (double x, void *params, 
+                    double *y, double *dy)
+     {
+       struct quadratic_params *p 
+         = (struct quadratic_params *) params;
+     
+       double a = p->a;
+       double b = p->b;
+       double c = p->c;
+     
+       *y = (a * x + b) * x + c;
+       *dy = 2.0 * a * x + b;
+     }
+</pre></pre>
+   <p class="noindent">The first program uses the function solver <code>gsl_root_fsolver_brent</code>
+for Brent's method and the general quadratic defined above to solve the
+following equation,
+with solution x = \sqrt 5 = 2.236068...
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;gsl/gsl_errno.h>
+     #include &lt;gsl/gsl_math.h>
+     #include &lt;gsl/gsl_roots.h>
+     
+     #include "demo_fn.h"
+     #include "demo_fn.c"
+     
+     int
+     main (void)
+     {
+       int status;
+       int iter = 0, max_iter = 100;
+       const gsl_root_fsolver_type *T;
+       gsl_root_fsolver *s;
+       double r = 0, r_expected = sqrt (5.0);
+       double x_lo = 0.0, x_hi = 5.0;
+       gsl_function F;
+       struct quadratic_params params = {1.0, 0.0, -5.0};
+     
+       F.function = &amp;quadratic;
+       F.params = &amp;params;
+     
+       T = gsl_root_fsolver_brent;
+       s = gsl_root_fsolver_alloc (T);
+       gsl_root_fsolver_set (s, &amp;F, x_lo, x_hi);
+     
+       printf ("using %s method\n", 
+               gsl_root_fsolver_name (s));
+     
+       printf ("%5s [%9s, %9s] %9s %10s %9s\n",
+               "iter", "lower", "upper", "root", 
+               "err", "err(est)");
+     
+       do
+         {
+           iter++;
+           status = gsl_root_fsolver_iterate (s);
+           r = gsl_root_fsolver_root (s);
+           x_lo = gsl_root_fsolver_x_lower (s);
+           x_hi = gsl_root_fsolver_x_upper (s);
+           status = gsl_root_test_interval (x_lo, x_hi,
+                                            0, 0.001);
+     
+           if (status == GSL_SUCCESS)
+             printf ("Converged:\n");
+     
+           printf ("%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
+                   iter, x_lo, x_hi,
+                   r, r - r_expected, 
+                   x_hi - x_lo);
+         }
+       while (status == GSL_CONTINUE &amp;&amp; iter &lt; max_iter);
+     
+       gsl_root_fsolver_free (s);
+     
+       return status;
+     }
+</pre></pre>
+   <p class="noindent">Here are the results of the iterations,
+
+<pre class="smallexample">     $ ./a.out
+     using brent method
+      iter [    lower,     upper]      root        err  err(est)
+         1 [1.0000000, 5.0000000] 1.0000000 -1.2360680 4.0000000
+         2 [1.0000000, 3.0000000] 3.0000000 +0.7639320 2.0000000
+         3 [2.0000000, 3.0000000] 2.0000000 -0.2360680 1.0000000
+         4 [2.2000000, 3.0000000] 2.2000000 -0.0360680 0.8000000
+         5 [2.2000000, 2.2366300] 2.2366300 +0.0005621 0.0366300
+     Converged:
+         6 [2.2360634, 2.2366300] 2.2360634 -0.0000046 0.0005666
+</pre>
+   <p class="noindent">If the program is modified to use the bisection solver instead of
+Brent's method, by changing <code>gsl_root_fsolver_brent</code> to
+<code>gsl_root_fsolver_bisection</code> the slower convergence of the
+Bisection method can be observed,
+
+<pre class="smallexample">     $ ./a.out
+     using bisection method
+      iter [    lower,     upper]      root        err  err(est)
+         1 [0.0000000, 2.5000000] 1.2500000 -0.9860680 2.5000000
+         2 [1.2500000, 2.5000000] 1.8750000 -0.3610680 1.2500000
+         3 [1.8750000, 2.5000000] 2.1875000 -0.0485680 0.6250000
+         4 [2.1875000, 2.5000000] 2.3437500 +0.1076820 0.3125000
+         5 [2.1875000, 2.3437500] 2.2656250 +0.0295570 0.1562500
+         6 [2.1875000, 2.2656250] 2.2265625 -0.0095055 0.0781250
+         7 [2.2265625, 2.2656250] 2.2460938 +0.0100258 0.0390625
+         8 [2.2265625, 2.2460938] 2.2363281 +0.0002601 0.0195312
+         9 [2.2265625, 2.2363281] 2.2314453 -0.0046227 0.0097656
+        10 [2.2314453, 2.2363281] 2.2338867 -0.0021813 0.0048828
+        11 [2.2338867, 2.2363281] 2.2351074 -0.0009606 0.0024414
+     Converged:
+        12 [2.2351074, 2.2363281] 2.2357178 -0.0003502 0.0012207
+</pre>
+   <p>The next program solves the same function using a derivative solver
+instead.
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;gsl/gsl_errno.h>
+     #include &lt;gsl/gsl_math.h>
+     #include &lt;gsl/gsl_roots.h>
+     
+     #include "demo_fn.h"
+     #include "demo_fn.c"
+     
+     int
+     main (void)
+     {
+       int status;
+       int iter = 0, max_iter = 100;
+       const gsl_root_fdfsolver_type *T;
+       gsl_root_fdfsolver *s;
+       double x0, x = 5.0, r_expected = sqrt (5.0);
+       gsl_function_fdf FDF;
+       struct quadratic_params params = {1.0, 0.0, -5.0};
+     
+       FDF.f = &amp;quadratic;
+       FDF.df = &amp;quadratic_deriv;
+       FDF.fdf = &amp;quadratic_fdf;
+       FDF.params = &amp;params;
+     
+       T = gsl_root_fdfsolver_newton;
+       s = gsl_root_fdfsolver_alloc (T);
+       gsl_root_fdfsolver_set (s, &amp;FDF, x);
+     
+       printf ("using %s method\n", 
+               gsl_root_fdfsolver_name (s));
+     
+       printf ("%-5s %10s %10s %10s\n",
+               "iter", "root", "err", "err(est)");
+       do
+         {
+           iter++;
+           status = gsl_root_fdfsolver_iterate (s);
+           x0 = x;
+           x = gsl_root_fdfsolver_root (s);
+           status = gsl_root_test_delta (x, x0, 0, 1e-3);
+     
+           if (status == GSL_SUCCESS)
+             printf ("Converged:\n");
+     
+           printf ("%5d %10.7f %+10.7f %10.7f\n",
+                   iter, x, x - r_expected, x - x0);
+         }
+       while (status == GSL_CONTINUE &amp;&amp; iter &lt; max_iter);
+     
+       gsl_root_fdfsolver_free (s);
+       return status;
+     }
+</pre></pre>
+   <p class="noindent">Here are the results for Newton's method,
+
+<pre class="example">     $ ./a.out
+     using newton method
+     iter        root        err   err(est)
+         1  3.0000000 +0.7639320 -2.0000000
+         2  2.3333333 +0.0972654 -0.6666667
+         3  2.2380952 +0.0020273 -0.0952381
+     Converged:
+         4  2.2360689 +0.0000009 -0.0020263
+</pre>
+   <p class="noindent">Note that the error can be estimated more accurately by taking the
+difference between the current iterate and next iterate rather than the
+previous iterate.  The other derivative solvers can be investigated by
+changing <code>gsl_root_fdfsolver_newton</code> to
+<code>gsl_root_fdfsolver_secant</code> or
+<code>gsl_root_fdfsolver_steffenson</code>.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

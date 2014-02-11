@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Index Look-up and Acceleration - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Interpolation.html" title="Interpolation">
+<link rel="prev" href="Interpolation-Types.html" title="Interpolation Types">
+<link rel="next" href="Evaluation-of-Interpolating-Functions.html" title="Evaluation of Interpolating Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Index-Look-up-and-Acceleration"></a>
+<a name="Index-Look_002dup-and-Acceleration"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Evaluation-of-Interpolating-Functions.html">Evaluation of Interpolating Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Interpolation-Types.html">Interpolation Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Interpolation.html">Interpolation</a>
+<hr>
+</div>
+
+<h3 class="section">27.4 Index Look-up and Acceleration</h3>
+
+<p>The state of searches can be stored in a <code>gsl_interp_accel</code> object,
+which is a kind of iterator for interpolation lookups.  It caches the
+previous value of an index lookup.  When the subsequent interpolation
+point falls in the same interval its index value can be returned
+immediately.
+
+<div class="defun">
+&mdash; Function: size_t <b>gsl_interp_bsearch</b> (<var>const double x_array</var>[]<var>, double x, size_t index_lo, size_t index_hi</var>)<var><a name="index-gsl_005finterp_005fbsearch-2256"></a></var><br>
+<blockquote><p>This function returns the index i of the array <var>x_array</var> such
+that <code>x_array[i] &lt;= x &lt; x_array[i+1]</code>.  The index is searched for
+in the range [<var>index_lo</var>,<var>index_hi</var>].  An inline version of this function is used when <code>HAVE_INLINE</code> is defined. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_interp_accel * <b>gsl_interp_accel_alloc</b> (<var>void</var>)<var><a name="index-gsl_005finterp_005faccel_005falloc-2257"></a></var><br>
+<blockquote><p><a name="index-gsl_005finterp_005faccel-2258"></a>This function returns a pointer to an accelerator object, which is a
+kind of iterator for interpolation lookups.  It tracks the state of
+lookups, thus allowing for application of various acceleration
+strategies. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: size_t <b>gsl_interp_accel_find</b> (<var>gsl_interp_accel * a, const double x_array</var>[]<var>, size_t size, double x</var>)<var><a name="index-gsl_005finterp_005faccel_005ffind-2259"></a></var><br>
+<blockquote><p>This function performs a lookup action on the data array <var>x_array</var>
+of size <var>size</var>, using the given accelerator <var>a</var>.  This is how
+lookups are performed during evaluation of an interpolation.  The
+function returns an index i such that <code>x_array[i] &lt;= x &lt;
+x_array[i+1]</code>.  An inline version of this function is used when <code>HAVE_INLINE</code> is defined. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_interp_accel_reset</b> (<var>gsl_interp_accel * acc</var>)<var>;<a name="index-gsl_005finterp_005faccel_005freset-2260"></a></var><br>
+<blockquote><p>This function reinitializes the accelerator object <var>acc</var>.  It
+should be used when the cached information is no longer
+applicable&mdash;for example, when switching to a new dataset. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_interp_accel_free</b> (<var>gsl_interp_accel* acc</var>)<var><a name="index-gsl_005finterp_005faccel_005ffree-2261"></a></var><br>
+<blockquote><p>This function frees the accelerator object <var>acc</var>. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>11.2. Shapes</title><link rel="stylesheet" type="text/css" href="css/dia.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /><link rel="home" href="index.html" title="Dia" /><link rel="up" href="ch11.html" title="Chapter 11. Custom Shape Module" /><link rel="prev" href="ch11.html" title="Chapter 11. Custom Shape Module" /><link rel="next" href="ch11s03.html" title="11.3. The Shape Description" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">11.2. Shapes</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch11.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Custom Shape Module</th><td width="20%" align="right"> <a accesskey="n" href="ch11s03.html">Next</a></td></tr></table><hr /></div><div class="sect1" title="11.2. Shapes"><div class="titlepage"><div><div><h2 class="title" style="clear: both" id="custom-shapes-shapes">11.2. Shapes</h2></div></div></div><p>
+      A typical shape file may look something like this:
+
+      </p><div class="literallayout"><p><br />
+        <code class="literal"><br />
+          <br />
+&lt;?xml version="1.0"?&gt;<br />
+  &lt;shape xmlns="http://www.daa.com.au/~james/dia-shape-ns"<br />
+         xmlns:svg="http://www.w3.org/2000/svg"&gt;<br />
+    &lt;name&gt;Circuit with identifiers - NPN Transistor&lt;/name&gt;<br />
+    &lt;icon&gt;npn.xpm&lt;/icon&gt;<br />
+    &lt;connections&gt;<br />
+      &lt;point x="0" y="0"/&gt;<br />
+      &lt;point x="6" y="-4"/&gt;<br />
+      &lt;point x="6" y="4"/&gt;<br />
+    &lt;/connections&gt;<br />
+<br />
+    &lt;aspectratio type="fixed"/&gt;<br />
+<br />
+    &lt;textbox x1="4" y1="-3" x2="12" y2="3" /&gt;<br />
+<br />
+    &lt;svg:svg&gt;<br />
+      &lt;svg:line x1="0" y1="0" x2="3" y2="0" /&gt;<br />
+      &lt;svg:line x1="3" y1="-3" x2="3" y2="3" /&gt;<br />
+      &lt;svg:line x1="3" y1="-2" x2="6" y2="-4" /&gt;<br />
+      &lt;svg:line x1="3" y1="2" x2="6" y2="4" /&gt;<br />
+<br />
+      &lt;svg:polyline points="5,4 6,4 5.6154,3.0769" /&gt;<br />
+    &lt;/svg:svg&gt;<br />
+<br />
+  &lt;/shape&gt;<br />
+<br />
+        </code><br />
+      </p></div><p>
+    </p><p>
+      Only the <code class="literal">name</code> and <code class="literal">svg</code> elements
+      are required in the shape file.  The
+      rest are optional.
+    </p><p>
+      The <code class="literal">name</code> element give the name of the object.  The
+      name is a unique identifier for this shape that is used for saving and
+      loading. 
+    </p><p>
+      As in the example, you may use "compound names". Many shapes have first 
+      part of its name to indicate the sheet in which they appear, but this
+      is optional.
+    </p><p>   
+      The <code class="literal">icon</code> element specifies an xpm file or a png
+      file that is used as 
+      the icon in the dia toolbox.  The filename can be relative to the shape 
+      file.  If it is not given, a default custom shape icon will be used.
+    </p><p>
+      The <code class="literal">connections</code> section specifies a number
+      of connection points for
+      the shape.  The coordinate system for these points is the same as the
+      coordinate system used in the svg shape description.
+    </p><p>
+      The <code class="literal">aspectratio</code> element allows you to specify 
+      how the shape can be
+      distorted.  The three possibilities are:
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+            <code class="literal">
+              &lt;aspectratio type="free"/&gt;
+            </code>
+            - Any aspect ratio is OK (the default)
+          </li><li class="listitem">
+            <code class="literal">
+              &lt;aspectratio type="fixed"/&gt;
+            </code>
+            - Fix the aspect ratio for this shape.
+          </li><li class="listitem">
+            <code class="literal">
+              &lt;aspectratio type="range" min="n" max="m"/&gt;
+            </code>
+            - Give a range of values.
+          </li></ul></div><p>
+      The last option allows you to specify a range of allowable amounts of
+      distortion, which may be useful in some cases.
+    </p><p>
+      The <code class="literal">textbox</code> element allows you to associate some text with
+      the shape.  The syntax is:
+      </p><div class="literallayout"><p><br />
+        <code class="literal"><br />
+          &lt;textbox x1="left" y1="top" x2="right" y2="bottom"/&gt;<br />
+        </code><br />
+      </p></div><p>
+      (Only one textbox per shape) Where the attributes give the bounds of 
+      the text box in the same coordinate system as the SVG shape description.
+    </p><p>
+      There are some optional attributes on &lt;textbox/&gt; namely
+      </p><div class="variablelist"><dl><dt><span class="term">resize="no" :</span></dt><dd>by default the textbox is resized with the text</dd><dt><span class="term">align="center" :</span></dt><dd>"center" is default, also "left" and "right" can be used</dd></dl></div><p>
+    </p><p>
+
+      Shapes are given a default size on creation. If that default size does
+      not fit your needs you can overwrite it by (one or both):
+      &lt;default-width&gt;1cm&lt;/default-width&gt;
+      &lt;default-height&gt;3cm&lt;/default-height&gt;
+      The default unit "cm" can be omitted.
+    </p><p>
+      The <code class="literal">svg</code> element describes the shape.
+      The width and height attributes
+      are ignored, and only given to comply with the SVG specification.  For
+      more information on SVG, see the W3C pages about the format at:
+      <a class="ulink" href="http://www.w3.org/Graphics/SVG" target="_top">http://www.w3.org/Graphics/SVG</a>
+    </p><p>
+      The next section details what parts of the SVG spec can be used in
+      shape files.
+    </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch11.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch11.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch11s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 11. Custom Shape Module </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 11.3. The Shape Description</td></tr></table></div></body></html>

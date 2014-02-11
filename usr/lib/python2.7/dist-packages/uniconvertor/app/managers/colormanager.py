@@ -1,0 +1,1 @@
+../../../../../../share/pyshared/uniconvertor/app/managers/colormanager.py

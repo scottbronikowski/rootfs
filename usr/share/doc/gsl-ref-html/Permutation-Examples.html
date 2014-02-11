@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Permutation Examples - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Permutations.html" title="Permutations">
+<link rel="prev" href="Permutations-in-cyclic-form.html" title="Permutations in cyclic form">
+<link rel="next" href="Permutation-References-and-Further-Reading.html" title="Permutation References and Further Reading">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Permutation-Examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Permutation-References-and-Further-Reading.html">Permutation References and Further Reading</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Permutations-in-cyclic-form.html">Permutations in cyclic form</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Permutations.html">Permutations</a>
+<hr>
+</div>
+
+<h3 class="section">9.9 Examples</h3>
+
+<p>The example program below creates a random permutation (by shuffling the
+elements of the identity) and finds its inverse.
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;gsl/gsl_rng.h>
+     #include &lt;gsl/gsl_randist.h>
+     #include &lt;gsl/gsl_permutation.h>
+     
+     int
+     main (void) 
+     {
+       const size_t N = 10;
+       const gsl_rng_type * T;
+       gsl_rng * r;
+     
+       gsl_permutation * p = gsl_permutation_alloc (N);
+       gsl_permutation * q = gsl_permutation_alloc (N);
+     
+       gsl_rng_env_setup();
+       T = gsl_rng_default;
+       r = gsl_rng_alloc (T);
+     
+       printf ("initial permutation:");  
+       gsl_permutation_init (p);
+       gsl_permutation_fprintf (stdout, p, " %u");
+       printf ("\n");
+     
+       printf (" random permutation:");  
+       gsl_ran_shuffle (r, p->data, N, sizeof(size_t));
+       gsl_permutation_fprintf (stdout, p, " %u");
+       printf ("\n");
+     
+       printf ("inverse permutation:");  
+       gsl_permutation_inverse (q, p);
+       gsl_permutation_fprintf (stdout, q, " %u");
+       printf ("\n");
+     
+       gsl_permutation_free (p);
+       gsl_permutation_free (q);
+       gsl_rng_free (r);
+     
+       return 0;
+     }
+</pre></pre>
+   <p class="noindent">Here is the output from the program,
+
+<pre class="example">     $ ./a.out
+     initial permutation: 0 1 2 3 4 5 6 7 8 9
+      random permutation: 1 3 5 2 7 6 0 4 9 8
+     inverse permutation: 6 0 3 1 7 2 5 4 9 8
+</pre>
+   <p class="noindent">The random permutation <code>p[i]</code> and its inverse <code>q[i]</code> are
+related through the identity <code>p[q[i]] = i</code>, which can be verified
+from the output.
+
+   <p>The next example program steps forwards through all possible third order
+permutations, starting from the identity,
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;gsl/gsl_permutation.h>
+     
+     int
+     main (void) 
+     {
+       gsl_permutation * p = gsl_permutation_alloc (3);
+     
+       gsl_permutation_init (p);
+     
+       do 
+        {
+           gsl_permutation_fprintf (stdout, p, " %u");
+           printf ("\n");
+        }
+       while (gsl_permutation_next(p) == GSL_SUCCESS);
+     
+       gsl_permutation_free (p);
+     
+       return 0;
+     }
+</pre></pre>
+   <p class="noindent">Here is the output from the program,
+
+<pre class="example">     $ ./a.out
+      0 1 2
+      0 2 1
+      1 0 2
+      1 2 0
+      2 0 1
+      2 1 0
+</pre>
+   <p class="noindent">The permutations are generated in lexicographic order.  To reverse the
+sequence, begin with the final permutation (which is the reverse of the
+identity) and replace <code>gsl_permutation_next</code> with
+<code>gsl_permutation_prev</code>.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

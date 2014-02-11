@@ -1,0 +1,155 @@
+<html lang="en">
+<head>
+<title>Radix-2 FFT routines for real data - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fast-Fourier-Transforms.html" title="Fast Fourier Transforms">
+<link rel="prev" href="Overview-of-real-data-FFTs.html" title="Overview of real data FFTs">
+<link rel="next" href="Mixed_002dradix-FFT-routines-for-real-data.html" title="Mixed-radix FFT routines for real data">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Radix-2-FFT-routines-for-real-data"></a>
+<a name="Radix_002d2-FFT-routines-for-real-data"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mixed_002dradix-FFT-routines-for-real-data.html">Mixed-radix FFT routines for real data</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Overview-of-real-data-FFTs.html">Overview of real data FFTs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fast-Fourier-Transforms.html">Fast Fourier Transforms</a>
+<hr>
+</div>
+
+<h3 class="section">16.6 Radix-2 FFT routines for real data</h3>
+
+<p><a name="index-FFT-of-real-data_002c-radix_002d2-algorithm-1499"></a><a name="index-Radix_002d2-FFT-for-real-data-1500"></a>
+This section describes radix-2 FFT algorithms for real data.  They use
+the Cooley-Tukey algorithm to compute in-place FFTs for lengths which
+are a power of 2.
+
+   <p>The radix-2 FFT functions for real data are declared in the header files
+<samp><span class="file">gsl_fft_real.h</span></samp>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_fft_real_radix2_transform</b> (<var>double data</var>[]<var>, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005freal_005fradix2_005ftransform-1501"></a></var><br>
+<blockquote>
+        <p>This function computes an in-place radix-2 FFT of length <var>n</var> and
+stride <var>stride</var> on the real array <var>data</var>.  The output is a
+half-complex sequence, which is stored in-place.  The arrangement of the
+half-complex terms uses the following scheme: for k &lt; n/2 the
+real part of the k-th term is stored in location k, and
+the corresponding imaginary part is stored in location n-k.  Terms
+with k &gt; n/2 can be reconstructed using the symmetry
+<!-- {$z_k = z^*_{n-k}$} -->
+z_k = z^*_{n-k}. 
+The terms for k=0 and k=n/2 are both purely
+real, and count as a special case.  Their real parts are stored in
+locations 0 and n/2 respectively, while their imaginary
+parts which are zero are not stored.
+
+        <p>The following table shows the correspondence between the output
+<var>data</var> and the equivalent results obtained by considering the input
+data as a complex sequence with zero imaginary part (assuming <var>stride=1</var>),
+
+     <pre class="example">          complex[0].real    =    data[0]
+          complex[0].imag    =    0
+          complex[1].real    =    data[1]
+          complex[1].imag    =    data[n-1]
+          ...............         ................
+          complex[k].real    =    data[k]
+          complex[k].imag    =    data[n-k]
+          ...............         ................
+          complex[n/2].real  =    data[n/2]
+          complex[n/2].imag  =    0
+          ...............         ................
+          complex[k'].real   =    data[k]        k' = n - k
+          complex[k'].imag   =   -data[n-k]
+          ...............         ................
+          complex[n-1].real  =    data[1]
+          complex[n-1].imag  =   -data[n-1]
+</pre>
+        <p class="noindent">Note that the output data can be converted into the full complex
+sequence using the function <code>gsl_fft_halfcomplex_radix2_unpack</code>
+described below.
+
+        </blockquote></div>
+   The radix-2 FFT functions for halfcomplex data are declared in the
+header file <samp><span class="file">gsl_fft_halfcomplex.h</span></samp>.
+
+<div class="defun">
+&mdash; Function: int <b>gsl_fft_halfcomplex_radix2_inverse</b> (<var>double data</var>[]<var>, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005fhalfcomplex_005fradix2_005finverse-1502"></a></var><br>
+&mdash; Function: int <b>gsl_fft_halfcomplex_radix2_backward</b> (<var>double data</var>[]<var>, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005fhalfcomplex_005fradix2_005fbackward-1503"></a></var><br>
+<blockquote>
+        <p>These functions compute the inverse or backwards in-place radix-2 FFT of
+length <var>n</var> and stride <var>stride</var> on the half-complex sequence
+<var>data</var> stored according the output scheme used by
+<code>gsl_fft_real_radix2</code>.  The result is a real array stored in natural
+order. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_fft_halfcomplex_radix2_unpack</b> (<var>const double halfcomplex_coefficient</var>[]<var>, gsl_complex_packed_array complex_coefficient, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005fhalfcomplex_005fradix2_005funpack-1504"></a></var><br>
+<blockquote><p>This function converts <var>halfcomplex_coefficient</var>, an array of
+half-complex coefficients as returned by <code>gsl_fft_real_radix2_transform</code>, into an ordinary complex array, <var>complex_coefficient</var>.  It fills in the
+complex array using the symmetry
+<!-- {$z_k = z_{n-k}^*$} -->
+z_k = z_{n-k}^*
+to reconstruct the redundant elements.  The algorithm for the conversion
+is,
+
+     <pre class="example">          complex_coefficient[0].real
+            = halfcomplex_coefficient[0];
+          complex_coefficient[0].imag
+            = 0.0;
+          
+          for (i = 1; i &lt; n - i; i++)
+            {
+              double hc_real
+                = halfcomplex_coefficient[i*stride];
+              double hc_imag
+                = halfcomplex_coefficient[(n-i)*stride];
+              complex_coefficient[i*stride].real = hc_real;
+              complex_coefficient[i*stride].imag = hc_imag;
+              complex_coefficient[(n - i)*stride].real = hc_real;
+              complex_coefficient[(n - i)*stride].imag = -hc_imag;
+            }
+          
+          if (i == n - i)
+            {
+              complex_coefficient[i*stride].real
+                = halfcomplex_coefficient[(n - 1)*stride];
+              complex_coefficient[i*stride].imag
+                = 0.0;
+            }
+</pre>
+        </blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

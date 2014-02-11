@@ -1,0 +1,253 @@
+<html lang="en">
+<head>
+<title>VEGAS - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Monte-Carlo-Integration.html" title="Monte Carlo Integration">
+<link rel="prev" href="MISER.html" title="MISER">
+<link rel="next" href="Monte-Carlo-Examples.html" title="Monte Carlo Examples">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="VEGAS"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Monte-Carlo-Examples.html">Monte Carlo Examples</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="MISER.html">MISER</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Monte-Carlo-Integration.html">Monte Carlo Integration</a>
+<hr>
+</div>
+
+<h3 class="section">24.4 VEGAS</h3>
+
+<p><a name="index-VEGAS-Monte-Carlo-integration-2122"></a><a name="index-importance-sampling_002c-VEGAS-2123"></a>
+The <span class="sc">vegas</span> algorithm of Lepage is based on importance sampling.  It
+samples points from the probability distribution described by the
+function |f|, so that the points are concentrated in the regions
+that make the largest contribution to the integral.
+
+   <p>In general, if the Monte Carlo integral of f is sampled with
+points distributed according to a probability distribution described by
+the function g, we obtain an estimate E_g(f; N),
+with a corresponding variance,
+If the probability distribution is chosen as g = |f|/I(|f|) then
+it can be shown that the variance V_g(f; N) vanishes, and the
+error in the estimate will be zero.  In practice it is not possible to
+sample from the exact distribution g for an arbitrary function, so
+importance sampling algorithms aim to produce efficient approximations
+to the desired distribution.
+
+   <p>The <span class="sc">vegas</span> algorithm approximates the exact distribution by making a
+number of passes over the integration region while histogramming the
+function f. Each histogram is used to define a sampling
+distribution for the next pass.  Asymptotically this procedure converges
+to the desired distribution. In order
+to avoid the number of histogram bins growing like K^d the
+probability distribution is approximated by a separable function:
+<!-- {$g(x_1, x_2,\ldots) = g_1(x_1) g_2(x_2)\ldots$} -->
+g(x_1, x_2, ...) = g_1(x_1) g_2(x_2) ... 
+so that the number of bins required is only Kd. 
+This is equivalent to locating the peaks of the function from the
+projections of the integrand onto the coordinate axes.  The efficiency
+of <span class="sc">vegas</span> depends on the validity of this assumption.  It is most
+efficient when the peaks of the integrand are well-localized.  If an
+integrand can be rewritten in a form which is approximately separable
+this will increase the efficiency of integration with <span class="sc">vegas</span>.
+
+   <p><span class="sc">vegas</span> incorporates a number of additional features, and combines both
+stratified sampling and importance sampling.  The integration region is
+divided into a number of &ldquo;boxes&rdquo;, with each box getting a fixed
+number of points (the goal is 2).  Each box can then have a fractional
+number of bins, but if the ratio of bins-per-box is less than two, Vegas switches to a
+kind variance reduction (rather than importance sampling).
+
+<div class="defun">
+&mdash; Function: gsl_monte_vegas_state * <b>gsl_monte_vegas_alloc</b> (<var>size_t dim</var>)<var><a name="index-gsl_005fmonte_005fvegas_005falloc-2124"></a></var><br>
+<blockquote><p><a name="index-gsl_005fmonte_005fvegas_005fstate-2125"></a>This function allocates and initializes a workspace for Monte Carlo
+integration in <var>dim</var> dimensions.  The workspace is used to maintain
+the state of the integration. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_monte_vegas_init</b> (<var>gsl_monte_vegas_state* s</var>)<var><a name="index-gsl_005fmonte_005fvegas_005finit-2126"></a></var><br>
+<blockquote><p>This function initializes a previously allocated integration state. 
+This allows an existing workspace to be reused for different
+integrations. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_monte_vegas_integrate</b> (<var>gsl_monte_function * f, double xl</var>[]<var>, double xu</var>[]<var>, size_t dim, size_t calls, gsl_rng * r, gsl_monte_vegas_state * s, double * result, double * abserr</var>)<var><a name="index-gsl_005fmonte_005fvegas_005fintegrate-2127"></a></var><br>
+<blockquote><p>This routines uses the <span class="sc">vegas</span> Monte Carlo algorithm to integrate the
+function <var>f</var> over the <var>dim</var>-dimensional hypercubic region
+defined by the lower and upper limits in the arrays <var>xl</var> and
+<var>xu</var>, each of size <var>dim</var>.  The integration uses a fixed number
+of function calls <var>calls</var>, and obtains random sampling points using
+the random number generator <var>r</var>. A previously allocated workspace
+<var>s</var> must be supplied.  The result of the integration is returned in
+<var>result</var>, with an estimated absolute error <var>abserr</var>.  The result
+and its error estimate are based on a weighted average of independent
+samples. The chi-squared per degree of freedom for the weighted average
+is returned via the state struct component, <var>s-&gt;chisq</var>, and must be
+consistent with 1 for the weighted average to be reliable. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_monte_vegas_free</b> (<var>gsl_monte_vegas_state * s</var>)<var><a name="index-gsl_005fmonte_005fvegas_005ffree-2128"></a></var><br>
+<blockquote><p>This function frees the memory associated with the integrator state
+<var>s</var>. 
+</p></blockquote></div>
+
+   <p>The <span class="sc">vegas</span> algorithm computes a number of independent estimates of the
+integral internally, according to the <code>iterations</code> parameter
+described below, and returns their weighted average.  Random sampling of
+the integrand can occasionally produce an estimate where the error is
+zero, particularly if the function is constant in some regions. An
+estimate with zero error causes the weighted average to break down and
+must be handled separately. In the original Fortran implementations of
+<span class="sc">vegas</span> the error estimate is made non-zero by substituting a small
+value (typically <code>1e-30</code>).  The implementation in GSL differs from
+this and avoids the use of an arbitrary constant&mdash;it either assigns
+the value a weight which is the average weight of the preceding
+estimates or discards it according to the following procedure,
+
+     <dl>
+<dt>current estimate has zero error, weighted average has finite error<dd>
+The current estimate is assigned a weight which is the average weight of
+the preceding estimates.
+
+     <br><dt>current estimate has finite error, previous estimates had zero error<dd>
+The previous estimates are discarded and the weighted averaging
+procedure begins with the current estimate.
+
+     <br><dt>current estimate has zero error, previous estimates had zero error<dd>
+The estimates are averaged using the arithmetic mean, but no error is computed. 
+</dl>
+
+   <p>The convergence of the algorithm can be tested using the overall
+chi-squared value of the results, which is available from the
+following function:
+
+<div class="defun">
+&mdash; Function: double <b>gsl_monte_vegas_chisq</b> (<var>const gsl_monte_vegas_state * s</var>)<var><a name="index-gsl_005fmonte_005fvegas_005fchisq-2129"></a></var><br>
+<blockquote><p>This function returns the chi-squared per degree of freedom for the
+weighted estimate of the integral.  The returned value should be close
+to 1.  A value which differs significantly from 1 indicates that the
+values from different iterations are inconsistent.  In this case the
+weighted error will be under-estimated, and further iterations of the
+algorithm are needed to obtain reliable results. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_monte_vegas_runval</b> (<var>const gsl_monte_vegas_state * s, double * result, double * sigma</var>)<var><a name="index-gsl_005fmonte_005fvegas_005frunval-2130"></a></var><br>
+<blockquote><p>This function returns the raw (unaveraged) values of the integral
+<var>result</var> and its error <var>sigma</var> from the most recent iteration
+of the algorithm. 
+</p></blockquote></div>
+
+   <p>The <span class="sc">vegas</span> algorithm is highly configurable. Several parameters
+can be changed using the following two functions.
+
+<div class="defun">
+&mdash; Function: void <b>gsl_monte_vegas_params_get</b> (<var>const gsl_monte_vegas_state * s, gsl_monte_vegas_params * params</var>)<var><a name="index-gsl_005fmonte_005fvegas_005fparams_005fget-2131"></a></var><br>
+<blockquote><p>This function copies the parameters of the integrator state into the
+user-supplied <var>params</var> structure. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_monte_vegas_params_set</b> (<var>gsl_monte_vegas_state * s, const gsl_monte_vegas_params * params</var>)<var><a name="index-gsl_005fmonte_005fvegas_005fparams_005fset-2132"></a></var><br>
+<blockquote><p>This function sets the integrator parameters based on values provided
+in the <var>params</var> structure. 
+</p></blockquote></div>
+
+   <p>Typically the values of the parameters are first read using
+<code>gsl_monte_vegas_params_get</code>, the necessary changes are made to
+the fields of the <var>params</var> structure, and the values are copied
+back into the integrator state using
+<code>gsl_monte_vegas_params_set</code>.  The functions use the
+<code>gsl_monte_vegas_params</code> structure which contains the following
+fields:
+
+<div class="defun">
+&mdash; Variable: double <b>alpha</b><var><a name="index-alpha-2133"></a></var><br>
+<blockquote><p>The parameter <code>alpha</code> controls the stiffness of the rebinning
+algorithm.  It is typically set between one and two. A value of zero
+prevents rebinning of the grid.  The default value is 1.5. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: size_t <b>iterations</b><var><a name="index-iterations-2134"></a></var><br>
+<blockquote><p>The number of iterations to perform for each call to the routine. The
+default value is 5 iterations. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: int <b>stage</b><var><a name="index-stage-2135"></a></var><br>
+<blockquote><p>Setting this determines the <dfn>stage</dfn> of the calculation.  Normally,
+<code>stage = 0</code> which begins with a new uniform grid and empty weighted
+average.  Calling <span class="sc">vegas</span> with <code>stage = 1</code> retains the grid from the
+previous run but discards the weighted average, so that one can &ldquo;tune&rdquo;
+the grid using a relatively small number of points and then do a large
+run with <code>stage = 1</code> on the optimized grid.  Setting <code>stage =
+2</code> keeps the grid and the weighted average from the previous run, but
+may increase (or decrease) the number of histogram bins in the grid
+depending on the number of calls available.  Choosing <code>stage = 3</code>
+enters at the main loop, so that nothing is changed, and is equivalent
+to performing additional iterations in a previous call. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: int <b>mode</b><var><a name="index-mode-2136"></a></var><br>
+<blockquote><p>The possible choices are <code>GSL_VEGAS_MODE_IMPORTANCE</code>,
+<code>GSL_VEGAS_MODE_STRATIFIED</code>, <code>GSL_VEGAS_MODE_IMPORTANCE_ONLY</code>. 
+This determines whether <span class="sc">vegas</span> will use importance sampling or
+stratified sampling, or whether it can pick on its own.  In low
+dimensions <span class="sc">vegas</span> uses strict stratified sampling (more precisely,
+stratified sampling is chosen if there are fewer than 2 bins per box). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: int <b>verbose</b><var><a name="index-verbose-2137"></a></var><br>
+&mdash; Variable: FILE * <b>ostream</b><var><a name="index-ostream-2138"></a></var><br>
+<blockquote><p>These parameters set the level of information printed by <span class="sc">vegas</span>. All
+information is written to the stream <var>ostream</var>.  The default setting
+of <var>verbose</var> is <code>-1</code>, which turns off all output.  A
+<var>verbose</var> value of <code>0</code> prints summary information about the
+weighted average and final result, while a value of <code>1</code> also
+displays the grid coordinates.  A value of <code>2</code> prints information
+from the rebinning procedure for each iteration. 
+</p></blockquote></div>
+
+   <p>The above fields and the <var>chisq</var> value can also be accessed
+directly in the <code>gsl_monte_vegas_state</code> but such use is
+deprecated.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

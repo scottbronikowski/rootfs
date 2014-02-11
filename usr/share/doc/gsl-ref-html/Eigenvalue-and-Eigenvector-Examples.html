@@ -1,0 +1,252 @@
+<html lang="en">
+<head>
+<title>Eigenvalue and Eigenvector Examples - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Eigensystems.html" title="Eigensystems">
+<link rel="prev" href="Sorting-Eigenvalues-and-Eigenvectors.html" title="Sorting Eigenvalues and Eigenvectors">
+<link rel="next" href="Eigenvalue-and-Eigenvector-References.html" title="Eigenvalue and Eigenvector References">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Eigenvalue-and-Eigenvector-Examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Eigenvalue-and-Eigenvector-References.html">Eigenvalue and Eigenvector References</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sorting-Eigenvalues-and-Eigenvectors.html">Sorting Eigenvalues and Eigenvectors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Eigensystems.html">Eigensystems</a>
+<hr>
+</div>
+
+<h3 class="section">15.8 Examples</h3>
+
+<p>The following program computes the eigenvalues and eigenvectors of the 4-th order Hilbert matrix, H(i,j) = 1/(i + j + 1).
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;gsl/gsl_math.h>
+     #include &lt;gsl/gsl_eigen.h>
+     
+     int
+     main (void)
+     {
+       double data[] = { 1.0  , 1/2.0, 1/3.0, 1/4.0,
+                         1/2.0, 1/3.0, 1/4.0, 1/5.0,
+                         1/3.0, 1/4.0, 1/5.0, 1/6.0,
+                         1/4.0, 1/5.0, 1/6.0, 1/7.0 };
+     
+       gsl_matrix_view m 
+         = gsl_matrix_view_array (data, 4, 4);
+     
+       gsl_vector *eval = gsl_vector_alloc (4);
+       gsl_matrix *evec = gsl_matrix_alloc (4, 4);
+     
+       gsl_eigen_symmv_workspace * w = 
+         gsl_eigen_symmv_alloc (4);
+       
+       gsl_eigen_symmv (&amp;m.matrix, eval, evec, w);
+     
+       gsl_eigen_symmv_free (w);
+     
+       gsl_eigen_symmv_sort (eval, evec, 
+                             GSL_EIGEN_SORT_ABS_ASC);
+       
+       {
+         int i;
+     
+         for (i = 0; i &lt; 4; i++)
+           {
+             double eval_i 
+                = gsl_vector_get (eval, i);
+             gsl_vector_view evec_i 
+                = gsl_matrix_column (evec, i);
+     
+             printf ("eigenvalue = %g\n", eval_i);
+             printf ("eigenvector = \n");
+             gsl_vector_fprintf (stdout, 
+                                 &amp;evec_i.vector, "%g");
+           }
+       }
+     
+       gsl_vector_free (eval);
+       gsl_matrix_free (evec);
+     
+       return 0;
+     }
+</pre></pre>
+   <p class="noindent">Here is the beginning of the output from the program,
+
+<pre class="example">     $ ./a.out
+     eigenvalue = 9.67023e-05
+     eigenvector =
+     -0.0291933
+     0.328712
+     -0.791411
+     0.514553
+     ...
+</pre>
+   <p class="noindent">This can be compared with the corresponding output from <span class="sc">gnu octave</span>,
+
+<pre class="example">     octave&gt; [v,d] = eig(hilb(4));
+     octave&gt; diag(d)
+     ans =
+     
+        9.6702e-05
+        6.7383e-03
+        1.6914e-01
+        1.5002e+00
+     
+     octave&gt; v
+     v =
+     
+        0.029193   0.179186  -0.582076   0.792608
+       -0.328712  -0.741918   0.370502   0.451923
+        0.791411   0.100228   0.509579   0.322416
+       -0.514553   0.638283   0.514048   0.252161
+</pre>
+   <p class="noindent">Note that the eigenvectors can differ by a change of sign, since the
+sign of an eigenvector is arbitrary.
+
+   <p>The following program illustrates the use of the nonsymmetric
+eigensolver, by computing the eigenvalues and eigenvectors of
+the Vandermonde matrix
+<!-- {$V(x;i,j) = x_i^{n - j}$} -->
+V(x;i,j) = x_i^{n - j}
+with x = (-1,-2,3,4).
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;gsl/gsl_math.h>
+     #include &lt;gsl/gsl_eigen.h>
+     
+     int
+     main (void)
+     {
+       double data[] = { -1.0, 1.0, -1.0, 1.0,
+                         -8.0, 4.0, -2.0, 1.0,
+                         27.0, 9.0, 3.0, 1.0,
+                         64.0, 16.0, 4.0, 1.0 };
+     
+       gsl_matrix_view m 
+         = gsl_matrix_view_array (data, 4, 4);
+     
+       gsl_vector_complex *eval = gsl_vector_complex_alloc (4);
+       gsl_matrix_complex *evec = gsl_matrix_complex_alloc (4, 4);
+     
+       gsl_eigen_nonsymmv_workspace * w = 
+         gsl_eigen_nonsymmv_alloc (4);
+       
+       gsl_eigen_nonsymmv (&amp;m.matrix, eval, evec, w);
+     
+       gsl_eigen_nonsymmv_free (w);
+     
+       gsl_eigen_nonsymmv_sort (eval, evec, 
+                                GSL_EIGEN_SORT_ABS_DESC);
+       
+       {
+         int i, j;
+     
+         for (i = 0; i &lt; 4; i++)
+           {
+             gsl_complex eval_i 
+                = gsl_vector_complex_get (eval, i);
+             gsl_vector_complex_view evec_i 
+                = gsl_matrix_complex_column (evec, i);
+     
+             printf ("eigenvalue = %g + %gi\n",
+                     GSL_REAL(eval_i), GSL_IMAG(eval_i));
+             printf ("eigenvector = \n");
+             for (j = 0; j &lt; 4; ++j)
+               {
+                 gsl_complex z = 
+                   gsl_vector_complex_get(&amp;evec_i.vector, j);
+                 printf("%g + %gi\n", GSL_REAL(z), GSL_IMAG(z));
+               }
+           }
+       }
+     
+       gsl_vector_complex_free(eval);
+       gsl_matrix_complex_free(evec);
+     
+       return 0;
+     }
+</pre></pre>
+   <p class="noindent">Here is the beginning of the output from the program,
+
+<pre class="example">     $ ./a.out
+     eigenvalue = -6.41391 + 0i
+     eigenvector =
+     -0.0998822 + 0i
+     -0.111251 + 0i
+     0.292501 + 0i
+     0.944505 + 0i
+     eigenvalue = 5.54555 + 3.08545i
+     eigenvector =
+     -0.043487 + -0.0076308i
+     0.0642377 + -0.142127i
+     -0.515253 + 0.0405118i
+     -0.840592 + -0.00148565i
+     ...
+</pre>
+   <p class="noindent">This can be compared with the corresponding output from <span class="sc">gnu octave</span>,
+
+<pre class="example">     octave&gt; [v,d] = eig(vander([-1 -2 3 4]));
+     octave&gt; diag(d)
+     ans =
+     
+       -6.4139 + 0.0000i
+        5.5456 + 3.0854i
+        5.5456 - 3.0854i
+        2.3228 + 0.0000i
+     
+     octave&gt; v
+     v =
+     
+      Columns 1 through 3:
+     
+       -0.09988 + 0.00000i  -0.04350 - 0.00755i  -0.04350 + 0.00755i
+       -0.11125 + 0.00000i   0.06399 - 0.14224i   0.06399 + 0.14224i
+        0.29250 + 0.00000i  -0.51518 + 0.04142i  -0.51518 - 0.04142i
+        0.94451 + 0.00000i  -0.84059 + 0.00000i  -0.84059 - 0.00000i
+     
+      Column 4:
+     
+       -0.14493 + 0.00000i
+        0.35660 + 0.00000i
+        0.91937 + 0.00000i
+        0.08118 + 0.00000i
+     
+</pre>
+   <p>Note that the eigenvectors corresponding to the eigenvalue
+5.54555 + 3.08545i differ by the multiplicative constant
+0.9999984 + 0.0017674i which is an arbitrary phase factor
+of magnitude 1.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

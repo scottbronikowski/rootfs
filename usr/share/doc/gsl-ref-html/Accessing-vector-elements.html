@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Accessing vector elements - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Vectors.html" title="Vectors">
+<link rel="prev" href="Vector-allocation.html" title="Vector allocation">
+<link rel="next" href="Initializing-vector-elements.html" title="Initializing vector elements">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Accessing-vector-elements"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Initializing-vector-elements.html">Initializing vector elements</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Vector-allocation.html">Vector allocation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Vectors.html">Vectors</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.3.2 Accessing vector elements</h4>
+
+<p><a name="index-vectors_002c-range_002dchecking-885"></a><a name="index-range_002dchecking-for-vectors-886"></a><a name="index-bounds-checking_002c-extension-to-GCC-887"></a><a name="index-gcc-extensions_002c-range_002dchecking-888"></a><a name="index-Fortran-range-checking_002c-equivalent-in-gcc-889"></a>
+Unlike <span class="sc">fortran</span> compilers, C compilers do not usually provide
+support for range checking of vectors and matrices.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  The functions <code>gsl_vector_get</code> and
+<code>gsl_vector_set</code> can perform portable range checking for you and
+report an error if you attempt to access elements outside the allowed
+range.
+
+   <p>The functions for accessing the elements of a vector or matrix are
+defined in <samp><span class="file">gsl_vector.h</span></samp> and declared <code>extern inline</code> to
+eliminate function-call overhead.  You must compile your program with
+the preprocessor macro <code>HAVE_INLINE</code> defined to use these
+functions.
+
+   <p><a name="index-g_t_0040code_007bGSL_005fRANGE_005fCHECK_005fOFF_007d-890"></a>If necessary you can turn off range checking completely without
+modifying any source files by recompiling your program with the
+preprocessor definition <code>GSL_RANGE_CHECK_OFF</code>.  Provided your
+compiler supports inline functions the effect of turning off range
+checking is to replace calls to <code>gsl_vector_get(v,i)</code> by
+<code>v-&gt;data[i*v-&gt;stride]</code> and calls to <code>gsl_vector_set(v,i,x)</code> by
+<code>v-&gt;data[i*v-&gt;stride]=x</code>.  Thus there should be no performance
+penalty for using the range checking functions when range checking is
+turned off.
+
+   <p><a name="index-g_t_0040code_007bGSL_005fC99_005fINLINE_007d-891"></a>If you use a C99 compiler which requires inline functions in header
+files to be declared <code>inline</code> instead of <code>extern inline</code>,
+define the macro <code>GSL_C99_INLINE</code> (see <a href="Inline-functions.html">Inline functions</a>). 
+With GCC this is selected automatically when compiling in C99 mode
+(<code>-std=c99</code>).
+
+   <p><a name="index-gsl_005fcheck_005frange-892"></a>If inline functions are not used, calls to the functions
+<code>gsl_vector_get</code> and <code>gsl_vector_set</code> will link to the
+compiled versions of these functions in the library itself.  The range
+checking in these functions is controlled by the global integer
+variable <code>gsl_check_range</code>.  It is enabled by default&mdash;to
+disable it, set <code>gsl_check_range</code> to zero.  Due to function-call
+overhead, there is less benefit in disabling range checking here than
+for inline functions.
+
+<div class="defun">
+&mdash; Function: double <b>gsl_vector_get</b> (<var>const gsl_vector * v, size_t i</var>)<var><a name="index-gsl_005fvector_005fget-893"></a></var><br>
+<blockquote><p>This function returns the <var>i</var>-th element of a vector <var>v</var>.  If
+<var>i</var> lies outside the allowed range of 0 to <var>n</var>-1 then the error
+handler is invoked and 0 is returned.  An inline version of this function is used when <code>HAVE_INLINE</code> is defined. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_vector_set</b> (<var>gsl_vector * v, size_t i, double x</var>)<var><a name="index-gsl_005fvector_005fset-894"></a></var><br>
+<blockquote><p>This function sets the value of the <var>i</var>-th element of a vector
+<var>v</var> to <var>x</var>.  If <var>i</var> lies outside the allowed range of 0 to
+<var>n</var>-1 then the error handler is invoked.  An inline version of this function is used when <code>HAVE_INLINE</code> is defined. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double * <b>gsl_vector_ptr</b> (<var>gsl_vector * v, size_t i</var>)<var><a name="index-gsl_005fvector_005fptr-895"></a></var><br>
+&mdash; Function: const double * <b>gsl_vector_const_ptr</b> (<var>const gsl_vector * v, size_t i</var>)<var><a name="index-gsl_005fvector_005fconst_005fptr-896"></a></var><br>
+<blockquote><p>These functions return a pointer to the <var>i</var>-th element of a vector
+<var>v</var>.  If <var>i</var> lies outside the allowed range of 0 to <var>n</var>-1
+then the error handler is invoked and a null pointer is returned.  Inline versions of these functions are used when <code>HAVE_INLINE</code> is defined. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Range
+checking is available in the GNU C Compiler bounds-checking extension,
+but it is not part of the default installation of GCC. Memory accesses
+can also be checked with Valgrind or the <code>gcc -fmudflap</code>
+memory protection option.</p>
+
+   <hr></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

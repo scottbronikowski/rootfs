@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Multimin Algorithms with Derivatives - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Multidimensional-Minimization.html" title="Multidimensional Minimization">
+<link rel="prev" href="Multimin-Stopping-Criteria.html" title="Multimin Stopping Criteria">
+<link rel="next" href="Multimin-Algorithms-without-Derivatives.html" title="Multimin Algorithms without Derivatives">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Multimin-Algorithms-with-Derivatives"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multimin-Algorithms-without-Derivatives.html">Multimin Algorithms without Derivatives</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Multimin-Stopping-Criteria.html">Multimin Stopping Criteria</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Multidimensional-Minimization.html">Multidimensional Minimization</a>
+<hr>
+</div>
+
+<h3 class="section">36.7 Algorithms with Derivatives</h3>
+
+<p>There are several minimization methods available. The best choice of
+algorithm depends on the problem.  The algorithms described in this
+section use the value of the function and its gradient at each
+evaluation point.
+
+<div class="defun">
+&mdash; Minimizer: <b>gsl_multimin_fdfminimizer_conjugate_fr</b><var><a name="index-gsl_005fmultimin_005ffdfminimizer_005fconjugate_005ffr-2540"></a></var><br>
+<blockquote><p><a name="index-Fletcher_002dReeves-conjugate-gradient-algorithm_002c-minimization-2541"></a><a name="index-Conjugate-gradient-algorithm_002c-minimization-2542"></a><a name="index-minimization_002c-conjugate-gradient-algorithm-2543"></a>This is the Fletcher-Reeves conjugate gradient algorithm. The conjugate
+gradient algorithm proceeds as a succession of line minimizations. The
+sequence of search directions is used to build up an approximation to the
+curvature of the function in the neighborhood of the minimum.
+
+        <p>An initial search direction <var>p</var> is chosen using the gradient, and line
+minimization is carried out in that direction.  The accuracy of the line
+minimization is specified by the parameter <var>tol</var>.  The minimum
+along this line occurs when the function gradient <var>g</var> and the search direction
+<var>p</var> are orthogonal.  The line minimization terminates when
+<!-- {$p\cdot g < tol |p| |g|$} -->
+dot(p,g) &lt; tol |p| |g|.  The
+search direction is updated  using the Fletcher-Reeves formula
+p' = g' - \beta g where \beta=-|g'|^2/|g|^2, and
+the line minimization is then repeated for the new search
+direction. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Minimizer: <b>gsl_multimin_fdfminimizer_conjugate_pr</b><var><a name="index-gsl_005fmultimin_005ffdfminimizer_005fconjugate_005fpr-2544"></a></var><br>
+<blockquote><p><a name="index-Polak_002dRibiere-algorithm_002c-minimization-2545"></a><a name="index-minimization_002c-Polak_002dRibiere-algorithm-2546"></a>This is the Polak-Ribiere conjugate gradient algorithm.  It is similar
+to the Fletcher-Reeves method, differing only in the choice of the
+coefficient \beta. Both methods work well when the evaluation
+point is close enough to the minimum of the objective function that it
+is well approximated by a quadratic hypersurface. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Minimizer: <b>gsl_multimin_fdfminimizer_vector_bfgs2</b><var><a name="index-gsl_005fmultimin_005ffdfminimizer_005fvector_005fbfgs2-2547"></a></var><br>
+&mdash; Minimizer: <b>gsl_multimin_fdfminimizer_vector_bfgs</b><var><a name="index-gsl_005fmultimin_005ffdfminimizer_005fvector_005fbfgs-2548"></a></var><br>
+<blockquote><p><a name="index-BFGS-algorithm_002c-minimization-2549"></a><a name="index-minimization_002c-BFGS-algorithm-2550"></a>These methods use the vector Broyden-Fletcher-Goldfarb-Shanno (BFGS)
+algorithm.  This is a quasi-Newton method which builds up an approximation
+to the second derivatives of the function f using the difference
+between successive gradient vectors.  By combining the first and second
+derivatives the algorithm is able to take Newton-type steps towards the
+function minimum, assuming quadratic behavior in that region.
+
+        <p>The <code>bfgs2</code> version of this minimizer is the most efficient
+version available, and is a faithful implementation of the line
+minimization scheme described in Fletcher's <cite>Practical Methods of
+Optimization</cite>, Algorithms 2.6.2 and 2.6.4.  It supersedes the original
+<code>bfgs</code> routine and requires substantially fewer function and
+gradient evaluations.  The user-supplied tolerance <var>tol</var>
+corresponds to the parameter \sigma used by Fletcher.  A value
+of 0.1 is recommended for typical use (larger values correspond to
+less accurate line searches).
+
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Minimizer: <b>gsl_multimin_fdfminimizer_steepest_descent</b><var><a name="index-gsl_005fmultimin_005ffdfminimizer_005fsteepest_005fdescent-2551"></a></var><br>
+<blockquote><p><a name="index-steepest-descent-algorithm_002c-minimization-2552"></a><a name="index-minimization_002c-steepest-descent-algorithm-2553"></a>The steepest descent algorithm follows the downhill gradient of the
+function at each step. When a downhill step is successful the step-size
+is increased by a factor of two.  If the downhill step leads to a higher
+function value then the algorithm backtracks and the step size is
+decreased using the parameter <var>tol</var>.  A suitable value of <var>tol</var>
+for most applications is 0.1.  The steepest descent method is
+inefficient and is included only for demonstration purposes. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

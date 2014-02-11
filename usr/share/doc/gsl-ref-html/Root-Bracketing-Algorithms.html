@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+<title>Root Bracketing Algorithms - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="One-dimensional-Root_002dFinding.html" title="One dimensional Root-Finding">
+<link rel="prev" href="Search-Stopping-Parameters.html" title="Search Stopping Parameters">
+<link rel="next" href="Root-Finding-Algorithms-using-Derivatives.html" title="Root Finding Algorithms using Derivatives">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Root-Bracketing-Algorithms"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Root-Finding-Algorithms-using-Derivatives.html">Root Finding Algorithms using Derivatives</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Search-Stopping-Parameters.html">Search Stopping Parameters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="One-dimensional-Root_002dFinding.html">One dimensional Root-Finding</a>
+<hr>
+</div>
+
+<h3 class="section">33.8 Root Bracketing Algorithms</h3>
+
+<p>The root bracketing algorithms described in this section require an
+initial interval which is guaranteed to contain a root&mdash;if a
+and b are the endpoints of the interval then f(a) must
+differ in sign from f(b).  This ensures that the function crosses
+zero at least once in the interval.  If a valid initial interval is used
+then these algorithm cannot fail, provided the function is well-behaved.
+
+   <p>Note that a bracketing algorithm cannot find roots of even degree, since
+these do not cross the x-axis.
+
+<div class="defun">
+&mdash; Solver: <b>gsl_root_fsolver_bisection</b><var><a name="index-gsl_005froot_005ffsolver_005fbisection-2410"></a></var><br>
+<blockquote>
+        <p><a name="index-bisection-algorithm-for-finding-roots-2411"></a><a name="index-root-finding_002c-bisection-algorithm-2412"></a>
+The <dfn>bisection algorithm</dfn> is the simplest method of bracketing the
+roots of a function.   It is the slowest algorithm provided by
+the library, with linear convergence.
+
+        <p>On each iteration, the interval is bisected and the value of the
+function at the midpoint is calculated.  The sign of this value is used
+to determine which half of the interval does not contain a root.  That
+half is discarded to give a new, smaller interval containing the
+root.  This procedure can be continued indefinitely until the interval is
+sufficiently small.
+
+        <p>At any time the current estimate of the root is taken as the midpoint of
+the interval.
+
+     <!-- eps file "roots-bisection.eps" -->
+     <!-- @iftex -->
+     <!-- @sp 1 -->
+     <!-- @center @image{roots-bisection,3.4in} -->
+     <!-- @quotation -->
+     <!-- Four iterations of bisection, where @math{a_n} is @math{n}th position of -->
+     <!-- the beginning of the interval and @math{b_n} is the @math{n}th position -->
+     <!-- of the end.  The midpoint of each interval is also indicated. -->
+     <!-- @end quotation -->
+     <!-- @end iftex -->
+        </blockquote></div>
+
+<!-- ============================================================ -->
+<div class="defun">
+&mdash; Solver: <b>gsl_root_fsolver_falsepos</b><var><a name="index-gsl_005froot_005ffsolver_005ffalsepos-2413"></a></var><br>
+<blockquote><p><a name="index-false-position-algorithm-for-finding-roots-2414"></a><a name="index-root-finding_002c-false-position-algorithm-2415"></a>
+The <dfn>false position algorithm</dfn> is a method of finding roots based on
+linear interpolation.  Its convergence is linear, but it is usually
+faster than bisection.
+
+        <p>On each iteration a line is drawn between the endpoints (a,f(a))
+and (b,f(b)) and the point where this line crosses the
+x-axis taken as a &ldquo;midpoint&rdquo;.  The value of the function at
+this point is calculated and its sign is used to determine which side of
+the interval does not contain a root.  That side is discarded to give a
+new, smaller interval containing the root.  This procedure can be
+continued indefinitely until the interval is sufficiently small.
+
+        <p>The best estimate of the root is taken from the linear interpolation of
+the interval on the current iteration.
+
+     <!-- eps file "roots-false-position.eps" -->
+     <!-- @iftex -->
+     <!-- @image{roots-false-position,4in} -->
+     <!-- @quotation -->
+     <!-- Several iterations of false position, where @math{a_n} is @math{n}th -->
+     <!-- position of the beginning of the interval and @math{b_n} is the -->
+     <!-- @math{n}th position of the end. -->
+     <!-- @end quotation -->
+     <!-- @end iftex -->
+        </blockquote></div>
+
+<!-- ============================================================ -->
+<div class="defun">
+&mdash; Solver: <b>gsl_root_fsolver_brent</b><var><a name="index-gsl_005froot_005ffsolver_005fbrent-2416"></a></var><br>
+<blockquote><p><a name="index-Brent_0027s-method-for-finding-roots-2417"></a><a name="index-root-finding_002c-Brent_0027s-method-2418"></a>
+The <dfn>Brent-Dekker method</dfn> (referred to here as <dfn>Brent's method</dfn>)
+combines an interpolation strategy with the bisection algorithm.  This
+produces a fast algorithm which is still robust.
+
+        <p>On each iteration Brent's method approximates the function using an
+interpolating curve.  On the first iteration this is a linear
+interpolation of the two endpoints.  For subsequent iterations the
+algorithm uses an inverse quadratic fit to the last three points, for
+higher accuracy.  The intercept of the interpolating curve with the
+x-axis is taken as a guess for the root.  If it lies within the
+bounds of the current interval then the interpolating point is accepted,
+and used to generate a smaller interval.  If the interpolating point is
+not accepted then the algorithm falls back to an ordinary bisection
+step.
+
+        <p>The best estimate of the root is taken from the most recent
+interpolation or bisection. 
+</p></blockquote></div>
+
+<!-- ============================================================ -->
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

@@ -1,0 +1,182 @@
+<html lang="en">
+<head>
+<title>GCC warning options for numerical programs - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugging-Numerical-Programs.html" title="Debugging Numerical Programs">
+<link rel="prev" href="Handling-floating-point-exceptions.html" title="Handling floating point exceptions">
+<link rel="next" href="Debugging-References.html" title="Debugging References">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="GCC-warning-options-for-numerical-programs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Debugging-References.html">Debugging References</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Handling-floating-point-exceptions.html">Handling floating point exceptions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugging-Numerical-Programs.html">Debugging Numerical Programs</a>
+<hr>
+</div>
+
+<h3 class="section">A.4 GCC warning options for numerical programs</h3>
+
+<p><a name="index-warning-options-2709"></a><a name="index-gcc-warning-options-2710"></a>
+Writing reliable numerical programs in C requires great care.  The
+following GCC warning options are recommended when compiling numerical
+programs:
+
+<!-- Uninitialized variables, conversions to and from integers or from -->
+<!-- signed to unsigned integers can all cause hard-to-find problems.  For -->
+<!-- many non-numerical programs compiling with @code{gcc}'s warning option -->
+<!-- @code{-Wall} provides a good check against common errors.  However, for -->
+<!-- numerical programs @code{-Wall} is not enough. -->
+<!-- If you are unconvinced take a look at this program which contains an -->
+<!-- error that can occur in numerical code, -->
+<!-- @example -->
+<!-- #include <math.h> -->
+<!-- #include <stdio.h> -->
+<!-- double f (int x); -->
+<!-- int main () -->
+<!-- @{ -->
+<!-- double a = 1.5; -->
+<!-- double y = f(a); -->
+<!-- printf("a = %g, sqrt(a) = %g\n", a, y); -->
+<!-- return 0; -->
+<!-- @} -->
+<!-- double f(x) @{ -->
+<!-- return sqrt(x); -->
+<!-- @} -->
+<!-- @end example -->
+<!-- @noindent -->
+<!-- This code compiles cleanly with @code{-Wall} but produces some strange -->
+<!-- output, -->
+<!-- @example -->
+<!-- bash$ gcc -Wall tmp.c -lm -->
+<!-- bash$ ./a.out -->
+<!-- a = 1.5, sqrt(a) = 1 -->
+<!-- @end example -->
+<!-- @noindent -->
+<!-- Note that adding @code{-ansi} does not help here, since the program does -->
+<!-- not contain any invalid constructs.  What is happening is that the -->
+<!-- prototype for the function @code{f(int x)} is not consistent with the -->
+<!-- function call @code{f(y)}, where @code{y} is a floating point -->
+<!-- number.  This results in the argument being silently converted to an -->
+<!-- integer.  This is valid C, but in a numerical program it also likely to -->
+<!-- be a programming error so we would like to be warned about it. (If we -->
+<!-- genuinely wanted to convert @code{y} to an integer then we could use an -->
+<!-- explicit cast, @code{(int)y}). -->
+<!-- Fortunately GCC provides many additional warnings which can alert you to -->
+<!-- problems such as this.  You just have to remember to use them.  Here is a -->
+<!-- set of recommended warning options for numerical programs. -->
+<pre class="example">     gcc -ansi -pedantic -Werror -Wall -W
+       -Wmissing-prototypes -Wstrict-prototypes
+       -Wconversion -Wshadow -Wpointer-arith
+       -Wcast-qual -Wcast-align
+       -Wwrite-strings -Wnested-externs
+       -fshort-enums -fno-common -Dinline= -g -O2
+</pre>
+   <p class="noindent">For details of each option consult the manual <cite>Using and Porting
+GCC</cite>.  The following table gives a brief explanation of what types of
+errors these options catch.
+
+     <dl>
+<dt><code>-ansi -pedantic</code><dd>Use ANSI C, and reject any non-ANSI extensions.  These flags help in
+writing portable programs that will compile on other systems. 
+<br><dt><code>-Werror</code><dd>Consider warnings to be errors, so that compilation stops.  This prevents
+warnings from scrolling off the top of the screen and being lost.  You
+won't be able to compile the program until it is completely
+warning-free. 
+<br><dt><code>-Wall</code><dd>This turns on a set of warnings for common programming problems.  You
+need <code>-Wall</code>, but it is not enough on its own. 
+<br><dt><code>-O2</code><dd>Turn on optimization.  The warnings for uninitialized variables in
+<code>-Wall</code> rely on the optimizer to analyze the code.  If there is no
+optimization then these warnings aren't generated. 
+<br><dt><code>-W</code><dd>This turns on some extra warnings not included in <code>-Wall</code>, such as
+missing return values and comparisons between signed and unsigned
+integers. 
+<br><dt><code>-Wmissing-prototypes -Wstrict-prototypes</code><dd>Warn if there are any missing or inconsistent prototypes.  Without
+prototypes it is harder to detect problems with incorrect arguments. 
+<br><dt><code>-Wconversion</code><dd>The main use of this option is to warn about conversions from signed to
+unsigned integers.  For example, <code>unsigned int x = -1</code>.  If you need
+to perform such a conversion you can use an explicit cast. 
+<br><dt><code>-Wshadow</code><dd>This warns whenever a local variable shadows another local variable.  If
+two variables have the same name then it is a potential source of
+confusion. 
+<br><dt><code>-Wpointer-arith -Wcast-qual -Wcast-align</code><dd>These options warn if you try to do pointer arithmetic for types which
+don't have a size, such as <code>void</code>, if you remove a <code>const</code>
+cast from a pointer, or if you cast a pointer to a type which has a
+different size, causing an invalid alignment. 
+<br><dt><code>-Wwrite-strings</code><dd>This option gives string constants a <code>const</code> qualifier so that it
+will be a compile-time error to attempt to overwrite them. 
+<br><dt><code>-fshort-enums</code><dd>This option makes the type of <code>enum</code> as short as possible.  Normally
+this makes an <code>enum</code> different from an <code>int</code>.  Consequently any
+attempts to assign a pointer-to-int to a pointer-to-enum will generate a
+cast-alignment warning. 
+<br><dt><code>-fno-common</code><dd>This option prevents global variables being simultaneously defined in
+different object files (you get an error at link time).  Such a variable
+should be defined in one file and referred to in other files with an
+<code>extern</code> declaration. 
+<br><dt><code>-Wnested-externs</code><dd>This warns if an <code>extern</code> declaration is encountered within a
+function. 
+<br><dt><code>-Dinline=</code><dd>The <code>inline</code> keyword is not part of ANSI C. Thus if you want to use
+<code>-ansi</code> with a program which uses inline functions you can use this
+preprocessor definition to remove the <code>inline</code> keywords. 
+<br><dt><code>-g</code><dd>It always makes sense to put debugging symbols in the executable so that
+you can debug it using <code>gdb</code>.  The only effect of debugging symbols
+is to increase the size of the file, and you can use the <code>strip</code>
+command to remove them later if necessary. 
+</dl>
+
+<!-- For comparison, this is what happens when the test program above is -->
+<!-- compiled with these options. -->
+<!-- @example -->
+<!-- bash$ gcc -ansi -pedantic -Werror -W -Wall -Wtraditional -->
+<!-- Wconversion -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -->
+<!-- Wwrite-strings -Waggregate-return -Wstrict-prototypes -fshort-enums -->
+<!-- fno-common -Wmissing-prototypes -Wnested-externs -Dinline= -->
+<!-- g -O4 tmp.c -->
+<!-- cc1: warnings being treated as errors -->
+<!-- tmp.c:7: warning: function declaration isn't a prototype -->
+<!-- tmp.c: In function `main': -->
+<!-- tmp.c:9: warning: passing arg 1 of `f' as integer rather than floating -->
+<!-- due to prototype -->
+<!-- tmp.c: In function `f': -->
+<!-- tmp.c:14: warning: type of `x' defaults to `int' -->
+<!-- tmp.c:15: warning: passing arg 1 of `sqrt' as floating rather than integer -->
+<!-- due to prototype -->
+<!-- make: *** [tmp] Error 1 -->
+<!-- @end example -->
+<!-- @noindent -->
+<!-- The error in the prototype is flagged, plus the fact that we should have -->
+<!-- defined main as @code{int main (void)} in ANSI C. Clearly there is some -->
+<!-- work to do before this program is ready to run. -->
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

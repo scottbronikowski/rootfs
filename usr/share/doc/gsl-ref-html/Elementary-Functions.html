@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Elementary Functions - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mathematical-Functions.html" title="Mathematical Functions">
+<link rel="prev" href="Infinities-and-Not_002da_002dnumber.html" title="Infinities and Not-a-number">
+<link rel="next" href="Small-integer-powers.html" title="Small integer powers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Elementary-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Small-integer-powers.html">Small integer powers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Infinities-and-Not_002da_002dnumber.html">Infinities and Not-a-number</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mathematical-Functions.html">Mathematical Functions</a>
+<hr>
+</div>
+
+<h3 class="section">4.3 Elementary Functions</h3>
+
+<p>The following routines provide portable implementations of functions
+found in the BSD math library.  When native versions are not available
+the functions described here can be used instead.  The substitution can
+be made automatically if you use <code>autoconf</code> to compile your
+application (see <a href="Portability-functions.html">Portability functions</a>).
+
+<div class="defun">
+&mdash; Function: double <b>gsl_log1p</b> (<var>const double x</var>)<var><a name="index-gsl_005flog1p-87"></a></var><br>
+<blockquote><p><a name="index-log1p-88"></a><a name="index-logarithm_002c-computed-accurately-near-1-89"></a>This function computes the value of \log(1+x) in a way that is
+accurate for small <var>x</var>. It provides an alternative to the BSD math
+function <code>log1p(x)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_expm1</b> (<var>const double x</var>)<var><a name="index-gsl_005fexpm1-90"></a></var><br>
+<blockquote><p><a name="index-expm1-91"></a><a name="index-exponential_002c-difference-from-1-computed-accurately-92"></a>This function computes the value of \exp(x)-1 in a way that is
+accurate for small <var>x</var>. It provides an alternative to the BSD math
+function <code>expm1(x)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_hypot</b> (<var>const double x, const double y</var>)<var><a name="index-gsl_005fhypot-93"></a></var><br>
+<blockquote><p><a name="index-hypot-94"></a><a name="index-euclidean-distance-function_002c-hypot-95"></a><a name="index-length_002c-computed-accurately-using-hypot-96"></a>This function computes the value of
+<!-- {$\sqrt{x^2 + y^2}$} -->
+\sqrt{x^2 + y^2} in a way that avoids overflow. It provides an
+alternative to the BSD math function <code>hypot(x,y)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_hypot3</b> (<var>const double x, const double y, const double z</var>)<var><a name="index-gsl_005fhypot3-97"></a></var><br>
+<blockquote><p><a name="index-euclidean-distance-function_002c-hypot-98"></a><a name="index-length_002c-computed-accurately-using-hypot-99"></a>This function computes the value of
+<!-- {$\sqrt{x^2 + y^2 + z^2}$} -->
+\sqrt{x^2 + y^2 + z^2} in a way that avoids overflow. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_acosh</b> (<var>const double x</var>)<var><a name="index-gsl_005facosh-100"></a></var><br>
+<blockquote><p><a name="index-acosh-101"></a><a name="index-hyperbolic-cosine_002c-inverse-102"></a><a name="index-inverse-hyperbolic-cosine-103"></a>This function computes the value of \arccosh(x). It provides an
+alternative to the standard math function <code>acosh(x)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_asinh</b> (<var>const double x</var>)<var><a name="index-gsl_005fasinh-104"></a></var><br>
+<blockquote><p><a name="index-asinh-105"></a><a name="index-hyperbolic-sine_002c-inverse-106"></a><a name="index-inverse-hyperbolic-sine-107"></a>This function computes the value of \arcsinh(x). It provides an
+alternative to the standard math function <code>asinh(x)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_atanh</b> (<var>const double x</var>)<var><a name="index-gsl_005fatanh-108"></a></var><br>
+<blockquote><p><a name="index-atanh-109"></a><a name="index-hyperbolic-tangent_002c-inverse-110"></a><a name="index-inverse-hyperbolic-tangent-111"></a>This function computes the value of \arctanh(x). It provides an
+alternative to the standard math function <code>atanh(x)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_ldexp</b> (<var>double x, int e</var>)<var><a name="index-gsl_005fldexp-112"></a></var><br>
+<blockquote><p><a name="index-ldexp-113"></a>This function computes the value of x * 2^e. It provides an
+alternative to the standard math function <code>ldexp(x,e)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: double <b>gsl_frexp</b> (<var>double x, int * e</var>)<var><a name="index-gsl_005ffrexp-114"></a></var><br>
+<blockquote><p><a name="index-frexp-115"></a>This function splits the number x into its normalized fraction
+f and exponent e, such that x = f * 2^e and
+<!-- {$0.5 \le f < 1$} -->
+0.5 &lt;= f &lt; 1. The function returns f and stores the
+exponent in e. If x is zero, both f and e
+are set to zero. This function provides an alternative to the standard
+math function <code>frexp(x, e)</code>. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

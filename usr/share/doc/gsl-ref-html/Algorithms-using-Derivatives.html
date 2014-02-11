@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Algorithms using Derivatives - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Multidimensional-Root_002dFinding.html" title="Multidimensional Root-Finding">
+<link rel="prev" href="Search-Stopping-Parameters-for-the-multidimensional-solver.html" title="Search Stopping Parameters for the multidimensional solver">
+<link rel="next" href="Algorithms-without-Derivatives.html" title="Algorithms without Derivatives">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Algorithms-using-Derivatives"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Algorithms-without-Derivatives.html">Algorithms without Derivatives</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Search-Stopping-Parameters-for-the-multidimensional-solver.html">Search Stopping Parameters for the multidimensional solver</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Multidimensional-Root_002dFinding.html">Multidimensional Root-Finding</a>
+<hr>
+</div>
+
+<h3 class="section">35.6 Algorithms using Derivatives</h3>
+
+<p>The root finding algorithms described in this section make use of both
+the function and its derivative.  They require an initial guess for the
+location of the root, but there is no absolute guarantee of
+convergence&mdash;the function must be suitable for this technique and the
+initial guess must be sufficiently close to the root for it to work. 
+When the conditions are satisfied then convergence is quadratic.
+
+<!-- ============================================================ -->
+   <p><a name="index-HYBRID-algorithms-for-nonlinear-systems-2492"></a>
+
+<div class="defun">
+&mdash; Derivative Solver: <b>gsl_multiroot_fdfsolver_hybridsj</b><var><a name="index-gsl_005fmultiroot_005ffdfsolver_005fhybridsj-2493"></a></var><br>
+<blockquote><p><a name="index-HYBRIDSJ-algorithm-2494"></a><a name="index-MINPACK_002c-minimization-algorithms-2495"></a>This is a modified version of Powell's Hybrid method as implemented in
+the <span class="sc">hybrj</span> algorithm in <span class="sc">minpack</span>.  Minpack was written by Jorge
+J. Mor&eacute;, Burton S. Garbow and Kenneth E. Hillstrom.  The Hybrid
+algorithm retains the fast convergence of Newton's method but will also
+reduce the residual when Newton's method is unreliable.
+
+        <p>The algorithm uses a generalized trust region to keep each step under
+control.  In order to be accepted a proposed new position x' must
+satisfy the condition |D (x' - x)| &lt; \delta, where D is a
+diagonal scaling matrix and \delta is the size of the trust
+region.  The components of D are computed internally, using the
+column norms of the Jacobian to estimate the sensitivity of the residual
+to each component of x.  This improves the behavior of the
+algorithm for badly scaled functions.
+
+        <p>On each iteration the algorithm first determines the standard Newton
+step by solving the system J dx = - f.  If this step falls inside
+the trust region it is used as a trial step in the next stage.  If not,
+the algorithm uses the linear combination of the Newton and gradient
+directions which is predicted to minimize the norm of the function while
+staying inside the trust region,
+     This combination of Newton and gradient directions is referred to as a
+<dfn>dogleg step</dfn>.
+
+        <p>The proposed step is now tested by evaluating the function at the
+resulting point, x'.  If the step reduces the norm of the function
+sufficiently then it is accepted and size of the trust region is
+increased.  If the proposed step fails to improve the solution then the
+size of the trust region is decreased and another trial step is
+computed.
+
+        <p>The speed of the algorithm is increased by computing the changes to the
+Jacobian approximately, using a rank-1 update.  If two successive
+attempts fail to reduce the residual then the full Jacobian is
+recomputed.  The algorithm also monitors the progress of the solution
+and returns an error if several steps fail to make any improvement,
+
+          <dl>
+<dt><code>GSL_ENOPROG</code><dd>the iteration is not making any progress, preventing the algorithm from
+continuing.
+
+          <br><dt><code>GSL_ENOPROGJ</code><dd>re-evaluations of the Jacobian indicate that the iteration is not
+making any progress, preventing the algorithm from continuing. 
+</dl>
+
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Derivative Solver: <b>gsl_multiroot_fdfsolver_hybridj</b><var><a name="index-gsl_005fmultiroot_005ffdfsolver_005fhybridj-2496"></a></var><br>
+<blockquote><p><a name="index-HYBRIDJ-algorithm-2497"></a>This algorithm is an unscaled version of <code>hybridsj</code>.  The steps are
+controlled by a spherical trust region |x' - x| &lt; \delta, instead
+of a generalized region.  This can be useful if the generalized region
+estimated by <code>hybridsj</code> is inappropriate. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Derivative Solver: <b>gsl_multiroot_fdfsolver_newton</b><var><a name="index-gsl_005fmultiroot_005ffdfsolver_005fnewton-2498"></a></var><br>
+<blockquote><p><a name="index-Newton_0027s-method-for-systems-of-nonlinear-equations-2499"></a>
+Newton's Method is the standard root-polishing algorithm.  The algorithm
+begins with an initial guess for the location of the solution.  On each
+iteration a linear approximation to the function F is used to
+estimate the step which will zero all the components of the residual. 
+The iteration is defined by the following sequence,
+     where the Jacobian matrix J is computed from the derivative
+functions provided by <var>f</var>.  The step dx is obtained by solving
+the linear system,
+     using LU decomposition.  If the Jacobian matrix is singular, an error
+code of <code>GSL_EDOM</code> is returned. 
+</p></blockquote></div>
+
+<!-- ============================================================ -->
+<div class="defun">
+&mdash; Derivative Solver: <b>gsl_multiroot_fdfsolver_gnewton</b><var><a name="index-gsl_005fmultiroot_005ffdfsolver_005fgnewton-2500"></a></var><br>
+<blockquote><p><a name="index-Modified-Newton_0027s-method-for-nonlinear-systems-2501"></a><a name="index-Newton-algorithm_002c-globally-convergent-2502"></a>This is a modified version of Newton's method which attempts to improve
+global convergence by requiring every step to reduce the Euclidean norm
+of the residual, |f(x)|.  If the Newton step leads to an increase
+in the norm then a reduced step of relative size,
+     is proposed, with r being the ratio of norms
+|f(x')|^2/|f(x)|^2.  This procedure is repeated until a suitable step
+size is found. 
+</p></blockquote></div>
+
+<!-- ============================================================ -->
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

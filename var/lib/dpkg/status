@@ -78,6 +78,23 @@ Description: HPGL converter into some vector- and raster formats
  HP-GL sources without any trouble.
 Original-Maintainer: Christian T. Steigies <cts@debian.org>
 
+Package: libbonoboui2-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 371
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libbonoboui
+Version: 2.24.5-0ubuntu1
+Replaces: libbonoboui2-common (<= 2.4.3-1)
+Depends: libart-2.0-2 (>= 2.3.18), libatk1.0-0 (>= 1.12.4), libbonobo2-0 (>= 2.15.0), libc6 (>= 2.13), libgconf2-4 (>= 2.31.1), libgdk-pixbuf2.0-0 (>= 2.22.0), libglade2-0 (>= 1:2.6.1), libglib2.0-0 (>= 2.24.0), libgnome2-0 (>= 2.17.3), libgnomecanvas2-0 (>= 2.11.1), libgtk2.0-0 (>= 2.18.0), liborbit2 (>= 1:2.14.10), libpopt0 (>= 1.16), libx11-6, libxml2 (>= 2.7.4), libbonoboui2-common (>= 2.24), libbonoboui2-common (<< 2.25)
+Description: The Bonobo UI library
+ This package contains the Bonobo UI library.
+ .
+ This package is a part of GNOME.
+Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+
 Package: linux-source
 Status: install ok installed
 Priority: optional
@@ -185,6 +202,36 @@ Description: Base of all Java packages
   * Information on how to create dummy packages to fulfill java2
     requirements.
 Original-Maintainer: Debian Java Mailing List <debian-java@lists.debian.org>
+
+Package: python-lxml
+Status: install ok installed
+Priority: optional
+Section: python
+Installed-Size: 1620
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: lxml
+Version: 2.3.2-1
+Replaces: python2.3-lxml, python2.4-lxml
+Provides: python2.7-lxml
+Depends: python2.7, python (>= 2.7.1-0ubuntu2), python (<< 2.8), libc6 (>= 2.4), libxml2 (>= 2.7.4), libxslt1.1 (>= 1.1.26)
+Suggests: python-lxml-dbg
+Conflicts: python2.3-lxml, python2.4-lxml
+Description: pythonic binding for the libxml2 and libxslt libraries
+ lxml is a new Python binding for libxml2 and libxslt, completely
+ independent from existing Python bindings. Its aim:
+ .
+   * Pythonic API.
+   * Documented.
+   * Use Python unicode strings in API.
+   * Safe (no segfaults).
+   * No manual memory management!
+ .
+ lxml aims to provide a Pythonic API by following as much as possible
+ the ElementTree API, trying to avoid inventing too many new APIs,
+ or the user's having to learn new things -- XML is complicated enough.
+Original-Maintainer: Matthias Klose <doko@debian.org>
+Homepage: http://codespeak.net/lxml/
 
 Package: libfile-which-perl
 Status: install ok installed
@@ -564,6 +611,24 @@ Description: low-level image manipulation library
  use of MagickCore.
 Homepage: http://www.imagemagick.org/
 Original-Maintainer: ImageMagick Packaging Team <pkg-gmagick-im-team@lists.alioth.debian.org>
+
+Package: libart-2.0-2
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 108
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libart-lgpl
+Version: 2.3.21-1
+Depends: libc6 (>= 2.4)
+Description: Library of functions for 2D graphics - runtime files
+ A library of functions for 2D graphics supporting a superset of the
+ PostScript imaging model, designed to be integrated with graphics, artwork,
+ and illustration programs. It is written in optimized C, and is fully
+ compatible with C++. With a small footprint of 10,000 lines of code, it is
+ especially suitable for embedded applications.
+Original-Maintainer: Josselin Mouette <joss@debian.org>
 
 Package: libgtk-3-common
 Status: install ok installed
@@ -1391,6 +1456,37 @@ Description: X C Binding, shm extension
 Original-Maintainer: XCB Developers <xcb@lists.freedesktop.org>
 Homepage: http://xcb.freedesktop.org
 
+Package: libxml-parser-perl
+Status: install ok installed
+Priority: optional
+Section: perl
+Installed-Size: 556
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 2.41-1build1
+Depends: perl (>= 5.14.2-5ubuntu1), perlapi-5.14.2, liburi-perl, libwww-perl, libc6 (>= 2.4), libexpat1 (>= 1.95.8)
+Description: Perl module for parsing XML files
+ XML::Parser module provides ways to parse XML documents.  It is built on top
+ of XML::Parser::Expat, which is a lower level interface to James
+ Clark's expat library.  Each call to one of the parsing methods
+ creates a new instance of XML::Parser::Expat which is then used to
+ parse the document.  Expat options may be provided when the
+ XML::Parser object is created.  These options are then passed on to
+ the Expat object on each parse call.  They can also be given as extra
+ arguments to the parse methods, in which case they override options
+ given at XML::Parser creation time.
+ .
+ The behavior of the parser is controlled either by Style and/or
+ Handlers options, or by setHandlers method.  These all provide
+ mechanisms for XML::Parser to set the handlers needed by
+ XML::Parser::Expat.  If neither Style nor Handlers are specified,
+ then parsing just checks the document for being well-formed.
+ .
+ When underlying handlers get called, they receive as their first
+ parameter the Expat object, not the Parser object.
+Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Homepage: http://www.libexpat.org/
+
 Package: libclass-accessor-perl
 Status: install ok installed
 Priority: optional
@@ -1574,6 +1670,45 @@ Description: creates device files in /dev
  This package is not necessary for most modern Linux systems, where the udev
  subsystem provides a more dynamic mechanism for device file management.
 Original-Maintainer: Bdale Garbee <bdale@gag.com>
+
+Package: python-uniconvertor
+Status: install ok installed
+Priority: optional
+Section: python
+Installed-Size: 1647
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 1.1.4-1ubuntu1
+Provides: python2.7-uniconvertor
+Depends: python2.7, python (>= 2.7.1-0ubuntu2), python (<< 2.8), libc6 (>= 2.7), python-imaging, python-reportlab
+Suggests: python-uniconvertor-dbg
+Description: Universal vector graphics translator
+ UniConvertor is a multiplatform universal vector graphics translator.
+ It uses sK1 engine to convert one format to another.
+ .
+ Import filters:
+  * CorelDRAW ver.7-X3,X4 (CDR/CDT/CCX/CDRX/CMX)
+  * Adobe Illustrator up to 9 ver. (AI postscript based)
+  * Postscript (PS)
+  * Encapsulated Postscript (EPS)
+  * Computer Graphics Metafile (CGM)
+  * Windows Metafile (WMF)
+  * XFIG
+  * Scalable Vector Graphics (SVG)
+  * Skencil/Sketch/sK1 (SK and SK1)
+  * Acorn Draw (AFF)
+ .
+ Export filters:
+  * AI (Postscript based Adobe Illustrator 5.0 format)
+  * SVG (Scalable Vector Graphics)
+  * SK (Sketch/Skencil format)
+  * SK1 (sK1 format)
+  * CGM (Computer Graphics Metafile)
+  * WMF (Windows Metafile)
+  * PDF (Portable Document Format)
+  * PS (PostScript)
+Original-Maintainer: Andreas Wenning <uniconvertor@awen.dk>
+Homepage: http://sk1project.org/modules.php?name=Products&product=uniconvertor
 
 Package: libnet-cidr-perl
 Status: install ok installed
@@ -3039,6 +3174,23 @@ Description: Javascript engine library for GTK+
 Homepage: http://webkitgtk.org/
 Original-Maintainer: Debian WebKit Maintainers <pkg-webkit-maintainers@lists.alioth.debian.org>
 
+Package: libxml-dom-perl
+Status: install ok installed
+Priority: optional
+Section: perl
+Installed-Size: 496
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 1.44-1
+Depends: libwww-perl, libxml-parser-perl (>= 2.34), libxml-perl, libxml-regexp-perl, perl (>= 5.6.0-16)
+Description: Perl module for building DOM Level 1 compliant doc structures
+ This module parses XML strings or files and builds a data structure
+ that conforms to the API of the Document Object Model as described at
+ http://www.w3.org/TR/REC-DOM-Level-1.  See the XML::Parser manpage
+ for other available features of the XML::DOM::Parser class.
+Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Homepage: http://search.cpan.org/dist/XML-DOM/
+
 Package: cpp-4.6
 Status: install ok installed
 Priority: optional
@@ -3752,6 +3904,38 @@ Description: alternative Python package installer
  sources, and can install from version control repositories.
 Original-Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
 Homepage: http://pip.openplans.org/
+
+Package: python-reportlab
+Status: install ok installed
+Priority: optional
+Section: python
+Installed-Size: 2304
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 2.5-1.1build1
+Replaces: python2.3-reportlab, python2.4-reportlab
+Depends: python2.7, python (>= 2.7.1-0ubuntu2), python (<< 2.8)
+Recommends: python-reportlab-accel, python-renderpm, python-imaging (>= 1.1.6)
+Suggests: pdf-viewer, python-egenix-mxtexttools (>= 2.0.6-3.1), python-reportlab-doc
+Conflicts: python2.3-reportlab, python2.4-reportlab
+Description: ReportLab library to create PDF documents using Python
+ ReportLab is a library that lets you directly create documents in
+ Adobe's Portable Document Format (PDF) using the Python programming language.
+ .
+ ReportLab library creates PDF based on graphics commands without
+ intervening steps. It's therefore extremely fast, and flexible (since
+ you're using a full-blown programming language).
+ .
+ Sample use cases are:
+   * Dynamic PDF generation on the web
+   * High-volume corporate reporting and database publishing
+   * As embeddable print engine for other applications, including a
+     'report language' so that users can customize their own reports.
+   * As 'build system' for complex documents with charts, tables and text
+     such as management accounts, statistical reports and scientific papers
+   * from XML to PDF in one step
+Original-Maintainer: Matthias Klose <doko@debian.org>
+Python-Version: 2.7
 
 Package: libpopt0
 Status: install ok installed
@@ -5482,6 +5666,29 @@ Description: Basic Nepomuk data manipulation interface
 Homepage: http://www.kde.org/
 Original-Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
 
+Package: dia-common
+Status: install ok installed
+Priority: optional
+Section: graphics
+Installed-Size: 17112
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: dia
+Version: 0.97.2-5
+Replaces: dia (<= 0.86-1)
+Depends: xml-core (>= 0.12), python-gtk2
+Recommends: dia | dia-gnome, dia-libs
+Conflicts: dia (<= 0.86-1)
+Description: Diagram editor (common files)
+ Dia is an editor for diagrams, graphs, charts etc. There is support for UML
+ static structure diagrams (class diagrams), Entity-Relationship diagrams,
+ network diagrams and much more. Diagrams can be exported to postscript and
+ many other formats.
+ .
+ This package contains hardware independent files common to dia and dia-gnome
+Original-Maintainer: Debian Dia Team <pkg-dia-team@lists.alioth.debian.org>
+Homepage: http://live.gnome.org/Dia
+
 Package: xorg
 Status: install ok installed
 Priority: optional
@@ -6371,6 +6578,21 @@ Description: Development files for the Pango
  with Pango.
 Original-Maintainer: Sebastien Bacher <seb128@debian.org>
 
+Package: gsl-ref-html
+Status: install ok installed
+Priority: optional
+Section: non-free/doc
+Installed-Size: 4684
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 1.15-1
+Suggests: libgsl0ldbl, www-browser | lynx
+Description: GNU Scientific Library (GSL) Reference Manual in html
+ This package provides html files with the reference manual for the
+ GNU Scientific Library (GSL), a collection of routines for numerical
+ analysis.
+Original-Maintainer: Dirk Eddelbuettel <edd@debian.org>
+
 Package: libxres1
 Status: install ok installed
 Priority: optional
@@ -6508,6 +6730,24 @@ Description: A logging library for C++ (development files)
 Homepage: http://logging.apache.org/log4cxx/index.html
 Original-Maintainer: Matthew Vernon <sunergos@vernshome.net>
 
+Package: libgnomeui-0
+Status: install ok installed
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 603
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libgnomeui
+Version: 2.24.5-2ubuntu2
+Depends: gconf-service, libart-2.0-2 (>= 2.3.18), libatk1.0-0 (>= 1.12.4), libbonoboui2-0 (>= 2.15.1), libc6 (>= 2.15-0ubuntu8), libgconf-2-4 (>= 2.31.1), libgdk-pixbuf2.0-0 (>= 2.22.0), libglade2-0 (>= 1:2.6.1), libglib2.0-0 (>= 2.31.8), libgnome-keyring0 (>= 2.20.3), libgnome2-0 (>= 2.17.3), libgnomecanvas2-0 (>= 2.11.1), libgnomevfs2-0 (>= 1:2.17.90), libgtk2.0-0 (>= 2.14), libice6 (>= 1:1.0.0), libpango1.0-0 (>= 1.17.5), libsm6, libgnomeui-common (>= 2.24), libgnomeui-common (<< 2.25)
+Pre-Depends: multiarch-support
+Suggests: gnome-icon-theme
+Description: GNOME user interface library - runtime files
+ This package contains the shared library for the base GNOME library
+ functions (User Interface functions).
+Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+
 Package: libgif4
 Status: install ok installed
 Multi-Arch: same
@@ -6528,6 +6768,28 @@ Description: library for GIF images (library)
  This package contains the library.
 Homepage: http://giflib.sourceforge.net/
 Original-Maintainer: Thibaut GRIDEL <tgridel@free.fr>
+
+Package: libgssglue1
+Status: install ok installed
+Priority: standard
+Section: libs
+Installed-Size: 66
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libgssglue
+Version: 0.3-4
+Replaces: libgssapi2 (<= 0.11-1)
+Depends: libc6 (>= 2.7)
+Conflicts: libgssapi2 (<= 0.11-1)
+Conffiles:
+ /etc/gssapi_mech.conf a44051ee9dc95201c8358f12206554c9
+Description: mechanism-switch gssapi library
+ libgssglue provides a gssapi interface, but does not implement any
+ gssapi mechanisms itself; instead it calls other gssapi functions
+ (e.g., those provided by MIT Kerberos), depending on the requested
+ mechanism, to do the work.
+Original-Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
+Homepage: http://www.citi.umich.edu/projects/nfsv4/linux/
 
 Package: libisccfg82
 Status: install ok installed
@@ -6631,6 +6893,24 @@ Description: X C Binding, development files
     machine-parsable protocol descriptions
 Original-Maintainer: XCB Developers <xcb@lists.freedesktop.org>
 Homepage: http://xcb.freedesktop.org
+
+Package: dia
+Status: install ok installed
+Priority: optional
+Section: graphics
+Installed-Size: 417
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 0.97.2-5
+Depends: libc6 (>= 2.7), libcairo2 (>= 1.2.4), libfreetype6 (>= 2.2.1), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.24.0), libgtk2.0-0 (>= 2.12.0), libpango1.0-0 (>= 1.18.0), libpng12-0 (>= 1.2.13-4), libxml2 (>= 2.7.4), dia-common (= 0.97.2-5), dia-libs (= 0.97.2-5)
+Recommends: gsfonts-x11
+Description: Diagram editor
+ Dia is an editor for diagrams, graphs, charts etc. There is support for UML
+ static structure diagrams (class diagrams), Entity-Relationship diagrams,
+ network diagrams and much more. Diagrams can be exported to postscript and
+ many other formats.
+Original-Maintainer: Debian Dia Team <pkg-dia-team@lists.alioth.debian.org>
+Homepage: http://live.gnome.org/Dia
 
 Package: libqt4-declarative
 Status: install ok installed
@@ -6980,6 +7260,21 @@ Description: Userspace interface to nouveau-specific kernel DRM services -- runt
  currently used on Linux to provide hardware-accelerated OpenGL drivers.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
+Package: gnome-mime-data
+Status: install ok installed
+Priority: optional
+Section: gnome
+Installed-Size: 4388
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 2.18.0-1
+Conffiles:
+ /etc/gnome-vfs-mime-magic 0d63596f36fdb27f8e09116ddab72c1a
+Description: base MIME and Application database for GNOME.
+ This module contains the base MIME and Application database for GNOME.
+ It is meant to be accessed through the MIME functions in GnomeVFS.
+Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+
 Package: libboost-all-dev
 Status: install ok installed
 Priority: optional
@@ -7101,6 +7396,30 @@ Description: PulseAudio client libraries (glib support)
  This package adds support for glib2 client applications.
 Homepage: http://www.pulseaudio.org
 Original-Maintainer: Pulseaudio maintenance team <pkg-pulseaudio-devel@lists.alioth.debian.org>
+
+Package: libxml-regexp-perl
+Status: install ok installed
+Priority: optional
+Section: perl
+Installed-Size: 64
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 0.03-8
+Depends: perl
+Description: Perl module for regular expressions for XML tokens
+ The XML::RegExp module provides regular expressions for the following XML
+ tokens: BaseChar, Ideographic, Letter, Digit, Extender,
+ CombiningChar, NameChar, EntityRef, CharRef, Reference, Name,
+ NmToken, and AttValue.
+ .
+ The definitions of these tokens were taken from the XML spec
+ (Extensible Markup Language 1.0) at http://www.w3.org/TR/REC-xml.
+ .
+ Also contains the regular expressions for the following tokens from
+ the XML Namespaces spec at http://www.w3.org/TR/REC-xml-names:
+ NCNameChar, NCName, QName, Prefix and LocalPart.
+Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Homepage: http://search.cpan.org/dist/XML-RegExp/
 
 Package: libwpd-0.9-9
 Status: install ok installed
@@ -7330,6 +7649,25 @@ Description: time zone and daylight-saving time data
  daylight-saving rules.
 Original-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Homepage: http://www.iana.org/time-zones
+
+Package: libgnomecanvas2-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 211
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libgnomecanvas
+Version: 2.30.3-1ubuntu1
+Depends: libart-2.0-2 (>= 2.3.18), libatk1.0-0 (>= 1.12.4), libc6 (>= 2.13), libgail18 (>= 1.18.0), libgdk-pixbuf2.0-0 (>= 2.22.0), libglade2-0 (>= 1:2.6.1), libglib2.0-0 (>= 2.24.0), libgtk2.0-0 (>= 2.8.17), libpango1.0-0 (>= 1.14.0), libgnomecanvas2-common (>= 2.30), libgnomecanvas2-common (<< 2.31)
+Description: powerful object-oriented display engine - runtime files
+ The canvas widget is a powerful and extensible object-oriented display
+ engine. A GnomeCanvasItem is a GtkObject representing some element of the
+ display, such as an image, a rectangle, an ellipse, or some text. You can
+ refer to this architecture as structured graphics; the canvas lets you deal
+ with graphics in terms of items, rather than an undifferentiated grid of
+ pixels.
+Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 
 Package: avahi-autoipd
 Status: install ok installed
@@ -7892,6 +8230,22 @@ Description: touch screen library
 Original-Maintainer: Neil Williams <codehelp@debian.org>
 Homepage: http://tslib.berlios.de/
 
+Package: libsvg-perl
+Status: install ok installed
+Priority: optional
+Section: perl
+Installed-Size: 268
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 2.50-1
+Depends: perl
+Description: perl module to generate SVG images
+ This package provides a perl extension to generate stand-alone
+ or inline SVG (scalable vector graphics) images using the W3C
+ SVG xml recommendation.
+Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Homepage: http://search.cpan.org/dist/SVG/
+
 Package: xserver-xorg-video-radeon
 Status: install ok installed
 Priority: optional
@@ -8099,6 +8453,32 @@ Description: C99/C++ preprocessor library (default version)
  Boost version (currently 1.46).
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
 Homepage: http://www.boost.org/libs/wave/
+
+Package: libbonobo2-common
+Status: install ok installed
+Priority: optional
+Section: gnome
+Installed-Size: 376
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: libbonobo
+Version: 2.32.1-0ubuntu1
+Replaces: bonobo-activation (<< 1:2.4)
+Conflicts: bonobo-activation (<< 1:2.4)
+Conffiles:
+ /etc/bonobo-activation/bonobo-activation-config.xml 6ccbdf532ae9b7c605f4129ae1d050da
+Description: Bonobo CORBA interfaces library -- support files
+ Bonobo is a set of language and system independent CORBA interfaces
+ for creating reusable components, controls and creating compound
+ documents.
+ .
+ The Bonobo distribution includes a Gtk+ based implementation of the
+ Bonobo interfaces, enabling developers to create reusable
+ components and applications that can be used to form more complex
+ documents.
+ .
+ This package contains the support files needed by the Bonobo library.
+Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 
 Package: libxrender1
 Status: install ok installed
@@ -9186,6 +9566,30 @@ Description: C++ wrapper for the GLib toolkit (documentation)
 Homepage: http://www.gtkmm.org/
 Original-Maintainer: Deng Xiyue <manphiz-guest@users.alioth.debian.org>
 
+Package: rpcbind
+Status: install ok installed
+Priority: standard
+Section: net
+Installed-Size: 126
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 0.2.0-7ubuntu1
+Replaces: portmap
+Provides: portmap
+Depends: libc6 (>= 2.4), libtirpc1, libwrap0 (>= 7.6-4~), upstart-job, lsb-base (>= 3.2-14), insserv (>= 1.14.0-2.1) | file-rc, initscripts (>= 2.88dsf-13.3)
+Pre-Depends: dpkg (>= 1.15.7.2)
+Conflicts: portmap
+Conffiles:
+ /etc/init/rpcbind-boot.conf 73a7b949697222b8d1616334629269be
+ /etc/init/portmap-wait.conf 21abf1424012cd65d26fc0b1f6c07181
+ /etc/init/portmap.conf 9c0fe5de58712169799b161cbcc9b8f2
+ /etc/insserv.conf.d/rpcbind 669a5c3a6ffa8b5b5ce263057934d118
+Description: converts RPC program numbers into universal addresses
+ The rpcbind utility is a server that converts RPC program numbers
+ into universal addresses.
+Homepage: http://sourceforge.net/projects/rpcbind/
+Original-Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
+
 Package: info2www
 Status: install ok installed
 Priority: optional
@@ -10247,6 +10651,33 @@ Description: generic graph components and algorithms in C++ (default version)
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
 Homepage: http://www.boost.org/libs/graph/
 
+Package: libbonobo2-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 607
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libbonobo
+Version: 2.32.1-0ubuntu1
+Replaces: libbonobo-activation4 (<< 1:2.4), libbonobo2-common (<< 2.20.3-1)
+Depends: libbonobo2-common (= 2.32.1-0ubuntu1), libc6 (>= 2.4), libglib2.0-0 (>= 2.26.0), liborbit2 (>= 1:2.14.10), libxml2 (>= 2.7.4)
+Recommends: dbus-x11
+Suggests: libbonobo2-bin
+Conflicts: libbonobo-activation4 (<< 1:2.4), nautilus (<< 2.2.4-5)
+Description: Bonobo CORBA interfaces library
+ Bonobo is a set of language and system independent CORBA interfaces
+ for creating reusable components, controls and creating compound
+ documents.
+ .
+ The Bonobo distribution includes a Gtk+ based implementation of the
+ Bonobo interfaces, enabling developers to create reusable
+ components and applications that can be used to form more complex
+ documents.
+ .
+ This package contains the shared libraries.
+Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+
 Package: texlive-binaries
 Status: install ok installed
 Priority: optional
@@ -11158,6 +11589,26 @@ Description: X11 Fixes extension wire protocol
  This package is built from the X.org fixesproto proto module.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
+Package: gsl-doc-pdf
+Status: install ok installed
+Priority: optional
+Section: non-free/doc
+Installed-Size: 2348
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: gsl-doc
+Version: 1.15-1
+Suggests: libgsl0ldbl, gv | pdf-viewer
+Description: GNU Scientific Library (GSL) Reference Manual in pdf
+ This package provides a pdf file with the reference manual for the
+ GNU Scientific Library (GSL), a collection of routines for numerical
+ analysis.
+ .
+ The reference manual is also available in postscript and html formats
+ in the packages gsl-ref-psdoc and gsl-ref-html, respectively.
+Original-Maintainer: Dirk Eddelbuettel <edd@debian.org>
+Homepage: http://www.gnu.org/software/gsl
+
 Package: libfm-gtk-data
 Status: install ok installed
 Priority: optional
@@ -11268,6 +11719,26 @@ Description: header files and a static library for Python (default)
  Python version (currently v2.7).
 Homepage: http://www.python.org/
 Original-Maintainer: Matthias Klose <doko@debian.org>
+
+Package: libidl0
+Status: install ok installed
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 211
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libidl
+Version: 0.8.14-0.2ubuntu2
+Depends: libidl-common (>= 0.8.14-0.2ubuntu2), libidl-common (<< 0.8.14-0.2ubuntu2.1), libc6 (>= 2.7), libgcc1 (>= 1:4.4.0), libglib2.0-0 (>= 2.16.0)
+Pre-Depends: multiarch-support
+Description: library for parsing CORBA IDL files
+ libIDL is a small library for creating parse trees of CORBA v2.2 compliant
+ Interface Definition Language (IDL) files, which is a specification for
+ defining interfaces which can be used between different CORBA
+ implementations.  libIDL is used in the ORBit2 IDL compiler, as well
+ as various language bindings (Perl, Python, etc.) for ORBit2.
+Original-Maintainer: Sebastian Rittau <srittau@debian.org>
 
 Package: libboost-signals-dev
 Status: install ok installed
@@ -11574,6 +12045,29 @@ Description: kate KPart
  components in KDE.
 Homepage: http://kate-editor.org/
 Original-Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
+
+Package: dia-libs
+Status: install ok installed
+Priority: optional
+Section: graphics
+Installed-Size: 1598
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: dia
+Version: 0.97.2-5
+Replaces: dia (<= 0.86-1), dia-common (<= 0.92.2-3)
+Depends: libart-2.0-2 (>= 2.3.18), libc6 (>= 2.7), libcairo2 (>= 1.2.4), libfreetype6 (>= 2.2.1), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.24.0), libgtk2.0-0 (>= 2.14.0), libpango1.0-0 (>= 1.18.0), libpng12-0 (>= 1.2.13-4), libpython2.7 (>= 2.7), libxml2 (>= 2.7.4), libxslt1.1 (>= 1.1.25), zlib1g (>= 1:1.1.4)
+Recommends: dia | dia-gnome, dia-common
+Conflicts: dia (<= 0.86-1), dia-common (<= 0.92.2-3)
+Description: Diagram editor (library files)
+ Dia is an editor for diagrams, graphs, charts etc. There is support for UML
+ static structure diagrams (class diagrams), Entity-Relationship diagrams,
+ network diagrams and much more. Diagrams can be exported to postscript and
+ many other formats.
+ .
+ This package contains library files common to dia and dia-gnome
+Original-Maintainer: Debian Dia Team <pkg-dia-team@lists.alioth.debian.org>
+Homepage: http://live.gnome.org/Dia
 
 Package: libguard-perl
 Status: install ok installed
@@ -12995,6 +13489,27 @@ Description: X11 Render extension wire protocol
  This package is built from the X.org renderproto proto module.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
+Package: dia-gnome
+Status: install ok installed
+Priority: optional
+Section: gnome
+Installed-Size: 422
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: dia
+Version: 0.97.2-5
+Depends: libc6 (>= 2.7), libcairo2 (>= 1.2.4), libfreetype6 (>= 2.2.1), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.24.0), libgnome2-0 (>= 2.17.3), libgnomeui-0 (>= 2.22.0), libgtk2.0-0 (>= 2.12.0), libpango1.0-0 (>= 1.18.0), libpng12-0 (>= 1.2.13-4), libxml2 (>= 2.7.4), dia-common (= 0.97.2-5), dia-libs (= 0.97.2-5)
+Recommends: gsfonts-x11
+Description: Diagram editor (GNOME version)
+ Dia is an editor for diagrams, graphs, charts etc. There is support for UML
+ static structure diagrams (class diagrams), Entity-Relationship diagrams,
+ network diagrams and much more. Diagrams can be exported to postscript and
+ many other formats.
+ .
+ This package contains the GNOME version of Dia.
+Original-Maintainer: Debian Dia Team <pkg-dia-team@lists.alioth.debian.org>
+Homepage: http://live.gnome.org/Dia
+
 Package: libjpeg-turbo8
 Status: install ok installed
 Multi-Arch: same
@@ -13392,6 +13907,26 @@ Description: stylesheets for processing DocBook XML to various output formats
 Homepage: http://wiki.docbook.org/DocBookXslStylesheets
 Original-Maintainer: Daniel Leidert (dale) <daniel.leidert@wgdd.de>
 
+Package: libgnome2-common
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 664
+Maintainer: Ubuntu Desktop Team <ubuntu-desktop@lists.ubuntu.com>
+Architecture: all
+Source: libgnome
+Version: 2.32.1-2ubuntu1
+Depends: gconf2 (>= 2.28.1-2)
+Suggests: desktop-base (>= 0.3.16)
+Breaks: gnome-panel (<< 2.28)
+Conffiles:
+ /etc/sound/events/gnome-2.soundlist c09950d1798b664926167b972ba325b6
+ /etc/sound/events/gtk-events-2.soundlist c9110db7c797eb722b95f252e4a36e8e
+Description: The GNOME library - common files
+ This package contains internationalization files for the base GNOME
+ library functions.
+Original-Maintainer: Josselin Mouette <joss@debian.org>
+
 Package: libxt-dev
 Status: install ok installed
 Priority: optional
@@ -13416,6 +13951,27 @@ Description: X11 toolkit intrinsics library (development headers)
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXt
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: libyaml-syck-perl
+Status: install ok installed
+Priority: optional
+Section: perl
+Installed-Size: 182
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 1.19-1
+Depends: libc6 (>= 2.4), perl (>= 5.14.2-5ubuntu1), perlapi-5.14.2
+Pre-Depends: dpkg (>= 1.15.6)
+Description: Perl module providing a fast, lightweight YAML loader and dumper
+ YAML::Syck provides a Perl interface to the libsyck data
+ serialization library.  It exports the Dump and Load functions for
+ converting Perl data structures to YAML strings, and the other way
+ around.
+ .
+ This module is considered deprecated. Please consider using
+ libyaml-libyaml-perl or switching to JSON instead.
+Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Homepage: http://search.cpan.org/dist/YAML-Syck/
 
 Package: libboost-serialization1.46-dev
 Status: install ok installed
@@ -13578,6 +14134,26 @@ Description: Boost.Python Library development files
  one of the Python development packages.
 Homepage: http://www.boost.org/libs/python/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
+
+Package: libjpeg-turbo-progs
+Status: install ok installed
+Priority: optional
+Section: graphics
+Installed-Size: 148
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libjpeg-turbo
+Version: 1.2.1+svn837~ci9+20120614+f8eb71d-0linaro1
+Replaces: libjpeg-progs (<< 8c-2ubuntu5)
+Provides: libjpeg-progs
+Depends: libc6 (>= 2.15-0ubuntu8), libjpeg8 (>= 8c)
+Description: Programs for manipulating JPEG files
+ This package contains programs for manipulating JPEG files:
+  cjpeg/djpeg: convert to/from the JPEG file format
+  rdjpgcom/wrjpgcom: read/write comments in JPEG files
+  jpegtran: lossless transformations of JPEG files
+  tjbench: a simple JPEG benchmarking tool
+Homepage: http://libjpeg-turbo.virtualgl.org/
 
 Package: libproxy1
 Status: install ok installed
@@ -14830,6 +15406,23 @@ Description: Resource files for gs-cjk, ghostscript CJK-TrueType extension
  Simplified-Chinese: needs cmap-adobe-gb1 and ttf-arphic-ukai |
   ttf-arphic-uming.
 Original-Maintainer: Kenshi Muto <kmuto@debian.org>
+
+Package: pstoedit
+Status: install ok installed
+Priority: optional
+Section: graphics
+Installed-Size: 679
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 3.60-1build2
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libpstoedit0c2a, libstdc++6 (>= 4.4.0), ghostscript
+Suggests: xfig | ivtools-bin | tgif | transfig
+Description: PostScript and PDF files to editable vector graphics converter
+ pstoedit converts Postscript and PDF files to various editable
+ vector graphic formats including tgif, xfig, PDF graphics, gnuplot format,
+ idraw, MetaPost, GNU Metafile, PIC, Kontour and flattened PostScript.
+Original-Maintainer: Roland Stigge <stigge@antcom.de>
+Homepage: http://www.pstoedit.net/
 
 Package: gnome-icon-theme
 Status: install ok installed
@@ -16091,6 +16684,28 @@ Description: Layout and rendering of internationalized text - gir bindings
  This package can be used by other packages using the GIRepository format to
  generate dynamic bindings.
 Original-Maintainer: Sebastien Bacher <seb128@debian.org>
+
+Package: libdate-manip-perl
+Status: install ok installed
+Priority: optional
+Section: perl
+Installed-Size: 10197
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 6.25-1
+Depends: perl, libyaml-syck-perl
+Description: module for manipulating dates
+ Date::Manip is a Perl module that contains a set of routines designed to make
+ any common date/time manipulation easy to do. It aims to make operations like
+ comparing two times, calculating a time a given amount of time from another,
+ or parsing international times simpler.
+ .
+ The focus of Date::Manip has been to be able to do ANY desired date or time
+ operation easily, though not necessarily quickly. There are other modules
+ that can do a small subset of these operations quicker, so if speed is a
+ primary issue, you should look elsewhere.
+Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Homepage: http://search.cpan.org/dist/Date-Manip/
 
 Package: wget
 Status: install ok installed
@@ -17617,6 +18232,23 @@ Description: desktop integration utilities from freedesktop.org
 Homepage: http://portland.freedesktop.org/
 Original-Maintainer: Per Olofsson <pelle@debian.org>
 
+Package: libxml-perl
+Status: install ok installed
+Priority: optional
+Section: perl
+Installed-Size: 400
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 0.08-2
+Depends: perl, libxml-parser-perl
+Description: Perl modules for working with XML
+ libxml-perl is a collection of smaller Perl modules, scripts, and
+ documents for working with XML in Perl.  libxml-perl software
+ works in combination with XML::Parser, PerlSAX, XML::DOM,
+ XML::Grove and others.
+Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Homepage: http://search.cpan.org/dist/libxml-perl/
+
 Package: libfs6
 Status: install ok installed
 Priority: optional
@@ -17985,6 +18617,26 @@ Description: module for manipulating JSON-formatted data (C/XS-accelerated)
  module (see libjson-perl) will automagically benefit from this.
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Homepage: http://search.cpan.org/dist/JSON-XS/
+
+Package: libtirpc1
+Status: install ok installed
+Multi-Arch: same
+Priority: standard
+Section: libs
+Installed-Size: 170
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libtirpc
+Version: 0.2.2-5
+Depends: libc6 (>= 2.8), libgssglue1
+Pre-Depends: multiarch-support
+Conffiles:
+ /etc/netconfig ca8db53e3af4d735335c2607d21c7195
+Description: transport-independent RPC library
+ This package contains a port of Sun's transport-independent RPC library to
+ Linux. The library is intended as a replacement for the RPC code in the GNU C
+ library, providing among others support for RPC (and in turn, NFS) over IPv6.
+Original-Maintainer: Steinar H. Gunderson <sesse@debian.org>
 
 Package: libnl-genl-3-200
 Status: install ok installed
@@ -18423,6 +19075,28 @@ Description: Network Security Service libraries
  This package contains versioned symbolic links for Debian compatibility.
 Homepage: http://www.mozilla.org/projects/security/pki/nss/
 Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
+
+Package: libidl-common
+Status: install ok installed
+Multi-Arch: foreign
+Priority: optional
+Section: libs
+Installed-Size: 77
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: libidl
+Version: 0.8.14-0.2ubuntu2
+Depends: cpp
+Description: library for parsing CORBA IDL files (common files)
+ libIDL is a small library for creating parse trees of CORBA v2.2 compliant
+ Interface Definition Language (IDL) files, which is a specification for
+ defining interfaces which can be used between different CORBA
+ implementations.  libIDL is used in the ORBit2 IDL compiler, as well
+ as various language bindings (Perl, Python, etc.) for ORBit2.
+ .
+ This package is a workaround for multiarch-related upgrade problems, and
+ will eventually be merged back into libidl0.
+Original-Maintainer: Sebastian Rittau <srittau@debian.org>
 
 Package: libcurl3
 Status: install ok installed
@@ -20223,6 +20897,30 @@ Description: C API for GeoClue
 Homepage: http://www.freedesktop.org/wiki/Software/GeoClue
 Original-Maintainer: Bernd Zeimetz <bzed@debian.org>
 
+Package: liborbit2
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 451
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: orbit2
+Version: 1:2.14.19-0.1
+Replaces: liborbit2-dev (<< 2.8.1-1)
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libglib2.0-0 (>= 2.24.0), libidl0
+Conflicts: libbonobo-activation4 (<< 1:2.4.0), liblinc1 (<< 1.0.3-4), liborbit2-dev (<< 2.8.1-1)
+Description: libraries for ORBit2 - a CORBA ORB
+ ORBit2 is a high-performance CORBA (Common Object Request Broker
+ Architecture) ORB (Object Request Broker). It allows programs to send
+ requests and receive replies from other programs, regardless of the
+ locations of the two programs. CORBA is an architecture that enables
+ communication between program objects, regardless of the programming
+ language they're written in or the operating system they run on.
+ .
+ This package contains the run-time libraries used by ORBit2-based
+ applications.
+Original-Maintainer: Sebastian Rittau <srittau@debian.org>
+
 Package: libio-socket-socks-perl
 Status: install ok installed
 Priority: optional
@@ -20568,6 +21266,40 @@ Description: FreeType-based font drawing library for X
  glyph drawing; otherwise, the core X protocol is used.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
+Package: libjpeg-progs
+Status: install ok installed
+Priority: optional
+Section: graphics
+Installed-Size: 26
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libjpeg8-empty
+Version: 8c-2ubuntu7
+Depends: libjpeg-turbo-progs (>= 1.1.90+svn722-1ubuntu6)
+Description: Programs for manipulating JPEG files (dependency package)
+ libjpeg-progs dependency package, depending on libjpeg-turbo-progs.
+
+Package: libgnomecanvas2-common
+Status: install ok installed
+Multi-Arch: foreign
+Priority: optional
+Section: x11
+Installed-Size: 80
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: libgnomecanvas
+Version: 2.30.3-1ubuntu1
+Description: powerful object-oriented display engine - common files
+ The canvas widget is a powerful and extensible object-oriented display
+ engine. A GnomeCanvasItem is a GtkObject representing some element of the
+ display, such as an image, a rectangle, an ellipse, or some text. You can
+ refer to this architecture as structured graphics; the canvas lets you deal
+ with graphics in terms of items, rather than an undifferentiated grid of
+ pixels.
+ .
+ This package contains internationalization files.
+Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+
 Package: xz-utils
 Status: install ok installed
 Multi-Arch: foreign
@@ -20624,6 +21356,34 @@ Description: KHTML Web Content Rendering Engine
  This package is part of the KDE Development Platform libraries module.
 Homepage: http://www.kde.org/
 Original-Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
+
+Package: libgnomevfs2-extra
+Status: install ok installed
+Priority: optional
+Section: oldlibs
+Installed-Size: 476
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gnome-vfs
+Version: 1:2.24.4-1ubuntu2
+Depends: libbz2-1.0, libc6 (>= 2.4), libgconf2-4 (>= 2.31.1), libglib2.0-0 (>= 2.16.0), libgnomevfs2-0 (>= 1:2.17.90), libgssapi-krb5-2 (>= 1.7+dfsg), libsmbclient (>= 3.0.24), libxml2 (>= 2.7.4), libgnomevfs2-common (>= 1:2.24), libgnomevfs2-common (<< 1:2.25)
+Conflicts: libgnomevfs2-0 (<< 1:2.16.0-1), libgnomevfs2-common (<< 2.12.2-7)
+Conffiles:
+ /etc/gnome-vfs-2.0/modules/extra-modules.conf 511ea9d12c3f69f36635c92080226361
+Description: GNOME Virtual File System (extra modules)
+ GNOME VFS is the GNOME virtual file system.  It is the foundation of the
+ Nautilus file manager.  It provides a modular architecture and ships with
+ several modules that implement support for local files, http, ftp and others.
+ It provides an URI-based API, a backend supporting asynchronous file
+ operations, a MIME type manipulation library and other features.
+ .
+ This package contains extra VFS modules for the GNOME Virtual
+ File System.  It includes:
+  * the bzip2 module;
+  * the ftp module;
+  * the http module (which also includes support for WebDAV);
+  * the smb module, to browse Windows shares.
+Original-Maintainer: Josselin Mouette <joss@debian.org>
 
 Package: xserver-xorg-video-nouveau
 Status: install ok installed
@@ -22314,6 +23074,23 @@ Description: PDF utilities (based on Poppler)
 Homepage: http://poppler.freedesktop.org/
 Original-Maintainer: Loic Minier <lool@dooz.org>
 
+Package: gsl-ref-psdoc
+Status: install ok installed
+Priority: optional
+Section: non-free/doc
+Installed-Size: 1440
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 1.15-1
+Replaces: gsl-ref-pdf
+Suggests: libgsl0ldbl, gv | ps-viewer
+Conflicts: gsl-ref-pdf
+Description: GNU Scientific Library (GSL) Reference Manual in postscript
+ This package provides a ps file with the reference manual for the
+ GNU Scientific Library (GSL), a collection of routines for numerical
+ analysis.
+Original-Maintainer: Dirk Eddelbuettel <edd@debian.org>
+
 Package: galculator
 Status: install ok installed
 Priority: optional
@@ -22407,6 +23184,21 @@ Description: infra-red remote control support - client library
  controls via LIRC in programs such as xawtv.
 Homepage: http://lirc.org
 Original-Maintainer: lirc Maintainer Team <pkg-lirc-maint@lists.alioth.debian.org>
+
+Package: libgnomeui-common
+Status: install ok installed
+Multi-Arch: foreign
+Priority: optional
+Section: libs
+Installed-Size: 188
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: libgnomeui
+Version: 2.24.5-2ubuntu2
+Description: GNOME user interface library - common files
+ This package contains internationalization files for the base GNOME
+ library functions (User Interface functions).
+Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 
 Package: gzip
 Essential: yes
@@ -23515,6 +24307,22 @@ Description: Multitouch Protocol Translation Library - shared library
  drivers that have not been updated to use the newer protocol.
 Homepage: http://bitmath.org/code/mtdev/
 Original-Maintainer: Nobuhiro Iwamatsu <iwamatsu@debian.org>
+
+Package: libbonoboui2-common
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 84
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: libbonoboui
+Version: 2.24.5-0ubuntu1
+Conflicts: libbonoboui2-0 (<= 2.4.3-1)
+Description: The Bonobo UI library -- common files
+ The Bonobo UI library
+ .
+ This package is a part of GNOME.
+Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 
 Package: gir1.2-glib-2.0
 Status: install ok installed
@@ -25568,6 +26376,42 @@ Original-Maintainer: Debian Apache Maintainers <debian-apache@lists.debian.org>
 Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-apache/apache2.git
 Original-Vcs-Git: git://git.debian.org/git/pkg-apache/apache2.git
 
+Package: python-imaging
+Status: install ok installed
+Priority: optional
+Section: python
+Installed-Size: 844
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 1.1.7-4
+Provides: python2.7-imaging
+Depends: python2.7, python (>= 2.7.1-0ubuntu2), python (<< 2.8), mime-support | python-imaging-tk, libc6 (>= 2.11), libfreetype6 (>= 2.2.1), libjpeg8 (>= 8c), liblcms1 (>= 1.15-1), zlib1g (>= 1:1.1.4)
+Suggests: python-imaging-doc, python-imaging-dbg
+Description: Python Imaging Library
+ The Python Imaging Library (PIL) adds an image object to your Python
+ interpreter. You can load images from a variety of file formats, and
+ apply a rich set of image operations to them.
+ .
+ Image Objects:
+  o Bilevel, greyscale, palette, true colour (RGB), true colour with
+    transparency (RGBA).
+  o colour separation (CMYK).
+  o Copy, cut, paste operations.
+  o Flip, transpose, resize, rotate, and arbitrary affine transforms.
+  o Transparency operations.
+  o Channel and point operations.
+  o Colour transforms, including matrix operations.
+  o Image enhancement, including convolution filters.
+ .
+ File Formats:
+  o Full (Open/Load/Save): BMP, EPS (with ghostscript), GIF, IM, JPEG,
+    MSP, PDF, PNG, PPM, TIFF, XBM.
+  o Read only (Open/Load): ARG, CUR, DCX, FLI, FPX, GBR, GD, ICO, IMT, IPTC,
+    MCIDAS, MPEG, PhotoCD, PCX, PIXAR, PSD, TGA, SGI, SUN, TGA, WMF, XPM.
+  o Save only: PDF, EPS (without ghostscript).
+Original-Maintainer: Matthias Klose <doko@debian.org>
+Python-Version: 2.7
+
 Package: libutouch-grail1
 Status: install ok installed
 Priority: optional
@@ -25832,6 +26676,25 @@ Provides: atmel-firmware
 Conflicts: atmel-firmware
 Description: Firmware for Linux kernel drivers
  This package provides firmware used by Linux kernel drivers.
+
+Package: libparse-yapp-perl
+Status: install ok installed
+Priority: optional
+Section: perl
+Installed-Size: 200
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 1.05-12
+Depends: perl
+Description: Perl module for creating fully reentrant LALR parser OO Perl modules
+ This is a collection of modules that let you generate and use yacc
+ like thread safe (reentrant) parsers with perl object oriented
+ interface.
+ .
+ The script yapp is a front-end to the Parse::Yapp module and let you
+ easily create a Perl OO parser from an input grammar file.
+Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Homepage: http://search.cpan.org/dist/Parse-Yapp/
 
 Package: librasqal3
 Status: install ok installed
@@ -26600,6 +27463,50 @@ Description: X11 Testing -- Record extension library
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXtst
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: libgnome2-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 574
+Maintainer: Ubuntu Desktop Team <ubuntu-desktop@lists.ubuntu.com>
+Architecture: armhf
+Source: libgnome
+Version: 2.32.1-2ubuntu1
+Depends: libbonobo2-0 (>= 2.15.0), libc6 (>= 2.4), libcanberra0 (>= 0.2), libgconf2-4 (>= 2.31.1), libglib2.0-0 (>= 2.24.0), libgnomevfs2-0 (>= 1:2.17.90), liborbit2 (>= 1:2.14.10), libpopt0 (>= 1.16), libgnome2-common (>= 2.32), libgnome2-common (<< 2.33)
+Recommends: gvfs
+Description: The GNOME library - runtime files
+ This package contains the shared library for the base GNOME library
+ functions.
+Original-Maintainer: Josselin Mouette <joss@debian.org>
+
+Package: libxml-xql-perl
+Status: install ok installed
+Priority: optional
+Section: perl
+Installed-Size: 420
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 0.68-6
+Depends: perl, libdate-manip-perl (>= 5.33), libparse-yapp-perl, libxml-dom-perl (>= 1.29), libxml-regexp-perl (>= 0.03)
+Description: Perl module for querying XML tree structures with XQL
+ The XML::XQL module implements the XQL (XML Query Language) proposal
+ submitted to the XSL Working Group in September 1998.  The spec can
+ be found at: http://www.w3.org/TandS/QL/QL98/pp/xql.html.  Most of
+ the contents related to the XQL syntax can also be found in the
+ XML::XQL::Tutorial that comes with this distribution.  Note that XQL
+ is not the same as XML-QL!
+ .
+ The current implementation only works with the XML::DOM module, but
+ once the design is stable and the major bugs are flushed out, other
+ extensions might follow, e.g. for XML::Grove.
+ .
+ XQL was designed to be extensible and this implementation tries to
+ stick to that.  Users can add their own functions, methods,
+ comparison operators and data types.  Plugging in a new XML tree
+ structure (like XML::Grove) should be a piece of cake.
+Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Homepage: http://search.cpan.org/dist/XML-XQL/
 
 Package: libwpg-0.2-2
 Status: install ok installed
@@ -27782,6 +28689,31 @@ Description: Embedded GNU C Library: Shared libraries
 Homepage: http://www.eglibc.org
 Original-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 
+Package: fam
+Status: install ok installed
+Priority: optional
+Section: admin
+Installed-Size: 154
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 2.7.0-17
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libstdc++6 (>= 4.4.0), lsb-base (>= 3.2-13), portmap, update-inetd
+Conffiles:
+ /etc/init.d/fam ec14d43a1abb7aef93f793d02e063159
+ /etc/fam.conf fefaad0a680dc9d980597d5f54edee45
+Description: File Alteration Monitor
+ FAM monitors files and directories, notifying interested applications
+ of changes.
+ .
+ This package provides a server that can monitor a given list of files
+ and notify applications through a socket.  If the kernel supports
+ dnotify (kernels >= 2.4.x) FAM is notified directly by the kernel.
+ Otherwise it has to poll the files' status.  FAM can also provide an
+ RPC service for monitoring remote files (such as on a mounted NFS
+ filesystem).
+Original-Maintainer: Chuan-kai Lin <cklin@debian.org>
+Homepage: http://oss.sgi.com/projects/fam/
+
 Package: libsm6
 Status: install ok installed
 Multi-Arch: same
@@ -27943,6 +28875,28 @@ Description: multimedia player and streamer
  or video plugins (vlc-plugin-sdl).
 Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Homepage: http://www.videolan.org/vlc/
+
+Package: libgnomevfs2-bin
+Status: install ok installed
+Priority: optional
+Section: oldlibs
+Installed-Size: 414
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gnome-vfs
+Version: 1:2.24.4-1ubuntu2
+Replaces: libgnomevfs2-common (<< 2.12.2-4)
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.16.0), libgnomevfs2-0 (>= 1:2.17.90)
+Description: GNOME Virtual File System (support binaries)
+ GNOME VFS is the GNOME virtual file system.  It is the foundation of the
+ Nautilus file manager.  It provides a modular architecture and ships with
+ several modules that implement support for local files, http, ftp and others.
+ It provides an URI-based API, a backend supporting asynchronous file
+ operations, a MIME type manipulation library and other features.
+ .
+ This package contains some example binaries using the GNOME VFS
+ library.
+Original-Maintainer: Josselin Mouette <joss@debian.org>
 
 Package: libmagickcore4-extra
 Status: install ok installed
@@ -28128,6 +29082,28 @@ Description: NetX - implementation of the Java Network Launching Protocol (JNLP)
  This package contains the architecture independent files.
 Original-Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
 Homepage: http://icedtea.classpath.org/wiki/IcedTea-Web
+
+Package: gsl-doc-info
+Status: install ok installed
+Priority: optional
+Section: non-free/doc
+Installed-Size: 384
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: gsl-doc
+Version: 1.15-1
+Replaces: libgsl0-dev (<= 1.11-2)
+Depends: dpkg (>= 1.15.4) | install-info
+Suggests: libgsl0ldbl, info | info-browser
+Description: GNU Scientific Library (GSL) Reference Manual in info
+ This package provides info files with the reference manual for the
+ GNU Scientific Library (GSL), a collection of routines for numerical
+ analysis.
+ .
+ The reference manual is also available in postscript and html formats
+ in the packages gsl-ref-psdoc and gsl-ref-html, respectively.
+Original-Maintainer: Dirk Eddelbuettel <edd@debian.org>
+Homepage: http://www.gnu.org/software/gsl
 
 Package: apt-utils
 Status: install ok installed

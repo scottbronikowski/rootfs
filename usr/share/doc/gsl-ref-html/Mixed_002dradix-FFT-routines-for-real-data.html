@@ -1,0 +1,319 @@
+<html lang="en">
+<head>
+<title>Mixed-radix FFT routines for real data - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fast-Fourier-Transforms.html" title="Fast Fourier Transforms">
+<link rel="prev" href="Radix_002d2-FFT-routines-for-real-data.html" title="Radix-2 FFT routines for real data">
+<link rel="next" href="FFT-References-and-Further-Reading.html" title="FFT References and Further Reading">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mixed-radix-FFT-routines-for-real-data"></a>
+<a name="Mixed_002dradix-FFT-routines-for-real-data"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FFT-References-and-Further-Reading.html">FFT References and Further Reading</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Radix_002d2-FFT-routines-for-real-data.html">Radix-2 FFT routines for real data</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fast-Fourier-Transforms.html">Fast Fourier Transforms</a>
+<hr>
+</div>
+
+<h3 class="section">16.7 Mixed-radix FFT routines for real data</h3>
+
+<p><a name="index-FFT-of-real-data_002c-mixed_002dradix-algorithm-1505"></a><a name="index-Mixed_002dradix-FFT_002c-real-data-1506"></a>
+This section describes mixed-radix FFT algorithms for real data.  The
+mixed-radix functions work for FFTs of any length.  They are a
+reimplementation of the real-FFT routines in the Fortran <span class="sc">fftpack</span> library
+by Paul Swarztrauber.  The theory behind the algorithm is explained in
+the article <cite>Fast Mixed-Radix Real Fourier Transforms</cite> by Clive
+Temperton.  The routines here use the same indexing scheme and basic
+algorithms as <span class="sc">fftpack</span>.
+
+   <p>The functions use the <span class="sc">fftpack</span> storage convention for half-complex
+sequences.  In this convention the half-complex transform of a real
+sequence is stored with frequencies in increasing order, starting at
+zero, with the real and imaginary parts of each frequency in neighboring
+locations.  When a value is known to be real the imaginary part is not
+stored.  The imaginary part of the zero-frequency component is never
+stored.  It is known to be zero (since the zero frequency component is
+simply the sum of the input data (all real)).  For a sequence of even
+length the imaginary part of the frequency n/2 is not stored
+either, since the symmetry
+<!-- {$z_k = z_{n-k}^*$} -->
+z_k = z_{n-k}^* implies that this is
+purely real too.
+
+   <p>The storage scheme is best shown by some examples.  The table below
+shows the output for an odd-length sequence, n=5.  The two columns
+give the correspondence between the 5 values in the half-complex
+sequence returned by <code>gsl_fft_real_transform</code>, <var>halfcomplex</var>[] and the
+values <var>complex</var>[] that would be returned if the same real input
+sequence were passed to <code>gsl_fft_complex_backward</code> as a complex
+sequence (with imaginary parts set to <code>0</code>),
+
+<pre class="example">     complex[0].real  =  halfcomplex[0]
+     complex[0].imag  =  0
+     complex[1].real  =  halfcomplex[1]
+     complex[1].imag  =  halfcomplex[2]
+     complex[2].real  =  halfcomplex[3]
+     complex[2].imag  =  halfcomplex[4]
+     complex[3].real  =  halfcomplex[3]
+     complex[3].imag  = -halfcomplex[4]
+     complex[4].real  =  halfcomplex[1]
+     complex[4].imag  = -halfcomplex[2]
+</pre>
+   <p class="noindent">The upper elements of the <var>complex</var> array, <code>complex[3]</code> and
+<code>complex[4]</code> are filled in using the symmetry condition.  The
+imaginary part of the zero-frequency term <code>complex[0].imag</code> is
+known to be zero by the symmetry.
+
+   <p>The next table shows the output for an even-length sequence, n=6
+In the even case there are two values which are purely real,
+
+<pre class="example">     complex[0].real  =  halfcomplex[0]
+     complex[0].imag  =  0
+     complex[1].real  =  halfcomplex[1]
+     complex[1].imag  =  halfcomplex[2]
+     complex[2].real  =  halfcomplex[3]
+     complex[2].imag  =  halfcomplex[4]
+     complex[3].real  =  halfcomplex[5]
+     complex[3].imag  =  0
+     complex[4].real  =  halfcomplex[3]
+     complex[4].imag  = -halfcomplex[4]
+     complex[5].real  =  halfcomplex[1]
+     complex[5].imag  = -halfcomplex[2]
+</pre>
+   <p class="noindent">The upper elements of the <var>complex</var> array, <code>complex[4]</code> and
+<code>complex[5]</code> are filled in using the symmetry condition.  Both
+<code>complex[0].imag</code> and <code>complex[3].imag</code> are known to be zero.
+
+   <p>All these functions are declared in the header files
+<samp><span class="file">gsl_fft_real.h</span></samp> and <samp><span class="file">gsl_fft_halfcomplex.h</span></samp>.
+
+<div class="defun">
+&mdash; Function: gsl_fft_real_wavetable * <b>gsl_fft_real_wavetable_alloc</b> (<var>size_t n</var>)<var><a name="index-gsl_005ffft_005freal_005fwavetable_005falloc-1507"></a></var><br>
+&mdash; Function: gsl_fft_halfcomplex_wavetable * <b>gsl_fft_halfcomplex_wavetable_alloc</b> (<var>size_t n</var>)<var><a name="index-gsl_005ffft_005fhalfcomplex_005fwavetable_005falloc-1508"></a></var><br>
+<blockquote><p><a name="index-gsl_005ffft_005freal_005fwavetable-1509"></a><a name="index-gsl_005ffft_005fhalfcomplex_005fwavetable-1510"></a>These functions prepare trigonometric lookup tables for an FFT of size
+n real elements.  The functions return a pointer to the newly
+allocated struct if no errors were detected, and a null pointer in the
+case of error.  The length <var>n</var> is factorized into a product of
+subtransforms, and the factors and their trigonometric coefficients are
+stored in the wavetable. The trigonometric coefficients are computed
+using direct calls to <code>sin</code> and <code>cos</code>, for accuracy. 
+Recursion relations could be used to compute the lookup table faster,
+but if an application performs many FFTs of the same length then
+computing the wavetable is a one-off overhead which does not affect the
+final throughput.
+
+        <p>The wavetable structure can be used repeatedly for any transform of the
+same length.  The table is not modified by calls to any of the other FFT
+functions.  The appropriate type of wavetable must be used for forward
+real or inverse half-complex transforms. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_fft_real_wavetable_free</b> (<var>gsl_fft_real_wavetable * wavetable</var>)<var><a name="index-gsl_005ffft_005freal_005fwavetable_005ffree-1511"></a></var><br>
+&mdash; Function: void <b>gsl_fft_halfcomplex_wavetable_free</b> (<var>gsl_fft_halfcomplex_wavetable * wavetable</var>)<var><a name="index-gsl_005ffft_005fhalfcomplex_005fwavetable_005ffree-1512"></a></var><br>
+<blockquote><p>These functions free the memory associated with the wavetable
+<var>wavetable</var>. The wavetable can be freed if no further FFTs of the
+same length will be needed. 
+</p></blockquote></div>
+
+<p class="noindent">The mixed radix algorithms require additional working space to hold
+the intermediate steps of the transform,
+
+<div class="defun">
+&mdash; Function: gsl_fft_real_workspace * <b>gsl_fft_real_workspace_alloc</b> (<var>size_t n</var>)<var><a name="index-gsl_005ffft_005freal_005fworkspace_005falloc-1513"></a></var><br>
+<blockquote><p><a name="index-gsl_005ffft_005freal_005fworkspace-1514"></a>This function allocates a workspace for a real transform of length
+<var>n</var>.  The same workspace can be used for both forward real and inverse
+halfcomplex transforms. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_fft_real_workspace_free</b> (<var>gsl_fft_real_workspace * workspace</var>)<var><a name="index-gsl_005ffft_005freal_005fworkspace_005ffree-1515"></a></var><br>
+<blockquote><p>This function frees the memory associated with the workspace
+<var>workspace</var>. The workspace can be freed if no further FFTs of the
+same length will be needed. 
+</p></blockquote></div>
+
+<p class="noindent">The following functions compute the transforms of real and half-complex
+data,
+
+<div class="defun">
+&mdash; Function: int <b>gsl_fft_real_transform</b> (<var>double data</var>[]<var>, size_t stride, size_t n, const gsl_fft_real_wavetable * wavetable, gsl_fft_real_workspace * work</var>)<var><a name="index-gsl_005ffft_005freal_005ftransform-1516"></a></var><br>
+&mdash; Function: int <b>gsl_fft_halfcomplex_transform</b> (<var>double data</var>[]<var>, size_t stride, size_t n, const gsl_fft_halfcomplex_wavetable * wavetable, gsl_fft_real_workspace * work</var>)<var><a name="index-gsl_005ffft_005fhalfcomplex_005ftransform-1517"></a></var><br>
+<blockquote><p>These functions compute the FFT of <var>data</var>, a real or half-complex
+array of length <var>n</var>, using a mixed radix decimation-in-frequency
+algorithm.  For <code>gsl_fft_real_transform</code> <var>data</var> is an array of
+time-ordered real data.  For <code>gsl_fft_halfcomplex_transform</code>
+<var>data</var> contains Fourier coefficients in the half-complex ordering
+described above.  There is no restriction on the length <var>n</var>. 
+Efficient modules are provided for subtransforms of length 2, 3, 4 and
+5.  Any remaining factors are computed with a slow, O(n^2),
+general-n module.  The caller must supply a <var>wavetable</var> containing
+trigonometric lookup tables and a workspace <var>work</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_fft_real_unpack</b> (<var>const double real_coefficient</var>[]<var>, gsl_complex_packed_array complex_coefficient, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005freal_005funpack-1518"></a></var><br>
+<blockquote>
+        <p>This function converts a single real array, <var>real_coefficient</var> into
+an equivalent complex array, <var>complex_coefficient</var>, (with imaginary
+part set to zero), suitable for <code>gsl_fft_complex</code> routines.  The
+algorithm for the conversion is simply,
+
+     <pre class="example">          for (i = 0; i &lt; n; i++)
+            {
+              complex_coefficient[i*stride].real
+                = real_coefficient[i*stride];
+              complex_coefficient[i*stride].imag
+                = 0.0;
+            }
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_fft_halfcomplex_unpack</b> (<var>const double halfcomplex_coefficient</var>[]<var>, gsl_complex_packed_array complex_coefficient, size_t stride, size_t n</var>)<var><a name="index-gsl_005ffft_005fhalfcomplex_005funpack-1519"></a></var><br>
+<blockquote>
+        <p>This function converts <var>halfcomplex_coefficient</var>, an array of
+half-complex coefficients as returned by <code>gsl_fft_real_transform</code>, into an
+ordinary complex array, <var>complex_coefficient</var>.  It fills in the
+complex array using the symmetry
+<!-- {$z_k = z_{n-k}^*$} -->
+z_k = z_{n-k}^*
+to reconstruct the redundant elements.  The algorithm for the conversion
+is,
+
+     <pre class="example">          complex_coefficient[0].real
+            = halfcomplex_coefficient[0];
+          complex_coefficient[0].imag
+            = 0.0;
+          
+          for (i = 1; i &lt; n - i; i++)
+            {
+              double hc_real
+                = halfcomplex_coefficient[(2 * i - 1)*stride];
+              double hc_imag
+                = halfcomplex_coefficient[(2 * i)*stride];
+              complex_coefficient[i*stride].real = hc_real;
+              complex_coefficient[i*stride].imag = hc_imag;
+              complex_coefficient[(n - i)*stride].real = hc_real;
+              complex_coefficient[(n - i)*stride].imag = -hc_imag;
+            }
+          
+          if (i == n - i)
+            {
+              complex_coefficient[i*stride].real
+                = halfcomplex_coefficient[(n - 1)*stride];
+              complex_coefficient[i*stride].imag
+                = 0.0;
+            }
+</pre>
+        </blockquote></div>
+
+<!-- @node Example of using mixed-radix FFT routines for real data -->
+<!-- @subsection Example of using mixed-radix FFT routines for real data -->
+   <p>Here is an example program using <code>gsl_fft_real_transform</code> and
+<code>gsl_fft_halfcomplex_inverse</code>.  It generates a real signal in the
+shape of a square pulse.  The pulse is Fourier transformed to frequency
+space, and all but the lowest ten frequency components are removed from
+the array of Fourier coefficients returned by
+<code>gsl_fft_real_transform</code>.
+
+   <p>The remaining Fourier coefficients are transformed back to the
+time-domain, to give a filtered version of the square pulse.  Since
+Fourier coefficients are stored using the half-complex symmetry both
+positive and negative frequencies are removed and the final filtered
+signal is also real.
+
+<pre class="example"><pre class="verbatim">     #include &lt;stdio.h>
+     #include &lt;math.h>
+     #include &lt;gsl/gsl_errno.h>
+     #include &lt;gsl/gsl_fft_real.h>
+     #include &lt;gsl/gsl_fft_halfcomplex.h>
+     
+     int
+     main (void)
+     {
+       int i, n = 100;
+       double data[n];
+     
+       gsl_fft_real_wavetable * real;
+       gsl_fft_halfcomplex_wavetable * hc;
+       gsl_fft_real_workspace * work;
+     
+       for (i = 0; i &lt; n; i++)
+         {
+           data[i] = 0.0;
+         }
+     
+       for (i = n / 3; i &lt; 2 * n / 3; i++)
+         {
+           data[i] = 1.0;
+         }
+     
+       for (i = 0; i &lt; n; i++)
+         {
+           printf ("%d: %e\n", i, data[i]);
+         }
+       printf ("\n");
+     
+       work = gsl_fft_real_workspace_alloc (n);
+       real = gsl_fft_real_wavetable_alloc (n);
+     
+       gsl_fft_real_transform (data, 1, n, 
+                               real, work);
+     
+       gsl_fft_real_wavetable_free (real);
+     
+       for (i = 11; i &lt; n; i++)
+         {
+           data[i] = 0;
+         }
+     
+       hc = gsl_fft_halfcomplex_wavetable_alloc (n);
+     
+       gsl_fft_halfcomplex_inverse (data, 1, n, 
+                                    hc, work);
+       gsl_fft_halfcomplex_wavetable_free (hc);
+     
+       for (i = 0; i &lt; n; i++)
+         {
+           printf ("%d: %e\n", i, data[i]);
+         }
+     
+       gsl_fft_real_workspace_free (work);
+       return 0;
+     }
+</pre></pre>
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

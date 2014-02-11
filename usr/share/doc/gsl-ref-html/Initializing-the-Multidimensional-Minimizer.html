@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Initializing the Multidimensional Minimizer - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Multidimensional-Minimization.html" title="Multidimensional Minimization">
+<link rel="prev" href="Multimin-Caveats.html" title="Multimin Caveats">
+<link rel="next" href="Providing-a-function-to-minimize.html" title="Providing a function to minimize">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Initializing-the-Multidimensional-Minimizer"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Providing-a-function-to-minimize.html">Providing a function to minimize</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Multimin-Caveats.html">Multimin Caveats</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Multidimensional-Minimization.html">Multidimensional Minimization</a>
+<hr>
+</div>
+
+<h3 class="section">36.3 Initializing the Multidimensional Minimizer</h3>
+
+<p>The following function initializes a multidimensional minimizer.  The
+minimizer itself depends only on the dimension of the problem and the
+algorithm and can be reused for different problems.
+
+<div class="defun">
+&mdash; Function: gsl_multimin_fdfminimizer * <b>gsl_multimin_fdfminimizer_alloc</b> (<var>const gsl_multimin_fdfminimizer_type * T, size_t n</var>)<var><a name="index-gsl_005fmultimin_005ffdfminimizer_005falloc-2515"></a></var><br>
+&mdash; Function: gsl_multimin_fminimizer * <b>gsl_multimin_fminimizer_alloc</b> (<var>const gsl_multimin_fminimizer_type * T, size_t n</var>)<var><a name="index-gsl_005fmultimin_005ffminimizer_005falloc-2516"></a></var><br>
+<blockquote><p><a name="index-gsl_005fmultimin_005ffdfminimizer-2517"></a><a name="index-gsl_005fmultimin_005ffminimizer-2518"></a><a name="index-gsl_005fmultimin_005ffdfminimizer_005ftype-2519"></a><a name="index-gsl_005fmultimin_005ffminimizer_005ftype-2520"></a>This function returns a pointer to a newly allocated instance of a
+minimizer of type <var>T</var> for an <var>n</var>-dimension function.  If there
+is insufficient memory to create the minimizer then the function returns
+a null pointer and the error handler is invoked with an error code of
+<code>GSL_ENOMEM</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_multimin_fdfminimizer_set</b> (<var>gsl_multimin_fdfminimizer * s, gsl_multimin_function_fdf * fdf, const gsl_vector * x, double step_size, double tol</var>)<var><a name="index-gsl_005fmultimin_005ffdfminimizer_005fset-2521"></a></var><br>
+<blockquote><p>This function initializes the minimizer <var>s</var> to minimize the function
+<var>fdf</var> starting from the initial point <var>x</var>.  The size of the
+first trial step is given by <var>step_size</var>.  The accuracy of the line
+minimization is specified by <var>tol</var>.  The precise meaning of this
+parameter depends on the method used.  Typically the line minimization
+is considered successful if the gradient of the function g is
+orthogonal to the current search direction p to a relative
+accuracy of <var>tol</var>, where <!-- {$p\cdot g < tol |p| |g|$} -->
+dot(p,g) &lt; tol |p| |g|.  A <var>tol</var> value of 0.1 is
+suitable for most purposes, since line minimization only needs to
+be carried out approximately.    Note that setting <var>tol</var> to zero will
+force the use of &ldquo;exact&rdquo; line-searches, which are extremely expensive.
+
+   &mdash; Function: int <b>gsl_multimin_fminimizer_set</b> (<var>gsl_multimin_fminimizer * s, gsl_multimin_function * f, const gsl_vector * x, const gsl_vector * step_size</var>)<var><a name="index-gsl_005fmultimin_005ffminimizer_005fset-2522"></a></var><br>
+<blockquote><p>This function initializes the minimizer <var>s</var> to minimize the function
+<var>f</var>, starting from the initial point
+<var>x</var>. The size of the initial trial steps is given in vector
+<var>step_size</var>. The precise meaning of this parameter depends on the
+method used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_multimin_fdfminimizer_free</b> (<var>gsl_multimin_fdfminimizer * s</var>)<var><a name="index-gsl_005fmultimin_005ffdfminimizer_005ffree-2523"></a></var><br>
+&mdash; Function: void <b>gsl_multimin_fminimizer_free</b> (<var>gsl_multimin_fminimizer * s</var>)<var><a name="index-gsl_005fmultimin_005ffminimizer_005ffree-2524"></a></var><br>
+<blockquote><p>This function frees all the memory associated with the minimizer
+<var>s</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: const char * <b>gsl_multimin_fdfminimizer_name</b> (<var>const gsl_multimin_fdfminimizer * s</var>)<var><a name="index-gsl_005fmultimin_005ffdfminimizer_005fname-2525"></a></var><br>
+&mdash; Function: const char * <b>gsl_multimin_fminimizer_name</b> (<var>const gsl_multimin_fminimizer * s</var>)<var><a name="index-gsl_005fmultimin_005ffminimizer_005fname-2526"></a></var><br>
+<blockquote><p>This function returns a pointer to the name of the minimizer.  For example,
+
+     <pre class="example">          printf ("s is a '%s' minimizer\n",
+                  gsl_multimin_fdfminimizer_name (s));
+</pre>
+        <p class="noindent">would print something like <code>s is a 'conjugate_pr' minimizer</code>. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

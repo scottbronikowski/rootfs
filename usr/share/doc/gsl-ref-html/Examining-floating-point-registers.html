@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>Examining floating point registers - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugging-Numerical-Programs.html" title="Debugging Numerical Programs">
+<link rel="prev" href="Using-gdb.html" title="Using gdb">
+<link rel="next" href="Handling-floating-point-exceptions.html" title="Handling floating point exceptions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Examining-floating-point-registers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Handling-floating-point-exceptions.html">Handling floating point exceptions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-gdb.html">Using gdb</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugging-Numerical-Programs.html">Debugging Numerical Programs</a>
+<hr>
+</div>
+
+<h3 class="section">A.2 Examining floating point registers</h3>
+
+<p><a name="index-floating-point-registers-2706"></a>
+The contents of floating point registers can be examined using the
+command <code>info float</code> (on supported platforms).
+
+<pre class="smallexample">     (gdb) info float
+          st0: 0xc4018b895aa17a945000  Valid Normal -7.838871e+308
+          st1: 0x3ff9ea3f50e4d7275000  Valid Normal 0.0285946
+          st2: 0x3fe790c64ce27dad4800  Valid Normal 6.7415931e-08
+          st3: 0x3ffaa3ef0df6607d7800  Spec  Normal 0.0400229
+          st4: 0x3c028000000000000000  Valid Normal 4.4501477e-308
+          st5: 0x3ffef5412c22219d9000  Zero  Normal 0.9580257
+          st6: 0x3fff8000000000000000  Valid Normal 1
+          st7: 0xc4028b65a1f6d243c800  Valid Normal -1.566206e+309
+        fctrl: 0x0272 53 bit; NEAR; mask DENOR UNDER LOS;
+        fstat: 0xb9ba flags 0001; top 7; excep DENOR OVERF UNDER LOS
+         ftag: 0x3fff
+          fip: 0x08048b5c
+          fcs: 0x051a0023
+       fopoff: 0x08086820
+       fopsel: 0x002b
+</pre>
+   <p class="noindent">Individual registers can be examined using the variables <var>$reg</var>,
+where <var>reg</var> is the register name.
+
+<pre class="smallexample">     (gdb) p $st1
+     $1 = 0.02859464454261210347719
+</pre>
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

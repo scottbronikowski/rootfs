@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Discrete Hankel Transform Definition - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Discrete-Hankel-Transforms.html" title="Discrete Hankel Transforms">
+<link rel="next" href="Discrete-Hankel-Transform-Functions.html" title="Discrete Hankel Transform Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Discrete-Hankel-Transform-Definition"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Discrete-Hankel-Transform-Functions.html">Discrete Hankel Transform Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Discrete-Hankel-Transforms.html">Discrete Hankel Transforms</a>
+<hr>
+</div>
+
+<h3 class="section">32.1 Definitions</h3>
+
+<p>The discrete Hankel transform acts on a vector of sampled data, where
+the samples are assumed to have been taken at points related to the
+zeroes of a Bessel function of fixed order; compare this to the case of
+the discrete Fourier transform, where samples are taken at points
+related to the zeroes of the sine or cosine function.
+
+   <p>Specifically, let f(t) be a function on the unit interval and
+<!-- {$j_{\nu,m}$} -->
+j_(\nu,m) the m-th zero of the Bessel function
+J_\nu(x).  Then the finite \nu-Hankel transform of
+f(t) is defined to be the set of numbers g_m given by,
+so that,
+Suppose that f is band-limited in the sense that
+g_m=0 for m &gt; M. Then we have the following
+fundamental sampling theorem. 
+It is this discrete expression which defines the discrete Hankel
+transform. The kernel in the summation above defines the matrix of the
+\nu-Hankel transform of size M-1.  The coefficients of
+this matrix, being dependent on \nu and M, must be
+precomputed and stored; the <code>gsl_dht</code> object encapsulates this
+data.  The allocation function <code>gsl_dht_alloc</code> returns a
+<code>gsl_dht</code> object which must be properly initialized with
+<code>gsl_dht_init</code> before it can be used to perform transforms on data
+sample vectors, for fixed \nu and M, using the
+<code>gsl_dht_apply</code> function. The implementation allows a scaling of
+the fundamental interval, for convenience, so that one can assume the
+function is defined on the interval [0,X], rather than the unit
+interval.
+
+   <p>Notice that by assumption f(t) vanishes at the endpoints
+of the interval, consistent with the inversion formula
+and the sampling formula given above. Therefore, this transform
+corresponds to an orthogonal expansion in eigenfunctions
+of the Dirichlet problem for the Bessel differential equation.
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

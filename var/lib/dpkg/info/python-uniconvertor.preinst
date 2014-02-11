@@ -1,0 +1,5 @@
+#!/bin/sh -e
+if [ "$1" = upgrade ] && dpkg --compare-versions "$2" lt 1.1.4-1; then
+	pycentral pkgremove python-uniconvertor
+fi
+

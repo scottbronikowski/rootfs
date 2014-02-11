@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>DWT Initialization - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Wavelet-Transforms.html" title="Wavelet Transforms">
+<link rel="prev" href="DWT-Definitions.html" title="DWT Definitions">
+<link rel="next" href="DWT-Transform-Functions.html" title="DWT Transform Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="DWT-Initialization"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="DWT-Transform-Functions.html">DWT Transform Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="DWT-Definitions.html">DWT Definitions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Wavelet-Transforms.html">Wavelet Transforms</a>
+<hr>
+</div>
+
+<h3 class="section">31.2 Initialization</h3>
+
+<p><a name="index-DWT-initialization-2326"></a><a name="index-gsl_005fwavelet_005ftype-2327"></a>
+The <code>gsl_wavelet</code> structure contains the filter coefficients
+defining the wavelet and any associated offset parameters.
+
+<div class="defun">
+&mdash; Function: gsl_wavelet * <b>gsl_wavelet_alloc</b> (<var>const gsl_wavelet_type * T, size_t k</var>)<var><a name="index-gsl_005fwavelet_005falloc-2328"></a></var><br>
+<blockquote><p><a name="index-gsl_005fwavelet-2329"></a>This function allocates and initializes a wavelet object of type
+<var>T</var>.  The parameter <var>k</var> selects the specific member of the
+wavelet family.  A null pointer is returned if insufficient memory is
+available or if a unsupported member is selected. 
+</p></blockquote></div>
+
+   <p>The following wavelet types are implemented:
+
+<div class="defun">
+&mdash; Wavelet: <b>gsl_wavelet_daubechies</b><var><a name="index-gsl_005fwavelet_005fdaubechies-2330"></a></var><br>
+&mdash; Wavelet: <b>gsl_wavelet_daubechies_centered</b><var><a name="index-gsl_005fwavelet_005fdaubechies_005fcentered-2331"></a></var><br>
+<blockquote><p><a name="index-Daubechies-wavelets-2332"></a><a name="index-maximal-phase_002c-Daubechies-wavelets-2333"></a>This is the Daubechies wavelet family of maximum phase with k/2
+vanishing moments.  The implemented wavelets are
+<!-- {$k=4, 6, \dots, 20$} -->
+k=4, 6, <small class="dots">...</small>, 20, with <var>k</var> even. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Wavelet: <b>gsl_wavelet_haar</b><var><a name="index-gsl_005fwavelet_005fhaar-2334"></a></var><br>
+&mdash; Wavelet: <b>gsl_wavelet_haar_centered</b><var><a name="index-gsl_005fwavelet_005fhaar_005fcentered-2335"></a></var><br>
+<blockquote><p><a name="index-Haar-wavelets-2336"></a>This is the Haar wavelet.  The only valid choice of k for the
+Haar wavelet is k=2. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Wavelet: <b>gsl_wavelet_bspline</b><var><a name="index-gsl_005fwavelet_005fbspline-2337"></a></var><br>
+&mdash; Wavelet: <b>gsl_wavelet_bspline_centered</b><var><a name="index-gsl_005fwavelet_005fbspline_005fcentered-2338"></a></var><br>
+<blockquote><p><a name="index-biorthogonal-wavelets-2339"></a><a name="index-B_002dspline-wavelets-2340"></a>This is the biorthogonal B-spline wavelet family of order (i,j). 
+The implemented values of k = 100*i + j are 103, 105, 202, 204,
+206, 208, 301, 303, 305 307, 309. 
+</p></blockquote></div>
+
+<p class="noindent">The centered forms of the wavelets align the coefficients of the various
+sub-bands on edges.  Thus the resulting visualization of the
+coefficients of the wavelet transform in the phase plane is easier to
+understand.
+
+<div class="defun">
+&mdash; Function: const char * <b>gsl_wavelet_name</b> (<var>const gsl_wavelet * w</var>)<var><a name="index-gsl_005fwavelet_005fname-2341"></a></var><br>
+<blockquote><p>This function returns a pointer to the name of the wavelet family for
+<var>w</var>. 
+</p></blockquote></div>
+
+<!-- @deftypefun {void} gsl_wavelet_print (const gsl_wavelet * @var{w}) -->
+<!-- This function prints the filter coefficients (@code{**h1}, @code{**g1}, @code{**h2}, @code{**g2}) of the wavelet object @var{w}. -->
+<!-- @end deftypefun -->
+<div class="defun">
+&mdash; Function: void <b>gsl_wavelet_free</b> (<var>gsl_wavelet * w</var>)<var><a name="index-gsl_005fwavelet_005ffree-2342"></a></var><br>
+<blockquote><p>This function frees the wavelet object <var>w</var>. 
+</p></blockquote></div>
+
+   <p>The <code>gsl_wavelet_workspace</code> structure contains scratch space of the
+same size as the input data and is used to hold intermediate results
+during the transform.
+
+<div class="defun">
+&mdash; Function: gsl_wavelet_workspace * <b>gsl_wavelet_workspace_alloc</b> (<var>size_t n</var>)<var><a name="index-gsl_005fwavelet_005fworkspace_005falloc-2343"></a></var><br>
+<blockquote><p><a name="index-gsl_005fwavelet_005fworkspace-2344"></a>This function allocates a workspace for the discrete wavelet transform. 
+To perform a one-dimensional transform on <var>n</var> elements, a workspace
+of size <var>n</var> must be provided.  For two-dimensional transforms of
+<var>n</var>-by-<var>n</var> matrices it is sufficient to allocate a workspace of
+size <var>n</var>, since the transform operates on individual rows and
+columns. A null pointer is returned if insufficient memory is available. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_wavelet_workspace_free</b> (<var>gsl_wavelet_workspace * work</var>)<var><a name="index-gsl_005fwavelet_005fworkspace_005ffree-2345"></a></var><br>
+<blockquote><p>This function frees the allocated workspace <var>work</var>. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

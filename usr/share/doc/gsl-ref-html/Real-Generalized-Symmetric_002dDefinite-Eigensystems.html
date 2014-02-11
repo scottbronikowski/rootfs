@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Real Generalized Symmetric-Definite Eigensystems - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Eigensystems.html" title="Eigensystems">
+<link rel="prev" href="Real-Nonsymmetric-Matrices.html" title="Real Nonsymmetric Matrices">
+<link rel="next" href="Complex-Generalized-Hermitian_002dDefinite-Eigensystems.html" title="Complex Generalized Hermitian-Definite Eigensystems">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Real-Generalized-Symmetric-Definite-Eigensystems"></a>
+<a name="Real-Generalized-Symmetric_002dDefinite-Eigensystems"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Complex-Generalized-Hermitian_002dDefinite-Eigensystems.html">Complex Generalized Hermitian-Definite Eigensystems</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Real-Nonsymmetric-Matrices.html">Real Nonsymmetric Matrices</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Eigensystems.html">Eigensystems</a>
+<hr>
+</div>
+
+<h3 class="section">15.4 Real Generalized Symmetric-Definite Eigensystems</h3>
+
+<p><a name="index-generalized-symmetric-eigensystems-1431"></a>
+The real generalized symmetric-definite eigenvalue problem is to find
+eigenvalues \lambda and eigenvectors x such that
+where A and B are symmetric matrices, and B is
+positive-definite. This problem reduces to the standard symmetric
+eigenvalue problem by applying the Cholesky decomposition to B:
+Therefore, the problem becomes C y = \lambda y where
+<!-- {$C = L^{-1} A L^{-t}$} -->
+C = L^{-1} A L^{-t}
+is symmetric, and y = L^t x. The standard
+symmetric eigensolver can be applied to the matrix C. 
+The resulting eigenvectors are backtransformed to find the
+vectors of the original problem. The eigenvalues and eigenvectors
+of the generalized symmetric-definite eigenproblem are always real.
+
+<div class="defun">
+&mdash; Function: gsl_eigen_gensymm_workspace * <b>gsl_eigen_gensymm_alloc</b> (<var>const size_t n</var>)<var><a name="index-gsl_005feigen_005fgensymm_005falloc-1432"></a></var><br>
+<blockquote><p><a name="index-gsl_005feigen_005fgensymm_005fworkspace-1433"></a>This function allocates a workspace for computing eigenvalues of
+<var>n</var>-by-<var>n</var> real generalized symmetric-definite eigensystems. The
+size of the workspace is O(2n). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_eigen_gensymm_free</b> (<var>gsl_eigen_gensymm_workspace * w</var>)<var><a name="index-gsl_005feigen_005fgensymm_005ffree-1434"></a></var><br>
+<blockquote><p>This function frees the memory associated with the workspace <var>w</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_eigen_gensymm</b> (<var>gsl_matrix * A, gsl_matrix * B, gsl_vector * eval, gsl_eigen_gensymm_workspace * w</var>)<var><a name="index-gsl_005feigen_005fgensymm-1435"></a></var><br>
+<blockquote><p>This function computes the eigenvalues of the real generalized
+symmetric-definite matrix pair (<var>A</var>, <var>B</var>), and stores them
+in <var>eval</var>, using the method outlined above. On output, <var>B</var>
+contains its Cholesky decomposition and <var>A</var> is destroyed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: gsl_eigen_gensymmv_workspace * <b>gsl_eigen_gensymmv_alloc</b> (<var>const size_t n</var>)<var><a name="index-gsl_005feigen_005fgensymmv_005falloc-1436"></a></var><br>
+<blockquote><p><a name="index-gsl_005feigen_005fgensymmv_005fworkspace-1437"></a>This function allocates a workspace for computing eigenvalues and
+eigenvectors of <var>n</var>-by-<var>n</var> real generalized symmetric-definite
+eigensystems. The size of the workspace is O(4n). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>gsl_eigen_gensymmv_free</b> (<var>gsl_eigen_gensymmv_workspace * w</var>)<var><a name="index-gsl_005feigen_005fgensymmv_005ffree-1438"></a></var><br>
+<blockquote><p>This function frees the memory associated with the workspace <var>w</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: int <b>gsl_eigen_gensymmv</b> (<var>gsl_matrix * A, gsl_matrix * B, gsl_vector * eval, gsl_matrix * evec, gsl_eigen_gensymmv_workspace * w</var>)<var><a name="index-gsl_005feigen_005fgensymmv-1439"></a></var><br>
+<blockquote><p>This function computes the eigenvalues and eigenvectors of the real
+generalized symmetric-definite matrix pair (<var>A</var>, <var>B</var>), and
+stores them in <var>eval</var> and <var>evec</var> respectively. The computed
+eigenvectors are normalized to have unit magnitude. On output,
+<var>B</var> contains its Cholesky decomposition and <var>A</var> is destroyed. 
+</p></blockquote></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

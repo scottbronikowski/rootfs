@@ -1,0 +1,1 @@
+../../../../../../share/pyshared/reportlab/graphics/barcode/qr.py

@@ -1,0 +1,153 @@
+<html lang="en">
+<head>
+<title>BLAS Support - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Sorting.html" title="Sorting">
+<link rel="next" href="Linear-Algebra.html" title="Linear Algebra">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="BLAS-Support"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Linear-Algebra.html">Linear Algebra</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sorting.html">Sorting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">13 BLAS Support</h2>
+
+<p><a name="index-linear-algebra_002c-BLAS-1134"></a><a name="index-matrix_002c-operations-1135"></a><a name="index-vector_002c-operations-1136"></a><a name="index-BLAS-1137"></a><a name="index-CBLAS-1138"></a><a name="index-Basic-Linear-Algebra-Subroutines-_0028BLAS_0029-1139"></a>
+The Basic Linear Algebra Subprograms (<span class="sc">blas</span>) define a set of fundamental
+operations on vectors and matrices which can be used to create optimized
+higher-level linear algebra functionality.
+
+   <p>The library provides a low-level layer which corresponds directly to the
+C-language <span class="sc">blas</span> standard, referred to here as &ldquo;<span class="sc">cblas</span>&rdquo;, and a
+higher-level interface for operations on GSL vectors and matrices. 
+Users who are interested in simple operations on GSL vector and matrix
+objects should use the high-level layer described
+in this chapter.  The functions are declared in the file
+<samp><span class="file">gsl_blas.h</span></samp> and should satisfy the needs of most users.
+
+   <p>Note that GSL matrices are implemented using dense-storage so the
+interface only includes the corresponding dense-storage <span class="sc">blas</span>
+functions.  The full <span class="sc">blas</span> functionality for band-format and
+packed-format matrices is available through the low-level <span class="sc">cblas</span>
+interface.  Similarly, GSL vectors are restricted to positive strides,
+whereas the low-level <span class="sc">cblas</span> interface supports negative
+strides as specified in the <span class="sc">blas</span> standard.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+
+   <p>The interface for the <code>gsl_cblas</code> layer is specified in the file
+<samp><span class="file">gsl_cblas.h</span></samp>.  This interface corresponds to the <span class="sc">blas</span> Technical
+Forum's standard for the C interface to legacy <span class="sc">blas</span>
+implementations. Users who have access to other conforming <span class="sc">cblas</span>
+implementations can use these in place of the version provided by the
+library.  Note that users who have only a Fortran <span class="sc">blas</span> library can
+use a <span class="sc">cblas</span> conformant wrapper to convert it into a <span class="sc">cblas</span>
+library.  A reference <span class="sc">cblas</span> wrapper for legacy Fortran
+implementations exists as part of the <span class="sc">cblas</span> standard and can
+be obtained from Netlib.  The complete set of <span class="sc">cblas</span> functions is
+listed in an appendix (see <a href="GSL-CBLAS-Library.html">GSL CBLAS Library</a>).
+
+   <p>There are three levels of <span class="sc">blas</span> operations,
+
+     <dl>
+<dt><b>Level 1</b><dd>Vector operations, e.g. y = \alpha x + y
+<br><dt><b>Level 2</b><dd>Matrix-vector operations, e.g. y = \alpha A x + \beta y
+<br><dt><b>Level 3</b><dd>Matrix-matrix operations, e.g. C = \alpha A B + C
+</dl>
+
+<p class="noindent">Each routine has a name which specifies the operation, the type of
+matrices involved and their precisions.  Some of the most common
+operations and their names are given below,
+
+     <dl>
+<dt><b>DOT</b><dd>scalar product, x^T y
+<br><dt><b>AXPY</b><dd>vector sum, \alpha x + y
+<br><dt><b>MV</b><dd>matrix-vector product, A x
+<br><dt><b>SV</b><dd>matrix-vector solve, inv(A) x
+<br><dt><b>MM</b><dd>matrix-matrix product, A B
+<br><dt><b>SM</b><dd>matrix-matrix solve, inv(A) B
+</dl>
+
+<p class="noindent">The types of matrices are,
+
+     <dl>
+<dt><b>GE</b><dd>general
+<br><dt><b>GB</b><dd>general band
+<br><dt><b>SY</b><dd>symmetric
+<br><dt><b>SB</b><dd>symmetric band
+<br><dt><b>SP</b><dd>symmetric packed
+<br><dt><b>HE</b><dd>hermitian
+<br><dt><b>HB</b><dd>hermitian band
+<br><dt><b>HP</b><dd>hermitian packed
+<br><dt><b>TR</b><dd>triangular
+<br><dt><b>TB</b><dd>triangular band
+<br><dt><b>TP</b><dd>triangular packed
+</dl>
+
+<p class="noindent">Each operation is defined for four precisions,
+
+     <dl>
+<dt><b>S</b><dd>single real
+<br><dt><b>D</b><dd>double real
+<br><dt><b>C</b><dd>single complex
+<br><dt><b>Z</b><dd>double complex
+</dl>
+
+<p class="noindent">Thus, for example, the name <span class="sc">sgemm</span> stands for &ldquo;single-precision
+general matrix-matrix multiply&rdquo; and <span class="sc">zgemm</span> stands for
+&ldquo;double-precision complex matrix-matrix multiply&rdquo;.
+
+   <p>Note that the vector and matrix arguments to BLAS functions must not
+be aliased, as the results are undefined when the underlying arrays
+overlap (see <a href="Aliasing-of-arrays.html">Aliasing of arrays</a>).
+
+<ul class="menu">
+<li><a accesskey="1" href="GSL-BLAS-Interface.html">GSL BLAS Interface</a>
+<li><a accesskey="2" href="BLAS-Examples.html">BLAS Examples</a>
+<li><a accesskey="3" href="BLAS-References-and-Further-Reading.html">BLAS References and Further Reading</a>
+</ul>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> In the low-level
+<span class="sc">cblas</span> interface, a negative stride accesses the vector elements
+in reverse order, i.e. the i-th element is given by
+(N-i)*|incx| for incx &lt; 0.</p>
+
+   <hr></div>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+

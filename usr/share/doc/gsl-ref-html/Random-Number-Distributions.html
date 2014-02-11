@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Random Number Distributions - GNU Scientific Library -- Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Scientific Library -- Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Quasi_002dRandom-Sequences.html" title="Quasi-Random Sequences">
+<link rel="next" href="Statistics.html" title="Statistics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 The GSL Team.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being ``GNU General Public License'' and ``Free Software
+Needs Free Documentation'', the Front-Cover text being ``A GNU Manual'',
+and with the Back-Cover Text being (a) (see below).  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License''.
+
+(a) The Back-Cover Text is: ``You have the freedom to copy and modify this
+GNU Manual.''-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Random-Number-Distributions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Statistics.html">Statistics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Quasi_002dRandom-Sequences.html">Quasi-Random Sequences</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">20 Random Number Distributions</h2>
+
+<p><a name="index-random-number-distributions-1684"></a><a name="index-cumulative-distribution-functions-_0028CDFs_0029-1685"></a><a name="index-CDFs_002c-cumulative-distribution-functions-1686"></a><a name="index-inverse-cumulative-distribution-functions-1687"></a><a name="index-quantile-functions-1688"></a>This chapter describes functions for generating random variates and
+computing their probability distributions.  Samples from the
+distributions described in this chapter can be obtained using any of the
+random number generators in the library as an underlying source of
+randomness.
+
+   <p>In the simplest cases a non-uniform distribution can be obtained
+analytically from the uniform distribution of a random number generator
+by applying an appropriate transformation.  This method uses one call to
+the random number generator.  More complicated distributions are created
+by the <dfn>acceptance-rejection</dfn> method, which compares the desired
+distribution against a distribution which is similar and known
+analytically.  This usually requires several samples from the generator.
+
+   <p>The library also provides cumulative distribution functions and inverse
+cumulative distribution functions, sometimes referred to as quantile
+functions.  The cumulative distribution functions and their inverses are
+computed separately for the upper and lower tails of the distribution,
+allowing full accuracy to be retained for small results.
+
+   <p>The functions for random variates and probability density functions
+described in this section are declared in <samp><span class="file">gsl_randist.h</span></samp>.  The
+corresponding cumulative distribution functions are declared in
+<samp><span class="file">gsl_cdf.h</span></samp>.
+
+   <p>Note that the discrete random variate functions always
+return a value of type <code>unsigned int</code>, and on most platforms this
+has a maximum value of <!-- {$2^{32}-1 \approx 4.29\times10^9$} -->
+2^32-1 ~=~ 4.29e9. They should only be called with
+a safe range of parameters (where there is a negligible probability of
+a variate exceeding this limit) to prevent incorrect results due to
+overflow.
+
+<ul class="menu">
+<li><a accesskey="1" href="Random-Number-Distribution-Introduction.html">Random Number Distribution Introduction</a>
+<li><a accesskey="2" href="The-Gaussian-Distribution.html">The Gaussian Distribution</a>
+<li><a accesskey="3" href="The-Gaussian-Tail-Distribution.html">The Gaussian Tail Distribution</a>
+<li><a accesskey="4" href="The-Bivariate-Gaussian-Distribution.html">The Bivariate Gaussian Distribution</a>
+<li><a accesskey="5" href="The-Exponential-Distribution.html">The Exponential Distribution</a>
+<li><a accesskey="6" href="The-Laplace-Distribution.html">The Laplace Distribution</a>
+<li><a accesskey="7" href="The-Exponential-Power-Distribution.html">The Exponential Power Distribution</a>
+<li><a accesskey="8" href="The-Cauchy-Distribution.html">The Cauchy Distribution</a>
+<li><a accesskey="9" href="The-Rayleigh-Distribution.html">The Rayleigh Distribution</a>
+<li><a href="The-Rayleigh-Tail-Distribution.html">The Rayleigh Tail Distribution</a>
+<li><a href="The-Landau-Distribution.html">The Landau Distribution</a>
+<li><a href="The-Levy-alpha_002dStable-Distributions.html">The Levy alpha-Stable Distributions</a>
+<li><a href="The-Levy-skew-alpha_002dStable-Distribution.html">The Levy skew alpha-Stable Distribution</a>
+<li><a href="The-Gamma-Distribution.html">The Gamma Distribution</a>
+<li><a href="The-Flat-_0028Uniform_0029-Distribution.html">The Flat (Uniform) Distribution</a>
+<li><a href="The-Lognormal-Distribution.html">The Lognormal Distribution</a>
+<li><a href="The-Chi_002dsquared-Distribution.html">The Chi-squared Distribution</a>
+<li><a href="The-F_002ddistribution.html">The F-distribution</a>
+<li><a href="The-t_002ddistribution.html">The t-distribution</a>
+<li><a href="The-Beta-Distribution.html">The Beta Distribution</a>
+<li><a href="The-Logistic-Distribution.html">The Logistic Distribution</a>
+<li><a href="The-Pareto-Distribution.html">The Pareto Distribution</a>
+<li><a href="Spherical-Vector-Distributions.html">Spherical Vector Distributions</a>
+<li><a href="The-Weibull-Distribution.html">The Weibull Distribution</a>
+<li><a href="The-Type_002d1-Gumbel-Distribution.html">The Type-1 Gumbel Distribution</a>
+<li><a href="The-Type_002d2-Gumbel-Distribution.html">The Type-2 Gumbel Distribution</a>
+<li><a href="The-Dirichlet-Distribution.html">The Dirichlet Distribution</a>
+<li><a href="General-Discrete-Distributions.html">General Discrete Distributions</a>
+<li><a href="The-Poisson-Distribution.html">The Poisson Distribution</a>
+<li><a href="The-Bernoulli-Distribution.html">The Bernoulli Distribution</a>
+<li><a href="The-Binomial-Distribution.html">The Binomial Distribution</a>
+<li><a href="The-Multinomial-Distribution.html">The Multinomial Distribution</a>
+<li><a href="The-Negative-Binomial-Distribution.html">The Negative Binomial Distribution</a>
+<li><a href="The-Pascal-Distribution.html">The Pascal Distribution</a>
+<li><a href="The-Geometric-Distribution.html">The Geometric Distribution</a>
+<li><a href="The-Hypergeometric-Distribution.html">The Hypergeometric Distribution</a>
+<li><a href="The-Logarithmic-Distribution.html">The Logarithmic Distribution</a>
+<li><a href="Shuffling-and-Sampling.html">Shuffling and Sampling</a>
+<li><a href="Random-Number-Distribution-Examples.html">Random Number Distribution Examples</a>
+<li><a href="Random-Number-Distribution-References-and-Further-Reading.html">Random Number Distribution References and Further Reading</a>
+</ul>
+
+<hr>The GNU Scientific Library - a free numerical library licensed under the GNU GPL<br>Back to the <a href="/software/gsl/">GNU Scientific Library Homepage</a></body></html>
+
