@@ -1,35 +1,3 @@
-cat /etc/udev/rules.d/70-persistent-net.rules 
-vim /etc/wpa_supplicant.conf 
-rm /etc/udev/rules.d/70-persistent-net.rules 
-shutdown -h now
-passwd
-cd /etc/network
-leafpad interfaces &
-ifdown wlan0
-ifup wlan0
-ls -al
-chmod 644 interfaces
-ls -al
-ifdown wlan0
-ifup wlan0
-ip addr
-ping google.com
-git config --global user.name "Scott Bronikowski"
-git config --global user.email "scottbronikowski@gmail.com"
-git config --global credential.helper cache
-git config --global credential.helper 'cache --timeout=360000'
-cd /
-ls -al
-cd etc
-ls
-ls ho*
-more hostname 
-emacs
-vi
-sudo apt-get install emacs
-sudo apt-get install ntp
-date -R
-ntpq -p
 dpkg-reconfigure ntp
 ntpq -p
 date
@@ -1996,5 +1964,37 @@ README              S21servo-control.sh  S24keepalive-ping.sh  S50saned
 S20pinmux.sh        S22monitor.sh        S24time-update.sh     S75sudo
 S21fam              S23debian.noip2.sh   S25ssh-tunnel.sh      S99ondemand
 S21gpio-monitor.sh  S23ntp               S50rsync              S99rc.local"
+git push
+reboot
+echo 20000 > /dev/pwm10
+echo 15000 > /dev/pwm10
+ps -ef
+date
+ls /etc/rc5.d/
+ps -ef | grep noi
+ps -ef | grep ntp
+ps -ef | grep ssh
+cd /var/log
+ls
+cat boot.log
+ls /etc/rc*
+cat /etc/rc5.d/S22monitor.sh 
+runlevel
+ls /etc/rc2.d/
+ls /etc/rc*
+/etc/init.d/ssh-tunnel.sh start
+ifdown wlan0
+ifup wlan0
+/etc/init.d/ssh-tunnel.sh start
+emacs &
+ps -ef | grep noi
+cd /etc/init.d/
+update-rc.d -f monitor.sh remove
+update-rc.d monitor.sh defaults
+update-rc.d -f monitor.sh remove
+update-rc.d monitor.sh defaults 99
+cd /
+git add -A
+git commit -m "moved monitor.sh to #99"
 git push
 reboot
