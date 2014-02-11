@@ -1,42 +1,3 @@
-shutdown -r now
-ping google.com
-ifdown wlan0
-ifconfig
-ping google.com
-ifup wlan0
-ping google.com
-ifconfig
-ifdown wlan0
-ifup wlan0
-ping google.com
-dmesg
-ping www.google.com
-ping www.gumstix.com
-ifdown eth0
-ping www.google.com
-ifup wlan0
-ifdown wlan0
-ifup wlan0
-ping www.google.com
-ls
-cat /etc/network/interfaces 
-ls
-rm network-manager.conf 
-rm networking.conf 
-ls
-shutdown -h now
-ping google.com
-vim /etc/wpa_supplicant.conf 
-shutdown -h now
-ls
-cd ros
-ls
-cd ..
-ls
-cd /etc/wpa_supplicant.conf 
-vim /etc/wpa_supplicant.conf 
-shutdown -r now
-ping google.com
 cat /etc/udev/rules.d/70-persistent-net.rules 
 vim /etc/wpa_supplicant.conf 
 rm /etc/udev/rules.d/70-persistent-net.rules 
@@ -1998,3 +1959,42 @@ apt-get install  dia dia-gnome libsvg-perl libxml-xql-perl pstoedit transfig lib
 git add -A
 git commit -m "apt-get install  dia dia-gnome libsvg-perl libxml-xql-perl pstoedit transfig libgnomevfs2-bin fam gnome-mime-data gsl-ref-psdoc gsl-doc-pdf gsl-doc-info gsl-ref-html libwmf-bin python-lxml python-uniconvertor libgnomevfs2-extra perlmagick libjpeg-progs"
 git push
+ps
+ps -ef
+ps -ef | grep ssh
+date
+ps -ef | grep moni
+ls /etc/rc*
+ps -ef | grep ping
+echo 20000 > /dev/pwm9
+echo 15000 > /dev/pwm9
+ls /etc/rc5.d/
+cat /etc/rc5.d/S21fam 
+ls /etc/rc5.d/
+cd /etc/init.d
+update-rc.d -f gpio-monitor.sh remove
+update-rc.d gpio-monitor.sh defaults 21
+ls /etc/rc5.d/
+update-rc.d -f monitor.sh remove
+update-rc.d monitor.sh defaults 22
+ls /etc/init.d/
+ls /etc/rc5.d/
+ps -ef | grep noi
+update-rc.d -f time-update.sh remove
+update-rc.d time-update.sh defaults 24
+ls /etc/rc5.d/
+update-rc.d -f keepalive-ping.sh remove
+update-rc.d keepalive-ping.sh defaults 24
+update-rc.d -f ssh-tunnel.sh remove
+update-rc.d ssh-tunnel.sh defaults 25
+ls /etc/rc5.d/
+cd /
+git status
+git add -A
+git commit -m "changed startup order: root@vader-rover:/etc/init.d# ls /etc/rc5.d/
+README              S21servo-control.sh  S24keepalive-ping.sh  S50saned
+S20pinmux.sh        S22monitor.sh        S24time-update.sh     S75sudo
+S21fam              S23debian.noip2.sh   S25ssh-tunnel.sh      S99ondemand
+S21gpio-monitor.sh  S23ntp               S50rsync              S99rc.local"
+git push
+reboot
