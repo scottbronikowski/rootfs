@@ -1,0 +1,147 @@
+#!/usr/bin/perl -w
+# vim:ft=perl:cindent:ts=4:sts=4:et:sw
+#
+# postinst for dwww
+#
+
+use Debconf::Client::ConfModule qw(:all);
+use Debian::Dwww::ConfigFile qw(ReadConfigFile WriteConfigFile);
+use strict;
+
+my $stdcgidir    = '/usr/lib/cgi-bin';
+my $cfgfile      = '/etc/dwww/dwww.conf';
+my $newcfgfile   = '/etc/dwww/dwww.conf.dpkg-new';
+$|=1;
+version('2.0');
+
+
+if ($ARGV[0] eq 'configure' or $ARGV[0] eq 'reconfigure')
+{
+    my $dwwwcfg = ReadConfigFile($cfgfile);
+
+    # docrootdir
+    my $old_docdir = $dwwwcfg->{DWWW_DOCROOTDIR}->{cfgval} ? canondir($dwwwcfg->{DWWW_DOCROOTDIR}->{cfgval}) : '';
+    my $old_cgidir = $dwwwcfg->{DWWW_CGIDIR}->{cfgval} ? canondir($dwwwcfg->{DWWW_CGIDIR}->{cfgval}): '';
+
+    $dwwwcfg->{DWWW_DOCROOTDIR}->{cfgval} = canondir(scalar get('dwww/docrootdir'));
+    $dwwwcfg->{DWWW_CGIDIR}->{cfgval}     = canondir(scalar get('dwww/cgidir'));
+    $dwwwcfg->{DWWW_CGIUSER}->{cfgval}    = get('dwww/cgiuser');
+    $dwwwcfg->{DWWW_SERVERPORT}->{cfgval} = get('dwww/serverport');
+    $dwwwcfg->{DWWW_SERVERNAME}->{cfgval} = get('dwww/servername');
+
+    my $do_index = (-x '/usr/bin/index++'
+                and not -s '/var/cache/dwww/dwww.swish++.index'
+            and scalar get('dwww/index_docs') eq 'true') ? 1 : 0;
+
+    &SetupDwwwLinks ($old_docdir, $dwwwcfg->{DWWW_DOCROOTDIR}->{cfgval},
+                     $old_cgidir, $dwwwcfg->{DWWW_CGIDIR}->{cfgval});
+
+    WriteConfigFile($newcfgfile, $dwwwcfg);
+    my @cmd = ("ucf","--debconf-ok", "--three-way", $newcfgfile, $cfgfile);
+    system (@cmd) == 0 or die "system @cmd failed: $!\n";
+    @cmd    = ("ucfr", "dwww", $cfgfile);
+    system (@cmd) == 0 or die "system @cmd failed: $!\n";
+    unlink ($newcfgfile);
+
+    stop(); # stop debconf
+
+    if ( ! -d "/var/cache/dwww" ) {
+        mkdir "/var/cache/dwww", 0755 or die "Cannot create directory /var/cache/dwww: $!\n";
+        chown 0, 0, "/var/cache/dwww";
+    } else {
+        system("rm", "-rf", "/var/cache/dwww/db");
+    }
+    mkdir "/var/cache/dwww/db", 0755 or die "Cannot create directory /var/cache/dwww/db: $!\n";
+    my $cgiuser = $dwwwcfg->{DWWW_CGIUSER}->{cfgval};
+    my $uid = (getpwnam($cgiuser))[2] ;
+    defined $uid or die "User $cgiuser does not exist\n";
+    $uid or die "You DON'T want to run the dwww CGI script as root!\n";
+    chown $uid, 0, "/var/cache/dwww/db";
+
+    if ( -r "/etc/dwww/apache.conf") {
+        foreach my $apache ("apache","apache-perl", "apache-ssl", "apache2") {
+            my $confd="/etc/$apache/conf.d";
+             if (-d $confd)  {
+                symlink ("../../dwww/apache.conf", "$confd/dwww")
+                    unless -e "$confd/dwww";
+                # restart the web server
+                system ("invoke-rc.d $apache restart 1>&2")
+                    if (-x "/usr/sbin/invoke-rc.d" && -x "/etc/init.d/$apache");
+             }
+        }
+    }
+
+    if ( -x "/etc/cron.daily/dwww" )
+    {
+        print STDERR "\nBuilding dwww pages in the background...\n";
+        system("setsid /etc/cron.daily/dwww &");
+    }
+
+    if ($do_index and -x "/usr/sbin/dwww-index++")
+    {
+        print STDERR "\nIndexing documentation files in the background...\n";
+        system("dwww-index++ &");
+    }
+
+}
+else
+{
+    stop(); # stop debconf
+}
+
+
+my $dh_commands="set -- @ARGV\n" . << 'EOF';
+set -e
+if [ "$1" = "configure" ] && dpkg --compare-versions "$2" lt-nl "1.10.14"; then
+    rm -f /etc/cron.daily/dwww.saved_by_dwww_preinst \
+          /etc/menu-methods/dwww.saved_by_dwww_preinst \
+      /etc/menu-methods/dwww
+   rm -rf /var/lib/dwww/menu-method
+fi
+# Automatically added by dh_installmenu
+if [ "$1" = "configure" ] && [ -x "`which update-menus 2>/dev/null`" ]; then
+	update-menus
+fi
+# End automatically added section
+
+EOF
+system ($dh_commands) / 256 == 0
+    or die "Problem with shell scripts: $!";
+
+exit 0;
+
+
+
+
+# SOUBROUTINES
+
+
+sub SetupDwwwLinks
+{
+    my ($olddocdir, $newdocdir, $oldcgidir, $newcgidir) = @_;
+
+    if (($olddocdir ne "") and ($olddocdir ne $newdocdir))
+    {
+        system("rm", "-rf", "$olddocdir/dwww");
+    }
+
+    if (($oldcgidir ne $stdcgidir) and ($oldcgidir ne ""))
+    {
+        unlink "$oldcgidir/dwww";
+    }
+
+    if (($newcgidir ne $stdcgidir) and ( -d $newcgidir ))
+    {
+        unlink "$newcgidir/dwww";
+        system("cp","-p","$stdcgidir/dwww", "$newcgidir/dwww");
+    }
+}
+
+sub canondir
+{
+    my $dir = $_[0];
+
+    $dir =~ s|/+|/|g;
+    $dir =~ s|/$||;
+    return $dir;
+}

@@ -1,0 +1,24 @@
+#!/bin/sh -e
+
+basedir=/usr/lib/jvm/java-6-openjdk-armhf
+jre_tools='java keytool pack200 rmid rmiregistry unpack200 orbd servertool tnameserv'
+
+rm -f $basedir/jre/lib/arm/client/classes.jsa
+
+if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ]; then
+    for i in $jre_tools; do
+	update-alternatives --remove $i $basedir/jre/bin/$i
+    done
+
+    if which update-binfmts >/dev/null; then
+	# try to remove and ignore the error
+	if [ -e /var/lib/binfmts/openjdk-6 ]; then
+	    update-binfmts --package openjdk-6 \
+		--remove jar /usr/bin/jexec || true
+	fi
+    fi
+
+    update-alternatives --remove jexec $basedir/jre/lib/jexec
+fi
+
+

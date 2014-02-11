@@ -1,0 +1,10 @@
+imagej for Debian
+-----------------
+
+Still have some problem with luts as files are binary so for the moment are
+base64 encoded but i've to write something in rules to base64 decode all luts file
+before copying them, maybe somthing like:
+perl -MMIME::Base64 -e 'print decode_base64(join("", <>))' < debian/extra/luts/*.enc > $(CURDIR)/debian/imagej/usr/share/imagej/luts/
+need help :)
+
+ -- Paolo Ariano <paolo.ariano@unito.it>, Thu, 03 Apr 2008 14:17:43 +0200

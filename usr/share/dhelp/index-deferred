@@ -1,0 +1,47 @@
+#!/bin/sh
+# Perform deffered indexing of documents registered during the last dpkg-run.
+# This script is meant to be called as a dpkg post-invoke trigger.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free
+# Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+# MA  02111-1307  USA.
+
+TODAY=`date '+%F'`
+LOGDIR=/var/lib/dhelp/tmp
+
+if [ "X${1}" = "X-f" ] || [ "X${1}" = "X--full" ]; then
+    INDEX_CMD='/etc/cron.weekly/dhelp'
+else
+    INDEX_CMD='/usr/sbin/dhelp_parse -i'
+fi
+BINCMD=`echo "${INDEX_CMD}" | awk '{print $1}'`
+
+if [ ! -x ${BINCMD} ]; then
+    echo "Error: ${BINCMD} is missing or is not executable"
+    exit 1
+fi
+
+DHLOG=`mktemp --tmpdir=${LOGDIR} ${TODAY}.index-log.XXXXXXXX`
+
+if [ ! -f ${DHLOG} ]; then
+    echo "Error: unable to create temporary log file in ${LOGDIR}"
+    exit 2
+fi
+
+# Indexing may last a large amount of time, which may be (depending
+# on how dpkg was called) larger than the timespan of the controlling
+# process/terminal. Use nohup to account for this possibility.
+
+</dev/null >${DHLOG} 2>${DHLOG} nohup nice -n10 ${INDEX_CMD} &
+

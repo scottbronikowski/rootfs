@@ -1,0 +1,105 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Chapter 12. Menus and Toolbars</title>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="index.html" title="Programming with gtkmm 3">
+<link rel="up" href="index.html" title="Programming with gtkmm 3">
+<link rel="prev" href="sec-textview-examples.html" title="Examples">
+<link rel="next" href="sec-uimanager.html" title="UIManager">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Chapter 12. Menus and Toolbars</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="sec-textview-examples.html"><img src="icons/prev.png" alt="Prev"></a> </td>
+<th width="60%" align="center"> </th>
+<td width="20%" align="right"> <a accesskey="n" href="sec-uimanager.html"><img src="icons/next.png" alt="Next"></a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="chapter" title="Chapter 12. Menus and Toolbars">
+<div class="titlepage"><div><div><h2 class="title">
+<a name="chapter-menus-and-toolbars"></a>Chapter 12. Menus and Toolbars</h2></div></div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<ul>
+<li><span class="sect1"><a href="chapter-menus-and-toolbars.html#sec-actions">Actions</a></span></li>
+<li><span class="sect1"><a href="sec-uimanager.html">UIManager</a></span></li>
+<li><span class="sect1"><a href="sec-menus-popup.html">Popup Menus</a></span></li>
+<li><span class="sect1"><a href="sec-menus-examples.html">Examples</a></span></li>
+</ul>
+</div>
+<p>
+There are specific APIs for Menus and toolbars, but you should usually deal
+with them together, using the <code class="classname">UIManager</code> to define
+<code class="classname">Action</code>s which you can then arrange in menu and toolbars.
+In this way you can handle activation of the action instead of responding to
+the menu and toolbar items separately. And you can enable or disable both the
+menu and toolbar item via the action.
+</p>
+<p>
+This involves the use of the <code class="classname">Gtk::ActionGroup</code>,
+<code class="classname">Gtk::Action</code>, and <code class="classname">UIManager</code>
+classes, all of which should be instantiated via their
+<code class="methodname">create()</code> methods, which return
+<code class="classname">RefPtr</code>s.
+</p>
+<div class="sect1" title="Actions">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="sec-actions"></a>Actions</h2></div></div></div>
+<p>
+First create the <code class="classname">Action</code>s and add them to an
+<code class="classname">ActionGroup</code>, with
+<code class="methodname">ActionGroup::add()</code>.
+</p>
+<p>
+The arguments to <code class="methodname">Action::create()</code> specify the action's
+name and how it will appear in menus and toolbars. Use stock items where
+possible so that you don't need to specify the label, accelerator, icon, and
+tooltips, and so you can use pre-existing translations.
+</p>
+<p>
+You can also specify a signal handler when calling
+<code class="methodname">ActionGroup::add()</code>. This signal handler will be called
+when the action is activated via either a menu item or a toolbar button.
+</p>
+<p>Note that you must specify actions for sub menus as well as menu items.</p>
+<p>For instance:
+</p>
+<pre class="programlisting">m_refActionGroup = Gtk::ActionGroup::create();
+
+m_refActionGroup-&gt;add( Gtk::Action::create("MenuFile", "_File") );
+m_refActionGroup-&gt;add( Gtk::Action::create("New", Gtk::Stock::NEW),
+  sigc::mem_fun(*this, &amp;ExampleWindow::on_action_file_new) );
+m_refActionGroup-&gt;add( Gtk::Action::create("ExportData", "Export Data"),
+  sigc::mem_fun(*this, &amp;ExampleWindow::on_action_file_open) );
+m_refActionGroup-&gt;add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
+  sigc::mem_fun(*this, &amp;ExampleWindow::on_action_file_quit) );</pre>
+<p>Note that this is where we specify the names of the actions as they will be seen by users in menus and toolbars. Therefore, this is where you should make strings translatable, by putting them inside the _() macro. When we use the Gtk::Stock items, of course, translations are automatically available.</p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="sec-textview-examples.html"><img src="icons/prev.png" alt="Prev"></a> </td>
+<td width="20%" align="center"> </td>
+<td width="40%" align="right"> <a accesskey="n" href="sec-uimanager.html"><img src="icons/next.png" alt="Next"></a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Examples </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html"><img src="icons/home.png" alt="Home"></a></td>
+<td width="40%" align="right" valign="top"> UIManager</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

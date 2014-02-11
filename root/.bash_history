@@ -1,44 +1,3 @@
-rosdep install irobot_create_2_1
-rosws update
-rosdep install irobot_create_2_1
-rosdep update
-rosdep install irobot_create_2_1
-rosws update
-rosdep install irobot_create_2_1/
-rosdep install irobot_create_2_1
-rosdep install irobot_Create_2_1
-rosdep udpate
-rosdep update
-rosws update
-rosmake irobot_create_2_1
-rosdep update
-rosmake irobot_create_2_1
-ls
-vim .rosinstall
-ls
-rosdep update
-rosmake irobot_create_2_1
-rosws update
-ls
-. ./setup.sh
-rosws update
-rosdep install irobot_create_2_1
-rosmake irobot_create_2_1
-ls
-tmux
-sudo apt-get install tmux
-tmux
-ls
-tmux
-roscore
-rosrun irobot_create_2_1 driver.py
-rosparam set /brown/irobot_create_2_1/port /dev/usbT
-rosparam set /brown/irobot_create_2_1/port /dev/ttyO0
-rosrun irobot_create_2_1 driver.py
-rosservice call /tank 1 100 100 && sleep 0.5 && rosservice call /brake 1
-rosservice call /tank 1 100 100 && sleep 0.5 && rosservice call /brake 1history
-history
-rosservice call /tank 1 100 100 && sleep 0.5 && rosservice call /brake 1history
 rosservice call /tank 1 100 -100 && sleep 0.5 && rosservice call /brake 1history
 rosservice call /tank 1 100 -100 && sleep 0.5 && rosservice call /brake 
 rosservice call /tank 1 100 -100 && sleep 0.5 && rosservice call /brake
@@ -1998,3 +1957,44 @@ date
 /etc/init.d/time-update.sh start
 emacs &
 exit
+date
+ps -ef | grep ssh
+/etc/init.d/keepalive-ping.sh start
+ping google.com
+ps -ef | grep ssh
+kill -9 919
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh start
+date
+ls /etc/rc*
+ps -ef | grep noi
+update-rc.d /etc/init.d/time-update.sh defaults 26
+update-rc.d time-update.sh defaults 26
+update-rc.d -f time-update.sh remove
+update-rc.d time-update.sh defaults 26
+ls /etc/rc*
+git status
+git add -A
+git commit -m "moved time-update.sh to 26 vice 25 -- may still need to add 'set -e' to scripts"
+git push
+ping google.com
+ifdown wlan0
+ifup wlan0
+ping google.com
+ps -ef | grep moni
+/root/test_code/monitor 
+/etc/init.d/ssh-tunnel.sh start
+ps -ef | grep ssh
+kill 2469
+/etc/init.d/ssh-tunnel.sh
+/etc/init.d/ssh-tunnel.sh start
+ps -ef | grep ssh
+halt
+emacs &
+ls
+halt
+date
+emacs &
+ls /etc/rc*
+ps -ef | grep noi
+ps -ef | grep ntp

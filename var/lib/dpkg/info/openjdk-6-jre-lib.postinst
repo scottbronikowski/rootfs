@@ -1,0 +1,14 @@
+#! /bin/sh
+
+set -e
+
+with_tzdata=yes
+
+if [ "$with_tzdata" = yes ]; then
+    if [ ! -h /usr/lib/jvm/java-6-openjdk-i386/jre/lib/zi ] && [ -d /usr/lib/jvm/java-6-openjdk-i386/jre/lib/zi ]; then
+	rm -rf /usr/lib/jvm/java-6-openjdk-i386/jre/lib/zi
+	ln -s ../../../../../share/javazi /usr/lib/jvm/java-6-openjdk-i386/jre/lib/zi
+    fi
+fi
+
+

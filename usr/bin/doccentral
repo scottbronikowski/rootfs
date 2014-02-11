@@ -1,0 +1,15 @@
+#!/bin/bash
+
+hostname="$DC_HOST"
+
+if [ -z "$hostname" ]; then
+    hostname="`hostname -f`"
+fi
+
+if [ -n "$1" ]; then
+    exec sensible-browser http://$hostname/cgi-bin/doc-central/viewdoc.cgi?keyword=$1
+else
+    exec sensible-browser http://$hostname/dc/
+fi
+
+

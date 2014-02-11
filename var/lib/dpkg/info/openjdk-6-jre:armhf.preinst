@@ -1,0 +1,35 @@
+#! /bin/sh
+
+set -e
+
+if [ -h /usr/share/doc/openjdk-6-jre-headless ]; then
+	rm -f /usr/share/doc/openjdk-6-jre-headless
+fi
+
+multiarch=arm-linux-gnueabihf
+old_basedir=/usr/lib/jvm/java-6-openjdk
+jre_tools='policytool'
+
+case "$1" in
+    upgrade)
+	for i in javaws pluginappletviewer; do
+	    [ -x $old_basedir/jre/bin/$i ] || continue
+	    dpkg-query -L openjdk-6-jre | grep -q ^$old_basedir/jre/bin/$i && continue
+	    if [ -n "$(update-alternatives --list $i 2>/dev/null | grep ^$old_basedir/)" ]; then
+		update-alternatives --remove $i $old_basedir/jre/bin/$i || true
+	    fi
+	done
+
+	if [ -n "$multiarch" ] && [ -n "$2" ]; then
+	    for i in $jre_tools; do
+		if [ -n "$(update-alternatives --list $i 2>/dev/null | grep ^$old_basedir/)" ]; then
+		    update-alternatives --remove $i $old_basedir/jre/bin/$i || true
+		fi
+	    done
+	fi
+	;;
+esac
+
+
+
+exit 0

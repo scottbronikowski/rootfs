@@ -1,0 +1,23 @@
+#!/bin/sh
+# Copyright (C) 2008 Kapil Hari Paranjape <kapil@debian.org>
+# The contents of this file are released in the Public Domain
+# A sample script to run a filter with
+# some limits set as by ulimit
+
+ulimargs="$*"
+cmd="$*"
+ulimargs=${ulimargs%%--*}
+cmd=${cmd##*--}
+
+ulimit -H ${ulimargs} > /dev/null 2>&1
+
+[ -n "$cmd" ] || exit 0
+
+if [ -z "$cmd" ]
+then
+	echo "usage:" $0 "<ulimit arguments> -- <filter cmd and args>"
+	exit 1
+fi
+
+exec ${cmd}
+

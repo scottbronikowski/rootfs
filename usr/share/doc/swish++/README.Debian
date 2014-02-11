@@ -1,0 +1,86 @@
+Some Remarks on configuring and running swish++
+-----------------------------------------------
+
+The programs contained in this package are very well documented.
+So just a few comments:
+
+* You can find a sample configuration file swish++.conf in
+  /usr/share/doc/swish++/examples/
+  (moved from /etc as it is only a sample) 
+
+* Some of the executables had to be renamed in order to avoid name
+  confusions (search --> search++ ...) 
+
+
+* Have a look at www_example if you intent to use swish++ for web
+  indexes; so you have to tweak it as the author states.
+
+* I moved the whole daemon stuff to
+  /usr/share/doc/swish++/examples/daemon/. The reason is that you
+  will need the daemon-mode only in very special environments where
+  you most likely want to set some compile time parameters
+  accordingly, which I can't presage either. 
+
+* (Personal observation: Swish++ is really powerful indexing email
+  folders consisting of one file per message. For example
+  Gnus-nnml + nnir + swish++ is an amazing combination
+  see "/usr/share/doc/swish++/examples/email_indexing/")
+    
+MH <mhummel@debian.org> 
+
+Running swish++ in cron jobs
+----------------------------
+
+(Ref: bugs.debian.org reports #459611 #461349 and #211513)
+
+First of all read the previous section and obey. The documentation of
+swish++ is really extensive and the upstream author has implemented a
+number of thoughtful features.
+
+Swish++ is often used as part of a cron job to index user file
+contents.
+
+Swish++ tries to be very quiet as it works and so when all goes well
+you don't get needless noise. However, when some file or filter
+generates an error, the error message may be too brief for the user
+of swish++ to locate and fix the problem. In brief, use the "-v"
+option with a suitable level during the next swish++ run to locate
+the problem. Of course, you can also choose to run with -v4 always
+and use some sort of filtering mechanism for your cron logs.
+
+Swish++ tries to do its work as fast as possible. Hence it tries to
+obtain all the available resources in order to finish its task
+quickly. There are times when you do not want this to happen. For
+example, in cron jobs you would like to apply resource limits.
+
+There is no uniform mechanism for applying resource limits to cron
+jobs. Typically, these are run with "nice" but that is certainly far
+from enough. For example a cron job may open a large number of files
+or run for too long etc.
+
+It is currently not possible for swish to solve this problem on its
+own. Users should make judicious use of "ulimit" which is defined in
+all Posix shells in order to set resource limits for child processes.
+
+One way to limit cron jobs is to replace your cron script with something like 
+
+	#!/bin/sh
+	ulimit <put in your limits here>
+	<put the original cron script here>
+
+This will put limits on the entire cron job but not on an individual
+filtering process called by swish++.
+
+So another possible solution is to use some program like the script
+"rlimit" which is provided in the examples/ subdirectory which allows
+you to write a filter rule like:
+
+	FilterFile *.pdf rlimit -t 3600 -- pdftotext %f @%F.txt
+
+which will limit the time the filter will run for to 3600 seconds or
+1 hour.  (Of course you will need to make "rlimit" executable and put
+it in the PATH where index++ will look for its filters. /usr/local/bin
+should work on Debian systems).
+
+Kapil Hari Paranjape <kapil@debian.org> Thu, 21 Feb 2008 12:17:22 +0530
+--

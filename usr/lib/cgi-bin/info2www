@@ -1,0 +1,1173 @@
+#!/usr/bin/perl -T
+#
+# info2www - Gateway between GNU Info nodes and WWW
+$id = '$Id: info2www,v 1.2.2.9 1996/07/02 08:44:12 lmdrsm Exp $ ';
+#
+# This is a script conforming to the CGI - Common Gateway Interface
+#
+# Author:	Roar Smith (lmdrsm@lmd.ericsson.se)
+#
+# Copyright:	This program is in the Public Domain.
+#
+# The original code (most of info2html) was written by 
+# Eelco van Asperen (evas@cs.few.eur.nl).
+#
+# TODO:
+# -----
+# * Present a list of choices when there is no exact match for the requested
+#   Info file but multiple non-exact matches exist.
+# 
+# * Use Tag Table to find possible file and offset.
+#
+#
+
+#----------------- CONFIGURATION -----------------------------------------------
+#
+#
+# DEBUG should be set if you want to debug what's happening.
+# 
+$DEBUG = 0;
+#
+# DEBUG_PREFIX is prepended to each debug string.
+# DEBUG_POSTFIX is appended to each debug string.
+# DEBUG_HTMLIFY should be set if you want to HTML'ify the debug output,
+# this shouldn't be necessary within comments, but your mileage may vary.
+#
+$DEBUG_PREFIX  = "<!--\n";	# Alternative suggestion: "<BR><I>"
+$DEBUG_POSTFIX = " -->";	# Alternative suggestion: "</I>\n"
+$DEBUG_HTMLIFY = 0;		# Alternative suggestion: 1
+
+#
+# INFOPATH is the path of direcories in which to search for Info node files.
+#
+@INFOPATH =
+    (
+     "/usr/info",
+     "/usr/share/info",
+     "/usr/local/info",
+     "/usr/local/share/info"
+    );
+
+#
+# ALLOWPATH specifies whether info files may be specified with path-names
+# outside of those directories included in INFOPATH .
+# It is a possible security hole to set this variable to a true value,
+# because *any* file on the system could then be accessed through this gateway.
+$ALLOWPATH = 0;
+
+#
+# ALLOWRELPATH specifies whether info files may be specified with 
+# relative path-names below the directories included in INFOPATH .
+$ALLOWRELPATH = 1;
+
+#
+# ALTERNATIVE is a map of alternatives - look for the alternative if the node
+# itself isn't found.
+# The key (first entry) is the node filename, the value (second entry) is the
+# alternative. Both are basenames (i.e. no path!) with no capital letters.
+# Note that the keys *must* be unique!
+#
+%ALTERNATIVE =
+    (
+     'emacs',		'lemacs',
+     'g++',		'gcc',
+     'c++',		'gcc',
+     'gunzip',		'gzip',
+     'zcat' ,		'gzip',
+     'elisp',		'lispref',
+     'features',	'bash'	# Really easy to guess this huh!
+     );
+
+#
+# Set the PATH so that the ZCAT and GZCAT programs can be found
+#
+
+#$ENV{'PATH'} =~ s!:$!!;
+#$ENV{'PATH'} .= ":/bin:/usr/bin";
+
+# Security: Hardcoded paths, so malicious tampering with PATH is not possible.
+$ENV{'PATH'} = "/bin:/usr/bin";
+
+#
+# ZCAT is the program to use for reading compressed files (*.Z)
+# GZCAT is the program to use for reading gzip'ped files (*.gz)
+# Both are arrays to be used in an exec() call, with the first element
+# being the program (absolute path, or something to be found in PATH)
+# and any additional elements being options.
+#
+# Set either of these to () if you don't want it used.
+#
+@ZCAT = ("zcat");
+@GZCAT = ("gunzip", "-c");
+
+#
+# URL of the icons used for indicating references and stuff:
+# $INFO_ICON	- Icon at the top left of each document
+# $UP_ICON	- Icon used in an "Up:"   hyperlink at the top
+# $NEXT_ICON	- Icon used in a  "Next:" hyperlink at the top
+# $PREV_ICON	- Icon used in a  "Prev:" hyperlink at the top
+# $MENU_ICON	- Icon used in front of each menu label
+# $ALIGN	- How to aling the icons
+#
+# Set these to "" if you don't want them used.
+#
+$INFO_ICON =	"/info2www/infodoc.png";
+$UP_ICON   =	"/info2www/up.png";
+$NEXT_ICON =	"/info2www/next.png";
+$PREV_ICON =	"/info2www/prev.png";
+$MENU_ICON =	"/info2www/menu.png";
+
+$ALIGN     =	"BOTTOM";
+
+#
+# URL for documentation on info2www
+#
+# Set this to "" if you don't want it used.
+#
+$DOCREF = "/info2www/info2www.html";
+
+#
+# $INPUTFORM specifies whether to have an input form for going to an Info node.
+#
+# Set this to 0 if you don't want it used.
+#
+$INPUTFORM = 1;
+
+#
+# CACHE is the dbm(3) or ndbm(3) file for caching lookup information.
+# Set this to "" if you don't want it used.
+# The effective user of this script should have write permissions to
+# the directory in which the dbm files reside, or at least to the files
+# $CACHE.dir , $CACHE.pag and $CACHE.lock.
+#
+$CACHE = "/var/cache/info2www/info2www_cache";
+
+#
+# Set this to true if you want to lock the lookup-cache dbm(3) files
+# while updating lookup information. If flock(2) doesn't work on your
+# system, then set this to false.
+# You can get a tiny performance increase by unsetting this variable,
+# but at the cost of risking damage to the dbm files, which could happen
+# if you get simultaneous update attempts since there is no builtin locking
+# in dbm - at least not in SunOS 4.x !
+#
+$CACHE_LOCKING = 1;
+
+#
+# These are the defines for file-locking with flock(2)
+#
+$LOCK_SH = 1; $LOCK_EX = 2; $LOCK_NB = 4; $LOCK_UN = 8;
+
+#
+#----------------- CONFIGURATION END -------------------------------------------
+
+#----------------- MAIN --------------------------------------------------------
+#
+print "Content-type: text/html\n\n"; # Mime header for NCSA httpd
+$DEBUG = 1 if (defined $ENV{'DEBUG'});
+$DEBUG && &Debug($id);
+$pg = $0; $pg =~ s,^.*/([^/]*)$,$1,;
+($version, $date) = ($id =~ m@,v\s+([0-9.]+)\s+([0-9/]+)@);
+%CACHE = ();
+%INPUT = ();
+$CACHE_OPENED = 0;
+$NFILES = 0;
+@INFOPATH = grep(-d, @INFOPATH); # Only search existing directories
+
+$SCRIPT_NAME = $ENV{'SCRIPT_NAME'};
+$SERVER_NAME = $ENV{'SERVER_NAME'};
+$QUERY_STRING = $ENV{'QUERY_STRING'};
+$REQUEST_METHOD = $ENV{'REQUEST_METHOD'};
+$PREFIX = $SCRIPT_NAME . "?";	# prefix for HREF= entries
+
+$DEBUG && &Debug("QUERY_STRING: $QUERY_STRING") if (defined $QUERY_STRING);
+$DEBUG && &Debug('ARGV: "', join('", "', @ARGV), '"') if @ARGV;
+
+if ($ENV{'REQUEST_METHOD'} eq "POST") {
+    read(STDIN, $request, $ENV{'CONTENT_LENGTH'});
+    $DEBUG && &Debug("POST: $request");
+} elsif ($ENV{'REQUEST_METHOD'} eq "GET" ) {
+    if ($QUERY_STRING) {
+	$request = $QUERY_STRING;
+    }
+}
+if ($request) {
+    # The argument string is encoded in %XX format and must be decoded, but not
+    # until split up into key=value pairs: file=gcc&node=Invoking%20GCC
+    if ($request =~ /=/) {	# Form created key=value pairs
+	%request = &UrlDecode(split(/[&=]/, $request));
+	if (!defined $request{'debug'}) {
+	    # Do nothing
+	} elsif ($request{'debug'} =~ /^Y(es)?$|^On$|^True$/i) {
+	    $DEBUG = 1;
+	    &Debug("debug=$request{'debug'}\nDEBUG enabled!");
+	    &Debug($id);
+	    &Debug("QUERY_STRING: $QUERY_STRING") if (defined $QUERY_STRING);
+	    &Debug('ARGV: "', join('", "', @ARGV), '"') if @ARGV;
+	} elsif ($request{'debug'} =~ /N(o)?$|^Off$|^False$|^$/i) {
+	    $DEBUG && &Debug("debug=$request{'debug'}\nIgnored!");
+	} else {
+	    $DEBUG = 1;
+	    &Debug("debug=$request{'debug'}\nSay what???\nDEBUG enabled!");
+	    &Debug($id);
+	    &Debug("QUERY_STRING: $QUERY_STRING") if (defined $QUERY_STRING);
+	    &Debug('ARGV: "', join('", "', @ARGV), '"') if @ARGV;
+	}
+	if ($nodename = ($request{'query'} || $request{'isindex'})) {
+	    if ($nodename !~ /^\(/ && $request{'file'}) {
+		$nodename = "(".$request{'file'}.")".$nodename;
+	    }
+	} elsif ($request{'file'}) {
+	    $nodename = "(".$request{'file'}.")".$request{'node'};
+	} else {
+	    $nodename = "(dir)";
+	}
+    } else {			# Simple request for a node
+	$nodename = &UrlDecode($request);
+    }
+} elsif (@ARGV) {
+    # The argument string is already decoded, bet special characters are
+    # backslash escaped: \(gcc\)Invoking\ GCC
+    ($nodename = join('+', @ARGV)) =~ s/\\(\W)/$1/g;;
+} else {
+    $nodename = "(dir)";
+}
+$nodename = "(dir)" unless $nodename;
+$nodename = "(".$nodename unless ($nodename =~ /^\(/);
+$nodename = $nodename.")" unless ($nodename =~ /\)/);
+$DEBUG && &Debug("Nodename: $nodename\n");
+&info2html($nodename);
+
+if ($DOCREF) {
+    print
+	"<HR>\n",
+	"<EM>automatically generated by</EM> ",
+	"<A HREF=\"$DOCREF\"><STRONG>$pg</STRONG></A>",
+	" <EM>version $version</EM>\n</BODY>\n</HTML>\n";
+} else {
+    print
+	"<HR>\n",
+	"<EM>automatically generated by</EM> ",
+	"<STRONG>$pg</STRONG>",
+	" <EM>version $version</EM>\n</BODY>\n</HTML>\n";
+}
+
+exit(0);
+
+#----------------- SUBROUTINES -------------------------------------------------
+#
+
+# Handle request for one info-node
+sub info2html {
+    local($node) = @_;
+    local($file, $node_file, $node_name, $fullnode, $link, $linkh, $h_file);
+    local($directory, $basefile, $handle, $pos, $entrypos);
+    local($cachedfile, $cachedpos);
+    local($info_img, $cache, $orglen, $regexp, $menu, $end, $listing, $active);
+    local($matches, $blank, $lastblank, $seenMenu, $indirect, $inentry);
+    $info_img = "<IMG SRC=\"$INFO_ICON\" ALIGN=\"$ALIGN\" WIDTH=\"204\" HEIGHT=\"51\" ALT=\"\"> " if $INFO_ICON;
+
+    # Nodename looks like one of these:
+    # (file)label	- Both file and label of the Info node given
+    # (file)		- Label defaults to "Top"
+    # 			- File defaults to "dir", Label defaults to "Top"
+
+    if ($node =~ /^\(([^\)]*)\)(.+)$/) {
+	($node_file, $node_name) = ($1, $2);
+    } elsif ($node =~ /^\(([^\)]*)\)$/) {
+	($node_file, $node_name) = ($1, "Top");
+    } elsif (!$node) {
+	($node_file, $node_name) = ("dir", "Top");
+    } else {
+	&Error("Malformed node: $node");
+	return(&info2html("(dir)Top"));
+    }
+    $fullnode = "($node_file)$node_name";
+    
+    ($target = $node_name) =~ tr/A-Z/a-z/;
+    ($regexp = $target) =~ s/(\W)/\\$1/g; # Escape special characters
+    $DEBUG && &Debug("Nodename: $node\nfile: $node_file\ntarget: $target");
+
+    ($file, $pos) = &TryCache("($node_file)$target", $regexp) if $CACHE;
+    if ($file) {
+	$cachedfile = $file;
+	$cachedpos = $pos;
+	($directory, $basefile) = ($cachedfile =~ m|(.*)/([^/]*)$|);
+    } else {
+	($directory, $basefile) = &FindFile($node_file);
+	unless ($basefile) {
+	    &Error("Couldn't find Info file \"$node_file\".");
+	    &UpdateCache();
+	    return(($fullnode =~ /^\(dir\)(Top)?$/i) || &info2html("(dir)Top"));
+	}
+	$file = "$directory/$basefile";
+	$pos = 0;
+	unless ($file = &OpenFile($file)) {
+	    &Error("Couldn't open Info file \"$node_file\".");
+	    &UpdateCache();
+	    return(($fullnode =~ /^\(dir\)(Top)?$/i) || &info2html("(dir)Top"));
+	}
+    }
+    # Figure out what file to specify in links to other targets within same file
+    $link = $node_file;		# This seems to be the safest choice
+    $linkh = &HTMLify($link);	# HTML'ified $link
+    
+  FileLoop:
+    while ($NFILES > 0) {
+	$handle = $file;
+	$DEBUG && &Debug("Now reading from $handle");
+	while ($_ = (shift @INPUT || scalar(<$handle>))) {
+	    $orglen = length($_);
+	    chop;
+	    #study;			# study actually seems to hurt!
+	    /^[\037\f]/ && do {
+		if ($active) {
+		    print "</DL>\n" if $menu; $menu = 0; # End menu
+		    print "</PRE>\n" if $listing; $listing = 0; # End text
+		    close($handle);
+		    $DEBUG && &Debug("Closed file $handle");
+		    last FileLoop;
+		}
+		$active = 0;
+		$seenMenu = 0;
+		$indirect = 0;
+		$inentry = 1;
+		$entrypos = $pos;
+		next;
+	    };
+	    next unless $inentry;
+
+	    ($inentry == 1) && do  {
+		local($h_node, $h_next, $h_prev, $h_up);
+		local($n) = 0;
+		/^tag table:/i && do {
+		    # we don't use the tag table
+		    $inentry = 0;
+		    next;
+		};
+		/^indirect:/i && do {
+		    # this entry is a list of filenames to include:
+		    #
+		    #	gcc.info-1: 1131
+		    #	gcc.info-2: 49880
+		    #	gcc.info-3: 99426
+		    $inentry++;
+		    $indirect++;
+		    next;
+		};
+
+		# top line:
+		# File: info,  Node: Add,  Up: Top,  Prev: Expert,  Next: Menus 
+		#
+		# Parse the header line. If one of the fields
+		#	Node: Up: Next: Previous: File:
+		# is found, then a variable 'h_node' is set for
+		# the field 'node:', 'h_next' for 'next:', etc.
+		#
+		/\bNode: *([^,\t]*)/i && ($h_node = $1) =~ s/\s+$//;
+		/\bUp: *([^,\t]*)/i && ($h_up = $1) =~ s/\s+$//;
+		/\bPrev: *([^,\t]*)/i && ($h_prev = $1) =~ s/\s+$//;
+		/\bPrevious: *([^,\t]*)/i && ($h_prev = $1) =~ s/\s+$//;
+		/\bNext: *([^,\t]*)/i && ($h_next = $1) =~ s/\s+$//;
+		
+		if ($h_node =~ m/^$regexp$/i) {
+		    $active = 1;
+		    $matches++;
+		    /\bFile: *([^ ,\t]*)/i && ($h_file = $1);
+		    $h_file = $node_file unless $h_file;
+		    # Update cache if necessary
+		    if ($CACHE &&
+			(($cachedfile ne $file) ||
+			 ($cachedpos ne $entrypos))) {
+			$CACHE{"($node_file)$target"} = "$entrypos\0$file";
+		    }
+		    print
+			"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n\"http://www.w3.org/TR/REC-html4/loose.dtd\">\n\n<HTML>\n<HEAD><TITLE>Info Node: ",
+			&HTMLify("($h_file)$h_node"),
+			"</TITLE>\n<LINK REV=\"MADE\" HREF=\"mailto:lmdrsm\@lmd.ericsson.se\"></HEAD>\n<BODY BGCOLOR=\"#FFFFFF\" TEXT=\"#000000\" LINK=\"#0000FF\" ALINK=\"#FF0000\" VLINK=\"#FF0000\">\n",
+			"<H1>",
+			"$info_img",
+			&HTMLify("($h_file)$h_node"),
+			"</H1>\n";
+		    print "<FORM METHOD=\"GET\" ACTION=\"$SCRIPT_NAME\">\n"
+			if $INPUTFORM;
+		    print "<HR>\n";
+		    if (defined $h_next) {
+			$h_next = &HTMLify($h_next);
+			print
+			    "Next: <STRONG>",
+			    &Anchor($linkh, $h_next, $h_next, $NEXT_ICON, 1),
+			    "</STRONG><TT>  </TT>";
+			$n++;
+		    }
+		    if (defined $h_prev) {
+			$h_prev = &HTMLify($h_prev);
+			print
+			    "Prev: <STRONG>",
+			    &Anchor($linkh, $h_prev, $h_prev, $PREV_ICON, 1),
+			    "</STRONG><TT>  </TT>";
+			$n++;
+		    }
+		    if (defined $h_up) {
+			$h_up = &HTMLify($h_up);
+			print
+			    "Up: <STRONG>",
+			    &Anchor($linkh, $h_up, $h_up, $UP_ICON, 1),
+			    "</STRONG><TT>  </TT>";
+			$n++;
+		    }
+		    print "<HR>\n";
+		    print("<INPUT TYPE=\"hidden\" NAME=\"file\"",
+			  " VALUE=\"$linkh\">",
+			  "<INPUT TYPE=\"submit\" VALUE=\"Goto:\">",
+			  "<INPUT TYPE=\"text\" NAME=\"query\"",
+#			  " VALUE=\"$linkh\"",
+			  " SIZE=\"30\"> ",
+			  "Enter <EM>node</EM> , <EM>(file)</EM> ",
+			  "or <EM>(file)node</EM>\n")
+			if $INPUTFORM;
+		    print "</FORM>\n" if $INPUTFORM;
+		    print "<PRE>\n" unless $listing; $listing = 1; # Start text
+		} elsif ($CACHE) {
+		    $CACHE{"($node_file)\L$h_node"} = "$entrypos\0$file";
+		}
+		$inentry++;
+		next;
+	    };
+
+	    ($inentry == 2 && $indirect) && do  {
+		# each line of this entry consists of two fields,
+		# a filename and an offset, separated by a colon.
+		# For example:
+		#	texinfo-1: 1077
+		local($includefile, $offset) = split(/:/);
+		unless ($includefile =~ /^\//) {
+			$includefile = "$directory/$includefile";
+		}
+		$DEBUG && &Debug("#include $includefile");
+		# should save: $inentry $indirect $pos
+		push(@inentry, $inentry);
+		push(@indirect, $indirect);
+		push(@pos, $pos);
+		push(@file, $file);
+		$inentry = 0;
+		$indirect = 0;
+		$pos = 0;
+		($file = &OpenFile($includefile)) || return(0);
+		next FileLoop;
+	    };
+
+	    next unless $active;
+	    $_ = &HTMLify($_) if /[<>&]/; # Test added for performance reasons
+	    #study;			# study actually seems to hurt!
+	    
+	    $lastblank = $blank; $blank = 0;
+	    /^$/ && do {
+		print "\n";
+		$blank = 1;
+		next;
+	    };
+
+	    if (($end) = /^\*\s+Menu:(.*)$/) {
+		# start of a menu:
+		$seenMenu = 1;
+		print "</PRE>\n" if $listing; $listing = 0; # End text
+		print "$end";
+		print "\n<DL>" unless $menu; $menu = 1; # Start menu
+		next;
+	    };
+
+	    /^\*/ && do {
+		#---- SAMPLE LINES: -----------------------------------------
+		# * Sample::.		Sample info.
+		#
+		# * Info: (info).	Documentation browsing system.
+		# 
+		# * Bison: (bison/bison)
+		# 		A Parser generator in the same style as yacc.
+		# * Random: (Random) Random    Random Number Generator
+		#------------------------------------------------------------
+
+		if ($menu == 0 && $seenMenu) {
+		    print "</PRE></STRONG>\n" if $listing; $listing = 0; # End text
+		    print "\n<DL>" unless $menu; $menu = 1; # Start menu
+		}
+
+		# * foo::
+		/^\*\s+([^:]+)::/ && do {
+		    $rest_of_line = $';
+		    print "<DT>", &Anchor($linkh, $1, $1, $MENU_ICON), "</DT>";
+		    $rest_of_line =~ s/^[\s\.]+//;
+		    print "<DD>$rest_of_line</DD>\n";
+		    next;
+		};
+
+		# * foo: (bar)beer OR (bar)
+		/^\*\s+([^:]+):\s*\(([^\) \t\n]+)\)([^\t\n\.,]*)/ && do {
+		    $rest_of_line = $';
+		    print "<DT>", &Anchor($linkh, "($2)$3",$1, $MENU_ICON),
+                          "</DT>";
+		    $rest_of_line =~ s/^[\s\.]+//;
+		    print "<DD>$rest_of_line\n";
+		    next;
+		};
+
+		# * foo: beer.
+		/^\*\s+([^:]+):\s*([^\t,\n\.]+)/ && do {
+		    $rest_of_line = $';
+		    print "<DT>", &Anchor($linkh, $2, $1, $MENU_ICON),
+			"</DT><DD>", $2, ". ";
+		    $rest_of_line =~ s/^[\s\.]+//;
+		    print "$rest_of_line</DD>\n";
+		    next;
+		};
+
+		# no match: ignore silently
+	    };
+
+	    $menu && $lastblank && do {
+		print "</DL>\n" if $menu; $menu = 0; # End menu
+		print "<STRONG><PRE>\n" unless $listing; $listing = 1; # Start text
+	    };
+
+	    $menu && do {
+		s/^\s+//;
+	    };
+
+	    /\*note/i && do {
+		# cross reference entry:
+		# "*note nodename::."
+		# "*note Cross-reference-name: nodename."
+		local($n) = 0;
+		# There can be multiple notes in a line, so find them all...
+		while (1) {
+		    # *note \nfoo... (reference split over newline)
+		    # *note foo\nbar... (reference split over newline)
+		    # *note foo: bar\nbleh... (reference split over newline)
+		    if (/\*note\s*$/i ||
+			/\*note\s+[^:\.]+$/i ||
+			/\*note\s+[^:\.]+:\s+[^:\.\t]+$/i) {
+			# Merge with next line
+			local($line) = scalar(<$handle>);
+			$pos += length($line);
+			chop($line);
+			$_ .= "\n" . &HTMLify($line);
+		    }
+		    # *note foo:
+		    if (/\*note(\s+)([^:\.]+)::/i) {
+			s//:=:NOTE:=:/;	# insert unique (I hope) marker
+			local($spc, $ref, $lbl) = ($1, $2, $2);
+			local($note) = "<STRONG>Note:</STRONG>$spc";
+			$note .= &Anchor($linkh, $ref, $lbl);
+			s/:=:NOTE:=:/$note/;
+			$n++;
+			next;
+		    }
+
+		    # * foo: (bar)beer OR (bar)
+		    if (/\*note(\s+)([^:]+):\s+\(([^\)\s]+)\)([^\t.,]*)(.?)/i) {
+			s//:=:NOTE:=:/;	# insert unique (I hope) marker
+			local($spc, $ref, $lbl) = ($1, "($3)$4", "$2$5");
+			local($nl) = ($ref =~ /\n/) ? "\n" : "";
+			local($note) = "<STRONG>Note:</STRONG>$spc";
+			$note .= &Anchor($linkh, $ref, $lbl);
+			s/:=:NOTE:=:/$note$nl/;
+			$n++;
+			next;
+		    }
+
+		    # * foo: beer.
+		    if (/\*note(\s+)([^:]+):\s+([^\t,\.]+)(.?)/i) {
+			s//:=:NOTE:=:/;	# insert unique (I hope) marker
+			local($spc, $ref, $lbl) = ($1, $3, "$2$4");
+			local($nl) = ($ref =~ /\n/) ? "\n" : "";
+			local($note) = "<STRONG>Note:</STRONG>$spc";
+			$note .= &Anchor($linkh, $ref, $lbl);
+			s/:=:NOTE:=:/$note$nl/;
+			$n++;
+			next;
+		    }
+
+		    last;
+		}
+	    };
+
+	    print "$_\n";
+	} continue {
+	    $pos += $orglen unless $active;
+	}
+	print "</DL>\n" if $menu; $menu = 0; # End menu
+
+	# clear status variables;
+	$active = 0;
+	$seenMenu = 0;
+	$indirect = 0;
+	$inentry = 0;
+	$lastblank = 0;
+
+	$DEBUG && &Debug("End of file $handle");
+	close($handle); $NFILES--;
+	$DEBUG && &Debug("Closed file $handle");
+	$inentry = pop(@inentry);
+	$indirect = pop(@indirect);
+	$pos = pop(@pos);
+	$file = pop(@file);
+	last if $matches;
+    }
+    while ($file  = pop(@file)) {
+	$handle = $file;
+	close($handle); $NFILES--;
+	$DEBUG && &Debug("Closed file $handle");
+	$inentry = pop(@inentry); # Not really necessary
+	$indirect = pop(@indirect); # Not really ncessary
+	$pos = pop(@pos);	# Not really necessary
+    }
+    unless ($matches) {
+	&Error("Couldn't find target: \"$node_name\" in file \"$node_file\".");
+	if ($CACHE && $cachedfile) {
+	    $CACHE{"($node_file)$target"} = undef;
+	    if ($cachedpos eq "0") {
+		$CACHE{"($node_file)"} = undef;
+	    }
+	}
+	&UpdateCache();
+	return(($fullnode =~ /\)Top$/i) || &info2html("($node_file)Top"));
+    }
+    &UpdateCache();
+    return($matches);
+}
+
+#---------------------------------------------------------------------------
+
+sub UrlDecode {
+
+#	Decode a URL encoded string or array of strings 
+#	1.	Change "+" to space, since FORMS change space to "+"
+#	2.	Change "%XX" to character with hex value "XX"
+
+    foreach (@_) {
+	tr/+/ /;
+	s/%(..)/pack("c",hex($1))/ge;
+    }
+    wantarray ? @_ : $_[$[];
+}
+
+sub Anchor {
+    local($link, $ref, $label, $icon, $iconlink) = @_;
+    local($file, $name, $img, $href);
+
+    $DEBUG && &Debug("Anchor($link, $ref, $label)");
+    # (foo)bar
+    if ($ref =~ m/^\(([^\)]+)\)\s*([^\t,\.]*)/) {
+	$file = $1;
+	$name = $2;
+    } elsif ($link =~ /^dir$|\/dir$/i) {
+	$DEBUG && &Debug("(dir) node - Menu \"$ref\" means \"($ref)\"");
+	$file = $ref;
+	$name = "";
+    } else {
+	$file = $link;
+	$name = $ref;
+    }
+    $name =~ s/\s+$//;		# Strip trailing blanks
+    $href = "($file)$name";
+    # Escape special characters in URL to %XX form.
+    # Since encoding is done to %XX form we must first encode "%" itself.
+    # The HTML special characters "<", ">" and "&" are already HTML'ified to
+    # "&lt;", "&gt;" and "&amp;" so we must *not* further encode "&" here,
+    # but for good measure we can encode any "<" and ">" that slip through...
+    $href =~ s/%/%25/g;		# %
+    $href =~ s/([<>\#\+\?\=\"\\])/sprintf("%%%X",ord($1))/ge;
+    $href =~ s/\s+/+/g;		# Encode multiple blanks as a "+" encoded space
+    $href = "$PREFIX$href";
+    if ($icon) {
+	if ($icon eq $MENU_ICON)
+	  { $img = "<IMG SRC=\"$icon\" ALIGN=\"$ALIGN\" WIDTH=\"20\" HEIGHT=\"23\" ALT=\"\"> "; }
+        else
+	  { $img = "<IMG SRC=\"$icon\" ALIGN=\"$ALIGN\" WIDTH=\"26\" HEIGHT=\"24\" ALT=\"\"> "; }
+    }
+    if ($iconlink) {
+	return "<A HREF=\"$href\">$img$label</A>";
+    } else {
+	return "$img<A HREF=\"$href\">$label</A>";
+    }
+}
+
+sub HTMLify {
+    local($_) = @_;
+    s/&/&amp\;/g;
+    s/</&lt\;/g;
+    s/>/&gt\;/g;
+    $_;
+}
+
+sub FindFile {
+    local($orgname) = @_;
+    local($name) = $orgname;
+    local($dir, $fil);
+    $DEBUG && &Debug("FindFile: \"$name\"");
+    
+    ($dir, $fil) = &FindFileNoAlt($name);
+    if ($dir) {
+	$CACHE{"($orgname)"} = "0\0$dir/$fil" unless ($orgname =~ /\//);
+	return($dir, $fil);
+    }
+    # Try a possible alternative...
+    $fil = $name;
+    $fil =~ s/[-\.]info$//;
+    $fil =~ tr/A-Z/a-z/;
+    $name = $ALTERNATIVE{$fil};
+    $DEBUG && &Debug("\$ALTERNATIVE{$fil} = $name");
+    return(undef) unless $name;
+    $DEBUG && &Debug("Trying with the alternative \"$name\"...");
+    ($dir, $fil) = &FindFileNoAlt($name);
+    if ($dir) {
+	$CACHE{"($orgname)"} = "0\0$dir/$fil" unless ($orgname =~ /\//);
+	$CACHE{"($name)"} = "0\0$dir/$fil" unless ($name =~ /\//);
+	return($dir, $fil);
+    } else {
+	return(undef);
+    }
+}
+   
+sub FindFileNoAlt {
+    local($name) = @_;
+    local($aname) = $name;
+    local(@list);
+    local($dir, $fil);
+    local($regexp, $aregexp);
+
+    $aname =~ s/\.gz$|\.Z$//;
+    if ($aname =~ /\.info$/) {
+	$aname =~ s/\.info$//;
+    } elsif ($aname =~ /-info$/) {
+	$aname =~ s/-info$/.info/;
+    } else {
+	$aname =~ s/$/.info/;
+    }
+    $DEBUG && &Debug("FindFileNoAlt: \"$name\", Alt=\"$aname\"");
+
+    ($regexp = $name) =~ s/(\W)/\\$1/g; # Escape special characters
+    if ($name =~ /\.gz$|\.Z$/) {
+	# Don't add gzip'ped and compress file to the regular expression
+    } elsif (@GZCAT && @ZCAT) {
+	$regexp .= "(\\.gz|\\.Z)?";
+    } elsif (@GZCAT) {
+	$regexp .= "(\\.gz)?";
+    } elsif (@ZCAT) {
+	$regexp .= "(\\.Z)?";
+    }
+    ($aregexp = $aname) =~ s/(\W)/\\$1/g; # Escape special characters
+    if (@GZCAT && @ZCAT) {
+	$aregexp .= "(\\.gz|\\.Z)?";
+    } elsif (@GZCAT) {
+	$aregexp .= "(\\.gz)?";
+    } elsif (@ZCAT) {
+	$aregexp .= "(\\.Z)?";
+    }
+    $DEBUG && &Debug("\$regexp=/$regexp/ \$aregexp=/$aregexp/");
+    # Try absolute match for $name...
+    if ($name =~ /\//) {
+	($dir, $fil) = ($name =~ m|(.*)/([^/]*)$|);
+	if ($ALLOWPATH || grep($_ eq $dir, @INFOPATH)) {
+	    @list = ($name);
+	    push(@list, "$name.gz") if (@GZCAT && !($name =~ /\.gz$|\.Z$/));
+	    push(@list, "$name.Z") if (@ZCAT && !($name =~ /\.gz$|\.Z$/));
+	    push(@list, $aname);
+	    push(@list, "$aname.gz") if (@GZCAT && !($aname =~ /\.gz$|\.Z$/));
+	    push(@list, "$aname.Z") if (@ZCAT && !($aname =~ /\.gz$|\.Z$/));
+	    foreach (@list) {
+		$DEBUG && &Debug("Trying absolute match for \"$_\"...");
+		if (-f $_) {
+		    ($dir, $fil) = ($_ =~ m|(.*)/([^/]*)$|);
+		    return($dir, $fil);
+		}
+	    }
+	    # Remove path component
+	    $name =~ s,^.*/([^/]*)$,$1,;
+	    $aname =~ s,^.*/([^/]*)$,$1,;
+	    $DEBUG && &Debug("Stripped path from filename: $name");
+	} elsif ($ALLOWRELPATH && !($name =~ /^\//) && !($name =~ /\.\./)) {
+	    @list = ();
+            foreach $dir (@INFOPATH) {
+	       push(@list, "$dir/$name");
+	       push(@list, "$dir/$name.gz") if (@GZCAT && !($name =~ /\.gz$|\.Z$/));
+	       push(@list, "$dir/$name.Z") if (@ZCAT && !($name =~ /\.gz$|\.Z$/));
+	       push(@list, "$dir/$aname");
+	       push(@list, "$dir/$aname.gz") if (@GZCAT && !($aname =~ /\.gz$|\.Z$/));
+	       push(@list, "$dir/$aname.Z") if (@ZCAT && !($aname =~ /\.gz$|\.Z$/));
+	    }
+	    foreach (@list) {
+		$DEBUG && &Debug("Trying absolute match for \"$_\"...");
+		if (-f $_) {
+		    ($dir, $fil) = ($_ =~ m|(.*)/([^/]*)$|);
+		    return($dir, $fil);
+		}
+	    }
+	    # Remove path component
+	    $name =~ s,^.*/([^/]*)$,$1,;
+	    $aname =~ s,^.*/([^/]*)$,$1,;
+	    $DEBUG && &Debug("Stripped path from filename: $name");
+	} else {
+	    $DEBUG && &Debug("Warning: Absolute path-names not allowed!");
+	    $name =~ s,^.*/([^/]*)$,$1,;
+	    $aname =~ s,^.*/([^/]*)$,$1,;
+	    $DEBUG && &Debug("Stripped path from filename: $name");
+	}
+    }
+
+    # Try exact match for $name in all directories...
+    $DEBUG && &Debug("Trying exact match for \"$name\"...");
+    foreach $dir (@INFOPATH) {
+	@list = ("$dir/$name");
+	push(@list, "$dir/$name.gz") if (@GZCAT && !($name =~ /\.gz$|\.Z$/));
+	push(@list, "$dir/$name.Z") if (@ZCAT && !($name =~ /\.gz$|\.Z$/));
+	foreach (@list) {
+	    $DEBUG && &Debug("Trying exact match for \"$_\"...");
+	    if (-f $_) {
+		($dir, $fil) = ($_ =~ m|(.*)/([^/]*)$|);
+		return($dir, $fil);
+	    }
+	}
+    }
+    # Try exact match for $aname in all directories...
+    $DEBUG && &Debug("Trying exact match for \"$aname\"...");
+    foreach $dir (@INFOPATH) {
+	@list = ("$dir/$aname");
+	push(@list, "$dir/$aname.gz") if (@GZCAT && !($aname =~ /\.gz$|\.Z$/));
+	push(@list, "$dir/$aname.Z") if (@ZCAT && !($aname =~ /\.gz$|\.Z$/));
+	foreach (@list) {
+	    $DEBUG && &Debug("Trying exact match for \"$_\"...");
+	    if (-f $_) {
+		($dir, $fil) = ($_ =~ m|(.*)/([^/]*)$|);
+		return($dir, $fil);
+	    }
+	}
+    }
+    # Try caseless match for $name in all directories...
+    $DEBUG && &Debug("Trying caseless match for \"$name\"...");
+    @list = ();
+    foreach $dir (@INFOPATH) {
+	opendir(DIR, $dir);
+	push (@list, grep(s/^/$dir\//, sort grep(/^$regexp$/i, readdir(DIR))));
+	closedir(DIR);
+    }
+    if ($#list > 0) {		# One or more matches, return first match
+	($dir, $fil) = ($list[0] =~ m|(.*)/([^/]*)$|);
+	return($dir, $fil);
+    } elsif ($#list == 0) {	# No matches
+	($dir, $fil) = ($list[0] =~ m|(.*)/([^/]*)$|);
+	return($dir, $fil);
+    }
+    # Try caseless match for $aname in all directories...
+    $DEBUG && &Debug("Trying caseless match for \"$aname\"...");
+    @list = ();
+    foreach $dir (@INFOPATH) {
+	opendir(DIR, $dir);
+	push (@list, grep(s/^/$dir\//, sort grep(/^$aregexp$/i, readdir(DIR))));
+	closedir(DIR);
+    }
+    if ($#list > 0) {		# One or more matches, return first match
+	($dir, $fil) = ($list[0] =~ m|(.*)/([^/]*)$|);
+	return($dir, $fil);
+    } elsif ($#list == 0) {	# No matches
+	($dir, $fil) = ($list[0] =~ m|(.*)/([^/]*)$|);
+	return($dir, $fil);
+    }
+    # Bummer - no matches at all
+    return(undef);
+}
+
+sub OpenFile {
+    local($filename) = @_;
+    local($handle, $pid, $file, $directory);
+    
+    if ($filename =~ /\//) {
+	($directory, $filename) = ($filename =~ m|(.*)/([^/]*)$|);
+    }
+    $file = "$directory/$filename";
+    unless (-f $file) {
+	if (@GZCAT && -f "$file.gz") {
+	    $filename .= ".gz";
+	    $file .= ".gz";
+	} elsif (@ZCAT && -f "$file.Z") {
+	    $filename .= ".Z";
+	    $file .= ".Z";
+	} else {
+	    $DEBUG && &Debug("No such file: $file");
+	    return(undef);
+	}
+    }
+    $DEBUG && &Debug("Trying to open file \"$file\"...");
+    $handle = $file;
+    if ($filename =~ /\.gz$/) {
+	if (@GZCAT) {
+	    select((select(STDOUT), $| = 1)[0]); # Non-buffered STDOUT
+	    select((select(STDERR), $| = 1)[0]); # Non-buffered STDERR
+	    $pid = open($handle, "-|");
+	    if ($pid) {		# This is the parent!
+		$NFILES++;
+		$DEBUG && &Debug("Opened pipe: @GZCAT $file |");
+		return($file);
+	    } elsif (defined $pid) { # This is the child!
+		exec(@GZCAT, $file) || die "Could not exec: $!\n";
+	    } else { 		# Pipe failed!
+		$DEBUG && &Debug("Could not open pipe: $!");
+		return(undef);
+	    }
+	} else {
+	    $DEBUG && &Debug("Cannot use gzip'ped file: $file");
+	    return(undef);
+	}
+    } elsif ($filename =~ /\.Z$/) {
+	if (@ZCAT) {
+	    select((select(STDOUT), $| = 1)[0]); # Non-buffered STDOUT
+	    select((select(STDERR), $| = 1)[0]); # Non-buffered STDERR
+	    $pid = open($handle, "-|");
+	    if ($pid) {		# This is the parent!
+		$NFILES++;
+		$DEBUG && &Debug("Opened pipe: @ZCAT $file |");
+		return($file);
+	    } elsif (defined $pid) { # This is the child!
+		exec(@ZCAT, $file) || die "Could not exec: $!\n";
+	    } else {		# Pipe failed!
+		$DEBUG && &Debug("Could not open pipe: $!");
+		return(undef);
+	    }
+	} else {
+	    $DEBUG && &Debug("Cannot use compressed file: $file");
+	    return(undef);
+	}
+    } else {			# Not a compressed or gzip'ped file
+	if (open($handle, $file)) {
+	    $NFILES++;
+	    $DEBUG && &Debug("Opened file \"$file\"");
+	    return($file);
+	} else {
+	    $DEBUG && &Debug("Could not open file: $!");
+	    return(undef);
+	}
+    }
+}
+
+# Try to lookup the file and position of the node in the cache
+sub TryCache {
+    local($cachekey, $regexp) = @_;
+    local($handle, $line, $h_node, $pos, $dummy);
+    local($cachevalue, $cachedpos, $cachedfile, $cachedir, $newkey, $file);
+    undef @INPUT;
+    $DEBUG && &Debug("Trying cached entry for \"$cachekey\"...");
+    if ($CACHE) {
+	unless ($CACHE_OPENED) {
+	    if (eval 'dbmopen(%cache, $CACHE, 0644) || die "$!\n"') {
+		$CACHE_OPENED = 1;
+	    } else {
+		$DEBUG && &Debug("Couldn't open cache: $@");
+		undef $CACHE;
+	    }
+	}
+	if ($CACHE_OPENED) {
+	    $cachevalue = $cache{$cachekey};
+	} else {
+	    undef $CACHE;
+	    return(undef);
+	}
+    } else {
+	undef $CACHE;
+	return(undef);
+    }
+    if (!$cachevalue) {
+	if (!$ALLOWRELPATH && ($cachekey =~ m,\(.*/.*\).*,)) {
+	    # Remove path and try again
+	    ($newkey = $cachekey) =~ s,^\([^\)]*/([^/\)]*)\),($1),;
+	    $DEBUG && &Debug("New key: $newkey");
+	    return(&TryCache($newkey, $regexp));
+	} elsif ($regexp && ($cachekey =~ /^\([^\)]*\).+/)) {
+	    # Remove target and try again
+	    ($newkey = $cachekey) =~ s,^\(([^\)]*)\).*,($1),;
+	    $DEBUG && &Debug("New key: $newkey");
+	    return(&TryCache($newkey, undef));
+	} else {
+	    $DEBUG && &Debug("Cached entry not found!");
+	    return(undef);
+	}
+    }
+    ($cachedpos, $cachedfile) = split("\0", $cachevalue);
+    $DEBUG && &Debug("Cached entry found: pos=$cachedpos in \"$cachedfile\"");
+    if ($cachedfile =~ /\//) {
+	($cachedir = $cachedfile) =~ s,(.*)/[^/]*$,$1,;
+	if (!$ALLOWPATH && !grep($_ eq $cachedir, @INFOPATH)) {
+	    $DEBUG && &Debug("Warning: Absolute path-names not allowed!");
+	    $CACHE{$cachekey} = undef;
+	    return(undef);
+	}
+    }
+    if ($cachedpos < 0) {
+	$DEBUG && &Debug("Warning: Negative cached position ignored!");
+	$cachedpos = 0;
+	$CACHE{$cachekey} = undef;
+    }
+    unless ($file = &OpenFile($cachedfile)) {
+	$CACHE{$cachekey} = undef;
+	return(undef);
+    }
+    if ($file ne $cachedfile) {
+	$CACHE{$cachekey} = "$cachedpos\0$file";
+    }
+    $handle = $file;
+    $DEBUG && &Debug("Now reading from $handle");
+    # Seek forward to the cached position by using seek() or read()
+    # Note that seek() will not work with a pipe!
+    unless (seek($handle, $cachedpos, 0) ||
+	    (read($handle, $dummy, $cachedpos) == $cachedpos)) {
+	close($handle); $NFILES--;
+	$CACHE{$cachekey} = undef;
+	return(undef);
+    }
+    undef $dummy;
+    $DEBUG && &Debug("Position: $cachedpos");
+    unless ($regexp) {
+	return($file, $pos);
+    }
+    if ($line = <$handle>) {
+	push(@INPUT, $line);	# Save line for later
+	chop($line);
+	$DEBUG && &Debug("line: [$line]");
+	if ($line =~ /^[\037\f]/) {
+	    $DEBUG && &Debug("Found node start");
+	    if ($line = <$handle>) {
+		push(@INPUT, $line); # Save line for later
+		chop($line);
+		$DEBUG && &Debug("line: [$line]");
+		if ($line =~ /\bnode: *([^,\t]*)/i) {
+		    $h_node = $1;
+		    $h_node =~ s/\s+$//; # delete trailing spaces
+		    if ($h_node =~ m/^$regexp$/i) {
+			$DEBUG && &Debug("Found the node!");
+			$pos = $cachedpos;
+			return($file, $pos);
+		    }
+		}
+	    }
+	}
+    }
+    undef @INPUT;
+    undef $pos;
+    $CACHE{$cachekey} = undef;
+    close($handle);
+    return(undef);
+}
+
+# Update the cache lookup DBM database with any saved entries in %CACHE
+sub UpdateCache {
+    local($key, $value, $pos, $file);
+    if ($CACHE && %CACHE && &LockCache()) {
+	unless ($CACHE_OPENED) {
+	    if (eval 'dbmopen(%cache, $CACHE, 0644) || die "$!\n"') {
+		$CACHE_OPENED = 1;
+	    } else {
+		$DEBUG && &Debug("Couldn't open cache: $@");
+		undef $CACHE;
+	    }
+	}
+	if ($CACHE_OPENED) {
+	    while (($key, $value) = each %CACHE) {
+		if (defined $value) {
+		    $cache{$key} = $value;
+		    if ($DEBUG) {
+			($pos, $file) = split("\0", $value);
+			&Debug("cache{$key} set to: pos=$pos in \"$file\"");
+		    }
+		} else {
+		    delete $cache{$key};
+		    $DEBUG && &Debug("cache{$key} deleted");
+		}
+	    }
+	    undef %CACHE;
+	    eval 'dbmclose(%cache) || die "$!\n'; $CACHE_OPENED = 0;
+	    &UnLockCache();
+	    return(1);
+	} else {
+	    $DEBUG && &Debug("Couldn't open DBM file: $!");
+	    undef $CACHE;
+	    &UnLockCache();
+	    return(0);
+	}
+    } else {
+	undef $CACHE;
+	return(0);
+    }
+}
+
+# Lock the lookup cache DBM database
+#
+# See the dbm(3) manual page. Here is an excerpt from dbm(3) on SunOS 4.1.3:
+#
+# BUGS
+#      ...
+#      There are no interlocks and no reliable cache flushing; thus
+#      concurrent updating and reading is risky.
+#
+sub LockCache {
+    return(1) unless $CACHE_LOCKING; # Just fake it unless cache locking is used
+    local($file) = $CACHE . ".lock";
+    unless (open(LOCKFILE, ">$file")) {
+	$DEBUG && &Debug("Couldn't open CACHE lockfile \"$file\": $!");
+	return(0);
+    }
+    unless (eval 'flock(LOCKFILE, $LOCK_EX) || die "$!\n"') {
+	$DEBUG && &Debug("Couldn't lock CACHE lockfile \"$file\": $@");
+	close(LOCKFILE);
+	return(0);
+    }
+    $DEBUG && &Debug("Locked CACHE lockfile \"$file\"");
+    return(1);
+}
+
+# Unlock the cache lookup DBM database
+sub UnLockCache {
+    return(1) unless $CACHE_LOCKING; # Just fake it unless cache locking is used
+    local($file) = $CACHE . ".lock";
+    unless (eval 'flock(LOCKFILE, $LOCK_UN) || die "$!\n"') {
+	$DEBUG && &Debug("Couldn't unlock CACHE lockfile \"$file\": $@");
+	close(LOCKFILE);
+	return(0);
+    }
+    close(LOCKFILE);
+    $DEBUG && &Debug("Unlocked CACHE lockfile \"$file\"");
+    return(1);
+}
+
+# Print an HTML error message
+sub Error {
+    local($reason) = @_;
+
+    # Security checks to prevent at least _some_ forms of XSS attacks.
+    # TODO: This is far from complete, more checks need to be done!
+    $reason =~ s/</&lt;/gs;
+    $reason =~ s/>/&gt;/gs;
+    $reason =~ s/&/&amp;/gs;
+    $reason =~ s/"/&quot;/gs;
+    $reason =~ s/#//gs;
+
+    print "<STRONG>Sorry! - $reason</STRONG>\n<P>\n";
+    return(0);
+}
+
+# Print debug information if debugging is enabled
+sub Debug {
+    # Print out text if debugging enabled
+    if ($DEBUG) {
+	print $DEBUG_PREFIX;
+	if ($DEBUG_HTMLIFY) {
+	    foreach (@_) {
+		print &HTMLify($_);
+	    }
+	} else {
+	    print @_;
+	}
+	print $DEBUG_POSTFIX;
+    }
+}
+
+__END__

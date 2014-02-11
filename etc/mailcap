@@ -26,6 +26,31 @@
 ###############################################################################
 
 text/plain; less '%s'; needsterminal
+image/gif; feh '%s'; test=test -n "$DISPLAY" ; description=GIF Image; nametemplate=%s.gif
+image/jpeg; feh '%s'; test=test -n "$DISPLAY" ; description=JPEG Image; nametemplate=%s.jpeg
+image/png; feh '%s'; test=test -n "$DISPLAY" ; description=PNG Image; nametemplate=%s.png
+image/tiff; feh '%s'; test=test -n "$DISPLAY" ; description=TIFF Image; nametemplate=%s.tiff
+image/x-portable-anymap; feh '%s'; test=test -n "$DISPLAY" ; description=PNM Image; nametemplate=%s.pnm
+image/targa; feh '%s'; test=test -n "$DISPLAY" ; description=TGA Image; nametemplate=%s.tga
+image/x-ms-bmp; feh '%s'; test=test -n "$DISPLAY" ; description=BMP Image; nametemplate=%s.bmp
+image/x-xpixmap; feh '%s'; test=test -n "$DISPLAY" ; description=XPM Image; nametemplate=%s.xpm
+image/pjpeg; feh '%s'; test=test -n "$DISPLAY" ; description=JPEG Image; nametemplate=%s.jpeg
+image/svg+xml; inkscape '%s'; description="Scalable Vector Graphics"; test=test -n "$DISPLAY"; print=inkscape --print='|lp' '%s'; edit=inkscape '%s'; compose=inkscape '%s'
+image/svg; inkscape '%s'; description="Scalable Vector Graphics"; test=test -n "$DISPLAY"; print=inkscape --print='|lp' '%s'; edit=inkscape '%s';  compose=inkscape '%s'
+image/svg+xml; false; description="Scalable Vector Graphics"; test=test -z "$DISPLAY"; print=inkscape --print='|lp' '%s'
+image/svg; false; description="Scalable Vector Graphics"; test=test -z "$DISPLAY"; print=inkscape --print='|lp' '%s'
+video/mpeg; vlc '%s'; description="MPEG Video"; test=test -n "$DISPLAY"
+video/x-mpeg; vlc '%s'; description="MPEG Video"; test=test -n "$DISPLAY"
+video/mpeg-system; vlc '%s'; description="MPEG Video"; test=test -n "$DISPLAY"
+video/x-mpeg-system; vlc '%s'; description="MPEG Video"; test=test -n "$DISPLAY"
+audio/x-wav; vlc '%s'; description="WAV Audio"; nametemplate=%s.wav; test=test -n "$DISPLAY"
+video/mpeg4; vlc '%s'; description="MPEG-4 Video"; test=test -n "$DISPLAY"
+audio/mpeg; vlc '%s'; description="MPEG Audio"; nametemplate=%s.mpg; test=test -n "$DISPLAY"
+audio/mpegurl; vlc '%s'; description="MPEG Audio URL"; nametemplate=%s.m3u; test=test -n "$DISPLAY"
+audio/x-mp3; vlc '%s'; nametemplate=%s.mp3; description="MPEG Audio"; test=test -n "$DISPLAY"
+audio/mpeg4; vlc '%s'; description="MPEG-4 Audio"; test=test -n "$DISPLAY"
+application/mpeg4-iod; vlc '%s'; description="MPEG-4 Video"; test=test -n "$DISPLAY"
+application/mpeg4-muxcodetable; vlc '%s'; description="MPEG-4 Video"; test=test -n "$DISPLAY"
 text/html; /usr/bin/sensible-browser '%s'; description=HTML Text; nametemplate=%s.html
 application/wordperfect; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; nametemplate=%s.wpd ; description="Corel WordPerfect Document"
 application/vnd.wordperfect; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; nametemplate=%s.wpd ; description="Corel WordPerfect Document"
@@ -165,8 +190,38 @@ application/x-tar; /bin/tar tvf -; print=/bin/tar tvf - | print text/plain:-; co
 application/x-gtar; /bin/tar tvzf -; print=/bin/tar tvzf - | print text/plain:-; copiousoutput
 application/zip; unzip -l '%s'; nametemplate=%s.zip; copiousoutput
 text/plain; more '%s'; needsterminal
+application/postscript; pstotext '%s'; test=test -z "$LYNX_VERSION"; copiousoutput; description="PostScript document"
+application/postscript; pstotext '%s'; test=test -n "$LYNX_VERSION"; description="PostScript document"
+application/ghostview;  pstotext '%s'; test=test -z "$LYNX_VERSION"; copiousoutput; description="PostScript document"
+application/ghostview;  pstotext '%s'; test=test -n "$LYNX_VERSION"; description="PostScript document"
 text/plain; view '%s'; edit=vim '%s'; compose=vim '%s'; test=test -x /usr/bin/vim; needsterminal
+video/mpeg; vlc -I rc -V caca '%s'; needsterminal; description="MPEG Video"
+video/x-mpeg; vlc -I rc -V caca '%s'; needsterminal; description="MPEG Video"
+video/mpeg-system; vlc -I rc -V caca '%s'; needsterminal; description="MPEG Video"
+video/x-mpeg-system; vlc -I rc -V caca '%s'; needsterminal; description="MPEG Video"
+audio/x-wav; vlc -I rc -V caca '%s'; nametemplate=%s.wav; needsterminal; description="WAV Audio"
+video/mpeg4; vlc -I rc -V caca '%s'; needsterminal; description="MPEG-4 Video"
+audio/mpeg; vlc -I rc -V caca '%s'; nametemplate=%s.mpg; needsterminal; description="MPEG Audio"
+audio/mpegurl; vlc -I rc -V caca '%s'; nametemplate=%s.m3u; needsterminal; description="MPEG Audio URL"
+audio/x-mp3; vlc -I rc -V caca '%s'; nametemplate=%s.mp3; needsterminal; description="MPEG Audio"
+audio/mpeg4; vlc -I rc -V caca '%s'; needsterminal; description="MPEG-4 Audio"
+application/mpeg4-iod; vlc -I rc -V caca '%s'; needsterminal; description="MPEG-4 Video"
+application/mpeg4-muxcodetable; vlc -I rc -V caca '%s'; needsterminal; description="MPEG-4 Video"
+video/x-msvideo; vlc '%s'; description="MS Video (AVI)"; test=test -n "$DISPLAY"
+video/quicktime; vlc '%s'; description="Apple Quicktime Video"; test=test -n "$DISPLAY"
+application/ogg; vlc '%s'; nametemplate=%s.ogg; description="Ogg stream"; test=test -n "$DISPLAY"
+application/x-ogg; vlc '%s'; nametemplate=%s.ogg; description="Ogg stream"; test=test -n "$DISPLAY"
+video/ogg; vlc '%s'; description="Ogg Video"; test=test -n "$DISPLAY"
+application/x-ms-asf-plugin; vlc '%s'; description="Windows Media Video"; test=test -n "$DISPLAY"
+application/x-mplayer2; vlc '%s'; description="Windows Media"; test=test -n "$DISPLAY"
 text/plain; view '%s'; edit=vi '%s'; compose=vi '%s'; needsterminal
+video/x-msvideo; vlc -I rc -V caca '%s'; needsterminal; description="MS Video (AVI)"
+video/quicktime; vlc -I rc -V caca '%s'; needsterminal; description="Apple Quicktime Video"
+application/ogg; vlc -I rc -V caca '%s'; nametemplate=%s.ogg; needsterminal; description="Ogg stream"
+application/x-ogg; vlc -I rc -V caca '%s'; nametemplate=%s.ogg; needsterminal; description="Ogg stream"
+video/ogg; vlc -I rc -V caca '%s'; needsterminal; description="Ogg Video"
+application/x-ms-asf-plugin; vlc -I rc -V caca '%s'; needsterminal; description="Windows Media Video"
+application/x-mplayer2; vlc -I rc -V caca '%s'; needsterminal; description="Windows Media"
 application/docbook+xml; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="DocBook XML Document"
 application/msword; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Microsoft Word Document"
 application/rtf; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Rich Text document"
@@ -187,6 +242,50 @@ text/plain; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; desc
 text/richtext; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Rich Text document"
 text/rtf; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Rich Text document"
 text/vnd.wap.wml; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Wireless Application Protocol WML file"
+image/avs; display 'avs:'%s''; test=test -n "$DISPLAY"
+image/bie; display 'jbig:'%s''; test=test -n "$DISPLAY"
+image/x-ms-bmp; display 'bmp:'%s''; test=test -n "$DISPLAY"
+image/cmyk; display 'cmyk:'%s''; test=test -n "$DISPLAY"
+image/dcx; display 'dcx:'%s''; test=test -n "$DISPLAY"
+image/eps; display 'eps:'%s''; test=test -n "$DISPLAY"
+image/fax; display 'fax:'%s''; test=test -n "$DISPLAY"
+image/fits; display 'fits:'%s''; test=test -n "$DISPLAY"
+image/gif; display 'gif:'%s''; test=test -n "$DISPLAY"
+image/gray; display 'gray:'%s''; test=test -n "$DISPLAY"
+image/jpeg; display 'jpeg:'%s''; test=test -n "$DISPLAY"
+image/pjpeg; display 'jpeg:'%s''; test=test -n "$DISPLAY"
+image/miff; display 'miff:'%s''; test=test -n "$DISPLAY"
+image/mono; display 'mono:'%s''; test=test -n "$DISPLAY"
+image/mtv; display 'mtv:'%s''; test=test -n "$DISPLAY"
+image/x-portable-bitmap; display 'pbm:'%s''; test=test -n "$DISPLAY"
+image/pcd; display 'pcd:'%s''; test=test -n "$DISPLAY"
+image/pcx; display 'pcx:'%s''; test=test -n "$DISPLAY"
+image/pdf; display 'pdf:'%s''; test=test -n "$DISPLAY"
+image/x-portable-graymap; display 'pgm:'%s''; test=test -n "$DISPLAY"
+image/pict; display 'pict:'%s''; test=test -n "$DISPLAY"
+image/png; display 'png:'%s''; test=test -n "$DISPLAY"
+image/x-portable-anymap; display 'pnm:'%s''; test=test -n "$DISPLAY"
+image/x-portable-pixmap; display 'ppm:'%s''; test=test -n "$DISPLAY"
+image/ps; display 'ps:'%s''; test=test -n "$DISPLAY"
+image/rad; display 'rad:'%s''; test=test -n "$DISPLAY"
+image/x-rgb; display 'rgb:'%s''; test=test -n "$DISPLAY"
+image/rgba; display 'rgba:'%s''; test=test -n "$DISPLAY"
+image/rla; display 'rla:'%s''; test=test -n "$DISPLAY"
+image/rle; display 'rle:'%s''; test=test -n "$DISPLAY"
+image/sgi; display 'sgi:'%s''; test=test -n "$DISPLAY"
+image/sun-raster; display 'sun:'%s''; test=test -n "$DISPLAY"
+image/targa; display 'tga:'%s''; test=test -n "$DISPLAY"
+image/tiff; display 'tiff:'%s''; test=test -n "$DISPLAY"
+image/uyvy; display 'uyvy:'%s''; test=test -n "$DISPLAY"
+image/vid; display 'vid:'%s''; test=test -n "$DISPLAY"
+image/viff; display 'viff:'%s''; test=test -n "$DISPLAY"
+image/x-xbitmap; display 'xbm:'%s''; test=test -n "$DISPLAY"
+image/x-xpixmap; display 'xpm:'%s''; test=test -n "$DISPLAY"
+image/x-xwindowdump; display 'xwd:'%s''; test=test -n "$DISPLAY"
+image/x-icon; display 'icon:'%s''; test=test -n "$DISPLAY"
+image/yuv; display 'yuv:'%s''; test=test -n "$DISPLAY"
+application/pdf; pstotext '%s'; test=test -z "$LYNX_VERSION" && expr `gs --version` ">=" 3.51 >/dev/null 2>&1; copiousoutput; description="Portable Document Format document"
+application/pdf; pstotext '%s'; test=test -n "$LYNX_VERSION" && expr `gs --version` ">=" 3.51 >/dev/null 2>&1; description="Portable Document Format document"
 text/*; less '%s'; needsterminal
 text/*; view '%s'; edit=vim '%s'; compose=vim '%s'; test=test -x /usr/bin/vim; needsterminal
 text/*; more '%s'; needsterminal

@@ -1,0 +1,19 @@
+#!/bin/sh -e
+
+multiarch=arm-linux-gnueabihf
+jdirname=java-6-openjdk-armhf
+etcdir=/etc/java-6-openjdk
+
+case "$1" in
+purge)
+    if [ -z "$jdirname" ] || [ -z "$etcdir" ]; then
+	echo >&2 "$(basename $0): Internal error"
+	exit 1
+    fi
+    # removals of config files in /etc is handled by dpkg
+
+    # XXX should remove /etc/.java ???
+    ;;
+esac
+
+
