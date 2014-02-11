@@ -1,1 +1,1 @@
-update-rc.d monitor.sh defaults 25
+update-rc.d monitor.sh defaults 22

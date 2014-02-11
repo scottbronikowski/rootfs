@@ -1,75 +1,3 @@
-rosservice call /tank 1 100 -100 && sleep 0.5 && rosservice call /brake 1history
-rosservice call /tank 1 100 -100 && sleep 0.5 && rosservice call /brake 
-rosservice call /tank 1 100 -100 && sleep 0.5 && rosservice call /brake
-rosservice call /tank 1 100 100 && sleep 0.5 && rosservice call /brake
-history
-ls
-cd ..
-ls
-cd /etc
-ls
-vim wpa_supplicant.conf 
-shutdown -r now
-ls
-shutdown -h now
-shutdown -r now
-dmesg
-cd /var/log
-ls
-vim Xorg.0.log
-ls
-shutdown -r now
-shutdown -h now
-ifconfig
-rm /etc/udev/rules.d/70-persistent-net.rules 
-shutdown -r now
-ifconfig
-ls
-cd /etc/
-ls
-vim wpa_supplicant.conf
-ls
-vim network/interfaces 
-shutdown -r now
-cat /var/run/wpa_supplicant/wlan0 
-dmesg | grep resolv
-ifconfig
-ifup wlan0
-rm /var/run/wpa_supplicant/wlan0 
-ifup wlan0
-cd /etc/init/
-ls
-mv networking.conf ~/
-rm /var/run/wpa_supplicant/wlan0 
-shutdown -r now
-ifup wlan0
-cd /etc/init
-ls
-mv network-manager.conf ~/
-shutdown -r now
-ping google.com
-shutdown -r now
-pign google.com
-ping google.com
-shutdown -r now
-ping google.com
-shutdown -r now
-ifdown wlan0
-ifup wlan0
-sudo mv /etc/resolv.conf /run/resolvconf/resolv.conf
-sudo ln -s /run/resolvconf/resolv.conf /etc/resolv.conf
-ifdown wlan0
-ifup wlan0
-shutdown -r now
-ifconfig
-ifdown wlan0-
-ifdown wlan0
-ifconfig
-ping google.com
-vim /etc/network/interfaces 
-shutdown -r now
-ifconfig
-ping google.com
 shutdown -r now
 ping google.com
 ifdown wlan0
@@ -1998,3 +1926,75 @@ emacs &
 ls /etc/rc*
 ps -ef | grep noi
 ps -ef | grep ntp
+ls
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ps -ef | grep ping
+ps -ef | grep ntp
+reboot
+date
+/etc/init.d/time-update.sh 
+/etc/init.d/time-update.sh start
+emacs &
+cd /etc/init.d
+update-rc.d -f ssh-tunnel.sh remove
+update-rc.d ssh-tunnel.sh defaults 28
+lsusb
+cd ~/pointgrey/
+ls
+cd flycapture.2.5.3.5_armhf
+ls
+cd src
+ls
+lla
+cd MultipleCameraEx/
+ls
+more ReadMe.txt 
+ls
+more Makefile 
+cd ../../bin
+ls
+lla
+cd C
+ls
+cd ..
+ls
+cd ../src
+ls
+cd FlyCap2_ARM/
+ls
+less FlyCap2.rc
+more Makefile 
+ls
+dpkg -s libdc1394
+dpkg -s libusb
+cd ../../bin
+ls
+./FlyCap2
+lsusb
+ls
+cd /
+git status
+git add -A
+git commit -m "added keepalive-ping.sh to startup as #27 (does not appear to work); moved ssh-tunnel.sh to #28 (vice #24); apt-get install libgtkmm-2.4 libglademm-2.4 libusb-1.0-0 vlc imagej imagemagick inkscape feh; apt-get install dhelp dwww doc-central yelp khelpcenter4 rarian-compat gtkmm-documentation libglibmm-2.4-doc"
+git push
+apt-get install java-virtual-machine default-jre equivs icedtea-plugin sun-java6-fonts fonts-ipafont-gothic fonts-ipafont-mincho ttf-wqy-microhei ttf-wqy-zenhei ttf-indic-fonts-core ttf-telugu-fonts ttf-oriya-fonts ttf-kannada-fonts ttf-bengali-fonts ttf-dejavu-extra icedtea-netx icedtea-6-jre-cacao icedtea-6-jre-jamvm
+apt-get install default-jre equivs icedtea-plugin sun-java6-fonts fonts-ipafont-gothic fonts-ipafont-mincho ttf-wqy-microhei ttf-wqy-zenhei ttf-indic-fonts-core ttf-telugu-fonts ttf-oriya-fonts ttf-kannada-fonts ttf-bengali-fonts ttf-dejavu-extra icedtea-netx icedtea-6-jre-cacao icedtea-6-jre-jamvm
+apt-get install java-virtual-machine default-jre equivs icedtea-plugin fonts-ipafont-gothic fonts-ipafont-mincho ttf-wqy-microhei ttf-wqy-zenhei ttf-indic-fonts-core ttf-telugu-fonts ttf-oriya-fonts ttf-kannada-fonts ttf-bengali-fonts ttf-dejavu-extra icedtea-netx icedtea-6-jre-cacao icedtea-6-jre-jamvm
+git add -A
+git commit -m "apt-get install java-virtual-machine default-jre equivs icedtea-plugin fonts-ipafont-gothic fonts-ipafont-mincho ttf-wqy-microhei ttf-wqy-zenhei ttf-indic-fonts-core ttf-telugu-fonts ttf-oriya-fonts ttf-kannada-fonts ttf-bengali-fonts ttf-dejavu-extra icedtea-netx icedtea-6-jre-cacao icedtea-6-jre-jamvm"
+git push
+apt-get install libdc1394
+apt-get install imagemagick-doc autotrace cups-bsd lpr lprng enscript ffmpeg gnuplot grads hp2xx html2ps libwmf-bin povray radiance sane-utils texlive-base-bin transfig ufraw-batch libmagickcore4-extra netpbm
+apt-get install imagemagick-doc autotrace cups-bsd lpr lprng enscript ffmpeg gnuplot grads hp2xx html2ps libwmf-bin radiance sane-utils texlive-base-bin transfig ufraw-batch libmagickcore4-extra netpbm
+apt-get install imagemagick-doc autotrace lpr lprng enscript ffmpeg gnuplot grads hp2xx html2ps libwmf-bin radiance sane-utils texlive-base-bin transfig ufraw-batch libmagickcore4-extra netpbm
+apt-get install imagemagick-doc autotrace enscript ffmpeg gnuplot grads hp2xx html2ps libwmf-bin radiance sane-utils texlive-base-bin transfig ufraw-batch libmagickcore4-extra netpbm
+git add -A
+git commit -m "apt-get install imagemagick-doc autotrace enscript ffmpeg gnuplot grads hp2xx html2ps libwmf-bin radiance sane-utils texlive-base-bin transfig ufraw-batch libmagickcore4-extra netpbm"
+git push
+apt-get install  dia dia-gnome libsvg-perl libxml-xql-perl pstoedit transfig libgnomevfs2-bin gamin fam gnome-mime-data gsl-ref-psdoc gsl-doc-pdf gsl-doc-info gsl-ref-html libwmf-bin python-lxml python-uniconvertor libgnomevfs2-extra perlmagick libjpeg-progs
+apt-get install  dia dia-gnome libsvg-perl libxml-xql-perl pstoedit transfig libgnomevfs2-bin fam gamin gnome-mime-data gsl-ref-psdoc gsl-doc-pdf gsl-doc-info gsl-ref-html libwmf-bin python-lxml python-uniconvertor libgnomevfs2-extra perlmagick libjpeg-progs
+apt-get install  dia dia-gnome libsvg-perl libxml-xql-perl pstoedit transfig libgnomevfs2-bin fam gnome-mime-data gsl-ref-psdoc gsl-doc-pdf gsl-doc-info gsl-ref-html libwmf-bin python-lxml python-uniconvertor libgnomevfs2-extra perlmagick libjpeg-progs
+git add -A
+git commit -m "apt-get install  dia dia-gnome libsvg-perl libxml-xql-perl pstoedit transfig libgnomevfs2-bin fam gnome-mime-data gsl-ref-psdoc gsl-doc-pdf gsl-doc-info gsl-ref-html libwmf-bin python-lxml python-uniconvertor libgnomevfs2-extra perlmagick libjpeg-progs"
+git push
