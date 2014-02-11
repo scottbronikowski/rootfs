@@ -1,0 +1,1169 @@
+#!/bin/sh -e
+# 
+# postinst maintainer script for the Debian  package.
+# $Id: postinst.in 4781 2011-01-09 05:36:21Z preining $
+
+# Copyright (C) 2004 by Frank Küster <frank@kuesterei.ch>. 
+#
+# The eperl code is taken from the auctex package, Copyright (C) 1999,
+# 2000, 01, 02, 03, 04 by Davide Giovanni Maria Salvetti.
+#
+# This file is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version.
+#
+# This file is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to: The Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+#
+# On Debian GNU/Linux System you can find a copy of the GNU General Public
+# License in "/usr/share/common-licenses/GPL".
+
+
+## Define static variables we need
+UCF_FILES="texmf.d/05TeXMF.cnf texmf.d/15Plain.cnf texmf.d/45TeXinputs.cnf texmf.d/55Fonts.cnf texmf.d/65BibTeX.cnf texmf.d/75DviPS.cnf texmf.d/80DVIPDFMx.cnf texmf.d/85Misc.cnf texmf.d/90TeXDoc.cnf texmf.d/95NonPath.cnf updmap.d/00updmap.cfg"
+TEXMFSYSVARDIR="/var/lib/texmf"
+UCF="ucf --debconf-ok"
+#UCF="ucf -d --debconf-ok --verbose"
+OLD_LDAT=/etc/texmf/language.dat
+POSTINST_MOVE_EXT="postinst-bak"
+FONTCACHE_PERMS=3775
+
+TEXMFTREES="/usr/share/texmf $TEXMFSYSVARDIR"
+FULLTEXMFTREES="$TEXMFTREES /usr/share/texmf-texlive"
+
+
+umask 022
+
+# Give a name to the first commandline argument
+action=$1
+trigger=$2
+
+. /usr/share/debconf/confmodule
+db_version 2.0
+
+#################################################################
+## Function definitions - included from file postinst.functions
+#################################################################
+
+# variables needed, please set in the main file
+# POSTINST_MOVE_EXT
+
+###############################################################################
+# cfgval(variable)
+#   read variable ($1) from config file, first match wins
+###############################################################################
+# from tetex-bin's updmap
+cfgval()
+{
+  cnfFile="$1"
+  opt="$2"
+  cat "$cnfFile" | sed -n 's/^'"$opt"'[	 =][	 =]*//p' | sed q
+}
+
+cleanup()
+{
+  rc=$?
+  [ -n "$tempdir" ] && rm -rf "$tempdir"
+  exit $rc
+}
+
+check_texmf(){
+  file=$1
+  variable=$2
+  pattern="$3"
+  removepattern='( |=)'
+  line=""
+  line=`egrep "^$variable" $file` || true
+  if [ -z "$line" ]; then
+    variable=${variable%$removepattern}
+    db_subst tex-common/check_texmf_missing filename $file || true
+    db_subst tex-common/check_texmf_missing variable $variable || true
+    db_fset tex-common/check_texmf_missing seen false || true
+    db_input critical tex-common/check_texmf_missing || true
+    db_go || true
+    echo "Error in $file: $variable not defined." >&2
+    checkfailed=true
+  else
+    if ! echo "$line" | egrep -q "$pattern"; then
+      variable=${variable%$removepattern}
+      # remove the slashes that escape the $ signs:
+      pattern=$(echo $pattern |  sed -e 's@[\]@@g')
+      db_subst tex-common/check_texmf_wrong filename $file || true
+      db_subst tex-common/check_texmf_wrong variable $variable || true
+      db_subst tex-common/check_texmf_wrong pattern $pattern || true
+      db_fset tex-common/check_texmf_wrong seen false || true
+      db_input critical  tex-common/check_texmf_wrong || true
+      db_go || true
+      echo "Error in $file: $variable incorrectly defined." >&2
+      checkfailed=true
+    fi
+  fi
+}
+
+dhit_libkpathsea_configured ()
+{
+    kpsewhich --version >/dev/null 2>&1
+}
+
+dhit_build_format ()
+{
+
+    tempfile=$(mktemp -p /tmp fmtutil.XXXXXXXX)
+    printf "Building format(s) $*.\n\tThis may take some time... "
+    if fmtutil-sys "$@" > $tempfile 2>&1 ; then
+        rm -f $tempfile
+        echo "done."
+    else
+        exec >&2
+        echo
+        echo "fmtutil-sys failed. Output has been stored in"
+        echo "$tempfile"
+        echo "Please include this file if you report a bug."
+        echo
+        exit 1
+    fi
+}
+
+
+#################################################################
+##  End of function definitions from file postinst.functions
+#################################################################
+
+# # #################################################################
+## Function definitions - included from file common.functions
+#################################################################
+# Copyright (C) 2004, 05, 06 by Frank KÃ¼ster <frank@debian.org>.
+# Copyright (C) 2006 by Julian Gilbey <jdg@debian.org>.
+# $Id: common.functions.in 4549 2010-01-27 00:10:36Z preining $
+
+# internal variables for common.functions
+SYMLINK_MOVE_EXT=moved-by-preinst
+TEXMFSYSVARDIR=/var/lib/texmf
+
+debug(){
+  true "$*"
+}
+# debug(){
+#   echo -en "$*"
+# }
+
+savemove(){
+  source="$1"
+  dest="$2"
+  chown --reference=$dest $source
+  chmod --reference=$dest $source
+  mv $source $dest
+} 
+
+rename_catinfo(){
+  oldfile=$1
+  newfile=$oldfile.$MOVE_EXT
+  echo $INFO_TEXT > $newfile
+  cat $oldfile >> $newfile
+  chmod --reference=$oldfile $newfile
+  chown --reference=$oldfile $newfile
+  rm -f $oldfile
+}
+
+create_tetex_formats(){
+  options="$@"
+  printf "Running fmtutil-sys. This may take some time... "
+  # for jadetex safety (see #352391 and friends), remove old latex formats
+  if [ "$options" = "--all" ];
+    then for file in latex.fmt latex.efmt latex.log pdflatex.fmt pdflatex.efmt pdflatex.log; do
+      rm -f $TEXMFSYSVARDIR/web2c/$file
+    done
+  fi
+
+  # Working in a temporary directory avoids bad suprises caused by TeX first
+  # looking for input files in the current directory (see bug #377581).
+  tempdir=$(mktemp -d -t tetex.format_creation.XXXXXXXX) || exit 1
+  curdir="$PWD"; cd "$tempdir"
+
+  if fmtutil-sys $options >fmtutil-sys.log; then
+    cd "$curdir"
+    rm -r "$tempdir"
+    echo "done."
+  else
+    echo
+    echo "fmtutil-sys failed. Output has been stored in:"
+    echo "  $tempdir/fmtutil-sys.log"
+    echo "Please include this file if you report a bug."
+    exit 1
+  fi
+}
+
+create_fontmaps(){
+    tempfile=$(mktemp -t tetex.updmap.XXXXXXXX)
+    printf "Running updmap-sys. This may take some time... "
+    if updmap-sys 2> $tempfile; then
+      rm -f $tempfile
+      echo "done."
+    else
+      echo
+      echo "updmap-sys failed. Output has been stored in:"
+      echo "  $tempfile"
+      echo "Please include this file if you report a bug."
+      exit 1
+    fi
+    echo
+}
+
+handle_stateof_configfile(){
+  # call this function with the correct action (see below) as first
+  # argument, the configuration file to handle as second, and the 
+  # package it belongs to as third argument.
+  #
+  # If you want to understand the function, start reading the --remove
+  # action. The function cannot do all for you! What you have to do
+  # additionally in preinst is outlined in the preinst action.
+
+  CONFIG_FILE="$2"
+  PACKAGE=$3
+
+  # static variables
+  CONFSTATEDIR=
+  NO_CONFIG_PREFIX=
+  PCONFSTATEDIR=$CONFSTATEDIR/$PACKAGE
+  SAVED_CONFIG_FILE=$PCONFSTATEDIR/$(basename $CONFIG_FILE)
+  NO_CONFIG_FILE=$PCONFSTATEDIR/$NO_CONFIG_PREFIX.$(basename $CONFIG_FILE)
+  TEMP_CONFIG_FILE="$PCONFSTATEDIR/$(basename $CONFIG_FILE).tmp"
+
+  case $1 in
+    --preinst)
+      if [ ! -d "$PCONFSTATEDIR" ]; then
+	mkdir --mode=755 "$PCONFSTATEDIR"
+      fi
+ 
+# here comes what you need to do in _your_ preinst script
+
+#     # if an old version is in state rc, we get "$old_version" as second arg
+#     # if an other version is installed, we will be called with upgrade.
+#     # Therefore we know that we install on a clean system if we've got 
+#     # only one argument and first argument is "install"
+#      case $1 in
+#	install)
+#	  if [ $# = 1 ] && [ ! -f $CONFIG_FILE ]; then
+#	    cat > "$TEMP_CONFIG_FILE" <<EOF
+#Put the filecontents here
+#EOF
+#	    mv "$TEMP_CONFIG_FILE" "$CONFIG_FILE"
+#
+#	  fi
+#	  ;;
+#      esac
+      ;;
+    --postinst)
+      if [ ! -f "$CONFIG_FILE" ]; then
+      # the config file does not exist (might also be deleted by the admin)
+	if [ -f "$SAVED_CONFIG_FILE" ]; then
+	# an old version was in state rc, and the admin wants the file
+	  if [ ! -f "$NO_CONFIG_FILE" ]; then
+	    mv "$SAVED_CONFIG_FILE" "$CONFIG_FILE"
+	  else
+	    echo >&2 <<EOF
+Error: 
+$SAVED_CONFIG_FILE and $NO_CONFIG_FILE
+should not be present at the same time on the system. If you did not fiddle 
+with one of these files yourself, please note carefully the last operations
+you did with $PACKAGE (installations, removals, purges, etc.) 
+and file a bug.
+EOF
+	  fi
+	fi
+      fi
+      rm -f $NO_CONFIG_FILE
+
+      ;;
+    --remove)
+      # updon remove, save away the config file (with possible local changes)
+      # or note that the local admin has deleted it.
+      if [ -f $CONFIG_FILE ]; then
+	mv $CONFIG_FILE $SAVED_CONFIG_FILE
+      elif [ ! -f $SAVED_CONFIG_FILE ]; then
+	: > $NO_CONFIG_FILE
+      fi
+      ;;
+    --purge)
+      rm -f "$CONFIG_FILE" "$SAVED_CONFIG_FILE" "$NO_CONFIG_FILE" "$TEMP_CONFIG_FILE"
+      rmdir $PCONFSTATEDIR
+      ;;
+  esac
+}
+
+preinst_move_symlink(){
+  existing_symlink="$1"
+  if [ -e $existing_symlink ] && [ -L $existing_symlink ]; then
+    echo "Removing obsolete symlink $existing_symlink."
+      mv  $existing_symlink  $existing_symlink.$SYMLINK_MOVE_EXT
+
+  fi
+}
+
+preinst_move_dir(){
+  existing_dir="$1"
+  if [ -d $existing_dir ] && [ ! -L $existing_dir ]; then
+    echo "Removing obsolete directory $existing_dir."
+      mv  $existing_dir  $existing_dir.$SYMLINK_MOVE_EXT
+
+  fi
+}
+
+# for abort-upgrade
+preinst_restore_symlink(){
+  stored_symlink="$1"
+  if [ -e $stored_symlink.$SYMLINK_MOVE_EXT ] && [ ! -e $stored_symlink ]; then
+    mv  $stored_symlink.$SYMLINK_MOVE_EXT  $stored_symlink
+  fi
+}
+
+preinst_restore_dir(){
+  stored_dir="$1"
+  if [ -e $stored_dir.$SYMLINK_MOVE_EXT ] && [ ! -e $stored_dir ]; then
+    mv  $stored_dir.$SYMLINK_MOVE_EXT  $stored_dir
+  fi
+}
+
+postinst_remove_saveddir(){
+  saveddir="$1"
+  if [ -e $saveddir.$SYMLINK_MOVE_EXT ] && \
+    [ -L $saveddir ] && \
+    [ -e $saveddir ]; # true if target exists
+    then
+    rm -r $saveddir.$SYMLINK_MOVE_EXT
+  fi
+}
+
+postinst_remove_savedlink(){
+  savedlink="$1"
+  if [ -e $savedlink.$SYMLINK_MOVE_EXT ] && \
+    [ ! -L $savedlink ] && \
+    [ -d $savedlink ];
+    then
+    rm -r $savedlink.$SYMLINK_MOVE_EXT
+  fi
+}
+
+select_lsrfile() {
+    case $1 in
+     main) LSR=$TEXMFSYSVARDIR/ls-R-TEXMFMAIN ;;
+     var)  LSR=$TEXMFSYSVARDIR/ls-R ;;
+     cache) LSR=/var/cache/fonts/ls-R ;;
+     *) echo "select_lsr: don't know how to set this: $1" >&2 ;;
+    esac
+    echo $LSR
+}
+
+clean_texenvironment(){
+  envvars="AFMFONTS BIBINPUTS BSTINPUTS CMAPFONTS CWEBINPUTS ENCFONTS GFFONTS \
+GLYPHFONTS INDEXSTYLE LIGFONTS MAILCAPLIBDIR MFBASES MFINPUTS MFPOOL MFTINPUTS \
+MIMELIBDIR MISCFONTS MISSFONT_LOG MPINPUTS MPMEMS MPPOOL MPSUPPORT MPXCOMMAND \
+OCPINPUTS OFMFONTS OPENTYPEFONTS OPLFONTS OTPINPUTS OVFFONTS OVPFONTS PDFTEXCONFIG \
+PKFONTS PSHEADERS SFDFONTS SYSTEXMF T1FONTS T42FONTS T4HTINPUTS TEX4HTFONTSET \
+TEX4HTINPUTS TEXCONFIG TEXDOCEXT TEXDOCHTML TEXDOCS TEXDOCSCOMPRESS TEXDOCSSUFFIX \
+TEXFONTMAPS TEXFORMATS TEX_HUSH TEXINPUTS TEXMF TEXMFCNF TEXMFCONFIG TEXMFDBS \
+TEXMFDIST TEXMFHOME TEXMFLOCAL TEXMFMAIN TEXMFSCRIPTS TEXMFSYSCONFIG TEXMFSYSVAR \
+TEXMFVAR TEXPICTS TEXPOOL TEXPSHEADERS TEXSOURCES TFMFONTS TRFONTS TTFONTS \
+VARTEXFONTS VFFONTS WEB2C WEBINPUTS"
+  for var in $envvars; do
+    unset $var || true
+  done
+
+}
+
+get_newfilename(){
+  file="$1" # without leading /etc/texmf
+  basedir=${file%%/*}
+  restname=$(echo ${file#*/})
+  case $basedir in
+    $file)
+      case $file in
+	modes.mf)
+	  echo metafont/misc/modes.mf
+	  ;;
+	mktex.cnf)
+	  echo web2c/mktex.cnf
+      esac
+      ;;
+    map)
+      echo fonts/$file
+      ;;
+    dvips)
+      echo $basedir/config/$restname
+      ;;
+      *)
+      echo tex/$basedir/config/$restname
+      ;;
+  esac
+}
+
+dpkg_md5sum(){
+  file=$1
+  package=$2
+  md5sum=$(dpkg-query -W -f='${Conffiles}' $package | grep "$file[[:space:]]" | cut -f 3 -d ' ')
+  if [ -z "$md5sum" ]; then
+    get_sarge_md5sum_from_list $file
+  fi
+  echo $md5sum
+}
+
+ucf_md5sum(){
+  file=$1
+  md5sum=$(grep "$file$"  /var/lib/ucf/hashfile | cut -f 1 -d ' ')
+  if [ -z "$md5sum" ]; then
+    get_sarge_md5sum_from_list $file
+  fi
+  echo $md5sum
+}
+
+
+
+sarge_md5sum_list="
+ /etc/texmf/mktex.cnf 6491db33ef75bbe4f38a6dcbdcab7db8 
+ /etc/texmf/modes.mf 17886f0a39f023a1830538073a743047
+ /etc/texmf/context/cont-cz.ini 984f5ed1242258775b9c6e5e8b219a26
+ /etc/texmf/context/cont-de.ini c2c75aaddf59e7cd1d14ef3661578eef
+ /etc/texmf/context/cont-en.ini 5d7064e3adc9acdaf94e37e9bc5c1a29
+ /etc/texmf/context/cont-it.ini 96366065e347eab53a30e72d9a6e4ca0
+ /etc/texmf/context/cont-nl.ini 25cbcc11164d749693de4eea197a9c65
+ /etc/texmf/context/cont-ro.ini a94fd43e68156f57e6bf3ac4a901af14
+ /etc/texmf/context/cont-uk.ini ee6f13cd52623786f7a13c151900ec50
+ /etc/texmf/context/cont-usr.tex 15b671e578d517dc54df1db022c3f412
+ /etc/texmf/context/texexec.ini 1497213cfcfded9d1ae2e5546cf55fc4
+ /etc/texmf/cslatex/fonttext.cfg 1129c41c24cf37f4d2cad6deca949fb1
+ /etc/texmf/cslatex/hyphen.cfg 987e934d95d372902b0e1a81d3dc3802
+ /etc/texmf/cyrplain/cyramstx.ini 15d4ba30419b36376851a124619e20ba
+ /etc/texmf/cyrplain/cyrtex.cfg 843bd70324caf63d72269dd3afdd8eb1
+ /etc/texmf/cyrplain/cyrtex.ini 40ae6def8399827a80f3736e5fb1cdf5
+ /etc/texmf/cyrplain/cyrtxinf.ini 797f2dae2d06396a4b40b1454609f025
+ /etc/texmf/dvipdfm/config 8713d15e9e574109c61474a3990b677f 
+ /etc/texmf/dvipdfm/README.config 2731fe134e122f315d91cae400a6b13e
+ /etc/texmf/dvips/config.builtin35 5775e9a2ec5e89c44f03c49a84133c76 
+ /etc/texmf/dvips/config.dfaxhigh 1c7ef7c0bcc006af534241df17d1e085
+ /etc/texmf/dvips/config.dfaxlo 25b7f9a41d13d188b75fb6ec63e8fa09
+ /etc/texmf/dvips/config.download35 39bb1088ea568d10973f48293c205a8e
+ /etc/texmf/dvips/config.gsftopk e02bc7dd315e819e349c52191837975a
+ /etc/texmf/dvips/config.ps 7402075ae27071bff26ddeb1143ace07
+ /etc/texmf/dvips/config.outline e671960560b7cb570aef7f19af14519a
+ /etc/texmf/dvips/config.pdf d05ab1e98fcf0d2a4eccd4bb7ad9b0e4
+ /etc/texmf/dvips/config.pk 44348634a3771beda74b4133a8614fa5
+ /etc/texmf/dvips/config.www ba6b447883942b5f0d653d878072321b
+ /etc/texmf/dvips/context.map 0c886351c178a140f3e2b6e39656ee44
+ /etc/texmf/etex/etex.ini eb7eeca34d4f7c338480ae2f1e95dae6
+ /etc/texmf/etex/language.def e28ea8119d0edaea53f2a55bd5a13bf5
+ /etc/texmf/latex/color.cfg d77957eef96e7e9a4bdc3d1d24a49df3
+ /etc/texmf/latex/graphics.cfg 3f384c52d267b7f0a50fb71fab57d60f
+ /etc/texmf/latex/latex.ini 09e4f410ade0befce1e0bacf8e272789
+ /etc/texmf/latex/latex209.cfg c9af399f9747715e21b6e64daa4e5916
+ /etc/texmf/latex/ltxdoc.cfg 50cf6ee9115a007246d2d79e350a8592
+ /etc/texmf/latex/ltxguide.cfg cc8dbfee5a57b4ae20bb77cc6aeb0e1f
+ /etc/texmf/latex/texsys.cfg 055c0b3967730e2dd75dee66ccde2687
+ /etc/texmf/latex/fontmath.cfg ee0a90dac1a81d3aee68f1abdbbd5839
+ /etc/texmf/latex/fonttext.cfg 6be6de7b54df7d13a8831138e7f1297b
+ /etc/texmf/latex/preload.cfg a2df76edd8245ce697c998dd4cbf060f
+ /etc/texmf/map/dvips/context/il2-ams-cmr.map cc471142a76445139def6ad5b5202ad4
+ /etc/texmf/map/dvips/context/pl0-ams-cmr.map 0bf5e38fde2a67bb4df7cdb11e499175
+ /etc/texmf/pdftex/context/il2-ams-cmr.map cc471142a76445139def6ad5b5202ad4
+ /etc/texmf/pdftex/context/original-adobe-euro.map ee2826182cf6f1b95890e8b7d0fc9633
+ /etc/texmf/pdftex/context/original-ams-cmr.map 5912f95748bc1917f14632e48cc223ac
+ /etc/texmf/pdftex/context/original-ams-euler.map 878c01a7de86554eb41ff74a0b752f5f
+ /etc/texmf/pdftex/context/original-context-symbol.map 7090f11f5bee8f5e9b46841f286d1df9
+ /etc/texmf/pdftex/context/original-vogel-symbol.map e4f07d28e80b93ad2513a3e812541f32
+ /etc/texmf/pdftex/context/original-youngryu-px.map b17cc8cb081cb34cbff9e197c1e97512
+ /etc/texmf/pdftex/context/original-youngryu-tx.map 229dbd1882f3378c4dd21e353489f03a
+ /etc/texmf/pdftex/context/pl0-ams-cmr.map 0bf5e38fde2a67bb4df7cdb11e499175
+ /etc/texmf/pdftex/context/pl0-ams-cmr.map 0bf5e38fde2a67bb4df7cdb11e499175
+ /etc/texmf/pdftex/cmttf.map 6b87723795683cdcfd846c2d8d60cb3e
+ /etc/texmf/pdftex/pdftex.cfg 8d08d2723661c86cd45e4a1408a5f923
+ /etc/texmf/platex/hyphen.cfg 1199fd3dbe752e8eedaca7a5a6df9258
+ /etc/texmf/platex/language.dat 8e3525fe40ae72bb08f673b30eca1236
+ /etc/texmf/platex/platex.ini c865212575be3a09cbadb694a803ca55
+
+ /etc/texmf/dvips/config.ams df69e80e8157afde30550f21317bbd6d 
+ /etc/texmf/dvips/config.cm 363c5ef43576af28b14330ae78ed5de8 
+ /etc/texmf/dvips/config.amz 0ef9213edceaaba3185a79e5946c8411 
+ /etc/texmf/dvips/config.cmz 949213a1865415e6f5199188ee57419e 
+ /etc/texmf/latex/SIunits.cfg e1c35ec7ca1a5a17ac67ecbdabb6990b 
+ /etc/texmf/latex/draftcopy.cfg 339604ed6e259f766281201bc26a3ebf 
+ /etc/texmf/latex/geometry.cfg 10ea5acebcdd8c1f6e50c6059a86fc4b 
+ /etc/texmf/latex/hyperref.cfg 6865c020b50d426d7d3893193933f852 
+ /etc/texmf/latex/lettrine.cfg 980963bc52386638361f704f2316092b 
+ /etc/texmf/latex/seminar.con e72fce0eed20a2c0ffe505578a517937 
+ /etc/texmf/latex/listings.cfg cda21886f370b2a08959be5b7c522bd0 
+ /etc/texmf/latex/jblong.cfg 1ff923049f25d755e3c598f1f9bd7321 
+ /etc/texmf/latex/jurabib.cfg d4655b3681c0a8be21267ee31a200164 
+ /etc/texmf/latex/efxmpl.cfg 8e5a8e1829832aefb9e6190365201470 
+ /etc/texmf/latex/adrplaner.cfg 26a0aedd3f777b141037b8bf0b992c92 
+ /etc/texmf/latex/adrdir.cfg fafff964038150fa8cf034d92a56ee77 
+ /etc/texmf/latex/adrsmall.cfg 6fdd42917d54ebb2389c6f4e4a13ae6c 
+ /etc/texmf/latex/htex4ht.cfg 9f3b36f33fd350aa315a4a3a40c87ef9 
+ /etc/texmf/lambda/language.dat b7b70636a817d3f75f28a107c240d2cf 
+
+ /etc/texmf/dvips/config.qbk ba3f00776ea78362953c9211a09c09d7
+ /etc/texmf/dvips/config.qcr 13822cff599bb1dc574a038f0d86a362
+ /etc/texmf/dvips/config.qhv 7c77d2e5f9ca96fbfda5f3f6c68d8287
+ /etc/texmf/dvips/config.qpl b36d7997a69aec7389a9580513750755
+ /etc/texmf/dvips/config.qtm 8cc586156ba303881e41671f7d5d8227
+ /etc/texmf/dvips/config.qzc ba705b343b90b615012fa41d5a7016d5
+"
+
+woody_md5sum_list="
+ /etc/texmf/dvips/antp.cfg 5fdea5dec2977f321c1d39b90f161858
+ /etc/texmf/dvips/antp.map 629cf954491b5092f56c79ba12761eb7
+ /etc/texmf/dvips/antt.cfg eb9863fe55c45357f3e93cc0f796df7d
+ /etc/texmf/dvips/antt.map 015d3ea75dda8f11ac4d3d376fc3f4f9
+ /etc/texmf/dvips/ar-ext-adobe-bi.map 7587ed88b27b0e85585bc2300d1c2a9a
+ /etc/texmf/dvips/ar-ext-adobe-kb.map b3e9ba6adac40cb9499d8f7c5bb7e6c3
+ /etc/texmf/dvips/ar-ext-urw-kb.map 1e18d58b346a184b2c009e8a2611cf6c
+ /etc/texmf/dvips/ar-ext-urw-urw.map 4613ccfaa28c351167239a049149076f
+ /etc/texmf/dvips/ar-std-adobe-bi.map b8729c41827597f2a5d9dc293a6257a3
+ /etc/texmf/dvips/ar-std-adobe-kb.map 4d5a5faacb6bb60ba44a040df0485c8f
+ /etc/texmf/dvips/ar-std-urw-kb.map 7c95efc06585ece0cad0c73f9bbe92bb
+ /etc/texmf/dvips/ar-std-urw-urw.map 512269272f1ec556035c8d4b38db4175
+ /etc/texmf/dvips/bakoma-extra.map 2deed84112de63c43d532bbd1dd51afa
+ /etc/texmf/dvips/bsr-interpolated.map b1810467ac2e91f76745f0eaed3eddc6
+ /etc/texmf/dvips/bsr.map dd57d8b9b4cc4fee6c4869ccb637f7d3
+ /etc/texmf/dvips/charter.map bcbe669e6587e1c0b9fbf5d3ac69a716
+ /etc/texmf/dvips/cmcyr.map 1fa90ba90a5ac959be73acbbf993aaa6
+ /etc/texmf/dvips/config.ams 32c36b063268c5e45819fe8114ce3cf0
+ /etc/texmf/dvips/config.amz b9c14f2d2e3923372e9067e2e1ee47b5
+ /etc/texmf/dvips/config.antp 5fdea5dec2977f321c1d39b90f161858
+ /etc/texmf/dvips/config.antt eb9863fe55c45357f3e93cc0f796df7d
+ /etc/texmf/dvips/config.cm 68d23ead2901dddbc1779c905806b783
+ /etc/texmf/dvips/config.cmz 830f16e1e39c67b1c665a8b09824a7b4
+ /etc/texmf/dvips/config.mirr 0e8b7634e3aeace8b57e240cb93408f6
+ /etc/texmf/dvips/config.pl a516410ffe6bcea727b688cdbff15c45
+ /etc/texmf/dvips/config.qf d8faeac49b163e20f2d5f7664fd4d312
+ /etc/texmf/dvips/cs.map b9727dbb85c735942232d9e77c548892
+ /etc/texmf/dvips/hoekwater.map bc6bdcc34147938cac35dd9cbfcf5461
+ /etc/texmf/dvips/lucidabr.map 75651df30093b42f15a137f4e8abb2d0
+ /etc/texmf/dvips/lw35extra-adobe-bi.map 11264229d954278095d041a7d406a1de
+ /etc/texmf/dvips/lw35extra-adobe-kb.map b599fd43351ddf92787bc4d45b210b33
+ /etc/texmf/dvips/lw35extra-urw-kb.map 22fad0272384ba9040e095cb23f5b751
+ /etc/texmf/dvips/lw35extra-urw-urw.map 947b2971882ac3defc4e1539e08d7755
+ /etc/texmf/dvips/marvosym.map b62e3abdcb114dbc2a09cf34f7d8d1d3
+ /etc/texmf/dvips/mathpi.map b583f43ff524840a455391c507a91630
+ /etc/texmf/dvips/mathpple-ext.map 34ae5407fab3660f7121fcad21016a70
+ /etc/texmf/dvips/mt-belleek.map 347a0440cf51e36f53fe76e205c71280
+ /etc/texmf/dvips/mt-plus.map 1a905e8e34fab38aa54af13dc1479864
+ /etc/texmf/dvips/mt-yy.map 6b31a726154f4542f030d1f73186683d
+ /etc/texmf/dvips/mtsupp-ext-adobe-bi.map 81bcdf8701d93786913a0139a7c37592
+ /etc/texmf/dvips/mtsupp-ext-adobe-kb.map bd64720edf9c35db323305d801b11be5
+ /etc/texmf/dvips/mtsupp-ext-urw-kb.map 74d836235b7c35e3af5fcef8404d6f86
+ /etc/texmf/dvips/mtsupp-ext-urw-urw.map 88297fe4c49421bb283d4b70cc6edf83
+ /etc/texmf/dvips/mtsupp-std-adobe-bi.map 8bb11a1c60587515f5d77170167f7f57
+ /etc/texmf/dvips/mtsupp-std-adobe-kb.map 95fca79f2bb903589501b60623cf2a70
+ /etc/texmf/dvips/mtsupp-std-urw-kb.map 464234ad0a8c06b5411e6bb69c69407f
+ /etc/texmf/dvips/mtsupp-std-urw-urw.map 500150762c74095610b6d57250f94b3b
+ /etc/texmf/dvips/omega.map 3d6c7dd276926b59b23ffdf03fb0572f
+ /etc/texmf/dvips/pazo.map d3595db441a758df87659e4818b38690
+ /etc/texmf/dvips/pdftex.map 3d0e6e8f2d699c2f34d07d49e4de040d
+ /etc/texmf/dvips/pl.cfg a516410ffe6bcea727b688cdbff15c45
+ /etc/texmf/dvips/pl.map b4c7ab7e7f366132ade80179181529b5
+ /etc/texmf/dvips/ps2pk.map a5252a3d87db54b810b75296cceca7e6
+ /etc/texmf/dvips/psfonts.map 30c95da0f4ba9c7fca1558212a245058
+ /etc/texmf/dvips/psnfss.map f00b2d47c09074b3f7c138adac928731
+ /etc/texmf/dvips/qpl.map f80cdfb21c7d47450d922bcdf2f0d741
+ /etc/texmf/dvips/qtm.map 8597ab2c2c1f30a5eb338200c752bcc4
+ /etc/texmf/dvips/raw-ar-ext-adobe-bi.map f625673c720a566fefc3adb2a330b0c6
+ /etc/texmf/dvips/raw-ar-ext-adobe-kb.map 99fa23110abc0b6322b168cd942abb00
+ /etc/texmf/dvips/raw-ar-ext-urw-kb.map a15eccb4c519784b0382e98b35462584
+ /etc/texmf/dvips/raw-ar-ext-urw-urw.map 4e4c658e639ed63d6b089e970d5b8790
+ /etc/texmf/dvips/raw-ar-std-adobe-bi.map 8f075586c668dd49d6659a47f80ca222
+ /etc/texmf/dvips/raw-ar-std-adobe-kb.map 420803cd71d69a67d30e01414a4b0b7c
+ /etc/texmf/dvips/raw-ar-std-urw-kb.map d9761c9236ba5f72a6a1db0add78e4c0
+ /etc/texmf/dvips/raw-ar-std-urw-urw.map a46a2fd9dc6c2b8d1520e9c5b8947293
+ /etc/texmf/dvips/raw-lw35extra-adobe-bi.map b8f9a068495e84954575da333dbff52b
+ /etc/texmf/dvips/raw-lw35extra-adobe-kb.map 90090d802aa0591abd0897c836119e43
+ /etc/texmf/dvips/raw-lw35extra-urw-kb.map e2ab5453857be7683779788218ea9e78
+ /etc/texmf/dvips/raw-lw35extra-urw-urw.map de4b3fc35de1dc73202d1ea31a018bc7
+ /etc/texmf/dvips/updmap ae1883f5a9a065d8b290943783ae5699
+ /etc/texmf/dvips/utopia.map 1486b1d114c9b279cdfebaffa7a6d47f
+ /etc/texmf/dvips/xypic.map 76252f9400b09fd41094c59d3ec887ae
+ /etc/texmf/varfontdirs.debian 7a37da968bb865bde339fb44818ba44a
+"
+
+teTeX3_md5sumlist="
+ /etc/texmf/latex/microtype.cfg 649944bb5f193e75dba7604b9515317f
+ /etc/texmf/map/dvips/ams/psfonts.ams 4b9748dab405dfea8ed231f49c6d41be  
+ /etc/texmf/map/dvips/ams/psfonts.amz b50e059ec6e8100fe2117c6369f481be
+ /etc/texmf/map/dvips/ams/psfonts.cm 32e4fd405f16fba1efa4b30b3eb6fbb2
+ /etc/texmf/map/dvips/ams/psfonts.cmz 5e4704775fe8b7a50da60d0c89bddbb6
+ /etc/texmf/map/dvips/misc/eurosym.map d166c4724e8ba420f96a1f09a520a571
+ /etc/texmf/map/dvips/omega/omega.map 4e8b9ee7c3eeaf1f29acfb4e8498a300
+ /etc/texmf/map/dvips/tetex/bsr-interpolated.map ff9ed6a46c278b41fe8fbbb6a2dff340
+ /etc/texmf/map/dvips/tetex/bsr.map 0b0b15d8614b7b0fea0e39c4e0aac0d5
+ /etc/texmf/map/dvips/xypic/xypic.map 76252f9400b09fd41094c59d3ec887ae
+
+ /etc/texmf/latex/mt-bch.cfg 614a80d4ecd37228b91cc2218bf2318e
+ /etc/texmf/latex/mt-cmr.cfg 0628cdefd394aa8cf76e81b25b202939
+ /etc/texmf/latex/mt-pad.cfg b8eb5e92c7fc74cfc76981cd2060efb1
+ /etc/texmf/latex/mt-pmn.cfg 9590d6f8df10679a1bb1b3688debdc60
+ /etc/texmf/latex/mt-ppl.cfg fd4be8fc50f24b2f71af4437aecd1b45
+ /etc/texmf/latex/mt-ptm.cfg d45476b9dc1ccafdbe47ab3421ed6487
+ /etc/texmf/latex/pict2e.cfg b16b3616fed72f01eb96e9db61b4c6b2
+ /etc/texmf/latex/subfig.cfg 6576eee12179b8e6e74a61803dccd4e8
+ /etc/texmf/latex/subfigure.cfg 42ba738bf6f1cec796106a69840777a4
+
+ /etc/texmf/map/dvips/tetex/ttcmex.map 30b444ca3bdddc7385674a264a88fc71
+ /etc/texmf/map/dvips/tetex/txfonts.map 1517cdcd00753f4cf479e1cd902e5565
+ /etc/texmf/map/dvips/urwvn/urwvn.map 3957d2189b90cf29432d11f3940f07a9
+ /etc/texmf/map/dvips/vntex/vnr.map e24ba6c5dba7177b97b1f09674b2efdd
+ /etc/texmf/map/dvips/context/8r-base.map 79cfc6242d56d94a474f82cf68b9b4f7
+ /etc/texmf/map/dvips/context/context-base.map 47f25cd8bbd06782c0c37e3a59fd2ad5
+ /etc/texmf/map/dvips/context/cork-public-lm.map 52c874fe89509d5c5680f7bf065021a8
+ /etc/texmf/map/dvips/context/cork-var-exclusive-public-lm.map d390da268671bfe0534a0e2f6f755ebe
+ /etc/texmf/map/dvips/context/cork-var-public-lm.map a9736f8a7e667b6e25a5d73743779424
+ /etc/texmf/map/dvips/context/ec-base.map dac422cda2e42ebc444a9c0a5270118d
+ /etc/texmf/map/dvips/context/ec-public-lm.map 52c874fe89509d5c5680f7bf065021a8
+ /etc/texmf/map/dvips/context/ec-var-exclusive-public-lm.map 8d8b3e2d03a46945abe9166ae8717980
+ /etc/texmf/map/dvips/context/ec-var-public-lm.map 5bba1aec7dc180ab5c7a14a8c7f37307
+ /etc/texmf/map/dvips/context/original-adobe-euro.map ee2826182cf6f1b95890e8b7d0fc9633
+ /etc/texmf/map/dvips/context/original-base.map d2769316abae0730b0ba7302f8445bad
+ /etc/texmf/map/dvips/context/original-context-symbol.map 7090f11f5bee8f5e9b46841f286d1df9
+ /etc/texmf/map/dvips/context/original-dummy.map c73e4c248c1b10fb4c2dba637e2ab5ac
+ /etc/texmf/map/dvips/context/original-empty.map c62254f50983f6bd7a9ba0b9c8a454e1
+ /etc/texmf/map/dvips/context/original-micropress-informal.map b1193c3602a01d34e7325a154d7d0752
+ /etc/texmf/map/dvips/context/original-public-csr.map 1b65adecb4e19df833eb7e74a0ba81f1
+ /etc/texmf/map/dvips/context/original-public-lm.map 0e1d5937d6b78e933e6e9c82ef9aef60
+ /etc/texmf/map/dvips/context/original-public-plr.map bb5e9c65080da1f780d52ca6d665c53b
+ /etc/texmf/map/dvips/context/original-vogel-symbol.map e4f07d28e80b93ad2513a3e812541f32
+ /etc/texmf/map/dvips/context/psclean.map 3827b27c947b8ccf50010649d7deebd0
+ /etc/texmf/map/dvips/context/qx-base.map 114614226629844c7e2895907254747b
+ /etc/texmf/map/dvips/context/qx-public-lm.map 6f4469307efb3d5219f8a59eb90439a0
+ /etc/texmf/map/dvips/context/texnansi-base.map 4b4834091ada92c2bea9d04d64f367cc
+ /etc/texmf/map/dvips/context/texnansi-public-lm.map 19dd099ceadcc329c4b6a46e8c1f8837
+ /etc/texmf/map/dvips/context/texnansi-var-exclusive-public-lm.map f06fac31ec825d35a478551652c28764
+ /etc/texmf/map/dvips/context/texnansi-var-public-lm.map 9114ed6275fb2d9e17bb5fb7de8d76a6
+ /etc/texmf/map/dvips/context/original-public-vnr.map f83114a5d4489dea4223d3d54dbaed2a
+ /etc/texmf/map/dvips/context/t5-base.map edfab2c556e71e69081803d366c32f36
+ /etc/texmf/map/dvips/context/t5-public-lm.map ba63279e67979c19cadcd2115b1a9b8d
+ /etc/texmf/map/dvipdfm/tetex/cm-dvipdfm-fix.map 6df4e61f14013914f4c232465f38b096
+ /etc/texmf/map/pdftex/cmttf/cmttf.map 6b87723795683cdcfd846c2d8d60cb3e
+ /etc/texmf/map/dvips/tetex/contnav.map 841fb6fa662cdee17994748492e8493c
+ /etc/texmf/generic/pdftexconfig.tex edd42bc8e0c2768a6e84c3bd5f41eb4a
+ /etc/texmf/generic/fontmath.cfg bf78874db3d6425f6f98d7dc6fd3ad74
+ /etc/texmf/generic/fonttext.cfg 1871c2f77ee3c2ea6bad3c786d4b6b4f
+ /etc/texmf/generic/preload.cfg 63a7532825e1f8f5742fa392577e9101
+ /etc/texmf/map/dvips/context/original-ams-euler.map baef813cea1c95eaf5782cd5c4db593d
+ /etc/texmf/map/dvips/context/original-ams-cmr.map 9f6c7359622ba2fe1cbbe36c8b40c07f
+ /etc/texmf/map/dvips/context/original-youngryu-tx.map efd89c4c9790b92c19dd9c94307c2497
+ /etc/texmf/pdftex/context/original-youngryu-px.map aac975fbf317cb2c3af057ae011f0356
+
+ /etc/texmf/map/dvips/qfonts/qbk.map a880a86dc59af79fa21176109426e002
+ /etc/texmf/map/dvips/qfonts/qcr.map 0dde05fe1edf9d22c1c33abb308337b5
+ /etc/texmf/map/dvips/qfonts/qhv.map 1b7d8cecc9b2037b4e14be6aec821425
+ /etc/texmf/map/dvips/qfonts/qpl.map 7d59433ee7e9ba0bab61973797280d01
+ /etc/texmf/map/dvips/qfonts/qtm.map 440385da4f2f40e53440d9e0e7782a6b
+ /etc/texmf/map/dvips/qfonts/qzc.map 59e87840844241fe3eede78368c13ff6
+ /etc/texmf/map/dvips/tetex/dvipdfm35.map ed194cf7240a45cb458c5ec174045cc6
+ /etc/texmf/map/dvips/tetex/dvips35.map ca61c59bcecd9f75c90f8b03416533f9
+ /etc/texmf/map/dvips/tetex/hoekwater.map bc6bdcc34147938cac35dd9cbfcf5461
+ /etc/texmf/map/dvips/tetex/lucidabr-o.map d8125ebea10915ba2e5ab2d5168f1a4e
+ /etc/texmf/map/dvips/tetex/lumath-o.map 374a42867948c28911301aa8ae4b9f73
+ /etc/texmf/map/dvips/tetex/mathpple.map bc2531931c6ab748e6a507803cc06f28
+ /etc/texmf/map/dvips/tetex/mt-belleek.map 347a0440cf51e36f53fe76e205c71280
+ /etc/texmf/map/dvips/tetex/mt-plus.map 4895bcb036ff481e067daec1a196b25a
+ /etc/texmf/map/dvips/tetex/mt-yy.map 7fb24232a249e9e899c97eaf33f6a7af
+ /etc/texmf/map/dvips/tetex/pdftex35.map 29f11fe462735f27af57ca893e37362d
+ /etc/texmf/map/dvips/tetex/ps2pk35.map f0d12d8dd8472e7fee1019c46b8718b6
+ /etc/texmf/map/dvips/tetex/pxfonts.map d92a7aba5febb36b3179de747bd7c099
+
+ /etc/texmf/map/dvips/antp/antp.map 50e9ff27840e0c2225fe2ab10658b5d3
+ /etc/texmf/map/dvips/antt/cork-antt.map b6d42f790e3bff20f56735ff6b612f57
+ /etc/texmf/map/dvips/antt/cs-antt.map 19e8e4a13d77ca47e0a0c1acb254ad0d
+ /etc/texmf/map/dvips/antt/exp-antt.map 08919cd0c39577f860f8b4c7a64c2b3d
+ /etc/texmf/map/dvips/antt/greek-antt.map 67f6c7038c5963663bd5516c10acba4e
+ /etc/texmf/map/dvips/antt/qx-antt.map 669ebfc8198223b41e4008ef3d74f508
+ /etc/texmf/map/dvips/antt/t2a-antt.map 1c9bd0a971ecf0cfa0e9ee9c57bbb100
+ /etc/texmf/map/dvips/antt/t2b-antt.map 0f3018935e9047a6965941dc1899fdfa
+ /etc/texmf/map/dvips/antt/t2c-antt.map 1d57e45d10a6d9015e393cf7160be328
+ /etc/texmf/map/dvips/antt/texnansi-antt.map 4baf42d2478c8a7e7d7e19b7dff03256
+ /etc/texmf/map/dvips/antt/wncy-antt.map 60aeb6f763540cb9eae371bf6977c84f
+ /etc/texmf/map/dvips/antt/t5-antt.map afbb27d29fbebd8976f22623811a940e
+ /etc/texmf/map/dvips/cc-pl/ccpl.map f2b809a52174b30918426e94ef56b86b
+ /etc/texmf/map/dvips/lucida/lucidabr-k.map 30174ed3e1f4cba2731c22dd9571f1b1
+ /etc/texmf/map/dvips/lucida/lucidabr.map c3b6c5489b772e235158b3c22117a95a
+ /etc/texmf/map/dvips/lucida/lumath-k.map ef1b8f1edbab74b19e450d732c8befa4
+ /etc/texmf/map/dvips/lucida/lumath.map fed199fec8770f09c201208602978e04
+ /etc/texmf/map/dvips/misc/cmcyr.map 1fa90ba90a5ac959be73acbbf993aaa6
+ /etc/texmf/map/dvips/misc/cs.map b9727dbb85c735942232d9e77c548892
+ /etc/texmf/map/dvips/misc/marvosym.map b62e3abdcb114dbc2a09cf34f7d8d1d3
+ /etc/texmf/map/dvips/misc/pcrr8rn.map 798d4ca99e50961a24f8eaea20978ceb
+ /etc/texmf/map/dvips/misc/dstroke.map 48c4f60d6a6326675a9c377c8d835e6a
+ /etc/texmf/map/dvips/pl/pl.map facfcd8e0cfd0be291ea542fb6c10148
+ /etc/texmf/map/dvips/psnfss/charter.map 993695ecc0d071d7fc3377129338cba1
+ /etc/texmf/map/dvips/psnfss/pazo.map d3595db441a758df87659e4818b38690
+ /etc/texmf/map/dvips/psnfss/psnfss.map 9bc5893a55f916e90839073715bbc390
+ /etc/texmf/map/dvips/psnfss/fpls.map 277c296a5fed1dab839c3b50169b22cf
+ /etc/texmf/map/dvips/psnfssx/pcr8y.map d50bbaffee15c71b4f37a3e57ef8ae92
+ /etc/texmf/map/dvips/psnfssx/phv8y.map 1a5eb8c9a441bf0f828212b0b3be535e
+ /etc/texmf/map/dvips/psnfssx/ptm8y.map 2f3991312960f9f9fd00156b34c0b4de
+ /etc/texmf/plain/language.def e28ea8119d0edaea53f2a55bd5a13bf5
+
+ /etc/texmf/map/dvips/psnfssx/README.mapfiles de70bcb7f559055385f0b450fce51d03
+ /etc/texmf/dvips/omega.cfg 20f3291d20f52a0af681cea63d491f22
+ /etc/texmf/dvips/config.omega 20f3291d20f52a0af681cea63d491f22
+ /etc/texmf/context/texexec.rme aca8d2729ceb83bc24852c0876cf884b
+
+ /etc/texmf/language.d/00tetex.cnf e057f645b860c3b4ac92a9b5a127c43e
+"
+
+get_sarge_md5sum_from_list(){
+  file=$1
+  set $sarge_md5sum_list $woody_md5sum_list $teTeX3_md5sumlist
+  while [ $# -gt 0 ]; do
+    if [ $file = $1 ]; then
+      echo $2
+      return 0
+    else
+      shift 2
+    fi
+  done
+  echo "$file: md5sum not known. Exiting" >&2
+  exit 1
+}
+
+preinst_remove_or_move(){
+  file=/etc/texmf/$1
+  newname=$(get_newfilename $1)
+  debug $file
+  test -f "$file" || return 0
+  debug "handled\n"
+  oldmd5sum=$(dpkg_md5sum $file)
+  currmd5sum=$(md5sum $file | cut -d ' ' -f 1)
+  if [ "$oldmd5sum" != "$currmd5sum" ]; then
+    mv $file $oldstuff_dir/$(basename $file).$PREINST_MOVE_EXT
+  else
+    rm $file
+  fi
+}
+preinst_remove_or_move_ucf(){
+  file=/etc/texmf/$1
+  newname=$(get_newfilename $1)
+  debug $file
+  test -f "$file" || return 0
+  debug "handled\n"
+  oldmd5sum=$(ucf_md5sum $file)
+  currmd5sum=$(md5sum $file | cut -d ' ' -f 1)
+  if [ "$oldmd5sum" != "$currmd5sum" ]; then
+    mv $file $oldstuff_dir/$(basename $file).$PREINST_MOVE_EXT
+  else
+    rm $file
+    if [ -x /usr/bin/ucf ]; then ucf --purge $file; fi
+  fi
+}
+
+
+
+#################################################################
+##  End of function definitions from file common.functions
+#################################################################
+
+
+
+do_triggers() 
+{
+    DONE_FULL_LSR=0
+    # currently we only support only triggers for updmap.d and
+    # language.d changes
+    # because all the other calls are quite fast 
+    # - call all the update-* scripts (it doesn't hurt)
+    # - go through all the triggers and call the respective fmtutil/updmap
+    #   calls.
+
+    # in any case call the update-* calls
+    update-updmap --quiet
+    update-language
+    update-fmtutil
+    #
+    # the following triggers are reacted upon and in that order:
+    # - texmf-lsr: call mktexlsr if present
+    # - texmf-lsrfull: call mktexlsr if present
+    # - texmf-map: call updmap-sys
+    # - texmf-hyphen: if texmf-format hasn't been triggered call 
+    #                 fmtutil-sys --byhyphen ...
+    case " $trigger " in
+        *" texmf-lsrfull "*)
+            # code from postinst-tex
+            if dhit_libkpathsea_configured; then
+                # mktexlsr may not be present
+                if which mktexlsr >/dev/null; then
+                    tempfile=$(mktemp -p /tmp mktexlsr.XXXXXXXX)
+                    printf "Running mktexlsr. This may take some time... "
+                    if mktexlsr $FULLTEXMFTREES > $tempfile 2>&1 ; then
+                        DONE_FULL_LSR=1
+                        rm -f $tempfile
+                        echo "done."
+                    else
+                        exec >&2
+                        echo
+                        echo "mktexlsr $FULLTEXMFTREES failed. Output has been stored in"
+                        echo "$tempfile"
+                        echo "Please include this file if you report a bug."
+                        echo
+                        exit 1
+                    fi
+                fi
+            fi
+        ;;
+    esac
+    # do NOT merge these two cases into one, from dpkg's trigger.txt:
+    # Generally each trigger name should be tested for separately, as the
+    # postinst will often be called for several triggers at once.
+    case " $trigger " in
+        *" texmf-lsr "*)
+          # only to lsr if we haven't done lsrfull
+          if [ $DONE_FULL_LSR = 0 ] ; then
+            # code from postinst-tex
+            if dhit_libkpathsea_configured; then
+                # mktexlsr may not be present
+                if which mktexlsr >/dev/null; then
+                    tempfile=$(mktemp -p /tmp mktexlsr.XXXXXXXX)
+                    printf "Running mktexlsr. This may take some time... "
+                    if mktexlsr $TEXMFTREES > $tempfile 2>&1 ; then
+                        rm -f $tempfile
+                        echo "done."
+                    else
+                        exec >&2
+                        echo
+                        echo "mktexlsr $TEXMFTREES failed. Output has been stored in"
+                        echo "$tempfile"
+                        echo "Please include this file if you report a bug."
+                        echo
+                        exit 1
+                    fi
+                fi
+            fi
+          fi
+        ;;
+    esac
+    # do NOT merge these two cases into one, from dpkg's trigger.txt:
+    # Generally each trigger name should be tested for separately, as the
+    # postinst will often be called for several triggers at once.
+    case " $trigger " in
+        *" texmf-map "*) 
+         # code from postinst-tex
+         if dhit_libkpathsea_configured; then
+             if which updmap-sys >/dev/null; then
+                    # we also have to check that texlive-base is installed
+                    # and configured, otherwise we cannot be sure that
+                    # all necessary basic files are present
+                    #
+                    # dpkg-query has two defects wrt not existing packages
+                    # - it is noisy to stderr
+                    # - it returns 1
+                    # so shut both errors up
+                    stat=$(dpkg-query -W -f='${Status}' texlive-base 2>/dev/null || true)
+                    case "$stat" in
+                        "install ok installed")
+                            do_it=1
+                            ;;
+                        *)
+                            do_it=0
+                            ;;
+                    esac
+                    if [ "$do_it" = 0 ] ; then
+                        echo "texlive-base is not ready, delaying updmap-sys call" >&2
+                    else
+                        tempfile=$(mktemp -p /tmp updmap.XXXXXXXX)
+                        printf "Running updmap-sys. This may take some time... "
+                        # call updmap with --nohash so that no ls-R files
+                        # are created in /usr/local/share/texmf/
+                        # see bug report #607857
+                        # instead of that we call mktexlsr $TEXMFSYSVARDIR 
+                        # afterwards. This can be done without checks as
+                        # we know that dhit_libkpathsea_configured and
+                        # since mktexlsr and updmap are in the same package
+                        # and we checked for updmap already
+                        if updmap-sys --nohash > $tempfile 2>&1 ; then
+                            rm -f $tempfile
+                            echo "done."
+                            tempfile=$(mktemp -p /tmp mktexlsr.XXXXXXXX)
+                            printf "Running mktexlsr $TEXMFSYSVARDIR ... "
+                            if mktexlsr $TEXMFSYSVARDIR > $tempfile 2>&1 ; then
+                                rm -f $tempfile
+                                echo "done."
+                            else
+                                exec >&2
+                                echo
+                                echo "mktexlsr $TEXMFSYSVARDIR failed. Output has been stored in"
+                                echo "$tempfile"
+                                echo "Please include this file if you report a bug."
+                                echo
+                                exit 1
+                            fi
+                        else
+                            exec >&2
+                            echo
+                            echo "updmap-sys failed. Output has been stored in"
+                            echo "$tempfile"
+                            echo "Please include this file if you report a bug."
+                            echo
+                            echo "Sometimes, not accepting conffile updates in /etc/texmf/updmap.d"
+                            echo "causes updmap-sys to fail.  Please check for files with extension"
+                            echo ".dpkg-dist or .ucf-dist in this directory" 
+                            echo
+                            exit 1
+    	                fi
+                    fi
+                fi
+            fi
+        ;;
+    esac
+    # do NOT merge these two cases into one, from dpkg's trigger.txt:
+    # Generally each trigger name should be tested for separately, as the
+    # postinst will often be called for several triggers at once.
+    case " $trigger " in
+        *" texmf-hyphen "*) 
+          if dhit_libkpathsea_configured; then
+            if which kpsewhich >/dev/null; then
+              if which fmtutil-sys >/dev/null; then
+                # code from postinst.tex
+                v=$(kpsewhich -var-value TEXMFSYSVAR)
+                c=$(kpsewhich -var-value TEXMFSYSCONFIG)
+                TEXMFVAR="$v"
+                TEXMFCONFIG="$c"
+                export TEXMFVAR TEXMFCONFIG
+                fmtcnffile=$(kpsewhich --format='web2c files' fmtutil.cnf)
+                X=$(grep "^[[:space:]]*latex[[:space:]]" $fmtcnffile || true)
+                if [ -n "$X" ] ; then
+                  # latex is installed so we can actually try to recreate
+                  # formats based on language.dat
+                  tempfile=$(mktemp -p /tmp fmtutil.XXXXXXXX)
+                  printf "Building latex-based formats --byhyphen $(kpsewhich language.dat).\n\tThis may take some time... "
+                  if fmtutil-sys --byhyphen "$(kpsewhich language.dat)" > $tempfile 2>&1 ; then
+                    rm -f $tempfile
+                    echo "done."
+                  else
+                    exec >&2
+                    echo
+                    echo "fmtutil-sys failed. Output has been stored in"
+                    echo "$tempfile"
+                    echo "Please include this file if you report a bug."
+                    echo
+                    exit 1
+                  fi
+                fi
+                Y=$(grep "^[[:space:]]*tex[[:space:]]" $fmtcnffile || true)
+                if [ -n "$Y" ] ; then
+                  # tex is installed so we can actually try to recreate
+                  # formats based on language.def
+                  tempfile=$(mktemp -p /tmp fmtutil.XXXXXXXX)
+                  printf "Building e-tex based formats --byhyphen $(kpsewhich language.def).\n\tThis may take some time... "
+                  if fmtutil-sys --byhyphen "$(kpsewhich language.def)" > $tempfile 2>&1 ; then
+                    rm -f $tempfile
+                    echo "done."
+                  else
+                    exec >&2
+                    echo
+                    echo "fmtutil-sys failed. Output has been stored in"
+                    echo "$tempfile"
+                    echo "Please include this file if you report a bug."
+                    echo
+                    exit 1
+                  fi
+                fi
+              fi
+            fi
+          fi
+        ;;
+    esac
+}
+
+
+#################################################################
+# Here starts the real action
+#################################################################
+
+
+case $action in
+    triggered)
+        do_triggers
+        ;;
+
+    configure|reconfigure)
+
+# is there a file /etc/texmf/language.dat already? Move it out of the way
+    if [ -f $OLD_LDAT ]; then
+      old_ldat_md5sum=`md5sum $OLD_LDAT`
+      # do nothing if the md5sum matches sarge's or woody's default:
+      if [ ! "$old_ldat_md5sum" = fe9baf0768ade79a585a9df568dac5f6 ] && \
+	[ ! "$old_ldat_md5sum" = 1d2d9b25a41ab1cec892bd3382af7645 ]; then
+	cat > $OLD_LDAT.$POSTINST_MOVE_EXT <<EOF
+This file is no longer used and has therefore been renamed by the postinst 
+script of the tetex-base package.
+
+Please use the mechanism described in update-language(8) instead.
+
+EOF
+	cat $OLD_LDAT >> $OLD_LDAT.$POSTINST_MOVE_EXT 
+      fi
+      rm $OLD_LDAT
+    fi
+
+
+# normal install    
+    # handle ucf-managed configuration files
+    for file in $UCF_FILES; do
+      $UCF /usr/share/tex-common/`basename $file` /etc/texmf/$file
+      if test -x "`which ucfr`" ; then
+        ucfr tex-common /etc/texmf/$file
+      fi
+    done
+
+# remove left over fmt/efmt/log files in /usr/share/texmf/web2c/.  If they are
+# there, it's because of an old bug or user misconfiguration, and they are
+# never registered to dpkg.
+#
+# move out of the way old config files
+# 
+    if [ -d /usr/share/texmf/web2c ] ; then
+      rm -rf /usr/share/texmf/web2c/*.fmt
+      rm -rf /usr/share/texmf/web2c/*.efmt
+      rm -rf /usr/share/texmf/web2c/*.base
+      rm -rf /usr/share/texmf/web2c/*.log
+      for cfgfile in fmtutil.cnf updmap.cfg ; do
+        oldname=/usr/share/texmf/web2c/$cfgfile
+	newname=/usr/share/texmf/web2c/$cfgfile.pre-upgrade
+        if [ -r $oldname ] ; then
+	  cat - > $newname <<EOF
+# This file conflicts with the new configuration location.
+# Please merge your changes to the correct location.
+
+EOF
+	  cat $oldname >> $newname
+	  rm $oldname
+	fi
+      done
+    fi
+
+# if the machine was originally upgraded from woody to sarge, and now
+# to etch, it will have a bogus generated configuration file.  This
+# will break with TeXlive, therefore we remove it
+    bogusfile=/etc/texmf/fmt.d/99postinst.cnf
+    if [ -f $bogusfile ]; then
+      tmpfile=`mktemp`
+      egrep -v \
+	"mf[[:space:]]*mf[[:space:]]*-[[:space:]]*mf.ini|\
+mfw[[:space:]]*mfw[[:space:]]*-[[:space:]]*mf.ini|\
+pdftex[[:space:]]*pdftex[[:space:]]*language.dat[[:space:]]*pdftex.ini|\
+omega[[:space:]]*omega[[:space:]]*language.dat*[[:space:]]*omega.ini" \
+	$bogusfile > $tmpfile
+      if !  egrep -v '^#|^[[:space:]]*$' $tmpfile >/dev/null; then
+	# only comments in tmpfile
+	cat >> $bogusfile.bak <<EOF
+
+This file has been renamed by the post-installation script of
+tex-common.  It is unused and contains only lines that were
+erroneously detected as being a local configuration file change.
+
+
+EOF
+	cat $bogusfile >> $bogusfile.bak
+	chmod 664 $bogusfile.bak
+	chown root:root $bogusfile.bak
+	rm $bogusfile
+      fi
+      rm $tmpfile
+    fi
+
+
+
+    update-texmf
+# Now we check for some essential settings
+    checkfailed=false
+    check_texmf /etc/texmf/texmf.d/55Fonts.cnf TEXFONTMAPS \
+'\$TEXMF/{fonts/,}map//;\$TEXMF/dvips//|\.;\$TEXMF{/fonts/map,}{/\$progname,/pdftex,/dvips,}//'
+    check_texmf /etc/texmf/texmf.cnf TEXFONTMAPS \
+'\$TEXMF/{fonts/,}map//;\$TEXMF/dvips//|\.;\$TEXMF{/fonts/map,}{/\$progname,/pdftex,/dvips,}//'
+    check_texmf /etc/texmf/texmf.d/05TeXMF.cnf TEXMFMAIN '/usr/share/texmf'
+    check_texmf /etc/texmf/texmf.cnf TEXMFMAIN '/usr/share/texmf'
+    check_texmf /etc/texmf/texmf.d/05TeXMF.cnf TEXMFDIST \
+          '/usr/share/texmf-{tetex,texlive}|/usr/share/texmf-{texlive,tetex}|/usr/share/texmf-texlive'
+    check_texmf /etc/texmf/texmf.cnf TEXMFDIST \
+          '/usr/share/texmf-{tetex,texlive}|/usr/share/texmf-{texlive,tetex}|/usr/share/texmf-texlive'
+    check_texmf /etc/texmf/texmf.d/05TeXMF.cnf 'TEXMF( |=)' TEXMFSYSCONFIG
+    check_texmf /etc/texmf/texmf.cnf 'TEXMF( |=)' TEXMFSYSCONFIG
+    check_texmf /etc/texmf/texmf.d/05TeXMF.cnf 'TEXMF( |=)' TEXMFSYSVAR
+    check_texmf /etc/texmf/texmf.cnf 'TEXMF( |=)' TEXMFSYSVAR
+    check_texmf /etc/texmf/texmf.d/05TeXMF.cnf 'TEXMF( |=)' TEXMFMAIN
+    check_texmf /etc/texmf/texmf.cnf 'TEXMF( |=)' TEXMFMAIN
+    check_texmf /etc/texmf/texmf.d/05TeXMF.cnf 'TEXMF( |=)' TEXMFDIST
+    check_texmf /etc/texmf/texmf.cnf 'TEXMF( |=)' TEXMFDIST
+
+    if [ $checkfailed = true ]; then
+      echo "Unrecoverable errors in your configuration have been detected" >&2
+      echo "in configuration files in /etc/texmf/." >&2
+      echo "If you've not seen debconf error messages,  see your mail for details" >&2
+      echo "or use an interactive debconf frontend." >&2
+      echo >&2
+      echo "Exiting" >&2
+
+      exit 1
+    fi
+
+
+    #
+    # call trigger action
+    # that calls mktexlsr if possible, and update-*
+    # we set the triggers updmap.d
+    #
+    trigger="texmf-lsr texmf-map"
+    do_triggers
+
+
+    # now call the equivalent of fmtutil-sys --all explicitely
+    # we also have to check that texlive-base is installed
+    # and configured, otherwise we cannot be sure that
+    # all necessary basic files are present
+    if dhit_libkpathsea_configured; then
+        # see above for information on dpkg-query usage
+        stat=$(dpkg-query -W -f='${Status}' texlive-base  2>/dev/null || true)
+        case "$stat" in
+        "install ok installed")
+            do_it=1
+            ;;
+        *)
+            do_it=0
+            ;;
+        esac
+        if [ "$do_it" = 0 ] ; then
+            echo "texlive-base is not ready, skipping fmtutil-sys --all call" >&2
+        else
+            dhit_build_format --all
+        fi
+    fi
+
+
+    # create empty dirs in /usr/local/share/
+    if [ ! -e /usr/local/share/texmf ]
+    then
+      if mkdir -p /usr/local/share/texmf 2>/dev/null
+      then
+        chown root:staff /usr/local/share/texmf
+        chmod 2775 /usr/local/share/texmf
+      fi
+    fi
+
+    ;;
+  *)
+    ;;
+esac
+
+
+
+
+### Local Variables:
+### perl-indent-level: 4
+### tab-width: 4
+### indent-tabs-mode: nil
+### End:
+# vim:set tabstop=4 expandtab: #

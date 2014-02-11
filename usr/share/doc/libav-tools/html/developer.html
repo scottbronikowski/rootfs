@@ -1,0 +1,646 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on March 22, 2012 by texi2html 1.82 -->
+<!--
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+
+-->
+<head>
+<title>Libav documentation : : </title>
+
+<meta name="description" content=": ">
+<meta name="keywords" content="Libav documentation : : ">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+
+<style type="text/css">
+<!--
+a.summary-letter { text-decoration: none }
+a { color: #2D6198; }
+a:visited { color: #884488; }
+h1 a, h2 a, h3 a { text-decoration: inherit; color: inherit; }
+p { margin-left: 1em; margin-right: 1em; }
+table { margin-left: 2em; }
+pre { margin-left: 2em; }
+#footer { text-align: center; }
+#body { margin-left: 1em; margin-right: 1em; }
+body { background-color: #313131; margin: 0; }
+
+#container {
+    background-color: white;
+    color: #202020;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+h1 {
+    background-color: #7BB37B;
+    border: 1px solid #6A996A;
+    color: #151515;
+    font-size: 1.2em;
+    padding-bottom: 0.2em;
+    padding-left: 0.4em;
+    padding-top: 0.2em;
+}
+
+h2 {
+    color: #313131;
+    font-size: 1.2em;
+}
+
+h3 {
+    color: #313131;
+    font-size: 0.8em;
+    margin-bottom: -8px;
+}
+
+.note {
+    margin: 1em;
+    border: 1px solid #bbc9d8;
+    background-color: #dde1e1;
+}
+
+.important {
+    margin: 1em;
+    border: 1px solid #d26767;
+    background-color: #f8e1e1;
+}
+
+-->
+</style>
+
+<link rel="icon" href="favicon.png" type="image/png" />
+<link rel="stylesheet" type="text/css" href="default.css" />
+
+</head>
+
+<body >
+<div id="container">
+
+<div id="body">
+<a name="SEC_Top"></a>
+<h1 class="settitle">Developer Documentation</h1>
+
+<a name="SEC_Contents"></a>
+<h1>Table of Contents</h1>
+<div class="contents">
+
+<ul class="toc">
+  <li><a name="toc-Developers-Guide" href="#Developers-Guide">1. Developers Guide</a>
+  <ul class="toc">
+    <li><a name="toc-API" href="#API">1.1 API</a></li>
+    <li><a name="toc-Integrating-libav-in-your-program" href="#Integrating-libav-in-your-program">1.2 Integrating libav in your program</a></li>
+    <li><a name="toc-Coding-Rules-1" href="#Coding-Rules-1">1.3 Coding Rules</a>
+    <ul class="toc">
+      <li><a name="toc-Code-formatting-conventions" href="#Code-formatting-conventions">1.3.1 Code formatting conventions</a></li>
+      <li><a name="toc-Comments" href="#Comments">1.3.2 Comments</a></li>
+      <li><a name="toc-C-language-features" href="#C-language-features">1.3.3 C language features</a></li>
+      <li><a name="toc-Naming-conventions" href="#Naming-conventions">1.3.4 Naming conventions</a></li>
+      <li><a name="toc-Miscellanous-conventions" href="#Miscellanous-conventions">1.3.5 Miscellanous conventions</a></li>
+      <li><a name="toc-Editor-configuration" href="#Editor-configuration">1.3.6 Editor configuration</a></li>
+    </ul></li>
+    <li><a name="toc-Development-Policy" href="#Development-Policy">1.4 Development Policy</a></li>
+    <li><a name="toc-Submitting-patches" href="#Submitting-patches">1.5 Submitting patches</a></li>
+    <li><a name="toc-New-codecs-or-formats-checklist" href="#New-codecs-or-formats-checklist">1.6 New codecs or formats checklist</a></li>
+    <li><a name="toc-patch-submission-checklist" href="#patch-submission-checklist">1.7 patch submission checklist</a></li>
+    <li><a name="toc-Patch-review-process" href="#Patch-review-process">1.8 Patch review process</a></li>
+    <li><a name="toc-Regression-Tests-1" href="#Regression-Tests-1">1.9 Regression Tests</a></li>
+  </ul>
+</li>
+</ul>
+</div>
+
+<a name="Developers-Guide"></a>
+<h1 class="chapter"><a href="developer.html#toc-Developers-Guide">1. Developers Guide</a></h1>
+
+<a name="API"></a>
+<h2 class="section"><a href="developer.html#toc-API">1.1 API</a></h2>
+<ul>
+<li> libavcodec is the library containing the codecs (both encoding and
+decoding). Look at &lsquo;<tt>libavcodec/apiexample.c</tt>&rsquo; to see how to use it.
+
+</li><li> libavformat is the library containing the file format handling (mux and
+demux code for several formats). Look at &lsquo;<tt>avplay.c</tt>&rsquo; to use it in a
+player. See &lsquo;<tt>libavformat/output-example.c</tt>&rsquo; to use it to generate
+audio or video streams.
+
+</li></ul>
+
+<a name="Integrating-libav-in-your-program"></a>
+<h2 class="section"><a href="developer.html#toc-Integrating-libav-in-your-program">1.2 Integrating libav in your program</a></h2>
+
+<p>Shared libraries should be used whenever is possible in order to reduce
+the effort distributors have to pour to support programs and to ensure
+only the public api is used.
+</p>
+<p>You can use Libav in your commercial program, but you must abide to the
+license, LGPL or GPL depending on the specific features used, please refer
+to <a href="http://libav.org/legal.html">our legal page</a> for a quick checklist and to
+the following links for the exact text of each license:
+<a href="http://git.libav.org/?p=libav.git;a=blob;f=COPYING.GPLv2">GPL version 2</a>,
+<a href="http://git.libav.org/?p=libav.git;a=blob;f=COPYING.GPLv3">GPL version 3</a>,
+<a href="http://git.libav.org/?p=libav.git;a=blob;f=COPYING.LGPLv2.1">LGPL version 2.1</a>,
+<a href="http://git.libav.org/?p=libav.git;a=blob;f=COPYING.LGPLv3">LGPL version 3</a>.
+Any modification to the source code can be suggested for inclusion.
+The best way to proceed is to send your patches to the
+<a href="https://lists.libav.org/mailman/listinfo/libav-devel">libav-devel</a>
+mailing list.
+</p>
+<p><a name="Coding-Rules"></a>
+</p><a name="Coding-Rules-1"></a>
+<h2 class="section"><a href="developer.html#toc-Coding-Rules-1">1.3 Coding Rules</a></h2>
+
+<a name="Code-formatting-conventions"></a>
+<h3 class="subsection"><a href="developer.html#toc-Code-formatting-conventions">1.3.1 Code formatting conventions</a></h3>
+<p>The code is written in K&amp;R C style. That means the following:
+</p><ul>
+<li>
+The control statements are formatted by putting space between the statement
+and parenthesis in the following way:
+<table><tr><td>&nbsp;</td><td><pre class="example">for (i = 0; i &lt; filter-&gt;input_count; i++) {
+</pre></td></tr></table>
+</li><li>
+The case statement is always located at the same level as the switch itself:
+<table><tr><td>&nbsp;</td><td><pre class="example">switch (link-&gt;init_state) {
+case AVLINK_INIT:
+    continue;
+case AVLINK_STARTINIT:
+    av_log(filter, AV_LOG_INFO, &quot;circular filter chain detected&quot;);
+    return 0;
+</pre></td></tr></table>
+</li><li>
+Braces in function declarations are written on the new line:
+<table><tr><td>&nbsp;</td><td><pre class="example">const char *avfilter_configuration(void)
+{
+    return LIBAV_CONFIGURATION;
+}
+</pre></td></tr></table>
+</li><li>
+In case of a single-statement if, no curly braces are required:
+<table><tr><td>&nbsp;</td><td><pre class="example">if (!pic || !picref)
+    goto fail;
+</pre></td></tr></table>
+</li><li>
+Do not put spaces immediately inside parentheses. &lsquo;<samp>if (ret)</samp>&rsquo; is
+a valid style; &lsquo;<samp>if ( ret )</samp>&rsquo; is not.
+</li></ul>
+
+<p>There are the following guidelines regarding the indentation in files:
+</p><ul>
+<li>
+Indent size is 4.
+</li><li>
+The TAB character is forbidden outside of Makefiles as is any
+form of trailing whitespace. Commits containing either will be
+rejected by the git repository.
+</li><li>
+You should try to limit your code lines to 80 characters; however, do so if
+and only if this improves readability.
+</li></ul>
+<p>The presentation is one inspired by &rsquo;indent -i4 -kr -nut&rsquo;.
+</p>
+<p>The main priority in Libav is simplicity and small code size in order to
+minimize the bug count.
+</p>
+<a name="Comments"></a>
+<h3 class="subsection"><a href="developer.html#toc-Comments">1.3.2 Comments</a></h3>
+<p>Use the JavaDoc/Doxygen  format (see examples below) so that code documentation
+can be generated automatically. All nontrivial functions should have a comment
+above them explaining what the function does, even if it is just one sentence.
+All structures and their member variables should be documented, too.
+</p>
+<p>Avoid Qt-style and similar Doxygen syntax with <code>!</code> in it, i.e. replace
+<code>//!</code> with <code>///</code> and similar.  Also @ syntax should be employed
+for markup commands, i.e. use <code>@param</code> and not <code>\param</code>.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/**
+ * @file
+ * MPEG codec.
+ * @author ...
+ */
+
+/**
+ * Summary sentence.
+ * more text ...
+ * ...
+ */
+typedef struct Foobar{
+    int var1; /**&lt; var1 description */
+    int var2; ///&lt; var2 description
+    /** var3 description */
+    int var3;
+} Foobar;
+
+/**
+ * Summary sentence.
+ * more text ...
+ * ...
+ * @param my_parameter description of my_parameter
+ * @return return value description
+ */
+int myfunc(int my_parameter)
+...
+</pre></td></tr></table>
+
+<a name="C-language-features"></a>
+<h3 class="subsection"><a href="developer.html#toc-C-language-features">1.3.3 C language features</a></h3>
+
+<p>Libav is programmed in the ISO C90 language with a few additional
+features from ISO C99, namely:
+</p><ul>
+<li>
+the &lsquo;<samp>inline</samp>&rsquo; keyword;
+</li><li>
+&lsquo;<samp>//</samp>&rsquo; comments;
+</li><li>
+designated struct initializers (&lsquo;<samp>struct s x = { .i = 17 };</samp>&rsquo;)
+</li><li>
+compound literals (&lsquo;<samp>x = (struct s) { 17, 23 };</samp>&rsquo;)
+</li></ul>
+
+<p>These features are supported by all compilers we care about, so we will not
+accept patches to remove their use unless they absolutely do not impair
+clarity and performance.
+</p>
+<p>All code must compile with recent versions of GCC and a number of other
+currently supported compilers. To ensure compatibility, please do not use
+additional C99 features or GCC extensions. Especially watch out for:
+</p><ul>
+<li>
+mixing statements and declarations;
+</li><li>
+&lsquo;<samp>long long</samp>&rsquo; (use &lsquo;<samp>int64_t</samp>&rsquo; instead);
+</li><li>
+&lsquo;<samp>__attribute__</samp>&rsquo; not protected by &lsquo;<samp>#ifdef __GNUC__</samp>&rsquo; or similar;
+</li><li>
+GCC statement expressions (&lsquo;<samp>(x = ({ int y = 4; y; })</samp>&rsquo;).
+</li></ul>
+
+<a name="Naming-conventions"></a>
+<h3 class="subsection"><a href="developer.html#toc-Naming-conventions">1.3.4 Naming conventions</a></h3>
+<p>All names are using underscores (_), not CamelCase. For example,
+&lsquo;<samp>avfilter_get_video_buffer</samp>&rsquo; is a valid function name and
+&lsquo;<samp>AVFilterGetVideo</samp>&rsquo; is not. The only exception from this are structure
+names; they should always be in the CamelCase
+</p>
+<p>There are following conventions for naming variables and functions:
+</p><ul>
+<li>
+For local variables no prefix is required.
+</li><li>
+For variables and functions declared as <code>static</code> no prefixes are required.
+</li><li>
+For variables and functions used internally by the library, <code>ff_</code> prefix
+should be used.
+For example, &lsquo;<samp>ff_w64_demuxer</samp>&rsquo;.
+</li><li>
+For variables and functions used internally across multiple libraries, use
+<code>avpriv_</code>. For example, &lsquo;<samp>avpriv_aac_parse_header</samp>&rsquo;.
+</li><li>
+For exported names, each library has its own prefixes. Just check the existing
+code and name accordingly.
+</li></ul>
+
+<a name="Miscellanous-conventions"></a>
+<h3 class="subsection"><a href="developer.html#toc-Miscellanous-conventions">1.3.5 Miscellanous conventions</a></h3>
+<ul>
+<li>
+fprintf and printf are forbidden in libavformat and libavcodec,
+please use av_log() instead.
+</li><li>
+Casts should be used only when necessary. Unneeded parentheses
+should also be avoided if they don&rsquo;t make the code easier to understand.
+</li></ul>
+
+<a name="Editor-configuration"></a>
+<h3 class="subsection"><a href="developer.html#toc-Editor-configuration">1.3.6 Editor configuration</a></h3>
+<p>In order to configure Vim to follow Libav formatting conventions, paste
+the following snippet into your &lsquo;<tt>.vimrc</tt>&rsquo;:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">&quot; indentation rules for libav: 4 spaces, no tabs
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+&quot; allow tabs in Makefiles
+autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=8
+&quot; Trailing whitespace and tabs are forbidden, so highlight them.
+highlight ForbiddenWhitespace ctermbg=red guibg=red
+match ForbiddenWhitespace /\s\+$\|\t/
+&quot; Do not highlight spaces at the end of line while typing on that line.
+autocmd InsertEnter * match ForbiddenWhitespace /\t\|\s\+\%#\@&lt;!$/
+</pre></td></tr></table>
+
+<p>For Emacs, add these roughly equivalent lines to your &lsquo;<tt>.emacs.d/init.el</tt>&rsquo;:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">(setq c-default-style &quot;k&amp;r&quot;)
+(setq-default c-basic-offset 4)
+(setq-default indent-tabs-mode nil)
+(setq-default show-trailing-whitespace t)
+</pre></td></tr></table>
+
+<a name="Development-Policy"></a>
+<h2 class="section"><a href="developer.html#toc-Development-Policy">1.4 Development Policy</a></h2>
+
+<ol>
+<li>
+   Contributions should be licensed under the LGPL 2.1, including an
+   &quot;or any later version&quot; clause, or the MIT license.  GPL 2 including
+   an &quot;or any later version&quot; clause is also acceptable, but LGPL is
+   preferred.
+</li><li>
+   All the patches MUST be reviewed in the mailing list before they are
+   committed.
+</li><li>
+   The Libav coding style should remain consistent. Changes to
+   conform will be suggested during the review or implemented on commit.
+</li><li>
+   Patches should be generated using <code>git format-patch</code> or directly sent
+   using <code>git send-email</code>.
+   Please make sure you give the proper credit by setting the correct author
+   in the commit.
+</li><li>
+   The commit message should have a short first line in the form of
+   &lsquo;<samp>topic: short description</samp>&rsquo; as header, separated by a newline
+   from the body consting in few lines explaining the reason of the patch.
+   Referring to the issue on the bug tracker does not exempt to report an
+   excerpt of the bug.
+</li><li>
+   Work in progress patches should be sent to the mailing list with the [WIP]
+   or the [RFC] tag.
+</li><li>
+   Branches in public personal repos are advised as way to
+   work on issues collaboratively.
+</li><li>
+   You do not have to over-test things. If it works for you and you think it
+   should work for others, send it to the mailing list for review.
+   If you have doubt about portability please state it in the submission so
+   people with specific hardware could test it.
+</li><li>
+   Do not commit unrelated changes together, split them into self-contained
+   pieces. Also do not forget that if part B depends on part A, but A does not
+   depend on B, then A can and should be committed first and separate from B.
+   Keeping changes well split into self-contained parts makes reviewing and
+   understanding them on the commit log mailing list easier. This also helps
+   in case of debugging later on.
+</li><li>
+   Patches that change behavior of the programs (renaming options etc) or
+   public API or ABI should be discussed in depth and possible few days should
+   pass between discussion and commit.
+   Changes to the build system (Makefiles, configure script) which alter
+   the expected behavior should be considered in the same regard.
+</li><li>
+   When applying patches that have been discussed (at length) on the mailing
+   list, reference the thread in the log message.
+</li><li>
+    Subscribe to the
+    <a href="https://lists.libav.org/mailman/listinfo/libav-devel">libav-devel</a> and
+    <a href="https://lists.libav.org/mailman/listinfo/libav-commits">libav-commits</a>
+    mailing lists.
+    Bugs and possible improvements or general questions regarding commits
+    are discussed on libav-devel. We expect you to react if problems with
+    your code are uncovered.
+</li><li>
+    Update the documentation if you change behavior or add features. If you are
+    unsure how best to do this, send an [RFC] patch to libav-devel.
+</li><li>
+    All discussions and decisions should be reported on the public developer
+    mailing list, so that there is a reference to them.
+    Other media (e.g. IRC) should be used for coordination and immediate
+    collaboration.
+</li><li>
+    Never write to unallocated memory, never write over the end of arrays,
+    always check values read from some untrusted source before using them
+    as array index or other risky things. Always use valgrind to doublecheck.
+</li><li>
+    Remember to check if you need to bump versions for the specific libav
+    parts (libavutil, libavcodec, libavformat) you are changing. You need
+    to change the version integer.
+    Incrementing the first component means no backward compatibility to
+    previous versions (e.g. removal of a function from the public API).
+    Incrementing the second component means backward compatible change
+    (e.g. addition of a function to the public API or extension of an
+    existing data structure).
+    Incrementing the third component means a noteworthy binary compatible
+    change (e.g. encoder bug fix that matters for the decoder).
+</li><li>
+    Compiler warnings indicate potential bugs or code with bad style.
+    If it is a bug, the bug has to be fixed. If it is not, the code should
+    be changed to not generate a warning unless that causes a slowdown
+    or obfuscates the code.
+    If a type of warning leads to too many false positives, that warning
+    should be disabled, not the code changed.
+</li><li>
+    If you add a new file, give it a proper license header. Do not copy and
+    paste it from a random place, use an existing file as template.
+</li></ol>
+
+<p>We think our rules are not too hard. If you have comments, contact us.
+</p>
+<p>Note, some rules were borrowed from the MPlayer project.
+</p>
+<a name="Submitting-patches"></a>
+<h2 class="section"><a href="developer.html#toc-Submitting-patches">1.5 Submitting patches</a></h2>
+
+<p>First, read the <a href="#Coding-Rules">Coding Rules</a> above if you did not yet, in particular
+the rules regarding patch submission.
+</p>
+<p>As stated already, please do not submit a patch which contains several
+unrelated changes.
+Split it into separate, self-contained pieces. This does not mean splitting
+file by file. Instead, make the patch as small as possible while still
+keeping it as a logical unit that contains an individual change, even
+if it spans multiple files. This makes reviewing your patches much easier
+for us and greatly increases your chances of getting your patch applied.
+</p>
+<p>Use the patcheck tool of Libav to check your patch.
+The tool is located in the tools directory.
+</p>
+<p>Run the <a href="#Regression-Tests">Regression Tests</a> before submitting a patch in order to verify
+it does not cause unexpected problems.
+</p>
+<p>Patches should be posted as base64 encoded attachments (or any other
+encoding which ensures that the patch will not be trashed during
+transmission) to the
+<a href="https://lists.libav.org/mailman/listinfo/libav-devel">libav-devel</a>
+mailing list.
+</p>
+<p>It also helps quite a bit if you tell us what the patch does (for example
+&rsquo;replaces lrint by lrintf&rsquo;), and why (for example &rsquo;*BSD isn&rsquo;t C99 compliant
+and has no lrint()&rsquo;). This kind of explanation should be the body of the
+commit message.
+</p>
+<p>Also please if you send several patches, send each patch as a separate mail,
+do not attach several unrelated patches to the same mail.
+</p>
+<p>Use <code>git send-email</code> when possible since it will properly send patches
+without requiring extra care.
+</p>
+<p>Your patch will be reviewed on the mailing list. You will likely be asked
+to make some changes and are expected to send in an improved version that
+incorporates the requests from the review. This process may go through
+several iterations. Once your patch is deemed good enough, it will be
+committed to the official Libav tree.
+</p>
+<p>Give us a few days to react. But if some time passes without reaction,
+send a reminder by email. Your patch should eventually be dealt with.
+</p>
+
+<a name="New-codecs-or-formats-checklist"></a>
+<h2 class="section"><a href="developer.html#toc-New-codecs-or-formats-checklist">1.6 New codecs or formats checklist</a></h2>
+
+<ol>
+<li>
+    Did you use av_cold for codec initialization and close functions?
+</li><li>
+    Did you add a long_name under NULL_IF_CONFIG_SMALL to the AVCodec or
+    AVInputFormat/AVOutputFormat struct?
+</li><li>
+    Did you bump the minor version number (and reset the micro version
+    number) in &lsquo;<tt>libavcodec/version.h</tt>&rsquo; or &lsquo;<tt>libavformat/version.h</tt>&rsquo;?
+</li><li>
+    Did you register it in &lsquo;<tt>allcodecs.c</tt>&rsquo; or &lsquo;<tt>allformats.c</tt>&rsquo;?
+</li><li>
+    Did you add the CodecID to &lsquo;<tt>avcodec.h</tt>&rsquo;?
+</li><li>
+    If it has a fourcc, did you add it to &lsquo;<tt>libavformat/riff.c</tt>&rsquo;,
+    even if it is only a decoder?
+</li><li>
+    Did you add a rule to compile the appropriate files in the Makefile?
+    Remember to do this even if you are just adding a format to a file that
+    is already being compiled by some other rule, like a raw demuxer.
+</li><li>
+    Did you add an entry to the table of supported formats or codecs in
+    &lsquo;<tt>doc/general.texi</tt>&rsquo;?
+</li><li>
+    Did you add an entry in the Changelog?
+</li><li>
+    If it depends on a parser or a library, did you add that dependency in
+    configure?
+</li><li>
+    Did you <code>git add</code> the appropriate files before committing?
+</li><li>
+    Did you make sure it compiles standalone, i.e. with
+    <code>configure --disable-everything --enable-decoder=foo</code>
+    (or <code>--enable-demuxer</code> or whatever your component is)?
+</li></ol>
+
+
+<a name="patch-submission-checklist"></a>
+<h2 class="section"><a href="developer.html#toc-patch-submission-checklist">1.7 patch submission checklist</a></h2>
+
+<ol>
+<li>
+    Does <code>make fate</code> pass with the patch applied?
+</li><li>
+    Does <code>make checkheaders</code> pass with the patch applied?
+</li><li>
+    Is the patch against latest Libav git master branch?
+</li><li>
+    Are you subscribed to the
+    <a href="https://lists.libav.org/mailman/listinfo/libav-devel">libav-devel</a>
+    mailing list? (Only list subscribers are allowed to post.)
+</li><li>
+    Have you checked that the changes are minimal, so that the same cannot be
+    achieved with a smaller patch and/or simpler final code?
+</li><li>
+    If the change is to speed critical code, did you benchmark it?
+</li><li>
+    If you did any benchmarks, did you provide them in the mail?
+</li><li>
+    Have you checked that the patch does not introduce buffer overflows or
+    other security issues?
+</li><li>
+    Did you test your decoder or demuxer against damaged data? If no, see
+    tools/trasher and the noise bitstream filter. Your decoder or demuxer
+    should not crash or end in a (near) infinite loop when fed damaged data.
+</li><li>
+    Does the patch not mix functional and cosmetic changes?
+</li><li>
+    Did you add tabs or trailing whitespace to the code? Both are forbidden.
+</li><li>
+    Is the patch attached to the email you send?
+</li><li>
+    Is the mime type of the patch correct? It should be text/x-diff or
+    text/x-patch or at least text/plain and not application/octet-stream.
+</li><li>
+    If the patch fixes a bug, did you provide a verbose analysis of the bug?
+</li><li>
+    If the patch fixes a bug, did you provide enough information, including
+    a sample, so the bug can be reproduced and the fix can be verified?
+    Note please do not attach samples &gt;100k to mails but rather provide a
+    URL, you can upload to ftp://upload.libav.org
+</li><li>
+    Did you provide a verbose summary about what the patch does change?
+</li><li>
+    Did you provide a verbose explanation why it changes things like it does?
+</li><li>
+    Did you provide a verbose summary of the user visible advantages and
+    disadvantages if the patch is applied?
+</li><li>
+    Did you provide an example so we can verify the new feature added by the
+    patch easily?
+</li><li>
+    If you added a new file, did you insert a license header? It should be
+    taken from Libav, not randomly copied and pasted from somewhere else.
+</li><li>
+    You should maintain alphabetical order in alphabetically ordered lists as
+    long as doing so does not break API/ABI compatibility.
+</li><li>
+    Lines with similar content should be aligned vertically when doing so
+    improves readability.
+</li></ol>
+
+<a name="Patch-review-process"></a>
+<h2 class="section"><a href="developer.html#toc-Patch-review-process">1.8 Patch review process</a></h2>
+
+<p>All patches posted to the
+<a href="https://lists.libav.org/mailman/listinfo/libav-devel">libav-devel</a>
+mailing list will be reviewed, unless they contain a
+clear note that the patch is not for the git master branch.
+Reviews and comments will be posted as replies to the patch on the
+mailing list. The patch submitter then has to take care of every comment,
+that can be by resubmitting a changed patch or by discussion. Resubmitted
+patches will themselves be reviewed like any other patch. If at some point
+a patch passes review with no comments then it is approved, that can for
+simple and small patches happen immediately while large patches will generally
+have to be changed and reviewed many times before they are approved.
+After a patch is approved it will be committed to the repository.
+</p>
+<p>We will review all submitted patches, but sometimes we are quite busy so
+especially for large patches this can take several weeks.
+</p>
+<p>When resubmitting patches, if their size grew or during the review different
+issues arisen please split the patch so each issue has a specific patch.
+</p>
+<p><a name="Regression-Tests"></a>
+</p><a name="Regression-Tests-1"></a>
+<h2 class="section"><a href="developer.html#toc-Regression-Tests-1">1.9 Regression Tests</a></h2>
+
+<p>Before submitting a patch (or committing to the repository), you should at
+least make sure that it does not break anything.
+</p>
+<p>If the code changed has already a test present in FATE you should run it,
+otherwise it is advised to add it.
+</p>
+<p>Improvements to codec or demuxer might change the FATE results. Make sure
+to commit the update reference with the change and to explain in the comment
+why the expected result changed.
+</p>
+<p>Please refer to <a href="fate.html">fate.html</a>.
+</p>
+<div id="footer">
+<p>
+ <font size="-1">
+  This document was generated by <em>buildd user</em> on <em>March 22, 2012</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+</div></div>
+</p>
+</body>
+</html>
+</div>

@@ -1,0 +1,556 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+
+<title>Debian-specific information about TeX packages - Changing your configuration, file placement</title>
+
+<link href="index.html" rel="start">
+<link href="ch1.html" rel="prev">
+<link href="ch3.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 Overview of the packages">
+<link href="ch2.html" rel="chapter" title="2 Changing your configuration, file placement">
+<link href="ch3.html" rel="chapter" title="3 Usage hints, Debian-specific adaptations">
+<link href="ch4.html" rel="chapter" title="4 How to install additional or updated (La)TeX packages or fonts">
+<link href="ch5.html" rel="chapter" title="5 Problems, bug reports">
+<link href="ch2.html#s-sec-texmf-trees" rel="section" title="2.1 Available TEXMF trees for users and system administrators">
+<link href="ch2.html#s2.2" rel="section" title="2.2 General hints">
+<link href="ch2.html#s2.3" rel="section" title="2.3 Hyphenation">
+<link href="ch2.html#s-sec-core-config-files" rel="section" title="2.4 The files texmf.cnf, fmtutil.cnf, updmap.cfg and language.dat">
+<link href="ch2.html#s2.5" rel="section" title="2.5 Font caching">
+<link href="ch3.html#s3.1" rel="section" title="3.1 Note on dvips">
+<link href="ch3.html#s3.2" rel="section" title="3.2 Note on dvipdfm">
+<link href="ch3.html#s3.3" rel="section" title="3.3 &ldquo;TeX capacity exceeded&rdquo; and similar errors">
+<link href="ch4.html#s4.1" rel="section" title="4.1 (La)TeX input files">
+<link href="ch4.html#s4.2" rel="section" title="4.2 Complex installations">
+<link href="ch4.html#s-sec-font-installation" rel="section" title="4.3 Font installation">
+<link href="ch4.html#s-sec-user-specific-installation" rel="section" title="4.4 User-specific installation">
+<link href="ch2.html#s2.2.1" rel="subsection" title="2.2.1 System-wide versus user-specific configuration">
+<link href="ch2.html#s2.2.2" rel="subsection" title="2.2.2 Configuration file placement">
+<link href="ch2.html#s2.2.3" rel="subsection" title="2.2.3 What is configured where?">
+<link href="ch2.html#s-sec-texmfcnf-and-update-texmf" rel="subsection" title="2.4.1 texmf.cnf and update-texmf">
+<link href="ch2.html#s2.4.2" rel="subsection" title="2.4.2 fmtutil.cnf and update-fmtutil, updmap.cfg and update-updmap, language.dat and update-language">
+<link href="ch2.html#s-jadetex-xmltex-specialcase" rel="subsection" title="2.4.3 A special case in update-fmtutil: Formats which are based on other formats">
+<link href="ch2.html#s-sec-user-config-files" rel="subsection" title="2.4.4 Per user configuration changes">
+
+</head>
+
+<body>
+
+<p><a name="ch2"></a></p>
+<hr>
+
+<p>
+[ <a href="ch1.html">previous</a> ]
+[ <a href="index.html#contents">Contents</a> ]
+[ <a href="ch1.html">1</a> ]
+[ 2 ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch4.html">4</a> ]
+[ <a href="ch5.html">5</a> ]
+[ <a href="ch3.html">next</a> ]
+</p>
+
+<hr>
+
+<h1>
+Debian-specific information about TeX packages
+<br>Chapter 2 - Changing your configuration, file placement
+</h1>
+
+<hr>
+
+<h2><a name="s-sec-texmf-trees"></a>2.1 Available <var>TEXMF</var> trees for users and system administrators</h2>
+
+<p>
+The following <var>TEXMF</var> trees are available.  They are displayed below
+in the order they are searched, where earlier ones override later ones.
+</p>
+<dl>
+<dt><var>TEXMFCONFIG</var></dt>
+<dd>
+<p>
+Default location: <code>$HOME/.texmf-config/</code>
+</p>
+
+<p>
+Contains user-specific configuration
+</p>
+</dd>
+</dl>
+<dl>
+<dt><var>TEXMFVAR</var></dt>
+<dd>
+<p>
+Default location: <code>$HOME/.texmf-var/</code>
+</p>
+
+<p>
+Contains user-specific generated files
+</p>
+</dd>
+</dl>
+<dl>
+<dt><var>TEXMFHOME</var></dt>
+<dd>
+<p>
+Default location: <code>$HOME/texmf/</code>
+</p>
+
+<p>
+Contains user-specific static input files, e.g.  new LaTeX packages.
+</p>
+</dd>
+</dl>
+<dl>
+<dt><var>TEXMFSYSCONFIG</var></dt>
+<dd>
+<p>
+Default location: <code>/etc/texmf</code>
+</p>
+
+<p>
+Contains system-wide configuration
+</p>
+</dd>
+</dl>
+<dl>
+<dt><var>TEXMFSYSVAR</var></dt>
+<dd>
+<p>
+Default location: <code>/var/lib/texmf/</code>
+</p>
+
+<p>
+Contains system-wide generated files
+</p>
+</dd>
+</dl>
+<dl>
+<dt><var>TEXMFLOCAL</var></dt>
+<dd>
+<p>
+Default location: <code>/usr/local/share/texmf/</code>
+</p>
+
+<p>
+Contains system-wide input files
+</p>
+</dd>
+</dl>
+<dl>
+<dt><var>TEXMFMAIN</var></dt>
+<dd>
+<p>
+Default location: <code>/usr/share/texmf/</code>
+</p>
+
+<p>
+Contains system-wide, <code>dpkg</code>-managed input files (TeX add-on
+packages)
+</p>
+</dd>
+</dl>
+<dl>
+<dt><var>TEXMFDIST</var></dt>
+<dd>
+<p>
+Default location: <code>/usr/share/texmf-texlive</code>
+</p>
+
+<p>
+Contains system-wide, <code>dpkg</code>-managed input files (basic TeX
+packages)
+</p>
+</dd>
+</dl>
+
+<p>
+If you want to add files, you should usually use <var>TEXMFLOCAL</var> or
+<var>TEXMFHOME</var>, depending on whether you are the system administrator or
+a user.  If needed, a system administrator can add additional trees to the
+<var>TEXMF</var> variable in <code>/etc/texmf/texmf.d/05TeXMF.cnf</code>
+(earlier entries take precedence).  <var>TEXMFCONFIG</var> and
+<var>TEXMFVAR</var> are used by the user-specific <code>texconfig</code>,
+<code>updmap</code>, and <code>fmtutil</code> commands.  Note that
+<code>texconfig</code> creates a copy of configuration files from
+<var>TEXMFMAIN</var> (or <code>/etc/texmf</code>) at the time it is first
+invoked to handle a particular file, and does not track later system-wide
+changes, and it does not know about <code>update-*</code> programs (see below
+<a href="#s-sec-core-config-files">The files <code>texmf.cnf</code>,
+<code>fmtutil.cnf</code>, <code>updmap.cfg</code> and
+<code>language.dat</code>, Section 2.4</a>).
+</p>
+
+<hr>
+
+<h2><a name="s2.2"></a>2.2 General hints</h2>
+
+<hr>
+
+<h3><a name="s2.2.1"></a>2.2.1 System-wide versus user-specific configuration</h3>
+
+<p>
+TeX Live supports a complete user-specific configuration setup in the user's
+home directory.  System administrators must use the commands
+<code>texconfig-sys</code>, <code>fmtutil-sys</code> and
+<code>updmap-sys</code> which act on the system-wide configuration files.
+Users can invoke their user counterparts <code>texconfig</code>,
+<code>fmtutil</code> and <code>updmap</code>.  This will put copies of the
+system-wide configuration files into the user's <var>TEXMFCONFIG</var>
+directory (by default, <code>$HOME/.texmf-config</code>), modify them and
+generate according formats, if applicable.
+</p>
+
+<p>
+There is no such mechanism for <code>texmf.cnf</code>.  For a way to customize
+<code>texmf.cnf</code> as a user, see <a href="#s-sec-user-config-files">Per
+user configuration changes, Section 2.4.4</a>.
+</p>
+
+<hr>
+
+<h3><a name="s2.2.2"></a>2.2.2 Configuration file placement</h3>
+
+<p>
+On a TeX system, in principle every TeX input file can be used to <em>change
+the behavior of the system</em> and hence could be treated as a configuration
+file.  To avoid an inflation of configuration files, those that are used to
+control the typeset output - the appearance of documents - are not installed as
+configuration files.  It makes more sense to keep changed versions in the
+current directory for a certain project, or in <var>TEXMFHOME</var> or
+<var>TEXMFCONFIG</var> of a particular user.  However, local admins can take
+any file they want from the <var>TEXMFDIST</var>
+(<code>/usr/share/texmf-texlive</code>) or <var>TEXMFMAIN</var>
+(<code>/usr/share/texmf</code>) trees and put changed copies into the
+respective directories below <code>/etc/texmf</code> (<var>TEXMFSYSCONFIG</var>
+which sorts before all other trees).
+</p>
+
+<p>
+Since the package management system does not know whether a file is treated as
+a configuration file on a specific system, it is up to the site admin or local
+user to check whether one of their changed files has changed in
+<var>TEXMFMAIN</var> or <var>TEXMFDIST</var>.
+</p>
+
+<hr>
+
+<h3><a name="s2.2.3"></a>2.2.3 What is configured where?</h3>
+
+<p>
+The central system-wide configuration files <code>texmf.cnf</code> (which
+controls the basic operation and file search paths for the included programs),
+<code>fmtutil.cnf</code> (which specifies the available TeX formats),
+<code>updmap.cfg</code> (font configuration) and <code>language.dat</code>
+(hyphenation patterns for many formats) are handled through a Debian-specific
+mechanism that allows the basic TeX packages, add-on packages and local
+administrators to combine their changes (see <a
+href="#s-sec-core-config-files">The files <code>texmf.cnf</code>,
+<code>fmtutil.cnf</code>, <code>updmap.cfg</code> and
+<code>language.dat</code>, Section 2.4</a> below).
+</p>
+
+<p>
+For some configuration changes, there is a program called
+<code>texconfig-dialog</code> (or simply <code>texconfig</code> for a
+commandline frontend); alternatively, you can of course make the necessary
+changes in configuration files by hand.
+</p>
+
+<hr>
+
+<h2><a name="s2.3"></a>2.3 Hyphenation</h2>
+
+<p>
+Hyphenation should pretty much work out of the box.  Please note that in
+Debian, language.dat is a generated file (see <a
+href="#s-sec-core-config-files">The files <code>texmf.cnf</code>,
+<code>fmtutil.cnf</code>, <code>updmap.cfg</code> and
+<code>language.dat</code>, Section 2.4</a>).
+</p>
+
+<p>
+For users of the ukranian language, the right pattern file depends on the
+output encoding (see
+<code>/usr/share/texmf-texlive/tex/generic/ukrhyph/ukrhyph.tex</code>); you can
+also choose different rule sets in the file.
+</p>
+
+<hr>
+
+<h2><a name="s-sec-core-config-files"></a>2.4 The files <code>texmf.cnf</code>, <code>fmtutil.cnf</code>, <code>updmap.cfg</code> and <code>language.dat</code></h2>
+
+<p>
+In the following we describe ways to configure these files for the <em>system
+administrator</em>, i.e.  one that has write access to the
+<code>/etc/texmf</code> hierachy.  In <a href="#s-sec-user-config-files">Per
+user configuration changes, Section 2.4.4</a> we describe a per-user
+configuration.
+</p>
+
+<p>
+The files <code>texmf.cnf</code>, <code>fmtutil.cnf</code>,
+<code>updmap.cfg</code> and <code>language.dat</code> contain configuration
+options from TeX Live, possibly from you, and from other TeX-related packages.
+They are generated by scripts and should not&mdash;in fact, except
+<code>texmf.cnf</code> may not&mdash;be edited directly.  Rather, you should
+work with the source files in the respective directories below
+<code>/etc/texmf/</code>.
+</p>
+
+<p>
+In order to make updates smooth, you should <em>avoid editing</em> system-wide
+files as far as possible, and instead <em>add new files</em> to change
+settings.  For <code>texmf.cnf</code> snippets, this is particularly easy,
+since earlier entries override any later entries.  Only for removing settings
+from <code>fmtutil.cnf</code>, <code>updmap.cfg</code> or
+<code>language.dat</code> is it necessary to edit existing files.
+</p>
+
+<hr>
+
+<h3><a name="s-sec-texmfcnf-and-update-texmf"></a>2.4.1 <code>texmf.cnf</code> and <code>update-texmf</code></h3>
+
+<p>
+The TeX binaries are built to look for <code>texmf.cnf</code> (the master
+config file for TeX and Metafont) in
+<code>/usr/share/texmf/web2c/texmf.cnf</code> (or
+<code>$HOME/.texmf-config/web2c/texmf.cnf</code> if it exists).  The
+system-wide file is a symbolic link to <code>/etc/texmf/texmf.cnf</code>.  The
+Debian packaging includes a mechanism for constructing texmf.cnf from a
+collection of files under <code>/etc/texmf/texmf.d/</code>.  To customize
+<code>texmf.cnf</code> while retaining the Debian-supplied configuration,
+create an appropriate file (or files) in <code>/etc/texmf/texmf.d/</code>, or
+change existing files, and then run <code>update-texmf</code>.  This will
+generate the desired <code>texmf.cnf</code> for you.
+</p>
+
+<p>
+You should not edit this file directly!  While changes made by the local
+administrator will not be overwritten, they will cause you trouble once a
+package is updated and brings in a configuration change.  You will be shown the
+differences between the edited and the newly generated file.  We will try to
+merge our and your changes, but that might not always work, and you will
+probably have to edit again.
+</p>
+
+<p>
+Therefore, if you want a smooth upgrade, please edit the files in
+<code>/etc/texmf/texmf.d</code>, or create an additional one, and invoke
+<code>update-texmf</code>.  This will write your changes into
+<code>/etc/texmf/texmf.cnf</code>.
+</p>
+
+<p>
+You should name your customization file something like
+<code>40macros.cnf</code>; the leading numerals will decide the order in which
+configuration fragments will be assembled by <code>update-texmf</code>, so it
+might be important to place your customizations in an appropriate place in the
+sequence &mdash; earlier definitions take precedence over later ones.  In
+previous versions the extension <samp>.cnf</samp> was not necessary, and all
+files in the directory were used.  If you had teTeX installed in woody, you
+might still have private files which need the extension to be added.
+</p>
+
+<hr>
+
+<h3><a name="s2.4.2"></a>2.4.2 <code>fmtutil.cnf</code> and <code>update-fmtutil</code>, <code>updmap.cfg</code> and <code>update-updmap</code>, <code>language.dat</code> and <code>update-language</code></h3>
+
+<p>
+These files are also generated files, just as it has been explained above for
+<code>texmf.cnf</code>.  The difference to <code>texmf.cnf</code> is that the
+system-wide files will be put into <code>/var/lib/texmf/web2c</code>, and any
+change made in these files will be <strong>unconditionally overwritten</strong>
+by <code>update-fmtutil</code>, <code>update-language</code> and
+<code>update-updmap</code>, respectively.  Only the files in
+<code>/etc/texmf/updmap.d/</code>, <code>/etc/texmf/fmt.d/</code> and
+<code>/etc/texmf/language.d/</code> will be treated as configuration files.
+Furthermore, the files <code>fmtutil.cnf</code>, <code>updmap.cfg</code> and
+<code>language.dat</code> are used on a first-found-first-used basis, if there
+are more than one in the search path, whereas if there are several
+<code>texmf.cnf</code> files in the search path, their settings are combined as
+described in <a href="#s-sec-user-config-files">Per user configuration changes,
+Section 2.4.4</a>.
+</p>
+
+<p>
+Just as for <code>texmf.cnf</code>, the right way to change settings is to edit
+or add files in <code>/etc/texmf/updmap.d/</code>,
+<code>/etc/texmf/fmt.d/</code> or <code>/etc/texmf/language.d/</code>.  The
+details have been described above (see <a
+href="#s-sec-texmfcnf-and-update-texmf"><code>texmf.cnf</code> and
+<code>update-texmf</code>, Section 2.4.1</a>).  Note, however, that the
+extension for <code>updmap.cfg</code> snippets in
+<code>/etc/texmf/updmap.d/</code> is <code>.cfg</code>, not <code>.cnf</code>.
+</p>
+
+<p>
+<code>updmap-sys(8)</code> provides options for enabling or disabling font map
+files.  When enabling a new map file that is not mentioned,
+<code>updmap-sys</code> will first create or edit <code>10local.cfg</code> in
+the <code>/etc/texmf/updmap.d</code> directory and then call
+<code>update-updmap</code>.  Note that <code>updmap-sys</code>'s
+<samp>--edit</samp> and <samp>--syncwithtrees</samp> options cannot be used on
+a Debian system.
+</p>
+
+<hr>
+
+<h3><a name="s-jadetex-xmltex-specialcase"></a>2.4.3 A special case in <code>update-fmtutil</code>: Formats which are based on other formats</h3>
+
+<p>
+The JadeTeX and xmlTeX formats are built on top of LaTeX and therefore require
+special treatment.  This is done automatically for the Debian packages for
+these formats.  However, local administrators who similarly base their custom
+formats on LaTeX (or any other format) might need to take special care, in
+particular when dist-upgrading.
+</p>
+
+<p>
+JadeTeX is based on LaTeX such that during format generation, the LaTeX format
+dump is preloaded with this line in <code>fmtutil.cnf</code>:
+</p>
+
+<pre>
+     jadetex		etex	language.dat	&amp;latex jadetex.ini
+</pre>
+
+<p>
+This is problematic if the package which provides LaTeX (currently
+<code>texlive-latex-base</code>) is upgraded at the same time as the package
+which provides the executables (currently <code>texlive-base-bin</code>).  In
+this dpkg run, <code>texlive-base-bin</code> will be configured while
+<code>texlive-latex-base</code> is unpacked but unconfigured and might have a
+<code>10texlive-latex-base.cnf.dpkg-new</code> file in
+<code>/etc/texmf/fmt.d</code>.  <code>texlive-base-bin</code> will call
+<code>update-fmtutil</code> just before it executes <samp>fmtutil --all</samp>,
+and because of the <code>dpkg-new</code> file information for LaTeX will not be
+included.  If JadeTeX would still be included, its format generation would
+consequently fail.
+</p>
+
+<p>
+<code>update-fmtutil</code> knows about this problem and will ignore JadeTeX
+and xmlTeX if LaTeX is not available.  It does not know which other (locally
+defined) formats are also based on LaTeX, though.  To prevent failures (and
+actually a possible fork bomb, see Debian Bug #427562), local administrators
+should manually disable such formats before upgrading TeX Live packages.
+</p>
+
+<hr>
+
+<h3><a name="s-sec-user-config-files"></a>2.4.4 Per user configuration changes</h3>
+
+<p>
+<code>update-texmf</code> is only available for root; if a user wants to
+maintain their own <code>texmf.cnf</code>, they can put it into
+<samp><var>TEXMFCONFIG</var>/web2c</samp> and must manually edit it.  However,
+in order for it to be found, they need to set an environment variable [<a
+href="footnotes.html#f1" name="fr1">1</a>]:
+</p>
+
+<pre>
+     export TEXMFCNF=$HOME/.texmf-config/web2c:
+</pre>
+
+<p>
+The final colon includes the system wide default.  Since all
+<code>texmf.cnf</code> files are read, with earlier definitions taking
+precedence over later ones, it is best to keep only a minimal set of
+definitions in the user-specific file.
+</p>
+
+<p>
+In contrast to the above&mdash;TeX reading and merging all
+<code>texmf.cnf</code> files&mdash;the <em>first</em> found occurrence of one
+of the files <code>updmap.cfg</code>, <code>language.dat</code>,
+<code>fmtutil.cnf</code> is used.  Thus, when called by a user, the other
+configuration update programs also work with files in
+<samp><var>TEXMFCONFIG</var>/updmap.d</samp>,
+<samp><var>TEXMFCONFIG</var>/fmt.d</samp> or
+<samp><var>TEXMFCONFIG</var>/language.d</samp>, where <var>TEXMFCONFIG</var> is
+usually <code><var>HOME</var>/.texmf-config</code>.  They combine files in
+these directories with the files in the system-wide directories&mdash;naturally
+the user-specific ones take precedence if the names are equal (see <a
+href="ch4.html#s-sec-user-specific-installation">User-specific installation,
+Section 4.4</a>) &mdash;and drop the respective generated file into the user's
+<var>TEXMFVAR</var>, effectively overriding the system-wide config files.  Note
+that changes to existing configuration file snippets made by package updates
+will not be propagated to the user's files.
+</p>
+
+<p>
+<code>updmap(1)</code> provides the same options for enabling and disabling map
+files as <code>updmap-sys(8)</code>, see above.  <code>10local.cfg</code> is
+created or edited in <samp><var>TEXMFCONFIG</var>/updmap.d</samp>.
+</p>
+
+<hr>
+
+<h2><a name="s2.5"></a>2.5 Font caching</h2>
+
+<p>
+A TeX system needs to generate new font data (pixel data, metric, sources) on
+the fly.  These files can be saved into the TeX font cache and later be reused.
+By default, a separate font cache is created for each user in their own
+<var>TEXMFVAR</var> directory (<code>$<var>HOME</var>/.texmf-var/</code>).  If
+this directory is not writable, e.g.  during automated package building, a
+directory called <var>VARTEXFONTS</var>, <code>/tmp/texfonts/</code>, is used
+instead, but this directory is cleaned up regularly.
+</p>
+
+<p>
+On multi-user machines, it might be advisable that the local administrator
+enables a site-wide font cache and sets <var>VARTEXFONTS</var> to a persistent
+directory, e.g.  <code>/var/cache/fonts</code>.  The variable is set in
+<code>/etc/texmf/texmf.d/05TeXMF.cnf</code> and can either be changed there or
+preferrably overwritten in a file that sorts before <code>05TeXMF.cnf</code>,
+e.g.  <code>/etc/texmf/texmf.d/04VARTEXFONTS.cnf</code>.  Do not forget to run
+<code>update-texmf</code> after making the change.  To enable a side-wide font
+caching the admin should edit <code>/etc/texmf/web2c/mktex.cnf</code> and use
+'varfonts' instead of 'texmfvar' in <var>MT_FEATURES</var>.  Care should be
+taken to specifiy appropriate permissions for the directory containing the font
+cache.  Either the local admin should create all available font data and not
+allow write access, or else write access should be limited to trusted users.
+Yet an other alternative is to bind-mount <code>/var/cache/fonts</code> from a
+separate partition, so that users are not able to fill up the <code>/var</code>
+partition with font data.
+</p>
+
+<hr>
+
+<p>
+[ <a href="ch1.html">previous</a> ]
+[ <a href="index.html#contents">Contents</a> ]
+[ <a href="ch1.html">1</a> ]
+[ 2 ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch4.html">4</a> ]
+[ <a href="ch5.html">5</a> ]
+[ <a href="ch3.html">next</a> ]
+</p>
+
+<hr>
+
+<p>
+Debian-specific information about TeX packages
+</p>
+
+<address>
+generated from $Id: TeX-on-Debian.sgml 4540 2010-01-18 16:59:06Z preining $<br>
+<br>
+The Debian TeX mailing list <code><a href="mailto:debian-tex-maint@lists.debian.org">debian-tex-maint@lists.debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

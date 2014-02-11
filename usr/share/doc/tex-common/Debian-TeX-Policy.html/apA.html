@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+
+<title>The Debian TeX sub-policy - Sample code</title>
+
+<link href="index.html" rel="start">
+<link href="ch6.html" rel="prev">
+<link href="index.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 About this document">
+<link href="ch2.html" rel="chapter" title="2 Terms and Definitions">
+<link href="ch3.html" rel="chapter" title="3 TeX packages for the impatient">
+<link href="ch4.html" rel="chapter" title="4 Meta-packages and dependencies">
+<link href="ch5.html" rel="chapter" title="5 File Placement">
+<link href="ch6.html" rel="chapter" title="6 Configuration">
+<link href="apA.html" rel="appendix" title="A Sample code">
+<link href="ch5.html#s-tds-libkpse" rel="section" title="5.1 File searching and libkpathsea / libkpse">
+<link href="ch5.html#s5.2" rel="section" title="5.2 Directory trees">
+<link href="ch5.html#s5.3" rel="section" title="5.3 Generated files">
+<link href="ch5.html#s-sec-names-and-texmfsite" rel="section" title="5.4 Filenames and installation of alternative files">
+<link href="ch5.html#s-sec-documentation" rel="section" title="5.5 Documentation">
+<link href="ch6.html#s-configurationfiles" rel="section" title="6.1 Configuration files">
+<link href="ch6.html#s-update-progs" rel="section" title="6.2 Configuration update programs">
+<link href="ch6.html#s6.3" rel="section" title="6.3 Best practices for packages that build-depend on the TeX system">
+<link href="ch6.html#s6.4" rel="section" title="6.4 Command execution and format files">
+<link href="ch6.html#s6.5" rel="section" title="6.5 The Dpkg Post-Invoke Mechanism">
+<link href="apA.html#s-appen-sample-font" rel="section" title="A.1 Sample code for font packages">
+<link href="ch6.html#s-sec-font-configuration" rel="subsection" title="6.2.1 Font configuration">
+<link href="ch6.html#s-font-configuration-details" rel="subsection" title="6.2.1.1 Description of manual font package setup">
+<link href="ch6.html#s-font-configuration-rationale" rel="subsection" title="6.2.1.2 Rationale">
+<link href="ch6.html#s6.2.2" rel="subsection" title="6.2.2 Language/Hyphenation configuration">
+<link href="ch6.html#s6.2.3" rel="subsection" title="6.2.3 Format configuration">
+<link href="ch6.html#s6.3.1" rel="subsection" title="6.3.1 Configuration">
+<link href="ch6.html#s6.3.2" rel="subsection" title="6.3.2 Font cache data">
+
+</head>
+
+<body>
+
+<p><a name="apA"></a></p>
+<hr>
+
+<p>
+[ <a href="ch6.html">previous</a> ]
+[ <a href="index.html#contents">Contents</a> ]
+[ <a href="ch1.html">1</a> ]
+[ <a href="ch2.html">2</a> ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch4.html">4</a> ]
+[ <a href="ch5.html">5</a> ]
+[ <a href="ch6.html">6</a> ]
+[ A ]
+[ <a href="index.html">next</a> ]
+</p>
+
+<hr>
+
+<h1>
+The Debian TeX sub-policy
+<br>Appendix A - Sample code</h1>
+
+<hr>
+
+<p>
+This section contains sample code that implements the recommodations of this
+document.
+</p>
+
+<hr>
+
+<h2><a name="s-appen-sample-font"></a>A.1 Sample code for font packages</h2>
+
+<p>
+Sample postinst script:
+</p>
+
+<pre>
+     #
+     # postinst-texfonts
+     #
+     # postinst snippet for installing Type 1 fonts for TeX
+     #
+     # Author: Florent Rougon &lt;f.rougon@free.fr&gt;
+     #
+     update_fontmaps()
+     {
+         update-updmap --quiet
+         # All of the following needs an installed and configured
+         # basic TeX system, so check this.
+         if kpsewhich --version &gt;/dev/null 2&gt;&amp;1; then
+             # mktexlsr is recommended now because updmap-sys relies 
+             # heavily on Kpathsea to locate updmap.cfg and the map files. 
+             # Also, it is slightly better not to specify a particular 
+             # directory to refresh because updmap.cfg is typically found 
+             # in TEXMFSYSVAR while the map files are in TEXMFMAIN or
+             # TEXMFDIST.
+             if which mktexlsr &gt;/dev/null; then mktexlsr; fi
+             if which updmap-sys &gt;/dev/null; then
+                 printf &quot;Running updmap-sys... &quot;
+                 updmap-sys --quiet
+                 echo &quot;done.&quot;
+             fi
+         fi
+     
+         return 0
+     }
+     
+     case &quot;$1&quot; in
+         configure|abort-upgrade|abort-remove|abort-deconfigure)
+             update_fontmaps
+         ;;
+     
+         *)
+             echo &quot;postinst called with unknown argument '$1'&quot; &gt;&amp;2
+             exit 1
+         ;;
+     esac
+</pre>
+
+<p>
+Sample postrm script:
+</p>
+
+<pre>
+     #
+     # postrm-texfonts
+     #
+     # postrm snippet for installing Type 1 fonts for TeX
+     #
+     # Author: Florent Rougon &lt;f.rougon@free.fr&gt;
+     #
+     tell_that_errors_are_ok()
+     {
+         # Cheap option handling...
+         if [ &quot;$1&quot; = -n ]; then
+             prog=&quot;$2&quot;
+             endwith=' '
+         else
+             prog=&quot;$1&quot;
+             endwith='\n'
+         fi
+     
+         printf &quot;\
+     Trying to run '$prog' (error messages can be ignored if tex-common
+     is not configured)...$endwith&quot;
+     
+         return 0
+     }
+     
+     # The function name is *try_to*_update_fontmaps because the following
+     # scenario might happen:
+     #    1. this package is deconfigured
+     #    2. tex-common and tetex-bin are removed
+     #    3. this package is removed or purged
+     #
+     # (cf. Policy § 6.5, step 2, about a conflicting package being removed due
+     # to the installation of the package being discussed).
+     #
+     # In this case, update-updmap, mktexlsr and updmap-sys would all be gone once
+     # tex-common and tetex-bin are removed, so we must append &quot;|| true&quot; to their
+     # calls.
+     try_to_update_fontmaps()
+     {
+         # Don't print alarming error messages if the programs aren't even
+         # available.
+         if which update-updmap &gt;/dev/null; then
+             tell_that_errors_are_ok -n update-updmap
+             update-updmap --quiet || true
+             echo &quot;done.&quot;
+         fi
+     
+         # All of the following needs an installed and configured basic TeX system.
+         # If there is one, register the fonts. Otherwise, that will be done later
+         # when the basic TeX system is configured, so we can exit without
+         # worrying.
+         kpsewhich --version &gt;/dev/null 2&gt;&amp;1 || return 0
+     
+         # mktexlsr is recommended now because updmap-sys relies heavily on
+         # Kpathsea to locate updmap.cfg and the map files. Also, it is slightly
+         # better not to specify a particular directory to refresh because
+         # updmap.cfg is typically found in TEXMFSYSVAR while the map files are in
+         # TEXMFMAIN.
+         if which mktexlsr &gt;/dev/null; then
+             tell_that_errors_are_ok mktexlsr
+             mktexlsr || true
+             echo &quot;done.&quot;
+         fi
+     
+         if which updmap-sys &gt;/dev/null; then
+             tell_that_errors_are_ok -n updmap-sys
+             updmap-sys --quiet || true
+             echo &quot;done.&quot;
+         fi
+     
+         return 0
+     }
+     
+     case &quot;$1&quot; in
+         remove|disappear)
+             try_to_update_fontmaps
+         ;;
+     
+         purge)
+             # Supposing updmap.cfg &amp; Co are clean (which I think is a reasonable
+             # assumption), we don't need to call try_to_update_fontmaps().
+             # Calling it on remove _and_ on purge just for hypothetical users
+             # who would break their config before purging this package seems to
+             # be more annoying than useful (it takes a lot of time).
+         ;;
+     
+         upgrade|failed-upgrade|abort-upgrade|abort-install)
+         ;;
+     
+         *)
+             echo &quot;postrm called with unknown argument '$1'&quot; &gt;&amp;2
+             exit 1
+         ;;
+     esac
+</pre>
+
+<hr>
+
+<p>
+[ <a href="ch6.html">previous</a> ]
+[ <a href="index.html#contents">Contents</a> ]
+[ <a href="ch1.html">1</a> ]
+[ <a href="ch2.html">2</a> ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch4.html">4</a> ]
+[ <a href="ch5.html">5</a> ]
+[ <a href="ch6.html">6</a> ]
+[ A ]
+[ <a href="index.html">next</a> ]
+</p>
+
+<hr>
+
+<p>
+The Debian TeX sub-policy
+</p>
+
+<address>
+generated from $Id: Debian-TeX-Policy.sgml 4540 2010-01-18 16:59:06Z preining $<br>
+<br>
+The Debian TeX mailing list <code><a href="mailto:debian-tex-maint@lists.debian.org">debian-tex-maint@lists.debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

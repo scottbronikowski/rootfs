@@ -1,0 +1,395 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+
+<title>Debian-specific information about TeX packages - How to install additional or updated (La)TeX packages or fonts</title>
+
+<link href="index.html" rel="start">
+<link href="ch3.html" rel="prev">
+<link href="ch5.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 Overview of the packages">
+<link href="ch2.html" rel="chapter" title="2 Changing your configuration, file placement">
+<link href="ch3.html" rel="chapter" title="3 Usage hints, Debian-specific adaptations">
+<link href="ch4.html" rel="chapter" title="4 How to install additional or updated (La)TeX packages or fonts">
+<link href="ch5.html" rel="chapter" title="5 Problems, bug reports">
+<link href="ch2.html#s-sec-texmf-trees" rel="section" title="2.1 Available TEXMF trees for users and system administrators">
+<link href="ch2.html#s2.2" rel="section" title="2.2 General hints">
+<link href="ch2.html#s2.3" rel="section" title="2.3 Hyphenation">
+<link href="ch2.html#s-sec-core-config-files" rel="section" title="2.4 The files texmf.cnf, fmtutil.cnf, updmap.cfg and language.dat">
+<link href="ch2.html#s2.5" rel="section" title="2.5 Font caching">
+<link href="ch3.html#s3.1" rel="section" title="3.1 Note on dvips">
+<link href="ch3.html#s3.2" rel="section" title="3.2 Note on dvipdfm">
+<link href="ch3.html#s3.3" rel="section" title="3.3 &ldquo;TeX capacity exceeded&rdquo; and similar errors">
+<link href="ch4.html#s4.1" rel="section" title="4.1 (La)TeX input files">
+<link href="ch4.html#s4.2" rel="section" title="4.2 Complex installations">
+<link href="ch4.html#s-sec-font-installation" rel="section" title="4.3 Font installation">
+<link href="ch4.html#s-sec-user-specific-installation" rel="section" title="4.4 User-specific installation">
+<link href="ch2.html#s2.2.1" rel="subsection" title="2.2.1 System-wide versus user-specific configuration">
+<link href="ch2.html#s2.2.2" rel="subsection" title="2.2.2 Configuration file placement">
+<link href="ch2.html#s2.2.3" rel="subsection" title="2.2.3 What is configured where?">
+<link href="ch2.html#s-sec-texmfcnf-and-update-texmf" rel="subsection" title="2.4.1 texmf.cnf and update-texmf">
+<link href="ch2.html#s2.4.2" rel="subsection" title="2.4.2 fmtutil.cnf and update-fmtutil, updmap.cfg and update-updmap, language.dat and update-language">
+<link href="ch2.html#s-jadetex-xmltex-specialcase" rel="subsection" title="2.4.3 A special case in update-fmtutil: Formats which are based on other formats">
+<link href="ch2.html#s-sec-user-config-files" rel="subsection" title="2.4.4 Per user configuration changes">
+
+</head>
+
+<body>
+
+<p><a name="ch4"></a></p>
+<hr>
+
+<p>
+[ <a href="ch3.html">previous</a> ]
+[ <a href="index.html#contents">Contents</a> ]
+[ <a href="ch1.html">1</a> ]
+[ <a href="ch2.html">2</a> ]
+[ <a href="ch3.html">3</a> ]
+[ 4 ]
+[ <a href="ch5.html">5</a> ]
+[ <a href="ch5.html">next</a> ]
+</p>
+
+<hr>
+
+<h1>
+Debian-specific information about TeX packages
+<br>Chapter 4 - How to install additional or updated (La)TeX packages or fonts
+</h1>
+
+<hr>
+
+<p>
+If you want to install additional (La)TeX stuff, you have to:
+</p>
+<ol type="1" start="1" >
+<li>
+<p>
+install it at a place where TeX can find it;
+</p>
+</li>
+</ol>
+<ol type="1" start="2" >
+<li>
+<p>
+register it properly.
+</p>
+</li>
+</ol>
+
+<p>
+This can generally be done site-wide (by an administrator who has write access
+to at least <code>/usr/local/share/texmf</code> and <code>/etc/texmf</code>),
+or on a per-user basis.  This can be done by any user on the system, without
+requiring write access to system directories.  Some people might also find it
+more convenient in case they share their home directory between a couple of
+machines, even if they do have administrator rights.
+</p>
+
+<p>
+In the following, we first explain the principles by describing a site-wide
+setup; then we explain the details for user-specific setup.
+</p>
+
+<hr>
+
+<h2><a name="s4.1"></a>4.1 (La)TeX input files</h2>
+
+<p>
+This is usually quite easy.  Put the files in an appropriate directory below
+<var>TEXMFLOCAL</var>, which is the directory tree rooted at
+<code>/usr/local/share/texmf</code>.
+</p>
+
+<p>
+For LaTeX packages, create the directory
+<code>tex/latex/<var>packagename</var></code> within that tree (or use
+<code>tex/latex/misc</code>) and put the files there; the documentation should
+be put into <code>doc/latex/<var>packagename</var></code>.  If the package
+comes as a pair of <code>.dtx</code> and <code>.ins</code> files, you need to
+run <code>latex</code> over the <code>.ins</code> file in order to produce the
+package files, and over the <code>.dtx</code> file to produce the
+documentation.  After that, the <code>.dtx</code> and <code>.ins</code> files
+are no longer needed.  Please refer to the <code>README</code> file of the
+package if there is one.
+</p>
+
+<p>
+After that, <em>registering</em> is easy: just run the command
+<code>mktexlsr</code> (also called <code>texhash</code>).  This will regenerate
+the <code>ls-R</code> file for all <var>TEXMF</var> trees you have write access
+to.
+</p>
+
+<hr>
+
+<h2><a name="s4.2"></a>4.2 Complex installations</h2>
+
+<p>
+With some packages, e.g.  when they contain fonts, the procedure is more
+complicated.  Please follow the instructions given in the package.  The
+Debian-specific part comes in when the configuration files
+<code>texmf.cnf</code>, <code>fmtutil.cnf</code>, <code>updmap.cfg</code>, or
+<code>language.dat</code> need to be changed.  See the description above (<a
+href="ch2.html#s-sec-core-config-files">The files <code>texmf.cnf</code>,
+<code>fmtutil.cnf</code>, <code>updmap.cfg</code> and
+<code>language.dat</code>, Section 2.4</a>), the manual pages for
+<code>update-updmap</code>, <code>update-texmf</code>,
+<code>update-fmtutil</code>, <code>update-language</code> and <a
+href="#s-sec-font-installation">Font installation, Section 4.3</a>.
+</p>
+
+<hr>
+
+<h2><a name="s-sec-font-installation"></a>4.3 Font installation</h2>
+
+<p>
+If you wish to install a font package in a system-wide manner, please follow
+the instructions in this section.  If you are preparing a Debian package
+containing fonts, you should refer to the Debian TeX policy instead, which is
+shipped in the <code>tex-common</code> package.
+</p>
+
+<p>
+Generally, you should first have a look at the installation instructions that
+come with the font package, in case there is something specific to that package
+with respect to installation.  But you should make sure that you install most
+files in a subdirectory of <var>TEXMFLOCAL</var> (see <a
+href="ch2.html#s-sec-texmf-trees">Available <var>TEXMF</var> trees for users
+and system administrators, Section 2.1</a>).  This is because we are describing
+here a system-wide installation that is not done by Debian packages.
+</p>
+
+<p>
+For instance, AFM files should be stored into
+<code><var>TEXMFLOCAL</var>/fonts/afm/<var>supplier</var>/<var>typeface</var>/</code>
+where <var>supplier</var> identifies the supplier of the fonts (for instance,
+<samp>adobe</samp>, <samp>urw</samp> or <samp>public</samp>) and
+<var>typeface</var> refers to the name of the font family (e.g.,
+<samp>marvosym</samp> or <samp>lm</samp>).  If in doubt, you should have a look
+at the system trees managed by Debian packages, <code>/usr/share/texmf</code>,
+<code>/usr/share/texmf-texlive</code> and
+<code>/usr/share/texmf-texlive</code>; they follow the same layout, called the
+TeX Directory Structure (which is documented at <code><a
+href="http://www.tug.org/tds/">http://www.tug.org/tds/</a></code>).
+</p>
+
+<p>
+In order for the various TeX-related programs to be able to use a font, you
+need to somehow register its map files (simply copying the files to
+<var>TEXMFLOCAL</var> is not enough).  You can do this with the following
+steps, performed as <samp>root</samp>, where <var>foo</var> stands for the name
+of the font package you are installing:
+</p>
+<ol type="1" start="1" >
+<li>
+<p>
+Make sure you have stored all the relevant files shipped in the package
+(<code>.afm</code>, <code>.tfm</code>, <code>.pfb</code>, <code>.pfa</code>,
+<code>.mf</code>, <code>.fd</code>, <code>.enc</code>, <code>.map</code>,
+<code>.sty</code> are all relevant in this context) in the appropriate
+subdirectories of <var>TEXMFLOCAL</var>, as explained above.
+</p>
+
+<p>
+Note: in teTeX 3 and current TeX Live (as opposed to teTeX 2):
+</p>
+<ul>
+<li>
+<p>
+<code>.map</code> files should go to
+<code><var>TEXMFLOCAL</var>/fonts/map/<var>syntax</var>/<var>foo</var>/</code>
+</p>
+</li>
+<li>
+<p>
+<code>.enc</code> files should go to
+<code><var>TEXMFLOCAL</var>/fonts/enc/<var>syntax</var>/<var>foo</var>/</code>
+</p>
+</li>
+</ul>
+
+<p>
+where <var>syntax</var> indicates the syntax followed by the files (it is often
+<samp>dvips</samp>).  Please refer to the teTeX Manual for details.  You can
+read this manual with the command
+</p>
+
+<pre>
+     texdoc TETEXDOC
+</pre>
+</li>
+</ol>
+<ol type="1" start="2" >
+<li>
+<p>
+Create a configuration file
+<code>/etc/texmf/updmap.d/10local-<var>foo</var>.cfg</code> (the extension
+<code>.cfg</code> is important!  You can also use one <code>10local.cfg</code>
+for all your locally installed fonts).  The file should list the map files you
+stored in step 1 under <var>TEXMFLOCAL</var>, with one line per file, as in:
+</p>
+
+<pre>
+     # This is a comment line
+     Map <var>foo</var>.map
+     Map other-map-file-from-package-<var>foo</var>.map
+</pre>
+
+<p>
+If a font is available both as bitmap and outline, you should use
+<samp>MixedMap</samp> instead of <samp>Map</samp>.  Please refer to the manual
+pages for <code>update-updmap</code> and <code>updmap-sys</code> for details.
+</p>
+
+<p>
+You can also use <samp>updmap-sys --enable Map <var>foo</var>.map</samp>; this
+will create the <code>10local.cfg</code> file for you.
+</p>
+</li>
+</ol>
+<ol type="1" start="3" >
+<li>
+<p>
+Run the program <code>update-updmap</code>.  This will generate an appropriate
+<code>updmap.cfg</code> file under <code>/var/lib/texmf/web2c/</code> (not
+<code>/etc/texmf/</code>!), containing the <samp>Map</samp> and/or
+<samp>MixedMap</samp> lines taken from <code>10local-<var>foo</var>.cfg</code>.
+</p>
+
+<p>
+Note: modifying <code>updmap.cfg</code> directly is not supported in Debian,
+because Debian font packages need to update it when they are installed or
+removed.  This is why <code>updmap.cfg</code> is not stored under
+<code>/etc</code> and why you have to use <code>update-updmap</code> whenever
+you want to modify it.
+</p>
+</li>
+</ol>
+<ol type="1" start="4" >
+<li>
+<p>
+Run the program <code>mktexlsr</code> (or <code>texhash</code>, which is the
+same).  This will record all the newly created files in <code>ls-R</code> files
+(these are used by TeX-related programs as indices to find the files they need
+when operating).
+</p>
+</li>
+</ol>
+<ol type="1" start="5" >
+<li>
+<p>
+Run the program <code>updmap-sys</code>.  This will use your updated
+<code>updmap.cfg</code> to generate files that are needed by
+<code>dvips</code>, <code>pdflatex</code>, <code>dvipdfm</code>, etc., such as
+<code>psfonts.map</code> and <code>pdftex.map</code>.
+</p>
+</li>
+</ol>
+
+<p>
+At this point, the font package should be properly installed for all users on
+the system.
+</p>
+
+<hr>
+
+<h2><a name="s-sec-user-specific-installation"></a>4.4 User-specific installation</h2>
+
+<p>
+Instead of a system-wide installation, one can also install input files and
+fonts in the private <var>TEXMFHOME</var>, which is set to
+<code>$HOME/texmf</code> by default.  For fonts, compared to the system-wide
+installation explained above, the following changes have to be made:
+</p>
+<ul>
+<li>
+<p>
+In step 1, copy all relevant files to the appropriate subdirectories in
+<var>TEXMFHOME</var>.
+</p>
+</li>
+</ul>
+<ul>
+<li>
+<p>
+The configuration file created in step 2 should be placed in
+<var>TEXMFCONFIG</var> (<code>$HOME/.texmf-config</code> by default).  An
+appropriate place would be <code><var>TEXMFCONFIG</var>/updmap.d/</code>.  Note
+that most likely you will have to create this directory first.
+</p>
+
+<p>
+As for the site-wide installation, you can also use <samp>updmap --enable Map
+<var>foo</var>.map</samp>.
+</p>
+</li>
+</ul>
+<ul>
+<li>
+<p>
+After updating the <code>ls-R</code> files with <code>mktexlsr</code> or
+<code>texhash</code> (step 4), one has to generate the map files in step 5.
+This is done by running the program <code>updmap</code> instead of
+<code>updmap-sys</code>.  The generated files are created in directories below
+<var>TEXMFVAR</var>.
+</p>
+</li>
+</ul>
+
+<p>
+Note that <code>update-updmap</code> merges the configuration files in
+<code>$HOME/.texmf-config/web2c/updmap.d</code> and in
+<code>/etc/texmf/updmap.d</code>.  Therefore, all system-wide installed fonts
+are accessible without duplicating their configuration files.  Merging the
+configuration files is done on the basis of file names: If a file exists in
+both directories, the version in <var>TEXMFCONFIG</var> takes precedence.
+Thus, you can also use this mechanism to change settings compared to the
+site-wide configuration, e.g.  by keeping a changed copy of
+<code>00updmap.cfg</code> in <code><var>TEXMFCONFIG</var>/updmap.d/</code>.
+</p>
+
+<p>
+Keep in mind that you still have to call <code>update-updmap</code> whenever
+the system-wide installation changes.  If you keep a changed copy of a file
+from the site-wide directories, you need to manually merge any changes to this
+file, if desired.
+</p>
+
+<hr>
+
+<p>
+[ <a href="ch3.html">previous</a> ]
+[ <a href="index.html#contents">Contents</a> ]
+[ <a href="ch1.html">1</a> ]
+[ <a href="ch2.html">2</a> ]
+[ <a href="ch3.html">3</a> ]
+[ 4 ]
+[ <a href="ch5.html">5</a> ]
+[ <a href="ch5.html">next</a> ]
+</p>
+
+<hr>
+
+<p>
+Debian-specific information about TeX packages
+</p>
+
+<address>
+generated from $Id: TeX-on-Debian.sgml 4540 2010-01-18 16:59:06Z preining $<br>
+<br>
+The Debian TeX mailing list <code><a href="mailto:debian-tex-maint@lists.debian.org">debian-tex-maint@lists.debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

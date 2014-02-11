@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+
+<title>The Debian TeX sub-policy - Footnotes</title>
+
+<link href="index.html" rel="start">
+<link href=".html" rel="prev">
+<link href=".html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 About this document">
+<link href="ch2.html" rel="chapter" title="2 Terms and Definitions">
+<link href="ch3.html" rel="chapter" title="3 TeX packages for the impatient">
+<link href="ch4.html" rel="chapter" title="4 Meta-packages and dependencies">
+<link href="ch5.html" rel="chapter" title="5 File Placement">
+<link href="ch6.html" rel="chapter" title="6 Configuration">
+<link href="apA.html" rel="appendix" title="A Sample code">
+<link href="ch5.html#s-tds-libkpse" rel="section" title="5.1 File searching and libkpathsea / libkpse">
+<link href="ch5.html#s5.2" rel="section" title="5.2 Directory trees">
+<link href="ch5.html#s5.3" rel="section" title="5.3 Generated files">
+<link href="ch5.html#s-sec-names-and-texmfsite" rel="section" title="5.4 Filenames and installation of alternative files">
+<link href="ch5.html#s-sec-documentation" rel="section" title="5.5 Documentation">
+<link href="ch6.html#s-configurationfiles" rel="section" title="6.1 Configuration files">
+<link href="ch6.html#s-update-progs" rel="section" title="6.2 Configuration update programs">
+<link href="ch6.html#s6.3" rel="section" title="6.3 Best practices for packages that build-depend on the TeX system">
+<link href="ch6.html#s6.4" rel="section" title="6.4 Command execution and format files">
+<link href="ch6.html#s6.5" rel="section" title="6.5 The Dpkg Post-Invoke Mechanism">
+<link href="apA.html#s-appen-sample-font" rel="section" title="A.1 Sample code for font packages">
+<link href="ch6.html#s-sec-font-configuration" rel="subsection" title="6.2.1 Font configuration">
+<link href="ch6.html#s-font-configuration-details" rel="subsection" title="6.2.1.1 Description of manual font package setup">
+<link href="ch6.html#s-font-configuration-rationale" rel="subsection" title="6.2.1.2 Rationale">
+<link href="ch6.html#s6.2.2" rel="subsection" title="6.2.2 Language/Hyphenation configuration">
+<link href="ch6.html#s6.2.3" rel="subsection" title="6.2.3 Format configuration">
+<link href="ch6.html#s6.3.1" rel="subsection" title="6.3.1 Configuration">
+<link href="ch6.html#s6.3.2" rel="subsection" title="6.3.2 Font cache data">
+
+</head>
+
+<body>
+
+<hr>
+
+<h1>
+The Debian TeX sub-policy
+<br>Footnotes</h1>
+
+<h2><a href="ch4.html#fr1" name="f1">1</a></h2>
+
+<p>
+This is, for example, required to be able to adapt dependencies of metapackages
+according to the users' needs.
+</p>
+
+<h2><a href="ch5.html#fr2" name="f2">2</a></h2>
+
+<p>
+This is new, and the basic TeX packages currently transition their files to the
+new place.
+</p>
+
+<h2><a href="ch5.html#fr3" name="f3">3</a></h2>
+
+<p>
+Reasons include hardcoded paths in executables as well as the need for e.g.
+pool files to exactly match the binaries' version, so that shadowing must be
+prevented.
+</p>
+
+<h2><a href="ch5.html#fr4" name="f4">4</a></h2>
+
+<p>
+Of course this is only a problem if the file is needed in the configure phase.
+If it is needed only at runtime, a README file to instruct the local admin
+should be sufficient.
+</p>
+
+<h2><a href="ch5.html#fr5" name="f5">5</a></h2>
+
+<p>
+Per default, this tree is located in the world-writeable directory
+<code>/tmp/texfonts/</code>, in order to allow automatic package builds to work
+without user directories.  On multi user systems, the admin might want to
+change this to a persistent directory and set up proper permissions
+</p>
+
+<h2><a href="ch5.html#fr6" name="f6">6</a></h2>
+
+<p>
+A wishlist bug on the shadowing package, blocked by an other wishlist bug on
+the basic TeX package, can help tracking these issues.
+</p>
+
+<h2><a href="ch5.html#fr7" name="f7">7</a></h2>
+
+<p>
+This allows users to say <samp>texdoc <var>packagename</var></samp> directly.
+Otherwise they will first have to find the right command line (e.g.
+<samp>texdoc <var>packagename</var>/user.dvi</samp>) using <samp>texdoc -s
+<var>keyword</var></samp>
+</p>
+
+<h2><a href="ch6.html#fr8" name="f8">8</a></h2>
+
+<p>
+Note that in <code>texmf.cnf</code>, as well as in the sequence of multiple
+<code>texmf.cnf</code> files that are read, earlier entries override later
+ones.
+</p>
+
+<h2><a href="ch6.html#fr9" name="f9">9</a></h2>
+
+<p>
+Filenames starting with <samp>10</samp> are reserved for the Basic TeX
+packages.  However, sorting order is actually only relevant for snippets for
+<code>texmf.cnf</code>, <code>fmtutil.cnf</code> and <code>language.dat</code>.
+</p>
+
+<h2><a href="ch6.html#fr10" name="f10">10</a></h2>
+
+<p>
+However, <code>update-updmap</code> uses <code>libkpathsea</code> only in
+user-specific-mode.  In system-wide mode, it doesn't matter whether
+<code>libkpathsea</code> is configured or not.
+</p>
+
+<h2><a href="ch6.html#fr11" name="f11">11</a></h2>
+
+<p>
+An <code>update-updmap</code> call could take place if another package such as
+<code>tetex-bin</code> is configured in the meantime.  That happens sometimes
+with APT.
+</p>
+
+<h2><a href="ch6.html#fr12" name="f12">12</a></h2>
+
+<p>
+The reason is that, in order to avoid other problems,
+<code>update-fmtutil</code> ignores files in <code>/etc/texmf/fmt.d</code> that
+have a corresponding <code>.dpkg-new</code> file, and that it is necessary to
+recreate all formats when pool files or engines are updated.  Thus, some Basic
+TeX packages call <samp>fmtutil --all</samp> in their postinst scripts.  When
+Basic TeX packages are upgraded together while a package that loads
+<code>latex.fmt</code> is installed and configured, then one of the Basic TeX
+packages' postinst will call <code>update-fmtutil</code> and <samp>fmtutil
+--all</samp> while others are is still unconfigured and have
+<code>.dpkg-new</code> files.  Consequently, no format information for e.g.
+LaTeX is available, and the generation of the format that wants to load it
+would fail.  However, since all files needed to create e.g.
+<code>latex.fmt</code> are available, the depending format can
+<samp>\input</samp> <code>latex.ini</code> and create its own format without
+problems.
+</p>
+
+<hr>
+
+<p>
+The Debian TeX sub-policy
+</p>
+
+<address>
+generated from $Id: Debian-TeX-Policy.sgml 4540 2010-01-18 16:59:06Z preining $<br>
+<br>
+The Debian TeX mailing list <code><a href="mailto:debian-tex-maint@lists.debian.org">debian-tex-maint@lists.debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

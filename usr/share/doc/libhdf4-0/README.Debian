@@ -1,0 +1,31 @@
+HDF4 library for Debian
+-----------------------
+
+The library is documented in libhdf4g-doc with the old-style HTML pages
+for 4.1r3. A modern an better documentation can be downloaded from
+ftp://ftp.hdfgroup.org/HDF/Documentation/ for every successive release
+as PDF files.
+
+In respect with the upstream release that distributes only static
+libraries, Debian HDF4 libraries (both C and Fortran) are installed 
+as both shared and static libraries. The preferred mode of use is 
+the shared form. Note that upstream supports currently only C shared
+libraries edition with the same SONAME used.
+
+Upstream changes in the library are documented in the release files
+here available:
+
+ftp://ftp.hdfgroup.org/HDF/prev-releases/ReleaseFiles
+
+HDF4 libraries provide a partial NetCDF support embedded, which is only
+partially compatible with the original one. Therefore, the libraries
+are distributed in Debian in two different flavors: the standard
+(traditional) one, with embedded NetCDF functions and Fortran support,
+and the -alt one with a non-colliding namespace for the NetCDF
+functions - thanks to the use of an sd_ prefix - that lacks Fortran
+support. The -alt flavor can be used for creating binaries that
+link both HDF4 and NetCDF libraries without collisions or
+malfunctions.
+
+-- Francesco Paolo Lovergine <frankie@debian.org>  Sat Jun 21 00:11:15 CEST 2008
+

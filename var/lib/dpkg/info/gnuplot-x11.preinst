@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+if [ "$1" = install ] || [ "$1" = upgrade ] ; then
+    dpkg-divert --add --package gnuplot-x11 --rename \
+        --divert /usr/bin/gnuplot-nox /usr/bin/gnuplot
+    dpkg-divert --add --package gnuplot-x11 --rename \
+        --divert /usr/share/man/man1/gnuplot-nox.1.gz \
+        /usr/share/man/man1/gnuplot.1.gz
+fi
+
+
+
+exit 0

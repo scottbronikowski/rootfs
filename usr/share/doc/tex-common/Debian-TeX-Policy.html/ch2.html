@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+
+<title>The Debian TeX sub-policy - Terms and Definitions</title>
+
+<link href="index.html" rel="start">
+<link href="ch1.html" rel="prev">
+<link href="ch3.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch1.html" rel="chapter" title="1 About this document">
+<link href="ch2.html" rel="chapter" title="2 Terms and Definitions">
+<link href="ch3.html" rel="chapter" title="3 TeX packages for the impatient">
+<link href="ch4.html" rel="chapter" title="4 Meta-packages and dependencies">
+<link href="ch5.html" rel="chapter" title="5 File Placement">
+<link href="ch6.html" rel="chapter" title="6 Configuration">
+<link href="apA.html" rel="appendix" title="A Sample code">
+<link href="ch5.html#s-tds-libkpse" rel="section" title="5.1 File searching and libkpathsea / libkpse">
+<link href="ch5.html#s5.2" rel="section" title="5.2 Directory trees">
+<link href="ch5.html#s5.3" rel="section" title="5.3 Generated files">
+<link href="ch5.html#s-sec-names-and-texmfsite" rel="section" title="5.4 Filenames and installation of alternative files">
+<link href="ch5.html#s-sec-documentation" rel="section" title="5.5 Documentation">
+<link href="ch6.html#s-configurationfiles" rel="section" title="6.1 Configuration files">
+<link href="ch6.html#s-update-progs" rel="section" title="6.2 Configuration update programs">
+<link href="ch6.html#s6.3" rel="section" title="6.3 Best practices for packages that build-depend on the TeX system">
+<link href="ch6.html#s6.4" rel="section" title="6.4 Command execution and format files">
+<link href="ch6.html#s6.5" rel="section" title="6.5 The Dpkg Post-Invoke Mechanism">
+<link href="apA.html#s-appen-sample-font" rel="section" title="A.1 Sample code for font packages">
+<link href="ch6.html#s-sec-font-configuration" rel="subsection" title="6.2.1 Font configuration">
+<link href="ch6.html#s-font-configuration-details" rel="subsection" title="6.2.1.1 Description of manual font package setup">
+<link href="ch6.html#s-font-configuration-rationale" rel="subsection" title="6.2.1.2 Rationale">
+<link href="ch6.html#s6.2.2" rel="subsection" title="6.2.2 Language/Hyphenation configuration">
+<link href="ch6.html#s6.2.3" rel="subsection" title="6.2.3 Format configuration">
+<link href="ch6.html#s6.3.1" rel="subsection" title="6.3.1 Configuration">
+<link href="ch6.html#s6.3.2" rel="subsection" title="6.3.2 Font cache data">
+
+</head>
+
+<body>
+
+<p><a name="ch2"></a></p>
+<hr>
+
+<p>
+[ <a href="ch1.html">previous</a> ]
+[ <a href="index.html#contents">Contents</a> ]
+[ <a href="ch1.html">1</a> ]
+[ 2 ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch4.html">4</a> ]
+[ <a href="ch5.html">5</a> ]
+[ <a href="ch6.html">6</a> ]
+[ <a href="apA.html">A</a> ]
+[ <a href="ch3.html">next</a> ]
+</p>
+
+<hr>
+
+<h1>
+The Debian TeX sub-policy
+<br>Chapter 2 - Terms and Definitions
+</h1>
+
+<hr>
+
+<p>
+The following terms are used in this document:
+</p>
+<dl>
+<dt>TeX-related package</dt>
+<dd>
+<p>
+Any Debian package that uses or provides parts of the TeX infrastructure, i.e.
+the TeX or Metafont program or derivatives thereof, fonts or input files in a
+<var>TEXMF</var> tree, etc.
+</p>
+</dd>
+</dl>
+<dl>
+<dt><code>tex-common</code></dt>
+<dd>
+<p>
+This package provides basic infrastructure and some configuration files for all
+TeX-related packages, including the <code>configuration update programs</code>.
+</p>
+</dd>
+</dl>
+<dl>
+<dt>Basic TeX packages</dt>
+<dd>
+<p>
+A Basic TeX package is a Debian package that provides the basic infrastructure
+for TeX-related programs.  It should provide sufficient functionality for
+typesetting most generated (La)TeX code, e.g.  from docbook, debiandoc, or
+texinfo sources.  Usually, the Basic TeX packages will be divided into an
+architecture-dependent and an architecture-independent package.
+</p>
+
+<p>
+The arch-dependent package must provide at least one binary that is fully
+compatible with Donald E.  Knuth's original TeX program, and it should provide
+the original TeX itself.  The output formats <samp>dvi</samp>, PostScript and
+Adobe PDF must be available, either directly or by conversion of other output
+formats.  The arch-independent package must provide at least the files
+necessary to create the formats for plain TeX and LaTeX and the input files
+required by the LaTeX distribution, as well as the Computer Modern fonts.
+</p>
+</dd>
+</dl>
+<dl>
+<dt>TDS</dt>
+<dd>
+<p>
+The TeX Directory Structure, which describes file placement for TeX input
+files.  The current version of the TDS is installed with this document as
+<code><a href="file:///usr/share/doc/tex-common/tds.pdf">tds.pdf</a></code> and
+<code><a href="file:///usr/share/doc/tex-common/tds.html">tds.html</a></code>.
+The latest version of the TDS is available at <samp><code><a
+href="http://www.tug.org/twg/tds/">http://www.tug.org/twg/tds/</a></code></samp>.
+</p>
+</dd>
+</dl>
+<dl>
+<dt><var>TEXMF</var> tree</dt>
+<dd>
+<p>
+One directory tree, arranged according to the TDS
+</p>
+</dd>
+</dl>
+<dl>
+<dt>TeX input file</dt>
+<dd>
+<p>
+A file that is meant to be used by a TeX-related program; technically any file
+that can be found by the <code>/kpathsea/kpse</code> library.  This includes
+e.g.  Type1 font files.
+</p>
+</dd>
+</dl>
+<dl>
+<dt>configuration update programs</dt>
+<dd>
+<p>
+The configuration information from files provided by different TeX-related
+packages must be merged and made available in appropriate form to the various
+programs.  This is usually done by scripts that write files into the
+<var>TEXMFSYSVAR</var> tree.
+</p>
+
+<p>
+Currently, the configuration update programs provided by
+<code>tex-common</code> are: <code>update-texmf</code>,
+<code>update-fmtutil</code>, <code>update-language</code>,
+<code>update-updmap</code>.
+</p>
+</dd>
+</dl>
+
+<hr>
+
+<p>
+[ <a href="ch1.html">previous</a> ]
+[ <a href="index.html#contents">Contents</a> ]
+[ <a href="ch1.html">1</a> ]
+[ 2 ]
+[ <a href="ch3.html">3</a> ]
+[ <a href="ch4.html">4</a> ]
+[ <a href="ch5.html">5</a> ]
+[ <a href="ch6.html">6</a> ]
+[ <a href="apA.html">A</a> ]
+[ <a href="ch3.html">next</a> ]
+</p>
+
+<hr>
+
+<p>
+The Debian TeX sub-policy
+</p>
+
+<address>
+generated from $Id: Debian-TeX-Policy.sgml 4540 2010-01-18 16:59:06Z preining $<br>
+<br>
+The Debian TeX mailing list <code><a href="mailto:debian-tex-maint@lists.debian.org">debian-tex-maint@lists.debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+
