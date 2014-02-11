@@ -1,0 +1,15 @@
+#!/bin/sh
+
+JAVA=/usr/lib/jvm/java-6-openjdk-armhf/jre/bin/java
+LAUNCHER_BOOTCLASSPATH="-Xbootclasspath/a:/usr/share/icedtea-web/netx.jar"
+LAUNCHER_FLAGS=-Xms8m
+CLASSNAME=net.sourceforge.jnlp.controlpanel.CommandLine
+BINARY_LOCATION=/usr/bin/itweb-settings
+PROGRAM_NAME=itweb-settings
+
+${JAVA} ${LAUNCHER_BOOTCLASSPATH} ${LAUNCHER_FLAGS} \
+  -Dicedtea-web.bin.name=${PROGRAM_NAME} \
+  -Dicedtea-web.bin.location=${BINARY_LOCATION} \
+  ${CLASSNAME} \
+  $@
+

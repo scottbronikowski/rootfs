@@ -1,0 +1,17 @@
+#! /bin/sh -e
+
+case "$1" in
+    configure)
+	docdir=/usr/share/doc/libgcj12
+	if [ -d $docdir ] && [ ! -h $docdir ]; then
+	  rm -rf /usr/share/doc/libgcj12
+	  ln -s gcj-4.6-base /usr/share/doc/libgcj12
+	fi
+esac
+
+# Automatically added by dh_makeshlibs
+if [ "$1" = "configure" ]; then
+	ldconfig
+fi
+# End automatically added section
+
