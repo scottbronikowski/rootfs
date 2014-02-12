@@ -1,0 +1,95 @@
+-- configuration handling for texdoc
+--[[ 
+Copyright 2008, 2009 Manuel Pégourié-Gonnard
+Distributed under the terms of the GNU GPL version 3 or later.
+See texdoc.tlu for details.
+--]]
+
+local L = {}
+load_env(L, {
+    'export_symbols',
+    'string', 'table', 'os', 'kpse', 'lfs', 'io',
+    'deb_print', 'tostring', 'tonumber',
+    'C',
+    'config',
+})
+
+-- structure of an alias entry
+-- 
+-- aliasentry = {
+--   name   = <string> pattern to be matched,
+--   score  = <number> associated score (may be nil),
+--   original = <boolean> is this the original keyword?,
+-- }
+
+-- alias is local to this file
+local alias = {}
+
+-- turn a name into a suitable alias entry
+-- if score is 'false', this is the original name
+function make_alias(pat, score)
+    local al = {}
+    al.name = pat
+    if score == false then
+        al.original = true
+    else
+        al.score = score -- may be nil
+    end
+    return al
+end
+
+-- add an alias value for a key
+function add_alias(key, value, score)
+    local k = string.lower(key)
+    alias[k] = alias[k] or { make_alias(key, false) }
+    if alias[k].stop then return end
+    table.insert(alias[k], make_alias(value, score))
+end
+
+-- prevent a key from begin further aliased
+function stop_alias(key)
+    local k = string.lower(key)
+    alias[k] = alias[k] or {}
+    alias[k].stop = true
+end
+
+-- get patterns for a name
+function get_patterns(name)
+    local n = string.lower(name)
+    if config.mode ~= 'regex' and config.alias_switch and alias[n] then
+        return alias[n]
+    else
+        return { make_alias(name, false) }
+    end
+end
+
+-- interpret a confline as an alias setting or return false
+function confline_to_alias(line, file, pos)
+    -- alias directive without score
+    local key, val = string.match(line, '^alias%s+([%w%p]+)%s*=%s*(.+)')
+    if key and val then
+        add_alias(key, val)
+        return true
+    end
+    -- alias directive with score
+    local score, key, val = string.match(line,
+        '^alias%(([%d+-.]+)%)%s+([%w%p]+)%s*=%s*(.+)')
+    if score then score = tonumber(score) end
+    if key and val and score then
+        add_alias(key, val, score)
+        return true
+    end
+    -- stopalias directive
+    local key = string.match(line, '^stopalias%s+(.+)')
+    if key then 
+        stop_alias(key)
+        return true
+    end
+    return false
+end
+
+-- finally export a few symbols
+export_symbols(L, {
+    'confline_to_alias',
+    'get_patterns',
+})

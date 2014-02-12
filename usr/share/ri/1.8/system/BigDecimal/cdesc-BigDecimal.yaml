@@ -1,0 +1,319 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: _load
+- !ruby/object:RI::MethodSummary 
+  name: double_fig
+- !ruby/object:RI::MethodSummary 
+  name: limit
+- !ruby/object:RI::MethodSummary 
+  name: mode
+- !ruby/object:RI::MethodSummary 
+  name: new
+- !ruby/object:RI::MethodSummary 
+  name: ver
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: BigDecimal provides arbitrary-precision floating point decimal arithmetic.
+- !ruby/struct:SM::Flow::P 
+  body: Copyright (C) 2002 by Shigeo Kobayashi &lt;shigeo@tinyforest.gr.jp&gt;. You may distribute under the terms of either the GNU General Public License or the Artistic License, as specified in the README file of the BigDecimal distribution.
+- !ruby/struct:SM::Flow::P 
+  body: Documented by mathew &lt;meta@pobox.com&gt;.
+- !ruby/struct:SM::Flow::H 
+  level: 1
+  text: Introduction
+- !ruby/struct:SM::Flow::P 
+  body: "Ruby provides built-in support for arbitrary precision integer arithmetic. For example:"
+- !ruby/struct:SM::Flow::P 
+  body: 42**13 -&gt; 1265437718438866624512
+- !ruby/struct:SM::Flow::P 
+  body: BigDecimal provides similar support for very large or very accurate floating point numbers.
+- !ruby/struct:SM::Flow::P 
+  body: "Decimal arithmetic is also useful for general calculation, because it provides the correct answers people expect--whereas normal binary floating point arithmetic often introduces subtle errors because of the conversion between base 10 and base 2. For example, try:"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  sum = 0\n  for i in (1..10000)\n    sum = sum + 0.0001\n  end\n  print sum\n"
+- !ruby/struct:SM::Flow::P 
+  body: "and contrast with the output from:"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  require 'bigdecimal'\n\n  sum = BigDecimal.new(&quot;0&quot;)\n  for i in (1..10000)\n    sum = sum + BigDecimal.new(&quot;0.0001&quot;)\n  end\n  print sum\n"
+- !ruby/struct:SM::Flow::P 
+  body: "Similarly:"
+- !ruby/struct:SM::Flow::P 
+  body: (BigDecimal.new(&quot;1.2&quot;) - BigDecimal(&quot;1.0&quot;)) == BigDecimal(&quot;0.2&quot;) -&gt; true
+- !ruby/struct:SM::Flow::P 
+  body: (1.2 - 1.0) == 0.2 -&gt; false
+- !ruby/struct:SM::Flow::H 
+  level: 1
+  text: Special features of accurate decimal arithmetic
+- !ruby/struct:SM::Flow::P 
+  body: Because BigDecimal is more accurate than normal binary floating point arithmetic, it requires some special values.
+- !ruby/struct:SM::Flow::H 
+  level: 2
+  text: Infinity
+- !ruby/struct:SM::Flow::P 
+  body: BigDecimal sometimes needs to return infinity, for example if you divide a value by zero.
+- !ruby/struct:SM::Flow::P 
+  body: BigDecimal.new(&quot;1.0&quot;) / BigDecimal.new(&quot;0.0&quot;) -&gt; infinity
+- !ruby/struct:SM::Flow::P 
+  body: BigDecimal.new(&quot;-1.0&quot;) / BigDecimal.new(&quot;0.0&quot;) -&gt; -infinity
+- !ruby/struct:SM::Flow::P 
+  body: You can represent infinite numbers to BigDecimal using the strings 'Infinity', '+Infinity' and '-Infinity' (case-sensitive)
+- !ruby/struct:SM::Flow::H 
+  level: 2
+  text: Not a Number
+- !ruby/struct:SM::Flow::P 
+  body: When a computation results in an undefined value, the special value NaN (for 'not a number') is returned.
+- !ruby/struct:SM::Flow::P 
+  body: "Example:"
+- !ruby/struct:SM::Flow::P 
+  body: BigDecimal.new(&quot;0.0&quot;) / BigDecimal.new(&quot;0.0&quot;) -&gt; NaN
+- !ruby/struct:SM::Flow::P 
+  body: "You can also create undefined values. NaN is never considered to be the same as any other value, even NaN itself:"
+- !ruby/struct:SM::Flow::P 
+  body: n = BigDecimal.new('NaN')
+- !ruby/struct:SM::Flow::P 
+  body: n == 0.0 -&gt; nil
+- !ruby/struct:SM::Flow::P 
+  body: n == n -&gt; nil
+- !ruby/struct:SM::Flow::H 
+  level: 2
+  text: Positive and negative zero
+- !ruby/struct:SM::Flow::P 
+  body: If a computation results in a value which is too small to be represented as a BigDecimal within the currently specified limits of precision, zero must be returned.
+- !ruby/struct:SM::Flow::P 
+  body: If the value which is too small to be represented is negative, a BigDecimal value of negative zero is returned. If the value is positive, a value of positive zero is returned.
+- !ruby/struct:SM::Flow::P 
+  body: BigDecimal.new(&quot;1.0&quot;) / BigDecimal.new(&quot;-Infinity&quot;) -&gt; -0.0
+- !ruby/struct:SM::Flow::P 
+  body: BigDecimal.new(&quot;1.0&quot;) / BigDecimal.new(&quot;Infinity&quot;) -&gt; 0.0
+- !ruby/struct:SM::Flow::P 
+  body: (See BigDecimal.mode for how to specify limits of precision.)
+- !ruby/struct:SM::Flow::P 
+  body: Note that -0.0 and 0.0 are considered to be the same for the purposes of comparison.
+- !ruby/struct:SM::Flow::P 
+  body: Note also that in mathematics, there is no particular concept of negative or positive zero; true mathematical zero has no sign.
+constants: 
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Base value used in internal calculations. On a 32 bit system, BASE is 10000, indicating that calculation is done in groups of 4 digits. (If it were larger, BASE**2 wouldn't fit in 32 bits, so you couldn't guarantee that two groups could always be multiplied together without overflow.)
+  name: BASE
+  value: INT2FIX((S_INT)VpBaseVal())
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Determines whether overflow, underflow or zero divide result in an exception being thrown. See BigDecimal.mode.
+  name: EXCEPTION_ALL
+  value: "0xff"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Determines what happens when the result of a computation is not a number (NaN). See BigDecimal.mode.
+  name: EXCEPTION_NaN
+  value: "0x02"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Determines what happens when the result of a computation is infinity. See BigDecimal.mode.
+  name: EXCEPTION_INFINITY
+  value: "0x01"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Determines what happens when the result of a computation is an underflow (a result too small to be represented). See BigDecimal.mode.
+  name: EXCEPTION_UNDERFLOW
+  value: "0x04"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Determines what happens when the result of a computation is an underflow (a result too large to be represented). See BigDecimal.mode.
+  name: EXCEPTION_OVERFLOW
+  value: "0x01"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Determines what happens when a division by zero is performed. See BigDecimal.mode.
+  name: EXCEPTION_ZERODIVIDE
+  value: "0x01"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Determines what happens when a result must be rounded in order to fit in the appropriate number of significant digits. See BigDecimal.mode.
+  name: ROUND_MODE
+  value: "0x100"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Indicates that values should be rounded away from zero. See BigDecimal.mode.
+  name: ROUND_UP
+  value: "1"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Indicates that values should be rounded towards zero. See BigDecimal.mode.
+  name: ROUND_DOWN
+  value: "2"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Indicates that digits &gt;= 5 should be rounded up, others rounded down. See BigDecimal.mode.
+  name: ROUND_HALF_UP
+  value: "3"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Indicates that digits &gt;= 6 should be rounded up, others rounded down. See BigDecimal.mode.
+  name: ROUND_HALF_DOWN
+  value: "4"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Round towards +infinity. See BigDecimal.mode.
+  name: ROUND_CEILING
+  value: "5"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Round towards -infinity. See BigDecimal.mode.
+  name: ROUND_FLOOR
+  value: "6"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Round towards the even neighbor. See BigDecimal.mode.
+  name: ROUND_HALF_EVEN
+  value: "7"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Indicates that a value is not a number. See BigDecimal.sign.
+  name: SIGN_NaN
+  value: "0"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Indicates that a value is +0. See BigDecimal.sign.
+  name: SIGN_POSITIVE_ZERO
+  value: "1"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Indicates that a value is -0. See BigDecimal.sign.
+  name: SIGN_NEGATIVE_ZERO
+  value: "-1"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Indicates that a value is positive and finite. See BigDecimal.sign.
+  name: SIGN_POSITIVE_FINITE
+  value: "2"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Indicates that a value is negative and finite. See BigDecimal.sign.
+  name: SIGN_NEGATIVE_FINITE
+  value: "-2"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Indicates that a value is positive and infinite. See BigDecimal.sign.
+  name: SIGN_POSITIVE_INFINITE
+  value: "3"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Indicates that a value is negative and infinite. See BigDecimal.sign.
+  name: SIGN_NEGATIVE_INFINITE
+  value: "-3"
+full_name: BigDecimal
+includes: []
+
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: "%"
+- !ruby/object:RI::MethodSummary 
+  name: "*"
+- !ruby/object:RI::MethodSummary 
+  name: "**"
+- !ruby/object:RI::MethodSummary 
+  name: +
+- !ruby/object:RI::MethodSummary 
+  name: "-"
+- !ruby/object:RI::MethodSummary 
+  name: /
+- !ruby/object:RI::MethodSummary 
+  name: <
+- !ruby/object:RI::MethodSummary 
+  name: <=
+- !ruby/object:RI::MethodSummary 
+  name: <=>
+- !ruby/object:RI::MethodSummary 
+  name: ==
+- !ruby/object:RI::MethodSummary 
+  name: ===
+- !ruby/object:RI::MethodSummary 
+  name: ">"
+- !ruby/object:RI::MethodSummary 
+  name: ">="
+- !ruby/object:RI::MethodSummary 
+  name: abs
+- !ruby/object:RI::MethodSummary 
+  name: ceil
+- !ruby/object:RI::MethodSummary 
+  name: coerce
+- !ruby/object:RI::MethodSummary 
+  name: divmod
+- !ruby/object:RI::MethodSummary 
+  name: eql?
+- !ruby/object:RI::MethodSummary 
+  name: exponent
+- !ruby/object:RI::MethodSummary 
+  name: finite?
+- !ruby/object:RI::MethodSummary 
+  name: fix
+- !ruby/object:RI::MethodSummary 
+  name: floor
+- !ruby/object:RI::MethodSummary 
+  name: frac
+- !ruby/object:RI::MethodSummary 
+  name: infinite?
+- !ruby/object:RI::MethodSummary 
+  name: inspect
+- !ruby/object:RI::MethodSummary 
+  name: modulo
+- !ruby/object:RI::MethodSummary 
+  name: nan?
+- !ruby/object:RI::MethodSummary 
+  name: nonzero?
+- !ruby/object:RI::MethodSummary 
+  name: power
+- !ruby/object:RI::MethodSummary 
+  name: precs
+- !ruby/object:RI::MethodSummary 
+  name: quo
+- !ruby/object:RI::MethodSummary 
+  name: remainder
+- !ruby/object:RI::MethodSummary 
+  name: round
+- !ruby/object:RI::MethodSummary 
+  name: sign
+- !ruby/object:RI::MethodSummary 
+  name: split
+- !ruby/object:RI::MethodSummary 
+  name: sqrt
+- !ruby/object:RI::MethodSummary 
+  name: to_f
+- !ruby/object:RI::MethodSummary 
+  name: to_i
+- !ruby/object:RI::MethodSummary 
+  name: to_int
+- !ruby/object:RI::MethodSummary 
+  name: to_s
+- !ruby/object:RI::MethodSummary 
+  name: truncate
+- !ruby/object:RI::MethodSummary 
+  name: zero?
+name: BigDecimal
+superclass: Numeric

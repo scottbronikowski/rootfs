@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+<title>parametric_mode - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="autoscale.html#autoscale" title="autoscale">
+<link rel="prev" href="autoscale.html#autoscale" title="autoscale">
+<link rel="next" href="polar_005fmode.html#polar_005fmode" title="polar_mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="parametric_mode"></a>
+<a name="parametric_005fmode"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="polar_005fmode.html#polar_005fmode">polar_mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="autoscale.html#autoscale">autoscale</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="autoscale.html#autoscale">autoscale</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.3.1 parametric mode</h5>
+
+<!-- ?commands set autoscale parametric -->
+<!-- ?set autoscale parametric -->
+<!-- ?set autoscale t -->
+<p>When in parametric mode (`set parametric`), the xrange is as fully scalable
+as the y range.  In other words, in parametric mode the x axis can be
+automatically scaled to fit the range of the parametric function that is
+being plotted.  Of course, the y axis can also be automatically scaled just
+as in the non-parametric case.  If autoscaling on the x axis is not set, the
+current x range is used.
+
+   <p>Data files are plotted the same in parametric and non-parametric mode. 
+However, there is a difference in mixed function and data plots: in
+non-parametric mode with autoscaled x, the x range of the datafile controls
+the x range of the functions; in parametric mode it has no influence.
+
+   <p>For completeness a last command `set autoscale t` is accepted.  However, the
+effect of this "scaling" is very minor.  When `gnuplot` determines that the
+t range would be empty, it makes a small adjustment if autoscaling is true. 
+Otherwise, `gnuplot` gives an error.  Such behavior may, in fact, not be very
+useful and the command `set autoscale t` is certainly questionable.
+
+   <p>`splot` extends the above ideas as you would expect.  If autoscaling is set,
+then x, y, and z ranges are computed and each axis scaled to fit the
+resulting data.
+
+   </body></html>
+

@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>defined_ - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="palette.html#palette" title="palette">
+<link rel="prev" href="rgbformulae.html#rgbformulae" title="rgbformulae">
+<link rel="next" href="functions_005f.html#functions_005f" title="functions_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="defined_"></a>
+<a name="defined_005f"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="functions_005f.html#functions_005f">functions_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="rgbformulae.html#rgbformulae">rgbformulae</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="palette.html#palette">palette</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.53.2 defined</h5>
+
+<!-- ?commands set palette defined -->
+<!-- ?set palette defined -->
+<!-- ?palette defined -->
+<p><a name="index-colors-527"></a>
+Gray-to-rgb mapping can be manually set by use of <a href="defined.html#defined">defined</a>:  A color gradient
+is defined and used to give the rgb values.  Such a  gradient is a piecewise
+linear mapping from gray values in [0,1] to the RGB space [0,1]x[0,1]x[0,1]. 
+You have to specify the gray values and the corresponding RGB values in
+between a linear interpolation shall take place:
+
+   <p>Syntax:
+<pre class="example">           set palette  defined { ( &lt;gray1&gt; &lt;color1&gt; {, &lt;grayN&gt; &lt;colorN&gt;}... ) }
+     
+</pre>
+   <p>&lt;grayX&gt; are gray values which are mapped to [0,1] and &lt;colorX&gt; are the
+corresponding rgb colors.  The color can be specified in three different
+ways:
+
+<pre class="example">          &lt;color&gt; :=  { &lt;r&gt; &lt;g&gt; &lt;b&gt; | '&lt;color-name&gt;' | '#rrggbb' }
+     
+</pre>
+   <p>Either by three numbers (each in [0,1]) for red, green and blue, separated by
+whitespace, or the name of the color in quotes or X style color specifiers
+also in quotes.  You may freely mix the three types in a gradient definition,
+but the named color "red" will be something strange if RGB is not selected
+as color space.  Use <a href="colornames.html#colornames">colornames</a> for a list of known color names.
+
+   <p>Please note, that even if written as &lt;r&gt;, this might actually be the
+&lt;H&gt; component in HSV color space or &lt;X&gt; in CIE-XYZ space, or ... 
+depending on the selected color model.
+
+   <p>The &lt;gray&gt; values have to form an ascending sequence of real numbers; the
+sequence will be automatically rescaled to [0,1].
+
+   <p><a href="defined.html#defined">defined</a> (without a gradient definition in braces) switches to
+RGB color space and uses a preset full-spectrum color gradient. 
+Use `show palette gradient` to display the gradient.
+
+   <p>Examples:
+
+   <p>To produce a gray palette (useless but instructive) use:
+<pre class="example">           set palette model RGB
+           set palette defined ( 0 "black", 1 "white" )
+     
+</pre>
+   <p>To produce a blue yellow red palette use (all equivalent):
+<pre class="example">           set palette defined ( 0 "blue", 1 "yellow", 2 "red" )
+           set palette defined ( 0 0 0 1, 1 1 1 0, 2 1 0 0 )
+           set palette defined ( 0 "#0000ff", 1 "#ffff00", 2 "#ff0000" )
+     
+</pre>
+   <p>To produce some rainbow-like palette use:
+<pre class="example">           set palette defined ( 0 "blue", 3 "green", 6 "yellow", 10 "red" )
+     
+</pre>
+   <p>Full color spectrum within HSV color space:
+<pre class="example">           set palette model HSV
+           set palette defined ( 0 0 1 1, 1 1 1 1 )
+           set palette defined ( 0 0 1 0, 1 0 1 1, 6 0.8333 1 1, 7 0.8333 0 1)
+     
+</pre>
+   <p>To produce a palette with few colors only use:
+<pre class="example">           set palette model RGB maxcolors 4
+           set palette defined ( 0 "blue", 1 "green", 2 "yellow", 3 "red" )
+     
+</pre>
+   <p>'Traffic light' palette (non-smooth color jumps at gray = 1/3 and 2/3).
+<pre class="example">           set palette model RGB
+           set palette defined (0 "dark-green", 1 "green", 1 "yellow", \
+                                2 "dark-yellow", 2 "red", 3 "dark-red" )
+     
+</pre>
+   </body></html>
+

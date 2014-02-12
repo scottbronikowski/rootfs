@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>gpic - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="Gnugraph_0028GNU_005fplotutils_0029.html#Gnugraph_0028GNU_005fplotutils_0029" title="Gnugraph(GNU_plotutils)">
+<link rel="next" href="gpic_005f.html#gpic_005f" title="gpic_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="gpic"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="gpic_005f.html#gpic_005f">gpic_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Gnugraph_0028GNU_005fplotutils_0029.html#Gnugraph_0028GNU_005fplotutils_0029">Gnugraph(GNU_plotutils)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.27 gpic</h5>
+
+<!-- ?commands set terminal gpic -->
+<!-- ?set terminal gpic -->
+<!-- ?set term gpic -->
+<!-- ?terminal gpic -->
+<!-- ?term gpic -->
+<p><a name="index-gpic-798"></a><a name="index-gpic-799"></a>
+
+   <p>The `gpic` terminal driver generates GPIC graphs in the Free Software
+Foundations's "groff" package.  The default size is 5 x 3 inches.  The only
+option is the origin, which defaults to (0,0).
+
+   <p>Syntax:
+<pre class="example">           set terminal gpic {&lt;x&gt; &lt;y&gt;}
+     
+</pre>
+   <p>where `x` and `y` are in inches.
+
+   <p>A simple graph can be formatted using
+
+<pre class="example">           groff -p -mpic -Tps file.pic &gt; file.ps.
+     
+</pre>
+   <p>The output from pic can be pipe-lined into eqn, so it is possible to put
+complex functions in a graph with the `set label` and `set {x/y}label`
+commands.  For instance,
+
+<pre class="example">           set ylab '@space 0 int from 0 to x alpha ( t ) roman d t@'
+     
+</pre>
+   <p>will label the y axis with a nice integral if formatted with the command:
+
+<pre class="example">           gpic filename.pic | geqn -d@@ -Tps | groff -m[macro-package] -Tps
+               &gt; filename.ps
+     
+</pre>
+   <p>Figures made this way can be scaled to fit into a document.  The pic language
+is easy to understand, so the graphs can be edited by hand if need be.  All
+co-ordinates in the pic-file produced by `gnuplot` are given as x+gnuplotx
+and y+gnuploty.  By default x and y are given the value 0.  If this line is
+removed with an editor in a number of files, one can put several graphs in
+one figure like this (default size is 5.0x3.0 inches):
+
+<pre class="example">           .PS 8.0
+           x=0;y=3
+           copy "figa.pic"
+           x=5;y=3
+           copy "figb.pic"
+           x=0;y=0
+           copy "figc.pic"
+           x=5;y=0
+           copy "figd.pic"
+           .PE
+     
+</pre>
+   <p>This will produce an 8-inch-wide figure with four graphs in two rows on top
+of each other.
+
+   <p>One can also achieve the same thing by the command
+
+<pre class="example">           set terminal gpic x y
+     
+</pre>
+   <p>for example, using
+
+<pre class="example">           .PS 6.0
+           copy "trig.pic"
+           .PE"
+     
+</pre>
+   </body></html>
+

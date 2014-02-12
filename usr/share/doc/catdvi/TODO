@@ -1,0 +1,85 @@
+IMPORTANT                            -*- Text -*- 
+
+  * Figure out how font's space params relate to the whitespace between
+    words in DVI.
+    [the current heuristics seem to work quite well however]
+
+  * Go through the current font encoding translation tables and fix the
+    unknown glyphs (do a make enc/*.h after ./configure
+    --enable-developer-warnings to see the problems).
+    [nearly done]
+
+BUGS:
+
+    [None except the known limitations]
+
+SMALL IMPROVEMENTS:
+
+  * Add encodings: TEX extended ASCII.
+  * should ./configure --enable-developer-warnings add
+    -Wall etc. to CFLAGS if we're using gcc?
+
+CLEANUPS
+
+  * page.c :
+     - box_t has grown large. Do we need a constructor?
+     - Put diacritics, texmext, radicals in a list and loop over the list
+       to adjust them, not over the whole page.
+  * fntenc.c: add additional per-encoding info, like "this encoding has the
+    same params array as OMS".
+  * Rethink the *clean targets in the makefile.
+  * Reorganize the glyph tweak tables in outenc.c
+  * Referencing fonts by their number begins to get ugly. Switch to pointers.
+
+PROJECTS
+
+  * Faciliate recovery of lost LaTeX files: introduce a "LATEX" output
+    encoding which spits out LaTeX commands for at least the most common
+    symbols. (Thanks to Giovanni Salme for suggesting this).
+ 
+  * Supplements to outenc.c :
+      - Add more visual substitutions for ascii and latin1 output encodings:
+        Arrows, angle brackets, lessmuch, greatermuch, ...
+
+  * Extend or mimick the diacritics mechanism to glue "multipart" glyphs
+    (long arrows, mapsto, hookarrow, etc.) together. The same could also
+    work for extended recipies.
+
+  * Math layout improvements -- the word break heuristics we use work well
+    with normal text, but fail miserably with math (no wonder since
+    TeX uses different spacing methods for math and the document author
+    usually adds another, impredictable, bunch of spacing instructions).
+    This sometimes leads to funny spacing in catdvis output.
+
+    One possible approach would be: there are no word breaks in formulae.
+    Position every glyph in a formula based on its DVI coordinates (as we do
+    with word beginnings). Think about how to pick the glyphs that we have to
+    position directly. Possibilities:
+     - based on glyph hints (i.e. per-unicode-char information)
+     - based on per-font information (math chars form extra character sets,
+       at least with TeX). Not really nice.
+
+  * Add rule support. Most important are line-like rules for fractions,
+    tables, etc. A lot of the required infrastructure is now implemented
+    (canvas.c and layout.c). Still to be done:
+      - Reserve sufficient space to print the rules, but allow rules to
+	intersect (for table borders etc.).
+    Most likely, special private space glyphs will be inserted into the page
+    to represent the rules. If so, then
+      - Try to detect fraction slashes and treat them like "on axis" texmext
+	glyphs.
+      - Define some kind of bogus font metrics for these glyphs.
+      - We will need "subclasses" of page_word_t to make this work.
+      - And some special case "break here" test in the word breaking code.
+	Maybe make this generic and combine with better math spacing attempts.
+
+  * What about a Win32/MikTeX port? Current MikTeX seems to include libkpathsea.
+  * Think about the pros and cons of using GNU automake.
+
+WISHLIST
+
+  * Implement TFM file location routine also without kpathsea
+  * Add support for non-latin languages. Cyrillic should be easiest (but
+    will need native speakers to verify the implementation), right-to-left
+    languages a lot harder.
+  * Looking at xdvik and kdvi, it may be time for a catdvi library.

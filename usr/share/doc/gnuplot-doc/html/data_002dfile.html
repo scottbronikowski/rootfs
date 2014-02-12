@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>data-file - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="splot.html#splot" title="splot">
+<link rel="prev" href="splot.html#splot" title="splot">
+<link rel="next" href="grid_005fdata.html#grid_005fdata" title="grid_data">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="data-file"></a>
+<a name="data_002dfile"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="grid_005fdata.html#grid_005fdata">grid_data</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="splot.html#splot">splot</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="splot.html#splot">splot</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.26.1 data-file</h4>
+
+<!-- ?commands splot datafile -->
+<!-- ?splot datafile -->
+<!-- ?splot data-file -->
+<p>As for `plot`, discrete data contained in a file can be displayed by
+specifying the name of the data file, enclosed in quotes,  on the `splot`
+command line.
+
+   <p>Syntax:
+<pre class="example">           splot '&lt;file_name&gt;' {binary &lt;binary list&gt;}
+                               {matrix}
+                               {index &lt;index list&gt;}
+                               {every &lt;every list&gt;}
+                               {using &lt;using list&gt;}
+     
+</pre>
+   <p>The special filenames `""` and `"-"` are permitted, as in `plot`.
+
+   <p>In brief, `binary` and `matrix` indicate that the data are in a special
+form, <a href="index.html#index">index</a> selects which data sets in a multi-data-set file are to be
+plotted, <a href="every.html#every">every</a> specifies which datalines (subsets) within a single data
+set are to be plotted, and <a href="using.html#using">using</a> determines how the columns within a single
+record are to be interpreted.
+
+   <p>The options <a href="index.html#index">index</a> and <a href="every.html#every">every</a> behave the same way as with `plot`;  <a href="using.html#using">using</a>
+does so also, except that the <a href="using.html#using">using</a> list must provide three entries
+instead of two.
+
+   <p>The `plot` options <a href="thru.html#thru">thru</a> and <a href="smooth.html#smooth">smooth</a> are not available for `splot`, but
+<a href="cntrparam.html#cntrparam">cntrparam</a> and <a href="dgrid3d.html#dgrid3d">dgrid3d</a> provide limited smoothing capabilities.
+
+   <p>Data file organization is essentially the same as for `plot`, except that
+each point is an (x,y,z) triple.  If only a single value is provided, it
+will be used for z, the datablock number will be used for y, and the index
+of the data point in the datablock will be used for x.  If two or four values
+are provided, `gnuplot` uses the last value for calculating the color in
+pm3d plots.  Three values are interpreted as an (x,y,z) triple.  Additional
+values are generally used as errors, which can be used by <a href="fit.html#fit">fit</a>.
+
+   <p>Single blank records separate datablocks in a `splot` datafile; `splot`
+treats datablocks as the equivalent of function y-isolines.  No line will
+join points separated by a blank record.  If all datablocks contain the same
+number of points, `gnuplot` will draw cross-isolines between datablocks,
+connecting corresponding points.  This is termed "grid data", and is required
+for drawing a surface, for contouring (<a href="contour.html#contour">contour</a>) and hidden-line removal
+(<a href="hidden3d.html#hidden3d">hidden3d</a>). See also `splot grid_data`.
+
+   <p>It is no longer necessary to specify `parametric` mode for three-column
+`splot`s.
+
+<ul class="menu">
+<li><a accesskey="1" href="binary_005fmatrix.html#binary_005fmatrix">binary_matrix</a>
+<li><a accesskey="2" href="example_005fdatafile_005f.html#example_005fdatafile_005f">example_datafile_</a>
+<li><a accesskey="3" href="matrix_005fascii.html#matrix_005fascii">matrix_ascii</a>
+<li><a accesskey="4" href="matrix.html#matrix">matrix</a>
+</ul>
+
+   </body></html>
+

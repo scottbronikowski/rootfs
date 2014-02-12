@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on May 29, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>psgml: 2. Installing PSGML</title>
+
+<meta name="description" content="psgml: 2. Installing PSGML">
+<meta name="keywords" content="psgml: 2. Installing PSGML">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Install"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml_1.html#Introduction" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_3.html#Invoke" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml_1.html#Introduction" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_3.html#Invoke" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Installing-PSGML"></a>
+<h1 class="chapter">2. Installing PSGML</h1>
+
+<p>To install PSGML you first need to uncompress and unpack the source
+archive.  This is done with the <code>gunzip</code> and <code>tar</code> commands.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">gunzip psgml-1.2.0.tar.gz; tar xf psgml-1.2.0.tar
+</pre></td></tr></table>
+
+<p>This should create a subdirectory to the current directory with the
+source code. This directory contains a <code>configure</code> command (see the
+file INSTALL for more information about configure).  You can use the
+<code>configure</code> command to configure the package or you can load the
+file &lsquo;<tt>psgml-maint</tt>&rsquo; and execute the <code>psgml-compile-files</code>
+command.
+</p>
+<p>Place the &lsquo;<tt>*.el</tt>&rsquo; and the &lsquo;<tt>*.elc</tt>&rsquo; files in a directory where
+Emacs can find it (i.e. one of the directories in the <code>load-path</code>
+variable, you can add a directory to this variable in your
+&lsquo;<tt>.emacs</tt>&rsquo;.)  
+</p>
+<p>If you use the <code>configure</code> approach, compile psgml with <code>make</code>
+and the you can run <code>make install</code> to install it in the system
+library &lsquo;<tt>site-lisp</tt>&rsquo;.  The location of &lsquo;<tt>site-lisp</tt>&rsquo; is figured
+out by <code>configure</code>, but you can change it in the &lsquo;<tt>Makefile</tt>&rsquo;.
+</p>
+<p>Put the following line in your .emacs:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="lisp">(autoload 'sgml-mode &quot;psgml&quot; &quot;Major mode to edit SGML files.&quot; t)
+(autoload 'xml-mode &quot;psgml&quot; &quot;Major mode to edit XML files.&quot; t)
+</pre></td></tr></table>
+
+<p>You may also want to set up search paths for external entities,
+See section <a href="psgml_4.html#Entity-manager">The Entity Manager</a>.
+</p>
+<p>The &lsquo;<tt>psgml.info</tt>&rsquo; is the documentation for PSGML in the info format.
+You can read this with the Emacs command <kbd>C-u C-h i</kbd>.  You can also
+install the file in your systems info directory and edit the
+&lsquo;<tt>dir</tt>&rsquo; file to include &lsquo;<tt>psgml.info</tt>&rsquo; in the menu.
+</p>
+<p>The info file &lsquo;<tt>psgml.info</tt>&rsquo; is created from the texinfo file
+&lsquo;<tt>psgml.texi</tt>&rsquo;.  The texinfo file can also be used to create a hard
+copy of the documentation.  To do this you need the TeX program and a
+copy of &lsquo;<tt>texinfo.tex</tt>&rsquo;.
+</p>
+
+
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml_1.html#Introduction" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_3.html#Invoke" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon user</em> on <em>May 29, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

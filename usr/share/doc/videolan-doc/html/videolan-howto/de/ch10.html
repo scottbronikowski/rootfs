@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 10.  Streamen in IPv6</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch09.html" title="Chapter 9.  Fortgeschrittene Nutzung der Stream-Ausgabe von VLC (Umkodierung, multiples Streaming, etc.)" /><link rel="next" href="ch11.html" title="Chapter 11.  Video On Demand" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 10. 
+
+Streamen in IPv6
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="ipv6"></a>Chapter 10. 
+
+Streamen in IPv6
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch10.html#id2579001">
+
+Streamen in IPv6
+</a></span></dt><dt><span class="sect1"><a href="ch10.html#id2579248">
+
+Empfangen in IPv6
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2579001"></a>
+
+Streamen in IPv6
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2578367"></a>
+
+Voraussetzungen
+</h3></div></div></div><p> 
+
+</p><p>
+
+Sie benötigen eine IPv6 kompatibles Betriebssystem, wie
+Linux 2.4 oder 2.6 mit geladenem <span class="emphasis"><em>ipv6</em></span> Modul, 
+Windows 2000 mit dem IPv6 Stack, Windows XP Service Pack 1 oder
+Mac OS X Version 10.2 oder höher. Bitte schauen Sie auf die Features-Seiten
+auf der <a class="ulink" href="http://www.videolan.org" target="_top">VideoLAN Website</a>, um
+den Status von IPv6 in VLC und VLS für jedes System zu erfahren.
+
+</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+
+
+Unter Windows 2000 müssen Sie per Hand eine 
+standardmäßige IPv6-Route mit folgendem Befehl festlegen:
+
+</p><pre class="screen">
+<code class="prompt"># </code><strong class="userinput"><code>ipv6 rtu ff::/8 4</code></strong>
+</pre><p>
+
+
+
+wobei die letzte Nummer (<span class="emphasis"><em>4</em></span> in
+diesem Beispiel) die Nummer Ihres echtes IPv6-Interfaces ist. Um eine Liste Ihrer
+IPv6-Interfaces zu erhalten, starten Sie den Befehl 
+<span class="command"><strong>ipv6 if</strong></span>.
+
+</p></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+
+
+
+Unter Windows XP können Sie Probleme mit einer
+verborgenen IPv6-Firewall haben. Um das Problem zu lösen, gehen Sie zur Liste
+der Windows-Dienste und stoppen Sie den IPv6-Firewall-Dienst.
+
+</p></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+
+Wenn Sie VMware unter Linux benutzen, werden Sie
+VMware stoppen müssen und die VMware-Kernelmodule beenden, da wir bemerkt
+haben, das es IPv6-Streaming verhindert!
+</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2579067"></a>
+
+Streamen mit VLC
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1] --ttl 12</code></strong>
+</pre><p>
+
+wobei:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">video1.xyz</code>
+
+ ist die Datei, die Sie streamen möchten (Sie können auch
+<span class="command"><strong>dvdsimple:/dev/dvd</strong></span> zum Streamen einer DVD
+benutzen)
+,</p></li><li><p><span class="emphasis"><em>ff08::1</em></span> 
+
+ist entweder 
+:</p><div class="itemizedlist"><ul type="circle"><li><p>
+
+die IPv6-Adresse des Rechners, den Sie via Unicast erreichen möchten
+;</p></li><li><p>
+
+oder die Multicast-IPv6-Adresse.
+
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+
+ ist der Wert der TTL (Time To Live) Ihrer IP-Paket (was
+bedeutet, dass der Stream in der Lage sein wird, 11 Router zu 
+überqueren).
+
+</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+Unter Unix/Linux müssen Sie eventuell die eckigen
+Klammern um die IPv6-Adresse schützen
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:\[ff08::1\] --ttl 12</code></strong>
+</pre></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+Es ist möglich, dass Sie das Ausgabe-Netzwerkinterface
+angeben müssen:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1%eth0] --ttl 12</code></strong>
+</pre><p>
+
+wobei <span class="emphasis"><em>eth0</em></span> der Name des
+Netzwerkinterfaces ist (unter Linux werden die Netzwerk-Interface'
+<span class="emphasis"><em>ethX</em></span> genannt, unter Mac OSX <span class="emphasis"><em>enX
+</em></span> und unter Windows <span class="emphasis"><em>X</em></span>, wobei
+<span class="emphasis"><em>X</em></span> die entsprechende Nummer ist).
+
+</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2579221"></a>
+
+Streamen mit VLS
+</h3></div></div></div><p>
+
+Sie werden die Konfigurationsdatei benutzen müssen
+<code class="filename">vls.cfg</code>. Bitte schauen Sie in den 
+<a class="ulink" href="http://www.videolan.org/doc/" target="_top">VLC-Userguide</a>, um zu
+erfahren, wie sie eine für IPv6-Streaming in Uni- oder Multicast 
+schreiben.
+
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2579248"></a>
+
+Empfangen in IPv6
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2579253"></a>
+
+Einen Unicast-Stream empfangen
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --ipv6 udp:</code></strong>
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2579275"></a>
+
+Einen Multicast-Stream empfangen
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --ipv6 udp:@[ff08::1]</code></strong>
+</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+Unter Unix/Linux kann es notwendig sein, dass Sie die
+Klammern um die IPv6-Adresse "beschützen" müssen
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --ipv6 udp:@\[ff08::1\]</code></strong>
+</pre></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+Es ist möglich, dass Sie das Ausgabe-Netzwerkinterface
+festlegen müssen:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1%eth0] --ttl 12</code></strong>
+</pre><p>
+
+wobei <span class="emphasis"><em>eth0</em></span> der Name des
+Netzwerkinterfaces ist (unter Linux werden die Netzwerk-Interface'
+<span class="emphasis"><em>ethX</em></span> genannt, unter Mac OSX <span class="emphasis"><em>enX
+</em></span> und unter Windows <span class="emphasis"><em>X</em></span>, wobei
+<span class="emphasis"><em>X</em></span> die entsprechende Nummer ist).
+
+</p></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 9. 
+
+Fortgeschrittene Nutzung der Stream-Ausgabe von VLC
+(Umkodierung, multiples Streaming, etc.)
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 11. 
+Video On Demand
+</td></tr></table></div></body></html>

@@ -1,0 +1,32 @@
+Charset handling:
+-----------------
+
+Since 2.083 charset handling has changed. Please note the following
+information from the upstream ChangeLog:
+
+	- FIX CHARACTER-SET HANDLING.  When a new body is created,
+	  it will get charset 'PERL', which means: Perl internal
+	  representation.  Also the decoded() body is of that.	As part
+	  of a message, the body with be translated into real utf-8.
+
+	  This change will make Mail::Box slower, but correct!  Check
+	  your applications!   Use $msg->decoded when you process the
+	  content.
+
+	- removed $msg->decoded option 'keep', because decoded object
+	  depends on temporary decoding parameters.
+  
+
+ -- gregor herrmann <gregoa@debian.org>  Sun, 12 Oct 2008 15:40:43 +0200
+
+
+Memory consumption:
+-------------------
+
+If you experience high memory usage while opening or browsing folders you
+might want to try either ->destruct()ing used messages and/or re-opening the
+folder periodically; cf.
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=443259 and
+http://rt.cpan.org/Public/Bug/Display.html?id=29580
+
+ -- gregor herrmann <gregor+debian@comodo.priv.at>  Wed, 26 Sep 2007 17:06:05 +0200

@@ -1,0 +1,45 @@
+Command line XSLT 2.0 and XQuery 1.0 processing
+-----------------------------------------------
+
+To invoke the XSLT 2.0 processor from the command line you can execute the
+following command:
+
+  CLASSPATH=/usr/share/java/saxonb.jar \
+  java net.sf.saxon.Transform -s:input.xml -xsl:style.xsl -o:output.xml
+
+similarly, XQuery 1.0 processing can be invoked with:
+
+  CLASSPATH=/usr/share/java/saxonb.jar \
+  java net.sf.saxon.Query query.xq
+
+In both cases, try -help to see other available options and see the command
+line reference manual available in the libsaxonb-java-doc package.
+
+Debian-specific helpers are provided to ease the invocations:
+
+  saxonb-xslt [OPTIONS ...]
+  saxonb-xquery [OPTIONS ...]
+
+the former will invoke the XSLT 2.0 processor passing it all given options, the
+latter will do the same for the XQuery 1.0 processor.
+
+ -- Stefano Zacchiroli <zack@debian.org>  Fri, 15 Feb 2008 15:04:41 +0100
+
+Calls on external Java functions disabled by default
+----------------------------------------------------
+
+By default, SaxonB enables calls on external Java functions to be
+embedded in stylesheets or queries. Such calls can invoke arbitrary
+Java methods and are thus a security risk when executing untrusted
+XSLT stylesheets of XQuery queries.  For this reason, SaxonB in Debian
+comes with calls on external Java functions disabled by default.
+
+If you are using the command line interface to the XSLT 2.0 or XQuery
+processors of Saxon, you can enable this feature by passing the
+"-ext:on" flag to your command line invocation.
+
+If you are using SaxonB from its Java API you should set the Attribute
+"FeatureKeys.ALLOW_EXTERNAL_FUNCTIONS" to "true". See the API
+reference in the libsaxonb-java-doc package for more information.
+
+ -- Stefano Zacchiroli <zack@debian.org>  Fri, 15 Feb 2008 14:47:43 +0100

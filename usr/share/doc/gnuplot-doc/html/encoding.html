@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>encoding - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="dummy.html#dummy" title="dummy">
+<link rel="next" href="fit_005f.html#fit_005f" title="fit_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="encoding"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="fit_005f.html#fit_005f">fit_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="dummy.html#dummy">dummy</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.20 encoding</h4>
+
+<!-- ?commands set encoding -->
+<!-- ?commands show encoding -->
+<!-- ?set encoding -->
+<!-- ?show encoding -->
+<p><a name="index-encoding-435"></a><a name="index-encoding-436"></a>
+
+   <p><a name="index-encodings-437"></a>
+<a name="index-UTF_002d8-438"></a>
+The <a href="encoding.html#encoding">encoding</a> command selects a character encoding. 
+Syntax:
+<pre class="example">           set encoding {&lt;value&gt;}
+           set encoding locale
+           show encoding
+     
+</pre>
+   <p>Valid values are
+<pre class="example">        default     - tells a terminal to use its default encoding
+        iso_8859_1  - the most common Western European encoding used by many
+                      Unix workstations and by MS-Windows. This encoding is
+                      known in the PostScript world as 'ISO-Latin1'.
+        iso_8859_15 - a variant of iso_8859_1 that includes the Euro symbol
+        iso_8859_2  - used in Central and Eastern Europe
+        iso_8859_9  - used in Turkey (also known as Latin5)
+        koi8r       - popular Unix cyrillic encoding
+        koi8u       - ukrainian Unix cyrillic encoding
+        cp437       - codepage for MS-DOS
+        cp850       - codepage for OS/2, Western Europe
+        cp852       - codepage for OS/2, Central and Eastern Europe
+        cp1250      - codepage for MS Windows, Central and Eastern Europe
+        cp1254      - codepage for MS Windows, Turkish (superset of Latin5)
+        utf8        - variable-length (multibyte) representation of Unicode
+                      entry point for each character
+     
+</pre>
+   <p>The command <a href="locale.html#locale">locale</a> is different from the other options. 
+It attempts to determine the current locale from the runtime environment. 
+On most systems this is controlled by the environmental variables
+LC_ALL, LC_CTYPE, or LANG.  This mechanism is necessary, for example, to
+pass multibyte character encodings such as UTF-8 or EUC_JP to the wxt
+and cairopdf terminals.  This command does not affect the locale-specific
+representation of dates or numbers. 
+See also <a href="locale.html#locale">locale</a> and <a href="decimalsign.html#decimalsign">decimalsign</a>.
+
+   <p>Generally you must set the encoding before setting the terminal type. 
+Note that encoding is not supported by all terminal drivers and that
+the device must be able to produce the desired non-standard characters.
+
+   </body></html>
+

@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>eepic - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="dxy800a.html#dxy800a" title="dxy800a">
+<link rel="next" href="emf.html#emf" title="emf">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="eepic"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="emf.html#emf">emf</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="dxy800a.html#dxy800a">dxy800a</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.17 eepic</h5>
+
+<!-- ?commands set terminal eepic -->
+<!-- ?set terminal eepic -->
+<!-- ?set term eepic -->
+<!-- ?terminal eepic -->
+<!-- ?term eepic -->
+<p><a name="index-eepic-753"></a><a name="index-eepic-754"></a>
+
+   <p>The `eepic` terminal driver supports the extended LaTeX picture environment. 
+It is an alternative to the `latex` driver.
+
+   <p>The output of this terminal is intended for use with the "eepic.sty" macro
+package for LaTeX.  To use it, you need "eepic.sty", "epic.sty" and a
+printer driver that supports the "tpic" \\specials.  If your printer driver
+doesn't support those \\specials, "eepicemu.sty" will enable you to use some
+of them. 
+dvips and dvipdfm do support the "tpic" \\specials.
+
+   <p>Syntax:
+<pre class="example">        set terminal eepic {color, dashed, rotate, small, tiny, default, &lt;fontsize&gt;}
+     
+</pre>
+   <p>Options:
+You can give options in any order you wish. 
+'color' causes gnuplot to produce \\color{...} commands so that the graphs are
+colored. Using this option, you must include \\usepackage{color} in the preambel
+of your latex document. 
+'dashed' will allow dashed line types; without this option, only solid lines
+with varying thickness will be used. 
+'dashed' and 'color' are mutually exclusive; if 'color' is specified, then 'dashed'
+will be ignored. 
+'rotate' will enable true rotated text (by 90 degrees). Otherwise, rotated text
+will be typeset with letters stacked above each other. If you use this option
+you must include \\usepackage{graphicx} in the preamble. 
+'small' will use \\scriptsize symbols as point markers (Probably does not work
+with TeX, only LaTeX2e). Default is to use the default math size. 
+'tiny' uses \\scriptscriptstyle symbols. 
+'default' resets all options to their defaults = no color, no dashed lines,
+pseudo-rotated (stacked) text, large point symbols. 
+&lt;fontsize&gt; is a number which specifies the font size inside the picture
+environment; the unit is pt (points), i.e., 10 pt equals approx. 3.5 mm. 
+If fontsize is not specified, then all text inside the picture will be set
+in \\footnotesize.
+
+   <p>Notes:
+Remember to escape the # character (or other chars meaningful to (La-)TeX)
+by \\\\ (2 backslashes). 
+It seems that dashed lines become solid lines when the vertices of a plot
+are too close. (I do not know if that is a general problem with the tpic specials,
+or if it is caused by a bug in eepic.sty or dvips/dvipdfm.) 
+The default size of an eepic plot is 5x3 inches, which can be scaled
+by 'set size a,b'. 
+Points, among other things, are drawn using the LaTeX commands "\\Diamond",
+"\\Box", etc.  These commands no longer belong to the LaTeX2e core; they are
+included in the latexsym package, which is part of the base distribution and
+thus part of any LaTeX implementation. Please do not forget to use this package. 
+Instead of latexsym, you can also include the amssymb package. 
+All drivers for LaTeX offer a special way of controlling text positioning:
+If any text string begins with '{', you also need to include a '}' at the
+end of the text, and the whole text will be centered both horizontally and
+vertically.  If the text string begins with '[', you need to follow this with
+a position specification (up to two out of t,b,l,r), ']{', the text itself,
+and finally '}'.  The text itself may be anything LaTeX can typeset as an
+LR-box.  '\\rule{}{}'s may help for best positioning.
+
+   <p>Examples:
+set term eepic
+<pre class="example">       output graphs as eepic macros inside a picture environment;
+       \\input the resulting file in your LaTeX document.
+</pre>
+   <p>set term eepic color tiny rotate 8
+<pre class="example">       eepic macros with \\color macros, \\scripscriptsize point markers,
+       true rotated text, and all text set with 8pt.
+     
+</pre>
+   <p>About label positioning:
+Use gnuplot defaults (mostly sensible, but sometimes not really best):
+<pre class="example">            set title '\\LaTeX\\ -- $ \\gamma $'
+</pre>
+   <p>Force centering both horizontally and vertically:
+<pre class="example">            set label '{\\LaTeX\\ -- $ \\gamma $}' at 0,0
+</pre>
+   <p>Specify own positioning (top here):
+<pre class="example">            set xlabel '[t]{\\LaTeX\\ -- $ \\gamma $}'
+</pre>
+   <p>The other label &ndash; account for long ticlabels:
+<pre class="example">            set ylabel '[r]{\\LaTeX\\ -- $ \\gamma $\\rule{7mm}{0pt}}'"
+     
+</pre>
+   </body></html>
+

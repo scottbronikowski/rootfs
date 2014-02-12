@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 2.  Installation von VLS</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, VLS, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB" /><link rel="start" href="index.html" title="VLS Anwenderhandbuch" /><link rel="up" href="index.html" title="VLS Anwenderhandbuch" /><link rel="prev" href="ch01.html" title="Chapter 1.  Einführung" /><link rel="next" href="ch03.html" title="Chapter 3. Überblick und grundlegende Konzepte" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. 
+Installation von VLS
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="install"></a>Chapter 2. 
+Installation von VLS
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch02.html#id2522307">
+Installation von VLS
+</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2569425">
+Deinstallation von VLS
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2522307"></a>
+Installation von VLS
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2522276"></a>Windows</h3></div></div></div><p>
+Laden Sie die ZIP-Datei von der <a class="ulink" href="http://www.videolan.org/streaming/download-vls-windows.html" target="_top">VLS
+Windows Downloadseite</a> herunter, entzippen Sie sie und
+führen Sie <code class="filename">setup.exe</code>aus.
+
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569194"></a>GNULinux &amp; Mac OS X</h3></div></div></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2569199"></a>
+Installation der Bibliotheken/Libraries
+</h4></div></div></div><p>
+Viele Bibliotheken werden für bestimmte Zwecke benötigt:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>libdvbpsi</em></span> 
+(immer benötigt)
+</p></li><li><p><span class="emphasis"><em>libdvdcss</em></span>
+wenn Sie auf verschlüsselte DVDs zugreifen möchten
+,</p></li><li><p><span class="emphasis"><em>libdvdread</em></span>
+wenn Sie in der Lage sein möchten, DVDs zu streamen
+,</p></li><li><p><span class="emphasis"><em>libdvb</em></span>
+wenn Sie in der Lage sein möchten, von einer DVB-Karte
+streamen zu können (eine Satelliten- oder eine digitale terrestrische TV-Karte).
+
+</p></li></ul></div><p>
+Laden Sie die Bibliotheken von der <a class="ulink" href="http://www.videolan.org/streaming/download-vls-sources.html" target="_top">VLS
+Quellen Downloadseite</a> herunter.
+
+</p><p>
+Dekomprimieren, konfigurieren (außer <span class="emphasis"><em>
+libdvb</em></span>, welche kein <span class="emphasis"><em>./configure</em></span> hat),
+kompilieren und installieren Sie jede Bibliothek:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>tar xvzf library.tar.gz</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>cd library</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>./configure</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>make</code></strong>
+<code class="prompt"># </code><strong class="userinput"><code>make install</code></strong>
+</pre><p>
+Überprüfen Sie unter GNU/Linux, ob die Konfigurationsdatei
+<code class="filename">/etc/ld.so.conf</code> die folgende Zeile enthält:</p><pre class="programlisting">
+/usr/local/lib
+</pre><p>
+Wenn dies nicht der Fall ist, fügen Sie diese hinzu und
+starten Sie dann:</p><pre class="screen">
+<code class="prompt"># </code><strong class="userinput"><code>ldconfig</code></strong>
+</pre><p>
+Führen Sie unter Mac OS X aus:</p><pre class="screen">
+<code class="prompt"># </code><strong class="userinput"><code>ranlib /usr/local/lib/*.a</code></strong>
+</pre></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2570176"></a>
+Installation von VLS
+</h4></div></div></div><p>
+Laden Sie die Quellen der neuesten Version herunter:
+holen Sie sich die Datei <code class="filename">vls-version.tar.gz</code> von der
+<a class="ulink" href="http://www.videolan.org/streaming/download-vls-sources.html" target="_top">
+VLS-Quellen Downloadseite</a>. Dekomprimieren Sie es und generieren Sie
+<span class="emphasis"><em>./configure</em></span>:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>tar xvzf vls-version.tar.gz</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>cd vls-version</code></strong>
+</pre><p>
+Um die Liste der Konfigurationsoptionen, machen Sie
+folgendes:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./configure --help</code></strong>
+</pre><p>
+Konfigurieren Sie dann VLS:</p><div class="itemizedlist"><ul type="disc"><li><p>
+wenn Sie ein einfaches VLS ohne DVD-Unterstützung
+möchten, machen Sie:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./configure --disable-dvd</code></strong>
+</pre></li><li><p>
+wenn Sie ein VLS mit DVD-Unterstützung möchten,
+machen Sie:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./configure</code></strong>
+</pre></li><li><p>
+wenn Sie ein VLS mit DVB-Unterstützung möchten,
+machen Sie:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./configure --enable-dvb --with-dvb=PATH_TO_DVB_DRIVERS --with-libdvb=PATH_TO_LIBDVB</code></strong>
+</pre></li></ul></div><p>
+Kompilieren und installieren Sie danach:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>make</code></strong>
+<code class="prompt"># </code><strong class="userinput"><code>make install</code></strong>
+</pre><p>
+Sie können auch <span class="command"><strong>make uninstall</strong></span>,
+<span class="command"><strong>make clean</strong></span> oder <span class="command"><strong>make distclean
+</strong></span> nach Bedarf ausführen.
+
+</p></div></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2569425"></a>
+Deinstallation von VLS
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569788"></a>Windows</h3></div></div></div><p>
+Gehen Sie in die <span class="emphasis"><em>Systemsteuerung
+</em></span>, klicken Sie auf <span class="emphasis"><em>Programme hinzufügen und entfernen
+</em></span>, wählen Sie <span class="emphasis"><em>VLS</em></span> und klicken Sie auf
+<span class="emphasis"><em>Bearbeiten/Entfernen</em></span> und folgen Sie den Schritten zur
+Deinstallation des Programms.
+
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569446"></a>
+Wenn Sie VLS aus den Quellen kompiliert haben
+</h3></div></div></div><p>
+Gehen Sie in das Verzeichnis, das die Quellen von VLS
+enthält und führen Sie aus:</p><pre class="screen">
+<code class="prompt"># </code><strong class="userinput"><code>make uninstall</code></strong>
+</pre><p>
+Danach können Sie die Quellen von VLS entfernen.
+
+</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. 
+Einführung
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. Überblick und grundlegende Konzepte</td></tr></table></div></body></html>

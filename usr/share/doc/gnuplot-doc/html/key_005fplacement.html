@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>key_placement - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="key.html#key" title="key">
+<link rel="prev" href="key.html#key" title="key">
+<link rel="next" href="key_005fsamples.html#key_005fsamples" title="key_samples">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="key_placement"></a>
+<a name="key_005fplacement"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="key_005fsamples.html#key_005fsamples">key_samples</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="key.html#key">key</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="key.html#key">key</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.30.1 key placement</h5>
+
+<!-- ?commands set key placement -->
+<!-- ?set key placement -->
+<!-- ?key placement -->
+<p>To understand positioning, the best concept is to think of a region, i.e.,
+inside/outside, or one of the margins.  Along with the region, keywords
+`left/center/right` (l/c/r) and `top/center/bottom` (t/c/b) control where
+within the particular region the key should be placed.
+
+   <p>When in `inside` mode, the keywords `left` (l), `right` (r), `top` (t),
+`bottom` (b), and `center` (c) push the key out toward the plot boundary as
+illustrated:
+
+<pre class="example">          t/l   t/c   t/r
+     
+</pre>
+   <pre class="example">          c/l    c    c/r
+     
+</pre>
+   <pre class="example">          b/l   b/c   b/r
+     
+</pre>
+   <p>When in `outside` mode, automatic placement is similar to the above
+illustration, but with respect to the view, rather than the graph boundary. 
+That is, a border is moved inward to make room for the key outside of
+the plotting area, although this may interfere with other labels and may
+cause an error on some devices.  The particular plot border that is moved
+depends upon the position described above and the stacking direction.  For
+options centered in one of the dimensions, there is no ambiguity about which
+border to move.  For the corners, when the stack direction is `vertical`, the
+left or right border is moved inward appropriately.  When the stack direction
+is `horizontal`, the top or bottom border is moved inward appropriately.
+
+   <p>The margin syntax allows automatic placement of key regardless of stack
+direction.  When one of the margins <a href="lmargin.html#lmargin">lmargin</a> (lm), <a href="rmargin.html#rmargin">rmargin</a> (rm),
+<a href="tmargin.html#tmargin">tmargin</a> (tm), and <a href="bmargin.html#bmargin">bmargin</a> (bm) is combined with a single, non-conflicting
+direction keyword, the following illustrated positions may contain the key:
+
+<pre class="example">               l/tm  c/tm  r/tm
+     
+</pre>
+   <pre class="example">          t/lm                  t/rm
+     
+</pre>
+   <pre class="example">          c/lm                  c/rm
+     
+</pre>
+   <pre class="example">          b/lm                  b/rm
+     
+</pre>
+   <pre class="example">               l/bm  c/bm  r/bm
+     
+</pre>
+   <p>Keywords `above` and `over` are synonymous with <a href="tmargin.html#tmargin">tmargin</a>.  For version
+compatibility, `above` or `over` without an additional l/c/r or stack direction
+keyword uses `center` and `horizontal`.  Keywords `below` and `under` are
+synonymous with <a href="bmargin.html#bmargin">bmargin</a>.  For compatibility, `below` or `under` without an
+additional l/c/r or stack  direction keyword uses `center` and `horizontal`.  A
+further compatibility issue is that `outside` appearing without an additional
+t/b/c or stack direction keyword uses `top`, `right` and `vertical` (i.e., the
+same as t/rm above).
+
+   <p>The &lt;position&gt; can be a simple x,y,z as in previous versions, but these can
+be preceded by one of five keywords (`first`, `second`, `graph`, `screen`,
+`character`) which selects the coordinate system in which the position of
+the first sample line is specified.  See `coordinates` for more details. 
+The effect of `left`, `right`, `top`, `bottom`, and `center` when &lt;position&gt;
+is given is to align the key as though it were text positioned using the
+label command, i.e., `left` means left align with key to the right of
+&lt;position&gt;, etc.
+
+   </body></html>
+

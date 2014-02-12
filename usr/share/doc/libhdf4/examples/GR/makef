@@ -1,0 +1,52 @@
+# Edit the following variables as needed
+HDF_INSTALL =  
+FC        = f77
+FFLAGS    = 
+LIB       = -lm
+
+LIBSHDF   = $(HDF_INSTALL)/lib/libmfhdf.a $(HDF_INSTALL)/lib/libdf.a \
+$(HDF_INSTALL)/lib/libjpeg.a $(HDF_INSTALL)/lib/libz.a
+
+GR: create_and_write_image \
+	modify_image \
+	read_image \
+	image_info \
+	set_attribute \
+	get_attribute \
+	write_palette \
+	read_palette
+ 
+create_and_write_image: create_and_write_image.f
+	$(FC) $(FFLAGS) -o $@ create_and_write_image.f $(INCLUDE) $(LIBSHDF) $(LIB)
+
+modify_image: modify_image.f
+	$(FC) $(FFLAGS) -o $@ modify_image.f $(LIBSHDF) $(LIB)
+
+read_image: read_image.f
+	$(FC) $(FFLAGS) -o $@ read_image.f  $(LIBSHDF) $(LIB)
+
+image_info: image_info.f
+	$(FC) $(FFLAGS) -o $@ image_info.f  $(LIBSHDF) $(LIB)
+
+set_attribute: set_attribute.f
+	$(FC) $(FFLAGS) -o $@ set_attribute.f $(LIBSHDF) $(LIB)
+
+get_attribute: get_attribute.f
+	$(FC) $(FFLAGS) -o $@ get_attribute.f $(LIBSHDF) $(LIB)
+ 
+write_palette: write_palette.f
+	$(FC) $(FFLAGS) -o $@ write_palette.f $(LIBSHDF) $(LIB)
+ 
+read_palette: read_palette.f
+	$(FC) $(FFLAGS) -o $@ read_palette.f $(LIBSHDF) $(LIB)
+
+clean:
+	rm -f *.o create_and_write_image \
+	modify_image \
+	read_image \
+	image_info \
+	set_attribute \
+	get_attribute \
+	write_palette \
+	read_palette
+.SUFFIXES:.o.c

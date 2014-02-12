@@ -1,0 +1,641 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Customizing the Stylesheets</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The Modular DocBook Stylesheets"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Installation and Setup"
+HREF="install.html"><LINK
+REL="NEXT"
+TITLE="The Print Stylesheet"
+HREF="print.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The Modular DocBook Stylesheets</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="install.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="print.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CUSTOMIZE"
+></A
+>Chapter 3. Customizing the Stylesheets</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="custom.html#AEN175"
+>Deriving Your Own Stylesheet</A
+></DT
+><DT
+><A
+HREF="custom.html#AEN191"
+>A Single Stylesheet for Both Print and HTML</A
+></DT
+><DT
+><A
+HREF="custom.html#AEN205"
+>Customizing the Title Page</A
+></DT
+><DT
+><A
+HREF="custom.html#AEN297"
+>Using the Stylesheets with XML</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN175"
+>Deriving Your Own Stylesheet</A
+></H1
+><P
+>The best way to customize the stylesheets is to write your own &ldquo;driver&rdquo;
+file; this is a document which contains your local modifications to the stylesheet
+and then includes the stylesheet from the standard distribution by reference.
+This allows you to make local changes and extensions without modifying the
+distributed files, which makes upgrading to the next release much, much simpler.</P
+><P
+>The basic driver file looks like this:<PRE
+CLASS="SCREEN"
+>&lt;!DOCTYPE style-sheet PUBLIC "-//James Clark//DTD DSSSL Style Sheet//EN" [
+&lt;!ENTITY dbstyle SYSTEM "docbook.dsl" CDATA DSSSL&#62;
+]&#62;
+
+&lt;style-sheet&#62;
+&lt;style-specification use="docbook"&#62;
+&lt;style-specification-body&#62;
+
+;; your stuff goes here...
+
+&lt;/style-specification-body&#62;
+&lt;/style-specification&#62;
+&lt;external-specification id="docbook" document="dbstyle"&#62;
+&lt;/style-sheet&#62;&#13;</PRE
+></P
+><P
+>Make sure that you specify, in the system identifier, the full path
+to the <TT
+CLASS="FILENAME"
+>docbook.dsl</TT
+> file that you want to customize; for
+example, <TT
+CLASS="FILENAME"
+>\docbook\print\docbook.dsl</TT
+>.</P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>The next stylesheet release will probably use public identifiers
+to locate the stylesheets, which will simplify this problem a bit (at the
+cost, naturally, of a little more complexity elsewhere; sigh).</P
+></BLOCKQUOTE
+></DIV
+><P
+>You can add your own definitions, or redefinitions, of stylesheet rules
+and parameters where<PRE
+CLASS="SCREEN"
+>;; your stuff goes here...</PRE
+> occurs in
+the example above.</P
+><P
+>The <TT
+CLASS="FILENAME"
+>plain.dsl</TT
+> stylesheet in the <TT
+CLASS="FILENAME"
+>docbook/print</TT
+> directory is a customization of the <TT
+CLASS="FILENAME"
+>docbook.dsl</TT
+>
+print stylesheet. It turns off title page and TOC generation.</P
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN191"
+>A Single Stylesheet for Both Print and HTML</A
+></H1
+><P
+>A DSSSL <CODE
+CLASS="SGMLTAG"
+>style-sheet</CODE
+> consists of one or more <CODE
+CLASS="SGMLTAG"
+>style-specification</CODE
+>s. This allows one to build a single stylesheet
+that can format with either the print or HTML backends.</P
+><P
+>All you need is a customization skeleton that looks like this:</P
+><PRE
+CLASS="SCREEN"
+>&lt;!DOCTYPE style-sheet PUBLIC "-//James Clark//DTD DSSSL Style Sheet//EN" [
+&lt;!ENTITY % html "IGNORE"&#62;
+&lt;![%html;[
+&lt;!ENTITY % print "IGNORE"&#62;
+&lt;!ENTITY docbook.dsl PUBLIC "-//Norman Walsh//DOCUMENT DocBook HTML Stylesheet//EN" CDATA dsssl&#62;
+]]&#62;
+&lt;!ENTITY % print "INCLUDE"&#62;
+&lt;![%print;[
+&lt;!ENTITY docbook.dsl PUBLIC "-//Norman Walsh//DOCUMENT DocBook Print Stylesheet//EN" CDATA dsssl&#62;
+]]&#62;
+]&#62;
+&lt;style-sheet&#62;
+&lt;style-specification id="print" use="docbook"&#62;
+&lt;style-specification-body&#62; 
+
+;; customize the print stylesheet
+
+&lt;/style-specification-body&#62;
+&lt;/style-specification&#62;
+&lt;style-specification id="html" use="docbook"&#62;
+&lt;style-specification-body&#62; 
+
+;; customize the html stylesheet
+
+&lt;/style-specification-body&#62;
+&lt;/style-specification&#62;
+&lt;external-specification id="docbook" document="docbook.dsl"&#62;
+&lt;/style-sheet&#62;</PRE
+><P
+>If this is <TT
+CLASS="FILENAME"
+>both.dsl</TT
+>, I can format my document using
+the print stylesheet by running<PRE
+CLASS="SCREEN"
+>jade -t rtf -d both.dsl#print file.sgm</PRE
+>and using the HTML stylesheet by running<PRE
+CLASS="SCREEN"
+>jade -t sgml -i html -d both.dsl#html file.sgm</PRE
+>which is kindof neat. (I've built some additional machinery on top
+of this to make the selection automatic from within <A
+HREF="http://www.arbortext.com/"
+TARGET="_top"
+>ADEPT</A
+> and a shell script that I use.)</P
+><P
+>An alternative method for doing this is simply to use marked sections
+in the stylesheet, like this:
+<PRE
+CLASS="SCREEN"
+>&lt;!DOCTYPE style-sheet PUBLIC "-//James Clark//DTD DSSSL Style Sheet//EN" [
+&lt;!ENTITY % html "IGNORE"&#62;
+&lt;![%html;[
+&lt;!ENTITY % print "IGNORE"&#62;
+&lt;!ENTITY docbook.dsl PUBLIC "-//Norman Walsh//DOCUMENT DocBook HTML Stylesheet//EN" CDATA dsssl&#62;
+]]&#62;
+&lt;!ENTITY % print "INCLUDE"&#62;
+&lt;![%print;[
+&lt;!ENTITY docbook.dsl PUBLIC "-//Norman Walsh//DOCUMENT DocBook Print Stylesheet//EN" CDATA dsssl&#62;
+]]&#62;
+]&#62;
+&lt;style-sheet&#62;
+&lt;style-specification use="docbook"&#62;
+&lt;style-specification-body&#62; 
+
+;; common customization can go here
+
+&lt;![%print;[
+
+;; customize the print stylesheet here
+
+]]&gt;
+
+&lt;![%html;[
+
+;; customize the html stylesheet here
+
+]]&gt;
+
+&lt;/style-specification-body&#62;
+&lt;/style-specification&#62;
+&lt;external-specification id="docbook" document="docbook.dsl"&#62;
+&lt;/style-sheet&#62;</PRE
+></P
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN205"
+>Customizing the Title Page</A
+></H1
+><P
+>Titlepages are controlled by several variables:<P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><TT
+CLASS="LITERAL"
+>%generate-<TT
+CLASS="REPLACEABLE"
+><I
+>element</I
+></TT
+>-titlepage%</TT
+></DT
+><DD
+><P
+>Controls whether or not a titlepage is generated. If, for
+example, <TT
+CLASS="LITERAL"
+>%generate-book-titlepage%</TT
+> is true, a titlepage
+will be generated for <CODE
+CLASS="SGMLTAG"
+>Book</CODE
+>s.</P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+><TT
+CLASS="REPLACEABLE"
+><I
+>element</I
+></TT
+>-titlepage-recto-elements</TT
+></DT
+><DD
+><P
+>Specifies the elements which should occur
+on the titlepage recto. This variable is a list of GIs. For example, if <TT
+CLASS="LITERAL"
+>book-titlepage-recto-elements</TT
+> is <TT
+CLASS="LITERAL"
+>'("TITLE" "SUBTITLE" "AUTHOR")</TT
+>, then the <CODE
+CLASS="SGMLTAG"
+>Title</CODE
+>, <CODE
+CLASS="SGMLTAG"
+>SubTitle</CODE
+>,
+and <CODE
+CLASS="SGMLTAG"
+>Author</CODE
+> elements in the division or component's <CODE
+CLASS="SGMLTAG"
+>*Info</CODE
+> element will appear on the <CODE
+CLASS="SGMLTAG"
+>Book</CODE
+>'s titlepage
+recto.</P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+><TT
+CLASS="REPLACEABLE"
+><I
+>element</I
+></TT
+>-titlepage-verso-elements</TT
+></DT
+><DD
+><P
+>Specifies the elements which should occur
+on the titlepage verso.</P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>%titlepage-in-info-order%</TT
+></DT
+><DD
+><P
+>The content of the titlepage is drawn from the <CODE
+CLASS="SGMLTAG"
+>*Info</CODE
+> element
+at the beginning of a division or component. If <TT
+CLASS="LITERAL"
+>%titlepage-in-info-order%</TT
+> is true, the elements on the titlepage will occur in the order
+in which they appear in the <CODE
+CLASS="SGMLTAG"
+>*Info</CODE
+> element. Otherwise, the
+elements occur in a fixed order given by the <TT
+CLASS="LITERAL"
+><TT
+CLASS="REPLACEABLE"
+><I
+>element</I
+></TT
+>-titlepage-<TT
+CLASS="REPLACEABLE"
+><I
+>side</I
+></TT
+>-elemnts</TT
+>.</P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>%generate-<TT
+CLASS="REPLACEABLE"
+><I
+>element</I
+></TT
+>-toc-on-titlepage%</TT
+></DT
+><DD
+><P
+>For some elements, such as <CODE
+CLASS="SGMLTAG"
+>Part</CODE
+>s, it may make sense to place the TOC for that element (if it is
+generated) on the same page sequence as the titlepage. If <TT
+CLASS="LITERAL"
+>%generate-<TT
+CLASS="REPLACEABLE"
+><I
+>element</I
+></TT
+>-toc-on-titlepage%</TT
+> is true, that's what will
+be done.</P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>%generate-partintro-on-titlepage%</TT
+></DT
+><DD
+><P
+><CODE
+CLASS="SGMLTAG"
+>Part</CODE
+>s and <CODE
+CLASS="SGMLTAG"
+>Reference</CODE
+>s can begin
+with a <CODE
+CLASS="SGMLTAG"
+>PartIntro</CODE
+>. If <TT
+CLASS="LITERAL"
+>%generate-partintro-on-titlepage%</TT
+> is true, the content of the <CODE
+CLASS="SGMLTAG"
+>PartIntro</CODE
+> will occur
+on the same page sequence as the titlepage.</P
+></DD
+></DL
+></DIV
+></P
+><P
+>The most common customization is probably setting <TT
+CLASS="LITERAL"
+>%generate-<TT
+CLASS="REPLACEABLE"
+><I
+>element</I
+></TT
+>-titlepage%</TT
+> to true and changing the list of
+elements in <TT
+CLASS="LITERAL"
+><TT
+CLASS="REPLACEABLE"
+><I
+>element</I
+></TT
+>-titlepage-recto-elements</TT
+> and <TT
+CLASS="LITERAL"
+><TT
+CLASS="REPLACEABLE"
+><I
+>element</I
+></TT
+>-titlepage-verso-elements</TT
+></P
+><P
+>There are a few other functions that you may wish to change:<P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><TT
+CLASS="LITERAL"
+>(<TT
+CLASS="REPLACEABLE"
+><I
+>element</I
+></TT
+>-titlepage-before node side)</TT
+></DT
+><DD
+><P
+>This function is called before each new type
+of element on the titlepage (before the first <CODE
+CLASS="SGMLTAG"
+>Title</CODE
+>, before
+the first <CODE
+CLASS="SGMLTAG"
+>SubTitle</CODE
+>, etc.). The <TT
+CLASS="LITERAL"
+>node</TT
+>
+will contain the element that will appear on the titlepage next and <TT
+CLASS="LITERAL"
+>side</TT
+> will be either <TT
+CLASS="LITERAL"
+>'recto</TT
+> or <TT
+CLASS="LITERAL"
+>'verso</TT
+>.</P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>(<TT
+CLASS="REPLACEABLE"
+><I
+>element</I
+></TT
+>-titlepage-<TT
+CLASS="REPLACEABLE"
+><I
+>component</I
+></TT
+> node side)</TT
+></DT
+><DD
+><P
+>This function
+is called for each element on the titlepage. For example, the <CODE
+CLASS="SGMLTAG"
+>Abstract</CODE
+> on a <CODE
+CLASS="SGMLTAG"
+>Book</CODE
+> titlepage is printed by the <TT
+CLASS="LITERAL"
+>book-titlepage-abstract</TT
+> function.</P
+></DD
+></DL
+></DIV
+></P
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN297"
+>Using the Stylesheets with XML</A
+></H1
+><P
+>This is just a placeholder. This needs to be written. Basically, you
+just need to use <TT
+CLASS="FILENAME"
+>catalog</TT
+> files to make sure that the
+XML instances and the stylesheets get parsed with the correct declarations.</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="install.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="print.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Installation and Setup</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>The Print Stylesheet</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

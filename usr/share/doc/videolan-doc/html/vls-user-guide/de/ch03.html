@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 3. Überblick und grundlegende Konzepte</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, VLS, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB" /><link rel="start" href="index.html" title="VLS Anwenderhandbuch" /><link rel="up" href="index.html" title="VLS Anwenderhandbuch" /><link rel="prev" href="ch02.html" title="Chapter 2.  Installation von VLS" /><link rel="next" href="ch04.html" title="Chapter 4.  Konfiguration" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. Überblick und grundlegende Konzepte</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="overview"></a>Chapter 3. Überblick und grundlegende Konzepte</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch03.html#id2569077">Struktur von VLS</a></span></dt><dt><span class="sect1"><a href="ch03.html#id2570932">
+
+Das Administrationsinterface
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2569077"></a>Struktur von VLS</h2></div></div></div><p>
+Aus der Sicht eines Benutzer kann VLS in vier
+Hauptkomponenten aufgeteilt werden:</p><div class="itemizedlist"><ul type="disc"><li><p>
+ein <span class="emphasis"><em>Manager</em></span>,</p></li><li><p>
+<span class="emphasis"><em>
+Inputs
+</em></span>,</p></li><li><p><span class="emphasis"><em>
+Konverter
+</em></span>,</p></li><li><p>
+
+und <span class="emphasis"><em>Channel</em></span> bzw. Ausgabekanäle.
+
+</p></li></ul></div><div class="figure"><a id="id2569089"></a><p class="title"><b>Figure 3.1. Struktur von VLS</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/archi-vls.jpg" width="324" alt="Struktur von VLS" /></div></div></div><br class="figure-break" /><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569114"></a>
+
+Die Inputs
+</h3></div></div></div><p>
+
+Die Role eines <span class="emphasis"><em>Inputs</em></span> ist
+MPEG Streams aus einer gegebenen Quelle (Datei, DVD, DVB-Kate, Gerät...)
+zu lesen und die richtigen <span class="emphasis"><em>Konverter</em></span> damit zu
+"füttern". Ein Input kann in der Lage sein mehrere Streams, <span class="emphasis"><em>
+Programme</em></span> genannt, zu lesen. Es gibt mehrere Arten von
+Inputs:</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+den <span class="emphasis"><em>local</em></span>-Input, der Videos
+aus Dateien oder DVDs lesen kann,</p></li><li><p>
+
+
+den <span class="emphasis"><em>Video</em></span>-Input, der
+Videos aus MPEG-Kodierungskarten lesen kann,</p></li><li><p>
+
+den <span class="emphasis"><em>DVB</em></span>-Input, der Videos
+von DVB-Karten lesen kann,</p></li><li><p>
+
+den <span class="emphasis"><em>v4l</em></span>-Input, der Videos
+aus Zugangskarten lesen kann, die von den Video4Linux-Treibern unterstützt
+werden.
+
+</p></li></ul></div><p>
+
+Sie können gleichzeitig mehrere Inputs benutzen und
+mehrere Programme abspielen.
+
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570828"></a>
+
+Die Konverter
+</h3></div></div></div><p>
+
+Die Rolle eines <span class="emphasis"><em>Konverters</em></span>
+ist einen Stream von einem Input zu erhalten und ihn in das MPEG-TS-Format
+zu konvertieren. VLS ist in der Lage PS-Streams (beispielsweise von DVDs)
+in TS-Streams zu konvertieren (ps2ts-Konverter). Natürlich kann es auch
+TS-Streams lesen und sie reparieren, in dem Streamunterbrechungen
+berücksichtigt werden (ts2ts-Konverter)..
+
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570851"></a>
+
+Die Channel
+</h3></div></div></div><p>
+
+
+
+Ein <span class="emphasis"><em>Channel</em></span> erhält einen
+Stream von einem Konverter und sendet ihn an ein gegebenes Ziel
+(Netzwerk, Datei...). Wenn Sie möchten, können Sie einen "Channel" auch
+einen "Output" nennen. Dies ist das gleiche. Derzeit gibt es zwei unterstützte
+Arten von Channeln: <span class="emphasis"><em>network</em></span> und 
+<span class="emphasis"><em>file</em></span>. Beachten Sie das VLS derzeit nur einen
+Output pro Stream unterstützt. Sie können also nicht einen Streamen über
+das Netzwerk senden und ihn gleichzeitig in eine Datei speichern. Der
+Netzwerk-Output umfassend konfigurierbar. Sie können wählen, welches
+Netzwerk-Interface Sie benutzen, sowie Quell- und Ziel-IP-Adressen 
+angeben
+.
+
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570890"></a>
+
+Der Manager
+</h3></div></div></div><p>
+
+Der <span class="emphasis"><em>Manager</em></span> kontrolliert
+die gesendeten Streams. Durch ein <span class="emphasis"><em>Administrationsinterface
+</em></span> können Sie dem Manager mitteilen, die verschiedenen
+Programme zu starten, stoppen, anzuhalten, wiederaufzunehmen, zu
+beschleunigen oder zu verlangsamen. Sie können auch eine Liste aller
+Programme erhalten. Der Manager liest diese aus der VLS-Konfigurationsdatei
+(<code class="filename">vls.cfg</code>), weshalb diese nicht geändert werden
+darf, nachdem VLS gestartet wurde. Derzeit können Sie den Manager nicht
+fragen, ob ein angebener Stream gesendet wird. Sie erhalten aber eine
+Fehlermeldung, wenn Sie versuchen einen Stream anzuhalten, der nicht
+gesendet wird
+.
+
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2570932"></a>
+
+Das Administrationsinterface
+</h2></div></div></div><p>
+
+Es gibt derzeit zwei Wege, das Streamen zu
+starten
+:</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+Sie können die <span class="emphasis"><em>Befehlszeile</em></span>
+benutzen, um Argumente beim Start zu übergeben 
+</p></li><li><p>
+
+oder Sie können das <span class="emphasis"><em>Telnet-Interface</em></span>
+benutzen, um das Streamen zu starten/anzuhalten/zu pausieren wann immer Sie
+möchten.
+
+</p></li></ul></div><p>
+
+Wenn Sie das Telnet-Interface benutzen, müssen
+Sie sich authentifizieren, bevor sie einen Befehl angeben, weil nicht jedem
+Benutzer erlaubt werden darf, einen Befehl auszuführen (dies kann in der
+Konfigurationsdatei <code class="filename">vls.cfg</code> eingestellt werden).
+
+</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. 
+Installation von VLS
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 4. 
+
+
+Konfiguration
+</td></tr></table></div></body></html>

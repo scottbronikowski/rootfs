@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 6.  Transmisión de un canal DVB (satélite o televisión digital terrestre)</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch05.html" title="Chapter 5.  Transmitir un DVD" /><link rel="next" href="ch07.html" title="Chapter 7.  Transmisión desde una tarjeta de codificación MPEG2" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. 
+Transmisión de un canal DVB (satélite o televisión digital
+terrestre)
+
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch07.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="dvb"></a>Chapter 6. 
+Transmisión de un canal DVB (satélite o televisión digital
+terrestre)
+
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch06.html#id2573959">
+
+
+Instalar los drivers DVB
+
+</a></span></dt><dt><span class="sect1"><a href="ch06.html#id2575015">
+
+
+Transmisión con VLS
+
+</a></span></dt><dt><span class="sect1"><a href="ch06.html#id2575125">
+
+
+Transmisión con VLC
+
+</a></span></dt></dl></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+
+Esto sólo es posible bajo GNU/Linux
+
+
+.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573959"></a>
+
+
+Instalar los drivers DVB
+
+</h2></div></div></div><p>
+
+
+Si se quiere transmitir desde una tarjeta DVB (tarjeta de satélite o de TV digital terrestre), se necesita instalar los drivers DVB:
+
+
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+
+
+
+
+si se utiliza un kernel Linux 2.6.x, sólo se necesita compilar los módulos adecuados;
+
+
+
+</p></li><li><p>
+
+
+
+
+
+si se está usando un kernel Linux 2.4.x, 
+se debe descargar la última versión de los drivers DVB desde la <a class="ulink" href="http://www.linuxtv.org/download/dvb/" target="_top">página de descarga de drivers DVB
+</a> del proyecto <a class="ulink" href="http://www.linuxtv.org/" target="_top">LinuxTV</a>
+Project.
+
+
+
+</p></li></ul></div><p>
+
+
+Descomprimir el tarball y seguir las instrucciones
+escritas en el fichero <code class="filename">INSTALL</code> para compilar e instalar
+los drivers
+
+
+.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2575015"></a>
+
+
+Transmisión con VLS
+
+</h2></div></div></div><p>
+
+
+Crear un fichero <code class="filename">.dvbrc</code> que contenga 
+los canales DVB (canales de satélite o de televisión digital terrestre) que se 
+quieren transmitir en el directorio raiz (algunos de ellos se proporcionan en el
+tarball <span class="emphasis"><em>libdvb</em></span> para canales de satélite)
+
+
+.</p><p>
+
+
+Ejecutar VLS con la siguiente línea de comandos
+
+
+ :</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vls -vv -d udp:192.168.0.42 dvb:"EUROSPORT" --ttl 12</code></strong>
+</pre><p>
+
+ 
+donde
+
+:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>"EUROSPORT"</em></span>
+
+
+ es el canal que se quiere transmitir, como se ha descrito en el fichero
+<code class="filename">~/.dvbrc</code>
+
+,</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+
+
+ es 
+
+:</p><div class="itemizedlist"><ul type="circle"><li><p>
+
+
+la dirección IP de la máquina a la que se quiere hacer unicast
+
+
+;</p></li><li><p>
+
+
+o el DNS de la máquina a la que se quiere hacer unicast
+
+
+;</p></li><li><p>
+
+
+o una dirección IP multicast
+
+
+.</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+
+
+ es el valor del TTL (Time To
+Live) de los paquetes IP (lo que significa que el stream será capaz
+de cruzar por 11 routers)
+
+
+.</p></li></ul></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2575125"></a>
+
+
+Transmisión con VLC
+
+</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+Para esto, se debería utilizar la versión SVN de VLC y compilarla
+con <span class="command"><strong>./configure --enable-dvb</strong></span> Esta característica debería
+ser considerada todavía como experimental.
+
+</p></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --program 8211 dvb:12597000:0:3:27500000 --sout udp:192.168.0.12 --ttl 12</code></strong>
+</pre><p>
+
+
+donde
+
+ :</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+<code class="filename">8211</code> es el PID del canal DVB
+que se quiere transmitir, expresado como un decimal
+
+
+;</p></li><li><p>
+
+<code class="filename">12597000</code> es la frecuencia del
+transpondedor que se quiere transmitir, en Hz
+
+;</p></li><li><p>
+
+<code class="filename">0</code> es la polarización (0 para
+vertical, 1 para horizontal)
+
+;</p></li><li><p>
+
+<code class="filename">3</code> es el FEC (3 para 3/4, 9 para
+automático)
+
+;</p></li><li><p>
+
+<code class="filename">27500000</code> es la tasa de
+símbolos (symbolrate) del transpondedor, en Hz
+
+;</p></li><li><p><span class="emphasis"><em>192.168.0.12</em></span>
+
+ es 
+
+:</p><div class="itemizedlist"><ul type="circle"><li><p>
+
+la dirección IP de la máquina a la que se quiere transmitir en unicast
+
+
+;</p></li><li><p>
+
+o el nombre DNS de la máquina a la que se quiere transmitir en unicast
+
+
+;</p></li><li><p>
+
+o la dirección IP multicast.
+
+</p></li></ul></div></li><li><p>
+
+<span class="emphasis"><em>12</em></span> es el valor del TTL (Time
+To Live) de los paquetes IP (lo que significa que el flujo es capaz de cruzar 11
+routers).
+
+</p></li></ul></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 5. 
+
+
+Transmitir un DVD
+
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 7. 
+Transmisión desde una tarjeta de codificación MPEG2
+</td></tr></table></div></body></html>

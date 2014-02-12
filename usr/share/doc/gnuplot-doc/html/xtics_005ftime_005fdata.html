@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<title>xtics_time_data - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="xtics.html#xtics" title="xtics">
+<link rel="prev" href="xtics.html#xtics" title="xtics">
+<link rel="next" href="xtics_005frangelimited.html#xtics_005frangelimited" title="xtics_rangelimited">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="xtics_time_data"></a>
+<a name="xtics_005ftime_005fdata"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="xtics_005frangelimited.html#xtics_005frangelimited">xtics_rangelimited</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="xtics.html#xtics">xtics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="xtics.html#xtics">xtics</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.91.1 xtics time_data</h5>
+
+<!-- ?set xtics time_axis tics -->
+<!-- ?xtics time_axis tics -->
+<!-- ?time_axis tics -->
+<p>In case of timeseries data, axis tic position values must be given as quoted
+dates or times according to the format <a href="timefmt.html#timefmt">timefmt</a>. If the &lt;start&gt;, &lt;incr&gt;, &lt;end&gt;
+form is used, &lt;start&gt; and &lt;end&gt; must be given according to <a href="timefmt.html#timefmt">timefmt</a>, but
+&lt;incr&gt; must be in seconds.  Times will be written out according to the format
+given on `set format`, however.
+
+   <p>Examples:
+<pre class="example">           set xdata time
+           set timefmt "%d/%m"
+           set xtics format "%b %d"
+           set xrange ["01/12":"06/12"]
+           set xtics "01/12", 172800, "05/12"
+     
+</pre>
+   <pre class="example">           set xdata time
+           set timefmt "%d/%m"
+           set xtics format "%b %d"
+           set xrange ["01/12":"06/12"]
+           set xtics ("01/12", "" "03/12", "05/12")
+</pre>
+   <p>Both of these will produce tics "Dec 1", "Dec 3", and "Dec 5", but in the
+second example the tic at "Dec 3" will be unlabelled.
+
+   </body></html>
+

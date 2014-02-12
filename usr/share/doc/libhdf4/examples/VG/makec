@@ -1,0 +1,42 @@
+# Edit the following variables as needed
+HDF_INSTALL = 
+CC          = cc
+CFLAGS      = 
+LIB         = -lm
+
+INCLUDE   = -I$(HDF_INSTALL)/include
+LIBSHDF   = -L$(HDF_INSTALL)/lib -lmfhdf -ldf -ljpeg -lz
+
+VG: create_vgroup \
+	add_sds_to_vgroup \
+	insert_vdatas_to_vgroup\
+	get_vgroup_info \
+	set_get_vgroup_attr \
+	vgroup_contents 
+
+create_vgroup: create_vgroup.c
+	$(CC) $(CFLAGS) -o $@ create_vgroup.c $(INCLUDE) $(LIBSHDF) $(LIB)
+
+add_sds_to_vgroup: add_sds_to_vgroup.c
+	$(CC) $(CFLAGS) -o $@ add_sds_to_vgroup.c $(INCLUDE) $(LIBSHDF) $(LIB)
+
+insert_vdatas_to_vgroup: insert_vdatas_to_vgroup.c
+	$(CC) $(CFLAGS) -o $@ insert_vdatas_to_vgroup.c $(INCLUDE) $(LIBSHDF) $(LIB)
+
+get_vgroup_info: get_vgroup_info.c
+	$(CC) $(CFLAGS) -o $@ get_vgroup_info.c $(INCLUDE) $(LIBSHDF) $(LIB)
+ 
+set_get_vgroup_attr: set_get_vgroup_attr.c
+	$(CC) $(CFLAGS) -o $@ set_get_vgroup_attr.c $(INCLUDE) $(LIBSHDF) $(LIB)
+ 
+vgroup_contents: vgroup_contents.c
+	$(CC) $(CFLAGS) -o $@ vgroup_contents.c $(INCLUDE) $(LIBSHDF) $(LIB)
+
+clean: 
+	rm -f *.o create_vgroup \
+	add_sds_to_vgroup \
+	insert_vdatas_to_vgroup\
+	get_vgroup_info \
+	set_get_vgroup_attr \
+	vgroup_contents 
+.SUFFIXES:.o.c

@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>grid_data - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="splot.html#splot" title="splot">
+<link rel="prev" href="data_002dfile.html#data_002dfile" title="data-file">
+<link rel="next" href="splot_005foverview.html#splot_005foverview" title="splot_overview">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="grid_data"></a>
+<a name="grid_005fdata"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="splot_005foverview.html#splot_005foverview">splot_overview</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="data_002dfile.html#data_002dfile">data-file</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="splot.html#splot">splot</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.26.2 grid data</h4>
+
+<!-- ?commands splot grid_data -->
+<!-- ?splot grid_data -->
+<p><a name="index-grid_005fdata-704"></a>
+The 3D routines are designed for points in a grid format, with one sample,
+datapoint, at each mesh intersection; the datapoints may originate from
+either evaluating a function, see <a href="isosamples.html#isosamples">isosamples</a>, or reading a datafile,
+see <a href="datafile.html#datafile">datafile</a>.  The term "isoline" is applied to the mesh lines for
+both functions and data.  Note that the mesh need not be rectangular in x
+and y, as it may be parameterized in u and v, see <a href="isosamples.html#isosamples">isosamples</a>.
+
+   <p>However, `gnuplot` does not require that format.  In the case of functions,
+'samples' need not be equal to 'isosamples', i.e., not every x-isoline
+sample need intersect a y-isoline. In the case of data files, if there
+are an equal number of scattered data points in each datablock, then
+"isolines" will connect the points in a datablock, and "cross-isolines"
+will connect the corresponding points in each datablock to generate a
+"surface".  In either case, contour and hidden3d modes may give different
+plots than if the points were in the intended format.  Scattered data can be
+converted to a {different} grid format with <a href="dgrid3d.html#dgrid3d">dgrid3d</a>.
+
+   <p>The contour code tests for z intensity along a line between a point on a
+y-isoline and the corresponding point in the next y-isoline.  Thus a `splot`
+contour of a surface with samples on the x-isolines that do not coincide with
+a y-isoline intersection will ignore such samples. Try:
+<pre class="example">            set xrange [-pi/2:pi/2]; set yrange [-pi/2:pi/2]
+            set style function lp
+            set contour
+            set isosamples 10,10; set samples 10,10;
+            splot cos(x)*cos(y)
+            set samples 4,10; replot
+            set samples 10,4; replot
+     
+</pre>
+   </body></html>
+

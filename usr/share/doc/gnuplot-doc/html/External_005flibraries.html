@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+<title>External_libraries - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Bugs.html#Bugs" title="Bugs">
+<link rel="prev" href="Gnuplot_005flimitations.html#Gnuplot_005flimitations" title="Gnuplot_limitations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="External_libraries"></a>
+<a name="External_005flibraries"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Gnuplot_005flimitations.html#Gnuplot_005flimitations">Gnuplot_limitations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Bugs.html#Bugs">Bugs</a>
+<hr>
+</div>
+
+<h3 class="section">6.2 External libraries</h3>
+
+<!-- ?bugs external_libraries -->
+<p><a name="index-libgd-973"></a>
+<a name="index-svgalib-974"></a><a name="index-svgalib-975"></a>
+
+   <p><a name="index-locale-976"></a><a name="index-locale-977"></a>
+
+   <p><a name="index-internationalization-978"></a>
+<a name="index-pdf-979"></a><a name="index-pdf-980"></a>
+
+   <p>External library GD (used by PNG/JPEG/GIF drivers):
+Versions of libgd through 2.0.33 contain various bugs in mapping the characters
+of Adobe's Symbol font.  Also it is possible to trigger a library segfault if
+an anti-aliased line crosses an upper corner of the canvas.
+
+   <p>External library PDFlib (used by PDF driver):
+Gnuplot can be linked against libpdf versions 4, 5, or 6. However, these
+versions differ in their handling of piped I/O.  Therefore gnuplot scripts
+using piped output to PDF may work only for some versions of PDFlib.
+
+   <p>External library svgalib (used by linux and vgagl driver):
+Requires gnuplot to be suid root (bad!) and has many bugs that are specific
+to the video card or graphics driver used in X11.
+
+   <p>Internationalization (locale settings):
+Gnuplot uses the C runtime library routine setlocale() to control
+locale-specific formatting of input and output number, times, and date strings. 
+The locales available, and the level of support for locale features such as
+"thousands' grouping separator", depend on the internationalization support
+provided by your individual machine.
+
+   </body></html>
+

@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>save - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="reset.html#reset" title="reset">
+<link rel="next" href="set_002dshow.html#set_002dshow" title="set-show">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="save"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="set_002dshow.html#set_002dshow">set-show</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="reset.html#reset">reset</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.23 save</h3>
+
+<!-- ?commands save -->
+<p><a name="index-save-380"></a><a name="index-save-381"></a>
+
+<!-- ^ <a name="save set"></a> -->
+   <p>The <a href="save.html#save">save</a> command saves user-defined functions, variables, the `set
+term` status, all `set` options, or all of these, plus the last `plot`
+(`splot`) command to the specified file.
+
+   <p>Syntax:
+<pre class="example">           save  {&lt;option&gt;} '&lt;filename&gt;'
+     
+</pre>
+   <p>where &lt;option&gt; is <a href="functions.html#functions">functions</a>, <a href="variables.html#variables">variables</a>, <a href="terminal.html#terminal">terminal</a> or `set`. If
+no option is used, `gnuplot` saves functions, variables, `set`
+options and the last `plot` (`splot`) command.
+
+   <p><a href="save.html#save">save</a>d files are written in text format and may be read by the
+`load` command. For <a href="save.html#save">save</a> with the `set` option or without any
+option, the <a href="terminal.html#terminal">terminal</a> choice and the <a href="output.html#output">output</a> filename are written
+out as a comment, to get an output file that works in other
+installations of gnuplot, without changes and without risk of
+unwillingly overwriting files.
+
+   <p><a href="terminal.html#terminal">terminal</a> will write out just the <a href="terminal.html#terminal">terminal</a> status, without
+the comment marker in front of it. This is mainly useful for
+switching the <a href="terminal.html#terminal">terminal</a> setting for a short while, and getting back
+to the previously set terminal, afterwards, by loading the saved
+<a href="terminal.html#terminal">terminal</a> status. Note that for a single gnuplot session you may
+rather use the other method of saving and restoring current terminal
+by the commands `set term push` and `set term pop`, see `set term`.
+
+   <p>The filename must be enclosed in quotes.
+
+   <p>The special filename "-" may be used to <a href="save.html#save">save</a> commands to standard output. 
+On systems which support a popen function (Unix), the output of save can be
+piped through an external program by starting the file name with a '|'. 
+This provides a consistent interface to `gnuplot`'s internal settings to
+programs which communicate with `gnuplot` through a pipe.  Please see
+help for `batch/interactive` for more details.
+
+   <p>Examples:
+<pre class="example">           save 'work.gnu'
+           save functions 'func.dat'
+           save var 'var.dat'
+           save set 'options.dat'
+           save term 'myterm.gnu'
+           save '-'
+           save '|grep title &gt;t.gp'
+     
+</pre>
+   </body></html>
+

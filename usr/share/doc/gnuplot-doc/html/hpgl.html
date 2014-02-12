@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>hpgl - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="hp500c.html#hp500c" title="hp500c">
+<link rel="next" href="hpljii.html#hpljii" title="hpljii">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="hpgl"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="hpljii.html#hpljii">hpljii</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="hp500c.html#hp500c">hp500c</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.34 hpgl</h5>
+
+<!-- ?commands set terminal hpgl -->
+<!-- ?set terminal hpgl -->
+<!-- ?set term hpgl -->
+<!-- ?terminal hpgl -->
+<!-- ?term hpgl -->
+<p><a name="index-hpgl-812"></a><a name="index-hpgl-813"></a>
+
+<!-- ?commands set terminal pcl5 -->
+<!-- ?set terminal pcl5 -->
+<!-- ?set term pcl5 -->
+<!-- ?terminal pcl5 -->
+<!-- ?term pcl5 -->
+   <p><a name="index-pcl5-814"></a><a name="index-pcl5-815"></a>
+
+   <p>The `hpgl` driver produces HPGL output for devices like the HP7475A plotter. 
+There are two options which can be set: the number of pens and `eject`,
+which tells the plotter to eject a page when done.  The default is to use 6
+pens and not to eject the page when done.
+
+   <p>The international character sets ISO-8859-1 and CP850 are recognized via
+`set encoding iso_8859_1` or `set encoding cp850` (see <a href="encoding.html#encoding">encoding</a> for
+details).
+
+   <p>Syntax:
+<pre class="example">           set terminal hpgl {&lt;number_of_pens&gt;} {eject}
+     
+</pre>
+   <p>The selection
+
+<pre class="example">           set terminal hpgl 8 eject
+     
+</pre>
+   <p>is equivalent to the previous `hp7550` terminal, and the selection
+
+<pre class="example">           set terminal hpgl 4
+     
+</pre>
+   <p>is equivalent to the previous `hp7580b` terminal.
+
+   <p>The `pcl5` driver supports plotters such as the Hewlett-Packard Designjet
+750C, the Hewlett-Packard Laserjet III, and the Hewlett-Packard Laserjet IV. 
+It actually uses HPGL-2, but there is a name conflict among the terminal
+devices.  It has several options which must be specified in the order
+indicated below:
+
+   <p>Syntax:
+<pre class="example">           set terminal pcl5 {mode &lt;mode&gt;} {&lt;plotsize&gt;}
+               {{color {&lt;number_of_pens&gt;}} | monochrome} {solid | dashed}
+               {font &lt;font&gt;} {size &lt;fontsize&gt;} {pspoints | nopspoints}
+     
+</pre>
+   <p>&lt;mode&gt; is `landscape` or `portrait`. &lt;plotsize&gt; is the physical
+plotting size of the plot, which is one of the following: `letter` for
+standard (8 1/2" X 11") displays, `legal` for (8 1/2" X 14") displays,
+`noextended` for (36" X 48") displays (a letter size ratio) or,
+`extended` for (36" X 55") displays (almost a legal size ratio). 
+`color` is for multi-pen (i.e. color) plots, and &lt;number_of_pens&gt; is
+the number of pens (i.e. colors) used in color plots. `monochrome` is for
+one (e.g. black) pen plots. `solid` draws all lines as solid lines, or
+`dashed` will draw lines with different dashed and dotted line patterns. 
+&lt;font&gt; is `stick`, `univers`, `cg_times`, `zapf_dingbats`, `antique_olive`,
+`arial`, `courier`, `garamond_antigua`, `letter_gothic`, `cg_omega`,
+`albertus`, `times_new_roman`, `clarendon`, `coronet`, `marigold`,
+`truetype_symbols`, or `wingdings`. &lt;fontsize&gt; is the font size in points. 
+The point type selection can be the standard default set by specifying
+`nopspoints`, or the same set of point types found in the postscript terminal
+by specifying `pspoints`.
+
+   <p>Note that built-in support of some of these options is printer device
+dependent. For instance, all the fonts are supposedly supported by the HP
+Laserjet IV, but only a few (e.g. univers, stick) may be supported by the HP
+Laserjet III and the Designjet 750C. Also, color obviously won't work on the
+the laserjets since they are monochrome devices.
+
+   <p>Defaults: landscape, noextended, color (6 pens), solid, univers, 12 point,
+<pre class="example">               and nopspoints.
+     
+</pre>
+   <p>With `pcl5` international characters are handled by the printer; you just put
+the appropriate 8-bit character codes into the text strings.  You don't need
+to bother with <a href="encoding.html#encoding">encoding</a>.
+
+   <p>HPGL graphics can be imported by many software packages."
+
+   </body></html>
+

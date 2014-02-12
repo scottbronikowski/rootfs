@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on May 29, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>psgml: 4. The Entity Manager</title>
+
+<meta name="description" content="psgml: 4. The Entity Manager">
+<meta name="keywords" content="psgml: 4. The Entity Manager">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Entity-manager"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml_3.html#Invoke" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_5.html#Validate" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml_3.html#Invoke" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_5.html#Validate" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="The-Entity-Manager"></a>
+<h1 class="chapter">4. The Entity Manager</h1>
+<a name="index-public-identifier"></a>
+<a name="index-system-identifier"></a>
+<a name="index-external-identifier"></a>
+<a name="index-entity-catalog"></a>
+
+
+<p>SGML can refer to an external file (really entity) with an
+<em>external identifier</em>, this is a <em>public identifier</em> or a
+<em>system identifier</em>, or both.
+</p>
+<p>A typical public identifier looks like
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">PUBLIC &quot;ISO 8879:1986//ENTITIES Added Latin 1//EN&quot;
+</pre></td></tr></table>
+
+<p>where &ldquo;ISO 8879:1986&rdquo; is the owner, &ldquo;ENTITIES&rdquo; is the text class and
+&ldquo;Added Latin 1&rdquo; is the text description (and &ldquo;EN&rdquo; is language).
+</p>
+<p>A system identifier looks like
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">SYSTEM &quot;htmlplus.dtd&quot;
+</pre></td></tr></table>
+
+<p>where &ldquo;htmlplus.dtd&rdquo; is a system-specific identifier. 
+</p>
+<p>To map external identifiers to file names, PSGML first searches entity
+catalog files and then search the list of file name templates in the
+variable <code>sgml-public-map</code>.
+</p>
+<p>The catalog format is according to SGML/Opens resolution on entity
+management.  The catalog consists of a series of entries and comments.  A
+comment is delimited by &lsquo;<samp>--</samp>&rsquo; like in a markup declaration.
+The entry types recognized are described in the following table.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>public <var>pubid</var> <var>file</var></samp>&rsquo;</dt>
+<dd><p>The <var>file</var> will be used for the entity text of an entity
+with the public identifier <var>pubid</var>.
+</p>
+</dd>
+<dt> &lsquo;<samp>entity <var>name</var> <var>file</var></samp>&rsquo;</dt>
+<dd><p>The <var>file</var> will be used for the entity text of an entity
+with the name <var>name</var>.  If the <var>name</var> starts with a &lsquo;<samp>%</samp>&rsquo; the
+rest of the name will be matched against parameter entities.
+</p>
+</dd>
+<dt> &lsquo;<samp>doctype <var>name</var> <var>file</var></samp>&rsquo;</dt>
+<dd><p>The <var>file</var> will be used for the entity text of an entity
+used as external subset of a document declaration with <var>name</var> as
+document type name.
+</p>
+</dd>
+<dt> &lsquo;<samp>sgmldecl <var>file</var></samp>&rsquo;</dt>
+<dd><p>Used to specify a default SGML declaration.  Recognized but not used by
+PSGML other than to pass to an external validation command
+(<code>sgml-validate-command</code>).
+</p>
+</dd>
+</dl>
+
+<p>When PSGML is looking for the file containing an external entity, the
+following things will be tried in order:
+</p>
+<ol>
+<li>
+<a name="index-sgml_002dsystem_002didentifiers_002dare_002dpreferred"></a>
+</li><li>
+Try the system identifier, as a file name, if there is a system
+identifier and the variable <code>sgml-system-identifiers-are-preferred</code>
+is non-<code>nil</code> and there is no elements containing &lsquo;<samp>%s</samp>&rsquo; in
+<code>sgml-public-map</code>.  If the system identifier is a relative file name
+it will be relative to the directory containing the defining entity.
+
+</li><li>
+Look thru each catalog in <code>sgml-local-catalogs</code> and
+<code>sgml-catalog-files</code> in order.  For each catalog look first for
+entries matching the public identifier, if any.  Then look for other
+matching entries in the order they appear in the catalog.
+
+<p>Currently an entry will be ignored if it is matching but its file is
+non-existent or unreadable.  (This is under reconsideration, perhaps it
+should signal error instead).
+</p>
+</li><li>
+Try the system identifier, if any, as a file name.
+If <code>sgml-system-identifiers-are-preferred</code> is <code>nil</code>
+and there is no elements containing &lsquo;<samp>%s</samp>&rsquo; in <code>sgml-public-map</code>.
+
+</li><li>
+Try the entries in <code>sgml-public-map</code>.  Using the catalogs are
+preferred.  The <code>sgml-public-map</code> may disappear in a future version
+of PSGML (not soon though).
+
+</li></ol>
+
+<p>The <code>sgml-public-map</code> variable can contain a list of file name
+templates where &lsquo;<samp>%P</samp>&rsquo; will be substituted with the whole public
+identifier, owner is substituted for &lsquo;<samp>%O</samp>&rsquo;, public text class for
+&lsquo;<samp>%C</samp>&rsquo;, and public text description for &lsquo;<samp>%D</samp>&rsquo;.  The text class
+will be converted to lower case and the owner and description will be
+transliterated according to the variable
+<code>sgml-public-transliterations</code>.  The templates in the list is tried
+in order until an existing file is found.  The <code>sgml-public-map</code> is
+modeled after &lsquo;<tt>sgmls</tt>&rsquo; environment variable <code>SGML_PATH</code> and
+psgml understand the following substitution characters: %%, %N, %P, %S,
+%Y, %C, %L, %O, %T, and %V.  The default value of
+<code>sgml-public-map</code> is taken from the environment variable
+<code>SGML_PATH</code>.
+</p>
+<p>Given the public identifier above and the file name template 
+&lsquo;<samp>/usr/local/lib/sgml/%o/%c/%d</samp>&rsquo;, the resulting file name is
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/usr/local/lib/sgml/ISO_8879:1986/entities/Added_Latin_1
+</pre></td></tr></table>
+
+<p>Note: blanks are transliterated to &lsquo;<samp>_</samp>&rsquo; (and also &lsquo;<samp>/</samp>&rsquo; to
+&lsquo;<samp>%</samp>&rsquo;) and the text class is down cased.
+</p>
+
+
+<dl>
+<dt><a name="index-sgml_002dcatalog_002dfiles"></a><u>User Option:</u> <b>sgml-catalog-files</b></dt>
+<dd><p>This is a list of catalog entry files.
+The files are in the format defined in the SGML Open Draft Technical
+Resolution on Entity Management.  The Emacs variable is initialized from
+the environment variable <code>SGML_CATALOG_FILES</code> or if this variable
+is undefined the default is
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="lisp">(&quot;CATALOG&quot; &quot;/usr/local/lib/sgml/CATALOG&quot;)
+</pre></td></tr></table>
+</dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dlocal_002dcatalogs"></a><u>User Option:</u> <b>sgml-local-catalogs</b></dt>
+<dd><p>A list of SGML entity catalogs to be searched first when parsing the
+buffer.  This is used in addition to <code>sgml-catalog-files</code>, and
+<code>sgml-public-map</code>.  This variable is automatically local to the
+buffer.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dsystem_002didentifiers_002dare_002dpreferred-1"></a><u>User Option:</u> <b>sgml-system-identifiers-are-preferred</b></dt>
+<dd><p>If <code>nil</code>, PSGML will look up external entities by searching the
+catalogs in <code>sgml-local-catalogs</code> and <code>sgml-catalog-files</code> and
+only if the entity is not found in the catalogs will a given system
+identifier be used.  If the variable is non-nil and a system identifier is
+given, the system identifier will be used for the entity.  If no system
+identifier is given the catalogs will searched.
+</p></dd></dl>
+
+
+<dl>
+<dt><a name="index-sgml_002dpublic_002dmap"></a><u>User Option:</u> <b>sgml-public-map</b></dt>
+<dd><p>This should be a list of file name templates.  This variable is
+initialized from the environment variable <code>SGML_PATH</code>.  This is
+the same environment variable that &lsquo;<tt>sgmls</tt>&rsquo; uses.  If the
+environment variable is undefined the default is
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="lisp">(&quot;%S&quot; &quot;/usr/local/lib/sgml/%o/%c/%d&quot;)
+</pre></td></tr></table>
+</dd></dl>
+
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml_3.html#Invoke" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_5.html#Validate" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon user</em> on <em>May 29, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

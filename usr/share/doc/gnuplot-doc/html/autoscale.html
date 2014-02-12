@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>autoscale - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="arrow.html#arrow" title="arrow">
+<link rel="next" href="bars.html#bars" title="bars">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="autoscale"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="bars.html#bars">bars</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="arrow.html#arrow">arrow</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.3 autoscale</h4>
+
+<!-- ?commands set autoscale -->
+<!-- ?commands unset autoscale -->
+<!-- ?commands show autoscale -->
+<!-- ?set autoscale -->
+<!-- ?unset autoscale -->
+<!-- ?show autoscale -->
+<p><a name="index-autoscale-392"></a><a name="index-autoscale-393"></a>
+
+   <p><a name="index-noautoscale-394"></a>
+Autoscaling may be set individually on the x, y or z axis or globally on all
+axes. The default is to autoscale all axes.  If you want to autoscale based on
+a subset of the plots in the figure, you can mark the other ones with the flag
+`noautoscale`.  See <a href="datafile.html#datafile">datafile</a>.
+
+   <p>Syntax:
+<pre class="example">           set autoscale {&lt;axes&gt;{|min|max|fixmin|fixmax|fix} | fix | keepfix}
+           unset autoscale {&lt;axes&gt;}
+           show autoscale
+     
+</pre>
+   <p>where &lt;axes&gt; is either `x`, `y`, `z`, `cb`, `x2`, `y2` or `xy`.  A keyword with
+`min` or `max` appended (this cannot be done with `xy`) tells `gnuplot` to
+autoscale just the minimum or maximum of that axis.  If no keyword is given,
+all axes are autoscaled.
+
+   <p>A keyword with `fixmin`, `fixmax` or `fix` appended tells gnuplot to disable
+extension of the axis range to the next tic mark position, for autoscaled
+axes using equidistant tics; `set autoscale fix` sets this for all axes. 
+Command `set autoscale keepfix` autoscales all axes while keeping the fix
+settings.
+
+   <p>When autoscaling, the axis range is automatically computed and the dependent
+axis (y for a `plot` and z for `splot`) is scaled to include the range of the
+function or data being plotted.
+
+   <p>If autoscaling of the dependent axis (y or z) is not set, the current y or z
+range is used.
+
+   <p>Autoscaling the independent variables (x for `plot` and x,y for `splot`) is a
+request to set the domain to match any data file being plotted.  If there are
+no data files, autoscaling an independent variable has no effect.  In other
+words, in the absence of a data file, functions alone do not affect the x
+range (or the y range if plotting z = f(x,y)).
+
+   <p>Please see <a href="xrange.html#xrange">xrange</a> for additional information about ranges.
+
+   <p>The behavior of autoscaling remains consistent in parametric mode, (see
+`set parametric`).  However, there are more dependent variables and hence more
+control over x, y, and z axis scales.  In parametric mode, the independent or
+dummy variable is t for `plot`s and u,v for `splot`s.  <a href="autoscale.html#autoscale">autoscale</a> in
+parametric mode, then, controls all ranges (t, u, v, x, y, and z) and allows
+x, y, and z to be fully autoscaled.
+
+   <p>Autoscaling works the same way for polar mode as it does for parametric mode
+for `plot`, with the extension that in polar mode <a href="dummy.html#dummy">dummy</a> can be used to
+change the independent variable from t (see <a href="dummy.html#dummy">dummy</a>).
+
+   <p>When tics are displayed on second axes but no plot has been specified for
+those axes, x2range and y2range are inherited from xrange and yrange.  This
+is done _before_ xrange and yrange are autoextended to a whole number of
+tics, which can cause unexpected results.  You can use the `fixmin`
+or `fixmax` options to avoid this.
+
+   <p>Examples:
+
+   <p>This sets autoscaling of the y axis (other axes are not affected):
+<pre class="example">           set autoscale y
+     
+</pre>
+   <p>This sets autoscaling only for the minimum of the y axis (the maximum of the
+y axis and the other axes are not affected):
+<pre class="example">           set autoscale ymin
+     
+</pre>
+   <p>This disables extension of the x2 axis tics to the next tic mark,
+thus keeping the exact range as found in the plotted data and functions:
+<pre class="example">           set autoscale x2fixmin
+           set autoscale x2fixmax
+     
+</pre>
+   <p>This sets autoscaling of the x and y axes:
+<pre class="example">           set autoscale xy
+     
+</pre>
+   <p>This sets autoscaling of the x, y, z, x2 and y2 axes:
+<pre class="example">           set autoscale
+     
+</pre>
+   <p>This disables autoscaling of the x, y, z, x2 and y2 axes:
+<pre class="example">           unset autoscale
+     
+</pre>
+   <p>This disables autoscaling of the z axis only:
+<pre class="example">           unset autoscale z
+     
+</pre>
+   <ul class="menu">
+<li><a accesskey="1" href="parametric_005fmode.html#parametric_005fmode">parametric_mode</a>
+<li><a accesskey="2" href="polar_005fmode.html#polar_005fmode">polar_mode</a>
+</ul>
+
+   </body></html>
+

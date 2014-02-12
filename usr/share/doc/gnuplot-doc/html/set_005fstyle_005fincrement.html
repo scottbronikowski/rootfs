@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+<title>set_style_increment - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="style.html#style" title="style">
+<link rel="prev" href="set_005fstyle_005ffunction.html#set_005fstyle_005ffunction" title="set_style_function">
+<link rel="next" href="set_005fstyle_005fline.html#set_005fstyle_005fline" title="set_style_line">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="set_style_increment"></a>
+<a name="set_005fstyle_005fincrement"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="set_005fstyle_005fline.html#set_005fstyle_005fline">set_style_line</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="set_005fstyle_005ffunction.html#set_005fstyle_005ffunction">set_style_function</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="style.html#style">style</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.61.5 set style increment</h5>
+
+<!-- ?commands set style increment -->
+<!-- ?commands show style increment -->
+<!-- ?set style increment -->
+<!-- ?show style increment -->
+<p>Syntax:
+<pre class="example">           set style increment {default|userstyles}
+           show style increment
+     
+</pre>
+   <p>By default, successive plots within the same graph will use successive
+linetypes from the default set for the current terminal type. 
+However, choosing `set style increment user` allows you to step through
+the user-defined line styles rather than through the default linetypes.
+
+   <p>Example:
+
+<pre class="example">           set style line 1 lw 2 lc rgb "gold"
+           set style line 2 lw 2 lc rgb "purple"
+           set style line 4 lw 1 lc rgb "sea-green"
+           set style increment user
+     
+</pre>
+   <pre class="example">           plot f1(x), f2(x), f3(x), f4(x)
+     
+</pre>
+   <p>should plot functions f1, f2, f4 in your 3 newly defined line styles. 
+If a user-defined line style is not found then the corresponding default
+linetype is used instead.  E.g. in the example above, f3(x) will be plotted
+using the default linetype 3.
+
+   </body></html>
+

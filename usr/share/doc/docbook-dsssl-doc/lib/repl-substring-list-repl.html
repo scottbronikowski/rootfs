@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>repl-substring-list-repl</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="DSSSL Library Reference"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Miscellaneous"
+HREF="r300.htm"><LINK
+REL="PREVIOUS"
+TITLE="repl-substring-list-target"
+HREF="repl-substring-list-target.html"><LINK
+REL="NEXT"
+TITLE="repl-substring-list"
+HREF="repl-substring-list.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>DSSSL Library Reference: Part of the Modular DocBook Stylesheet distribution</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="repl-substring-list-target.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="repl-substring-list.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="REPL-SUBSTRING-LIST-REPL"
+></A
+>repl-substring-list-repl</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN814"
+></A
+><H2
+>Name</H2
+>repl-substring-list-repl&nbsp;--&nbsp;Return the replacement that would be used in the string</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN817"
+></A
+><H2
+>Synopsis</H2
+><PRE
+CLASS="SYNOPSIS"
+>(repl-substring-list-repl string replace-list pos)</PRE
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN820"
+></A
+><H2
+>Description</H2
+><P
+>Returns the replacement in <TT
+CLASS="LITERAL"
+>replace-list</TT
+> that would be used for the
+target that matches in <TT
+CLASS="LITERAL"
+>string</TT
+> at <TT
+CLASS="LITERAL"
+>pos</TT
+>
+See also <TT
+CLASS="LITERAL"
+>repl-substring-list?</TT
+>.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN827"
+></A
+><H2
+>Author</H2
+><P
+>Norman Walsh, &lt;ndw@nwalsh.com&gt;</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN830"
+></A
+><H2
+>Source Code</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>(define (repl-substring-list-repl string replace-list pos)
+  ;; Return the replacement that would be used in the string
+  (let loop ((list replace-list))
+    (let ((target (car list))
+	  (repl   (car (cdr list)))
+	  (rest   (cdr (cdr list))))
+      (if (repl-substring? string target pos)
+	  repl
+	  (if (null? rest)
+	      #f
+	      (loop rest))))))</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="repl-substring-list-target.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="repl-substring-list.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>repl-substring-list-target</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="r300.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>repl-substring-list</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>pdfcairo - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="be.html#be" title="be">
+<link rel="next" href="canvas.html#canvas" title="canvas">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="pdfcairo"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="canvas.html#canvas">canvas</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="be.html#be">be</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.7 pdfcairo</h5>
+
+<!-- ?set terminal pdfcairo -->
+<!-- ?terminal pdfcairo -->
+<!-- ?set term pdfcairo -->
+<!-- ?term pdfcairo -->
+<p><a name="index-pdfcairo-733"></a><a name="index-pdfcairo-734"></a>
+
+   <p>The `pdfcairo` terminal device generates output in pdf. The actual
+drawing is done via cairo, a 2D graphics library, and pango, a library for
+laying out and rendering text.
+
+   <p>Syntax:
+<pre class="example">             set term pdfcairo
+                          {{no}enhanced} {mono|color} {solid|dashed}
+                          {font &lt;font&gt;}
+                          {linewidth &lt;lw&gt;} {rounded|butt} {dashlength &lt;dl&gt;}
+                          {size &lt;XX&gt;{unit},&lt;YY&gt;{unit}}
+     
+</pre>
+   <p>This terminal supports an enhanced text mode, which allows font and other
+formatting commands (subscripts, superscripts, etc.) to be embedded in labels
+and other text strings. The enhanced text mode syntax is shared with other
+gnuplot terminal types. See `enhanced` for more details.
+
+   <p>The width of all lines in the plot can be modified by the factor &lt;lw&gt;
+specified in `linewidth`. The default linewidth is 0.25 points. 
+(1 "PostScript" point = 1/72 inch = 0.353 mm)
+
+   <p>`rounded` sets line caps and line joins to be rounded; `butt` is the
+default, butt caps and mitered joins.
+
+   <p>The default size for the output is 5 inches x 3 inches. The <a href="size.html#size">size</a> option
+changes this to whatever the user requests. By default the X and Y sizes are
+taken to be in inches, but other units are possibly (currently only cm). 
+Screen coordinates always run from 0.0 to 1.0 along the full length of the
+plot edges as specified by the <a href="size.html#size">size</a> option.
+
+   <p>&lt;font&gt; is in the format "FontFace,FontSize", i.e. the face and the size
+comma-separated in a single string. FontFace is a usual font face name, such
+as \'Arial\'. If you do not provide FontFace, the pdfcairo terminal will use
+\'Sans\'. FontSize is the font size, in points. If you do not provide it,
+the pdfcairo terminal will use a size of 6 points.
+<pre class="example">        For example :
+           set term pdfcairo font "Arial,12"
+           set term pdfcairo font "Arial" # to change the font face only
+           set term pdfcairo font ",12" # to change the font size only
+           set term pdfcairo font "" # to reset the font name and size
+     
+</pre>
+   <p>The fonts are retrieved from the usual fonts subsystems. Under Windows,
+those fonts are to be found and configured in the entry "Fonts" of the
+control panel. Under UNIX, they are handled by "fontconfig".
+
+   <p>Pango, the library used to layout the text, is based on utf-8. Thus, the pdfcairo
+terminal has to convert from your encoding to utf-8. The default input
+encoding is based on your \'locale\'. If you want to use another encoding,
+make sure gnuplot knows which one you are using. See <a href="encoding.html#encoding">encoding</a> for more
+details.
+
+   <p>Pango may give unexpected results with fonts that do not respect the unicode
+mapping. With the Symbol font, for example, the pdfcairo terminal will use the map
+provided by http://www.unicode.org/ to translate character codes to unicode. 
+Note that "the Symbol font" is to be understood as the Adobe
+Symbol font, distributed with Acrobat Reader as "SY______.PFB". 
+Alternatively, the OpenSymbol font, distributed with OpenOffice.org as
+"opens___.ttf", offers the same characters. Microsoft has distributed a
+Symbol font ("symbol.ttf"), but it has a different character set with
+several missing or moved mathematic characters. If you experience problems
+with your default setup (if the demo enhancedtext.dem is not displayed
+properly for example), you probably have to install one of the Adobe or
+OpenOffice Symbol fonts, and remove the Microsoft one. 
+Other non-conform fonts, such as "wingdings" have been observed working.
+
+   <p>The rendering of the plot cannot be altered yet. To obtain the best output
+possible, the rendering involves two mechanisms : antialiasing and
+oversampling. 
+Antialiasing allows to display non-horizontal and non-vertical lines
+smoother. 
+Oversampling combined with antialiasing provides subpixel accuracy,
+so that gnuplot can draw a line from non-integer coordinates. This avoids
+wobbling effects on diagonal lines ('plot x' for example).
+
+   </body></html>
+

@@ -1,0 +1,83 @@
+<html lang="en">
+<head>
+<title>object - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="mztics.html#mztics" title="mztics">
+<link rel="next" href="offsets.html#offsets" title="offsets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="object"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="offsets.html#offsets">offsets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="mztics.html#mztics">mztics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.46 object</h4>
+
+<p><a name="index-object-504"></a><a name="index-object-505"></a>
+
+<!-- ?commands set object -->
+<!-- ?commands show object -->
+<!-- ?set object -->
+<!-- ?show object -->
+   <p>The <a href="object.html#object">object</a> command defines a single object which will appear in all
+subsequent 2D plots. You may define as many objects as you like. Currently the
+supported object types are <a href="rectangle.html#rectangle">rectangle</a>, `circle`, <a href="ellipse.html#ellipse">ellipse</a>, and <a href="polygon.html#polygon">polygon</a>. 
+Rectangles inherit a default set of style properties (fill, color, border) from
+those set by the command <a href="rectangle.html#rectangle">rectangle</a>, but each object can also be
+given individual style properties. Circles, ellipses, and polygons  inherit the
+fill style from `set style fill`.
+
+   <p>Syntax:
+<pre class="example">         set object &lt;index&gt;
+             &lt;object-type&gt; &lt;object-properties&gt;
+             {front|back|behind} {fc|fillcolor &lt;colorspec&gt;} {fs &lt;fillstyle&gt;}
+             {default} {lw|linewidth &lt;width&gt;}
+     
+</pre>
+   <p>&lt;object-type&gt; is either <a href="rectangle.html#rectangle">rectangle</a>, <a href="ellipse.html#ellipse">ellipse</a>, `circle`, or <a href="polygon.html#polygon">polygon</a>. 
+Each object type has its own set of characteristic properties.
+
+   <p>Setting `front` will draw the object in front of all plot elements, but
+behind any labels that are also marked `front`. Setting `back` will place the
+object behind all plot curves and labels. Setting `behind` will place the
+object behind everything including the axes and `back` rectangles, thus
+<pre class="example">         set object rectangle from screen 0,0 to screen 1,1 behind
+</pre>
+   <p>can be used to provide a colored background for the entire graph or page.
+
+   <p>The fill color of the object is taken from the &lt;colorspec&gt;. `fillcolor`
+may be abbreviated `fc`.  The fill style is taken from &lt;fillstyle&gt;. 
+See <a href="colorspec.html#colorspec">colorspec</a> and `fillstyle`.  If the keyword `default` is given,
+these properties are inherited from the default settings at the time a plot
+is drawn. See <a href="rectangle.html#rectangle">rectangle</a>.
+
+<ul class="menu">
+<li><a accesskey="1" href="rectangle.html#rectangle">rectangle</a>
+<li><a accesskey="2" href="ellipse.html#ellipse">ellipse</a>
+<li><a accesskey="3" href="circle.html#circle">circle</a>
+<li><a accesskey="4" href="polygon.html#polygon">polygon</a>
+</ul>
+
+   </body></html>
+

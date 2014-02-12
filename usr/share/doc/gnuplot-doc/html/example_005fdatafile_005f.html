@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>example_datafile_ - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="data_002dfile.html#data_002dfile" title="data-file">
+<link rel="prev" href="binary_005fmatrix.html#binary_005fmatrix" title="binary_matrix">
+<link rel="next" href="matrix_005fascii.html#matrix_005fascii" title="matrix_ascii">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="example_datafile_"></a>
+<a name="example_005fdatafile_005f"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="matrix_005fascii.html#matrix_005fascii">matrix_ascii</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="binary_005fmatrix.html#binary_005fmatrix">binary_matrix</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="data_002dfile.html#data_002dfile">data-file</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.26.1.2 example datafile</h5>
+
+<!-- ?commands splot datafile example -->
+<!-- ?splot datafile example -->
+<!-- ?splot example -->
+<p>A simple example of plotting a 3D data file is
+
+<pre class="example">           splot 'datafile.dat'
+     
+</pre>
+   <p>where the file "datafile.dat" might contain:
+
+<pre class="example">           # The valley of the Gnu.
+              0 0 10
+              0 1 10
+              0 2 10
+     
+</pre>
+   <pre class="example">              1 0 10
+              1 1 5
+              1 2 10
+     
+</pre>
+   <pre class="example">              2 0 10
+              2 1 1
+              2 2 10
+     
+</pre>
+   <pre class="example">              3 0 10
+              3 1 0
+              3 2 10
+     
+</pre>
+   <p>Note that "datafile.dat" defines a 4 by 3 grid ( 4 rows of 3 points each ). 
+Rows (datablocks) are separated by blank records.
+
+<!-- ^ <img align=bottom src="http://www.gnuplot.info/doc/splot.gif" alt="[splot.gif]" width=640 height=480> -->
+   <p>Note also that the x value is held constant within each dataline.  If you
+instead keep y constant, and plot with hidden-line removal enabled, you will
+find that the surface is drawn 'inside-out'.
+
+   <p>Actually for grid data it is not necessary to keep the x values constant
+within a datablock, nor is it necessary to keep the same sequence of y
+values.  `gnuplot` requires only that the number of points be the same for
+each datablock.  However since the surface mesh, from which contours are
+derived, connects sequentially corresponding points, the effect of an
+irregular grid on a surface plot is unpredictable and should be examined
+on a case-by-case basis.
+
+   </body></html>
+

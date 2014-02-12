@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>output - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="origin.html#origin" title="origin">
+<link rel="next" href="parametric_005f.html#parametric_005f" title="parametric_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="output"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="parametric_005f.html#parametric_005f">parametric_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="origin.html#origin">origin</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.49 output</h4>
+
+<!-- ?commands set output -->
+<!-- ?commands show output -->
+<!-- ?set output -->
+<!-- ?show output -->
+<p><a name="index-output-515"></a><a name="index-output-516"></a>
+
+<!-- ?output file -->
+   <p>By default, screens are displayed to the standard output. The <a href="output.html#output">output</a>
+command redirects the display to the specified file or device.
+
+   <p>Syntax:
+<pre class="example">           set output {"&lt;filename&gt;"}
+           show output
+     
+</pre>
+   <p>The filename must be enclosed in quotes.  If the filename is omitted, any
+output file opened by a previous invocation of <a href="output.html#output">output</a> will be closed
+and new output will be sent to STDOUT.  (If you give the command `set output
+"STDOUT"`, your output may be sent to a file named "STDOUT"!  ["May be", not
+"will be", because some terminals, like `x11` or `wxt`, ignore <a href="output.html#output">output</a>.])
+
+   <p>When both <a href="terminal.html#terminal">terminal</a> and <a href="output.html#output">output</a> are used together, it is safest to
+give <a href="terminal.html#terminal">terminal</a> first, because some terminals set a flag which is needed
+in some operating systems.  This would be the case, for example, if the
+operating system needs to know whether or not a file is to be formatted in
+order to open it properly.
+
+   <p>On machines with popen functions (Unix), output can be piped through a shell
+command if the first non-whitespace character of the filename is '|'. 
+For instance,
+
+<pre class="example">           set output "|lpr -Plaser filename"
+           set output "|lp -dlaser filename"
+     
+</pre>
+   <p>On MSDOS machines, `set output "PRN"` will direct the output to the default
+printer.  On VMS, output can be sent directly to any spooled device.  It is
+also possible to send the output to DECnet transparent tasks, which allows
+some flexibility.
+
+   </body></html>
+

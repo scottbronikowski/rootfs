@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>offsets - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="object.html#object" title="object">
+<link rel="next" href="origin.html#origin" title="origin">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="offsets"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="origin.html#origin">origin</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="object.html#object">object</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.47 offsets</h4>
+
+<!-- ?commands set offsets -->
+<!-- ?commands unset offsets -->
+<!-- ?commands show offsets -->
+<!-- ?set offsets -->
+<!-- ?unset offsets -->
+<!-- ?show offsets -->
+<p><a name="index-offsets-510"></a><a name="index-offsets-511"></a>
+
+   <p><a name="index-nooffsets-512"></a>
+Offsets provide a mechanism to put an empty boundary around the data inside
+an autoscaled graph.  The offsets only affect the x1 and y1 axes, and only in
+2D `plot` commands.
+
+   <p>Syntax:
+<pre class="example">           set offsets &lt;left&gt;, &lt;right&gt;, &lt;top&gt;, &lt;bottom&gt;
+           unset offsets
+           show offsets
+     
+</pre>
+   <p>Each offset may be a constant or an expression.  Each defaults to 0. 
+By default, the left and right offsets are given in units of the first x axis,
+the top and bottom offsets in units of the first y axis.  Alternatively, you
+may specify the offsets as a fraction of the total axis range by using the
+keyword "graph".  A positive offset expands the axis range in the specified
+direction, e.g., a positive bottom offset makes ymin more negative.  Negative
+offsets, while permitted, can have unexpected interactions with autoscaling
+and clipping.  To prevent the auto-scaling from further adjusting your axis
+ranges, it is useful to also specify "set auto fix".
+
+   <p>Example:
+<pre class="example">           set auto fix
+           set offsets graph 0.05, 0, 2, 2
+           plot sin(x)
+     
+</pre>
+   <p>This graph of sin(x) will have a y range [-3:3] because the function
+will be autoscaled to [-1:1] and the vertical offsets are each two. 
+The x range will be [-11:10] because the default is [-10:10] and it has
+been expanded to the left by 0.05 of that total range.
+
+   </body></html>
+

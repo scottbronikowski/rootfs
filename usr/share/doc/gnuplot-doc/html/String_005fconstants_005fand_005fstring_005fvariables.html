@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>String_constants_and_string_variables - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="gnuplot.html#gnuplot" title="gnuplot">
+<link rel="prev" href="Start_002dup.html#Start_002dup" title="Start-up">
+<link rel="next" href="Substitution_005fand_005fCommand_005fline_005fmacros.html#Substitution_005fand_005fCommand_005fline_005fmacros" title="Substitution_and_Command_line_macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="String_constants_and_string_variables"></a>
+<a name="String_005fconstants_005fand_005fstring_005fvariables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Substitution_005fand_005fCommand_005fline_005fmacros.html#Substitution_005fand_005fCommand_005fline_005fmacros">Substitution_and_Command_line_macros</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Start_002dup.html#Start_002dup">Start-up</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="gnuplot.html#gnuplot">gnuplot</a>
+<hr>
+</div>
+
+<h3 class="section">1.20 String constants and string variables</h3>
+
+<p><a name="index-strings-228"></a>
+<!-- ?string variables -->
+In addition to string constants, most gnuplot commands also accept a string
+variable, a string expression, or a function that returns a string. 
+For example, the following four methods of creating a plot all result in the
+same plot title:
+
+<pre class="example">           four = "4"
+           graph4 = "Title for plot #4"
+           graph(n) = sprintf("Title for plot #%d",n)
+     
+</pre>
+   <pre class="example">           plot 'data.4' title "Title for plot #4"
+           plot 'data.4' title graph4
+           plot 'data.4' title "Title for plot #".four
+           plot 'data.4' title graph(4)
+     
+</pre>
+   <p>Since integers are promoted to strings when operated on by the string
+concatenation operator, the following method also works:
+
+<pre class="example">           N = 4
+           plot 'data.'.N title "Title for plot #".N
+     
+</pre>
+   <p>In general, elements on the command line will only be evaluated as possible
+string variables if they are not otherwise recognizable as part of the normal
+gnuplot syntax. So the following sequence of commands is legal, although
+probably should be avoided so as not to cause confusion:
+
+<pre class="example">           plot = "my_datafile.dat"
+           title = "My Title"
+           plot plot title title
+     
+</pre>
+   <p>There are three binary operators that require string operands: the string
+concatenation operator ".", the string equality operator "eq" and the string
+inequality operator "ne".  The following example will print TRUE.
+
+<pre class="example">          if ("A"."B" eq "AB") print "TRUE"
+     
+</pre>
+   <p>See also the two string formatting functions <a href="gprintf.html#gprintf">gprintf</a> and <a href="sprintf.html#sprintf">sprintf</a>.
+
+   <p><a name="index-substring-229"></a>
+Substrings can be specified by appending a range specifier to any string,
+string variable, or string-valued function.  The range specifier has the
+form [begin:end], where begin is the index of the first character of the
+substring and end is the index of the last character of the substring. 
+The first character has index 1.  The begin or end fields may be empty, or
+contain '*', to indicate the true start or end of the original string. 
+E.g.  str[:] and str[*:*] both describe the full string str.
+
+   </body></html>
+

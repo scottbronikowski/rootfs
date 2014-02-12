@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<title>call - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="cd.html#cd" title="cd">
+<link rel="next" href="clear.html#clear" title="clear">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="call"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="clear.html#clear">clear</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="cd.html#cd">cd</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.2 call</h3>
+
+<!-- ?commands call -->
+<p><a name="index-call-279"></a><a name="index-call-280"></a>
+
+   <p>The <a href="call.html#call">call</a> command is identical to the load command with one exception: you
+can have up to ten additional parameters to the command (delimited according
+to the standard parser rules) which can be substituted into the lines read
+from the file.  As each line is read from the <a href="call.html#call">call</a>ed input file, it is
+scanned for the sequence `$` (dollar-sign) followed by a digit (0&ndash;9).  If
+found, the sequence is replaced by the corresponding parameter from the
+<a href="call.html#call">call</a> command line.  If the parameter was specified as a string in the
+<a href="call.html#call">call</a> line, it is substituted without its enclosing quotes.  Sequence `$#`
+is replaced by the number of passed parameters.  `$` followed by any character
+will be that character; e.g. use `$$` to get a single `$`.  Providing more
+than ten parameters on the <a href="call.html#call">call</a> command line will cause an error.  A
+parameter that was not provided substitutes as nothing.  Files being <a href="call.html#call">call</a>ed
+may themselves contain <a href="call.html#call">call</a> or `load` commands.
+
+   <p>Syntax:
+<pre class="example">           call "&lt;input-file&gt;" &lt;parameter-0&gt; &lt;parm-1&gt; ... &lt;parm-9&gt;
+     
+</pre>
+   <p>The name of the input file must be enclosed in quotes, and it is recommended
+that parameters are similarly enclosed in quotes (future versions of gnuplot
+may treat quoted and unquoted arguments differently).
+
+   <p>Example:
+
+   <p>If the file 'calltest.gp' contains the line:
+<pre class="example">           print "argc=$# p0=$0 p1=$1 p2=$2 p3=$3 p4=$4 p5=$5 p6=$6 p7=x$7x"
+     
+</pre>
+   <p>entering the command:
+<pre class="example">           call 'calltest.gp' "abcd" 1.2 + "'quoted'" -- "$2"
+     
+</pre>
+   <p>will display:
+<pre class="example">           argc=7 p0=abcd p1=1.2 p2=+ p3='quoted' p4=- p5=- p6=$2 p7=xx
+     
+</pre>
+   <p>NOTE: there is a clash in syntax with the datafile <a href="using.html#using">using</a> callback
+operator.  Use `$$n` or `column(n)` to access column n from a datafile inside
+a <a href="call.html#call">call</a>ed datafile plot.
+
+   </body></html>
+

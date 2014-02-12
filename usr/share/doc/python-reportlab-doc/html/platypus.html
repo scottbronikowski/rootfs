@@ -1,0 +1,312 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Platypus &mdash; reportlab v2.4 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="reportlab v2.4 documentation" href="index.html" />
+    <link rel="next" title="Graphics and Charts" href="graphics.html" />
+    <link rel="prev" title="package reportlab.pdfgen" href="pdfgen.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="graphics.html" title="Graphics and Charts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pdfgen.html" title="package reportlab.pdfgen"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://www.reportlab.com/">ReportLab Homepage</a> &raquo;</li>
+    
+        <li><a href="index.html">reportlab v2.4 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Platypus</a><ul>
+<li><a class="reference internal" href="#doctemplate">doctemplate</a></li>
+<li><a class="reference internal" href="#paragraph">paragraph</a></li>
+<li><a class="reference internal" href="#paraparser">paraparser</a></li>
+<li><a class="reference internal" href="#flowables">flowables</a></li>
+<li><a class="reference internal" href="#frames">frames</a></li>
+<li><a class="reference internal" href="#figures">figures</a></li>
+<li><a class="reference internal" href="#tables">tables</a></li>
+<li><a class="reference internal" href="#tableofcontents">tableofcontents</a></li>
+<li><a class="reference internal" href="#xpreformatted">xpreformatted</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pdfgen.html"
+                        title="previous chapter">package reportlab.pdfgen</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="graphics.html"
+                        title="next chapter">Graphics and Charts</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/platypus.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+<div id="container">
+    <div id="header">
+        <a href="/"><div id="logo"></div></a>
+        <div id="topbar"></div>
+        <ul id="menu">
+            <li class="menu txt-blue highlight_blue"><a href="/">Home</a></li>
+            <li class="menu txt-lightblue highlight_lightblue"><a href="/solutions/">Solutions</a></li>
+            <li class="menu txt-green highlight_green"><a href="/software/">Software</a></li>
+            <li class="menu txt-purple highlight_purple"><a href="/about/">About Us</a></li>
+            <li class="menu txt-pink highlight_pink" style="border:0px;"><a href="/contact/">Contact</a></li>
+        </ul>
+        <a style="color:white" href="/accounts/login/"><img id="login_btn" src="/media/base/login_btn.gif" alt="Login / Register" style="border: 0" /></a>
+    </div>
+    <div id="content">
+        <div id="breadcrumb">
+        </div>
+        <div id="divider">
+            <div id="nav_bar">
+                <div id="nav_bar_top">
+                    
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Platypus</a><ul>
+<li><a class="reference internal" href="#doctemplate">doctemplate</a></li>
+<li><a class="reference internal" href="#paragraph">paragraph</a></li>
+<li><a class="reference internal" href="#paraparser">paraparser</a></li>
+<li><a class="reference internal" href="#flowables">flowables</a></li>
+<li><a class="reference internal" href="#frames">frames</a></li>
+<li><a class="reference internal" href="#figures">figures</a></li>
+<li><a class="reference internal" href="#tables">tables</a></li>
+<li><a class="reference internal" href="#tableofcontents">tableofcontents</a></li>
+<li><a class="reference internal" href="#xpreformatted">xpreformatted</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pdfgen.html"
+                        title="previous chapter">package reportlab.pdfgen</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="graphics.html"
+                        title="next chapter">Graphics and Charts</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/platypus.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+                </div>
+            </div>
+            <div id="main_content_sub_pages_wide">
+                
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="graphics.html" title="Graphics and Charts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pdfgen.html" title="package reportlab.pdfgen"
+             >previous</a> |</li>
+    <li><a href="http://www.reportlab.com/">ReportLab Homepage</a> &raquo;</li>
+    
+        <li><a href="index.html">reportlab v2.4 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+                <div class="section" id="platypus">
+<h1>Platypus<a class="headerlink" href="#platypus" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">long flowing documents</p>
+<div class="section" id="doctemplate">
+<h2>doctemplate<a class="headerlink" href="#doctemplate" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="paragraph">
+<h2>paragraph<a class="headerlink" href="#paragraph" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="paraparser">
+<h2>paraparser<a class="headerlink" href="#paraparser" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="flowables">
+<h2>flowables<a class="headerlink" href="#flowables" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="frames">
+<h2>frames<a class="headerlink" href="#frames" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="figures">
+<h2>figures<a class="headerlink" href="#figures" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="tables">
+<h2>tables<a class="headerlink" href="#tables" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="tableofcontents">
+<h2>tableofcontents<a class="headerlink" href="#tableofcontents" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="xpreformatted">
+<h2>xpreformatted<a class="headerlink" href="#xpreformatted" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+                
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="graphics.html" title="Graphics and Charts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pdfgen.html" title="package reportlab.pdfgen"
+             >previous</a> |</li>
+    <li><a href="http://www.reportlab.com/">ReportLab Homepage</a> &raquo;</li>
+    
+        <li><a href="index.html">reportlab v2.4 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+            </div>
+        </div>
+        <div id="clear"></div>
+    </div>
+</div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Platypus</a><ul>
+<li><a class="reference internal" href="#doctemplate">doctemplate</a></li>
+<li><a class="reference internal" href="#paragraph">paragraph</a></li>
+<li><a class="reference internal" href="#paraparser">paraparser</a></li>
+<li><a class="reference internal" href="#flowables">flowables</a></li>
+<li><a class="reference internal" href="#frames">frames</a></li>
+<li><a class="reference internal" href="#figures">figures</a></li>
+<li><a class="reference internal" href="#tables">tables</a></li>
+<li><a class="reference internal" href="#tableofcontents">tableofcontents</a></li>
+<li><a class="reference internal" href="#xpreformatted">xpreformatted</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pdfgen.html"
+                        title="previous chapter">package reportlab.pdfgen</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="graphics.html"
+                        title="next chapter">Graphics and Charts</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/platypus.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="graphics.html" title="Graphics and Charts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pdfgen.html" title="package reportlab.pdfgen"
+             >previous</a> |</li>
+    <li><a href="http://www.reportlab.com/">ReportLab Homepage</a> &raquo;</li>
+    
+        <li><a href="index.html">reportlab v2.4 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Robinson, Becker, Watters and many more.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
+    </div>
+  </body>
+</html>

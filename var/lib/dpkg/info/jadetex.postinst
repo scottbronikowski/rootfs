@@ -1,0 +1,238 @@
+#!/bin/bash
+# jadetex postinst
+#   jobs: remove old cruft we used to make
+
+set -e
+
+# clear environment
+TETEXDIR=
+TEXMF=
+TEXINPUTS=
+
+PACKAGE=jadetex
+
+umask 022
+
+# emit a warning, generic routine
+warn ( ) {
+   echo $* 1>&2
+   if [ -f $MYTMPFILE ]; then
+       echo $* >> $MYTMPFILE
+   fi
+}
+
+dpkg_md5sum(){
+  dpkg-query -W -f='${Conffiles}' "$PACKAGE" \
+    | grep -F " $1 " | cut -d ' ' -f 3
+}
+
+config_rename ()
+{
+    oldfile=$1
+    oldmd5sum=$(dpkg_md5sum $oldfile)
+
+    if ! [ -r $oldfile ] ; then
+        return 0
+    fi
+    oldloc=$(dirname $oldfile)
+    newmd5sum=$(md5sum $oldfile |  cut -d ' ' -f 1)
+    if [ "$newmd5sum" = "$oldmd5sum" ] ; then
+        echo "Removing obsolete, unchanged conffile $oldfile"
+        rm $oldfile
+    else
+        echo "Conffile $oldfile was changed, renaming it to $oldfile.dpkg-save"
+	echo "Please see the TeX Policy on where to put the file."
+        mv $oldfile $oldfile.dpkg-save
+    fi
+    test -d $oldloc && rmdir --ignore-fail-on-non-empty $oldloc || true
+}
+
+remove_conffile_commit () {
+  # syntax: remove_conffile_commit filename
+  #
+  # Complete the removal of a conffile "filename" that has become obsolete.
+  #
+  # Call this function from a postinst script after having used
+  # remove_conffile_prepare() in the preinst.
+
+  # validate arguments
+  if [ $# -ne 1 ]; then
+    echo "remove_conffile_commit() called with wrong number of" \
+                "arguments; expected 1, got $#"
+    exit 2
+  fi
+
+  conffile="$1"
+
+  # if the temporary file created by remove_conffile_prepare() exists, remove it
+  if [ -e "$conffile.${PACKAGE}-tmp" ]; then
+    echo "committing removal of obsolete conffile $conffile"
+    rm "$conffile.${PACKAGE}-tmp"
+  fi
+}
+
+if [ "$1" = "configure" ] || [ "$1" = "reconfigure" ]; then
+    # old crufty stuff we used to build in postinst - I wonder whether we
+    # should actually do this in preinst?
+	remove_conffile_commit /etc/texmf/fmt.d/40jadetex.cnf
+
+    if [ -L /usr/lib/texmf/tex/jadetex/config ]; then
+	warn "removing old JadeTeX config symlink"
+	rm /usr/lib/texmf/tex/jadetex/config
+    fi
+    if [ -d /usr/lib/texmf/tex/jadetex ]; then
+	rmdir /usr/lib/texmf/tex/jadetex || \
+	  warn "unused, obsolete dir /usr/lib/texmf/tex/jadetex, remove it yourself if you care"
+    fi
+    if [ -f /etc/texmf/texmf.d/96JadeTeX ]; then
+	warn "removing old texmf.d config snippet"
+	rm /etc/texmf/texmf.d/96JadeTeX
+    fi
+    # rename the files in /etc/texmf/jadetex/ or remove them.
+    config_rename /etc/texmf/jadetex/jadetex.ini 
+    config_rename /etc/texmf/jadetex/pdfjadetex.ini 
+fi
+
+# call update-texmf with all postinst arguments
+update-texmf
+
+# Automatically added by dh_installtex
+##
+## postinst-tex
+##
+## postinst snippets for everything TeX related (mktlsr, hyphenation
+## patterns, formats, font maps)
+##
+## Authors:
+##       Florent Rougon <f.rougon@free.fr>
+##       Norbert Preining <preining@logic.at>
+##
+#
+
+TEXMFTREES="/usr/share/texmf /var/lib/texmf"
+FULLTEXMFTREES="$TEXMFTREES /usr/share/texmf-texlive"
+
+#
+#
+dhit_libkpathsea_configured ()
+{
+    kpsewhich --version >/dev/null 2>&1
+}
+
+dhit_update_lsr_files ()
+{
+    tempfile=$(mktemp -p /tmp mktexlsr.XXXXXXXX)
+    printf "Running mktexlsr. This may take some time... "
+    if mktexlsr $* > $tempfile 2>&1 ; then
+        rm -f $tempfile
+        echo "done."
+    else
+        exec >&2
+        echo
+        echo "mktexlsr $* failed. Output has been stored in"
+        echo "$tempfile"
+        echo "Please include this file if you report a bug."
+        echo
+        exit 1
+    fi
+}
+
+
+dhit_build_hyphen_format_if_format_exists ()
+{
+    v=$(kpsewhich -var-value TEXMFSYSVAR)
+    c=$(kpsewhich -var-value TEXMFSYSCONFIG)
+    TEXMFVAR="$v"
+    TEXMFCONFIG="$c"
+    export TEXMFVAR TEXMFCONFIG
+    fmtcnffile=$(kpsewhich --format='web2c files' fmtutil.cnf)
+    X=$(grep "^[[:space:]]*$1[[:space:]]" $fmtcnffile || true)
+    if [ -n "$X" ] ; then
+        dhit_build_format --byhyphen "$2"
+    fi
+}
+
+dhit_build_format ()
+{
+
+    tempfile=$(mktemp -p /tmp fmtutil.XXXXXXXX)
+    printf "Building format(s) $*.\n\tThis may take some time... "
+    if fmtutil-sys "$@" > $tempfile 2>&1 ; then
+        rm -f $tempfile
+        echo "done."
+    else
+        exec >&2
+        echo
+        echo "fmtutil-sys failed. Output has been stored in"
+        echo "$tempfile"
+        echo "Please include this file if you report a bug."
+        echo
+        exit 1
+    fi
+}
+
+
+case "$1" in
+    configure|abort-upgrade|abort-remove|abort-deconfigure)
+        update-updmap --quiet
+        update-language
+        update-fmtutil
+        if dhit_libkpathsea_configured; then
+            #
+            do_lsr=0
+            for i in format lsr ; do
+                if [ "$i" = lsrfull ] ; then
+                    TEXMFTREES=$FULLTEXMFTREES
+                fi
+                if [ "$i" = allformats ] ; then
+                    do_lsr=1
+                fi
+                if [ "$i" = format ] ; then
+                    do_lsr=1
+                fi
+            done
+            if [ $do_lsr = 1 ] ; then
+                if which mktexlsr >/dev/null; then
+                    dhit_update_lsr_files $TEXMFTREES
+                fi
+            fi
+            for i in format lsr ; do
+                if [ "$i" = lsr ] ; then
+                    if [ $do_lsr = 0 ] ; then
+                        update-texmf-config lsr
+                    fi
+                fi
+                if [ "$i" = lsrfull ] ; then
+                    if [ $do_lsr = 0 ] ; then
+                        update-texmf-config lsrfull
+                    fi
+                fi
+                if [ "$i" = map ] ; then
+                    update-texmf-config map
+                fi
+                if [ "$i" = allformats ] ; then
+                    dhit_build_format --all
+                fi
+                if [ "$i" = format ] ; then
+                    for fmt in 40jadetex ; do
+                        dhit_build_format --all --cnffile "/etc/texmf/fmt.d/$fmt.cnf"
+                    done
+                fi
+                if [ "$i" = hyphen ] ; then
+                    update-texmf-config hyphen
+                fi
+            done
+        fi
+    ;;
+
+    *)
+        echo "postinst called with unknown argument '$1'" >&2
+        exit 1
+    ;;
+esac
+
+# End automatically added section
+
+
+exit 0
+

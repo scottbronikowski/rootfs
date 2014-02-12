@@ -1,0 +1,24 @@
+# Edit the following variables as needed
+HDF_INSTALL =  
+FC        = f77
+FFLAGS    = 
+LIB       = -lm
+
+LIBSHDF   = $(HDF_INSTALL)/lib/libmfhdf.a $(HDF_INSTALL)/lib/libdf.a \
+$(HDF_INSTALL)/lib/libjpeg.a $(HDF_INSTALL)/lib/libz.a
+
+AN: create_annotation read_annotation get_annotation_info
+
+create_annotation: create_annotation.f
+	$(FC) $(FFLAGS) -o $@ create_annotation.f $(LIBSHDF)  $(LIB)
+
+read_annotation: read_annotation.f
+	$(FC) $(FFLAGS) -o $@ read_annotation.f $(LIBSHDF)  $(LIB)
+
+get_annotation_info: get_annotation_info.f
+	$(FC) $(FFLAGS) -o $@ get_annotation_info.f $(LIBSHDF)  $(LIB)
+
+clean:
+	rm -f *.o create_annotation read_annotation get_annotation_info
+.SUFFIXES:.o.f
+

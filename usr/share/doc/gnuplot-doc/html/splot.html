@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>splot - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="shell.html#shell" title="shell">
+<link rel="next" href="system_005f.html#system_005f" title="system_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="splot"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="system_005f.html#system_005f">system_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="shell.html#shell">shell</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.26 splot</h3>
+
+<!-- ?commands splot -->
+<p><a name="index-splot-700"></a><a name="index-splot-701"></a>
+
+   <p>`splot` is the command for drawing 3D plots (well, actually projections on
+a 2D surface, but you knew that).  It can create a plot from functions or
+data read from files in a manner very similar to the `plot` command. 
+`splot` provides only a single x, y, and z axis; there is no equivalent to the
+x2 and y2 secondary axes provided by `plot`.
+
+   <p>See `plot` for features common to the `plot` command; only differences are
+discussed in detail here.
+
+   <p>Syntax:
+<pre class="example">           splot {&lt;ranges&gt;}
+                 {&lt;iteration&gt;}
+                 &lt;function&gt; | "&lt;datafile&gt;" {datafile-modifiers}}
+                 {&lt;title-spec&gt;} {with &lt;style&gt;}
+                 {, {definitions{,}} &lt;function&gt; ...}
+     
+</pre>
+   <p>where either a &lt;function&gt; or the name of a data file enclosed in quotes is
+supplied.  The function can be a mathematical expression, or a triple of
+mathematical expressions in parametric mode.
+
+   <p>By default `splot` draws the xy plane completely below the plotted data. 
+The offset between the lowest ztic and the xy plane can be changed by <a href="xyplane.html#xyplane">xyplane</a>.  The orientation of a `splot` projection is controlled by
+<a href="view.html#view">view</a>.  See <a href="view.html#view">view</a> and <a href="xyplane.html#xyplane">xyplane</a> for more information.
+
+   <p>The syntax for setting ranges on the `splot` command is the same as for
+`plot`.  In non-parametric mode, the order in which ranges must be given is
+<a href="xrange.html#xrange">xrange</a>, <a href="yrange.html#yrange">yrange</a>, and <a href="zrange.html#zrange">zrange</a>.  In parametric mode, the order is <a href="urange.html#urange">urange</a>,
+<a href="vrange.html#vrange">vrange</a>, <a href="xrange.html#xrange">xrange</a>, <a href="yrange.html#yrange">yrange</a>, and <a href="zrange.html#zrange">zrange</a>.
+
+   <p>The <a href="title.html#title">title</a> option is the same as in `plot`.  The operation of <a href="with.html#with">with</a> is also
+the same as in `plot`, except that the plotting styles available to `splot`
+are limited to `lines`, `points`, <a href="linespoints.html#linespoints">linespoints</a>, <a href="dots.html#dots">dots</a>, and <a href="impulses.html#impulses">impulses</a>;  the
+error-bar capabilities of `plot` are not available for `splot`.
+
+   <p>The <a href="datafile.html#datafile">datafile</a> options have more differences.
+
+   <p>See also `show plot`.
+
+<ul class="menu">
+<li><a accesskey="1" href="data_002dfile.html#data_002dfile">data-file</a>
+<li><a accesskey="2" href="grid_005fdata.html#grid_005fdata">grid_data</a>
+<li><a accesskey="3" href="splot_005foverview.html#splot_005foverview">splot_overview</a>
+</ul>
+
+   </body></html>
+

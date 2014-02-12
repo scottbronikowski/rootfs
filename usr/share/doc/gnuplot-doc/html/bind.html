@@ -1,0 +1,138 @@
+<html lang="en">
+<head>
+<title>bind - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="mouse_005finput.html#mouse_005finput" title="mouse_input">
+<link rel="prev" href="mouse_005finput.html#mouse_005finput" title="mouse_input">
+<link rel="next" href="Mouse_005fvariables.html#Mouse_005fvariables" title="Mouse_variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="bind"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mouse_005fvariables.html#Mouse_005fvariables">Mouse_variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="mouse_005finput.html#mouse_005finput">mouse_input</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="mouse_005finput.html#mouse_005finput">mouse_input</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.17.1 bind</h4>
+
+<!-- ?commands bind -->
+<p><a name="index-hotkey-219"></a>
+<a name="index-hotkeys-220"></a>
+<a name="index-bind-221"></a><a name="index-bind-222"></a>
+
+   <p>Syntax:
+<pre class="example">           bind {allwindows} [&lt;key-sequence&gt;] ["&lt;gnuplot commands&gt;"]
+           bind &lt;key-sequence&gt; ""
+           reset bind
+     
+</pre>
+   <p>The `bind` allows defining or redefining a hotkey, i.e. a sequence of gnuplot
+commands which will be executed when a certain key or key sequence is pressed
+while the driver's window has the input focus. Note that `bind` is only
+available if gnuplot was compiled with `mouse` support and it is used by all
+mouse-capable terminals. A user-specified binding supersedes any builtin
+bindings, except that &lt;space&gt; and 'q' cannot normally be rebound. For an
+exception, see `bind space`.
+
+   <p>Mouse buttons cannot be rebound.
+
+   <p>You get the list of all hotkeys by typing `show bind` or `bind` or by typing
+the hotkey 'h' in the graph window.
+
+   <p>Key bindings are restored to their default state by `reset bind`.
+
+   <p>Note that multikey-bindings with modifiers must be given in quotes.
+
+   <p>Normally hotkeys are only recognized when the currently active plot window
+has focus. `bind allwindows &lt;key&gt; ...` (short form: `bind all &lt;key&gt; ...`)
+causes the binding for &lt;key&gt; to apply to all gnuplot plot windows, active
+or not.  In this case gnuplot variable MOUSE_KEY_WINDOW is set to the ID
+of the originating window, and may be used by the bound command.
+
+   <p>Examples:
+
+   <p>- set bindings:
+
+<pre class="example">         bind a "replot"
+         bind "ctrl-a" "plot x*x"
+         bind "ctrl-alt-a" 'print "great"'
+         bind Home "set view 60,30; replot"
+         bind all Home 'print "This is window ",MOUSE_KEY_WINDOW'
+     
+</pre>
+   <p>- show bindings:
+<pre class="example">         bind "ctrl-a"          # shows the binding for ctrl-a
+         bind                   # shows all bindings
+         show bind              # show all bindings
+     
+</pre>
+   <p>- remove bindings:
+<pre class="example">         bind "ctrl-alt-a" ""   # removes binding for ctrl-alt-a
+                                  (note that builtins cannot be removed)
+         reset bind             # installs default (builtin) bindings
+         bind!                  # deprecated form of "reset bind"
+     
+</pre>
+   <p>- bind a key to toggle something:
+<pre class="example">       v=0
+       bind "ctrl-r" "v=v+1;if(v%2)set term x11 noraise; else set term x11 raise"
+     
+</pre>
+   <p>Modifiers (ctrl / alt) are case insensitive, keys not:
+<pre class="example">         ctrl-alt-a == CtRl-alT-a
+         ctrl-alt-a != ctrl-alt-A
+     
+</pre>
+   <p>List of modifiers (alt == meta):
+<pre class="example">         ctrl, alt
+     
+</pre>
+   <p>List of supported special keys:
+
+<pre class="example">        "BackSpace", "Tab", "Linefeed", "Clear", "Return", "Pause", "Scroll_Lock",
+        "Sys_Req", "Escape", "Delete", "Home", "Left", "Up", "Right", "Down",
+        "PageUp", "PageDown", "End", "Begin",
+     
+</pre>
+   <pre class="example">        "KP_Space", "KP_Tab", "KP_Enter", "KP_F1", "KP_F2", "KP_F3", "KP_F4",
+        "KP_Home", "KP_Left", "KP_Up", "KP_Right", "KP_Down", "KP_PageUp",
+        "KP_PageDown", "KP_End", "KP_Begin", "KP_Insert", "KP_Delete", "KP_Equal",
+        "KP_Multiply", "KP_Add", "KP_Separator", "KP_Subtract", "KP_Decimal",
+        "KP_Divide",
+     
+</pre>
+   <pre class="example">        "KP_1" - "KP_9", "F1" - "F12"
+     
+</pre>
+   <p>The following are window events rather than actual keys
+
+<pre class="example">        "Close"
+     
+</pre>
+   <p>See also help for `mouse` and <a href="if.html#if">if</a>.
+
+<ul class="menu">
+<li><a accesskey="1" href="bind_005fspace.html#bind_005fspace">bind_space</a>
+</ul>
+
+   </body></html>
+

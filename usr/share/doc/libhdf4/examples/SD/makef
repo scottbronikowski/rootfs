@@ -1,0 +1,93 @@
+# Edit the following variables as needed
+HDF_INSTALL = 
+FC        = f77
+FFLAGS    = 
+LIB       = -lm
+ 
+LIBSHDF   = $(HDF_INSTALL)/lib/libmfhdf.a $(HDF_INSTALL)/lib/libdf.a \
+$(HDF_INSTALL)/lib/libjpeg.a $(HDF_INSTALL)/lib/libz.a
+
+SD: create_sds \
+	write_to_sds \
+	write_slab \
+	alter_sds_values \
+	unlimited_sds \
+	mv_sds_to_external \
+	read_from_sds \
+	read_subsets \
+	get_info \
+	find_sds_by_name \
+	set_get_dim_info \
+	dimscale_vs_sds \
+	set_attr \
+	get_attr \
+	compress_sds \
+	chunking_example
+ 
+
+create_sds: create_sds.f
+	$(FC) $(FFLAGS) -o $@ create_sds.f $(LIBSHDF) $(LIB)
+
+write_to_sds: write_to_sds.f
+	$(FC) $(FFLAGS) -o $@ write_to_sds.f $(LIBSHDF) $(LIB)
+
+write_slab: write_slab.f
+	$(FC) $(FFLAGS) -o $@ write_slab.f $(LIBSHDF) $(LIB)
+
+alter_sds_values: alter_sds_values.f
+	$(FC) $(FFLAGS) -o $@ alter_sds_values.f $(LIBSHDF) $(LIB)
+
+unlimited_sds: unlimited_sds.f
+	$(FC) $(FFLAGS) -o $@ unlimited_sds.f $(LIBSHDF) $(LIB)
+
+mv_sds_to_external: mv_sds_to_external.f
+	$(FC) $(FFLAGS) -o $@ mv_sds_to_external.f $(LIBSHDF) $(LIB)
+ 
+read_from_sds: read_from_sds.f
+	$(FC) $(FFLAGS) -o $@ read_from_sds.f $(LIBSHDF) $(LIB)
+ 
+read_subsets: read_subsets.f
+	$(FC) $(FFLAGS) -o $@ read_subsets.f $(LIBSHDF) $(LIB)
+
+get_info: get_info.f
+	$(FC) $(FFLAGS) -o $@ get_info.f $(LIBSHDF) $(LIB)
+
+find_sds_by_name: find_sds_by_name.f
+	$(FC) $(FFLAGS) -o $@ find_sds_by_name.f $(LIBSHDF) $(LIB)
+
+set_get_dim_info: set_get_dim_info.f
+	$(FC) $(FFLAGS) -o $@ set_get_dim_info.f  $(LIBSHDF) $(LIB)
+
+dimscale_vs_sds: dimscale_vs_sds.f
+	$(FC) $(FFLAGS) -o $@ dimscale_vs_sds.f $(LIBSHDF) $(LIB)
+
+set_attr: set_attr.f
+	$(FC) $(FFLAGS) -o $@ set_attr.f $(LIBSHDF) $(LIB)
+
+get_attr: get_attr.f
+	$(FC) $(FFLAGS) -o $@ get_attr.f $(LIBSHDF) $(LIB)
+ 
+compress_sds: compress_sds.f
+	$(FC) $(FFLAGS) -o $@ compress_sds.f $(LIBSHDF) $(LIB)
+ 
+chunking_example: chunking_example.f
+	$(FC) $(FFLAGS) -o $@ chunking_example.f  $(LIBSHDF) $(LIB)
+
+clean: 
+	rm -f *.o create_sds \
+	write_to_sds \
+	write_slab \
+	alter_sds_values \
+	unlimited_sds \
+	mv_sds_to_external \
+	read_from_sds \
+	read_subsets \
+	get_info \
+	find_sds_by_name \
+	set_get_dim_info \
+	dimscale_vs_sds \
+	set_attr \
+	get_attr \
+	compress_sds \
+	chunking_example
+.SUFFIXES:.o.c

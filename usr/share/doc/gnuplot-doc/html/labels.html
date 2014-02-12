@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>labels - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plotting_005fstyles.html#plotting_005fstyles" title="plotting_styles">
+<link rel="prev" href="impulses.html#impulses" title="impulses">
+<link rel="next" href="lines.html#lines" title="lines">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="labels"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="lines.html#lines">lines</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="impulses.html#impulses">impulses</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plotting_005fstyles.html#plotting_005fstyles">plotting_styles</a>
+<hr>
+</div>
+
+<h3 class="section">2.14 labels</h3>
+
+<!-- ?commands set style labels -->
+<!-- ?set style labels -->
+<!-- ?plotting styles labels -->
+<!-- ?style labels -->
+<p><a name="index-labels-262"></a>
+The <a href="labels.html#labels">labels</a> style reads coordinates and text from a data file and places
+the text string at the corresponding 2D or 3D position.  3 or 4 input columns
+of basic data are required.  Additional input columns may be used to provide
+information such as variable font size or text color (see `rgbcolor variable`).
+
+<pre class="example">          3 columns:  x  y  string    # 2D version
+          4 columns:  x  y  z  string # 3D version
+     
+</pre>
+   <p>The font, color, rotation angle and other properties of the printed text
+may be specified as additional command options (see `set label`). The example
+below generates a 2D plot with text labels constructed from the city whose
+name is taken from column 1 of the input file, and whose geographic coordinates
+are in columns 4 and 5. The font size is calculated from the value in column 3,
+in this case the population.
+
+<pre class="example">       CityName(String,Size) = sprintf("{/=%d %s}", Scale(Size), String)
+       plot 'cities.dat' using 5:4:(CityName(stringcolumn(1),$3)) with labels
+     
+</pre>
+   <p>If we did not want to adjust the font size to a different size for each city
+name, the command would be much simpler:
+
+<pre class="example">       plot 'cities.dat' using 5:4:1 with labels font "Times,8"
+     
+</pre>
+   <p>The <a href="labels.html#labels">labels</a> style can also be used in 3D plots. In this case four input
+column specifiers are required, corresponding to X Y Z and text.
+
+<pre class="example">       splot 'datafile' using 1:2:3:4 with labels
+     
+</pre>
+   <p>See also `datastrings`, `set style data`.
+
+   </body></html>
+

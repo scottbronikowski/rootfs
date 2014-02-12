@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>Mouse_variables - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="mouse_005finput.html#mouse_005finput" title="mouse_input">
+<link rel="prev" href="bind.html#bind" title="bind">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mouse_variables"></a>
+<a name="Mouse_005fvariables"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="bind.html#bind">bind</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="mouse_005finput.html#mouse_005finput">mouse_input</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.17.2 Mouse variables</h4>
+
+<!-- ?mouse variables -->
+<p>When `mousing` is active, clicking in the active window will set several user
+variables that can be accessed from the gnuplot command line. The coordinates
+of the mouse at the time of the click are stored in MOUSE_X MOUSE_Y MOUSE_X2
+and MOUSE_Y2. The mouse button clicked, and any meta-keys active at that time,
+are stored in MOUSE_BUTTON MOUSE_SHIFT MOUSE_ALT and MOUSE_CTRL.  These
+variables are set to undefined at the start of every plot, and only become
+defined in the event of a mouse click in the active plot window. To determine
+from a script if the mouse has been clicked in the active plot window, it is
+sufficient to test for any one of these variables being defined.
+
+<pre class="example">           plot 'something'
+           pause mouse
+           if (defined(MOUSE_BUTTON)) call 'something_else'; \
+           else print "No mouse click."
+     
+</pre>
+   <p>It is also possible to track keystrokes in the plot window using the mousing
+code.
+
+<pre class="example">           plot 'something'
+           pause mouse keypress
+           print "Keystroke ", MOUSE_KEY, " at ", MOUSE_X, " ", MOUSE_Y
+     
+</pre>
+   <p>When `pause mouse keypress` is terminated by a keypress, then MOUSE_KEY will
+contain the ascii character value of the key that was pressed. MOUSE_CHAR will
+contain the character itself as a string variable.  If the pause command is
+terminated abnormally (e.g. by ctrl-C or by externally closing the plot window)
+then MOUSE_KEY will equal -1.
+
+   <p>Note that after a zoom by mouse, you can read the new ranges as GPVAL_X_MIN,
+GPVAL_X_MAX, GPVAL_Y_MIN, and GPVAL_Y_MAX, see <a href="variables.html#variables">variables</a>.
+
+   </body></html>
+

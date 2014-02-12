@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Expressions - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="gnuplot.html#gnuplot" title="gnuplot">
+<link rel="prev" href="Environment.html#Environment" title="Environment">
+<link rel="next" href="Fonts.html#Fonts" title="Fonts">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Expressions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fonts.html#Fonts">Fonts</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Environment.html#Environment">Environment</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="gnuplot.html#gnuplot">gnuplot</a>
+<hr>
+</div>
+
+<h3 class="section">1.13 Expressions</h3>
+
+<p><a name="index-expressions-25"></a>
+In general, any mathematical expression accepted by C, FORTRAN, Pascal, or
+BASIC is valid.  The precedence of these operators is determined by the
+specifications of the C programming language.  White space (spaces and tabs)
+is ignored inside expressions.
+
+   <p>Complex constants are expressed as {&lt;real&gt;,&lt;imag&gt;}, where &lt;real&gt; and &lt;imag&gt;
+must be numerical constants.  For example, {3,2} represents 3 + 2i; {0,1}
+represents 'i' itself.  The curly braces are explicitly required here.
+
+   <p><a name="index-division-26"></a>
+Note that gnuplot uses both "real" and "integer" arithmetic, like FORTRAN and
+C.  Integers are entered as "1", "-10", etc; reals as "1.0", "-10.0", "1e1",
+3.5e-1, etc.  The most important difference between the two forms is in
+division: division of integers truncates: 5/2 = 2; division of reals does
+not: 5.0/2.0 = 2.5.  In mixed expressions, integers are "promoted" to reals
+before evaluation: 5/2e0 = 2.5.  The result of division of a negative integer
+by a positive one may vary among compilers.  Try a test like "print -5/2" to
+determine if your system chooses -2 or -3 as the answer.
+
+   <p>The integer expression "1/0" may be used to generate an "undefined" flag,
+which causes a point to ignored; the `ternary` operator gives an example. 
+Or you can use the pre-defined variable NaN to achieve the same result. 
+<a name="index-NaN-27"></a>
+
+   <p>The real and imaginary parts of complex expressions are always real, whatever
+the form in which they are entered: in {3,2} the "3" and "2" are reals, not
+integers.
+
+   <p>Gnuplot can also perform simple operations on strings and string variables. 
+For example, the expression ("A" . "B" eq "AB") evaluates as true, illustrating
+the string concatenation operator and the string equality operator.
+
+   <p>A string which contains a numerical value is promoted to the corresponding
+integer or real value if used in a numerical expression. Thus ("3" + "4" == 7)
+and (6.78 == "6.78") both evaluate to true.  An integer, but not a real or
+complex value, is promoted to a string if used in string concatenation. 
+A typical case is the use of integers to construct file names or other strings;
+e.g. ("file" . 4 eq "file4") is true.
+
+   <p>Substrings can be specified using a postfixed range descriptor [beg:end]. 
+For example, "ABCDEF"[3:4] == "CD"   and   "ABCDEF"[4:*] == "DEF"
+The syntax "string"[beg:end] is exactly equivalent to calling the built-in
+string-valued function substr("string",beg,end), except that you cannot
+omit either beg or end from the function call.
+
+<ul class="menu">
+<li><a accesskey="1" href="Functions.html#Functions">Functions</a>
+<li><a accesskey="2" href="Operators.html#Operators">Operators</a>
+<li><a accesskey="3" href="Gnuplot_002ddefined_005fvariables.html#Gnuplot_002ddefined_005fvariables">Gnuplot-defined_variables</a>
+<li><a accesskey="4" href="User_002ddefined_005fvariables_005fand_005ffunctions.html#User_002ddefined_005fvariables_005fand_005ffunctions">User-defined_variables_and_functions</a>
+</ul>
+
+   </body></html>
+

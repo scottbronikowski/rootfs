@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>ranges - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plot.html#plot" title="plot">
+<link rel="prev" href="parametric.html#parametric" title="parametric">
+<link rel="next" href="iteration_005f.html#iteration_005f" title="iteration_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ranges"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="iteration_005f.html#iteration_005f">iteration_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="parametric.html#parametric">parametric</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plot.html#plot">plot</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.14.6 ranges</h4>
+
+<!-- ?commands plot ranges -->
+<!-- ?commands splot ranges -->
+<!-- ?plot ranges -->
+<!-- ?splot ranges -->
+<p><a name="index-ranges-354"></a>
+The optional ranges specify the region of the graph that will be displayed.
+
+   <p>Syntax:
+<pre class="example">           [{&lt;dummy-var&gt;=}{{&lt;min&gt;}:{&lt;max&gt;}}]
+           [{{&lt;min&gt;}:{&lt;max&gt;}}]
+     
+</pre>
+   <p>The first form applies to the independent variable (<a href="xrange.html#xrange">xrange</a> or <a href="trange.html#trange">trange</a>, if
+in parametric mode).  The second form applies to the dependent variable
+<a href="yrange.html#yrange">yrange</a> (and <a href="xrange.html#xrange">xrange</a>, too, if in parametric mode).  &lt;dummy-var&gt; is a new
+name for the independent variable.  (The defaults may be changed with <a href="dummy.html#dummy">dummy</a>.)  The optional &lt;min&gt; and &lt;max&gt; terms can be constant expressions or *.
+
+   <p>In non-parametric mode, the order in which ranges must be given is <a href="xrange.html#xrange">xrange</a>
+and <a href="yrange.html#yrange">yrange</a>.
+
+   <p>In parametric mode, the order for the `plot` command is <a href="trange.html#trange">trange</a>, <a href="xrange.html#xrange">xrange</a>,
+and <a href="yrange.html#yrange">yrange</a>.  The following `plot` command shows setting the <a href="trange.html#trange">trange</a> to
+[-pi:pi], the <a href="xrange.html#xrange">xrange</a> to [-1.3:1.3] and the <a href="yrange.html#yrange">yrange</a> to [-1:1] for the
+duration of the graph:
+
+<pre class="example">           plot [-pi:pi] [-1.3:1.3] [-1:1] sin(t),t**2
+     
+</pre>
+   <p>Note that the x2range and y2range cannot be specified here&mdash;<a href="x2range.html#x2range">x2range</a>
+and <a href="y2range.html#y2range">y2range</a> must be used.
+
+   <p>Ranges are interpreted in the order listed above for the appropriate mode. 
+Once all those needed are specified, no further ones must be listed, but
+unneeded ones cannot be skipped&mdash;use an empty range `[]` as a placeholder.
+
+   <p>`*` can be used to allow autoscaling of either of min and max.  See also
+<a href="autoscale.html#autoscale">autoscale</a>.
+
+   <p>Ranges specified on the `plot` or `splot` command line affect only that
+graph; use the <a href="xrange.html#xrange">xrange</a>, <a href="yrange.html#yrange">yrange</a>, etc., commands to change the
+default ranges for future graphs.
+
+   <p>With time data, you must provide the range (in the same manner as the time
+appears in the datafile) within quotes.  `gnuplot` uses the <a href="timefmt.html#timefmt">timefmt</a> string
+to read the value&mdash;see <a href="timefmt.html#timefmt">timefmt</a>.
+
+   <p>Examples:
+
+   <p>This uses the current ranges:
+<pre class="example">           plot cos(x)
+     
+</pre>
+   <p>This sets the x range only:
+<pre class="example">           plot [-10:30] sin(pi*x)/(pi*x)
+     
+</pre>
+   <p>This is the same, but uses t as the dummy-variable:
+<pre class="example">           plot [t = -10 :30]  sin(pi*t)/(pi*t)
+     
+</pre>
+   <p>This sets both the x and y ranges:
+<pre class="example">           plot [-pi:pi] [-3:3]  tan(x), 1/x
+     
+</pre>
+   <p>This sets only the y range, and turns off autoscaling on both axes:
+<pre class="example">           plot [ ] [-2:sin(5)*-8] sin(x)**besj0(x)
+     
+</pre>
+   <p>This sets xmax and ymin only:
+<pre class="example">           plot [:200] [-pi:]  exp(sin(x))
+     
+</pre>
+   <p>This sets the x range for a timeseries:
+<pre class="example">           set timefmt "%d/%m/%y %H:%M"
+           plot ["1/6/93 12:00":"5/6/93 12:00"] 'timedata.dat'
+     
+</pre>
+   </body></html>
+

@@ -1,0 +1,369 @@
+-- File searching functions for texdoc.
+--[[ 
+Copyright 2008, 2009 Manuel Pégourié-Gonnard
+Distributed under the terms of the GNU GPL version 3 or later.
+See texdoc.tlu for details.
+--]]
+
+local L = {}
+load_env(L, {
+    'export_symbols',
+    'os', 'string', 'table', 'lfs', 'kpse', 'io', 
+    'ipairs', 'assert', 'error', 'tostring', 'setmetatable',
+    'deb_print', 'err_print', 'win32_hook', 'parse_zip',
+    'get_patterns', 'sort_doclist', 'docfile_quality',
+    'config', 'C',
+})
+
+-- shared by all functions in this file
+local s_doclist
+
+-----------------------   docfile and doclist objects   ------------------------
+
+-- doclist = {
+--     [1] = docfile1, [2] = docfiles2, ...,
+--     inv = { realpath1 = index1, ... }
+-- }
+--
+-- The inv subtable is such that for all i
+-- doclist.inv(doclist[i].realpath) == i
+
+local Doclist = {}
+Doclist.__index = Doclist
+
+-- create a new list of docfiles
+function Doclist:new()
+    local dl = { inv = {} }
+    setmetatable(dl, self)
+    return dl
+end
+
+-- add a docfile to a list
+function Doclist:add(df)
+    local index = self.inv[df.realpath]
+    if index then
+        self[index]:mergein(df)
+    else
+        local newindex = #self + 1
+        self[newindex] = df
+        self.inv[df.realpath] = newindex
+    end
+end
+
+-- stops a doclist
+function Doclist:stop()
+    self.inv = nil
+end
+
+-- docfile = {
+--     name     = filename (used for scoring only)
+--     tree     = code of the tree, see below
+--     matches  = {pattern1, pattern2, ...}
+-- }
+-- if tree > 1, this is the index of the tree in TEXDOCS
+-- if tree = 0, then name is relative to TLROOT (file found from tlpdb only)
+-- tree = - 1 if and only if file is a sty file. Here name is absolute.
+
+local Docfile = {}
+Docfile.__index = Docfile
+
+-- create a new docfile objet using initilisation info
+-- fields : name (relative to tree), tree, pattern
+function Docfile:new(info)
+    df = {}
+    setmetatable(df, self)
+    -- get realpath, tree and prepare name
+    df.tree = info.tree
+    if info.tree > 0 then
+        df.realpath = texdocs_tree_to_path(info.tree, info.name)
+    elseif info.tree == 0 then
+        error('Unimplemented')
+        df.realpath = get_tlroot()..'/'..info.name
+        info.name = string.gsub(info.name, '^texmf(-dist)?/doc/', '', 1)
+    elseif info.tree == -1 then
+        df.realpath = info.name
+    else
+        error('Internal error: bad tree number')
+    end
+    -- remove first component of name if at least two directory levels
+    if info.tree > -1 then
+        local name = string.match(info.name, '^..-/(.+/.+)$')
+        if name then
+            df.name = '/'..name
+        else
+            df.name = info.name
+        end
+    else
+        df.name = info.name
+    end
+    -- initialise the list of matches
+    if info.pattern then
+        df.matches = { info.pattern }
+    else
+        df.matches = {}
+    end
+    return df
+end
+
+-- merge a second docfile objet into self
+function Docfile:mergein(df)
+    if df.tree > self.tree then
+        self.name = df.name
+        self.tree = df.tree
+    end
+    for _, m in ipairs(df.matches) do
+        table.insert(self.matches, m)
+    end
+end
+
+-- from score.tlu
+Docfile.quality = docfile_quality
+
+------------------   get results from TEXDOCS (à la kpse)   -------------------
+
+do -- scope of doc_roots
+local doc_roots
+
+-- doc_roots is a Lua version of kpse's TEXDOCS
+-- structure of the doc_roots variable:
+-- doc_roots[i] = {
+--     path                 = <path>,
+--     index_mandatory      = <does path begin with !! in TEXDOCS?>
+--     recursion_allowed    = <does path ends with // in TEXDOCS?>,
+-- }
+
+-- set the doc_roots list from kpse's $TEXDOCS
+function get_texdocs ()
+    doc_roots = {}
+    local sep = (os.type == 'windows') and ';' or ':'
+    local kpse_texdocs = kpse.expand_var("$TEXDOCS")
+    -- expand the path and turn it into a lua list
+    local raw_doc_roots = string.explode(kpse.expand_braces(kpse_texdocs), sep)
+    local max = #raw_doc_roots + 1
+    for j, dir in ipairs(raw_doc_roots) do
+        local i = max - j
+        local dr = {}
+        local n
+        -- get path, !! and // values
+        dir, n = string.gsub (dir, '//$', '')
+        dr.recursion_allowed = (n == 1)
+        dr.path, n = string.gsub (dir, '^!!', '')
+        dr.index_mandatory = (n == 1)
+        deb_print('texdocs', string.format(
+            'texdocs[%d] = %s (index_mandatory=%s, recursion_allowed=%s)',
+            i, dr.path,
+            tostring(dr.index_mandatory),
+            tostring(dr.recursion_allowed)))
+        -- decide if we should use a ls-R index, the filesystem, or do nothing
+        local root, shift = lsr_root(dr.path)
+        if root and shift and dr.recursion_allowed then
+            dr.lsr = root
+            dr.lsr_shift = shift
+            deb_print('texdocs', string.format(
+                'texdocs[%d] using index: %s (shift=%s)', i, root, shift))
+        elseif not dr.index_mandatory and lfs.isdir(dr.path) then
+            dr.searchfs = true
+            deb_print('texdocs', string.format(
+                'texdocs[%d] using filesystem search', i))
+        end
+        -- register this in docroots
+        doc_roots[i] = dr
+    end
+end
+
+-- return the real path from a texdocs tree number + relative path
+function texdocs_tree_to_path(tree, rel)
+    if doc_roots == nil then get_texdocs() end
+    return win32_hook(doc_roots[tree].path..'/'..rel)
+end
+
+-- find docfiles in texdocs directories
+function get_doclist_texdocs(patlist)
+    if doc_roots == nil then get_texdocs() end
+    for code, dr in ipairs(doc_roots) do
+        if dr.lsr then
+            scan_lsr(patlist, code, dr.lsr, dr.lsr_shift)
+        elseif dr.searchfs then
+            scan_tree(patlist, code, dr.path, '', dr.recursion_allowed)
+        end
+    end
+end
+
+end -- scope of doc_roots
+
+-- find a ls-R file in a parent directory an return it or nil
+function lsr_root (path)
+    if not lfs.isdir (path) then return end
+    local root, shift = path, ''
+    if string.sub(root, -1) == '/' then root = string.sub(root, 1, -2) end
+    while string.find(root, '/', 1, true) do
+        if lfs.isfile(root..'/ls-R') then
+            return root, shift
+        end
+        local last_comp = string.match(root, '^.*/(.*)$')
+        -- /!\ cannot put last_comp in a regex: can contain special char
+        root = string.sub(root, 1, - (#last_comp + 2))
+        shift = last_comp..'/'..shift
+    end
+end
+
+-- scan a tree without ls-R file
+function scan_tree (patlist, code, base, cwd, recurse)
+    deb_print('filesea', "Entering directory: "..cwd)
+    for file in lfs.dir(base..'/'..cwd) do
+        if file ~= '.' and file ~= '..' then
+            local f = (cwd == '') and file or cwd..'/'..file
+            if lfs.isdir(base..'/'..f) then
+                if recurse then scan_tree(patlist, code, base, f, recurse) end
+            else
+                local df = process_file(patlist, file, f, code, true)
+                if df then s_doclist:add(df) end
+            end
+        end
+    end
+    deb_print('filesea', "Leaving directory: "..cwd)
+end
+
+-- scan a ls-R file
+function scan_lsr(patlist, code, cwd, shift)
+    local is_dir = {} -- is_dir[path] = true iff path is a dir
+    local results = Doclist:new()
+    local isdoc = false
+    local current_dir
+    local l = #shift
+    local lsr = assert(io.open(cwd..'/ls-R', 'r'))
+    local _ = lsr:read('*line') -- throw away first line (comment)
+    local maybe_dir = true -- next line may be a directory
+    while true do
+        local line = lsr:read('*line')
+        while line == '' do line, maybe_dir = lsr:read('*line'), true end
+        if line == nil then break end  -- EOF
+        local dir_line = maybe_dir and string.match (line, '^%./(.*):$')
+        if dir_line then
+            maybe_dir = false -- next line may not be a dir
+            if string.sub (dir_line, 1, l) == shift then
+                isdoc = true
+                current_dir = string.sub (dir_line, l+1)
+                is_dir[current_dir] = true
+                deb_print('lsrsea', 'Scanning directory: '..current_dir)
+            elseif isdoc then
+                deb_print('lsrsea', "Finished scanning: "..shift)
+                break -- we're exiting the ./doc (or shift) dir, so it's over
+            end
+        elseif isdoc then
+            local df = process_file(patlist, line, current_dir..'/'..line, code)
+            if df then results:add(df) end
+        end
+    end
+    lsr:close()
+    -- add non-directories to the list
+    for _, df in ipairs(results) do
+        if not is_dir[df.name] then
+            s_doclist:add(df)
+        end
+    end
+end
+
+-- says if file has a 'good' extenstion according to ext_list
+function check_ext(file)
+    file = string.lower(file)
+    -- remove zipext if applicable
+    file = parse_zip(file)
+    -- then do the normal thing
+    for _, e in ipairs(config.ext_list) do
+        if e == '*' then
+            return true
+        elseif (e == '') then
+            if not string.find(file, '.', 1, true) then
+                return true
+            end
+        else
+            local dot_e = '.'..e
+            if string.sub(file, -string.len(dot_e)) == dot_e then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+-- return a docfile object if file "matches", nil ortherwise
+function process_file(patlist, file, pathfile, code)
+    deb_print('kpse', 'Processing file: '..pathfile)
+    local docfile
+    local pattern
+    for _, pattern in ipairs(patlist) do
+        if string.find(string.lower(pathfile), string.lower(pattern.name),
+                1, config.mode ~= 'regex') then
+            local good_ext = check_ext(file)
+            deb_print('kpse', string.format(
+                "File '%s' matches '%s'; good_ext=%s",
+                pathfile, pattern.name, tostring(good_ext)))
+            if good_ext then
+                local info = {
+                    name    = pathfile,
+                    tree    = code,
+                    pattern = pattern,
+                }
+                if docfile then
+                    docfile:mergein(Docfile:new(info))
+                else
+                    docfile = Docfile:new(info)
+                end
+            end
+        end
+    end
+    return docfile
+end
+
+----------------------------   look for sty files   ----------------------------
+
+-- add doclist entries for sty files in patlist
+function get_doclist_sty(patlist)
+    for _, pat in ipairs(patlist) do
+        local file = kpse.find_file(pat.name)
+        if file then
+            local df = Docfile:new({
+                name    = file,
+                tree    = -1,
+                pattern = pat,
+            })
+            s_doclist:add(df)
+        end
+    end
+end
+
+------------------------------   main function   -------------------------------
+
+-- find docfiles according to pattern
+function get_doclist(pattern)
+    -- get patterns (inc. aliases)
+    local normal, sty = normal_vs_sty(get_patterns(pattern))
+    -- initialise result list
+    s_doclist = Doclist:new()
+    -- get results
+    get_doclist_sty(sty)
+    get_doclist_texdocs(normal)
+    -- finally, sort results
+    sort_doclist(s_doclist, pattern)
+    return s_doclist
+end
+
+-- separate sty patterns from the rest
+function normal_vs_sty(list)
+    if config.mode == 'regex' then return list, {} end
+    local normal, sty = {}, {}
+    for _, p in ipairs(list) do
+        if string.match(string.lower(p.name), '%.([^/.]*)$') == 'sty' then
+            table.insert(sty, p)
+        else
+            table.insert(normal, p)
+        end
+    end
+    return normal, sty
+end
+
+-- finally export a few symbols
+export_symbols(L, {
+    'get_doclist',
+})

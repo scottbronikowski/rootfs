@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>short_introduction - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="fit.html#fit" title="fit">
+<link rel="prev" href="adjustable_005fparameters.html#adjustable_005fparameters" title="adjustable_parameters">
+<link rel="next" href="error_005festimates.html#error_005festimates" title="error_estimates">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="short_introduction"></a>
+<a name="short_005fintroduction"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="error_005festimates.html#error_005festimates">error_estimates</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="adjustable_005fparameters.html#adjustable_005fparameters">adjustable_parameters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="fit.html#fit">fit</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.6.2 short introduction</h4>
+
+<!-- ?commands fit beginners_guide -->
+<!-- ?fit beginners_guide -->
+<!-- ?fit guide -->
+<p><a name="index-fitting-292"></a>
+<a href="fit.html#fit">fit</a> is used to find a set of parameters that 'best' fits your data to your
+user-defined function.  The fit is judged on the basis of the sum of the
+squared differences or 'residuals' (SSR) between the input data points and
+the function values, evaluated at the same places.  This quantity is often
+called 'chisquare' (i.e., the Greek letter chi, to the power of 2).  The
+algorithm attempts to minimize SSR, or more precisely, WSSR, as the residuals
+are 'weighted' by the input data errors (or 1.0) before being squared;
+see `fit error_estimates` for details.
+
+   <p>That's why it is called 'least-squares fitting'.  Let's look at an example
+to see what is meant by 'non-linear', but first we had better go over some
+terms.  Here it is convenient to use z as the dependent variable for
+user-defined functions of either one independent variable, z=f(x), or two
+independent variables, z=f(x,y).  A parameter is a user-defined variable
+that <a href="fit.html#fit">fit</a> will adjust, i.e., an unknown quantity in the function
+declaration.  Linearity/non-linearity refers to the relationship of the
+dependent variable, z, to the parameters which <a href="fit.html#fit">fit</a> is adjusting, not of
+z to the independent variables, x and/or y.  (To be technical, the
+second {and higher} derivatives of the fitting function with respect to
+the parameters are zero for a linear least-squares problem).
+
+   <p>For linear least-squares (LLS), the user-defined function will be a sum of
+simple functions, not involving any parameters, each multiplied by one
+parameter.  NLLS handles more complicated functions in which parameters can
+be used in a large number of ways.  An example that illustrates the
+difference between linear and nonlinear least-squares is the Fourier series. 
+One member may be written as
+<pre class="example">          z=a*sin(c*x) + b*cos(c*x).
+</pre>
+   <p>If a and b are the unknown parameters and c is constant, then estimating
+values of the parameters is a linear least-squares problem.  However, if
+c is an unknown parameter, the problem is nonlinear.
+
+   <p>In the linear case, parameter values can be determined by comparatively
+simple linear algebra, in one direct step.  However LLS is a special case
+which is also solved along with more general NLLS problems by the iterative
+procedure that `gnuplot` uses.  <a href="fit.html#fit">fit</a> attempts to find the minimum by doing
+a search.  Each step (iteration) calculates WSSR with a new set of parameter
+values.  The Marquardt-Levenberg algorithm selects the parameter values for
+the next iteration.  The process continues until a preset criterion is met,
+either (1) the fit has "converged" (the relative change in WSSR is less than
+FIT_LIMIT), or (2) it reaches a preset iteration count limit, FIT_MAXITER
+(see <a href="variables.html#variables">variables</a>).  The fit may also be interrupted
+and subsequently halted from the keyboard (see <a href="fit.html#fit">fit</a>).  The user variable
+FIT_CONVERGED contains 1 if the previous fit command terminated due to
+convergence; it contains 0 if the previous fit terminated for any other
+reason.
+
+   <p>Often the function to be fitted will be based on a model (or theory) that
+attempts to describe or predict the behaviour of the data.  Then <a href="fit.html#fit">fit</a> can
+be used to find values for the free parameters of the model, to determine
+how well the data fits the model, and to estimate an error range for each
+parameter.  See `fit error_estimates`.
+
+   <p>Alternatively, in curve-fitting, functions are selected independent of
+a model (on the basis of experience as to which are likely to describe
+the trend of the data with the desired resolution and a minimum number
+of parameters*functions.)  The <a href="fit.html#fit">fit</a> solution then provides an analytic
+representation of the curve.
+
+   <p>However, if all you really want is a smooth curve through your data points,
+the <a href="smooth.html#smooth">smooth</a> option to `plot` may be what you've been looking for rather
+than <a href="fit.html#fit">fit</a>.
+
+   </body></html>
+

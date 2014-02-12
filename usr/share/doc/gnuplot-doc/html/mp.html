@@ -1,0 +1,225 @@
+<html lang="en">
+<head>
+<title>mp - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="mf.html#mf" title="mf">
+<link rel="next" href="mgr.html#mgr" title="mgr">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="mp"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="mgr.html#mgr">mgr</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="mf.html#mf">mf</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.45 mp</h5>
+
+<!-- ?commands set terminal mpost -->
+<!-- ?set terminal mp -->
+<!-- ?set term mp -->
+<!-- ?terminal mp -->
+<!-- ?term mp -->
+<p><a name="index-mp-842"></a>
+<a name="index-metapost-843"></a>
+
+   <p>The `mp` driver produces output intended to be input to the Metapost program. 
+Running Metapost on the file creates EPS files containing the plots. By
+default, Metapost passes all text through TeX.  This has the advantage of
+allowing essentially  any TeX symbols in titles and labels.
+
+   <p>Syntax:
+<pre class="example">        set term mp {color | colour | monochrome}
+                    {solid | dashed}
+                    {notex | tex | latex}
+                    {magnification &lt;magsize&gt;}
+                    {psnfss | psnfss-version7 | nopsnfss}
+                    {prologues &lt;value&gt;}
+                    {a4paper}
+                    {amstex}
+                    {"&lt;fontname&gt;"} {&lt;fontsize&gt;}
+     
+</pre>
+   <p>The option `color` causes lines to be drawn in color (on a printer or display
+that supports it), `monochrome` (or nothing) selects black lines.  The option
+`solid` draws solid lines, while `dashed` (or nothing) selects lines with
+different patterns of dashes.  If `solid` is selected but `color` is not,
+nearly all lines will be identical.  This may occasionally be useful, so it is
+allowed.
+
+   <p>The option `notex` bypasses TeX entirely, therefore no TeX code can be used in
+labels under this option.  This is intended for use on old plot files or files
+that make frequent use of common characters like `$` and `%` that require
+special handling in TeX.
+
+   <p>The option `tex` sets the terminal to output its text for TeX to process.
+
+   <p>The option `latex` sets the terminal to output its text for processing by
+LaTeX. This allows things like \\frac for fractions which LaTeX knows about
+but TeX does not.  Note that you must set the environment variable TEX to the
+name of your LaTeX executable (normally latex) if you use this option or use
+`mpost &ndash;tex=&lt;name of LaTeX executable&gt; ...`. Otherwise metapost will try and
+use TeX to process the text and it won't work.
+
+   <p>Changing font sizes in TeX has no effect on the size of mathematics, and there
+is no foolproof way to make such a change, except by globally  setting a
+magnification factor. This is the purpose of the `magnification` option. It
+must be followed by a scaling factor. All text (NOT the graphs) will be scaled
+by this factor. Use this if you have math that you want at some size other
+than the default 10pt. Unfortunately, all math will be the same size, but see
+the discussion below on editing the MP output. `mag` will also work under
+`notex` but there seems no point in using it as the font size option (below)
+works as well.
+
+   <p>The option `psnfss` uses postscript fonts in combination with LaTeX. Since
+this option only makes sense, if LaTeX is being used, the `latex` option is selected
+automatically. This option includes the following packages for LaTeX:
+inputenc(latin1), fontenc(T1), mathptmx, helvet(scaled=09.2), courier, latexsym
+and textcomp.
+
+   <p>The option `psnfss-version7` uses also postscript fonts in LaTeX (option `latex`
+is also automatically selected), but uses the following packages with LaTeX:
+inputenc(latin1), fontenc(T1), times, mathptmx, helvet and courier.
+
+   <p>The option `nopsnfss` is the default and uses the standard font (cmr10 if not
+otherwise specified).
+
+   <p>The option `prologues` takes a value as an additional argument and adds the line
+`prologues:=&lt;value&gt;` to the metapost file. If a value of `2` is specified metapost
+uses postscript fonts to generate the eps-file, so that the result can be viewed
+using e.g. ghostscript. Normally the output of metapost uses TeX fonts and therefore
+has to be included in a (La)TeX file before you can look at it.
+
+   <p>The option `noprologues` is the default. No additional line specifying the prologue
+will be added.
+
+   <p>The option `a4paper` adds a `[a4paper]` to the documentclass. Normally letter paper
+is used (default). Since this option is only used in case of LaTeX, the `latex` option
+is selected automatically.
+
+   <p>The option `amstex` automatically selects the `latex` option and includes the following
+LaTeX packages: amsfonts, amsmath(intlimits). By default these packages are not
+included.
+
+   <p>A name in quotes selects the font that will be used when no explicit font is
+given in a `set label` or <a href="title.html#title">title</a>.  A name recognized by TeX (a TFM file
+exists) must be used.  The default is "cmr10" unless `notex` is selected,
+then it is "pcrr8r" (Courier).  Even under `notex`, a TFM file is needed by
+Metapost. The file `pcrr8r.tfm` is the name given to Courier in LaTeX's psnfss
+package.  If you change the font from the `notex` default, choose a font that
+matches the ASCII encoding at least in the range 32-126.  `cmtt10` almost
+works, but it has a nonblank character in position 32 (space).
+
+   <p>The size can be any number between 5.0 and 99.99.  If it is omitted, 10.0 is
+used.  It is advisable to use `magstep` sizes: 10 times an integer or
+half-integer power of 1.2, rounded to two decimals, because those are the most
+available sizes of fonts in TeX systems.
+
+   <p>All the options are optional.  If font information is given, it must be at the
+end, with size (if present) last.  The size is needed to select a size for the
+font, even if the font name includes size information.  For example,
+`set term mp "cmtt12"` selects cmtt12 shrunk to the default size 10.  This
+is probably not what you want or you would have used cmtt10.
+
+   <p>The following common ascii characters need special treatment in TeX:
+<pre class="example">        $, &amp;, #, %, _;  |, &lt;, &gt;;  ^, ~,  \\, {, and }
+</pre>
+   <p>The five characters $, #, &amp;, _, and % can simply be escaped, e.g., `\\$`. 
+The three characters &lt;, &gt;, and | can be wrapped in math mode, e.g., `$&lt;$`. 
+The remainder require some TeX work-arounds.  Any good book on TeX will give
+some guidance.
+
+   <p>If you type your labels inside double quotes, backslashes in TeX code need to
+be escaped (doubled). Using single quotes will avoid having to do this, but
+then you cannot use `\\n` for line breaks.  As of this writing, version 3.7 of
+gnuplot processes titles given in a `plot` command differently than in other
+places, and backslashes in TeX commands need to be doubled regardless of the
+style of quotes.
+
+   <p>Metapost pictures are typically used in TeX documents.  Metapost deals with
+fonts pretty much the same way TeX does, which is different from most other
+document preparation programs.  If the picture is included in a LaTeX document
+using the graphics package, or in a plainTeX document via epsf.tex, and then
+converted to PostScript with dvips (or other dvi-to-ps converter), the text in
+the plot will usually be handled correctly.  However, the text may not appear
+if you send the Metapost output as-is to a PostScript interpreter.
+
+<p class="noindent">&mdash; METAPOST INSTRUCTIONS &mdash;
+
+<!-- ?commands set terminal mp detailed -->
+<!-- ?set terminal mp detailed -->
+<!-- ?set term mp detailed -->
+<!-- ?mp detailed -->
+<!-- ?metapost detailed -->
+   <p>- Set your terminal to Metapost, e.g.:
+<pre class="example">        set terminal mp mono "cmtt12" 12
+     
+</pre>
+   <p>- Select an output-file, e.g.:
+<pre class="example">        set output "figure.mp"
+     
+</pre>
+   <p>- Create your pictures.  Each plot (or multiplot group) will generate a
+separate Metapost beginfig...endfig group.  Its default size will be 5 by 3
+inches.  You can change the size by saying `set size 0.5,0.5` or whatever
+fraction of the default size you want to have.
+
+   <p>- Quit gnuplot.
+
+   <p>- Generate EPS files by running Metapost on the output of gnuplot:
+<pre class="example">        mpost figure.mp  OR  mp figure.mp
+</pre>
+   <p>The name of the Metapost program depends on the system, typically `mpost` for
+a Unix machine and `mp` on many others.  Metapost will generate one EPS file
+for each picture.
+
+   <p>- To include your pictures in your document you can use the graphics package
+in LaTeX or epsf.tex in plainTeX:
+<pre class="example">        \\usepackage{graphics} % LaTeX
+        \\input epsf.tex       % plainTeX
+</pre>
+   <p>If you use a driver other than dvips for converting TeX DVI output to PS, you
+may need to add the following line in your LaTeX document:
+<pre class="example">        \\DeclareGraphicsRule{*}{eps}{*}{}
+</pre>
+   <p>Each picture you made is in a separate file.  The first picture is in, e.g.,
+figure.0, the second in figure.1, and so on....  To place the third picture in
+your document, for example, all you have to do is:
+<pre class="example">        \\includegraphics{figure.2} % LaTeX
+        \\epsfbox{figure.2}         % plainTeX
+     
+</pre>
+   <p>The advantage, if any, of the mp terminal over a postscript terminal is
+editable output.  Considerable effort went into making this output as clean as
+possible.  For those knowledgeable in the Metapost language, the default line
+types and colors can be changed by editing the arrays `lt[]` and `col[]`. 
+The choice of solid vs dashed lines, and color vs black lines can be change by
+changing the values assigned to the booleans `dashedlines` and `colorlines`. 
+If the default `tex` option was in effect, global changes to the text of
+labels can be achieved by editing the `vebatimtex...etex` block.  In
+particular, a LaTeX preamble can be added if desired, and then LaTeX's
+built-in size changing commands can be used for maximum flexibility. Be sure
+to set the appropriate MP configuration variable to force Metapost to run
+LaTeX instead of plainTeX."
+
+   </body></html>
+

@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>User-defined_variables_and_functions - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Expressions.html#Expressions" title="Expressions">
+<link rel="prev" href="Gnuplot_002ddefined_005fvariables.html#Gnuplot_002ddefined_005fvariables" title="Gnuplot-defined_variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="User-defined_variables_and_functions"></a>
+<a name="User_002ddefined_005fvariables_005fand_005ffunctions"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Gnuplot_002ddefined_005fvariables.html#Gnuplot_002ddefined_005fvariables">Gnuplot-defined_variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Expressions.html#Expressions">Expressions</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.13.4 User-defined variables and functions</h4>
+
+<!-- ?expressions user-defined -->
+<!-- ?user-defined variables -->
+<p><a name="index-user_002ddefined-186"></a>
+<a name="index-variables-187"></a><a name="index-variables-188"></a>
+
+   <p>New user-defined variables and functions of one through twelve variables may
+be declared and used anywhere, including on the `plot` command itself.
+
+   <p>User-defined function syntax:
+<pre class="example">           &lt;func-name&gt;( &lt;dummy1&gt; {,&lt;dummy2&gt;} ... {,&lt;dummy12&gt;} ) = &lt;expression&gt;
+     
+</pre>
+   <p>where &lt;expression&gt; is defined in terms of &lt;dummy1&gt; through &lt;dummy12&gt;.
+
+   <p>User-defined variable syntax:
+<pre class="example">           &lt;variable-name&gt; = &lt;constant-expression&gt;
+     
+</pre>
+   <p>Examples:
+<pre class="example">           w = 2
+           q = floor(tan(pi/2 - 0.1))
+           f(x) = sin(w*x)
+           sinc(x) = sin(pi*x)/(pi*x)
+           delta(t) = (t == 0)
+           ramp(t) = (t &gt; 0) ? t : 0
+           min(a,b) = (a &lt; b) ? a : b
+           comb(n,k) = n!/(k!*(n-k)!)
+           len3d(x,y,z) = sqrt(x*x+y*y+z*z)
+           plot f(x) = sin(x*a), a = 0.2, f(x), a = 0.4, f(x)
+     
+</pre>
+   <pre class="example">           file = "mydata.inp"
+           file(n) = sprintf("run_%d.dat",n)
+     
+</pre>
+   <!-- ^ <img align=bottom src="http://www.gnuplot.info/doc/userdefined.gif" alt="[userdefined.gif]" width=640 height=480> -->
+   <p>The final two examples illustrate a user-defined string variable and a
+user-defined string function.
+
+   <p><a name="index-NaN-189"></a>
+<a name="index-pi-190"></a>
+Note that the variables `pi` (3.14159...) and `NaN` (IEEE "Not a Number") are
+already defined.  You can redefine these to something else if you really need
+to. The original values can be recovered by setting:
+
+<pre class="example">           NaN = GPVAL_NaN
+           pi  = GPVAL_pi
+     
+</pre>
+   <p>Other variables may be defined under various gnuplot operations like mousing in
+interactive terminals or fitting; see <a href="variables.html#variables">variables</a> for details.
+
+   <p>You can check for existence of a given variable V by the exists("V")
+expression. For example
+<pre class="example">           a = 10
+           if (exists("a")) print "a is defined"
+           if (!exists("b")) print "b is not defined"
+     
+</pre>
+   <p>Valid names are the same as in most programming languages: they must begin
+with a letter, but subsequent characters may be letters, digits, or "_".
+
+   <p>Each function definition is made available as a special string-valued
+variable with the prefix 'GPFUN_'.
+
+   <p>Example:
+<pre class="example">           set label GPFUN_sinc at graph .05,.95
+     
+</pre>
+   <p>See <a href="functions.html#functions">functions</a>, <a href="functions.html#functions">functions</a>, <a href="variables.html#variables">variables</a>, <a href="macros.html#macros">macros</a>.
+
+   </body></html>
+

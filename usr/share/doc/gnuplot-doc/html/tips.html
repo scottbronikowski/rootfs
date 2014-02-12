@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>tips - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="fit.html#fit" title="fit">
+<link rel="prev" href="starting_005fvalues.html#starting_005fvalues" title="starting_values">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="tips"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="starting_005fvalues.html#starting_005fvalues">starting_values</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="fit.html#fit">fit</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.6.7 tips</h4>
+
+<!-- ?commands fit tips -->
+<!-- ?fit tips -->
+<p><a name="index-tips-299"></a>
+Here are some tips to keep in mind to get the most out of <a href="fit.html#fit">fit</a>.  They're not
+very organized, so you'll have to read them several times until their essence
+has sunk in.
+
+   <p>The two forms of the `via` argument to <a href="fit.html#fit">fit</a> serve two largely distinct
+purposes.  The `via "file"` form is best used for (possibly unattended) batch
+operation, where you just supply the startup values in a file and can later
+use <a href="update.html#update">update</a> to copy the results back into another (or the same) parameter
+file.
+
+   <p>The `via var1, var2, ...` form is best used interactively, where the command
+history mechanism may be used to edit the list of parameters to be fitted or
+to supply new startup values for the next try.  This is particularly useful
+for hard problems, where a direct fit to all parameters at once won't work
+without good starting values.  To find such, you can iterate several times,
+fitting only some of the parameters, until the values are close enough to the
+goal that the final fit to all parameters at once will work.
+
+   <p>Make sure that there is no mutual dependency among parameters of the function
+you are fitting.  For example, don't try to fit a*exp(x+b), because
+a*exp(x+b)=a*exp(b)*exp(x).  Instead, fit either a*exp(x) or exp(x+b).
+
+   <p>A technical issue:  the parameters must not be too different in magnitude. 
+The larger the ratio of the largest and the smallest absolute parameter
+values, the slower the fit will converge.  If the ratio is close to or above
+the inverse of the machine floating point precision, it may take next to
+forever to converge, or refuse to converge at all.  You will have to adapt
+your function to avoid this, e.g., replace 'parameter' by '1e9*parameter' in
+the function definition, and divide the starting value by 1e9.
+
+   <p>If you can write your function as a linear combination of simple functions
+weighted by the parameters to be fitted, by all means do so.  That helps a
+lot, because the problem is no longer nonlinear and should converge with only
+a small number of iterations, perhaps just one.
+
+   <p>Some prescriptions for analysing data, given in practical experimentation
+courses, may have you first fit some functions to your data, perhaps in a
+multi-step process of accounting for several aspects of the underlying
+theory one by one, and then extract the information you really wanted from
+the fitting parameters of those functions.  With <a href="fit.html#fit">fit</a>, this may often be
+done in one step by writing the model function directly in terms of the
+desired parameters.  Transforming data can also quite often be avoided,
+though sometimes at the cost of a more difficult fit problem.  If you think
+this contradicts the previous paragraph about simplifying the fit function,
+you are correct.
+
+   <p>A "singular matrix" message indicates that this implementation of the
+Marquardt-Levenberg algorithm can't calculate parameter values for the next
+iteration.  Try different starting values, writing the function in another
+form, or a simpler function.
+
+   <p>Finally, a nice quote from the manual of another fitting package (fudgit),
+that kind of summarizes all these issues:  "Nonlinear fitting is an art!"
+
+   </body></html>
+

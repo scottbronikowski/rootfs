@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>Quote_Marks - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntax.html#Syntax" title="Syntax">
+<link rel="prev" href="Syntax.html#Syntax" title="Syntax">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Quote_Marks"></a>
+<a name="Quote_005fMarks"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax.html#Syntax">Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntax.html#Syntax">Syntax</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.22.1 Quote Marks</h4>
+
+<p><a name="index-quotes-240"></a>
+<!-- ?syntax quotes -->
+Gnuplot uses three forms of quote marks for delimiting text strings,
+double-quote (ascii 34), single-quote (ascii 39), and backquote (ascii 96).
+
+   <p>Filenames may be entered with either single- or double-quotes.  In this
+manual the command examples generally single-quote filenames and double-quote
+other string tokens for clarity.
+
+   <p>String constants and text strings used for labels, titles, or other plot
+elements may be enclosed in either single quotes or double quotes. Further
+processing of the quoted text depends on the choice of quote marks.
+
+   <p>Backslash processing of special characters like \n (newline) and
+\345 (octal character code) is performed for double-quoted strings.  In
+single-quoted strings, backslashes are just ordinary characters.  To get
+a single-quote (ascii 39) in a single-quoted string, it has to be doubled. 
+Thus the strings "d\" s' b\\" and 'd" s&rdquo; b\' are completely equivalent.
+
+   <p>Text justification is the same for each line of a multi-line string. 
+Thus the center-justified string
+<pre class="example">           "This is the first line of text.\nThis is the second line."
+</pre>
+   <p>will produce
+<pre class="example">                            This is the first line of text.
+                               This is the second line.
+</pre>
+   <p>but
+<pre class="example">           'This is the first line of text.\nThis is the second line.'
+</pre>
+   <p>will produce
+<pre class="example">               This is the first line of text.\nThis is the second line.
+     
+</pre>
+   <p>Enhanced text processing is performed for both double-quoted text and
+single-quoted text, but only by terminals supporting this mode. 
+See `enhanced text`.
+
+   <p>Back-quotes are used to enclose system commands for substitution into the
+command line.  See `substitution`.
+
+   </body></html>
+

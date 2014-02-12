@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>vgagl - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="vx384.html#vx384" title="vx384">
+<link rel="next" href="VWS.html#VWS" title="VWS">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="vgagl"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="VWS.html#VWS">VWS</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="vx384.html#vx384">vx384</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.71 vgagl</h5>
+
+<!-- ?commands set terminal vgagl -->
+<!-- ?set terminal vgagl -->
+<!-- ?set term vgagl -->
+<!-- ?terminal vgagl -->
+<!-- ?term vgagl -->
+<p><a name="index-vgagl-908"></a><a name="index-vgagl-909"></a>
+
+   <p>The `vgagl` driver is a fast linux console driver with full mouse and pm3d
+support.  It looks at the environment variable SVGALIB_DEFAULT_MODE for the
+default mode; if not set, it uses a 256 color mode with the highest
+available resolution.
+
+   <p>Syntax:
+<pre class="example">        set terminal vgagl \\
+                     background [red] [[green] [blue]] \\
+                     [uniform | interpolate] \\
+                     [dump "file"] \\
+                     [mode]
+     
+</pre>
+   <p>The color mode can also be given with the mode option. Both Symbolic
+names as G1024x768x256 and integers are allowed. The `background` option
+takes either one or three integers in the range [0, 255]. If only one
+integers is supplied, it is taken as gray value for the background. 
+If three integers are present, the background gets the corresponding
+color. 
+The (mutually exclusive) options `interpolate` and `uniform` control
+if color interpolation is done while drawing triangles (on by default).
+
+   <p>A <a href="file.html#file">file</a> can be specified with the `dump "file"` option. 
+If this option is present, (i.e the dump file name is not empty) pressing
+the key KP_Delete will write the file.  This action cannot and cannot be
+rebound. The file is written in raw ppm (P6) format. Note that this option
+is reset each time the `set term` command is issued.
+
+   <p>To get high resolution modes, you will probably have to modify the
+configuration file of libvga, usually /etc/vga/libvga.conf.  Using
+the VESA fb is a good choice, but this needs to be compiled in the
+kernel.
+
+   <p>The vgagl driver uses the first *available* vga mode from the following list:
+<pre class="example">      - the driver which was supplied when setting vgagl, e.g. `set term vgagl
+        G1024x768x256` would first check, if the G1024x768x256 mode is available.
+      - the environment variable SVGALIB_DEFAULT_MODE
+      - G1024x768x256
+      - G800x600x256
+      - G640x480x256
+      - G320x200x256
+      - G1280x1024x256
+      - G1152x864x256
+      - G1360x768x256
+      - G1600x1200x256
+     
+</pre>
+   </body></html>
+

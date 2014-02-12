@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+<title>Ternary - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Operators.html#Operators" title="Operators">
+<link rel="prev" href="Binary.html#Binary" title="Binary">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Ternary"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Binary.html#Binary">Binary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Operators.html#Operators">Operators</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">1.13.2.3 Ternary</h5>
+
+<!-- ?expressions operators ternary -->
+<!-- ?operators ternary -->
+<p><a name="index-ternary-183"></a>
+There is a single ternary operator:
+
+<pre class="example">         Symbol       Example      Explanation
+           ?:          a?b:c     ternary operation
+     
+</pre>
+   <p>The ternary operator behaves as it does in C.  The first argument (a), which
+must be an integer, is evaluated.  If it is true (non-zero), the second
+argument (b) is evaluated and returned; otherwise the third argument (c) is
+evaluated and returned.
+
+   <p>The ternary operator is very useful both in constructing piecewise functions
+and in plotting points only when certain conditions are met.
+
+   <p>Examples:
+
+   <p>Plot a function that is to equal sin(x) for 0 &lt;= x &lt; 1, 1/x for 1 &lt;= x &lt; 2,
+and undefined elsewhere:
+<pre class="example">           f(x) = 0&lt;=x &amp;&amp; x&lt;1 ? sin(x) : 1&lt;=x &amp;&amp; x&lt;2 ? 1/x : 1/0
+           plot f(x)
+</pre>
+   <!-- ^ <img align=bottom src="http://www.gnuplot.info/doc/ternary.gif" alt="[ternary.gif]" width=640 height=480> -->
+   <p>Note that `gnuplot` quietly ignores undefined values, so the final branch of
+the function (1/0) will produce no plottable points.  Note also that f(x)
+will be plotted as a continuous function across the discontinuity if a line
+style is used.  To plot it discontinuously, create separate functions for the
+two pieces.  (Parametric functions are also useful for this purpose.)
+
+   <p>For data in a file, plot the average of the data in columns 2 and 3 against
+the datum in column 1, but only if the datum in column 4 is non-negative:
+
+<pre class="example">           plot 'file' using 1:( $4&lt;0 ? 1/0 : ($2+$3)/2 )
+     
+</pre>
+   <p>For an explanation of the <a href="using.html#using">using</a> syntax, please see <a href="using.html#using">using</a>.
+
+   </body></html>
+

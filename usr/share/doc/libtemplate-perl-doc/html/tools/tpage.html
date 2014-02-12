@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
+<html>
+  <head>
+    <title>Template::Tools::tpage</title>
+    <link rel="stylesheet" type="text/css" href="../css/blue.css" title="Clear Blue">
+    <link rel="alternate stylesheet" type="text/css" href="../css/orange.css" title="Clear Orange">
+    <link rel="alternate stylesheet" type="text/css" href="../css/green.css" title="Clear Green">
+    <link rel="alternate stylesheet" type="text/css" href="../css/purple.css" title="Clear Purple">
+    <link rel="alternate stylesheet" type="text/css" href="../css/grey.css" title="Clear Grey">
+    <link rel="alternate stylesheet" type="text/css" href="../css/print.css" title="Print">
+    <!--[if IE 6]>
+    <link rel="stylesheet" type="text/css" href="../css/ie6.css" />
+    <![endif]-->
+    <!--[if IE 7]>
+    <link rel="stylesheet" type="text/css" href="../css/ie7.css" />
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="../css/print.css" media="print">
+    <script type="text/javascript" src="../js/tt2.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="author" content="Andy Wardley">
+  </head>
+  <body id="body"> 
+    <div id="layout">
+        <div id="header">
+          <a href="../index.html" id="logo" alt="" title="Click for the Home Page"><span class="alt">TT2 Home Page</span></a>
+          <ul id="trail">
+            <li><a href="../tools/index.html">Tools</a></li>
+            <li class="last"><a href="../tools/tpage.html">tpage</a></li>
+          </ul>
+          <div class="controls">
+            <a href="#" class="menu show" onclick="widescreen_off(); return false" title="Show Menu">
+              <span class="about">Click to view the menu.  It's very nice.</span>
+            </a>
+            <a href="#" class="menu hide" onclick="widescreen_on();  return false" title="Hide Menu">
+              <span class="about">Click to hide the menu and go all widescreen!</span>
+            </a>
+          
+          <div class="pager">
+            <span class="go back">Back<span class="about">You can't go back.  It exists in a different dimension and I left the keys at home.</span></span>
+            <a href="../tools/index.html" title="Template::Tools" class="go up">Up<span class="about"><h4>Template::Tools</h4>Command Line Tools for the Template Toolkit</span></a>
+            <a href="../tools/ttree.html" title="Template::Tools::ttree" class="go next">Next<span class="about"><h4>Template::Tools::ttree</h4>Process entire directory trees of templates</span></a>
+          </div>
+          </div>
+          <h1 class="headline">Template::Tools::tpage</h1>
+          <h2 class="subhead">Process templates from command line</h1>
+        
+        </div>
+        
+        <div id="page">
+          <div id="sidebar">
+            <a href="../index.html" id="logo"></a>
+            <div id="menu">
+              <ul class="menu">
+                <li class="l0 first"><a href="../manual/index.html">Manual</a></li>
+                <li class="l0"><a href="../modules/index.html">Modules</a></li>
+                <li class="l0"><a href="../tools/index.html" class="warm">Tools</a></li>
+                <li class="l1"><a href="../tools/tpage.html" class="warm">tpage</a></li>
+                <li class="l1"><a href="../tools/ttree.html">ttree</a></li>
+                <li class="l0"><a href="../tutorial/index.html">Tutorial</a></li>
+                <li class="l0 last"><a href="../faq/index.html">FAQ</a></li>
+              </ul>
+              <div class="foot"></div>
+            </div>
+          </div>
+          <div id="content">
+          <div class="section">
+            <div class="head">
+              <h1 id="contents" onclick="switch_section(this)" title="Click title to show/hide section content.">Contents</h1>
+              <a href="#body" class="top" title="Back up to the top of the page" >Top</a>
+            </div>
+            <div class="body">
+              <ul class="toc">
+                  <li class=""><a href="#USAGE">USAGE</a></li>
+                  <li class=""><a href="#DESCRIPTION">DESCRIPTION</a></li>
+                  <li class=""><a href="#AUTHOR">AUTHOR</a></li>
+                  <li class=""><a href="#COPYRIGHT">COPYRIGHT</a></li>
+                  <li class=""><a href="#SEE_ALSO">SEE ALSO</a></li>
+              
+              </ul>
+            </div>
+          </div>
+          
+                <div class="pod">
+            <div class="section">
+              <div class="head">
+                <h1 id="USAGE" onclick="switch_section(this)" title="Click title to show/hide section content.">USAGE</h1>
+                <a href="#body" class="top" title="Back up to the top of the page" >Top</a>
+              </div>
+              <div class="body">
+                <pre>tpage [ --define var=value ] file(s)</pre>
+              </div>
+            </div>
+            <div class="section">
+              <div class="head">
+                <h1 id="DESCRIPTION" onclick="switch_section(this)" title="Click title to show/hide section content.">DESCRIPTION</h1>
+                <a href="#body" class="top" title="Back up to the top of the page" >Top</a>
+              </div>
+              <div class="body">
+                <p>
+                      The <b>tpage</b> script is a simple wrapper around the Template Toolkit
+                      processor. Files specified by name on the command line are processed in
+                      turn by the template processor and the resulting output is sent to STDOUT
+                      and can be redirected accordingly. e.g.
+                    </p>
+                    <pre>tpage myfile &gt; myfile.out
+tpage header myfile footer &gt; myfile.html</pre>
+                    <p>
+                      If no file names are specified on the command line then <b>tpage</b> will
+                      read STDIN for input.
+                    </p>
+                    <p>
+                      The <code>--define</code> option can be used to set the values of
+                      template variables. e.g.
+                    </p>
+                    <pre>tpage --define author="Andy Wardley" skeleton.pm &gt; MyModule.pm</pre>
+                    <p>
+                      See <a href="../modules/Template.html">Template</a> for general
+                      information about the Perl Template Toolkit and the template language and
+                      features.
+                    </p>
+              </div>
+            </div>
+            <div class="section">
+              <div class="head">
+                <h1 id="AUTHOR" onclick="switch_section(this)" title="Click title to show/hide section content.">AUTHOR</h1>
+                <a href="#body" class="top" title="Back up to the top of the page" >Top</a>
+              </div>
+              <div class="body">
+                <p>
+                      Andy Wardley <a href="http://wardley.org/">http://wardley.org/</a>
+                    </p>
+              </div>
+            </div>
+            <div class="section">
+              <div class="head">
+                <h1 id="COPYRIGHT" onclick="switch_section(this)" title="Click title to show/hide section content.">COPYRIGHT</h1>
+                <a href="#body" class="top" title="Back up to the top of the page" >Top</a>
+              </div>
+              <div class="body">
+                <p>
+                      Copyright (C) 1996-2008 Andy Wardley. All Rights Reserved.
+                    </p>
+                    <p>
+                      This module is free software; you can redistribute it and/or modify it
+                      under the same terms as Perl itself.
+                    </p>
+              </div>
+            </div>
+            <div class="section">
+              <div class="head">
+                <h1 id="SEE_ALSO" onclick="switch_section(this)" title="Click title to show/hide section content.">SEE ALSO</h1>
+                <a href="#body" class="top" title="Back up to the top of the page" >Top</a>
+              </div>
+              <div class="body">
+                <p>
+                      <a href="../tools/ttree.html">ttree</a>
+                    </p>
+              </div>
+            </div>
+            
+            </div></div>
+          <br class="clear" />
+          <div class="pageinfo">
+            <a href="http://template-toolkit.org/docs/tools/tpage.html">http://template-toolkit.org/docs/tools/tpage.html</a>
+          </div>
+        </div>
+        
+        <div id="footer">
+          <a href="http://opensource.org/" class="osi"></a>
+          <div class="controls">
+          <div class="pager">
+            <span class="go back">Back<span class="about"></span></span>
+            <a href="../tools/index.html" title="Template::Tools" class="go up">Up<span class="about"><h4>Template::Tools</h4></span></a>
+            <a href="../tools/ttree.html" title="Template::Tools::ttree" class="go next">Next<span class="about"><h4>Template::Tools::ttree</h4></span></a>
+          </div>
+          </div>
+          <div class="copyright">
+            Copyright &copy; 1996-2008 <a href="http://wardley.org/">Andy Wardley</a>.  All Rights Reserved.
+          </div>
+          <div class="licence">
+            The <a href="http://template-toolkit.org/">Template Toolkit</a> is <a href="http://opensource.org/">Open Source</a> software.
+            You can redistribute and/or modify it under the terms of the <a href="http://www.opensource.org/licenses/gpl-license.php">GNU Public Licence</a>
+            or the <a href="http://www.opensource.org/licenses/artistic-license.php">Perl Artistic Licence</a>.
+          </div>
+        </div>
+        <div id="palette">
+          <ul>
+            <li class="first"><a href="#" class="blue" onclick="set_style('Clear Blue')"></a></li>
+            <li><a href="#" class="orange" onclick="set_style('Clear Orange')"></a></li>
+            <li><a href="#" class="green" onclick="set_style('Clear Green')"></a></li>
+            <li><a href="#" class="purple" onclick="set_style('Clear Purple')"></a></li>
+            <li><a href="#" class="grey" onclick="set_style('Clear Grey')"></a></li>
+          </ul>
+        </div>
+    </div>  </body>
+</html>

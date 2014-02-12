@@ -1,0 +1,124 @@
+#! /bin/sh
+# /usr/lib/emacsen-common/packages/install/apel
+set -e
+
+FLAVOR=$1
+PACKAGE=apel
+
+case $FLAVOR in
+    emacs)
+    exit 0
+    ;;
+    *xemacs*)
+    mule=`/bin/ls -1 /usr/bin/$FLAVOR*-mule* 2>/dev/null | head -1`
+    nomule=`/bin/ls -1 /usr/bin/$FLAVOR*-nomule* 2>/dev/null | head -1`
+    if [ -n "$nomule" ]; then
+	if [ -n "$mule" ]; then
+	    EMACSEN="$mule $nomule"
+	else
+	    EMACSEN="$nomule"
+	fi
+    else
+	EMACSEN=$FLAVOR
+    fi
+    ;;
+    *)
+    EMACSEN=$FLAVOR
+    ;;
+esac
+
+ELCDIR=/usr/share/$FLAVOR/site-lisp/$PACKAGE
+ELDIR=/usr/share/emacs/site-lisp/$PACKAGE
+ELCSTAMP=$ELCDIR/compile-stamp
+if [ -f "$ELCSTAMP" ]; then
+    echo "install/$PACKAGE: already byte-compiled for $FLAVOR, skipped"
+    exit 0
+fi
+
+LOG=`mktemp -t elc.XXXXXXXXXXXX`
+chmod 644 "$LOG"
+echo "install/$PACKAGE: byte-compiling for $FLAVOR, logged in $LOG"
+
+cd "$ELDIR"
+LINKS=`echo *.el`
+if [ ! -d "$ELCDIR" ]; then
+    mkdir "$ELCDIR"
+    chmod 755 "$ELCDIR"
+fi
+
+for EMACS in $EMACSEN; do
+    cd "$ELCDIR"
+    TOELDIR=../../../emacs/site-lisp/$PACKAGE
+    case $EMACS in
+	*-nomule*)
+	if [ x"$EMACS" != x"$EMACSEN" ]; then
+	    if [ ! -d nomule ]; then
+		mkdir nomule; chmod 755 nomule
+	    fi
+	    cd nomule
+	    TOELDIR=../$TOELDIR
+	fi
+	;;
+    esac
+    rm -f *.elc __myinit.el
+    for f in $LINKS; do
+	ln -sf "$TOELDIR/$f" .
+    done
+    rm -f *-e20_2.el *-18.el *-om.el *-nemacs.el atype file-detect localhook.el env.el pces-raw.el timezone.el emu-mule.el tinyrich.el
+    case $FLAVOR in
+	*xemacs*)
+	rm -f pces-e20.el poem-e20_3.el poem-e20.el mcs-e20.el inv-19.el
+	;;
+	*)
+	rm -f poe-xemacs.el pces-xm.el pces-xfc.el poem-xm.el mcs-xmu.el mcs-xm.el inv-xemacs.el
+	;;
+    esac
+    case $EMACS in
+	*-nomule*)
+	rm -f pccl-20.el pces-xm.el poem-xm.el
+	;;
+	*)
+	rm -f poem-ltn1.el mcs-ltn1.el
+	;;
+    esac
+    FILES=`/bin/ls -1 *.el | egrep -v '^mcs-xmu.el'`
+
+    cat > __myinit.el << EOF
+(setq load-path (cons "." load-path))
+(setq byte-compile-warnings nil)
+EOF
+
+    FLAGS="-q -no-site-file -batch -l __myinit.el -f batch-byte-compile"
+    echo "$EMACS" $FLAGS $FILES >> "$LOG"
+    "$EMACS" $FLAGS $FILES >> "$LOG" 2>&1
+    chmod 644 *.elc
+
+    if [ ! -f pces-20.elc ]; then
+	# Remove pces-20.el to prevent a literal-test-file problem.
+	rm -f pces-20.el
+    fi
+
+    rm -f __myinit.el*
+done # EMACS in $EMACSEN
+
+echo "install/$PACKAGE: deleting $LOG"
+rm -f "$LOG"
+
+echo "install/$PACKAGE: byte-compiling for reverse dependency"
+pkgs=
+
+for p in w3m-el:w3m w3m-el-snapshot:w3m flim bitmap-mule cmail ddskk elscreen elpoint eldav initz liece tdiary-mode; do
+    pkg=`echo $p | cut -d : -f 1`
+    sname=`echo $p | cut -d : -f 2`
+    dir=/usr/share/$FLAVOR/site-lisp/$sname
+    if [ -n "$sname" ] && [ -d "$dir" ] && [ -f "/usr/lib/emacsen-common/packages/install/$pkg" ]; then
+	rm -rf "$dir"/*
+	pkgs="$pkg $pkgs"
+    fi
+done
+for pkg in $pkgs; do
+    "/usr/lib/emacsen-common/packages/install/$pkg" "$FLAVOR"
+done
+
+touch "$ELCSTAMP"
+exit 0

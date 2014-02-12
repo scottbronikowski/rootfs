@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on May 29, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>psgml: 5. Running an external SGML parser</title>
+
+<meta name="description" content="psgml: 5. Running an external SGML parser">
+<meta name="keywords" content="psgml: 5. Running an external SGML parser">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Validate"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml_4.html#Entity-manager" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_6.html#SGML-declaration" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml_4.html#Entity-manager" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_6.html#SGML-declaration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Running-an-external-SGML-parser"></a>
+<h1 class="chapter">5. Running an external SGML parser</h1>
+
+<a name="index-C_002dc-C_002dv"></a>
+<a name="index-sgml_002dvalidate"></a>
+<p>PSGML can not validate an SGML document (see below what it can
+and can&rsquo;t do).  If you have a validating SGML parser, like
+&lsquo;<tt>sgmls</tt>&rsquo;, you can run the parser on your file with the
+command <kbd>C-c C-v</kbd> (<code>sgml-validate</code>).
+</p>
+<p>Some variables control this function:
+</p>
+<dl>
+<dt><a name="index-sgml_002dvalidate_002dcommand"></a><u>User Option:</u> <b>sgml-validate-command</b></dt>
+<dd><p>The shell command to validate an SGML document.
+</p>
+<p>This is a <code>format</code> control string that by default should contain two
+<code>%s</code> conversion specifications: the first will be replaced by the
+value of <code>sgml-declaration</code> (or the empty string, if nil); the
+second will be replaced by the current buffer&rsquo;s file name (or the
+empty string, if nil).
+</p>
+<p>If <code>sgml-validate-files</code> is non-nil, the format string should contain
+one <code>%s</code> conversion specification for each element of its result.
+</p>
+<p>If sgml-validate-command is a list, then every element should be a
+string.  The strings will be tried in order and &lsquo;<samp>%</samp>&rsquo;-sequences in the
+string will be replaced according to the list below, if the string contains
+&lsquo;<samp>%</samp>&rsquo;-sequences with no replacement value the next string will be tried.
+</p>
+<dl compact="compact">
+<dt> <code>%b</code></dt>
+<dd><p>means the visited file of the current buffer
+</p>
+</dd>
+<dt> <code>%s</code></dt>
+<dd><p>means the SGML declaration specified in the sgml-declaration variable
+</p>
+</dd>
+<dt> <code>%d</code></dt>
+<dd><p>means the file containing the DOCTYPE declaration, if not in the buffer 
+</p></dd>
+</dl>
+
+<p>The default value is <code>nsgmls -s %s %s</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dvalidate_002dfiles"></a><u>User Option:</u> <b>sgml-validate-files</b></dt>
+<dd><p>If non-nil, a function of no arguments that returns a list of
+file names.  These file names will serve as the arguments to the
+<code>sgml-validate-command</code> format control string instead of
+the defaults.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002ddeclaration"></a><u>User Option:</u> <b>sgml-declaration</b></dt>
+<dd><p>The name of the SGML declaration file.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002doffer_002dsave"></a><u>User Option:</u> <b>sgml-offer-save</b></dt>
+<dd><p>If non-nil, <kbd>C-c C-v</kbd> (<code>sgml-validate</code>) will ask about
+saving modified buffers before running the validate command.
+The default value is <code>t</code>.
+</p></dd></dl>
+
+
+<a name="index-C_002dc-C_002do"></a>
+<a name="index-sgml_002dnext_002dtrouble_002dspot"></a>
+<p>The built-in parser can find some markup errors.  The command <kbd>C-c
+C-o</kbd> (<code>sgml-next-trouble-spot</code>) is the best way to use the built-in
+parser for this.  To check the whole file go to the beginning of the
+buffer and use <kbd>C-c C-o</kbd>.
+</p>
+<p>Some of the markup errors not found are:
+</p>
+<ul>
+<li>
+Errors in the SGML declaration.
+</li><li>
+Errors in attribute specifications.
+</li><li>
+Omitted start-tags for empty elements.
+</li></ul>
+
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml_4.html#Entity-manager" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_6.html#SGML-declaration" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon user</em> on <em>May 29, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

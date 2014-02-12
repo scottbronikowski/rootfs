@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//gnu.org///DTD XHTML 1.1 plus Target 1.0//EN" "../../../resources/xhtml11-target10.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><title>Verbatim</title><script src="../../../resources/gjdoc.js" type="text/javascript"><!-- this comment required for konqueror 3.2.2 --></script><meta http-equiv="Content-Type" content="text/html; charset=US-ASCII"/><meta name="generator" content="GNU Gjdoc Standard Doclet"/><meta name="keywords" content="com.nwalsh.saxon.Verbatim class"/><meta name="keywords" content="getVariable()"/><meta name="keywords" content="numberLines()"/><meta name="keywords" content="insertCallouts()"/><link rel="stylesheet" type="text/css" href="../../../resources/gjdochtml-clean-layout.css" title="GNU Clean"/><link rel="stylesheet" type="text/css" href="../../../resources/gjdochtml-clean-color1.css" title="GNU Clean"/></head><body class="content class" onload="if(parent.contentPageLoaded)parent.contentPageLoaded(document.title)"><table class="navbar div top"><tr><td class="navbar div top"><div class="navbar div top"><span class="navbar item enabled"><a href="../../../com/nwalsh/saxon/package-summary.html">Package</a></span> <span class="navbar item active">Class</span> <span class="navbar item enabled"><a href="Verbatim-uses.html">Use</a></span> <span class="navbar item enabled"><a href="tree.html">Tree</a></span> <span class="navbar item enabled"><a href="../../../alphaindex-1.html">Index</a></span> <span class="navbar item enabled"><a href="../../../deprecated.html">Deprecated</a></span> <span class="navbar item enabled"><a href="../../../about.html">About</a></span></div></td></tr><tr><td class="navi"><a href="../../../com/nwalsh/saxon/UnwrapLinksEmitter.html">Prev Class</a> | <a href="../../../com/nwalsh/saxon/Website.html">Next Class</a></td><td class="navi"><a href="../../../index.html" title="Show in a frameset" target="_top">Frames</a> | <a href="Verbatim.html" title="Show without frames" target="_top">No Frames</a> </td></tr><tr><td class="navi">Summary: Nested | Field | <a href="#summary-methods">Method</a> | <a href="#summary-constructors">Constr</a></td><td class="navi">Detail: Nested | Field | <a href="#detail-methods">Method</a> | <a href="#detail-constructors">Constr</a></td></tr></table><div class="class title outer"><h3 class="class title-package">com.nwalsh.saxon</h3><h1 class="class title-class">Class Verbatim</h1></div><div class="class inheritance-tree"><ul class="inheritance 0"><li class="inheritance 0"><code>java.lang.Object</code></li><li><ul class="inheritance 1"><li class="inheritance 1"><code>com.nwalsh.saxon.Verbatim</code></li><li></li></ul></li></ul></div><hr/><div class="class synopsis outer"><div class="class synopsis declaration"><code>public class <b class="class synopsis name">Verbatim</b></code></div><div class="class synopsis superclass"><code>extends java.lang.Object</code></div></div><hr/><div class="class description"> Saxon extensions supporting DocBook verbatim environments
+
+ <p/>$Id: Verbatim.java 7155 2007-07-26 21:34:48Z mzjn $
+
+ <p/>Copyright (C) 2000 Norman Walsh.
+
+ <p/>This class provides a
+ <a href="http://saxon.sourceforge.net/">Saxon</a>
+ implementation of two features that would be impractical to
+ implement directly in XSLT: line numbering and callouts.
+
+ <p/><b>Line Numbering</b>
+ <p/>The <tt>numberLines</tt> method takes a result tree
+ fragment (assumed to contain the contents of a formatted verbatim
+ element in DocBook: programlisting, screen, address, literallayout,
+ or synopsis) and returns a result tree fragment decorated with
+ line numbers.
+
+ <p/><b>Callouts</b>
+ <p/>The <tt>insertCallouts</tt> method takes an
+ <tt>areaspec</tt> and a result tree fragment
+ (assumed to contain the contents of a formatted verbatim
+ element in DocBook: programlisting, screen, address, literallayout,
+ or synopsis) and returns a result tree fragment decorated with
+ callouts.
+
+ <p/><b>Change Log:</b>
+ <dl>
+ <dt></dt>
+ <dd><p/></dd>
+ </dl>
+</div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div><a name="summary-constructors" id="summary-constructors"/><dl class="table container"><dd><table class="class summary" border="1" width="100%"><tr class="table header"><td colspan="2"><h2 class="table header">Constructor Summary</h2></td></tr><tr><td class="right"><dl class="list"><dt class="synopsis"><code><a href="#Verbatim()">Verbatim</a>()</code></dt><dd class="description"> Constructor for Verbatim
+
+ <p/>All of the methods are static, so the constructor does nothing.</dd></dl></td></tr></table></dd></dl><a name="summary-methods" id="summary-methods"/><dl class="table container"><dd><table class="class summary" border="1" width="100%"><tr class="table header"><td colspan="2"><h2 class="table header">Method Summary</h2></td></tr><tr><td class="left" valign="top"><code class="synopsis">protected static String</code></td><td class="right"><dl class="list"><dt class="synopsis"><code><a href="#getVariable(Context,String)">getVariable</a>(Context&nbsp;context, String&nbsp;varName)</code></dt><dd class="description"> Find the string value of a stylesheet variable or parameter
+
+ <p/>Returns the string value of <code>varName</code> in the current
+ <code>context</code>.</dd></dl></td></tr><tr><td class="left" valign="top"><code class="synopsis">static NodeSetValue</code></td><td class="right"><dl class="list"><dt class="synopsis"><code><a href="#insertCallouts(Context,NodeList,NodeSetValue)">insertCallouts</a>(Context&nbsp;context, NodeList&nbsp;areaspecNodeList, NodeSetValue&nbsp;rtf_ns)</code></dt><dd class="description"> Insert text callouts into a verbatim environment.</dd></dl></td></tr><tr><td class="left" valign="top"><code class="synopsis">static NodeSetValue</code></td><td class="right"><dl class="list"><dt class="synopsis"><code><a href="#numberLines(Context,NodeSetValue)">numberLines</a>(Context&nbsp;context, NodeSetValue&nbsp;rtf_ns)</code></dt><dd class="description"> Number lines in a verbatim environment
+
+ <p/>The extension function expects the following variables to be
+ available in the calling context: $linenumbering.everyNth,
+ $linenumbering.width, $linenumbering.separator, and
+ $stylesheet.result.type.</dd></dl></td></tr></table></dd></dl><a name="detail-constructors" id="detail-constructors"/><h2 class="section header">Constructor Details</h2><div class="section"><a name="Verbatim()" id="Verbatim()"/><div class="member detail outer"><h3 class="member detail name">Verbatim</h3><pre class="member detail synopsis">public Verbatim()</pre><blockquote class="member detail name"><div class="member detail description"> Constructor for Verbatim
+
+ <p/>All of the methods are static, so the constructor does nothing.
+</div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div></blockquote></div></div><a name="detail-methods" id="detail-methods"/><h2 class="section header">Method Details</h2><div class="section"><a name="getVariable(Context,String)" id="getVariable(Context,String)"/><div class="member detail outer"><h3 class="member detail name">getVariable</h3><pre class="member detail synopsis">protected static String getVariable(Context context,
+                                    String varName)</pre><blockquote class="member detail name"><div class="member detail description"> Find the string value of a stylesheet variable or parameter
+
+ <p/>Returns the string value of <code>varName</code> in the current
+ <code>context</code>. Returns the empty string if the variable is
+ not defined.
+</div><div class="parameter"><dl><dt class="header"><b>Parameters:</b></dt><dd class="item"><code class="name">context</code><span class="separator"> - </span><span class="description">The current stylesheet context</span></dd><dd class="item"><code class="name">varName</code><span class="separator"> - </span><span class="description">The name of the variable (without the dollar sign)</span></dd></dl></div><div class="member detail return list"><dl><dt class="member detail return header"><b>Returns:</b></dt><dd class="member detail return item">The string value of the variable</dd></dl></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div></blockquote></div><hr/><a name="insertCallouts(Context,NodeList,NodeSetValue)" id="insertCallouts(Context,NodeList,NodeSetValue)"/><div class="member detail outer"><h3 class="member detail name">insertCallouts</h3><pre class="member detail synopsis">public static NodeSetValue insertCallouts(Context context,
+                                          NodeList areaspecNodeList,
+                                          NodeSetValue rtf_ns)</pre><blockquote class="member detail name"><div class="member detail description"> Insert text callouts into a verbatim environment.
+
+ <p/>This method examines the <tt>areaset</tt> and <tt>area</tt> elements
+ in the supplied <tt>areaspec</tt> and decorates the supplied
+ result tree fragment with appropriate callout markers.
+
+ <p/>If a <tt>label</tt> attribute is supplied on an <tt>area</tt>,
+ its content will be used for the label, otherwise the callout
+ number will be used, surrounded by parenthesis. Callout numbers may
+ also be represented as graphics. Callouts are
+ numbered in document order. All of the <tt>area</tt>s in an
+ <tt>areaset</tt> get the same number.
+
+ <p/>Only the <tt>linecolumn</tt> and <tt>linerange</tt> units are
+ supported. If no unit is specifed, <tt>linecolumn</tt> is assumed.
+ If only a line is specified, the callout decoration appears in
+ the defaultColumn. Lines will be padded with blanks to reach the
+ necessary column, but callouts that are located beyond the last
+ line of the verbatim environment will be ignored.
+
+ <p/>Callouts are inserted before the character at the line/column
+ where they are to occur.
+
+ <p/>If graphical callouts are used, and the callout number is less
+ than or equal to the $callout.graphics.number.limit, the following image
+ will be generated for HTML:
+
+ <pre>
+ &lt;img src="$callout.graphics.path/999$callout.graphics.ext"
+         alt="conumber"&gt;
+ </pre>
+
+ If the $stylesheet.result.type is 'fo', the following image will
+ be generated:
+
+ <pre>
+ &lt;fo:external-graphic src="$callout.graphics.path/999$callout.graphics.ext"/&gt;
+ </pre>
+
+ <p/>If the callout number exceeds $callout.graphics.number.limit,
+ the callout will be the callout number surrounded by
+ parenthesis.
+</div><div class="parameter"><dl><dt class="header"><b>Parameters:</b></dt><dd class="item"><code class="name">context</code><span class="separator"> - </span><span class="description">The stylesheet context.</span></dd><dd class="item"><code class="name">areaspecNodeList</code><span class="separator"> - </span><span class="description">The source node set that contains the areaspec.</span></dd><dd class="item"><code class="name">rtf_ns</code><span class="separator"> - </span><span class="description">The result tree fragment of the verbatim environment.</span></dd></dl></div><div class="member detail return list"><dl><dt class="member detail return header"><b>Returns:</b></dt><dd class="member detail return item">The modified result tree fragment.</dd></dl></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div></blockquote></div><hr/><a name="numberLines(Context,NodeSetValue)" id="numberLines(Context,NodeSetValue)"/><div class="member detail outer"><h3 class="member detail name">numberLines</h3><pre class="member detail synopsis">public static NodeSetValue numberLines(Context context,
+                                       NodeSetValue rtf_ns)</pre><blockquote class="member detail name"><div class="member detail description"> Number lines in a verbatim environment
+
+ <p/>The extension function expects the following variables to be
+ available in the calling context: $linenumbering.everyNth,
+ $linenumbering.width, $linenumbering.separator, and
+ $stylesheet.result.type.
+
+ <p/>This method adds line numbers to a result tree fragment. Each
+ newline that occurs in a text node is assumed to start a new line.
+ The first line is always numbered, every subsequent 'everyNth' line
+ is numbered (so if everyNth=5, lines 1, 5, 10, 15, etc. will be
+ numbered. If there are fewer than everyNth lines in the environment,
+ every line is numbered.
+
+ <p/>Every line number will be right justified in a string 'width'
+ characters long. If the line number of the last line in the
+ environment is too long to fit in the specified width, the width
+ is automatically increased to the smallest value that can hold the
+ number of the last line. (In other words, if you specify the value 2
+ and attempt to enumerate the lines of an environment that is 100 lines
+ long, the value 3 will automatically be used for every line in the
+ environment.)
+
+ <p/>The 'separator' string is inserted between the line
+ number and the original program listing. Lines that aren't numbered
+ are preceded by a 'width' blank string and the separator.
+
+ <p/>If inline markup extends across line breaks, markup changes are
+ required. All the open elements are closed before the line break and
+ "reopened" afterwards. The reopened elements will have the same
+ attributes as the originals, except that 'name' and 'id' attributes
+ are not duplicated if the stylesheet.result.type is "html" and
+ 'id' attributes will not be duplicated if the result type is "fo".
+</div><div class="parameter"><dl><dt class="header"><b>Parameters:</b></dt><dd class="item"><code class="name">context</code><span class="separator"> - </span><span class="description">The current stylesheet context.</span></dd><dd class="item"><code class="name">rtf_ns</code><span class="separator"> - </span><span class="description">The result tree fragment of the verbatim environment.</span></dd></dl></div><div class="member detail return list"><dl><dt class="member detail return header"><b>Returns:</b></dt><dd class="member detail return item">The modified result tree fragment.</dd></dl></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div><div class="taglet"></div></blockquote></div></div><p class="navbar bottom spacer"> </p><table class="navbar div bottom"><tr><td><div class="navbar div top"><span class="navbar item enabled"><a href="../../../com/nwalsh/saxon/package-summary.html">Package</a></span> <span class="navbar item active">Class</span> <span class="navbar item enabled"><a href="Verbatim-uses.html">Use</a></span> <span class="navbar item enabled"><a href="tree.html">Tree</a></span> <span class="navbar item enabled"><a href="../../../alphaindex-1.html">Index</a></span> <span class="navbar item enabled"><a href="../../../deprecated.html">Deprecated</a></span> <span class="navbar item enabled"><a href="../../../about.html">About</a></span></div></td></tr></table></body></html>

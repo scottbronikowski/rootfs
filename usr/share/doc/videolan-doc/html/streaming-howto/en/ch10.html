@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 10.  Stream from encoding cards and other capture peripherals</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DV, DVB, DVD, DivX" /><link rel="start" href="index.html" title="VideoLAN Streaming Howto" /><link rel="up" href="index.html" title="VideoLAN Streaming Howto" /><link rel="prev" href="ch09.html" title="Chapter 9.  Stream a DVB channel (satellite or digital terrestial TV)" /><link rel="next" href="ch11.html" title="Chapter 11.  Stream from a DV camcorder" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 10. 
+Stream from encoding cards and other capture peripherals
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="hardencoding"></a>Chapter 10. 
+Stream from encoding cards and other capture peripherals
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch10.html#id2579389">Hardware encoding cards</a></span></dt><dt><span class="sect1"><a href="ch10.html#id2580336">Software encoding cards</a></span></dt><dt><span class="sect1"><a href="ch10.html#id2580713">Stream with DirectShow</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2579389"></a>Hardware encoding cards</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+This is possible under GNU/Linux only.
+</p></div><p>
+VideoLAN supports two kinds of MPEG-2 encoding cards:
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+Hauppauge WinTV-PVR-250 and WinTV-PVR-350,
+
+</p></li><li><p>Visiontech Kfir.</p></li></ul></div><p>
+The Hauppauge WinTV-PVR-250/350 gives much better
+results and is cheaper than the Visiontech Kfir.
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2580028"></a>
+Stream with the Hauppauge WinTV-PVR-250/350 card
+</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2580032"></a>
+Install the drivers
+</h4></div></div></div><p>
+First, you will have to patch your kernel (version 2.4) to support
+the v4l2 API (Video 4 Linux version 2). The patch is available on the
+<a class="ulink" href="http://bytesex.org/v4l/" target="_top">Video4Linux HQ</a>.
+If you use a 2.6 kernel, you only need to build I2C support and the BT848 Video For Linux module.
+</p><p>
+Once your kernel is ready, install the CK version (currently in development) of the Linux drivers for the Hauppauge WinTV-PVR-250/350. They are hosted on
+<a class="ulink" href="http://67.18.1.101/~ckennedy/ivtv" target="_top">ivtv ck</a>. You will need to patch your kernel to use it with a 2.4. You can also use the CVS version available here: <a class="ulink" href="http://ivtv.sourceforge.net/" target="_top">ivtv.sourceforge.net</a> (this version is not developped anymore).
+Then, you will have to create the device and load the modules; for this,
+please refer to the documentation shipped with the drivers.
+</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2580074"></a>
+Stream with VLC
+</h4></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+You must add <span class="command"><strong>--enable-pvr</strong></span>
+to <span class="command"><strong>./configure</strong></span> to use this
+feature.
+</p></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --color pvr:/dev/video0:norm=secam:size=720x576:frequency=576250:
+bitrate=3000000:maxbitrate=4000000 --cr-average 1000 --sout udp:192.168.0.42 --ttl 12</code></strong>
+</pre><p>
+where
+
+ 
+:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>/dev/video0</em></span> 
+is the device corresponding to the encoding card
+,</p></li><li><p><span class="emphasis"><em>norm=secam</em></span>
+ is name of the standard of the analogic signal
+(possible values are pal, secam, and ntsc)
+,</p></li><li><p><span class="emphasis"><em>size=720x576</em></span>
+is the size of the video you want to stream
+,</p></li><li><p><span class="emphasis"><em>frequency=567250</em></span>
+ is the frequency in kHz of the channel you want to
+stream
+,</p></li><li><p><span class="emphasis"><em>bitrate=3000000</em></span> 
+is the average bitrate of the stream
+,</p></li><li><p><span class="emphasis"><em>maxbitrate=4000000</em></span>
+is the maximum bitrate of the stream
+,</p></li><li><p><span class="emphasis"><em>1000</em></span> is a secret value to work around a bug of the card.
+</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+ is either :
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+the IP address of the machine you want to unicast
+to
+;</p></li><li><p>
+or the DNS name the machine you want to unicast
+to
+;</p></li><li><p>
+or a multicast IP address.
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+ is the value of the TTL (Time To
+Live) of your IP packets (which means that the stream will be
+able to cross 11 routers).
+</p></li></ul></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2580214"></a>
+Stream with the Visiontech Kfir card
+</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2580219"></a>
+Install the drivers
+</h4></div></div></div><p>
+If you want to be able to stream from a
+Visiontech Kfir card, you need to install its Linux drivers.
+Download the latest release of the drivers from the <a class="ulink" href="http://www.linuxtv.org/download/mpeg2/" target="_top">drivers download
+page</a> of the <a class="ulink" href="http://www.linuxtv.org/" target="_top">LinuxTV web
+site</a>.
+</p><p>
+Uncompress the tarball and follow the instructions
+written in the <code class="filename">INSTALL</code> file to compile and install
+the drivers.
+</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+If you have a VIA chipset, you need to disable USB
+in the BIOS.
+</p></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2580259"></a>
+
+Stream
+</h4></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --color kfir:/dev/video --sout udp:192.168.0.42 --ttl 12</code></strong>
+</pre><p>where
+ :</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">/dev/video</code>
+is the device corresponding to the Kfir card
+,</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+ is either :
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+the IP address of the machine you want to unicast
+to
+;</p></li><li><p>
+or the DNS name the machine you want to unicast
+to
+;</p></li><li><p>
+or a multicast IP address.
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+ is the value of the TTL (Time To
+Live) of your IP packets (which means that the stream will be
+able to cross 11 routers).
+</p></li></ul></div></div></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2580336"></a>Software encoding cards</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2580342"></a>Under GNU/Linux</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2580346"></a>
+Install the Video for Linux drivers
+</h4></div></div></div><p>
+If you want to stream from an acquisition card
+or a webcam, a video4linux driver must be available for it. You can
+find more information about video4linux and supported devices <a class="ulink" href="http://www.exploits.org/v4l" target="_top">here</a>.
+</p><p>
+Compile the right module for your device, and insert
+it into your kernel. Some video4linux modules are shipped with the 2.4.x 
+and 2.6.x Linux kernels, the patch is available on the 
+<a class="ulink" href="http://bytesex.org/v4l" target="_top">Video4Linux HQ</a>.</p><p>You can test your device by using any of the listed
+programs in the <span class="emphasis"><em>Video: TV and PVR/DVR</em></span> section of
+<a class="ulink" href="http://www.exploits.org/v4l/" target="_top">this page</a>.
+</p><p>
+Note that v4l2 modules will also work with VLC.
+</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2580396"></a>
+Stream with VLC
+</h4></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+You must add <span class="command"><strong>--enable-v4l</strong></span> to
+<span class="command"><strong>./configure</strong></span> to use this feature.
+</p></div><pre class="screen">
+
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --color v4l:/dev/video:norm=secam:frequency=543250:size=640x480:channel=0:adev=/dev/dsp:audio=0
+--sout '#transcode{vcodec=mp4v,acodec=mpga,vb=3000,ab=256,venc=ffmpeg{keyint=80,hurry-up,vt=800000},deinterlace}:std{access=udp,mux=ts,dst=239.255.12.13}' --ttl 12</code></strong>
+</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>You can find all transcode options on this page : <a class="xref" href="ch03.html" title="Chapter 3.  Advanced streaming using the command line">
+Advanced streaming using the command line</a> .</p></div><p>where:
+</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">/dev/video</code>
+ is the device corresponding to your acquisition
+card or your webcam,
+</p></li><li><p><span class="emphasis"><em>norm=secam</em></span>
+ is name of the standard of the analogic signal
+(possible values are pal, secam, and ntsc)
+,</p></li><li><p><span class="emphasis"><em>frequency=543250</em></span>
+ is the frequency of the channel in kHz
+(<span class="emphasis"><em>Warning :</em></span> for VLC &lt; 0.6.1, Frequency is channel
+frequency in MHz multiplied by 16),
+</p></li><li><p>
+<span class="emphasis"><em>size=640x480</em></span>
+is the size of the video you want (you can also put the
+standard size like <span class="emphasis"><em>subqcif</em></span> (128x96),
+<span class="emphasis"><em>qsif</em></span> (160x120), <span class="emphasis"><em>qcif</em></span>
+(176x144), <span class="emphasis"><em>sif</em></span> (320x240), <span class="emphasis"><em>cif</em></span>
+(352x288) or <span class="emphasis"><em>vga</em></span> (640x480)),
+</p></li><li><p><span class="emphasis"><em>channel=0</em></span> 
+is the number of the channel (usually 0 is for
+tuner, 1 for composite and 2 for svideo),
+
+</p></li><li><p><span class="emphasis"><em>adev=/dev/dsp</em></span>
+is the audio device,
+</p></li><li><p><span class="emphasis"><em>audio=1</em></span> 
+is the number of the audio
+channel (usually 0 is for mono and 1 for stereo),
+</p></li><li><p><span class="emphasis"><em>vcodec=mp4v</em></span> 
+is the video format you want to encode in
+(<span class="emphasis"><em>mp4v</em></span> is MPEG-4, <span class="emphasis"><em>mpgv</em></span> is
+MPEG-1, and there is also
+<span class="emphasis"><em>h263</em></span>, <span class="emphasis"><em>DIV1</em></span>,
+<span class="emphasis"><em>DIV2</em></span>, <span class="emphasis"><em>DIV3</em></span>,
+<span class="emphasis"><em>I420</em></span>, <span class="emphasis"><em>I422</em></span>,
+<span class="emphasis"><em>I444</em></span>, <span class="emphasis"><em>RV24</em></span>,
+<span class="emphasis"><em>YUY2</em></span>),</p></li><li><p><span class="emphasis"><em>acodec=mpga</em></span> 
+is the audio format you want to encode
+in (<span class="emphasis"><em>mpga</em></span> is MPEG audio layer 2,
+<span class="emphasis"><em>a52</em></span> is A52 i.e. AC3 sound),
+</p></li><li><p><span class="emphasis"><em>vb=3000</em></span>
+ is the video bitrate in Kbit/s
+</p></li><li><p><span class="emphasis"><em>ab=256</em></span>
+ is the audio bitrate in Kbit/s
+</p></li><li><p><span class="emphasis"><em>venc=ffmpeg</em></span>
+ allows to set the encoder to use, where: </p><div class="itemizedlist"><ul type="circle"><li><p><span class="emphasis"><em>keyint=80</em></span> is the maximal amount of frames between two key frames</p></li><li><p><span class="emphasis"><em>hurry-up</em></span> allows the encoder to decrease the quality of the stream if the CPU can't keep up with the encoding rate</p></li><li><p><span class="emphasis"><em>vt=800000</em></span> is the tolerance in kbit/s for the bitrate of the outputted video</p></li></ul></div></li><li><p><span class="emphasis"><em>deinterlace</em></span>
+tells VLC to deinterlace the video on the fly,
+</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+ is either:
+
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+the IP address of the machine you want to unicast
+to;
+</p></li><li><p>
+or the DNS name the machine you want to unicast
+to;
+
+</p></li><li><p>
+or a multicast IP address.</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+ is the value of the TTL (Time To
+Live) of your IP packets (which means that the stream will be
+able to cross 11 routers).</p></li></ul></div></div></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2580713"></a>Stream with DirectShow</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>This is only possible under Windows</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2580722"></a>Install your peripheral drivers</h3></div></div></div><p>You need to install your peripherals under Windows with the appropriate drivers. Nothing else is necessary.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2580733"></a>Stream with VLC in command line</h3></div></div></div><pre class="screen"><code class="prompt">% </code><strong class="userinput"><code>C:\Program Files\VideoLAN\VLC\vlc.exe -vvv -I rc --ttl 12 dshow:// vdev="VGA USB Camera" adev="USB Camera" size="640x480" --sout=#std{mux=ts,access=udp,dst=239.255.42.12}</code></strong></pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>You need to precise the complete path to find vlc program or to launch the command from the correct directory.</p></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>vvv</em></span> is to activate the verbose mode</p></li><li><p><span class="emphasis"><em>rc</em></span> is to activate the remote control interface (MS/DOS console)</p></li><li><p><span class="emphasis"><em>12</em></span> is the value of the TTL (Time To Live) of your IP packets (which means that the stream will be able to cross 11 routers),
+</p></li><li><p><span class="emphasis"><em>vdev="VGA USB Camera"</em></span> is the name of the video peripheral that DirectShow will use (this is only an exemple),
+</p></li><li><p><span class="emphasis"><em>adev="USB Camera"</em></span> is the name of the audio peripheral,
+</p></li><li><p><span class="emphasis"><em>size="640x480"</em></span> is the resolution (you can also put the standard size like <span class="emphasis"><em>subqcif</em></span> (128x96),
+<span class="emphasis"><em>qsif</em></span> (160x120), <span class="emphasis"><em>qcif</em></span>
+(176x144), <span class="emphasis"><em>sif</em></span> (320x240), <span class="emphasis"><em>cif</em></span>
+(352x288) or <span class="emphasis"><em>vga</em></span> (640x480)).
+</p></li><li><p><span class="emphasis"><em>239.255.42.12</em></span>
+ is either:
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+the IP address of the machine you want to unicast to
+</p></li><li><p>
+or the DNS name the machine you want to unicast to
+</p></li><li><p>
+or a multicast IP address.</p></li></ul></div></li></ul></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 9. 
+Stream a DVB channel (satellite or digital
+terrestial TV)
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 11. 
+Stream from a DV camcorder
+</td></tr></table></div></body></html>

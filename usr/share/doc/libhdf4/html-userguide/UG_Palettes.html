@@ -1,0 +1,979 @@
+<!?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for FrameMaker 8.0.8.2296" />
+    <meta name="TEMPLATEBASE" content="HDF4 Version 1.0" />
+    <meta name="LASTUPDATED" content="07/16/09 01:39:56" />
+    <title>Chapter</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+<link rel="first" title="First" href="UGTop.html" />
+<link rel="last" title="Last" href="UG_BookIX.html" />
+<link rel="previous" title="Previous" href="UG_GR.html" />
+<link rel="next" title="Next" href="UG_MF_Annot.html" />
+
+    <script type="text/javascript" language="JavaScript1.2" src="scripts/expand.js"></script>
+    <script type="text/javascript" language="JavaScript1.2" src="scripts/seealso.js"></script>
+
+    <script type="text/javascript" language="JavaScript1.2">
+     <!--
+      var  WebWorksSeeAlso = new WebWorksSeeAlso_Object();
+     // -->
+    </script>
+  </head>
+
+  <body>
+
+    <p>
+    <table id="SummaryNotReq1" border="0" width="850"cellspacing="0" cellpadding="0">
+      <tr>
+        <td align="left">
+          <a href="http://www.hdfgroup.org"><img id="LongDescNotReq1" border="0" src="images/hdf_logo.jpg" width="90" height="70" alt="The HDF Group" valign="top" /></a>
+        </td>
+        <td valign="middle" align="center">
+          <b><H1>HDF User’s Guide</H1>
+           Version 4.2r4</b><br />
+        </td>
+        <td valign="middle" align="right">
+        <br/>
+<b><a HREF="UGTOP.html">[Top]</a>
+<a accesskey="3" href="UG_GR.html"><b>[Prev]</b><a accesskey="4" href="UG_MF_Annot.html"><b>[Next]</b></b>
+        </td>
+      </tr>
+    </table>
+    </p>
+    <hr />
+
+    <blockquote>
+<a name="wp14865"> </a>
+<h1> <align left=20>
+Chapter
+
+<a name="wp14874"> </a>
+9
+
+--
+<a name="wp14868"> </a>
+Palettes (DFP API)
+</h1>
+
+<hr /><a name="wp2883"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 23pt" class="pHeading1">
+	9.1	Chapter Overview
+</h2>
+<a name="wp4490"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+This chapter describes the routines available for storing and retrieving 8-bit palettes. An 8-bit palette is a look-up table with 256 entries, one entry for each of the 256 possible pixel values the system hardware associates with a particular color. This chapter introduces and describes the HDF palette data model and the DFP interface.
+</p>
+<a name="wp3601"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	9.2	The Palette Data Model
+</h2>
+<a name="wp1180"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+A <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">palette</span> is the means by which color is applied to an image and is also referred to as a <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">color lookup table</span>. It is a table in which every row contains the numerical representation of a particular color. Palettes can be many different sizes, but HDF only supports palettes with 256 colors, corresponding to the 256 different possible pixel values (0 to 255) in 8-bit raster images. 
+</p>
+<a name="wp1674"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+For each of the 256 colors in a palette, there are three 8-bit numbers describing its appearance. <a href="UG_Palettes.html#wp1695">(See Figure 9a.)</a> Each 8-bit <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">color component</span> represents the amount of red (or &quot;R&quot;), green (or &quot;G&quot;), or blue (or &quot;B&quot;) used to create a particular color. In HDF, 8-bit palettes are assumed to be organized as follows; each entry consists of three bytes: one each for R, G, and B value. The first group of three bytes represent the R, G, and B values of the first color in the palette; the next three the R, G, and B values of the second color; and so forth. Therefore, the 256 possible different pixel values in an image serve as an index for the 256 color entries stored in the palette.
+</p>
+<a name="wp1695"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 95pt; margin-right: 0pt; margin-top: 8pt; text-align: left; text-decoration: none; text-indent: -95pt; text-transform: none">
+FIGURE 9a	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Color Mapping Using a Palette</span></div>
+<div align="left"><img src="images/hdf4_UG-10-1-1.jpg" height="188" width="447" id="wp17333" border="0" hspace="0" vspace="0"/></div><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 95pt; margin-right: 0pt; margin-top: 8pt; text-align: left; text-decoration: none; text-indent: -95pt; text-transform: none">
+<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault"></span>
+</div>
+<a name="wp6513"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+In the HDF library, there are four interfaces that support the reading and writing of palette data; the raster image interfaces, covered in <a href="UG_RIS8s.html#wp1811"><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Chapter 6, </span><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">8-Bit Raster Images (DFR8 API)</span></a>, <a href="UG_RIS24s.html#wp1937"><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Chapter 7, </span><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">24-bit Raster Images (DF24 API)</span></a>, <a href="UG_Palettes.html#wp14868">Chapter 9, <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Palettes (DFP API)</span></a>, and the DFP palette interface covered in this chapter. The raster image interfaces store palettes with raster images and the palette interface reads and writes palettes outside of raster image sets. Palettes stored using the palette interface are stored as isolated data objects. In other words they are not included as members of any set, although they can be grouped with other objects using the Vgroup interface. For more information on the Vgroup interface, refer to <a href="UG_Vgroups.html#wp2487">Chapter 5, <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Vgroups (V API)</span></a>.
+</p>
+<a name="wp6539"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	9.3	The Palette API
+</h2>
+<a name="wp1122"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The DFP interface consists of eight routines. The routines DFPaddpal and DFPgetpal are the primary routines for palette I/O and are used for most reading and writing operations. 
+</p>
+<a name="wp1123"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	9.3.1	Palette Library Routines
+</h3>
+<a name="wp1207"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+All C functions in the palette interface are prefaced by &quot;DFP&quot; and the equivalent FORTRAN-77 functions are prefaced by &quot;dp&quot;. These routines are divided into the following categories:
+</p>
+<div class="pSmartList1" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal"><ul class="pSmartList1" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal">
+<div class="pSmartList2" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal"><ul class="pSmartList2" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal">
+<a name="wp1209"> </a><div style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal" class="pSmartList2"><li><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Write routines</span> store palettes in new files or append them to existing files. </li></div>
+<a name="wp1211"> </a><div style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal" class="pSmartList2"><li><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Read routines</span> sequentially or randomly locate palettes to be read from a named file. </li></div>
+</ul></div>
+</ul></div>
+<a name="wp1217"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The DFP function calls are more explicitly defined in the following table and in the <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">HDF Reference Guide</span>.
+</p>
+<a name="wp1222"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 9A	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFP Library Routines</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp4023table4021">
+  <caption></caption>
+  <tr>    <th colspan="1" rowspan="2"><a name="wp4023"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Category</span>
+</div>
+</th>
+    <th colspan="2" rowspan="1"><a name="wp4025"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Names
+</div>
+</th>
+    <th colspan="1" rowspan="2"><a name="wp4029"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</th>
+</tr>
+  <tr>    <th><a name="wp4033"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</th>
+    <th><a name="wp4035"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</th>
+</tr>
+  <tr>    <td colspan="1" rowspan="3"><a name="wp4039"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+ Write
+</div>
+</td>
+    <td><a name="wp4041"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPaddpal
+</div>
+</td>
+    <td><a name="wp4043"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+dpapal
+</div>
+</td>
+    <td><a name="wp4045"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Appends a palette to a file.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4049"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPputpal
+</div>
+</td>
+    <td><a name="wp4051"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+dpppal
+</div>
+</td>
+    <td><a name="wp4053"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Writes a palette to a file.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4057"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPwriteref
+</div>
+</td>
+    <td><a name="wp4059"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+dpwref
+</div>
+</td>
+    <td><a name="wp4061"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Sets the reference number for writing the next palette.
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="5"><a name="wp4063"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+ Read
+</div>
+</td>
+    <td><a name="wp4065"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPgetpal
+</div>
+</td>
+    <td><a name="wp4067"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+dpgpal
+</div>
+</td>
+    <td><a name="wp4069"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Retrieves the next palette in a file.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4427"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPlastref
+</div>
+</td>
+    <td><a name="wp4429"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+dplref
+</div>
+</td>
+    <td><a name="wp4431"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Returns the value of the last reference number read or written.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4435"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPnpals
+</div>
+</td>
+    <td><a name="wp4437"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+dpnpals
+</div>
+</td>
+    <td><a name="wp4439"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Returns the number of palettes in a file.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4073"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPreadref
+</div>
+</td>
+    <td><a name="wp4075"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+dprref
+</div>
+</td>
+    <td><a name="wp4077"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Sets reference number for retrieving the next palette.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4097"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPrestart
+</div>
+</td>
+    <td><a name="wp4099"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+dprest
+</div>
+</td>
+    <td><a name="wp4101"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Specifies that the next read call will get the first palette in the file.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp1228"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	9.4	Writing Palettes
+</h2>
+<a name="wp1232"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	9.4.1	Writing a Palette: DFPaddpal and DFPputpal
+</h3>
+<a name="wp6209"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+To write a palette to an HDF file, the calling program must contain one of the following function calls:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp6210"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFPaddpal(filename, palette);
+</p><a name="wp6211"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = dpapal(filename, palette)
+</p><a name="wp6212"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">	<b style="font-family: Courier New; font-size: 9pt" class="cBold">OR
+</b></p><a name="wp1242"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFPputpal(filename, palette, overwrite, filemode);
+</p><a name="wp1244"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = dpppal(filename, palette, overwrite, filemode)
+</p></ul></div>
+<a name="wp1246"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPaddpal</b> and <b class="cFunctionName">DFPputpal</b> will write a palette to an HDF file named by <em class="cVarName">filename</em>. When given a new filename, <b class="cFunctionName">DFPputpal</b> and <b class="cFunctionName">DFPaddpal</b> creates a new file and writes the palette as the first object in the file. When given an existing filename, <b class="cFunctionName">DFPaddpal</b> appends the palette to the end of the file. 
+</p>
+<a name="wp1185"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPputpal</b> provides this functionality as well with additional options for how the data is handled, providing more control over how a palette is written to file than <b class="cFunctionName">DFPaddpal</b>. Specifically, the <em class="cVarName">overwrite</em> parameter determines whether or not to overwrite the last palette written to a file or to append a new palette onto the file. The <em class="cVarName">filemode</em> parameter determines whether to create a new file or to append the data to the previous file. Note the combination to overwrite a palette in a newly created file is invalid and will generate an error. To overwrite a palette, <em class="cVarName">filename</em> must be the same filename as the last file accessed through the DFP interface. The parameters for <b class="cFunctionName">DFPaddpal</b> and <b class="cFunctionName">DFPputpal</b> are more explicitly defined in the following table.
+</p>
+<a name="wp1281"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 9B	DFPputpal and DFPaddpal Parameter List</div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp4109table4107">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp4109"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp4442"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp4110"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp4112"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp4114"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp4118"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4124"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp4126"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="4"><a name="wp4130"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPputpal
+</div>
+<a name="wp4443"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp4131"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(dpppal)
+</div>
+</td>
+    <td><a name="wp4133"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp4135"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp4137"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp4139"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of the HDF file.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4143"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+palette
+</div>
+</td>
+    <td><a name="wp4145"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+VOIDP
+</div>
+</td>
+    <td><a name="wp4147"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+&lt;valid numeric data type&gt;
+</div>
+</td>
+    <td><a name="wp4149"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+768-byte space for palette.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4153"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+overwrite
+</div>
+</td>
+    <td><a name="wp4155"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+intn
+</div>
+</td>
+    <td><a name="wp4157"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp4159"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Palette write specification.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4163"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filemode
+</div>
+</td>
+    <td><a name="wp4165"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp4167"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp4169"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+File write specification.
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp4171"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPaddpal
+</div>
+<a name="wp4444"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp4172"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(dpapal)
+</div>
+</td>
+    <td><a name="wp4174"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp4176"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp4178"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp4180"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of the HDF file.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4184"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+palette
+</div>
+</td>
+    <td><a name="wp4186"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+VOIDP
+</div>
+</td>
+    <td><a name="wp4188"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+&lt;valid numeric data type&gt;
+</div>
+</td>
+    <td><a name="wp4190"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+768-byte space with palette.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp1259"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+Calling <b class="cFunctionName">DFPaddpal</b> or <b class="cFunctionName">DFPputpal</b> immediately after writing an 8-bit raster image will not group the palette with the preceding image. Palettes written to a file sequentially can be retrieved sequentially. However, to maintain a higher level of organization between multiple palettes and images stored in the same file, it&#39;s a good idea to explicitly group each palette with the image to which it belongs. To find out more about assigning a palette to an image, see <a href="UG_RIS8s.html#wp1811"><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Chapter 6, </span><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">8-Bit Raster Images (DFR8 API)</span></a>.
+</p>
+<a name="wp1261"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 16pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+EXAMPLE 1.	Writing a Palette
+</div>
+<a name="wp4574"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+In the following code examples, <b class="cFunctionName">DFPaddpal</b> is used to write a palette to an HDF file named &quot;Example1.hdf&quot;.
+</p>
+<a name="wp4575"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 108pt; text-transform: none">
+C:		
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+#include &quot;hdf.h&quot;<a name="wp4578"> </a>
+main( )<a name="wp4580"> </a>
+{<a name="wp4581"> </a>
+	uint8 palette_data[768];<a name="wp4582"> </a>
+	intn i;<a name="wp4583"> </a>
+	int32 status;<a name="wp4584"> </a>
+	/* Initialize the palette to grayscale. */<a name="wp4586"> </a>
+	for (i = 0; i &lt; 256; i++) {<a name="wp4587"> </a>
+	  palette_data[i * 3] = i;<a name="wp4588"> </a>
+	  palette_data[i * 3 + 1] = i;<a name="wp4589"> </a>
+	  palette_data[i * 3 + 2] = i;<a name="wp4590"> </a>
+	}<a name="wp4591"> </a>
+	/* Write the palette to file. */<a name="wp4593"> </a>
+	status = DFPaddpal(&quot;Example1.hdf&quot;, (VOIDP)palette_data);<a name="wp4594"> </a>
+}<a name="wp4596"> </a>
+</pre></div>
+<a name="wp4599"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 180pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: -85pt; text-transform: none">
+FORTRAN:	
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+	 PROGRAM WRITE PALETTE<a name="wp1301"> </a>
+      integer dpapal, status, i<a name="wp4359"> </a>
+      character palette_data(768)<a name="wp4360"> </a>
+C     Initialize the palette to greyscale.<a name="wp4362"> </a>
+      do 10, i = 1, 256<a name="wp4363"> </a>
+        palette_data((i - 1) * 3 + 1) = char(i - 1)<a name="wp4364"> </a>
+        palette_data((i - 1) * 3 + 2) = char(i - 1) <a name="wp4365"> </a>
+        palette_data((i - 1) * 3 + 3) = char(i - 1)<a name="wp4366"> </a>
+10     continue<a name="wp4367"> </a>
+C     Write the palette to the HDF file.<a name="wp4369"> </a>
+      status = dpapal(&#39;Example1.hdf&#39;, palette_data)<a name="wp4370"> </a>
+      end<a name="wp4372"> </a>
+</pre></div>
+<a name="wp1861"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	9.4.2	Specifying the Reference Number of a Palette: DFPwriteref
+</h3>
+<a name="wp1862"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPwriteref</b> specifies the reference number of the palette to be written on the next call to <b class="cFunctionName">DFPaddpal</b> or <b class="cFunctionName">DFPputpal</b>:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp1863"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFPwriteref(filename, ref);
+</p><a name="wp4501"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = DFPaddpal(filename, palette);
+</p><a name="wp4503"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = dpwref(filename, ref)
+</p><a name="wp1866"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = dpapal(filename, palette)
+</p></ul></div>
+<a name="wp1867"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPwriteref</b> assigns the specified reference number to the next palette written to the file <em class="cVarName">filename</em>. If the value of <em class="cVarName">ref</em> is the same as the reference number of an existing palette, the existing palette will be overwritten. 
+</p>
+<a name="wp3160"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The parameters of <b class="cFunctionName">DFPwriteref</b> are further described in the following table.
+</p>
+<a name="wp1916"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 9C	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFPwriteref Parameter List</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp4200table4198">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp4200"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp4447"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp4201"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp4203"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp4205"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp4209"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4215"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp4217"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp4221"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPwriteref
+</div>
+<a name="wp4448"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp4222"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(dpwref)
+</div>
+</td>
+    <td><a name="wp4224"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp4226"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp4228"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp4230"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of the HDF file containing the palette.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp4234"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+ref
+</div>
+</td>
+    <td><a name="wp4236"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+uint16
+</div>
+</td>
+    <td><a name="wp4238"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp4240"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Reference number for the next call to<span style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault"> </span>DFPaddpal or DFPputpal.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp1360"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	9.5	Reading a Palette
+</h2>
+<a name="wp1362"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The DFP programming model for reading a palette is similar to that for writing a palette - only the palette read call is required. 
+</p>
+<a name="wp1364"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	9.5.1	Reading a Palette: DFPgetpal
+</h3>
+<a name="wp1366"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPgetpal</b> is the only function required to read a palette. If the file is being opened for the first time, <b class="cFunctionName">DFPgetpal</b> returns the first palette in the file. Subsequent calls will return successive palettes in the file. In this way palettes are read in the same order in which they were written to the file.
+</p>
+<a name="wp1368"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+To read a palette from an HDF file, the calling program must contain the following routines:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp1370"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFPgetpal(filename, palette);
+</p><a name="wp1372"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = dpgpal(filename,palette)
+</p></ul></div>
+<a name="wp1378"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPgetpal</b> retrieves the next palette from the HDF file specified by <em class="cVarName">filename</em>. The space allocated for the palette is specified by palette and must be at least 768 bytes. When <b class="cFunctionName">DFPgetpal</b> is first called, it returns the first palette in the file. Subsequent calls to <b class="cFunctionName">DFPgetpal</b> will return successive palettes in the order in which they are stored in the file, including those stored via the DFR8 interface. 
+</p>
+<a name="wp3232"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The parameters of <b class="cFunctionName">DFPgetpal</b> are defined in the following table.
+</p>
+<a name="wp1383"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 9D	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFPgetpal Parameter List</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp3263table800">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp3263"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp4451"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp3264"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp3266"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp3270"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp3272"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp3278"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp3280"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp3284"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPgetpal
+</div>
+<a name="wp4452"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp3285"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(dpapal)
+</div>
+</td>
+    <td><a name="wp3287"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp3289"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp3291"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp3293"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of the HDF file.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp3297"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+palette
+</div>
+</td>
+    <td><a name="wp3299"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+VOIDP
+</div>
+</td>
+    <td><a name="wp3301"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+&lt;valid numeric data type&gt;
+</div>
+</td>
+    <td><a name="wp3303"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+768-byte buffer for the palette.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp1385"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 16pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+EXAMPLE 2.	Reading a Palette
+</div>
+<a name="wp1387"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The following examples demonstrate the method used to read a palette from the &quot;Example1.hdf&quot; HDF file created in Example 1.
+</p>
+<a name="wp1391"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 108pt; text-transform: none">
+C:		
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+#include &quot;hdf.h&quot;<a name="wp4301"> </a>
+main( )<a name="wp4381"> </a>
+{<a name="wp4382"> </a>
+	uint8 palette_data[768];<a name="wp4384"> </a>
+	intn status;<a name="wp4385"> </a>
+	/* Read the palette data from a file. */<a name="wp4387"> </a>
+	status = DFPgetpal(&quot;Example1.hdf&quot;, (VOIDP)palette_data);<a name="wp4388"> </a>
+}<a name="wp4390"> </a>
+</pre></div>
+<a name="wp1411"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 180pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: -85pt; text-transform: none">
+FORTRAN:	
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+	 PROGRAM READ PALETTE<a name="wp1413"> </a>
+      integer dpgpal, status<a name="wp4394"> </a>
+      character palette_data(768)<a name="wp4395"> </a>
+C     Read the palette from the HDF file.<a name="wp4397"> </a>
+      status = dpgpal(&#39;Example1.hdf&#39;, palette_data)<a name="wp4398"> </a>
+      end<a name="wp4400"> </a>
+</pre></div>
+<a name="wp1423"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	9.5.2	Reading a Palette with a Given Reference Number: DFPreadref
+</h3>
+<a name="wp2062"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPreadref</b> is used to access specific palettes stored in files containing multiple palettes. It is the optionally called before <b class="cFunctionName">DFPgetpal</b> to set the next palette to be accessed to be the specified palette. <b class="cFunctionName">DFPreadref</b> can be used in connection with vgroups, which identify their members by tag/reference number pair. 
+</p>
+<a name="wp1427"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+To access a specific palette, use the following calling sequence:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp1429"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		true_false = DFPreadref(filename, ref);
+</p><a name="wp1431"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = DFPgetpal(filename, palette);	
+</p><a name="wp1433"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	true_false = dprref(filename, ref)
+</p><a name="wp1435"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = dpgpal(filename, palette)
+</p></ul></div>
+<a name="wp2651"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPreadref</b> specifies the reference number for the next read operation performed on the HDF file<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault"> </span><em class="cVarName">filename</em><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault"> to the reference number specified by </span><em class="cVarName">ref</em><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">.</span>
+</p>
+<a name="wp3322"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The parameters of <b class="cFunctionName">DFPreadref</b> are further defined in the following table.
+</p>
+<a name="wp2762"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 9E	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFPreadref Parameter List</span><span style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault"></span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp3689table2766">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp3689"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp4457"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp3690"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp3692"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp3694"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp3698"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp3704"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp3706"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp3710"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPreadref
+</div>
+<a name="wp4458"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp3711"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(dprref)
+</div>
+</td>
+    <td><a name="wp3713"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp3715"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp3717"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp3719"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of the HDF file.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp3723"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+ref
+</div>
+</td>
+    <td><a name="wp3725"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+uint16
+</div>
+</td>
+    <td><a name="wp3727"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp3729"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Reference number of the next palette to be read.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+<span style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault"></span>
+</div>
+<a name="wp2096"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	9.5.3	Specifying the Next Palette to be Accessed to be the First Palette: DFPrestart
+</h3>
+<a name="wp2097"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPrestart</b> causes the next <b class="cFunctionName">DFPgetpal</b> to read from the first palette in the file, rather than the palette following the one that was most recently read. <b class="cFunctionName">DFPrestart</b> has the following syntax:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp2098"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFPrestart( );
+</p><a name="wp2099"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = dprest( )
+</p></ul></div>
+<a name="wp2119"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	9.6	Other Palette Routines
+</h2>
+<a name="wp2120"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	9.6.1	Querying the Number of Palettes in a File: DFPnpals
+</h3>
+<a name="wp2121"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPnpals</b> returns the total number palettes in a file and has the following syntax:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp2122"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		num_of_pals = DFPnpals(filename);
+</p><a name="wp2123"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	num_of_pals = dpnpals(filename)
+</p></ul></div>
+<a name="wp2173"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The parameter of DFPnpals is further defined in the following table.
+</p>
+<a name="wp2360"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 9F	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFPnpals Parameter List</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp3454table2328">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp3454"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp4461"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp3455"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp3457"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp3459"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp3463"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp3469"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp3471"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp3475"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFPnpals
+</div>
+<a name="wp4462"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp3476"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(dpnpals)
+</div>
+</td>
+    <td><a name="wp3478"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp3480"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp3482"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp3484"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of the HDF file.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp2304"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	9.6.2	Obtaining the Reference Number of the Most Recently Accessed Palette: DFPlastref
+</h3>
+<a name="wp1055"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPlastref</b> returns the reference number most recently used in writing or reading a palette. This routine is used for attaching annotations to palettes and adding palettes to vgroups.
+</p>
+<a name="wp1056"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The following calling sequence uses <b class="cFunctionName">DFPlastref</b> to find the reference number of the palette most recently written to an HDF file:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp2176"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFPaddpal(filename, palette, width, height, compress);
+</p><a name="wp2177"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		lastref = DFPlastref( );
+</p><a name="wp2178"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = dpapal(filename, palette, width, height, compress)
+</p><a name="wp2179"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		lastref = dplref( )
+</p></ul></div>
+<a name="wp2817"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFPputpal</b> or <b class="cFunctionName">DFPgetpal</b> can be used in place of <b class="cFunctionName">DFPaddpal</b> with similar results. 
+</p>
+<a name="wp2181"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	9.7	Backward Compatibility Issues
+</h2>
+<a name="wp2182"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+As HDF has evolved, a variety of internal structures have been used to store palettes, with different tags used to represent them. To maintain backward compatibility with older versions of HDF, the palette interface supported by HDF version 4.0 recognizes palettes stored using all previously-used HDF tags. A detailed description of the tags and structures used to store palettes is in the <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">HDF Specifications and Developer&#39;s Guide v3.2</span> which can be found from the HDF web site at <a href="http://www.hdfgroup.org/"><span class="cWebJump">http://www.hdfgroup.org/</span></a>.
+</p>
+    </blockquote>
+
+    <hr />
+
+    <table id="SummaryNotReq2" border="0" width="850" cellspacing="0" cellpadding="0">
+      <tr>
+        <td align="left">
+        HDF4.2r4 - February 2009<br/>
+        <a href="UG_Copyright.html">Copyright</a>
+        <td align="right">
+          <span style="font-size: 12px; font-weight: bold">
+            The HDF Group<br />
+          </span>
+          <span style="font-size: 12px">
+            <a href="http://www.hdfgroup.org">www.hdfgroup.org</a><br />
+            <img valign="bottom" border="0" src="images/help.jpg" height="12" alt="The HDF Group" valign="top" />
+          </span>
+        </td>
+      </tr>
+    </table>
+
+    <table id="SummaryNotReq3" width="220" border="0" cellpadding="0" cellspacing="0">
+    </table>
+  </body>
+</html>

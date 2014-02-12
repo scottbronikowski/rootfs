@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>errorbars - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plot.html#plot" title="plot">
+<link rel="prev" href="data.html#data" title="data">
+<link rel="next" href="errorlines.html#errorlines" title="errorlines">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="errorbars"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="errorlines.html#errorlines">errorlines</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="data.html#data">data</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plot.html#plot">plot</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.14.3 errorbars</h4>
+
+<!-- ?commands plot errorbars -->
+<!-- ?commands splot errorbars -->
+<!-- ?plot errorbars -->
+<!-- ?splot errorbars -->
+<p><a name="index-errorbars-352"></a>
+Error bars are supported for 2D data file plots by reading one to four
+additional columns (or <a href="using.html#using">using</a> entries); these additional values are used in
+different ways by the various errorbar styles.
+
+   <p>In the default situation, `gnuplot` expects to see three, four, or six
+numbers on each line of the data file&mdash;either
+
+<pre class="example">           (x, y, ydelta),
+           (x, y, ylow, yhigh),
+           (x, y, xdelta),
+           (x, y, xlow, xhigh),
+           (x, y, xdelta, ydelta), or
+           (x, y, xlow, xhigh, ylow, yhigh).
+     
+</pre>
+   <p>The x coordinate must be specified.  The order of the numbers must be
+exactly as given above, though the <a href="using.html#using">using</a> qualifier can manipulate the order
+and provide values for missing columns.  For example,
+
+<pre class="example">           plot 'file' with errorbars
+           plot 'file' using 1:2:(sqrt($1)) with xerrorbars
+           plot 'file' using 1:2:($1-$3):($1+$3):4:5 with xyerrorbars
+     
+</pre>
+   <p>The last example is for a file containing an unsupported combination of
+relative x and absolute y errors.  The <a href="using.html#using">using</a> entry generates absolute x min
+and max from the relative error.
+
+   <p>The y error bar is a vertical line plotted from (x, ylow) to (x,
+yhigh). If ydelta is specified instead of ylow and yhigh, ylow = y -
+ydelta and yhigh = y + ydelta are derived. If there are only two
+numbers on the record, yhigh and ylow are both set to y. The x error
+bar is a horizontal line computed in the same fashion. To get lines
+plotted between the data points, `plot` the data file twice, once with
+errorbars and once with lines (but remember to use the `notitle`
+option on one to avoid two entries in the key). Alternately, use the
+errorlines command (see <a href="errorlines.html#errorlines">errorlines</a>).
+
+   <p>The error bars have crossbars at each end unless <a href="bars.html#bars">bars</a> is used
+(see <a href="bars.html#bars">bars</a> for details).
+
+   <p>If autoscaling is on, the ranges will be adjusted to include the error bars.
+
+   <p>See also
+<a href="http://gnuplot.sourceforge.net/demo/mgr.html">errorbar demos.</a>
+
+   <p>See <a href="using.html#using">using</a>, <a href="with.html#with">with</a>, and <a href="style.html#style">style</a> for more information.
+
+   </body></html>
+

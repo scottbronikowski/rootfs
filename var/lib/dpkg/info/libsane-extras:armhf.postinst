@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+    configure)
+    if [ "$(uname -s)" = "Linux" ]; then
+	if [ -e /etc/hotplug/usb/libsane-extras.usermap ]; then
+	    rm -f /etc/hotplug/usb/libsane-extras.usermap
+	fi
+	if [ -e /etc/sane.d/hotplug/libsane-extras.db ]; then
+	    rm -f /etc/sane.d/hotplug/libsane-extras.db
+	    rmdir -p --ignore-fail-on-non-empty /etc/sane.d/hotplug
+	fi
+    fi
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+    echo "$0 called with unknown argument '$1'" >&2
+    exit 1
+    ;;
+esac
+
+

@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on May 29, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>psgml: 6. SGML Declaration</title>
+
+<meta name="description" content="psgml: 6. SGML Declaration">
+<meta name="keywords" content="psgml: 6. SGML Declaration">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="SGML-declaration"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml_5.html#Validate" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_7.html#Managing-the-DTD" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml_5.html#Validate" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_7.html#Managing-the-DTD" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="SGML-Declaration"></a>
+<h1 class="chapter">6. SGML Declaration</h1>
+<a name="index-SHORTTAG"></a>
+<a name="index-OMITTAG"></a>
+<a name="index-NAMECASE-GENERAL"></a>
+<a name="index-case-sensitivity"></a>
+
+<p>PSGML does not understand the SGML declaration, it accepts one in the
+file but it is ignored.  If you have the SGML declaration in another
+file you can make &lsquo;<tt>sgmls</tt>&rsquo; use it when you use the <kbd>C-c C-v</kbd>
+(<code>sgml-validate</code>) command (see section <a href="psgml_5.html#Validate">Running an external SGML parser</a>).
+</p>
+<p>PSGML has some options in what features it uses and what markup it
+creates.  You have to set these options to make PSGML&rsquo;s behavior
+consistent with your SGML declaration and personal preferences.
+</p>
+<dl>
+<dt><a name="index-sgml_002domittag"></a><u>User Option:</u> <b>sgml-omittag</b></dt>
+<dd><p>Set this to <code>t</code> if the SGML declaration has &lsquo;<samp>OMITTAG YES</samp>&rsquo; and
+to <code>nil</code> otherwise.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dshorttag"></a><u>User Option:</u> <b>sgml-shorttag</b></dt>
+<dd><p>Set this to <code>t</code> if the SGML declaration has &lsquo;<samp>SHORTTAG YES</samp>&rsquo; and
+to <code>nil</code> otherwise.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dnamecase_002dgeneral"></a><u>User Option:</u> <b>sgml-namecase-general</b></dt>
+<dd><p>Set this to <code>t</code> if the SGML declaration has &lsquo;<samp>NAMECASE
+GENERAL YES</samp>&rsquo; and to <code>nil</code> otherwise. I.e., this controls whether
+names, except entity names, will be case insensitive (translated to
+upper case).
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dalways_002dquote_002dattributes"></a><u>User Option:</u> <b>sgml-always-quote-attributes</b></dt>
+<dd><p>If non-nil, quote all attribute values inserted after finishing edit
+attributes.  If this variable is <code>nil</code> and <code>sgml-shorttag</code> is
+non-<code>nil</code>, attribute values that consists of only name characters
+will not be quoted.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dminimize_002dattributes"></a><u>User Option:</u> <b>sgml-minimize-attributes</b></dt>
+<dd><p>Determines minimization of attributes inserted by edit-attributes.  If
+non-nil, omit attribute name if the attribute value is from a token
+group.  If <code>max</code>, omit attributes with default value.  Minimization
+will only be done if they produce legal SGML (assuming
+<code>sgml-omittag</code> and <code>sgml-shorttag</code> are set correctly).
+</p></dd></dl>
+
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml_5.html#Validate" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_7.html#Managing-the-DTD" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon user</em> on <em>May 29, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

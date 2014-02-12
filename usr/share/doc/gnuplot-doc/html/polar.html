@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>polar - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="pointsize.html#pointsize" title="pointsize">
+<link rel="next" href="print_005f.html#print_005f" title="print_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="polar"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="print_005f.html#print_005f">print_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="pointsize.html#pointsize">pointsize</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.55 polar</h4>
+
+<!-- ?commands set polar -->
+<!-- ?commands unset polar -->
+<!-- ?commands show polar -->
+<!-- ?set polar -->
+<!-- ?unset polar -->
+<!-- ?show polar -->
+<p><a name="index-polar-531"></a><a name="index-polar-532"></a>
+
+   <p><a name="index-nopolar-533"></a>
+The `set polar` command changes the meaning of the plot from rectangular
+coordinates to polar coordinates.
+
+   <p>Syntax:
+<pre class="example">           set polar
+           unset polar
+           show polar
+     
+</pre>
+   <p>In polar coordinates, the dummy variable (t) is an angle.  The default range
+of t is [0:2*pi], or, if degree units have been selected, to [0:360] (see
+<a href="angles.html#angles">angles</a>).
+
+   <p>The command `unset polar` changes the meaning of the plot back to the default
+rectangular coordinate system.
+
+   <p>The `set polar` command is not supported for `splot`s.  See the <a href="mapping.html#mapping">mapping</a>
+command for similar functionality for `splot`s.
+
+   <p>While in polar coordinates the meaning of an expression in t is really
+r = f(t), where t is an angle of rotation.  The trange controls the domain
+(the angle) of the function, and the x and y ranges control the range of the
+graph in the x and y directions.  Each of these ranges, as well as the
+rrange, may be autoscaled or set explicitly.  Ffor details of all the <a href="ranges.html#ranges">ranges</a>
+commands, see <a href="xrange.html#xrange">xrange</a>.
+
+   <p>Example:
+<pre class="example">           set polar
+           plot t*sin(t)
+           plot [-2*pi:2*pi] [-3:3] [-3:3] t*sin(t)
+     
+</pre>
+   <p>The first `plot` uses the default polar angular domain of 0 to 2*pi.  The
+radius and the size of the graph are scaled automatically.  The second `plot`
+expands the domain, and restricts the size of the graph to [-3:3] in both
+directions.
+
+   <p>You may want to `set size square` to have `gnuplot` try to make the aspect
+ratio equal to unity, so that circles look circular. 
+See also
+<a href="http://www.gnuplot.info/demo/polar.html">polar demos (polar.dem)</a>
+and
+<a href="http://www.gnuplot.info/demo/poldat.html">polar data plot (poldat.dem).</a>
+
+   </body></html>
+

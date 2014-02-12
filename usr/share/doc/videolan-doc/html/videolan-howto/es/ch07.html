@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 7.  Transmisión desde una tarjeta de codificación MPEG2</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch06.html" title="Chapter 6.  Transmisión de un canal DVB (satélite o televisión digital terrestre)" /><link rel="next" href="ch08.html" title="Chapter 8.  Transmisión desde una tarjeta capturadora o una webcam" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 7. 
+Transmisión desde una tarjeta de codificación MPEG2
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch08.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="hardencoding"></a>Chapter 7. 
+Transmisión desde una tarjeta de codificación MPEG2
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch07.html#id2574745">
+
+
+Transmisión con la Hauppauge WinTV-PVR-250/350
+
+</a></span></dt><dt><span class="sect1"><a href="ch07.html#id2575944">
+
+
+Transmisión con la Visiontech Kfir
+
+</a></span></dt></dl></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+
+Esto sólo es posible bajo GNU/Linux
+
+.</p></div><p>
+
+
+VideoLAN soporta dos tipos de tarjetas codificadoras MPEG2
+
+ :</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+
+
+Hauppauge WinTV-PVR-250 y WinTV-PVR-350
+
+
+</p></li><li><p>Visiontech Kfir.</p></li></ul></div><p>
+
+
+Las Hauppauge WinTV-PVR-250/350 dan mejor resultado
+y son menos caras que la VisionTech Kfir
+
+.</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2574745"></a>
+
+
+Transmisión con la Hauppauge WinTV-PVR-250/350
+
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574950"></a>
+
+
+Instalación de los drivers
+
+</h3></div></div></div><p>
+
+
+Primero, tendrá que parchear el kernel para dar soporte
+al API v412 (Video 4 Linux version 2). El patch está disponible en
+<a class="ulink" href="http://bytesex.org/v41/" target="_top">VideoLinux HQ</a>
+
+.</p><p>
+
+
+Una vez que el kernel está listo, instale la versión
+CVS de los drivers Linux para la Hauppauge WinTV-PVR-250/350. Están 
+disponibles en <a class="ulink" href="http://ivtv.sourceforge.net/" target="_top">ivtv.sourceforge.net</a>.
+Después tendrá que crear el dispositivo y cargar los módulos; para esto
+por favor consulte la documentación de los drivers
+
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575682"></a>
+
+
+Transmisión con VLC
+
+</h3></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+
+Se debe añadir <span class="command"><strong>--enable-pvr</strong></span>
+a <span class="command"><strong>./configure</strong></span> para poder usar esta característica.
+
+</p></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv pvr:/dev/video0:norm=secam:size=720x576:frequency=576250:
+bitrate=3000000:maxbitrate=4000000 --sout udp:192.168.0.42 --ttl 12 --cr-average 1000</code></strong>
+</pre><p>
+
+
+donde 
+
+:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>/dev/video0</em></span> 
+
+
+es el dispositivo correspondiente a la tarjeta
+
+,</p></li><li><p><span class="emphasis"><em>norm=secam</em></span>
+
+
+es el nombre del estándar de la señal analógica
+(los valores posibles son pal, secam, ntsc)
+
+,</p></li><li><p><span class="emphasis"><em>size=720x576</em></span>
+
+
+es el tamaño del video a transmitir
+
+,</p></li><li><p><span class="emphasis"><em>frequency=567250</em></span>
+
+
+es la frecuencia en kHz del canal que se quiere
+transmitir
+
+,</p></li><li><p><span class="emphasis"><em>bitrate=3000000</em></span> 
+
+
+es la tasa de compresión media del stream
+
+,</p></li><li><p><span class="emphasis"><em>maxbitrate=4000000</em></span>
+
+
+es la tasa de compresión máxima del stream
+
+,</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+
+
+ puede ser 
+
+:</p><div class="itemizedlist"><ul type="circle"><li><p>
+
+
+la dirección IP de la máquina a la que se quiere
+enviar el flujo unicast
+
+;</p></li><li><p>
+
+
+o bien el nombre DNS de la máquina a la que se
+quiere enviar el flujo unicast
+
+;</p></li><li><p>
+
+
+o bien una dirección IP multicast
+
+.</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+
+
+ es el valor del TTL (Time To Live)
+de los paquetes IP (quiere decir que el stream podrá pasar a 
+través de 11 routers
+
+.</p></li><li><p><span class="emphasis"><em>1000</em></span>
+
+
+ es una parámetro secreto que permite evitar un bug de la tarjeta
+
+.</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575834"></a>
+
+
+Transmisión con VLS
+
+</h3></div></div></div><p>
+
+
+Debe usar la versión SVN de VLS
+
+.</p><p>
+
+
+No hay interfaz de comandos para este tipo de 
+entrada por el momento. Debe usar el fichero de configuración
+
+.</p><p>
+
+
+Éste es un fichero típico de configuración
+<code class="filename">vls.cfg</code> para la Hauppauge WinTV-PVR-250/350
+
+:</p><pre class="programlisting">
+# vls.cfg (VLS configuration file)
+# Example of the VideoLAN HOWTO for Hauppauge WinTV-PVR-250/350 encoding cards
+
+begin "inputs"
+
+  pvr0       = "video"
+
+end
+
+begin "input"
+
+  trickplay = "normal"
+
+end
+
+begin "pvr0"
+
+  # This card is a Hauppauge WinTV-PVR-250/350
+  cardtype      = "pvr"
+
+  # Device name
+  device        = "/dev/video0"
+
+  # Stream type
+  type          = "mpeg2-ps"
+
+  # Norm : put "pal", "secam" or "ntsc"
+  norm          = "pal"
+
+  # Framerate : put "30" for NTSC and "25" for PAL and SECAM
+  framerate     = "25"
+
+  # Input number : put - "0" for Composite on S-video plug
+  #                    - "4" for tuner
+  #                    - "6" for S-video on S-video plug
+  inputnumber   = "4"
+
+  # If you use the tuner, put the frequency
+  frequency     = "567250"
+
+  # Image size : put "widthxheight" or "subqcif" (128x96) or "qsif" (160x120)
+  # or "qcif" (176x144) or "sif" (320x240) or "cif" (352x288) or "vga" (640x480)
+  size          = "720x576"
+
+  # Bitrate in Kbit/s
+  bitrate       = "7000"
+
+  # Maximum bitrate in Kbit/s
+  maxbitrate    = "9000"
+
+  # Bitrate mode : put "cbr" (constant bitrate) or "vbr" (variable bitrate)
+  bitratemode   = "vbr"
+
+end
+
+begin "channels"
+
+  channel1       = "network"
+
+end
+
+begin "channel1"
+
+  # Unicast or multicast IP address
+  dsthost = "192.168.0.42"
+
+  # Destination port
+  dstport = "1234"
+
+  # If it's a multicast IP address, uncomment the line below
+  #type    = "multicast"
+
+  # If it's a multicast IP address, set the "Time To Live" below
+  #ttl     = "12"
+
+end
+
+begin "launchonstartup"
+
+  command1 = "start video channel1 pvr0"
+
+end
+</pre><p>
+
+
+Una vez adaptado el fichero de configuración
+anterior, ejecute VLS
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vls -vv -f vls.cfg</code></strong>
+</pre></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2575944"></a>
+
+
+Transmisión con la Visiontech Kfir
+
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575950"></a>
+
+
+Instalación de los drivers
+
+</h3></div></div></div><p>
+
+
+Si desea transmitir con una tarjeta
+Visiontech Kfir, necesita instalar los drivers Linux.
+Descargue la última versión de los drivers desde la
+<a class="ulink" href="http://www.linuxtv.org/download/mpeg2/" target="_top">página de descargas
+</a> de la web <a class="ulink" href="http://www.linuxtv.org/" target="_top">LinuxTV</a>
+
+.</p><p>
+
+
+Descomprima el fichero y siga las instrucciones
+del archivo <code class="filename">INSTALL</code> para compilar e instalar
+los drivers
+
+.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+
+Si tiene un chipset VIA, necesita desabilitar el
+USB en la BIOS
+
+.</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575995"></a>
+
+
+
+Transmisión con VLC
+
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv kfir:/dev/video --sout udp:192.168.0.42 --ttl 12</code></strong>
+</pre><p>
+
+donde
+
+ :</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">/dev/video</code>
+
+
+es el dispositivo correspondiente a la tarjeta Kfir
+
+,</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+
+
+ puede ser 
+
+:</p><div class="itemizedlist"><ul type="circle"><li><p>
+
+
+la dirección IP de la máquina a la que se quiere
+enviar el flujo unicast
+
+;</p></li><li><p>
+
+
+o bien el nombre DNS de la máquina a la que se quiere
+enviar el flujo unicast
+
+;</p></li><li><p>
+
+
+o bien una dirección multicast
+
+.</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+
+
+ es el valor del TTL (Time To Live)
+de los paquetes IP (quiere decir que el stream podrá pasar a 
+través de 11 routers
+
+.</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2576076"></a>
+
+
+
+
+</h3></div></div></div><p>
+
+
+No hay interfaz de comandos para este tipo de 
+entrada por el momento. Debe usar el fichero de configuración
+
+.</p><p>
+
+
+Éste es un fichero típico de configuración
+<code class="filename">vls.cfg</code> para la Visiontech Kfir
+
+:</p><pre class="programlisting">
+# vls.cfg (VLS configuration file)
+# Example of the VideoLAN HOWTO for the Visiontech Kfir encoding card
+
+BEGIN "Inputs"
+
+  kfir       = "video"
+
+END
+
+BEGIN "kfir"
+
+  # Visiontech Kfir device
+  Device        = "/dev/video"
+
+  # Stream type (default is "Mpeg2-PS")
+  Type          = "Mpeg2-PS"
+
+END
+
+BEGIN "Channels"
+
+  channel1       = "network"
+
+END
+
+BEGIN "channel1"
+
+  # Unicast or multicast IP address
+  DstHost = "192.168.0.42"
+
+  # Destination port
+  DstPort = "1234"
+
+  # If it's a multicast IP address, uncomment the line below
+  #Type    = "multicast"
+
+  # If it's a multicast IP address, set the "Time To Live" below
+  #TTL     = "12"
+
+END
+
+BEGIN "LaunchOnStartUp"
+
+  command1 = "start video channel1 kfir"
+
+END
+</pre><p>
+
+
+Una vez adaptado el fichero de configuración
+anterior, ejecute VLS
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vls -vv -f vls.cfg</code></strong>
+</pre></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 6. 
+Transmisión de un canal DVB (satélite o televisión digital
+terrestre)
+
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 8. 
+
+
+Transmisión desde una tarjeta capturadora o una webcam
+
+</td></tr></table></div></body></html>

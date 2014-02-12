@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>mapping - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="macros.html#macros" title="macros">
+<link rel="next" href="margin.html#margin" title="margin">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="mapping"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="margin.html#margin">margin</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="macros.html#macros">macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.37 mapping</h4>
+
+<!-- ?commands set mapping -->
+<!-- ?commands show mapping -->
+<!-- ?set mapping -->
+<!-- ?show mapping -->
+<p><a name="index-mapping-476"></a><a name="index-mapping-477"></a>
+
+   <p>If data are provided to `splot` in spherical or cylindrical coordinates,
+the <a href="mapping.html#mapping">mapping</a> command should be used to instruct `gnuplot` how to
+interpret them.
+
+   <p>Syntax:
+<pre class="example">           set mapping {cartesian | spherical | cylindrical}
+     
+</pre>
+   <p>A cartesian coordinate system is used by default.
+
+   <p>For a spherical coordinate system, the data occupy two or three columns
+(or <a href="using.html#using">using</a> entries).  The first two are interpreted as the azimuthal
+and polar angles theta and phi (or "longitude" and "latitude"), in the
+units specified by <a href="angles.html#angles">angles</a>.  The radius r is taken from the third
+column if there is one, or is set to unity if there is no third column. 
+The mapping is:
+
+<pre class="example">           x = r * cos(theta) * cos(phi)
+           y = r * sin(theta) * cos(phi)
+           z = r * sin(phi)
+     
+</pre>
+   <p>Note that this is a "geographic" spherical system, rather than a "polar"
+one (that is, phi is measured from the equator, rather than the pole).
+
+   <p>For a cylindrical coordinate system, the data again occupy two or three
+columns.  The first two are interpreted as theta (in the units specified by
+<a href="angles.html#angles">angles</a>) and z.  The radius is either taken from the third column or set
+to unity, as in the spherical case.  The mapping is:
+
+<pre class="example">           x = r * cos(theta)
+           y = r * sin(theta)
+           z = z
+     
+</pre>
+   <p>The effects of <a href="mapping.html#mapping">mapping</a> can be duplicated with the <a href="using.html#using">using</a> filter on the
+`splot` command, but <a href="mapping.html#mapping">mapping</a> may be more convenient if many data files are
+to be processed.  However even if <a href="mapping.html#mapping">mapping</a> is used, <a href="using.html#using">using</a> may still be
+necessary if the data in the file are not in the required order.
+
+   <p><a href="mapping.html#mapping">mapping</a> has no effect on `plot`. 
+<!-- ^ See also -->
+<a href="http://www.gnuplot.info/demo/world.html">world.dem: mapping demos.</a>
+
+   </body></html>
+

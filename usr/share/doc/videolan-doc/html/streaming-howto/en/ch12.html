@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 12.  Streaming over IPv6</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DV, DVB, DVD, DivX" /><link rel="start" href="index.html" title="VideoLAN Streaming Howto" /><link rel="up" href="index.html" title="VideoLAN Streaming Howto" /><link rel="prev" href="ch11.html" title="Chapter 11.  Stream from a DV camcorder" /><link rel="next" href="apa.html" title="Appendix A. GNU General Public License" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 12. 
+Streaming over IPv6
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch11.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="ipv6"></a>Chapter 12. 
+Streaming over IPv6
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch12.html#id2581345">
+Streaming over IPv6
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2581345"></a>
+Streaming over IPv6
+</h2></div></div></div><p>This chapter covers the specifics of streaming over IPv6. You
+should still read the previous chapters if you are not confortable with
+streaming in general.
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2581355"></a>
+Requirements
+</h3></div></div></div><p> You will obviously need an IPv6-aware operating system.
+That includes Windows XP/2003, Linux 2.6, Mac OS X (starting from version
+10.2). Windows 2000 and Linux 2.4 are supported too, but their IPv6
+stacks are not as good, so upgrade if you can. IPv6 must be properly
+configured and working on your system and network.
+</p><p>On Linux, the <span class="emphasis"><em>ipv6</em></span> kernel module must be
+loaded (or compiled-in). On Windows, the IPv6 protocols suite can be
+installed by running "ipv6 install" from the command line, or through
+the Network configuration panel.
+</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Under Windows 2000, you must add by hand a default
+multicast IPv6 route, with the following command:
+</p><pre class="screen">
+<code class="prompt"># </code><strong class="userinput"><code>ipv6 rtu ff::/8 4</code></strong>
+</pre><p>
+where the last number (<span class="emphasis"><em>4</em></span> in
+this example) is the number of your true IPv6 interface. To have a list
+of your IPv6 interfaces, run <span class="command"><strong>ipv6 if</strong></span>.
+</p></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+Under Windows XP SP1, you may have problems with a hidden IPv6
+firewall. To solve the problem, go to the list of Windows
+Services and stop the IPv6 firewalling service. You should consider
+upgrading to Service Pack 2 which provides an integrated IPv4/IPv6
+firewall that can be configured through the GUI.
+</p></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+If you are using VMware under Linux, you will have
+to stop VMware and unload the VMware kernel modules, because we noticed
+it prevented IPv6 streaming !
+</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2582392"></a>
+Limitations
+</h3></div></div></div><p>There are still some features of the VLC media player
+which do not support IPv6. In particular, it is not possible to use
+RTSP over IPv6 because the underlying library, Live.com, does not
+support IPv6 at the time of writing.
+</p><p>Additionnaly, note that at the moment, VLC defaults to using
+IPv4 mostly every, as it is what most people uses. That might be
+changed to something more transparent in future versions.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2582410"></a>
+Streaming with VLC
+</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2582415"></a>With the Streaming Wizard (GUI)</h4></div></div></div><p>The streaming wizard accepts IPv6 addresses between braces, for
+example:
+<strong class="userinput"><code>[2002:8ac3:802d:1242:211:11ff:fe25:e6b4]</code></strong>.
+If you specify a link-local address, you will most likely need to
+specify the networking interface to use. On Unix, that can be done this
+way: <strong class="userinput"><code>[fe80::211:11ff:fe25:e6b4%eth0]</code></strong> to attach
+to eth0. Similarly, on Windows, you may specify
+<strong class="userinput"><code>[fe80::211:11ff:fe25:e6b4%1]</code></strong> where 1 is the
+number of the network interface as defined by the operating system.
+</p><p>If you're streaming over HTTP, note that IPv6 is automatically
+used by default (so that both IPv6 and IPv4 clients will be allowed).
+</p><p>If you want to specify DNS hostname, keep in mind that the VLC
+defaults to IPv4 resolution. You must either specify hostnames that
+only resolves to IPv6 addresses, or enable the "Force IPv6"
+<span class="emphasis"><em>advanced</em></span> option in
+<span class="emphasis"><em>Preferences / General Settings / Input</em></span>.
+</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2582473"></a>From the command-line</h4></div></div></div><p>The <strong class="userinput"><code>--ipv6</code></strong> command line option force
+the use of IPv6 by default (ie. IPv6 is always attempted before IPv4).
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1] --ttl 12</code></strong>
+</pre><p>
+where:
+</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">video1.xyz</code>
+ is the file you want to stream (you can also put
+<span class="command"><strong>dvdsimple:/dev/dvd</strong></span> to stream a DVD or any other input
+configuration)
+,</p></li><li><p><span class="emphasis"><em>ff08::1</em></span> 
+is either :
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+the IPv6 address of the machine you want to unicast to;
+</p></li><li><p>
+or the multicast IPv6 address.
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+ is the value of the TTL (Time To
+Live) of your IP packets (which means that the stream will be
+able to cross 11 routers).
+</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Under Unix/Linux, you may have to protect the square
+brackets around the IPv6 address:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:\[ff08::1\] --ttl 12</code></strong>
+</pre></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+You may have to specify the output network
+interface:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1%eth0] --ttl 12</code></strong>
+</pre><p>
+where <span class="emphasis"><em>eth0</em></span> is the name of the
+network interface (under Linux the network interfaces
+are named <span class="emphasis"><em>ethX</em></span>, under Mac OS X it's
+<span class="emphasis"><em>enX</em></span> and under Windows it's <span class="emphasis"><em>X</em></span>,
+where <span class="emphasis"><em>X</em></span> is the appropriate number).
+</p></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2582632"></a>
+Receiving an IPv6 stream
+</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2582637"></a>With the graphical user interface</h4></div></div></div><p>Select File / Open Network Stream. To receive an UDP/RTP unicast
+stream sent to your system, you should select the Force IPv6 option
+(and possibly adjust the destination UDP port). To receive an UDP
+multicast stream, select the UDP/RTP Multicast option, and specify the
+multicast address to subscribe to inside square brackets. The IPv6
+addresses syntax is the same as that explained in the
+<span class="emphasis"><em>Streaming over IPv6</em></span> section of this chapter.
+</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2582657"></a>From the command line</h4></div></div></div><p>As for streaming, the <strong class="userinput"><code>--ipv6</code></strong> command line
+option force the use of IPv6 by default (ie. IPv6 is always attempted
+before IPv4).
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --ipv6 udp:@[ff08::1]</code></strong>
+</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Under Unix/Linux, you may have to protect the square
+brackets around the IPv6 address:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --ipv6 udp:@\[ff08::1\]</code></strong>
+</pre></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+You may have to specify the output network interface:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1%eth0] --ttl 12</code></strong>
+</pre><p>
+where <span class="emphasis"><em>eth0</em></span> is the name of the
+network interface (under Linux the network interfaces
+are named <span class="emphasis"><em>ethX</em></span>, under Mac OS X it's
+<span class="emphasis"><em>enX</em></span> and under Windows it's <span class="emphasis"><em>X</em></span>,
+where <span class="emphasis"><em>X</em></span> is the appropriate number).
+</p></div></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch11.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 11. 
+Stream from a DV camcorder
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Appendix A. GNU General Public License</td></tr></table></div></body></html>

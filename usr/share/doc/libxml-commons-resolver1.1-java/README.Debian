@@ -1,0 +1,34 @@
+Apache XML Commons Resolver for Debian
+--------------------------------------
+
+- The JAR is named xml-commons-resolver-*.jar in /usr/share/java. Most
+  applications that use the resolver library expect the JAR name to be simply
+  resolver.jar in their build files.
+
+- Two files are missing in the Debian package compared to upstream's binary
+  distribution. I don't know where upstream got them from, the strings
+  "WhichFactory" and "WhichJar" don't appear in the source code at all:
+
+  org.apache.env.WhichFactory.properties
+  org.apache.env.WhichJar.properties
+
+- The Javadoc API documentation is not re-created during the build process
+  because there are no tools for this in the Debian main section. The
+  pre-built version from the distribution archive is used instead.
+
+- This package installs a CatalogManager.properties file in the
+  /etc/xml/resolver directory. Among other things, the
+  CatalogManager.properties file tells the resolver where to find XML
+  catalog files to use. Debian uses a single master catalog file --
+  /etc/xml/catalog -- so the CatalogManager.properties that this package
+  installs points to that file.
+
+  In order for the resolver to be able to find and use the
+  CatalogManager.properties files, you need to include the
+  *directory* that contains it -- the /etc/xml/resolver directory -- in
+  your Java classpath, either by specifying it on the Java command-line
+  or via the CLASSPATH environment variable:
+
+    export CLASSPATH=/etc/xml/resolver:$CLASSPATH
+
+ -- Arnaud Vandyck <avdyk@debian.org>, Mon Oct 11 01:37:06 2004

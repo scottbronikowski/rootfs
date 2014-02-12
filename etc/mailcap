@@ -168,6 +168,9 @@ application/x-sylk; gnumeric '%s'; edit=gnumeric '%s'; description="Multiplan SY
 application/x-xbase; gnumeric '%s'; edit=gnumeric '%s'; description="Xbase spreadsheet"; test=test -n "$DISPLAY"; nametemplate=%s.dbf
 application/x-lpsolve; gnumeric '%s'; edit=gnumeric '%s'; description="LPSolve Linear Program Solver"; test=test -n "$DISPLAY"; nametemplate=%s.lp
 application/x-troff-man; /usr/bin/nroff -mandoc -Tutf8; copiousoutput; print=/usr/bin/nroff -mandoc -Tutf8 | print text/plain:-
+application/postscript; /usr/bin/gv '%s'; test=test -n "$DISPLAY"; description=postscript
+application/ghostview; /usr/bin/gv '%s'; test=test -n "$DISPLAY"
+application/pdf; /usr/bin/gv '%s'; test=test -n "$DISPLAY"
 application/x-ogg; mplayer '%s'; description="Ogg Stream"
 application/ogg; mplayer '%s'; description="Ogg Stream"
 audio/mpeg; mplayer '%s'; description="MPEG Audio"
@@ -190,8 +193,11 @@ video/x-ms-wmx; mplayer '%s'; description="Windows Media Video"
 video/x-ms-wvx; mplayer '%s'; description="Windows Media Video"
 application/x-tar; /bin/tar tvf -; print=/bin/tar tvf - | print text/plain:-; copiousoutput
 application/x-gtar; /bin/tar tvzf -; print=/bin/tar tvzf - | print text/plain:-; copiousoutput
+application/x-dvi; /usr/bin/xdvi '%s'; description=TeX DVI; test=test -n "$DISPLAY"; nametemplate=%s.dvi
 application/zip; unzip -l '%s'; nametemplate=%s.zip; copiousoutput
 text/plain; more '%s'; needsterminal
+application/x-xfig; xfig '%s'; test=test -n "$DISPLAY"
+text/html; /usr/bin/links '%s'; needsterminal; description=HTML Text; nametemplate=%s.html
 application/postscript; pstotext '%s'; test=test -z "$LYNX_VERSION"; copiousoutput; description="PostScript document"
 application/postscript; pstotext '%s'; test=test -n "$LYNX_VERSION"; description="PostScript document"
 application/ghostview;  pstotext '%s'; test=test -z "$LYNX_VERSION"; copiousoutput; description="PostScript document"
@@ -216,6 +222,9 @@ application/x-ogg; vlc '%s'; nametemplate=%s.ogg; description="Ogg stream"; test
 video/ogg; vlc '%s'; description="Ogg Video"; test=test -n "$DISPLAY"
 application/x-ms-asf-plugin; vlc '%s'; description="Windows Media Video"; test=test -n "$DISPLAY"
 application/x-mplayer2; vlc '%s'; description="Windows Media"; test=test -n "$DISPLAY"
+text/html; /usr/bin/w3m -T text/html '%s'; needsterminal; description=HTML Text; nametemplate=%s.html
+text/html; /usr/bin/links -dump '%s'; copiousoutput; description=HTML Text; nametemplate=%s.html
+text/html; /usr/bin/lynx -force_html '%s'; needsterminal; description=HTML Text; nametemplate=%s.html
 text/plain; view '%s'; edit=vi '%s'; compose=vi '%s'; needsterminal
 video/x-msvideo; vlc -I rc -V caca '%s'; needsterminal; description="MS Video (AVI)"
 video/quicktime; vlc -I rc -V caca '%s'; needsterminal; description="Apple Quicktime Video"
@@ -224,6 +233,7 @@ application/x-ogg; vlc -I rc -V caca '%s'; nametemplate=%s.ogg; needsterminal; d
 video/ogg; vlc -I rc -V caca '%s'; needsterminal; description="Ogg Video"
 application/x-ms-asf-plugin; vlc -I rc -V caca '%s'; needsterminal; description="Windows Media Video"
 application/x-mplayer2; vlc -I rc -V caca '%s'; needsterminal; description="Windows Media"
+text/html; /usr/bin/w3m -dump -T text/html '%s'; copiousoutput; description=HTML Text; nametemplate=%s.html
 application/docbook+xml; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="DocBook XML Document"
 application/msword; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Microsoft Word Document"
 application/rtf; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Rich Text document"
@@ -244,6 +254,7 @@ text/plain; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; desc
 text/richtext; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Rich Text document"
 text/rtf; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Rich Text document"
 text/vnd.wap.wml; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Wireless Application Protocol WML file"
+application/dpkg-www-installer; /usr/sbin/dpkg-www-installer '%s'; needsterminal; description=dpkg-www-installer request
 text/html; /usr/bin/html2text '%s'; copiousoutput; description=HTML Text
 image/avs; display 'avs:'%s''; test=test -n "$DISPLAY"
 image/bie; display 'jbig:'%s''; test=test -n "$DISPLAY"
@@ -287,10 +298,12 @@ image/x-xpixmap; display 'xpm:'%s''; test=test -n "$DISPLAY"
 image/x-xwindowdump; display 'xwd:'%s''; test=test -n "$DISPLAY"
 image/x-icon; display 'icon:'%s''; test=test -n "$DISPLAY"
 image/yuv; display 'yuv:'%s''; test=test -n "$DISPLAY"
+text/html; /usr/bin/lynx -dump -force_html '%s'; copiousoutput; description=HTML Text; nametemplate=%s.html
 application/pdf; pstotext '%s'; test=test -z "$LYNX_VERSION" && expr `gs --version` ">=" 3.51 >/dev/null 2>&1; copiousoutput; description="Portable Document Format document"
 application/pdf; pstotext '%s'; test=test -n "$LYNX_VERSION" && expr `gs --version` ">=" 3.51 >/dev/null 2>&1; description="Portable Document Format document"
 text/*; less '%s'; needsterminal
 text/*; view '%s'; edit=vim '%s'; compose=vim '%s'; test=test -x /usr/bin/vim; needsterminal
 text/*; more '%s'; needsterminal
 text/*; view '%s'; edit=vi '%s'; compose=vi '%s'; needsterminal
+application/msword; /usr/bin/antiword '%s'; copiousoutput; description="Microsoft Word Text"; nametemplate=%s.doc
 application/x-debian-package; /usr/lib/mime/debian-view '%s'; needsterminal; description=Debian GNU/Linux Package; nametemplate=%s.deb

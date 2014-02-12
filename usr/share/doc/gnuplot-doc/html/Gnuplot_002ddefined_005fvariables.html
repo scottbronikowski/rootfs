@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>Gnuplot-defined_variables - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Expressions.html#Expressions" title="Expressions">
+<link rel="prev" href="Operators.html#Operators" title="Operators">
+<link rel="next" href="User_002ddefined_005fvariables_005fand_005ffunctions.html#User_002ddefined_005fvariables_005fand_005ffunctions" title="User-defined_variables_and_functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Gnuplot-defined_variables"></a>
+<a name="Gnuplot_002ddefined_005fvariables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="User_002ddefined_005fvariables_005fand_005ffunctions.html#User_002ddefined_005fvariables_005fand_005ffunctions">User-defined_variables_and_functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Operators.html#Operators">Operators</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Expressions.html#Expressions">Expressions</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.13.3 Gnuplot-defined variables</h4>
+
+<!-- ?gnuplot-defined variables -->
+<p>Gnuplot maintains a number of read-only variables that reflect the current
+internal state of the program and the most recent plot. These variables begin
+with the prefix "GPVAL_". 
+Examples include GPVAL_TERM, GPVAL_X_MIN, GPVAL_X_MAX, GPVAL_Y_MIN. 
+Type `show variables all` to display the complete list and current values. 
+Values related to axes parameters (ranges, log base) are values used during the
+last plot, not those currently `set`.
+
+   <p><a name="index-errors-184"></a>
+<a name="index-error-state-185"></a>
+The read-only variable GPVAL_ERRNO is set to a non-zero value if any gnuplot
+command terminates early due to an error.  The most recent error message is
+stored in the string variable GPVAL_ERRMSG.  Both GPVAL_ERRNO and GPVAL_ERRMSG
+can be cleared using the command `reset errors`.
+
+   <p>Interactive terminals with `mouse` functionality maintain read-only variables
+with the prefix "MOUSE_".  See <a href="variables.html#variables">variables</a> for details.
+
+   <p>The <a href="fit.html#fit">fit</a> mechanism uses several variables with names that begin "FIT_".  It
+is safest to avoid using such names.  "FIT_LIMIT", however, is one that you
+may wish to redefine. Under `set fit errorvariables`, the error for each
+fitted parameter will be stored in a variable named like the parameter, but
+with "_err" appended. See the documentation on <a href="fit.html#fit">fit</a> for details.
+
+   <p>See <a href="variables.html#variables">variables</a>, `reset errors`, <a href="variables.html#variables">variables</a>, and <a href="fit.html#fit">fit</a>.
+
+   </body></html>
+

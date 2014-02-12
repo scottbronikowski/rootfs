@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<title>key_samples - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="key.html#key" title="key">
+<link rel="prev" href="key_005fplacement.html#key_005fplacement" title="key_placement">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="key_samples"></a>
+<a name="key_005fsamples"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="key_005fplacement.html#key_005fplacement">key_placement</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="key.html#key">key</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.30.2 key samples</h5>
+
+<!-- ?commands set key samples -->
+<!-- ?set key samples -->
+<!-- ?key samples -->
+<p>By default, each plot on the graph generates a corresponding entry in the key. 
+This entry contains a plot title and a sample line/point/box of the same color
+and fill properties as used in the plot itself.  The font and textcolor
+properties control the appearance of the individual plot titles that appear in
+the key. Setting the textcolor to "rgb variable" causes the text for each key
+entry to be the same color as the line or fill color for that plot. 
+This was the default in some earlier versions of gnuplot.
+
+   <p>The length of the sample line can be controlled by `samplen`.  The sample
+length is computed as the sum of the tic length and &lt;sample_length&gt; times the
+character width.  `samplen` also affects the positions of point samples in
+the key since these are drawn at the midpoint of the sample line, even if
+the sample line itself is not drawn.
+
+   <p>The vertical spacing between lines is controlled by `spacing`.  The spacing
+is set equal to the product of the pointsize, the vertical tic size, and
+&lt;vertical_spacing&gt;.  The program will guarantee that the vertical spacing is
+no smaller than the character height.
+
+   <p>The &lt;width_increment&gt; is a number of character widths to be added to or
+subtracted from the length of the string.  This is useful only when you are
+putting a box around the key and you are using control characters in the text. 
+`gnuplot` simply counts the number of characters in the string when computing
+the box width; this allows you to correct it.
+
+   </body></html>
+

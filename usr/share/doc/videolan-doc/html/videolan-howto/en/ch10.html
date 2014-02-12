@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 10.  Stream in IPv6</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch09.html" title="Chapter 9.  Advanced use of VLC's stream output (transcoding, multiple streaming, etc...)" /><link rel="next" href="ch11.html" title="Chapter 11.  Video On Demand" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 10. 
+Stream in IPv6
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="ipv6"></a>Chapter 10. 
+Stream in IPv6
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch10.html#id2578636">
+Stream in IPv6
+</a></span></dt><dt><span class="sect1"><a href="ch10.html#id2578856">
+Receive in IPv6
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2578636"></a>
+Stream in IPv6
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2578002"></a>
+Requirements
+</h3></div></div></div><p> You will need an IPv6-aware operating
+system, like Linux 2.4 or 2.6 with the <span class="emphasis"><em>ipv6</em></span> module
+loaded, Windows 2000 with the IPv6 stack, Windows XP Service Pack 1 or
+Mac OS X version 10.2 or higher. Please look at the features pages on
+the <a class="ulink" href="http://www.videolan.org" target="_top">VideoLAN web site</a> to
+know about the status of IPv6 in VLC and VLS for each O.S..
+</p><p>
+</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+Under Windows 2000, you must add by hand a default
+multicast IPv6 route, with the following command:
+
+</p><pre class="screen">
+<code class="prompt"># </code><strong class="userinput"><code>ipv6 rtu ff::/8 4</code></strong>
+</pre><p>
+
+where the last number (<span class="emphasis"><em>4</em></span> in
+this example) is the number of your true IPv6 interface. To have a list
+of your IPv6 interfaces, run <span class="command"><strong>ipv6 if</strong></span>.
+
+</p></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+
+Under Windows XP, you may have problems with a
+hidden IPv6 firewall. To solve the problem, go to the list of Windows
+Services and stop the IPv6 firewalling service.
+
+</p></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+If you are using VMware under Linux, you will have
+to stop VMware and unload the VMware kernel modules, because we noticed
+it prevented IPv6 streaming !
+</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2578685"></a>
+Stream with VLC
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1] --ttl 12</code></strong>
+</pre><p>
+where:
+</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">video1.xyz</code>
+ is the file you want to stream (you can also put
+<span class="command"><strong>dvdsimple:/dev/dvd</strong></span> to stream a DVD or any other input
+configuration)
+,</p></li><li><p><span class="emphasis"><em>ff08::1</em></span> 
+is either :
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+the IPv6 address of the machine you want to unicast
+to
+;</p></li><li><p>
+or the multicast IPv6 address.
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+ is the value of the TTL (Time To
+Live) of your IP packets (which means that the stream will be
+able to cross 11 routers).
+</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Under Unix/Linux, you may have to protect the square
+brackets around the IPv6 address:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:\[ff08::1\] --ttl 12</code></strong>
+</pre></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+You may have to specify the output network
+interface:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1%eth0] --ttl 12</code></strong>
+</pre><p>
+where <span class="emphasis"><em>eth0</em></span> is the name of the
+network interface (under Linux the network interfaces
+are named <span class="emphasis"><em>ethX</em></span>, under Mac OS X it's
+<span class="emphasis"><em>enX</em></span> and under Windows it's <span class="emphasis"><em>X</em></span>,
+where <span class="emphasis"><em>X</em></span> is the appropriate number).
+</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2578831"></a>
+Stream with VLS
+</h3></div></div></div><p>
+You will need to use the configuration
+file <code class="filename">vls.cfg</code>. Please, see the <a class="ulink" href="http://www.videolan.org/doc/" target="_top">VLS user guide</a> to know how to
+write one for IPv6 streaming in unicast or multicast.
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2578856"></a>
+Receive in IPv6
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2578861"></a>
+Receive an unicast stream
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --ipv6 udp:</code></strong>
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2578882"></a>
+Receive a multicast stream
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --ipv6 udp:@[ff08::1]</code></strong>
+</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Under Unix/Linux, you may have to protect the square
+brackets around the IPv6 address:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --ipv6 udp:@\[ff08::1\]</code></strong>
+</pre></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+You may have to specify the output network
+interface:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1%eth0] --ttl 12</code></strong>
+</pre><p>
+where <span class="emphasis"><em>eth0</em></span> is the name of the
+network interface (under Linux the network interfaces
+are named <span class="emphasis"><em>ethX</em></span>, under Mac OS X it's
+<span class="emphasis"><em>enX</em></span> and under Windows it's <span class="emphasis"><em>X</em></span>,
+where <span class="emphasis"><em>X</em></span> is the appropriate number).
+</p></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 9. 
+Advanced use of VLC's stream output
+(transcoding, multiple streaming, etc...)
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 11. 
+Video On Demand
+</td></tr></table></div></body></html>

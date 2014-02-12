@@ -1,0 +1,1 @@
+/etc/sgml/docbook/4.3/dbgenent.mod

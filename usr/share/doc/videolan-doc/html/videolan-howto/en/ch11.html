@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 11.  Video On Demand</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch10.html" title="Chapter 10.  Stream in IPv6" /><link rel="next" href="ch12.html" title="Chapter 12.  Add a channel information service" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 11. 
+Video On Demand
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch12.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="vod"></a>Chapter 11. 
+Video On Demand
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch11.html#id2579422">
+Overview
+</a></span></dt><dt><span class="sect1"><a href="ch11.html#id2578318">
+On the server side
+</a></span></dt><dt><span class="sect1"><a href="ch11.html#id2579458">
+On the client side
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2579422"></a>
+Overview
+</h2></div></div></div><p>With Video On Demand (VOD), the user can start the video when he
+wants, make pauses, go forward and back in the video. It is of course
+the best in video streaming and the dream for every user.</p><p>VOD is a very big consumer of resources for the server and the
+network. VOD is unicast, not multicast : this means that the network
+and server resources needed are directly proportional to the number of
+clients.</p><p>The design of VideoLAN's VOD solution is very simple. The idea
+is to do HTTP streaming, i.e. stream an MPEG video encapsulated in
+HTTP. The regulation of the bitrate between the client and the server
+is done automatically by TCP. With HTTP version 1.1, there is the
+possibility to seek in a file downloaded, that's what we use to seek in
+the video.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2578318"></a>
+On the server side
+</h2></div></div></div><p>On the VOD server, you need a running Web server. For example,
+you can use a Linux server running Apache. Other operating systems
+and other Web servers should work too, but we have never tested.</p><p>Make your MPEG-1, MPEG-2 or MPEG-4 / DivX files available to the
+clients on the Web server.</p><p>For example, we have a Web server whose DNS name
+is <span class="emphasis"><em>localserver</em></span>. On this server,
+we put an MPEG file <code class="filename">video1.mpg</code>
+which will be available to the clients at the URL
+<code class="filename">http://localserver/video1.mpg</code>.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2579458"></a>
+On the client side
+</h2></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv http://localserver/video1.mpg</code></strong>
+</pre><p>VLC starts to read the stream nearly immediately and you can
+seek in the stream, make pauses, etc... as if the stream was a local
+file.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch12.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 10. 
+Stream in IPv6
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 12. 
+Add a channel information service
+</td></tr></table></div></body></html>

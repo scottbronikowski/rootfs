@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>ipreced</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="DSSSL Library Reference"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="ISO/IEC 10179"
+HREF="r49.htm"><LINK
+REL="PREVIOUS"
+TITLE="node-list-last-element"
+HREF="node-list-last-element.html"><LINK
+REL="NEXT"
+TITLE="ifollow"
+HREF="ifollow.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>DSSSL Library Reference: Part of the Modular DocBook Stylesheet distribution</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="node-list-last-element.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ifollow.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="IPRECED"
+></A
+>ipreced</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN133"
+></A
+><H2
+>Name</H2
+>ipreced&nbsp;--&nbsp;Implements ipreced as per ISO/IEC 10179:1996</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN136"
+></A
+><H2
+>Synopsis</H2
+><PRE
+CLASS="SYNOPSIS"
+>(ipreced nl)</PRE
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN139"
+></A
+><H2
+>Description</H2
+><P
+>Implements <TT
+CLASS="LITERAL"
+>ipreced</TT
+> as per ISO/IEC 10179:1996</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN143"
+></A
+><H2
+>Author</H2
+><P
+>From ISO/IEC 10179:1996</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN146"
+></A
+><H2
+>Source Code</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>(define (ipreced nl)
+  ;; Implements ipreced as per ISO/IEC 10179:1996
+  (node-list-map (lambda (snl)
+		 (let loop ((prev (empty-node-list))
+			    (rest (siblings snl)))
+		   (cond ((node-list-empty? rest)
+			  (empty-node-list))
+			 ((node-list=? (node-list-first rest) snl)
+			  prev)
+			 (else
+			  (loop (node-list-first rest)
+				(node-list-rest rest))))))
+		 nl))</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="node-list-last-element.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ifollow.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>node-list-last-element</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="r49.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ifollow</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

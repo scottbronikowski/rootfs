@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>practical_guidelines - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="error_005festimates.html#error_005festimates" title="error_estimates">
+<link rel="prev" href="statistical_005foverview.html#statistical_005foverview" title="statistical_overview">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="practical_guidelines"></a>
+<a name="practical_005fguidelines"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="statistical_005foverview.html#statistical_005foverview">statistical_overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="error_005festimates.html#error_005festimates">error_estimates</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.6.3.2 practical guidelines</h5>
+
+<!-- ?commands fit error practical_guidelines -->
+<!-- ?fit error practical_guidelines -->
+<p><a name="index-practical_005fguidelines-294"></a>
+<a name="index-guidelines-295"></a>
+If you have a basis for assigning weights to each data point, doing so lets
+you make use of additional knowledge about your measurements, e.g., take into
+account that some points may be more reliable than others.  That may affect
+the final values of the parameters.
+
+   <p>Weighting the data provides a basis for interpreting the additional <a href="fit.html#fit">fit</a>
+output after the last iteration.  Even if you weight each point equally,
+estimating an average standard deviation rather than using a weight of 1
+makes WSSR a dimensionless variable, as chisquare is by definition.
+
+   <p>Each fit iteration will display information which can be used to evaluate
+the progress of the fit.  (An '*' indicates that it did not find a smaller
+WSSR and is trying again.)  The 'sum of squares of residuals', also called
+'chisquare', is the WSSR between the data and your fitted function; <a href="fit.html#fit">fit</a>
+has minimized that.  At this stage, with weighted data, chisquare is expected
+to approach the number of degrees of freedom (data points minus parameters). 
+The WSSR can be used to calculate the reduced chisquare (WSSR/ndf) or stdfit,
+the standard deviation of the fit, sqrt(WSSR/ndf).  Both of these are
+reported for the final WSSR.
+
+   <p>If the data are unweighted, stdfit is the rms value of the deviation of the
+data from the fitted function, in user units.
+
+   <p>If you supplied valid data errors, the number of data points is large enough,
+and the model is correct, the reduced chisquare should be about unity.  (For
+details, look up the 'chi-squared distribution' in your favourite statistics
+reference.)  If so, there are additional tests, beyond the scope of this
+overview, for determining how well the model fits the data.
+
+   <p>A reduced chisquare much larger than 1.0 may be due to incorrect data error
+estimates, data errors not normally distributed, systematic measurement
+errors, 'outliers', or an incorrect model function.  A plot of the residuals,
+e.g., `plot 'datafile' using 1:($2-f($1))`, may help to show any systematic
+trends.  Plotting both the data points and the function may help to suggest
+another model.
+
+   <p>Similarly, a reduced chisquare less than 1.0 indicates WSSR is less than that
+expected for a random sample from the function with normally distributed
+errors.  The data error estimates may be too large, the statistical
+assumptions may not be justified, or the model function may be too general,
+fitting fluctuations in a particular sample in addition to the underlying
+trends.  In the latter case, a simpler function may be more appropriate.
+
+   <p>You'll have to get used to both <a href="fit.html#fit">fit</a> and the kind of problems you apply it
+to before you can relate the standard errors to some more practical estimates
+of parameter uncertainties or evaluate the significance of the correlation
+matrix.
+
+   <p>Note that <a href="fit.html#fit">fit</a>, in common with most NLLS implementations, minimizes the
+weighted sum of squared distances (y-f(x))**2.  It does not provide any means
+to account for "errors" in the values of x, only in y.  Also, any "outliers"
+(data points outside the normal distribution of the model) will have an
+exaggerated effect on the solution.
+
+   </body></html>
+

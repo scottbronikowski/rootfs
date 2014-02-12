@@ -1,0 +1,1019 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 2.  Modules and options for VLC</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DivX" /><link rel="start" href="index.html" title="VLC user guide" /><link rel="up" href="index.html" title="VLC user guide" /><link rel="prev" href="ch01.html" title="Chapter 1.  Introduction" /><link rel="next" href="ch03.html" title="Chapter 3.  Installing VLC" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. 
+Modules and options for VLC</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="modules"></a>Chapter 2. 
+Modules and options for VLC</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch02.html#id2522422">The modules</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2569857">
+Access modules
+</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2570302">
+Demuxers
+</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2569600">
+Codec modules
+</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2572261">
+Video outputs
+</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2572154">
+Video filters modules
+</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2573250">
+Audio outputs
+</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2573234">
+Interface modules
+</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2575741">
+OS support modules
+</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2574622">
+Miscellaneous
+</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2575845">
+Compilation Options
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2522422"></a>The modules</h2></div></div></div><p>VLC uses a modular system, which allows to add easily new
+fonctions and formats. Here is a description of nearly all the VLC
+modules. A few "internal" modules won't be explained here. For a 
+complete list of all VLC modules, please have a look at the LIST file
+ in the subdirectory "modules" of the VLC source tree.</p><p>If you installed VLC through a binary file, you will get
+the default modules. If, however, you want to customize VLC to your
+needs, you will have to compile VLC from sources.</p><p>Reading this part may be useful if you intend to compile VLC or
+if you want to know all the options available for modules you use.</p><p>The compilation itself is explained in the next chapter.</p><p>
+If you wish to compile a module which is stated 
+<span class="emphasis"><em>disabled by default</em></span>, you have to launch the 
+configure script with:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./configure --enable-module_name</code></strong>
+</pre><p>
+On the contrary, if you want to disable a module 
+that is <span class="emphasis"><em>default enabled</em></span>, you have to use:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./configure --disable-module_name</code></strong></pre><p>
+Each VLC module has its own help and options. To see
+every options associated with a module, use:</p><pre class="screen"> <code class="prompt">% </code><strong class="userinput"><code>vlc --advanced -p module_name</code></strong></pre><p>
+or use the "Preferences" Panel of your favorite 
+graphical interface.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2569857"></a>
+Access modules
+</h2></div></div></div><p>
+These modules allow VLC to read its streams from
+different sources. VLC tries to guess the most suitable module at runtime.
+If you want to force an input module lauch VLC with:
+<span class="emphasis"><em>--access modulename</em></span></p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569870"></a>cdda</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>This is the Audio CD input.  At present, if
+you are have a new enough libvcdinfo (from <a class="ulink" href="http://www.vcdimager.org/index.phtml" target="_top">vcdimager</a>) and a new
+enough <a class="ulink" href="http://www.gnu.org/software/libcdio" target="_top">libcdio</a>
+you will get the newer navigation-capable plugin. Eventually when libcdio is more
+mature and handles more OSs the older plugin will disapear. The file
+<code class="filename">doc/intf-vcd.txt</code> in the vlc source gives detailed information
+about this plugin.
+
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569892"></a>dvb</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+For GNU/Linux only
+</em></span></p><p>
+This module allows to read from DVB-S, DVB-T,
+and DBC-C satellite, digital terrestrial, or cable cards. It uses
+the Video4Linux 2 API, that is only available in kernel 2.5.X and
+2.6.X.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569901"></a>dvd</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This is the old DVD input module. It uses
+<span class="emphasis"><em>libdvdcss</em></span> for DVD decryption (see the
+<a class="ulink" href="http://developers.videolan.org/libdvdcss/" target="_top">libdvdcss
+page</a>).
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569923"></a>dvdplay</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This is the regular DVD input module. It will need
+<span class="emphasis"><em>libdvdcss</em></span> for DVD decryption (see the <a class="ulink" href="http://developers.videolan.org/libdvdcss/" target="_top">libdvdcss page</a>)
+and <span class="emphasis"><em>libdvdplay</em></span> for DVD navigation (see the <a class="ulink" href="http://developers.videolan.org/libdvdplay/" target="_top">libdvdplay</a>
+page).
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570404"></a>dvdread</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+This is an alternative to the previous ones. It uses
+<span class="emphasis"><em>libdvdread</em></span> for DVD reading (see the <a class="ulink" href="http://www.dtek.chalmers.se/groups/dvd/downloads.shtml" target="_top">Ogle
+download page</a>) and <span class="emphasis"><em>libdvdcss</em></span>
+for DVD decryption (see the <a class="ulink" href="http://developers.videolan.org/libdvdcss/" target="_top">libdvdcss
+page</a>).
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570442"></a>dshow</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p><span class="emphasis"><em>For Microsoft Windows only</em></span></p><p>
+This module allows VLC to read from input cards that have a DirectShow driver. Most common webcams and acquisitions boards have such a driver.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570467"></a>http,ftp,udp,file,directory,mms</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+These are standard input modules.
+The HTTP input can be used for Video On Demand.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570478"></a>pvr</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+For GNU/Linux only
+</em></span></p><p>
+This module allows to read from Hauppauge PVR cards.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570489"></a>rstp/rtp/sdp (livedotcom)</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This module allows you to read VOD streams using the RTSP protocol. It uses the liveMedia library from http://live.com/
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570508"></a>satellite</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+This is an input module that allows to read directly
+from a Hauppauge WinTV Nova card under GNU/Linux. It requires drivers
+0.9.4 available from <a class="ulink" href="http://www.linuxtv.org/" target="_top">linuxtv.org</a>.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570560"></a>slp</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This module allows to get the names and addresses
+for streams announced using the SLP protocol.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570577"></a>v4l</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+For GNU/Linux only
+</em></span></p><p>
+This module allows to read from Video4Linux devices.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570599"></a>vcd</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>This is the VideoCD input. At present, if
+you are have a new enough libvcdinfo (from <a class="ulink" href="http://www.vcdimager.org/index.phtml" target="_top">vcdimager</a>) and a new
+enough <a class="ulink" href="http://www.gnu.org/software/libcdio" target="_top">libcdio</a> you will get
+the newer navigation-capable plugin. Eventually when libcdio is more
+mature and handles more OSs the older plugin will disapear. The file
+<code class="filename">doc/intf-vcd.txt</code> in the vlc source gives detailed
+information about this plugin.
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2570302"></a>
+Demuxers
+</h2></div></div></div><p>
+In a video stream, the video signal and the audio
+one are always into "containers" formats. Demuxers extract the streams
+from it and pass it to the decoders.
+</p><p>
+For example, an AVI file can contain a MPEG-4
+video, or an uncompressed video. AVI is only a storing format, not a
+compression format.
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570115"></a>avi</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This module allows you to read
+<code class="filename">.avi</code> files.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--avi-interleaved, --no-avi-interleaved </em></span>:
+   Enables or disables interlacing mode (default is disabled)
+  </p></li><li><p><span class="emphasis"><em>--avi-index, --no-avi-index </em></span>:
+   Forces an index to be created. This can help for
+    buggy streams (default is disabled)
+  </p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570328"></a>asf, aac, ogg, aiff, au, wav, mp4</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This module allows you to read
+<code class="filename">.asf, .aac, .ogg, .aiff, .au, .wav, .mp4</code> files.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570348"></a>mkv</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This module allows you to read files that use the
+Matroska format.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--mkv-seek-percent, --no-mkv-seek-percent</em></span> :
+    When this option is enabled (this is the default 
+	behaviour), seek is based on percentage and not on time
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570732"></a>mod</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This module allows you to read MOD files (extensions mod, s3m, xm, it, 669,
+amf, ams, dbm, dmf, dsm, far, mdl, med, mtm, okt, ptm, stm, ult, umx,
+mt2, psm). MOD files are audio files used on AMIGA computers.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--mod-noisereduction, --no-mod-noisereduction</em></span> : Default disabled. Add noise reduction to mod audio</p></li><li><p><span class="emphasis"><em>--mod-reverb, --no-mod-reverb</em></span> : Default disabled. Add reverberation to mod audio</p></li><li><p><span class="emphasis"><em>--mod-reverb-level &lt;integer&gt;</em></span> : Reverb level (0-100 defaults to 0)</p></li><li><p><span class="emphasis"><em>--mod-reverb-delay &lt;integer&gt;</em></span> : Reverb delay in ms, 0 to 1000 ms, default to 40. (usually 40-200ms).</p></li><li><p><span class="emphasis"><em>--mod-megabass, --no-mod-megabass</em></span> : Default disabled. Add megabass enhancements to mod audio.</p></li><li><p><span class="emphasis"><em>--mod-megabass-level &lt;integer&gt;</em></span> : Mega bass level (0-100 defaults to 0).</p></li><li><p><span class="emphasis"><em>--mod-megabass-range &lt;integer&gt;</em></span> : Mega bass cut-off (10-100 Hz defaults to 10).</p></li><li><p><span class="emphasis"><em>--mod-surround, --no-mod-surround</em></span> : Default disabled. Add surround enhancements to mod audio.</p></li><li><p><span class="emphasis"><em>--mod-surround-level &lt;integer&gt;</em></span> : Surround level (0-100 defaults to 0).</p></li><li><p><span class="emphasis"><em>--mod-surround-level &lt;integer&gt;</em></span> : Surround delay (0-1000 ms defaults to 5, usually 5-40ms).</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570863"></a>nsv</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This module allows you to read NSV (Nullsoft Streaming Video) streams.
+Most NSV streams use the VP6 codec which is currently unsupported by VLC (VLC only supports VP1 and VP3 for the moment).
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570884"></a>ps,ts</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+These modules allow you to read MPEG-2 Program Stream
+or Transport Stream files.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--vls-backward-compat, --no-vls-backward-compat</em></span> :
+    Enable this option if you want to read VLS &lt; 0.4
+   MPEG 2 TS streams.
+  </p></li><li><p><span class="emphasis"><em>--buggy-psi, --no-buggy-psi (ts module) </em></span>:
+    Enable this option to help handling of files
+     with buggy PSI.
+  </p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570929"></a>pva</h3></div></div></div><p>
+This module allows you to read PVA files (.pva). PVA is a file format used by the software that comes with the TechnoTrend/Hauppauge/Siemens/Galaxis DVB cards.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570941"></a>real</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This module allows you to read RealMedia (.rm) files.
+Note : Only very old audio codecs (rv10) are currently supported by VLC inside RealMedia files.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570960"></a>rawdv</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This module allows you to read
+DV files
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570976"></a>dvbpsi</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This module allows to demux streams from a satellite
+card.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570993"></a>id3,m3u</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+These modules allow you to read M3U, B4S, PLS, and
+ASX playlists, and ID3 tags.
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2569600"></a>
+Codec modules
+</h2></div></div></div><p>
+The following modules add codec (ie, compression
+formats) support.
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569610"></a>a52</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This decoder uses liba52 (see the <a class="ulink" href="http://liba52.sourceforge.net/" target="_top">liba52 web site</a>
+).</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569565"></a>cinepak</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This codec decodes the Cinepak format.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569621"></a>faad</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+Faad is an MPEG-4 audio decoder.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2569637"></a>ffmpeg</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This is a free MPEG-4/DivX/OpenDivX/Xvid codec (see the
+<a class="ulink" href="http://ffmpeg.sourceforge.net/" target="_top">ffmpeg web site</a>).
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--ffmpeg-dr, --no-ffmpeg-dr </em></span>:
+Enables or disables direct rendering (default enabled)
+</p></li><li><p><span class="emphasis"><em>--ffmpeg-error-resilience </em></span>:
+Integer to set the error resilience factor, from -1 to 99 
+(-1 means no resilience at all)
+</p></li><li><p><span class="emphasis"><em>--ffmpeg-workaround-bugs </em></span>:
+Try to fix some bugs. Add the values corresponding to the bugs you want to fix, and pass it as argument: 1 = autodetect, 2 = old msmpeg4, 4 = xvid interlaces, 8 = ump4, 16 = no padding, 32 = ac vlc, 64 = Qpel chroma
+</p></li><li><p><span class="emphasis"><em>--ffmpeg-hurry-up, --no-ffmpeg-hurry-up </em></span>:
+Allow the decoder to decode only partially or even to skip frames, if it is late. This can be useful with low end computers, but produces weird pictures.
+</p></li><li><p><span class="emphasis"><em>--ffmpeg-truncated </em></span>:
+Truncates the stream : -1=auto, 0=disabled, 1=enabled
+</p></li><li><p><span class="emphasis"><em>--ffmpeg-pp-q </em></span>:
+Postprocessing quality (integer between 0 and 6). A higher level requires more CPU power and will produce better pictures.
+</p></li><li><p><span class="emphasis"><em>--ffmpeg-pp-name </em></span>:
+Series of postprocessing filters
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571597"></a>libmpeg2</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This codec allows to read MPEG2 files.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571613"></a>mad</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This codec is a very smart MP3 decoder, that only
+uses integers. This allows its use for CPU which don't handle floating
+point numbers (on PDA, for example).
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571633"></a>ogt</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+OGT handles the SVCD subtitles (Philips Overlay
+Graphics Text or OGT) and subtitles used by Chaoji VCDs (also known as
+CVD).
+</p><p>
+A description of the format for these kinds
+of subtitles can be found in the vlc source
+in <code class="filename">doc/subtitles/svcd-subtitles.txt</code> and
+<code class="filename">doc/subtitles/cvd-subtitles.txt</code>
+werden</p><p>
+  	 Use the option
+  	 <code class="filename">--spu-channel</code> <span class="emphasis"><em>number</em></span>
+  	 to select a subtitle track to show. The number
+  	 should be -1, 0, 1, 2, or 3. The CVD and SVCD subtitle formats
+  	 allow for 4 subtitles. The value -1 deselects any subtitles
+  	    .</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571686"></a>spudec</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+spudec handles the DVD subtitles. At present
+full color subtitles and transparency are not handled.
+</p><p>
+For a description of the format for these kinds of
+subtitles see
+<a class="ulink" href="http://sam.zoy.org/writings/dvd/subtitles" target="_top">http://sam.zoy.org/writings/dvd/subtitles</a>.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571716"></a>tarkin</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+tarkin is a new codec (experimental) by the Ogg
+Project (see the <a class="ulink" href="http://www.vorbis.com" target="_top">Ogg Vorbis web
+site</a>).
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571739"></a>theora</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+theora is a new codec (experimental) by the Ogg
+Project (see the <a class="ulink" href="http://www.vorbis.com" target="_top">Ogg Vorbis web
+site</a>).
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571762"></a>tremor</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+This is an Ogg/Vorbis codec that only makes
+integer calculus, which allow its use on CPU which don't have floating
+point support (see the <a class="ulink" href="http://www.vorbis.com" target="_top">Ogg Vorbis
+web site</a>).
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571786"></a>vorbis</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This codec allows you to read the Vorbis (audio)
+encoded files.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571803"></a>xvid</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+This codec allows you to read files encoded
+with Xvid via the xvidcore library (see <a class="ulink" href="http://www.xvid.org/" target="_top">Xvid web site</a>).
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2572261"></a>
+Video outputs
+</h2></div></div></div><p>
+Video outputs modules allow VLC to display video on your screen.
+When launched, VLC tries to guess the most suitable video output module for your system.
+However, if you want to force a specific module, use the following command line switch:
+--vout modulename
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572274"></a>directx</h3></div></div></div><p><span class="emphasis"><em>
+default enabled on win32
+</em></span></p><p><span class="emphasis"><em>
+For Windows only
+</em></span></p><p>
+This video output uses Microsoft Direct X libraries. 
+It is recommended for the win32 port.
+</p><p>
+You may indicate the path to directX libraries and
+headers with the <span class="command"><strong>--with-directx=PATH</strong></span> switch, when
+running the configure script.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571419"></a>x11</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+For Unix with X11 servers only
+</em></span></p><p>
+This is the basic X11 video output. It only requires a
+working X11 server. You will need xlibs headers to compile it
+(<span class="emphasis"><em>xlibs-dev</em></span> package on Debian systems).
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p>--x11-display &lt;string&gt;
+X11 display name to use
+</p></li><li><p><span class="emphasis"><em>--x11-altfullscreen, --no-x11-altfullscreen </em></span> :
+use alternate fullscreen mode to bypass window managers (default disabled)
+</p></li><li><p><span class="emphasis"><em>--x11-shm, --no-x11-shm </em></span>:
+use x11 shared memory (default enabled)
+</p></li><li><p><span class="emphasis"><em>--x11-xineramascreen &lt;integer&gt; </em></span>:
+choose the screen to be used for fullscreen mode, when working with xinerama
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572350"></a>xvideo</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+ For GNU/Linux only
+</em></span></p><p>
+It requires an xvideo compliant graphic card (it is the case for
+nearly all modern cards). It uses hardware acceleration for YUV
+transformation and rescaling.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--xvideo-display &lt;string&gt; </em></span>:
+X11 display name to use
+</p></li><li><p><span class="emphasis"><em>--xvideo-adaptor &lt;integer&gt; </em></span>:
+xvideo adaptor number
+</p></li><li><p><span class="emphasis"><em>--xvideo-altfullscreen, --no-xvideo-altfullscreen </em></span>:
+use alternate fullscreen mode to bypass window
+managers (default disabled)
+</p></li><li><p><span class="emphasis"><em>--xvideo-shm, --no-xvideo-shm </em></span>:
+use x11 shared memory (default enabled)
+</p></li><li><p><span class="emphasis"><em>--xvideo-xineramascreen &lt;integer&gt; </em></span>:
+choose the screen to be used for fullscreen mode, when working with xinerama
+</p></li><li><p><span class="emphasis"><em>--xvideo-chroma &lt;string&gt; </em></span>:
+XVimage chroma format
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572865"></a>sdl</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+ This video output uses sdl libraries. You need at least
+version 1.1.6 of this libraries.
+</p><p>
+You may indicate the path to the 
+<span class="emphasis"><em>sdl-config</em></span> program with the <span class="command"><strong>
+ --with-sdl-config-path=PATH </strong></span> switch, when running 
+the configure script, if you intend to compile VLC.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572897"></a>wingdi</h3></div></div></div><p><span class="emphasis"><em>
+default: enabled on win32
+</em></span></p><p><span class="emphasis"><em>
+For Windows only
+</em></span></p><p>
+This video output uses GDI. It is designed for users who
+don't have Direct X, but the perfs are very low. If you have DirectX installed on
+your system, do not use the wingdi video output
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572919"></a>fb</h3></div></div></div><p><span class="emphasis"><em>
+default: enabled on GNU/Linux
+</em></span></p><p><span class="emphasis"><em>
+For GNU/Linux only
+</em></span></p><p>
+This is the frame buffer video output. Your
+kernel has to be compiled with frame buffer support.
+sein.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--fbdev &lt;string&gt; </em></span>:
+framebuffer device (default is /dev/fb0)
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572955"></a>glide</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+This video output uses Glide libraries (hardware 
+acceleration for 3Dfx cards).
+</p><p>
+You may indicate the path to the library with the
+<span class="command"><strong>--with-glide=PATH</strong></span> configure option, if you intend to compile VLC.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572983"></a>mga</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+For GNU/Linux only
+</em></span></p><p>
+This module provides hardware acceleration for Matrox
+cards under GNU/Linux.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572430"></a>ggi</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572443"></a>caca</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+This is the Color ASCII Art Video Output. This video
+output uses the libcaca library to display video through Color ASCII art.
+It requires libcaca development headers (<span class="emphasis"><em>libcaca-dev</em></span> package under Debian GNU/Linux) to compile.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572467"></a>aa</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+This is the ASCII Art Video Output. This video 
+output uses the aalib library to display video through ASCII art. 
+It requires aalib headers (<span class="emphasis"><em>aalib1-dev</em></span> package
+ under Debian GNU/Linux) to compile.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572491"></a>svgalib</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+For GNU/Linux only
+</em></span></p><p>
+This is a video output for the SVGAlib library.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572511"></a>qte</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+For iPaq only
+</em></span></p><p>
+This is a video output for QT Embedded, an
+ iPaq-specific graphical library.
+.</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2572154"></a>
+Video filters modules
+</h2></div></div></div><p>
+These modules allow you to perform modifications on
+the rendered image (deinterlacing, hue/contrast/saturation adjusting, cropping and so on).
+To enable them use the following VLC command-line switch:
+--filter filter1,filter2,...
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572166"></a>adjust</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This filter allows you to alter image contrast, hue,
+saturation and brightness.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--contrast &lt;float&gt; </em></span>:
+set the image contrast, between 0 and 2. Defaults to 1
+</p></li><li><p><span class="emphasis"><em>--brightness &lt;float&gt; </em></span>:
+set the image brightness, between 0 and 2. Defaults to 1
+</p></li><li><p><span class="emphasis"><em>--hue &lt;integer&gt; </em></span>:
+Set the image hue, between 0 and 360. Defaults to 0
+</p></li><li><p><span class="emphasis"><em>--saturation &lt;float&gt; </em></span>:
+Set the image saturation, between 0 and 3. Defaults to 1
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572201"></a>deinterlace</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+ This filter deinterlaces video. It is useful with
+streams coming from a digital satellite channel or digital terrestial
+television channels
+.</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--deinterlace-mode {discard,blend,mean,bob,linear} </em></span>:
+deinterlacing mode (default: discard)
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572237"></a>crop</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This filter allows you to crop parts of the image.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--crop-geometry &lt;string&gt; </em></span>:
+set the geometry of the zone to crop. This is set
+as width x heigth + left offset + top offset (in pixels).
+</p></li><li><p><span class="emphasis"><em>--autocrop, --noautocrop </em></span>:
+automatic black border cropping (default disabled)
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573331"></a>transform</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This filter allows to rotate the video in several ways
+.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--transform-type {90,180,270,hflip,vflip} </em></span>:
+transformation type, one of '90', '180', '270', 'hflip' and 'vflip'.
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573365"></a>distort</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This filter adds a distortion effect to the video.
+Who said it was useless ? :-)
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--distort-mode {wave,ripple} </em></span>:
+distortion mode, one of "wave" and "ripple"
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573401"></a>invert</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This filter inverses colors.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573418"></a>motionblur</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This filter adds a "motion blur" effect to the image.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--blur-factor &lt;integer&gt; </em></span>:
+the degree of blurring from 1 to 127
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573453"></a>wall</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This filter allows you to have the video cut in
+pieces in several windows, which you can order as you wish. It can be
+used to generate image walls with several sources.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--wall-cols &lt;integer&gt; </em></span>:
+Select the number of vertical videowindows in which to split the video
+</p></li><li><p><span class="emphasis"><em>--wall-rows &lt;integer&gt; </em></span>:
+Select the number of horizontal videowindows in which to split the video
+</p></li><li><p><span class="emphasis"><em>--wall-active &lt;string&gt; </em></span>:
+comma separated list of active windows, defaults to all
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573511"></a>logo</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This filter allows you to insert a png logo inside the video, adjust its transparency with the mouse wheel and move it around using the mouse.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--logo-file &lt;string&gt; </em></span>:
+Logo filename (The file must be in PNG RGBA 8bits format).
+</p></li><li><p><span class="emphasis"><em>--logo-x &lt;integer&gt; </em></span>:
+X coordinate of the logo, You can move the logo by left-clicking on it.
+</p></li><li><p><span class="emphasis"><em>--logo-y &lt;integer&gt; </em></span>:
+Y coordinate of the logo, You can move the logo by left-clicking on it.
+</p></li><li><p><span class="emphasis"><em>--logo-transparency  &lt;integer&gt; </em></span>:
+Transparency of the logo (255-0). You can change it by middle-clicking and moving mouse left or right.
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573580"></a>clone</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This filter allows you to clone the image.
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--clone-count &lt;integer&gt; </em></span>:
+number of video windows in which to clone the video
+</p></li><li><p><span class="emphasis"><em>--clone-vout-list &lt;string&gt; </em></span>:
+specific vout modules that you want to activate
+</p></li></ul></div></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573250"></a>
+Audio outputs
+</h2></div></div></div><p>
+These modules allow you to choose the way the
+sound will be output to your audio system. VLC tries to guess the most appropriate audio output module for your system at runtime. However if you want to force a specific output module, use the following command line switch:
+--aout modulename
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573263"></a>coreaudio</h3></div></div></div><p><span class="emphasis"><em>
+default: enabled on Mac OS X
+</em></span></p><p><span class="emphasis"><em>
+For Mac OS X only
+</em></span></p><p>
+This audio output uses CoreAudio under Mac OS X
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--coreaudio-dev &lt;integer&gt; </em></span>:
+force a specific audio device
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573227"></a>directx</h3></div></div></div><p><span class="emphasis"><em>
+default: enabled on Windows
+</em></span></p><p><span class="emphasis"><em>
+For Windows only
+</em></span></p><p>
+This audio output uses directX under Windows
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573284"></a>oss</h3></div></div></div><p><span class="emphasis"><em>
+default: enabled on GNU/Linux
+</em></span></p><p><span class="emphasis"><em>
+For GNU/Linux and Unix only
+</em></span></p><p>
+This is the audio output for OSS (Open Sound System)
+output (<code class="filename">/dev/dsp</code>, for example, under Linux). It
+requires that your kernel was compiled with support for your sound
+card, or, if you use ALSA (Advanced Linux Sound System), the OSS emulation
+layer must be active.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--dspdev &lt;string&gt; </em></span>:
+set dsp OSS driver
+</p></li><li><p><span class="emphasis"><em>--oss-buggy, --no-oss-buggy </em></span>
+Some buggy OSS drivers just don't like when their internal buffers are completely filled (the sound gets heavily hashed). If you have one of these drivers, then you need to enable this option (default disabled)
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574229"></a>alsa</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+For GNU/Linux only
+</em></span></p><p>
+This is the sound output for ALSA (Advanced Linux Sound
+Architecture). It only works under Linux, and it requires that you
+installed the ALSA drivers and libraries.
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--alsadev &lt;string&gt; </em></span>:
+ALSA device name
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574269"></a>esd</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+For GNU/Linux &amp; Unix only
+</em></span></p><p>
+This sound output has ESD (Enlightened Sound Daemon)
+support (usually used with Gnome). You must have the daemon and its
+libraries installed.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574292"></a>arts</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+For GNU/Linux &amp; Unix only
+</em></span></p><p>
+This sound output has aRts (KDE's sound server)
+support. You must have the daemon and its libraries installed.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574315"></a>waveout</h3></div></div></div><p><span class="emphasis"><em>
+default: enabled under Windows
+</em></span></p><p><span class="emphasis"><em>
+For Windows only
+</em></span></p><p>
+This is the Wave output, which is used by the windows port.
+
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574332"></a>sdl</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This audio output uses SDL. Please refer to the 
+video output.
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573234"></a>
+Interface modules
+</h2></div></div></div><p>
+These modules allow you to choose the interface
+or interfaces you want to use (either graphical or control
+interfaces).
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573866"></a>dummy</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+Use this interface when you want
+<span class="emphasis"><em>no</em></span> interface! That is you just want to give a
+self-contained command-line string.</p><p>
+For example:
+
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc --intf dummy vcd://</code></strong>
+</pre><p>
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574662"></a>gestures</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This module allows you to control VLC via mouse
+gestures
+.</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--gestures-threshold </em></span>:
+The integer argument is the threshold of move
+required for a mouse gesture to be recorded
+</p></li><li><p><span class="emphasis"><em>--gestures-button {left,middle,right} </em></span>:
+The button to click before a gesture
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574706"></a>gnome</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+ For GNU/Linux only
+</em></span></p><p>
+This is the Gnome interface. It needs gnome libraries
+(<span class="emphasis"><em>libgnome32</em></span> package under Debian) and headers
+(<span class="emphasis"><em>libgnome-dev</em></span> package under Debian) if you wish to
+compile it. Warning: this interface is no longer maintained, and outdated
+.</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--gnome-tooltips, --no-gnome-tooltips </em></span>:
+Whether to show tooltips (default enabled)
+</p></li><li><p><span class="emphasis"><em>--gnome-toolbartext, --no-gnome-toolbartext </em></span>:
+Whether to show text on buttons (default enabled)
+</p></li><li><p><span class="emphasis"><em>--gnome-prefs-maxh </em></span>:
+Argument is an integer that gives the maximum
+	height for configuration windows
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574773"></a>gtk</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This is the GTK+ interface. It needs gtk libraries
+and headers files if you are compiling it. Note that it can also be used
+under Windows. Warning: this interface is no longer maintained, and outdated
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574793"></a>http</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This module allows you to remote control your VLC
+via a web browser. You can create custom web pages.
+.</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--http-host </em></span>:
+The argument, a string, gives the host address. 
+It must look like address[:port], where address can be an IP address 
+or a DNS name, and port is the port on which the HTTP interface
+will be available (default is 8080). Default address is localhost, 
+which will be ok for almost everybody
+</p></li><li><p><span class="emphasis"><em>--http-src </em></span>:
+Gives the path to the HTML pages to be served.
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574838"></a>joystick</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+ For GNU/Linux only
+</em></span></p><p>
+This module allows you to control VLC via a joystick
+with many options.
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574860"></a>kde</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+ For GNU/Linux only
+</em></span></p><p>
+This is the KDE interface module. You will need the libraries
+(<span class="emphasis"><em>kdelibs3</em></span> package on Debian) and headers
+(<span class="emphasis"><em>kde-devel</em></span> package under Debian) if you wish to
+compile it. Warning: this interface is no longer maintained, and outdated
+.</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--kde-uirc </em></span>:
+Path to the <code class="filename">ui.rc</code> file
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574916"></a>lirc</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+ For GNU/Linux only
+</em></span></p><p>
+This interface module allows you to control VLC
+through a remote. A lircrc example is provided to help you configure it
+to your remote (see <code class="filename">doc/lirc/example.lircrc</code>)
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574945"></a>ncurses</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+ For GNU/Linux only
+</em></span></p><p>
+This is a text interface, using ncurses library.
+You will need ncurses headers if you want to compile it
+(<span class="emphasis"><em>libncurses5-dev</em></span> package on Debian)
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574972"></a>opie</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+This is an interface plugin for the Qt Embedded
+library (iPaq graphical library)
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574989"></a>qt</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+This is the QT interface module. You will need the libraries
+(<span class="emphasis"><em>libqt2</em></span> package under Debian) and headers
+(<span class="emphasis"><em>libqt-dev</em></span> package under Debian) if you wish to
+compile it. Warning: this interface is no longer maintained, and outdated
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575016"></a>rc</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  Always enabled
+ </em></span>
+</p><p>
+This is the Remote Control interface module. It allows you
+to control VLC via commands, such as <span class="emphasis"><em>play</em></span>,
+<span class="emphasis"><em>stop</em></span>, etc... or via a script. This interface is
+text-based, so you should use it when you are in console mode
+.</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--rc-show-pos, --no-rc-show-pos </em></span> :
+Indicates whether the position in the stream
+must be shown (outputs one timer line every seconds) (default
+disabled)
+</p></li><li><p><span class="emphasis"><em>--fake-tty, --no-fake-tty </em></span>:
+Enables or disables TTY virtual terminal
+emulation (default disabled)
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575070"></a>skins</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+This skinnable interface module works under Win32
+and X11. You can create your own skins very easily with XML files
+.</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--skin_last</em></span> :
+    This option allows you to specify the last used skin
+     (the argument is a string).
+  </p></li><li><p><span class="emphasis"><em>--skin_config</em></span> :
+    This allows you to set the skin configuration
+     (the argument is a string).
+  </p></li><li><p><span class="emphasis"><em>--show_in_tray, --noshow_in_tray</em></span> :
+    Indicates whether the application must  
+     be shown in traybar (default disabled).
+  </p></li><li><p><span class="emphasis"><em>
+	--show_in_taskbar, --noshow_in_taskbar</em></span> :
+    Indicates whether the application must  
+     be shown in the taskbar (default enabled).
+  </p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575133"></a>wxwindows</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+The wxWindows interface is a portable interface that
+is currently working under GNU/Linux and Windows. It is now the most up-to-date
+graphical interface available under both Windows and GNU/Linux
+.</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2575741"></a>
+OS support modules
+</h2></div></div></div><p>
+The following modules add support for different OSs.
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575750"></a>macosx</h3></div></div></div><p>
+This is the MacOS X support module, including a native
+interface.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574613"></a>qnx</h3></div></div></div><p>
+This is the QNX RTOS support module.
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2574622"></a>
+Miscellaneous
+</h2></div></div></div><p>
+This section describes a few more modules that don't
+belong to any of the categories described before.
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2574632"></a>sout</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: enabled
+ </em></span>
+</p><p>
+Stream Output is a new feature of VLC that allows
+it to stream an MPEG-1, MPEG-2 or MPEG-4/DivX file or a DVD.
+</p><p>
+For more details, please have a look at the <a class="xref" href="ch04.html" title="Chapter 4.  The command line interface">
+The command line interface</a> section.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575785"></a>test-suite</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+This builds a special VLC, for testing purposes only.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575803"></a>mozilla</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p>
+This is not really a module. When enabled, a VLC-based
+Mozilla plugin is built.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575821"></a>xosd</h3></div></div></div><p>
+ <span class="emphasis"><em>
+  default: disabled
+ </em></span>
+</p><p><span class="emphasis"><em>
+For Unix only
+</em></span></p><p>
+
+This module outputs the current stream to an "OSD" (On Screen Display).
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2575845"></a>
+Compilation Options
+</h2></div></div></div><p>
+There are a few options that you can set when
+running the configure script, which are not related to modules.
+</p><p>
+You can have a look at these options by typing:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./configure --help</code></strong>
+</pre><p>
+You can for example control all the installation
+directories, the system for which you want to build VLC for (if not
+guessed correctly),...
+</p><p>
+You can also choose to enable or disable some
+optimizations.
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575885"></a>--disable-plugins</h3></div></div></div><p>
+If you select this option, no plugins will be
+enabled. This is definitely not recommended, as you would get a very
+poor VLC, and should only be used for testing purposes.
+</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. 
+Introduction
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. 
+Installing VLC
+</td></tr></table></div></body></html>

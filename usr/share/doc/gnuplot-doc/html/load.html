@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>load - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="iteration.html#iteration" title="iteration">
+<link rel="next" href="lower.html#lower" title="lower">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="load"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="lower.html#lower">lower</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="iteration.html#iteration">iteration</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.11 load</h3>
+
+<!-- ?commands load -->
+<p><a name="index-load-308"></a><a name="index-load-309"></a>
+
+   <p>The `load` command executes each line of the specified input file as if it
+had been typed in interactively.  Files created by the <a href="save.html#save">save</a> command can
+later be `load`ed.  Any text file containing valid commands can be created
+and then executed by the `load` command.  Files being `load`ed may themselves
+contain `load` or <a href="call.html#call">call</a> commands.  See `comments` for information about
+comments in commands.  To `load` with arguments, see <a href="call.html#call">call</a>.
+
+   <p>Syntax:
+<pre class="example">           load "&lt;input-file&gt;"
+     
+</pre>
+   <p>The name of the input file must be enclosed in quotes.
+
+   <p>The special filename "-" may be used to `load` commands from standard input. 
+This allows a `gnuplot` command file to accept some commands from standard
+input.  Please see help for `batch/interactive` for more details.
+
+   <p>On some systems which support a popen function (Unix), the load file can be
+read from a pipe by starting the file name with a '&lt;'.
+
+   <p>Examples:
+<pre class="example">           load 'work.gnu'
+           load "func.dat"
+           load "&lt; loadfile_generator.sh"
+     
+</pre>
+   <p>The `load` command is performed implicitly on any file names given as
+arguments to `gnuplot`.  These are loaded in the order specified, and
+then `gnuplot` exits.
+
+   </body></html>
+

@@ -1,0 +1,474 @@
+<html lang="en">
+<head>
+<title>x11 - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="wxt.html#wxt" title="wxt">
+<link rel="next" href="x11_005f.html#x11_005f" title="x11_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="x11"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="x11_005f.html#x11_005f">x11_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="wxt.html#wxt">wxt</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.75 x11</h5>
+
+<!-- ?commands set terminal x11 -->
+<!-- ?set terminal x11 -->
+<!-- ?set term x11 -->
+<!-- ?terminal x11 -->
+<!-- ?term x11 -->
+<p><a name="index-x11-924"></a>
+<a name="index-X11-925"></a>
+`gnuplot` provides the `x11` terminal type for use with X servers.  This
+terminal type is set automatically at startup if the `DISPLAY` environment
+variable is set, if the `TERM` environment variable is set to `xterm`, or
+if the `-display` command line option is used.
+
+   <p>Syntax:
+<pre class="example">        set terminal x11 {&lt;n&gt; | window "&lt;string&gt;"}
+                         {title "&lt;string&gt;"}
+                         {{no}enhanced} {font &lt;fontspec&gt;}
+                         {linewidth LW} {solid|dashed}
+                         {{no}persist} {{no}raise} {{no}ctrlq}
+                         {close}
+                         {size XX,YY} {position XX,YY}
+        set terminal x11 {reset}
+     
+</pre>
+   <p>Multiple plot windows are supported: `set terminal x11 &lt;n&gt;` directs the
+output to plot window number n.  If n is not 0, the terminal number will be
+appended to the window title (unless a title has been supplied manually)
+and the icon will be labeled `Gnuplot &lt;n&gt;`.  The active window may be
+distinguished by a change in cursor (from default to crosshair).
+
+   <p>The `x11` terminal can connect to X windows previously created by an outside
+application via the option `window` followed by a string containing the
+X ID for the window in hexadecimal format.  Gnuplot uses that external X
+window as a container since X does not allow for multiple clients selecting
+the ButtonPress event.  In this way, gnuplot's mouse features work within
+the contained plot window.
+
+<pre class="example">        set term x11 window "220001e"
+     
+</pre>
+   <p>The x11 terminal supports enhanced text mode (see `enhanced`), subject
+to the available fonts. In order for font size commands embedded in text
+to have any effect, the default x11 font must be scalable. Thus the first
+example below will work as expected, but the second will not.
+
+<pre class="example">        set term x11 enhanced font "arial,15"
+        set title '{/=20 Big} Medium {/=5 Small}'
+     
+</pre>
+   <pre class="example">        set term x11 enhanced font "terminal-14"
+        set title '{/=20 Big} Medium {/=5 Small}'
+     
+</pre>
+   <p>Plot windows remain open even when the `gnuplot` driver is changed to a
+different device.  A plot window can be closed by pressing the letter q
+while that window has input focus, or by choosing `close` from a window
+manager menu.  All plot windows can be closed by specifying <a href="reset.html#reset">reset</a>, which
+actually terminates the subprocess which maintains the windows (unless
+`-persist` was specified).  The `close` command can be used to close
+individual plot windows by number.  However, after a <a href="reset.html#reset">reset</a>, those plot
+windows left due to persist cannot be closed with the command `close`. 
+A `close` without a number closes the current active plot window.
+
+   <p>The gnuplot outboard driver, gnuplot_x11, is searched in a default place
+chosen when the program is compiled.  You can override that by defining
+the environment variable GNUPLOT_DRIVER_DIR to point to a different
+location.
+
+   <p>Plot windows will automatically be closed at the end of the session
+unless the `-persist` option was given.
+
+   <p>The options `persist` and <a href="raise.html#raise">raise</a> are unset by default, which means that
+the defaults (persist == no and raise == yes) or the command line options
+-persist / -raise or the Xresources are taken.  If [no]persist or
+[no]raise are specified, they will override command line options and
+Xresources.  Setting one of these options takes place immediately, so
+the behaviour of an already running driver can be modified.  If the window
+does not get raised, see discussion in <a href="raise.html#raise">raise</a>.
+
+   <p>The option `title "&lt;title name&gt;"` will supply the title name of the window
+for the current plot window or plot window &lt;n&gt; if a number is given. 
+Where (or if) this title is shown depends on your X window manager.
+
+   <p>The size option can be used to set the size of the plot window.  The
+size option will only apply to newly created windows.
+
+   <p>The position option can be used to set the position of the plot window.  The
+position option will only apply to newly created windows.
+
+   <p>The size or aspect ratio of a plot may be changed by resizing the `gnuplot`
+window.
+
+   <p>Linewidths and pointsizes may be changed from within `gnuplot` with
+`set linestyle`.
+
+   <p>For terminal type `x11`, `gnuplot` accepts (when initialized) the standard
+X Toolkit options and resources such as geometry, font, and name from the
+command line arguments or a configuration file.  See the X(1) man page
+(or its equivalent) for a description of such options.
+
+   <p><a name="index-X-resources-926"></a>
+A number of other `gnuplot` options are available for the `x11` terminal. 
+These may be specified either as command-line options when `gnuplot` is
+invoked or as resources in the configuration file ".Xdefaults".  They are
+set upon initialization and cannot be altered during a `gnuplot` session. 
+(except `persist` and <a href="raise.html#raise">raise</a>)
+
+<p class="noindent">&mdash; X11_FONTS &mdash;
+
+<!-- ?commands set terminal x11 x11_fonts -->
+<!-- ?set terminal x11 x11_fonts -->
+<!-- ?set term x11 x11_fonts -->
+<!-- ?x11 x11_fonts -->
+   <p><a name="index-x11_005ffonts-927"></a>
+<a name="index-fonts-928"></a>
+Upon initial startup, the default font is taken from the X11 resources
+as set in the system or user .Xdefaults file or on the command line.
+
+   <p>Example:
+<pre class="example">           gnuplot*font: lucidasans-bold-12
+</pre>
+   <p>A new default font may be specified to the x11 driver from inside
+gnuplot using
+<pre class="example">          `set term x11 font "&lt;fontspec&gt;"`
+</pre>
+   <p>The driver first queries the X-server for a font of the exact name given. 
+If this query fails, then it tries to interpret &lt;fontspec&gt; as
+"&lt;font&gt;,&lt;size&gt;,&lt;slant&gt;,&lt;weight&gt;" and to construct a full X11 font name
+of the form
+<pre class="example">           -*-&lt;font&gt;-&lt;weight&gt;-&lt;s&gt;-*-*-&lt;size&gt;-*-*-*-*-*-&lt;encoding&gt;
+     
+</pre>
+   <pre class="example">      &lt;font&gt; is the base name of the font (e.g. Times or Symbol)
+      &lt;size&gt; is the point size (defaults to 12 if not specified)
+      &lt;s&gt; is `i` if &lt;slant&gt;=="italic" `o` if &lt;slant&gt;=="oblique" `r` otherwise
+      &lt;weight&gt; is `medium` or `bold` if explicitly requested, otherwise `*`
+      &lt;encoding&gt; is set based on the current character set (see <a href="encoding.html#encoding">encoding</a>).
+</pre>
+   <p>So `set term x11 font "arial,15,italic"` will be translated to
+-*-arial-*-i-*-*-15-*-*-*-*-*-iso8859-1 (assuming default encoding). 
+The &lt;size&gt;, &lt;slant&gt;, and &lt;weight&gt; specifications are all optional. 
+If you do not specify &lt;slant&gt; or &lt;weight&gt; then you will get whatever font
+variant the font server offers first. 
+You may set a default enconding via the corresponding X11 resource. E.g.
+<pre class="example">           gnuplot*encoding: iso8859-15
+</pre>
+   <p>The driver also recognizes some common PostScript font names and
+replaces them with possible X11 or TrueType equivalents. 
+This same sequence is used to process font requests from `set label`.
+
+   <p>If your gnuplot was built with configuration option &ndash;enable-x11-mbfonts,
+you can specify multi-byte fonts by using the prefix "mbfont:" on the font
+name. An additional font may be given, separated by a semicolon. 
+Since multi-byte font encodings are interpreted according to the locale
+setting, you must make sure that the environmental variable LC_CTYPE is set
+to some appropriate locale value such as ja_JP.eucJP, ko_KR.EUC, or zh_CN.EUC.
+
+   <p>Example:
+<pre class="example">           set term x11 font 'mbfont:kana14;k14'
+                 # 'kana14' and 'k14' are Japanese X11 font aliases, and ';'
+                 # is the separator of font names.
+           set term x11 font 'mbfont:fixed,16,r,medium'
+                 # &lt;font&gt;,&lt;size&gt;,&lt;slant&gt;,&lt;weight&gt; form is also usable.
+           set title '(mb strings)' font 'mbfont:*-fixed-medium-r-normal--14-*'
+     
+</pre>
+   <p>The same syntax applies to the default font in Xresources settings,
+for example,
+<pre class="example">           gnuplot*font: \\
+               mbfont:-misc-fixed-medium-r-normal--14-*-*-*-c-*-jisx0208.1983-0
+     
+</pre>
+   <p>If gnuplot is built with &ndash;enable-x11-mbfonts, you can use two special
+PostScript font names 'Ryumin-Light-*' and 'GothicBBB-Medium-*' (standard
+Japanese PS fonts) without the prefix "mbfont:".
+
+<p class="noindent">&mdash; COMMAND-LINE_OPTIONS &mdash;
+
+<!-- ?commands set terminal x11 command-line-options -->
+<!-- ?set terminal x11 command-line-options -->
+<!-- ?set term x11 command-line-options -->
+<!-- ?x11 command-line-options -->
+   <p><a name="index-command_002dline_002doptions-929"></a>
+In addition to the X Toolkit options, the following options may be specified
+on the command line when starting `gnuplot` or as resources in your
+".Xdefaults" file (note that <a href="raise.html#raise">raise</a> and `persist` can be overridden
+later by `set term x11 [no]raise [no]persist)`:
+
+<pre class="example">      `-mono`     forces monochrome rendering on color displays.
+      `-gray`     requests grayscale rendering on grayscale or color displays.
+                  (Grayscale displays receive monochrome rendering by default.)
+      `-clear`    requests that the window be cleared momentarily before a
+                  new plot is displayed.
+      `-tvtwm`    requests that geometry specifications for position of the
+                  window be made relative to the currently displayed portion
+                  of the virtual root.
+      `-raise`    raises plot window after each plot
+      `-noraise`  does not raise plot window after each plot
+      `-noevents` does not process mouse and key events
+      `-ctrlq   ` closes window on ctrl-q rather than q
+      `-persist`  plot windows survive after main gnuplot program exits
+     
+</pre>
+   <p><a name="index-X-resources-930"></a>
+The options are shown above in their command-line syntax.  When entered as
+resources in ".Xdefaults", they require a different syntax.
+
+   <p>Example:
+<pre class="example">           gnuplot*gray:  on
+           gnuplot*ctrlq: on
+     
+</pre>
+   <p>`gnuplot` also provides a command line option (`-pointsize &lt;v&gt;`) and a
+resource, `gnuplot*pointsize: &lt;v&gt;`, to control the size of points plotted
+with the `points` plotting style.  The value `v` is a real number (greater
+than 0 and less than or equal to ten) used as a scaling factor for point
+sizes.  For example, `-pointsize 2` uses points twice the default size, and
+`-pointsize 0.5` uses points half the normal size.
+
+   <p>The `-noevents` switch disables all mouse and key event processing (except
+for `q` and `&lt;space&gt;` for closing the window). This is useful for programs
+which use the x11 driver independent of the gnuplot main program.
+
+   <p>The `-ctrlq` switch changes the hot-key that closes a plot window from `q`
+to `&lt;ctrl&gt;q`. This is useful is you are using the keystroke-capture feature
+`pause mouse keystroke`, since it allows the character `q` to be captured
+just as all other alphanumeric characters. The `-ctrlq` switch similarly
+replaces the &lt;space&gt; hot-key with &lt;ctrl&gt;&lt;space&gt; for the same reason.
+
+<p class="noindent">&mdash; MONOCHROME_OPTIONS &mdash;
+
+<!-- ?commands set terminal x11 monochrome_options -->
+<!-- ?set terminal x11 monochrome_options -->
+<!-- ?set term x11 monochrome_options -->
+<!-- ?x11 monochrome_options -->
+   <p><a name="index-monochrome_005foptions-931"></a>
+<a name="index-X-resources-932"></a>
+For monochrome displays, `gnuplot` does not honor foreground or background
+colors.  The default is black-on-white.  `-rv` or `gnuplot*reverseVideo: on`
+requests white-on-black.
+
+<p class="noindent">&mdash; COLOR_RESOURCES &mdash;
+
+<!-- ?commands set terminal x11 color_resources -->
+<!-- ?set terminal x11 color_resources -->
+<!-- ?set term x11 color_resources -->
+<!-- ?x11 color_resources -->
+   <p><a name="index-color_005fresources-933"></a>
+<a name="index-X-resources-934"></a>
+The X11 terminal honors the following resources (shown here with their
+default values) or the greyscale resources.  The values may be color names
+as listed in the X11 rgb.txt file on your system, hexadecimal RGB color
+specifications (see X11 documentation), or a color name followed by a comma
+and an `intensity` value from 0 to 1.  For example, `blue, 0.5` means a half
+intensity blue.
+
+<pre class="example">      gnuplot*background:  white
+      gnuplot*textColor:   black
+      gnuplot*borderColor: black
+      gnuplot*axisColor:   black
+      gnuplot*line1Color:  red
+      gnuplot*line2Color:  green
+      gnuplot*line3Color:  blue
+      gnuplot*line4Color:  magenta
+      gnuplot*line5Color:  cyan
+      gnuplot*line6Color:  sienna
+      gnuplot*line7Color:  orange
+      gnuplot*line8Color:  coral
+     
+</pre>
+   <p>The command-line syntax for these is simple only for background,
+which maps directly to the usual X11 toolkit option "-bg".  All
+others can only be set on the command line by use of the generic
+"-xrm" resource override option
+
+   <p>Examples:
+
+<pre class="example">           gnuplot -background coral
+</pre>
+   <p>to change the background color.
+
+<pre class="example">           gnuplot -xrm 'gnuplot*line1Color:blue'
+</pre>
+   <p>to override the first linetype color.
+
+<p class="noindent">&mdash; GRAYSCALE_RESOURCES &mdash;
+
+<!-- ?commands set terminal x11 grayscale_resources -->
+<!-- ?set terminal x11 grayscale_resources -->
+<!-- ?set term x11 grayscale_resources -->
+<!-- ?x11 grayscale_resources -->
+   <p><a name="index-grayscale_005fresources-935"></a>
+<a name="index-X-resources-936"></a>
+When `-gray` is selected, `gnuplot` honors the following resources for
+grayscale or color displays (shown here with their default values).  Note
+that the default background is black.
+
+<pre class="example">      gnuplot*background: black
+      gnuplot*textGray:   white
+      gnuplot*borderGray: gray50
+      gnuplot*axisGray:   gray50
+      gnuplot*line1Gray:  gray100
+      gnuplot*line2Gray:  gray60
+      gnuplot*line3Gray:  gray80
+      gnuplot*line4Gray:  gray40
+      gnuplot*line5Gray:  gray90
+      gnuplot*line6Gray:  gray50
+      gnuplot*line7Gray:  gray70
+      gnuplot*line8Gray:  gray30
+     
+</pre>
+   <p class="noindent">&mdash; LINE_RESOURCES &mdash;
+
+<!-- ?commands set terminal x11 line_resources -->
+<!-- ?set terminal x11 line_resources -->
+<!-- ?set term x11 line_resources -->
+<!-- ?x11 line_resources -->
+   <p><a name="index-line_005fresources-937"></a>
+<a name="index-X-resources-938"></a>
+`gnuplot` honors the following resources for setting the width (in pixels) of
+plot lines (shown here with their default values.)  0 or 1 means a minimal
+width line of 1 pixel width.  A value of 2 or 3 may improve the appearance of
+some plots.
+
+<pre class="example">      gnuplot*borderWidth: 2
+      gnuplot*axisWidth:   0
+      gnuplot*line1Width:  0
+      gnuplot*line2Width:  0
+      gnuplot*line3Width:  0
+      gnuplot*line4Width:  0
+      gnuplot*line5Width:  0
+      gnuplot*line6Width:  0
+      gnuplot*line7Width:  0
+      gnuplot*line8Width:  0
+     
+</pre>
+   <p>`gnuplot` honors the following resources for setting the dash style used for
+plotting lines.  0 means a solid line.  A two-digit number `jk` (`j` and `k`
+are &gt;= 1 and &lt;= 9) means a dashed line with a repeated pattern of `j` pixels
+on followed by `k` pixels off.  For example, '16' is a dotted line with one
+pixel on followed by six pixels off.  More elaborate on/off patterns can be
+specified with a four-digit value.  For example, '4441' is four on, four off,
+four on, one off.  The default values shown below are for monochrome displays
+or monochrome rendering on color or grayscale displays. 
+Color displays default to dashed:off
+
+<pre class="example">      gnuplot*dashed:       off
+      gnuplot*borderDashes:   0
+      gnuplot*axisDashes:    16
+      gnuplot*line1Dashes:    0
+      gnuplot*line2Dashes:   42
+      gnuplot*line3Dashes:   13
+      gnuplot*line4Dashes:   44
+      gnuplot*line5Dashes:   15
+      gnuplot*line6Dashes: 4441
+      gnuplot*line7Dashes:   42
+      gnuplot*line8Dashes:   13
+     
+</pre>
+   <p>, "
+
+<p class="noindent">&mdash; X11 PM3D_RESOURCES &mdash;
+
+<!-- ?commands set terminal x11 pm3d_resources -->
+<!-- ?set terminal x11 pm3d_resources -->
+<!-- ?set term x11 pm3d_resources -->
+<!-- ?x11 pm3d_resources -->
+   <p><a name="index-pm3d_005fresources-939"></a>
+<!-- ?x11 pm3d -->
+<a name="index-X-resources-940"></a>
+Choosing the appropriate visual class and number of colors is a crucial
+point in X11 applications and a bit awkward, since X11 supports six visual
+types in different depths.
+
+   <p>By default `gnuplot` uses the default visual of the screen. The number of
+colors which can be allocated depends on the visual class chosen. On a
+visual class with a depth &gt; 12bit, gnuplot starts with a maximal number
+of 0x200 colors.  On a visual class with a depth &gt; 8bit (but &lt;= 12 bit)
+the maximal number of colors is 0x100, on &lt;= 8bit displays the maximum
+number of colors is 240 (16 are left for line colors).
+
+   <p>Gnuplot first starts to allocate the maximal number of colors as stated
+above.  If this fails, the number of colors is reduced by the factor 2
+until gnuplot gets all colors which are requested. If dividing `maxcolors`
+by 2 repeatedly results in a number which is smaller than `mincolors`
+`gnuplot` tries to install a private colormap. In this case the window
+manager is responsible for swapping colormaps when the pointer is moved
+in and out the x11 driver's window.
+
+   <p>The default for `mincolors` is maxcolors / (num_colormaps &gt; 1 ? 2 : 8),
+where num_colormaps is the number of colormaps which are currently used
+by gnuplot (usually 1, if only one x11 window is open).
+
+   <p>Some systems support multiple (different) visual classes together on one
+screen. On these systems it might be necessary to force gnuplot to use a
+specific visual class, e.g. the default visual might be 8bit PseudoColor
+but the screen would also support 24bit TrueColor which would be the
+preferred choice.
+
+   <p>The information about an Xserver's capabilities can be obtained with the
+program `xdpyinfo`.  For the visual names below you can choose one of
+StaticGray, GrayScale, StaticColor, PseudoColor, TrueColor, DirectColor. 
+If an Xserver supports a requested visual type at different depths,
+`gnuplot` chooses the visual class with the highest depth (deepest). 
+If the requested visual class matches the default visual and multiple
+classes of this type are supported, the default visual is preferred.
+
+   <p>Example: on an 8bit PseudoColor visual you can force a private color map
+by specifying `gnuplot*maxcolors: 240` and `gnuplot*mincolors: 240`.
+
+<pre class="example">      gnuplot*maxcolors:  &lt;integer&gt;
+      gnuplot*mincolors:  &lt;integer&gt;
+      gnuplot*visual:     &lt;visual name&gt;
+     
+</pre>
+   <p>, "
+
+<p class="noindent">&mdash; X11 OTHER_RESOURCES &mdash;
+
+<!-- ?commands set terminal x11 other_resources -->
+<!-- ?set terminal x11 other_resources -->
+<!-- ?set term x11 other_resources -->
+<!-- ?x11 other_resources -->
+   <p><a name="index-X-resources-941"></a>
+By default the contents of the current plot window are exported to the X11
+clipboard in response to X events in the window. Setting the resource
+'gnuplot*exportselection' to 'off' or 'false' will disable this.
+
+   <p>By default text rotation is done using a method that is fast, but can
+corrupt nearby colors depending on the background.  If this is a problem,
+you can set the resource 'gnuplot.fastrotate' to 'off'
+
+<pre class="example">      gnuplot*exportselection:  off
+      gnuplot*fastrotate:  on
+      gnuplot*ctrlq:  off
+     
+</pre>
+   </body></html>
+

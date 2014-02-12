@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>binary_matrix - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="data_002dfile.html#data_002dfile" title="data-file">
+<link rel="prev" href="data_002dfile.html#data_002dfile" title="data-file">
+<link rel="next" href="example_005fdatafile_005f.html#example_005fdatafile_005f" title="example_datafile_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="binary_matrix"></a>
+<a name="binary_005fmatrix"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="example_005fdatafile_005f.html#example_005fdatafile_005f">example_datafile_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="data_002dfile.html#data_002dfile">data-file</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="data_002dfile.html#data_002dfile">data-file</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.26.1.1 binary matrix</h5>
+
+<!-- ?commands plot datafile binary matrix -->
+<!-- ?commands splot datafile binary matrix -->
+<!-- ?plot datafile matrix binary -->
+<!-- ?splot datafile matrix binary -->
+<!-- ?plot binary matrix -->
+<!-- ?splot binary matrix -->
+<!-- ?plot matrix binary -->
+<!-- ?splot matrix binary -->
+<!-- ?matrix binary -->
+<!-- ?binary matrix -->
+<p><a name="index-gpbin-702"></a>
+Gnuplot can read matrix binary files by use of the option `binary` appearing
+without keyword qualifications unique to general binary, i.e., `array`,
+`record`, `format`, or `filetype`.  Other general binary keywords for
+translation should also apply to matrix binary.  (See `binary general` for
+more details.)
+
+   <p>In previous versions, `gnuplot` dynamically detected binary data files.  It
+is now necessary to specify the keyword `binary` directly after the filename.
+
+   <p>Single precision floats are stored in a binary file as follows:
+
+<pre class="example">           &lt;N+1&gt;  &lt;y0&gt;   &lt;y1&gt;   &lt;y2&gt;  ...  &lt;yN&gt;
+            &lt;x0&gt; &lt;z0,0&gt; &lt;z0,1&gt; &lt;z0,2&gt; ... &lt;z0,N&gt;
+            &lt;x1&gt; &lt;z1,0&gt; &lt;z1,1&gt; &lt;z1,2&gt; ... &lt;z1,N&gt;
+             :      :      :      :   ...    :
+     
+</pre>
+   <p>which are converted into triplets:
+<pre class="example">           &lt;x0&gt; &lt;y0&gt; &lt;z0,0&gt;
+           &lt;x0&gt; &lt;y1&gt; &lt;z0,1&gt;
+           &lt;x0&gt; &lt;y2&gt; &lt;z0,2&gt;
+            :    :     :
+           &lt;x0&gt; &lt;yN&gt; &lt;z0,N&gt;
+     
+</pre>
+   <pre class="example">           &lt;x1&gt; &lt;y0&gt; &lt;z1,0&gt;
+           &lt;x1&gt; &lt;y1&gt; &lt;z1,1&gt;
+            :    :     :
+     
+</pre>
+   <p>These triplets are then converted into `gnuplot` iso-curves and then
+`gnuplot` proceeds in the usual manner to do the rest of the plotting.
+
+   <p>A collection of matrix and vector manipulation routines (in C) is provided
+in `binary.c`.  The routine to write binary data is
+
+<pre class="example">           int fwrite_matrix(file,m,nrl,nrl,ncl,nch,row_title,column_title)
+     
+</pre>
+   <p>An example of using these routines is provided in the file `bf_test.c`, which
+generates binary files for the demo file `demo/binary.dem`.
+
+   <p>The <a href="index.html#index">index</a> keyword is not supported, since the file format allows only one
+surface per file.  The <a href="every.html#every">every</a> and <a href="using.html#using">using</a> filters are supported.  <a href="using.html#using">using</a>
+operates as if the data were read in the above triplet form.
+
+   <p>See also `binary general` and
+
+   <p><a href="http://www.gnuplot.info/demo/binary.html">Binary File Splot Demo.</a>
+
+   </body></html>
+

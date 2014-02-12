@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+To build, you need to have Maven 2 installed.
+
+To compile, run:
+
+    mvn compile
+
+To run tests, run:
+
+    mvn test
+
+To run one particular test, e.g. TestSomeTest, run:
+
+    mvn test -Dtest=TestSomeTest
+
+To build the jars, run:
+
+    mvn package
+
+To create and upload a release, run:
+
+    mvn deploy
+
+To build the site and upload it, run:
+
+    mvn site:deploy
+
+To perform a complete release, run:
+
+    mvn clean compile package site assembly:assembly deploy site:deploy
+
+To actually upload the artifact to sourceforge, it must be manually ftp'd:
+
+    lftp ftp://upload.sourceforge.net/incoming/ -e "put `ls target/jline-*.zip`"
+
+To make a bundle and request that ibilio upload it, do:
+
+    mvn source:jar javadoc:jar repository:bundle-create
+
+    scp target/jline-*-bundle.jar shell.sourceforge.net:/home/groups/j/jl/jline/htdocs
+
+    Make a request like at http://jira.codehaus.org/browse/MAVENUPLOAD-1003
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0     http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>jline</groupId>
+	<artifactId>jline</artifactId>
+	<version>debian</version>
+	<packaging>jar</packaging>
+	<properties>
+		<debian.junit.junit.originalVersion>3.8.1</debian.junit.junit.originalVersion>
+		<debian.originalVersion>1.0</debian.originalVersion>
+		<debian.package>libjline-java</debian.package>
+	</properties>
+	
+	<name>JLine</name>
+	<description>JLine is a java library for reading and editing user input in console applications. It features tab-completion, command history, password masking, customizable keybindings, and pass-through handlers to use to chain to other console applications.</description>
+	<url>http://jline.sourceforge.net</url>
+	<issueManagement>
+		<system>sourceforge</system>
+		<url>http://sourceforge.net/tracker/?group_id=64033&amp;atid=506056</url>
+	</issueManagement>
+	<inceptionYear>2002</inceptionYear>
+	<mailingLists>
+		<mailingList>
+			<name>JLine users</name>
+			<subscribe>https://lists.sourceforge.net/lists/listinfo/jline-users</subscribe>
+			<post>jline-users@lists.sourceforge.net</post>
+			<archive>http://sourceforge.net/mailarchive/forum.php?forum=jline-users</archive>
+		</mailingList>
+	</mailingLists>
+	<developers>
+		<developer>
+			<id>mprudhom</id>
+			<name>Marc Prud'hommeaux</name>
+			<email>mwp1@cornell.edu</email>
+		</developer>
+		<developer>
+			<id>headius</id>
+			<name>Charles Oliver Nutter</name>
+			<email>headius@headius.com</email>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>BSD</name>
+			<url>LICENSE.txt</url>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:git://github.com/jline/jline.git</connection>
+		<developerConnection>scm:git://github.com/jline/jline.git</developerConnection>
+		<url>https://github.com/jline/jline</url>
+	</scm>
+	<dependencies>
+	</dependencies>
+</project>

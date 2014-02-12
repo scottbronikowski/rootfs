@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 11.  Diffusion sur IPv6</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DivX" /><link rel="start" href="index.html" title="VideoLAN Streaming Howto" /><link rel="up" href="index.html" title="VideoLAN Streaming Howto" /><link rel="prev" href="ch10.html" title="Chapter 10.  Diffuser depuis une carte d'encodage ou d'autres périphériques d'acquisition" /><link rel="next" href="apa.html" title="Appendix A. GNU General Public License" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 11. 
+Diffusion sur IPv6
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="ipv6"></a>Chapter 11. 
+Diffusion sur IPv6
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch11.html#id2582115">
+Diffusion sur IPv6
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2582115"></a>
+Diffusion sur IPv6
+</h2></div></div></div><p>Ce chapitre couvre les spécificités de la diffusion sur IPv6. Vous
+devriez quand même lire les chapitres précédents si vous n'êtes pas à l'aise avec
+la diffusion en général.
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2582129"></a>
+Prérequis
+</h3></div></div></div><p> Votre système d'exploitation doit évidemment savoir gérer l'IPv6.
+C'est le cas, entre autres, de Windows XP/2003, Linux 2.6, Mac OS X (à
+partir de la version 10.2). Windows 2000 et Linux 2.4 sont aussi supportés,
+mais leur pile IPv6 n'est pas aussi bonne : aussi nous conseillons de
+les mettre à jour si vous le pouvez. L'IPv6 doit être correctement
+configuré et fonctionner sur votre ordinateur ainsi que sur le réseau.
+</p><p>Sous Linux, le module du noyau <span class="emphasis"><em>ipv6</em></span> doit être
+chargé (ou compilé en dur). Sous Windows, le support de l'IPv6 peut être
+installé en exécutant "ipv6 install" à partir de la ligne de commandes,
+ou par l'intermédiaire du paneau de configuration du réseau.
+</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Sous Windows 2000, vous devez ajouter à la main une route de multicast
+IPv6 par défaut, grâce à la commande suivante :
+</p><pre class="screen">
+<code class="prompt"># </code><strong class="userinput"><code>ipv6 rtu ff::/8 4</code></strong>
+</pre><p>
+où le dernier nombre (<span class="emphasis"><em>4</em></span> dans cet exemple) est le
+numéro de votre vraie interface IPv6. Pour avoir la liste de vos
+interfaces IPv6, exécutez la commande <span class="command"><strong>ipv6 if</strong></span>.
+</p></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+Sous Windows XP SP1, vous pouvez rencontrer des problèmes avec un
+firewall IPv6 caché. Pour résoudre le problème, allez dans la liste
+des services Windows et arrêtez le service de pare-feu IPv6.
+Vous devriez envisager d'installer le Service Pack 2 qui fournit un
+pare-feu intégré IPv4/IPv6, configurable à l'aide de l'interface
+graphique.
+</p></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+Si vous utilisez VMWare sous Linux, vous devrez l'arrêter et décharger
+les modules noyau de VMWare, car nous avons constaté qu'ils empêchaient la
+diffusion IPv6 !
+</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2582837"></a>
+Limitations
+</h3></div></div></div><p>Quelques fonctionnalités de VLC media player ne supportent toujours
+pas l'IPv6. En particulier, il n'est pas possible d'utiliser le
+RTSP sur IPv6 à cause de la bibliothèque utilisée, Live.com, quine
+supporte pas l'IPv6 au moment de la rédaction de ce document.
+</p><p>De plus, veuillez noter que, pour le moment, VLC utilise l'IPv4
+par défaut dans la plupart des cas, étant utilisé par la majorité.
+ Ceci pourrait être modifié afin d'être plus transparent dans les
+prochaines versions.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2582865"></a>
+Diffuser avec VLC
+</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2582869"></a>Avec l'assistant de diffusion (interface graphique)</h4></div></div></div><p>L'assistant de diffusion accepte les adresses IPv6 entre crochets, par
+exemple :
+<strong class="userinput"><code>[2002:8ac3:802d:1242:211:11ff:fe25:e6b4]</code></strong>.
+Si vous spécifiez une adresse locale de lien, vous devrez sûrement
+spécifier l'interface réseau à utiliser. Sous Unix, ceci peut être fait
+de cette façon : <strong class="userinput"><code>[fe80::211:11ff:fe25:e6b4%eth0]</code></strong>
+pour utiliser eth0. De même, sous Windows, vous pouvez spécifier
+<strong class="userinput"><code>[fe80::211:11ff:fe25:e6b4%1]</code></strong> où 1 est le numéro
+de l'interface réseau, donné par le système d'exploitation.
+</p><p>Si vous diffusez sur HTTP, notez que l'IPv6 est automatiquement utilisé
+par défaut (afin que les clients en IPv6 ou IPv4 puissent se connecter).
+</p><p>Si vous voulez spécifier un nom d'hôte DNS, souvenez-vous que VLC résouds
+les DNS en IPv4 par défaut. Vous devez soit préciser un nom d'hôte qui ne
+se résolve qu'en IPv6, soit activer l'option <span class="emphasis"><em>advanced</em></span>
+"Forcer l'utilisation d'IPv6" dans <span class="emphasis"><em>Préférences /
+Paramètres généraux / Entrée</em></span>.
+</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2582938"></a>En ligne de commande</h4></div></div></div><p>L'option de ligne de commande <strong class="userinput"><code>--ipv6</code></strong> force
+l'utilisation de l'IPv6 par défaut (ie. l'IPv6 sera toujours tentée
+avant l'IPv4).
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1] --ttl 12</code></strong>
+</pre><p>
+où :
+</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">video1.xyz</code>
+ est le fichier que vous désirez diffuser (vous pouvez par exemple utiliser
+<span class="command"><strong>dvdsimple:/dev/dvd</strong></span> pour diffuser un DVD, ou n'importe
+quelle autre configuration d'entrée),</p></li><li><p><span class="emphasis"><em>ff08::1</em></span> 
+est soit :
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+l'adresse IPv6 de la machine vers laquelle vous désirez diffuser en unicast;
+</p></li><li><p>
+ou l'adresse IPv6 multicast.
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+est la valeur du TTL (Time To Live) de vos paquets IP (ce qui
+signifie que le flux peut traverser 11 routeurs maximum).
+</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Sous Unix/Linux, il est possible que vous deviez "protéger" les
+crochets autour de l'adresse IPv6 :
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:\[ff08::1\] --ttl 12</code></strong>
+</pre></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Il est possible que vous deviez spécifier
+l'interface réseau de sortie :
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1%eth0] --ttl 12</code></strong>
+</pre><p>
+où <span class="emphasis"><em>eth0</em></span> est le nom de l'interface réseau (sous
+ Linux, elles sont nommées <span class="emphasis"><em>ethX</em></span>, sous Mac OS X, c'est
+<span class="emphasis"><em>enX</em></span>, et <span class="emphasis"><em>X</em></span> sous Windows, avec
+<span class="emphasis"><em>X</em></span> le numéro approprié).
+</p></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583109"></a>
+Recevoir un flux en IPv6
+</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2583114"></a>Avec l'interface graphique</h4></div></div></div><p>Cliquez sur <span class="emphasis"><em>Fichier / Ouvrir un flux réseau</em></span>. Pour
+recevoir un flux UDP/RTP unicast envoyé à votre ordinateur, vous devez
+sélectionner l'option "Forcer l'utilisation d'IPv6" (et
+probablement ajuster le port UDP de destination). Pour recevoir un flux
+UDP multicast, sélectionnez l'option Multidiff. UDP/RTP, et précisez
+l'adresse multicast à laquelle s'inscrire, entre crochets. La syntaxe
+des adresses IPv6 est expliquée dans la partie <span class="emphasis"><em>Diffusion sur
+IPv6</em></span> de ce chapitre.
+</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2583142"></a>En ligne de commande</h4></div></div></div><p>Comme pour la diffusion, l'option de ligne de commande
+<strong class="userinput"><code>--ipv6</code></strong> force l'utilisation de l'IPv6 par défaut
+(ie. l'IPv6 sera toujours tentée avant l'IPv4).
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --ipv6 udp:@[ff08::1]</code></strong>
+</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Sous Unix/Linux, il est possible que vous deviez "protéger" les
+crochets autour de l'adresse IPv6 :
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --ipv6 udp:@\[ff08::1\]</code></strong>
+</pre></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Il est possible que vous deviez spécifier l'interface réseau de sortie :
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --ipv6 --sout udp:[ff08::1%eth0] --ttl 12</code></strong>
+</pre><p>
+où <span class="emphasis"><em>eth0</em></span> est le nom de l'interface réseau (sous
+ Linux, elles sont nommées <span class="emphasis"><em>ethX</em></span>, sous Mac OS X, c'est
+<span class="emphasis"><em>enX</em></span>, et <span class="emphasis"><em>X</em></span> sous Windows, avec
+<span class="emphasis"><em>X</em></span> le numéro approprié).
+</p></div></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 10. 
+Diffuser depuis une carte d'encodage ou d'autres périphériques d'acquisition
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Appendix A. GNU General Public License</td></tr></table></div></body></html>

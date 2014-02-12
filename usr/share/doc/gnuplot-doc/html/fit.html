@@ -1,0 +1,169 @@
+<html lang="en">
+<head>
+<title>fit - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="exit.html#exit" title="exit">
+<link rel="next" href="help.html#help" title="help">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="fit"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="help.html#help">help</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="exit.html#exit">exit</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.6 fit</h3>
+
+<!-- ?commands fit -->
+<p><a name="index-fit-287"></a><a name="index-fit-288"></a>
+
+   <p><a name="index-least_002dsquares-289"></a>
+<a name="index-Marquardt-290"></a>
+The <a href="fit.html#fit">fit</a> command can fit a user-supplied expression to a set of data points
+(x,z) or (x,y,z), using an implementation of the nonlinear least-squares
+(NLLS) Marquardt-Levenberg algorithm.  Any user-defined variable occurring in
+the expression may serve as a fit parameter, but the return type of the
+expression must be real.
+
+   <p>Syntax:
+<pre class="example">           fit {&lt;ranges&gt;} &lt;expression&gt;
+               '&lt;datafile&gt;' {datafile-modifiers}
+               via '&lt;parameter file&gt;' | &lt;var1&gt;{,&lt;var2&gt;,...}
+     
+</pre>
+   <p>Ranges may be specified to temporarily limit the data which is to be fitted;
+any out-of-range data points are ignored. The syntax is
+<pre class="example">           [{dummy_variable=}{&lt;min&gt;}{:&lt;max&gt;}],
+</pre>
+   <p>analogous to `plot`; see <a href="ranges.html#ranges">ranges</a>.
+
+   <p>&lt;expression&gt; is any valid `gnuplot` expression, although it is usual to use a
+previously user-defined function of the form f(x) or f(x,y).
+
+   <p>&lt;datafile&gt; is treated as in the `plot` command.  All the <a href="datafile.html#datafile">datafile</a>
+modifiers (<a href="using.html#using">using</a>, <a href="every.html#every">every</a>,...) except <a href="smooth.html#smooth">smooth</a> and the deprecated <a href="thru.html#thru">thru</a>
+are applicable to <a href="fit.html#fit">fit</a>. See <a href="datafile.html#datafile">datafile</a>.
+
+   <p>The default data formats for fitting functions with a single
+independent variable, z=f(x), are z or x:z.  That is, if there is
+only a single column then it is the dependent variable and the line
+numbers is the independent variable.  If there are two columns, the
+first is the independent variable and the second is the dependent
+variable.
+
+   <p>Those formats can be changed with the datafile <a href="using.html#using">using</a> qualifier, for
+example to take the z value from a different column or to calculate
+it from several columns.  A third <a href="using.html#using">using</a> qualifier (a column number
+or an expression), if present, is interpreted as the standard
+deviation of the corresponding z value and is used to compute a
+weight for the datum, 1/s**2.  Otherwise, all data points are
+weighted equally, with a weight of one. Note that if you don't
+specify a <a href="using.html#using">using</a> option at all, no z standard deviations are read
+from the datafile even if it does have a third column, so you'll
+always get unit weights.
+
+   <p>To fit a function with two independent variables, z=f(x,y), the required
+format is <a href="using.html#using">using</a> with four items, x:y:z:s.  The complete format must be
+given&mdash;no default columns are assumed for a missing token.  Weights for
+each data point are evaluated from 's' as above.  If error estimates are
+not available, a constant value can be specified as a constant expression
+(see <a href="using.html#using">using</a>), e.g., `using 1:2:3:(1)`.
+
+   <p>The fit function may have up to five independent variables.  There
+must be two more <a href="using.html#using">using</a> qualifiers than there are independent
+variables, unless there is only one variable.  The allowed formats,
+and the default dummy variable names, are as follows:
+
+<pre class="example">           z
+           x:z
+           x:z:s
+           x:y:z:s
+           x:y:t:z:s
+           x:y:t:u:z:s
+           x:y:t:u:v:z:s
+     
+</pre>
+   <p>The dummy variable names may be changed with ranges as noted above. 
+The first range corresponds to the first <a href="using.html#using">using</a> spec, etc.  A range
+may also be given for z (the dependent variable), but that name
+cannot be changed.
+
+   <p>Multiple datasets may be simultaneously fit with functions of one
+independent variable by making y a 'pseudo-variable', e.g., the dataline
+number, and fitting as two independent variables.  See <a href="multi_002dbranch.html#multi_002dbranch">multi-branch</a>.
+
+   <p>The `via` qualifier specifies which parameters are to be adjusted, either
+directly, or by referencing a parameter file.
+
+   <p>Examples:
+<pre class="example">           f(x) = a*x**2 + b*x + c
+           g(x,y) = a*x**2 + b*y**2 + c*x*y
+           FIT_LIMIT = 1e-6
+           fit f(x) 'measured.dat' via 'start.par'
+           fit f(x) 'measured.dat' using 3:($7-5) via 'start.par'
+           fit f(x) './data/trash.dat' using 1:2:3 via a, b, c
+           fit g(x,y) 'surface.dat' using 1:2:3:(1) via a, b, c
+           fit a0 + a1*x/(1 + a2*x/(1 + a3*x)) 'measured.dat' via a0,a1,a2,a3
+           fit a*x + b*y 'surface.dat' using 1:2:3:(1) via a,b
+           fit [*:*][yaks=*:*] a*x+b*yaks 'surface.dat' u 1:2:3:(1) via a,b
+           fit a*x + b*y + c*t 'foo.dat' using 1:2:3:4:(1) via a,b,c
+           h(x,y,t,u,v) = a*x + b*y + c*t + d*u + e*v
+           fit h(x,y,t,u,v) 'foo.dat' using 1:2:3:4:5:6:(1) via a,b,c,d,e
+     
+</pre>
+   <p>After each iteration step, detailed information about the current state
+of the fit is written to the display.  The same information about the
+initial and final states is written to a log file, "fit.log".  This file
+is always appended to, so as to not lose any previous fit history;  it
+should be deleted or renamed as desired. By using the command
+`set fit logfile`, the name of the log file can be changed.
+
+   <p>If gnuplot was built with this option, and you activated it using `set fit
+errorvariables`, the error for each fitted parameter will be stored in
+a variable named like the parameter, but with "_err" appended.  Thus the
+errors can be used as input for further computations.
+
+   <p>The fit may be interrupted by pressing Ctrl-C. 
+After the current iteration completes, you have the option to
+(1) stop the fit and accept the current parameter values,
+(2) continue the fit, (3) execute a `gnuplot` command as specified by the
+environment variable FIT_SCRIPT.  The default for FIT_SCRIPT is <a href="replot.html#replot">replot</a>,
+so if you had previously plotted both the data and the fitting function in
+one graph, you can display the current state of the fit.
+
+   <p>Once <a href="fit.html#fit">fit</a> has finished, the <a href="update.html#update">update</a> command may be used to store final
+values in a file for subsequent use as a parameter file.   See <a href="update.html#update">update</a>
+for details.
+
+<ul class="menu">
+<li><a accesskey="1" href="adjustable_005fparameters.html#adjustable_005fparameters">adjustable_parameters</a>
+<li><a accesskey="2" href="short_005fintroduction.html#short_005fintroduction">short_introduction</a>
+<li><a accesskey="3" href="error_005festimates.html#error_005festimates">error_estimates</a>
+<li><a accesskey="4" href="control.html#control">control</a>
+<li><a accesskey="5" href="multi_002dbranch.html#multi_002dbranch">multi-branch</a>
+<li><a accesskey="6" href="starting_005fvalues.html#starting_005fvalues">starting_values</a>
+<li><a accesskey="7" href="tips.html#tips">tips</a>
+</ul>
+
+   </body></html>
+

@@ -1,0 +1,1 @@
+../../../../emacs/site-lisp/w3m/shimbun/sb-squeak-ja.el

@@ -1,0 +1,45 @@
+%%
+%% This is file `luamcallbacks-test.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% luamcallbacks.dtx  (with options: `test')
+%% This is a generated file.
+%% 
+%% Copyright (C) 2009 by Elie Roux <elie.roux@telecom-bretagne.eu>
+%% 
+%% This work is under the CC0 license.
+%% 
+%% This work consists of the main source file luamcallbacks.dtx
+%% and the derived files
+%%   luamcallbacks.lua, luamcallbacks-test.tex, luamcallbacks.pdf.
+%% 
+\input luatextra.sty
+
+This is just a test file.
+\luadirect{
+local function one(head,...)
+    texio.write_nl("I'm number 1")
+    return head, true
+end
+
+local function two(head,...)
+    texio.write_nl("I'm number 2")
+    return head, true
+end
+
+local function three(head,...)
+    texio.write_nl("I'm number 3")
+    return head, true
+end
+callback.add("hpack_filter",one,"my example function one",1)
+callback.add("hpack_filter",two,"my example function two",2)
+callback.add("hpack_filter",three,"my example function three",1)
+callback.remove("hpack_filter","my example function three")
+}
+
+\bye
+\endinput
+%%
+%% End of file `luamcallbacks-test.tex'.

@@ -1,0 +1,163 @@
+<html lang="en">
+<head>
+<title>palette - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="pm3d.html#pm3d" title="pm3d">
+<link rel="next" href="pointsize.html#pointsize" title="pointsize">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="palette"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="pointsize.html#pointsize">pointsize</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="pm3d.html#pm3d">pm3d</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.53 palette</h4>
+
+<!-- ?commands set palette -->
+<!-- ?commands show palette -->
+<!-- ?set palette -->
+<!-- ?show palette -->
+<p><a name="index-palette-523"></a><a name="index-palette-524"></a>
+
+   <p>Palette is a color storage for use by <a href="pm3d.html#pm3d">pm3d</a>, filled color contours or
+polygons, color histograms, color gradient background, and whatever it is
+or it will be implemented...  Here it stands for a palette of smooth
+"continuous" colors or grays, but let's call it just a palette.
+
+   <p>Color palettes require terminal entries for filled color polygons and
+palettes of smooth colors, are currently available for terminals listed in
+help for <a href="pm3d.html#pm3d">pm3d</a>. The range of color values are adjustable independently by
+<a href="cbrange.html#cbrange">cbrange</a> and `set log cb`. The whole color palette is
+visualized in the `colorbox`.
+
+   <p>Syntax:
+<pre class="example">           set palette
+           set palette {
+                      { gray | color }
+                      { gamma &lt;gamma&gt; }
+                      {   rgbformulae &lt;r&gt;,&lt;g&gt;,&lt;b&gt;
+                        | defined { ( &lt;gray1&gt; &lt;color1&gt; {, &lt;grayN&gt; &lt;colorN&gt;}... ) }
+                        | file '&lt;filename&gt;' {datafile-modifiers}
+                        | functions &lt;R&gt;,&lt;G&gt;,&lt;B&gt;
+                      }
+                      { model { RGB | HSV | CMY | YIQ | XYZ } }
+                      { positive | negative }
+                      { nops_allcF | ps_allcF }
+                      { maxcolors &lt;maxcolors&gt; }
+                    }
+           show palette
+           show palette palette &lt;n&gt; {{float | int}}
+           show palette gradient
+           show palette fit2rgbformulae
+           show palette rgbformulae
+           show colornames
+     
+</pre>
+   <p><a href="palette.html#palette">palette</a> (i.e. without options) sets up the default values. 
+Otherwise, the options can be given in any order. 
+<a href="palette.html#palette">palette</a> shows the current palette properties.
+
+   <p>`show palette gradient` displays the gradient defining the palette (if
+appropriate).  <a href="rgbformulae.html#rgbformulae">rgbformulae</a> prints the available fixed gray &ndash;&gt;
+color transformation formulae.  <a href="colornames.html#colornames">colornames</a> prints the known color names.
+
+   <p>`show palette palette &lt;n&gt;` prints to the screen or to the file given by
+<a href="print.html#print">print</a> a table of RGB triplets calculated for the current palette settings
+and a palette having &lt;n&gt; discrete colors.  The default wide table can be
+limited to 3 columns of r,g,b float values [0..1] or integer values [0..255]
+by options float or int, respectively.  This way, the current gnuplot color
+palette can be loaded into other imaging applications, for example Octave. 
+Additionally to this textual list of RGB table, you can use the <a href="palette.html#palette">palette</a>
+command to plot the R,G,B profiles for the current palette.
+
+   <p>The following options determine the coloring properties.
+
+   <p>Figure using this palette can be `gray` or `color`.  For instance, in <a href="pm3d.html#pm3d">pm3d</a>
+color surfaces the gray of each small spot is obtained by mapping the averaged
+z-coordinate of the 4 corners of surface quadrangles into the range
+[min_z,max_z] providing range of grays [0:1]. This value can be used directly
+as the gray for gray maps. The color map requires a transformation gray &ndash;&gt;
+(R,G,B), i.e. a mapping [0:1] &ndash;&gt; ([0:1],[0:1],[0:1]).
+
+   <p>Basically two different types of mappings can be used:  Analytic formulae to
+convert gray to color, or discrete mapping tables which are interpolated. 
+<a href="rgbformulae.html#rgbformulae">rgbformulae</a> and <a href="functions.html#functions">functions</a> use analytic formulae whereas
+<a href="defined.html#defined">defined</a> and <a href="file.html#file">file</a> use interpolated tables.  <a href="rgbformulae.html#rgbformulae">rgbformulae</a> reduces the size of postscript output to a minimum.
+
+   <p>The command `show palette fit2rgbformulae` finds the best matching <a href="rgbformulae.html#rgbformulae">rgbformulae</a> for the current <a href="palette.html#palette">palette</a>. Naturally, it makes sense
+to use it for non-rgbformulae palettes. This command can be found useful
+mainly for external programs using the same rgbformulae definition of palettes
+as gnuplot, like zimg (
+<a href="http://zimg.sourceforge.net">http://zimg.sourceforge.net</a>
+).
+
+   <p>`set palette gray` switches to a gray only palette. <a href="rgbformulae.html#rgbformulae">rgbformulae</a>,
+<a href="defined.html#defined">defined</a>, <a href="file.html#file">file</a> and <a href="functions.html#functions">functions</a> switch
+to a color mapping. `set palette color` is an easy way to switch back from the
+gray palette to the last color mapping.
+
+   <p>Automatic gamma correction via `set palette gamma &lt;gamma&gt;` can be done for
+gray maps only (`set palette gray`).  Linear mapping to gray is for gamma
+equals 1, see <a href="palette.html#palette">palette</a>.  Gamma is ignored for color mappings.
+
+   <p>Most terminals support only discrete number of colors (e.g. 256 colors in
+gif).  All entries of the palette remaining after the default gnuplot linetype
+colors declaration are allocated for pm3d by default.  Then <a href="multiplot.html#multiplot">multiplot</a> could
+fail if there are no more color positions in the terminal available.  Then you
+should use `set palette maxcolors &lt;maxcolors&gt;` with a reasonably small value. 
+This option can also be used to separate levels of z=constant in discrete
+steps, thus to emulate filled contours. Default value of 0 stays for
+allocating all remaining entries in the terminal palette or for to use exact
+mapping to RGB.
+
+   <p>RGB color space might not be the most useful color space to work in.  For that
+reason you may change the color space with `model` to one of `RGB`, `HSV`,
+`CMY`, `YIQ` and `XYZ`.  Using color names for <a href="defined.html#defined">defined</a> tables
+and a color space other than RGB will result in funny colors.  All explanation
+have been written for RGB color space, so please note, that `R` can be `H`,
+`C`, `Y`, or `X`, depending on the actual color space (`G` and `B`
+accordingly).
+
+   <p>All values for all color spaces are limited to [0,1].
+
+   <p>RGB stands for Red, Green and Blue;  CMY stands for Cyan, Magenta and Yellow;
+HSV stands for Hue, Saturation, and Value;  YIQ is the color model used by
+the U.S. Commercial Color Television Broadcasting, it is basically an RGB
+recoding with downward compatibility for black and white television;
+XYZ are the three primary colors of the color model defined by the 'Commission
+Internationale de l'Eclairage' (CIE). 
+For more information on color models see:
+<a href="http://en.wikipedia.org/wiki/Color_space">http://en.wikipedia.org/wiki/Color_space</a>
+
+<ul class="menu">
+<li><a accesskey="1" href="rgbformulae.html#rgbformulae">rgbformulae</a>
+<li><a accesskey="2" href="defined_005f.html#defined_005f">defined_</a>
+<li><a accesskey="3" href="functions_005f.html#functions_005f">functions_</a>
+<li><a accesskey="4" href="file.html#file">file</a>
+<li><a accesskey="5" href="gamma_005fcorrection.html#gamma_005fcorrection">gamma_correction</a>
+<li><a accesskey="6" href="postscript.html#postscript">postscript</a>
+</ul>
+
+   </body></html>
+

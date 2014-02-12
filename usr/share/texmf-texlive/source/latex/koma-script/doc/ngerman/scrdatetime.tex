@@ -1,0 +1,245 @@
+% ======================================================================
+% scrdatetime.tex
+% Copyright (c) Markus Kohm, 2001-2009
+%
+% This file is part of the LaTeX2e KOMA-Script bundle.
+%
+% This work may be distributed and/or modified under the conditions of
+% the LaTeX Project Public License, version 1.3c of the license.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX 
+% version 2005/12/01 or later and of this work.
+%
+% This work has the LPPL maintenance status "author-maintained".
+%
+% The Current Maintainer and author of this work is Markus Kohm.
+%
+% This work consists of all files listed in manifest.txt.
+% ----------------------------------------------------------------------
+% scrdatetime.tex
+% Copyright (c) Markus Kohm, 2001-2009
+%
+% Dieses Werk darf nach den Bedingungen der LaTeX Project Public Lizenz,
+% Version 1.3c, verteilt und/oder veraendert werden.
+% Die neuste Version dieser Lizenz ist
+%   http://www.latex-project.org/lppl.txt
+% und Version 1.3c ist Teil aller Verteilungen von LaTeX
+% Version 2005/12/01 oder spaeter und dieses Werks.
+%
+% Dieses Werk hat den LPPL-Verwaltungs-Status "author-maintained"
+% (allein durch den Autor verwaltet).
+%
+% Der Aktuelle Verwalter und Autor dieses Werkes ist Markus Kohm.
+% 
+% Dieses Werk besteht aus den in manifest.txt aufgefuehrten Dateien.
+% ======================================================================
+%
+% Chapter about scrpage2 of the KOMA-Script guide
+% Maintained by Markus Kohm
+%
+% ----------------------------------------------------------------------
+%
+% Kapitel über scrpage2 in der KOMA-Script-Anleitung
+% Verwaltet von Markus Kohm
+%
+% ============================================================================
+
+\ProvidesFile{scrdatetime.tex}[{2009/01/01 KOMA-Script guide (chapter:
+  scrdate, scrtime)}]
+
+\chapter{Wochentag und Uhrzeit mit \Package{scrdate} und \Package{scrtime}}
+\labelbase{datetime}
+
+Zu \KOMAScript{} gehören auch zwei Pakete, um den Umgang mit
+Datum\Index{Datum} und Zeit\Index{Zeit} über die beiden
+Standardbefehle \Macro{today} und \Macro{date} hinaus zu
+erweitern. Ebenso wie die anderen Pakete aus {\KOMAScript} können
+diese Pakete auch mit den Standardklassen verwendet werden.
+
+\section{Der aktuelle Wochentag mit \Package{scrdate}}
+\label{sec:datetime.scrdate}
+\BeginIndex{Package}{scrdate}
+
+Das erste Problem ist die Frage nach dem aktuellen Wochentag. Dieses kann mit
+Hilfe des Pakets \Package{scrdate} gelöst werden.
+
+\BeginIndex{Cmd}{todaysname}%
+\begin{Declaration}
+  \Macro{todaysname}
+\end{Declaration}%
+Bekanntlich erhält man mit \Macro{today}\IndexCmd{today} das aktuelle
+Datum in der landestypischen Schreibweise. \Package{scrdate} bietet
+mit \Macro{todaysname} eine Anweisung, um den aktuellen Wochentag zu
+erhalten.
+
+\begin{Example}
+  Sie wollen in Ihrem Dokument ausgeben, an welchem Tag es mit
+  \LaTeX{} in eine \File{DVI}-Datei übersetzt wurde. Sie schreiben
+  dazu
+\begin{lstcode}
+  Dieses Dokument entstand an einem {\todaysname}.
+\end{lstcode}
+  und erhalten beispielsweise:
+  \begin{quote}
+    Dieses Dokument entstand an einem {\todaysname}.
+  \end{quote}
+\end{Example}
+
+Es sei darauf hingewiesen, dass das Paket natürlich nicht deklinieren
+kann. Gespeichert sind die Wochentage im Nominativ Singular, wie er
+beispielsweise für eine Datumsangabe in Briefen benötigt wird. Obiges Beispiel
+funktioniert daher nur sprachabhängig und eher zufällig.
+
+\begin{Explain}
+  \begin{labeling}{\textbf{Tipp:}}
+  \item[\textbf{Tipp:}] Wenn Sie den Namen des Tages in Kleinbuchstaben
+    benötigen, weil das in der entsprechenden Sprache innerhalb des Satzes so
+    üblich ist, können Sie das erreichen, obwohl die Namen der Wochentage in
+    \Package{scrdate} alle groß geschrieben sind. Greifen Sie mit
+    \begin{lstcode}
+  \Macro{MakeLowercase}\PParameter{\Macro{todaysname}}
+    \end{lstcode}
+    einfach auf die \LaTeX-Anweisung \Macro{MakeLowercase} zurück. Diese
+    wandelt ihr Argument komplett in Kleinbuchstaben.
+  \end{labeling}
+\end{Explain}
+\EndIndex{Cmd}{todaysname}
+
+
+\BeginIndex{Cmd}{nameday}%
+\begin{Declaration}
+  \Macro{nameday}\Parameter{Name}
+\end{Declaration}%
+So wie mit \Macro{date}\IndexCmd{date} die Ausgabe von \Macro{today}
+direkt geändert werden kann, setzt \Macro{nameday} die Ausgabe von
+\Macro{todaysname} auf den Wert \PName{Name}.
+\begin{Example}
+  Sie setzen mit \Macro{date} das aktuelle Datum auf einen festen
+  Wert. Für die Ausgabe des zugehörigen Wochentags interessiert es nur,
+  dass dieser Tag ein Werktag war. Daher schreiben Sie
+\begin{lstcode}
+  \nameday{Werktag}
+\end{lstcode}
+  und erhalten so mit dem Satz aus dem vorherigen Beispiel:
+  \begin{quote}\nameday{Werktag}
+    Dieses Dokument entstand an einem {\todaysname}.
+  \end{quote}
+\end{Example}
+\EndIndex{Cmd}{nameday}
+
+Das \Package{scrdate}-Paket beherrscht derzeit die Sprachen Englisch (english
+und USenglish), Deutsch (german, ngerman und austrian), Französisch (french),
+Italienisch (italian), Spanisch (spanish), Kroatisch (croatian), Finnisch
+(finnish) und Norwegisch (norsk), kann aber auch für andere Sprachen
+konfiguriert werden. Näheres dazu entnehme man \File{scrdate.dtx}.
+
+Bei der aktuellen Version ist es egal, ob \Package{scrdate} vor oder
+nach \Package{german}\IndexPackage{german},
+\Package{babel}\IndexPackage{babel} oder ähnlichen Paketen geladen
+wird, in jedem Falle wird die korrekte Sprache
+gewählt.
+
+\begin{Explain}
+  Etwas genauer ausgedrückt: Solange die Sprachauswahl in einer zu
+  \Package{babel}\IndexPackage{babel} bzw.
+  \Package{german}\IndexPackage{german} kompatiblen Form erfolgt und
+  die Sprache \Package{scrdate} bekannt ist, wird die Sprache korrekt
+  gewählt. Ist dies nicht der Fall, werden (US-)englische Ausdrücke
+  verwendet.
+\end{Explain}
+\EndIndex{Package}{scrdate}
+
+
+\section{Die aktuelle Zeit mit \Package{scrtime}}
+\label{sec:datetime.scrtime}
+\BeginIndex{Package}{scrtime}
+
+Das zweite Problem ist die Frage nach der aktuellen Zeit. Dieses kann mit
+Hilfe des Pakets \Package{scrtime} gelöst werden.
+
+
+\BeginIndex{Cmd}{thistime}\BeginIndex{Cmd}{thistime*}%
+\begin{Declaration}%
+  \Macro{thistime}\OParameter{Trennung}\\
+  \Macro{thistime*}\OParameter{Trennung}
+\end{Declaration}%
+\Macro{thistime} liefert die aktuelle Zeit\Index{Zeit} in Stunden und
+Minuten. In der Ausgabe wird zwischen den Stunden und Minuten das optionale
+Argument \PName{Trennung} gesetzt. Die Voreinstellung ist hierbei das Zeichen
+»\PValue{:}«.
+
+\Macro{thistime*} funktioniert fast genau wie \Macro{thistime}. Der
+einzige Unterschied besteht darin, dass im Gegensatz zu
+\Macro{thistime} bei \Macro{thistime*} die Minutenangaben bei Werten
+kleiner 10 nicht durch eine vorangestellte Null auf zwei Stellen
+erweitert wird.
+\begin{Example}
+  Die Zeile
+\begin{lstcode}
+  Ihr Zug geht um \thistime\ Uhr.
+\end{lstcode}
+  liefert als Ergebnisse beispielsweise eine Zeile wie
+  \begin{quote}
+    Ihr Zug geht um \thistime\ Uhr.
+  \end{quote}
+  oder
+  \begin{quote}
+    Ihr Zug geht um 23:09 Uhr.
+  \end{quote}
+  \bigskip
+  Demgegenüber liefert die Zeile
+\begin{lstcode}
+  Beim nächsten Ton ist es \thistime*[\ Uhr,\ ] 
+  Minuten und 42 Sekunden.
+\end{lstcode}
+  als mögliches Ergebnis etwas wie:
+  \begin{quote}
+    Beim nächsten Ton ist es \thistime*[\ Uhr,\ ] Minuten und 42 Sekunden.
+  \end{quote}
+  oder
+  \begin{quote}
+    Beim nächsten Ton ist es 23\ Uhr,\ 9 Minuten und 42 Sekunden.
+  \end{quote}
+\end{Example}
+\EndIndex{Cmd}{thistime}\EndIndex{Cmd}{thistime*}
+
+
+\BeginIndex{Cmd}{settime}%
+\begin{Declaration}%
+ \Macro{settime}\Parameter{Wert}
+\end{Declaration}%
+\Macro{settime} setzt die Ausgabe von \Macro{thistime} und
+\Macro{thistime*} auf einen festen \PName{Wert}%
+%\footnote{Allerdings darf man nicht erwarten, dass nun die Zeit
+%  stillsteht!}
+. %
+Anschließend wird das optionale Argument von \Macro{thistime} bzw.
+\Macro{thistime*} ignoriert, da ja die komplette Zeichenkette, die
+\Macro{thistime} bzw. \Macro{thistime*} nun liefert, hiermit explizit
+festgelegt wurde.%
+\EndIndex{Cmd}{settime}
+
+
+\BeginIndex{Option}{12h}\BeginIndex{Option}{24h}%
+\begin{Declaration}
+  \Option{12h}\\
+  \Option{24h}
+\end{Declaration}%
+Mit den Optionen \Option{12h} und \Option{24h} kann ausgewählt
+werden, ob die Zeit bei \Macro{thistime} und \Macro{thistime*} im
+12-Stunden- oder 24-Stunden-Format ausgegeben werden soll.
+Voreingestellt ist \Option{24h}%
+%\footnote{Leider beherrscht das \Package{scrtime}-Paket noch nicht die
+%  Sternzeit nach \textsc{StarTrek}\Index{StarTrek}, ein echter
+%  Mangel!}
+. %
+Die Option verliert bei einem Aufruf von \Macro{settime} ebenfalls ihre
+Gültigkeit.%
+\EndIndex{Option}{12h}\EndIndex{Option}{24h}
+\EndIndex{Package}{scrtime}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../guide"
+%%% End:

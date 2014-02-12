@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 4.  Eine Datei streamen</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch03.html" title="Chapter 3.  Einen Stream empfangen und speichern" /><link rel="next" href="ch05.html" title="Chapter 5.  Eine DVD streamen" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. 
+
+
+
+Eine Datei streamen
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch05.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="file"></a>Chapter 4. 
+
+
+
+Eine Datei streamen
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch04.html#id2572549">Eine Datei mit VLC streamen
+</a></span></dt><dt><span class="sect1"><a href="ch04.html#id2573716">
+Eine Datei mit VLS streamen
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2572549"></a>Eine Datei mit VLC streamen
+</h2></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv video1.xyz --sout udp:192.168.0.42 --ttl 12</code></strong>
+</pre><p>
+wobei:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">video1.xyz</code>
+
+die Datei ist, die Sie streamen möchten.</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+ ist entweder:</p><div class="itemizedlist"><ul type="circle"><li><p>
+die IP-Adresse des Rechners ist, den Sie via Unicast
+erreichen möchten;</p></li><li><p>
+oder der DNS-Name des Rechners ist, den Sie via Unicast
+erreichen möchten;</p></li><li><p>
+oder eine Multicast-IP-Adresse.
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+ ist der Wert der TTL (Time To Live) Ihrer
+Paket (was bedeutet, dass der Stream in der Lage sein wird, 11 Router zu
+überqueren).
+</p></li></ul></div><p>
+Wenn Sie die Datei fortlaufend streamen möchten,
+fügen Sie die <span class="emphasis"><em>--loop</em></span>-Option hinzu.
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573716"></a>
+Eine Datei mit VLS streamen
+</h2></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vls -vv -d udp:192.168.0.42 file:video1.xyz --ttl 12</code></strong>
+</pre><p>
+wobei:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">video1.xyz</code>
+ist die Datei, die Sie streamen möchten,</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+ist entweder:</p><div class="itemizedlist"><ul type="circle"><li><p>
+die IP-Adresse des Rechners, den Sie via Unicast erreichen
+möchten;</p></li><li><p>
+oder der DNS-Name des Rechners, den Sie via Unicast
+erreichen möchten;</p></li><li><p>
+oder eine Multicast-IP-Adresse.
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+ist der Wert der TTL (Time To Live) Ihrer IP-Pakete
+(was bedeutet, dass der Stream in der Lage sein wird, 11 Router zu
+überqueren).
+
+</p></li></ul></div><p>
+Wenn Sie VLS anhalten möchten, nutzen Sie die
+Tastenkombination
+<span class="keycap"><strong>Ctrl</strong></span>+<span class="keycap"><strong>c</strong></span>.</p><p>
+Wenn Sie die Datei fortlaufend streamen möchten, fügen
+Sie die Option <span class="emphasis"><em>--loop</em></span> hinzu.
+</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+VLS can stream MPEG files that meet two critera
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+the file must be MPEG <span class="emphasis"><em>PS</em></span>
+(Program Stream) or MPEG <span class="emphasis"><em>TS</em></span> (Transport Stream),
+that contain video and audio multiplexed. VLS cannot stream MPEG
+<span class="emphasis"><em>ES</em></span> (Elementary Stream), i.e. a file with only audio
+or video.
+</p><p>
+In order to know if an MPEG file is MPEG
+<span class="emphasis"><em>PS</em></span>, MPEG <span class="emphasis"><em>TS</em></span> or MPEG
+<span class="emphasis"><em>ES</em></span>, read the file with VLC and look at the messages
+(in the messageswindow or use the
+command line <span class="command"><strong>vlc -vvv</strong></span>).
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+If you see a line:
+</p><pre class="programlisting">
+[00000107] main module debug: using demux module "ts_dvbpsi"
+</pre><p>
+it means the file is MPEG TS.
+</p></li><li><p>
+If you see a line:
+</p><pre class="programlisting">
+[00000109] main module debug: using demux module "ps"
+</pre><p>
+it means the file is MPEG PS.
+</p></li><li><p>
+If you see a line:
+</p><pre class="programlisting">
+[00000109] main module debug: using demux module "es"
+</pre><p>
+it means the file is MPEG ES, VLS can't stream it.
+</p></li></ul></div></li><li><p>
+the sequence header of the video must repeat itself
+regularly, which is often the case with MPEG-2, but very rare with
+MPEG-1. There is no easy way to know if the sequence header is repeated
+regularly. Files with a <span class="emphasis"><em>.vob</em></span> extension are
+normally MPEG-2 files and files with <span class="emphasis"><em>.mpg</em></span> or
+<span class="emphasis"><em>.mpeg</em></span> extension are usually MPEG-1 files.
+</p></li></ul></div><p>
+ You can download this
+streamable MPEG-2 PS file for your tests : <a class="ulink" href="ftp://ftp.videolan.org/pub/videolan/streams/presentation/presentation_short.vob" target="_top">presentation_short.vob</a>.
+</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 3. 
+
+
+
+Einen Stream empfangen und speichern
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 5. 
+Eine DVD streamen
+</td></tr></table></div></body></html>

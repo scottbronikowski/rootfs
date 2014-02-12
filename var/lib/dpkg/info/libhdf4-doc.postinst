@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+# Doc-base support
+if [ "$1" = "configure" ]; then
+  if command -v install-docs >/dev/null 2>&1
+  then
+    install-docs -i /usr/share/doc-base/libhdf4-ref
+    install-docs -i /usr/share/doc-base/libhdf4-user
+  fi
+fi
+
+

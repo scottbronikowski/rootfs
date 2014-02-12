@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 7.  The Mozilla plugin</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DivX" /><link rel="start" href="index.html" title="VLC user guide" /><link rel="up" href="index.html" title="VLC user guide" /><link rel="prev" href="ch06.html" title="Chapter 6.  Other interfaces" /><link rel="next" href="apa.html" title="Appendix A. GNU General Public License" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 7. 
+The Mozilla plugin
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="webbrowser-plugin"></a>Chapter 7. 
+The Mozilla plugin
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch07.html#id2588107">Install the plugin</a></span></dt><dt><span class="sect1"><a href="ch07.html#id2588910">
+Build HTML pages that use the plugin
+</a></span></dt></dl></div><p>
+VLC can also be embedded in a web browser
+! For the moment, this function is only available with <a class="ulink" href="http://www.mozilla.org/" target="_top">Mozilla</a> under GNU/Linux. An experimental plugin is also available for Mac OS X and Microsft Windows.
+</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2588107"></a>Install the plugin</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2587769"></a>GNU/Linux Debian</h3></div></div></div><p>
+You should already have the following lines in your
+<code class="filename">/etc/apt/sources.list</code>
+ file, if you run Debian Woody:
+</p><pre class="programlisting">
+     deb http://download.videolan.org/pub/videolan/debian woody main
+     deb-src http://download.videolan.org/pub/videolan/debian woody main
+</pre><p>
+ VLC's latest packaged version is always in the official Debian unstable branch. However you should still use our apt-get line if you need libdvdcss in its latest version:
+</p><pre class="programlisting">
+     deb http://download.videolan.org/pub/videolan/debian sid main
+     deb-src http://download.videolan.org/pub/videolan/debian sid main
+</pre><p>
+Install the
+<span class="emphasis"><em>mozilla-plugin-vlc</em></span> package:</p><pre class="screen">
+<code class="prompt"># </code><strong class="userinput"><code>apt-get update</code></strong>
+<code class="prompt"># </code><strong class="userinput"><code>apt-get install mozilla-plugin-vlc</code></strong>
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2588793"></a>
+Compile the sources yourself
+</h3></div></div></div><p>
+Install the Mozilla development package
+(<span class="emphasis"><em>mozilla-dev</em></span> under Debian).
+</p><p>
+Install the required librairies like for a normal VLC install
+(from the sources, or from the packages with the development
+packages).
+</p><p>
+Download the sources of the latest release: get the
+file <code class="filename">vlc-version.tar.gz</code> from the <a class="ulink" href="http://www.videolan.org/vlc/download-sources.html" target="_top">VLC sources
+download page</a>. Uncompress-it, configure-it, compile and install:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>tar xvzf vlc-version.tar.gz</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>cd vlc-version</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>./configure --enable-mozilla</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>make</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>su</code></strong>
+<code class="prompt">Password: </code><strong class="userinput"><code> [Root Password]</code></strong>
+<code class="prompt"># </code><strong class="userinput"><code>make install</code></strong>
+</pre></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2588910"></a>
+Build HTML pages that use the plugin
+</h2></div></div></div><p>
+Here are a few examples of HTML pages that use the
+Mozilla plugin.
+</p><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2588919"></a>
+Example 1
+</h3></div></div></div><p>
+In this example, the plugin will read an HTTP stream
+inside the web page. If the user goes fullscreen, he will have to press
+<span class="keycap"><strong>f</strong></span> to go back in normal view.
+
+</p><pre class="programlisting">
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Demo of VLC mozilla plugin&lt;/title&gt;&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;h1&gt;Demo of VLC mozilla plugin - Example 1&lt;/h1&gt;
+
+&lt;embed type="application/x-vlc-plugin"
+         name="video1"
+         autoplay="no" loop="yes" width="400" height="300"
+         target="http://server.example.org/video1.vob" /&gt;
+&lt;br /&gt;
+  &lt;a href="javascript:;" onclick='document.video1.play()'&gt;Play video1&lt;/a&gt;
+  &lt;a href="javascript:;" onclick='document.video1.pause()'&gt;Pause video1&lt;/a&gt;
+  &lt;a href="javascript:;" onclick='document.video1.stop()'&gt;Stop video1&lt;/a&gt;
+  &lt;a href="javascript:;" onclick='document.video1.fullscreen()'&gt;Fullscreen&lt;/a&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2588963"></a>
+Example 
+</h3></div></div></div><p> In this example, the plugin will read a
+multicast UDP stream in a dedicated video output window.
+</p><pre class="programlisting">
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Demo of VLC mozilla plugin&lt;/title&gt;&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;h1&gt;Demo of VLC mozilla plugin - Example 2&lt;/h1&gt;
+
+&lt;embed type="application/x-vlc-plugin"
+         name="video2"
+         autoplay="no" loop="no" hidden="yes"
+         target="udp:@239.255.12.42" /&gt;
+&lt;br /&gt;
+  &lt;a href="javascript:;" onclick='document.video2.play()'&gt;Play video2&lt;/a&gt;
+  &lt;a href="javascript:;" onclick='document.video2.stop()'&gt;Stop video2&lt;/a&gt;
+  &lt;a href="javascript:;" onclick='document.video2.fullscreen()'&gt;Fullscreen&lt;/a&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 6. 
+Other interfaces
+
+
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Appendix A. GNU General Public License</td></tr></table></div></body></html>

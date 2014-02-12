@@ -1,0 +1,173 @@
+<html lang="en">
+<head>
+<title>Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="../index.html#dir" title="(dir)">
+<link rel="prev" href="../index.html#dir" title="(dir)">
+<link rel="next" href="gnuplot.html#gnuplot" title="gnuplot">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Top"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="gnuplot.html#gnuplot">gnuplot</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="../index.html#dir">(dir)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#dir">(dir)</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">Master Menu</h2>
+
+<pre class="example">                            GNUPLOT
+     
+                 An Interactive Plotting Program
+                  Thomas Williams &amp; Colin Kelley
+                     Version 4.4 organized by:
+         Hans-Bernhard Broeker, Ethan A Merritt, and others
+     
+        Copyright (C) 1986 - 1993, 1998, 2004   Thomas Williams, Colin Kelley
+                Copyright (C) 2004 - 2009  various authors
+     
+            Mailing list for comments: gnuplot-info@lists.sourceforge.net
+          Mailing list for bug reports: gnuplot-bugs@lists.sourceforge.net
+     
+              This manual was originally prepared by Dick Crawford
+                        Version 4.4 - 31 May 2009
+     
+     
+     Major contributors (alphabetic order):
+</pre>
+   <!-- ^ <h2> An Interactive Plotting Program </h2><p> -->
+<!-- ^ <h2>  Thomas Williams & Colin Kelley</h2><p> -->
+<!-- ^ <h2>  Version 4.4 organized by Ethan A Merritt and others</h2><p> -->
+<!-- ^ <h2>Major contributors (alphabetic order):</h2> -->
+     <ul>
+<li>Hans-Bernhard Broeker
+<li>John Campbell
+<li>Robert Cunningham
+<li>David Denholm
+<li>Gershon Elber
+<li>Roger Fearick
+<li>Carsten Grammes
+<li>Lucas Hart
+<li>Lars Hecking
+<li>Thomas Koenig
+<li>David Kotz
+<li>Ed Kubaitis
+<li>Russell Lang
+<li>Alexander Lehmann
+<li>Alexander Mai
+<li>Ethan A Merritt
+<li>Petr Mikulik
+<li>Carsten Steger
+<li>Tom Tkacik
+<li>Jos Van der Woude
+<li>Alex Woo
+<li>James R. Van Zandt
+<li>Johannes Zellner
+</ul>
+
+<!-- ^<h2>  Copyright (C) 1986 - 1993, 1998 - 2004   Thomas Williams, Colin Kelley<p> -->
+<!-- ^   Mailing list for comments: gnuplot-info@@lists.sourceforge.net <p> -->
+<!-- ^   Mailing list for bug reports: gnuplot-bugs@@lists.sourceforge.net <p> -->
+<!-- ^</h2><p> -->
+<!-- ^<h3> This manual was originally prepared by Dick Crawford</h3><p> -->
+<!-- ^<h3> Last revised: March 2009</h3><p> -->
+<!-- ^<hr> -->
+<ul class="menu">
+<li><a accesskey="1" href="gnuplot.html#gnuplot">gnuplot</a>
+<li><a accesskey="2" href="plotting_005fstyles.html#plotting_005fstyles">plotting_styles</a>
+<li><a accesskey="3" href="Commands.html#Commands">Commands</a>
+<li><a accesskey="4" href="Terminal_005ftypes.html#Terminal_005ftypes">Terminal_types</a>
+<li><a accesskey="5" href="Graphical_005fUser_005fInterfaces.html#Graphical_005fUser_005fInterfaces">Graphical_User_Interfaces</a>
+<li><a accesskey="6" href="Bugs.html#Bugs">Bugs</a>
+<li><a accesskey="7" href="Concept_005fIndex.html#Concept_005fIndex">Concept_Index</a>
+<li><a accesskey="8" href="Command_005fIndex.html#Command_005fIndex">Command_Index</a>
+<li><a accesskey="9" href="Options_005fIndex.html#Options_005fIndex">Options_Index</a>
+<li><a href="Function_005fIndex.html#Function_005fIndex">Function_Index</a>
+<li><a href="Terminal_005fIndex.html#Terminal_005fIndex">Terminal_Index</a>
+</ul>
+
+   <div class="node">
+<a name="index"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="smooth.html#smooth">smooth</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="example_005fdatafile.html#example_005fdatafile">example_datafile</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="data.html#data">data</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.14.2.5 index</h5>
+
+<!-- ?commands plot datafile index -->
+<!-- ?plot datafile index -->
+<!-- ?plot index -->
+<!-- ?data-file index -->
+<!-- ?datafile index -->
+<p><a name="index-index-335"></a>
+The <a href="index.html#index">index</a> keyword allows you to select specific data sets in a multi-data-set
+file for plotting.
+
+   <p>Syntax:
+<pre class="example">           plot 'file' index { &lt;m&gt;{:&lt;n&gt;{:&lt;p&gt;}} | "&lt;name&gt;" }
+     
+</pre>
+   <p>Data sets are separated by pairs of blank records.  `index &lt;m&gt;` selects only
+set &lt;m&gt;; `index &lt;m&gt;:&lt;n&gt;` selects sets in the range &lt;m&gt; to &lt;n&gt;; and `index
+&lt;m&gt;:&lt;n&gt;:&lt;p&gt;` selects indices &lt;m&gt;, &lt;m&gt;+&lt;p&gt;, &lt;m&gt;+2&lt;p&gt;, etc., but stopping at
+&lt;n&gt;.  Following C indexing, the index 0 is assigned to the first data set in
+the file.  Specifying too large an index results in an error message. 
+If &lt;p&gt; is specified but &lt;n&gt; is left blank then every &lt;p&gt;-th dataset is read
+until the end of the file.  If <a href="index.html#index">index</a> is not specified, the entire file is
+plotted as a single data set.
+
+   <p>Example:
+<pre class="example">           plot 'file' index 4:5
+     
+</pre>
+   <p>For each point in the file, the index value of the data set it appears in is
+available via the pseudo-column `column(-2)`.  This leads to an alternative way
+of distinguishing individual data sets within a file as shown below.  This is
+more awkward than the <a href="index.html#index">index</a> command if all you are doing is selecting one
+data set for plotting, but is very useful if you want to assign different
+properties to each data set.  See `pseudocolumns`, `lc variable`.
+
+   <p>Example:
+<pre class="example">           plot 'file' using 1:(column(-2)==4 ? $2 : NaN)        # very awkward
+           plot 'file' using 1:2:(column(-2)) linecolor variable # very useful!
+     
+</pre>
+   <p>`index '&lt;name&gt;'` selects the data set with name '&lt;name&gt;'.  Names are assigned
+to data sets in comment lines.  The comment character and leading white space
+are removed from the comment line.  If the resulting line starts with &lt;name&gt;,
+the following data set is now named &lt;name&gt; and can be selected.
+
+   <p>Example:
+<pre class="example">           plot 'file' index 'Population'
+     
+</pre>
+   <p>Please note that every comment that starts with &lt;name&gt; will name the following
+data set.  To avoid problems it may be useful to choose a naming scheme like
+'== Population ==' or '[Population]'.
+
+<!-- ^ See also web page -->
+   <p><a href="http://www.gnuplot.info/demo/multimsh.html">splot with indices demo.</a>
+
+   </body></html>
+

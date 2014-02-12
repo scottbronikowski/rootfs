@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+<title>adjustable_parameters - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="fit.html#fit" title="fit">
+<link rel="prev" href="fit.html#fit" title="fit">
+<link rel="next" href="short_005fintroduction.html#short_005fintroduction" title="short_introduction">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="adjustable_parameters"></a>
+<a name="adjustable_005fparameters"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="short_005fintroduction.html#short_005fintroduction">short_introduction</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="fit.html#fit">fit</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="fit.html#fit">fit</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.6.1 adjustable parameters</h4>
+
+<!-- ?commands fit parameters -->
+<!-- ?fit parameters -->
+<!-- ?commands fit adjustable_parameters -->
+<!-- ?fit adjustable_parameters -->
+<p><a name="index-fit_005fparameters-291"></a>
+There are two ways that `via` can specify the parameters to be adjusted,
+either directly on the command line or indirectly, by referencing a
+parameter file.  The two use different means to set initial values.
+
+   <p>Adjustable parameters can be specified by a comma-separated list of variable
+names after the `via` keyword.  Any variable that is not already defined
+is created with an initial value of 1.0.  However, the fit is more likely
+to converge rapidly if the variables have been previously declared with more
+appropriate starting values.
+
+   <p>In a parameter file, each parameter to be varied and a corresponding initial
+value are specified, one per line, in the form
+<pre class="example">           varname = value
+     
+</pre>
+   <p>Comments, marked by '#', and blank lines are permissible.  The
+special form
+<pre class="example">           varname = value       # FIXED
+     
+</pre>
+   <p>means that the variable is treated as a 'fixed parameter', initialized by the
+parameter file, but not adjusted by <a href="fit.html#fit">fit</a>.  For clarity, it may be useful to
+designate variables as fixed parameters so that their values are reported by
+<a href="fit.html#fit">fit</a>.  The keyword `# FIXED` has to appear in exactly this form.
+
+   </body></html>
+

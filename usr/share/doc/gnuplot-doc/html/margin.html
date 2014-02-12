@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>margin - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="mapping.html#mapping" title="mapping">
+<link rel="next" href="mouse.html#mouse" title="mouse">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="margin"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="mouse.html#mouse">mouse</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="mapping.html#mapping">mapping</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.38 margin</h4>
+
+<!-- ?commands set margin -->
+<!-- ?commands show margin -->
+<!-- ?set margin -->
+<!-- ?show margin -->
+<p><a name="index-margin-478"></a><a name="index-margin-479"></a>
+
+   <p>The computed margins can be overridden by the <a href="margin.html#margin">margin</a> commands.  <a href="margin.html#margin">margin</a> shows the current settings.
+
+   <p>Syntax:
+<pre class="example">           set bmargin {{at screen} &lt;margin&gt;}
+           set lmargin {{at screen} &lt;margin&gt;}
+           set rmargin {{at screen} &lt;margin&gt;}
+           set tmargin {{at screen} &lt;margin&gt;}
+           show margin
+     
+</pre>
+   <p>The default units of &lt;margin&gt; are character heights or widths, as appropriate. 
+A positive value defines the absolute size of the margin.  A negative value
+(or none) causes `gnuplot` to revert to the computed value.  For 3D plots,
+only the left margin can be set using character units.
+
+   <p>The keywords `at screen` indicates that the margin is specified as a fraction
+of the full drawing area. This can be used to precisely line up the corners of
+individual 2D and 3D graphs in a multiplot. This placement ignores the current
+values of <a href="origin.html#origin">origin</a> and <a href="size.html#size">size</a>, and is intended as an alternative
+method for positioning graphs within a multiplot.
+
+   <p>Normally the margins of a plot are automatically calculated based on tics,
+tic labels, axis labels, the plot title, the timestamp and the size of the
+key if it is outside the borders.  If, however, tics are attached to the
+axes (`set xtics axis`, for example), neither the tics themselves nor their
+labels will be included in either the margin calculation or the calculation
+of the positions of other text to be written in the margin.  This can lead
+to tic labels overwriting other text if the axis is very close to the border.
+
+   </body></html>
+

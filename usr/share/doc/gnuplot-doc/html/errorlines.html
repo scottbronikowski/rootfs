@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>errorlines - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plot.html#plot" title="plot">
+<link rel="prev" href="errorbars.html#errorbars" title="errorbars">
+<link rel="next" href="parametric.html#parametric" title="parametric">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="errorlines"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="parametric.html#parametric">parametric</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="errorbars.html#errorbars">errorbars</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plot.html#plot">plot</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.14.4 errorlines</h4>
+
+<!-- ?commands plot errorlines -->
+<!-- ?commands splot errorlines -->
+<!-- ?plot errorlines -->
+<!-- ?splot errorlines -->
+<p><a name="index-errorlines-353"></a>
+Lines with error bars are supported for 2D data file plots by reading
+one to four additional columns (or <a href="using.html#using">using</a> entries); these additional
+values are used in different ways by the various errorlines styles.
+
+   <p>In the default situation, `gnuplot` expects to see three, four, or six
+numbers on each line of the data file&mdash;either
+
+<pre class="example">           (x, y, ydelta),
+           (x, y, ylow, yhigh),
+           (x, y, xdelta),
+           (x, y, xlow, xhigh),
+           (x, y, xdelta, ydelta), or
+           (x, y, xlow, xhigh, ylow, yhigh).
+     
+</pre>
+   <p>The x coordinate must be specified. The order of the numbers must be
+exactly as given above, though the <a href="using.html#using">using</a> qualifier can manipulate
+the order and provide values for missing columns. For example,
+
+<pre class="example">           plot 'file' with errorlines
+           plot 'file' using 1:2:(sqrt($1)) with xerrorlines
+           plot 'file' using 1:2:($1-$3):($1+$3):4:5 with xyerrorlines
+     
+</pre>
+   <p>The last example is for a file containing an unsupported combination
+of relative x and absolute y errors. The <a href="using.html#using">using</a> entry generates
+absolute x min and max from the relative error.
+
+   <p>The y error bar is a vertical line plotted from (x, ylow) to (x,
+yhigh). If ydelta is specified instead of ylow and yhigh, ylow = y -
+ydelta and yhigh = y + ydelta are derived. If there are only two
+numbers on the record, yhigh and ylow are both set to y. The x error
+bar is a horizontal line computed in the same fashion.
+
+   <p>The error bars have crossbars at each end unless <a href="bars.html#bars">bars</a> is used
+(see <a href="bars.html#bars">bars</a> for details).
+
+   <p>If autoscaling is on, the ranges will be adjusted to include the error bars.
+
+   <p>See <a href="using.html#using">using</a>, <a href="with.html#with">with</a>, and <a href="style.html#style">style</a> for more information.
+
+   </body></html>
+

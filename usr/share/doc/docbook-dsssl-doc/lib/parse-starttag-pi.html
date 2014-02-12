@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>parse-starttag-pi</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="DSSSL Library Reference"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Miscellaneous"
+HREF="r300.htm"><LINK
+REL="PREVIOUS"
+TITLE="parse-skip-pi-attribute"
+HREF="parse-skip-pi-attribute.html"><LINK
+REL="NEXT"
+TITLE="string->nodes"
+HREF="string-X3Enodes.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>DSSSL Library Reference: Part of the Modular DocBook Stylesheet distribution</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="parse-skip-pi-attribute.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="string-X3Enodes.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="PARSE-STARTTAG-PI"
+></A
+>parse-starttag-pi</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN2034"
+></A
+><H2
+>Name</H2
+>parse-starttag-pi&nbsp;--&nbsp;Parses a structured PI and returns a list of values</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN2037"
+></A
+><H2
+>Synopsis</H2
+><PRE
+CLASS="SYNOPSIS"
+>(parse-starttag-pi pi)</PRE
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN2040"
+></A
+><H2
+>Description</H2
+><P
+>It has become common practice to give PIs structured values.  The
+result is a PI that looks a lot like a start tag with attributes:</P
+><P
+>&#60;?pitarget name1="value1" name2=<TT
+CLASS="LITERAL"
+>value2</TT
+> name3="value <TT
+CLASS="LITERAL"
+>3</TT
+>"&#62;</P
+><P
+>This function parses a PI with this form and returns a list. The
+list contains the pitarget and each of the name/value pairs:</P
+><P
+>("pitarget" "name1" "value1" "name2" "value2" "name3" "value <TT
+CLASS="LITERAL"
+>3</TT
+>")</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN2049"
+></A
+><H2
+>Author</H2
+><P
+>Norman Walsh, &lt;ndw@nwalsh.com&gt;</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN2052"
+></A
+><H2
+>Source Code</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>(define (parse-starttag-pi pi)
+  ;; Parses a structured PI and returns a list of values
+  (let* ((strippi (strip pi))
+	 (spacepos (string-index strippi " ")))
+    (if (&#60; spacepos 0)
+	(list strippi)
+	(let* ((pitarget (substring strippi 0 spacepos))
+	       (pivalues (strip (substring strippi 
+					   (+ spacepos 1)
+					   (string-length strippi)))))
+	  (let loop ((values pivalues) (result (list pitarget)))
+	    (if (string=? values "")
+		result
+		(loop (parse-skip-pi-attribute values)
+		      (append result (parse-pi-attribute values)))))))))</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="parse-skip-pi-attribute.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="string-X3Enodes.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>parse-skip-pi-attribute</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="r300.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>string-&#62;nodes</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

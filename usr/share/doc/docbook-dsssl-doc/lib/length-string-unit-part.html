@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>length-string-unit-part</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="DSSSL Library Reference"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Miscellaneous"
+HREF="r300.htm"><LINK
+REL="PREVIOUS"
+TITLE="length-string-number-part"
+HREF="length-string-number-part.html"><LINK
+REL="NEXT"
+TITLE="normalize"
+HREF="normalize.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>DSSSL Library Reference: Part of the Modular DocBook Stylesheet distribution</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="length-string-number-part.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="normalize.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="LENGTH-STRING-UNIT-PART"
+></A
+>length-string-unit-part</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1800"
+></A
+><H2
+>Name</H2
+>length-string-unit-part&nbsp;--&nbsp;Returns the unit part of a length string</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1803"
+></A
+><H2
+>Synopsis</H2
+><PRE
+CLASS="SYNOPSIS"
+>(length-string-unit-part lenstr)</PRE
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1806"
+></A
+><H2
+>Description</H2
+><P
+>Given a length as a string, return the units part.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1809"
+></A
+><H2
+>Example</H2
+><P
+><TT
+CLASS="LITERAL"
+>"100pt"</TT
+> returns <TT
+CLASS="LITERAL"
+>"pt"</TT
+>. <TT
+CLASS="LITERAL"
+>"30"</TT
+> returns <TT
+CLASS="LITERAL"
+>""</TT
+>.  
+<TT
+CLASS="LITERAL"
+>"in"</TT
+> returns <TT
+CLASS="LITERAL"
+>"in"</TT
+>.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1818"
+></A
+><H2
+>Author</H2
+><P
+>Norman Walsh, &lt;ndw@nwalsh.com&gt;</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1821"
+></A
+><H2
+>Source Code</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>(define (length-string-unit-part lenstr)
+  ;; Returns the unit part of a length string
+  (let ((number-part (length-string-number-part lenstr))
+	(strlen (string-length lenstr)))
+    (if (equal? (string-length number-part) strlen)
+	""
+	(substring lenstr (string-length number-part) strlen))))</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="length-string-number-part.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="normalize.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>length-string-number-part</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="r300.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>normalize</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

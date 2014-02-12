@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>fontpath - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="fit_005f.html#fit_005f" title="fit_">
+<link rel="next" href="format_005f.html#format_005f" title="format_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="fontpath"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="format_005f.html#format_005f">format_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="fit_005f.html#fit_005f">fit_</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.22 fontpath</h4>
+
+<!-- ?commands set fontpath -->
+<!-- ?commands show fontpath -->
+<!-- ?set fontpath -->
+<!-- ?show fontpath -->
+<p><a name="index-fontpath-439"></a><a name="index-fontpath-440"></a>
+
+   <p>The <a href="fontpath.html#fontpath">fontpath</a> setting defines additional locations for font files
+searched when including font files. Currently only the postscript terminal
+supports <a href="fontpath.html#fontpath">fontpath</a>. If a file cannot be found in the current directory,
+the directories in <a href="fontpath.html#fontpath">fontpath</a> are tried. Further documentation concerning
+the supported file formats is included in the `terminal postscript` section
+of the documentation.
+
+   <p>Syntax:
+<pre class="example">           set fontpath {"pathlist1" {"pathlist2"...}}
+           show fontpath
+     
+</pre>
+   <p>Path names may be entered as single directory names, or as a list of
+path names separated by a platform-specific path separator, eg. colon
+(':') on Unix, semicolon (';') on DOS/Windows/OS/2/Amiga platforms. 
+The <a href="fontpath.html#fontpath">fontpath</a>, <a href="save.html#save">save</a> and `save set` commands replace the
+platform-specific separator with a space character (' ') for maximum
+portability. If a directory name ends with an exclamation mark ('!') also
+the subdirectories of this directory are searched for font files.
+
+   <p>If the environmental variable GNUPLOT_FONTPATH is set, its contents are
+appended to <a href="fontpath.html#fontpath">fontpath</a>.  If it is not set, a system dependent default value
+is used. It is set by testing several directories for existence when using
+the fontpath the first time. Thus, the first call of <a href="fontpath.html#fontpath">fontpath</a>,
+<a href="fontpath.html#fontpath">fontpath</a>, <a href="fontpath.html#fontpath">fontpath</a>, `plot`, or `splot` with embedded font
+files takes a little more time. If you want to save this time you may
+set the environmental variable GNUPLOT_FONTPATH since probing is switched
+off, then. You can find out which is the default fontpath by using
+<a href="fontpath.html#fontpath">fontpath</a>.
+
+   <p>However, <a href="fontpath.html#fontpath">fontpath</a> prints the contents of user defined fontpath and
+system fontpath separately.  Also, the <a href="save.html#save">save</a> and `save set` commands save
+only the user specified parts of <a href="fontpath.html#fontpath">fontpath</a>, for portability reasons.
+
+   <p>Many other terminal drivers access TrueType fonts via the gd library. 
+For these drivers the font search path is controlled by the environmental
+variable GDFONTPATH.
+
+   </body></html>
+

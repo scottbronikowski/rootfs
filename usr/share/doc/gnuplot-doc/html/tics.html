@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>tics - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="termoption.html#termoption" title="termoption">
+<link rel="next" href="ticslevel.html#ticslevel" title="ticslevel">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="tics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ticslevel.html#ticslevel">ticslevel</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="termoption.html#termoption">termoption</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.66 tics</h4>
+
+<!-- ?commands set tics -->
+<!-- ?commands unset tics -->
+<!-- ?commands show tics -->
+<!-- ?set tics -->
+<!-- ?unset tics -->
+<!-- ?show tics -->
+<p><a name="index-tics-560"></a><a name="index-tics-561"></a>
+
+   <p>Control of the major (labelled) tics on all axes at once is possible with the
+`set tics` command.
+
+   <p>Fine control of the major (labelled) tics on all axes at once is possible
+with the `set tics` command.  The tics may be turned off with the `unset tics`
+command, and may be turned on (the default state) with `set tics`.  Similar
+commands (by preceding 'tics' by the axis name) control the major tics on a
+single axis.
+
+   <p>Syntax:
+<pre class="example">           set tics {axis | border} {{no}mirror}
+                    {in | out} {scale {default | &lt;major&gt; {,&lt;minor&gt;}}}
+                    {{no}rotate {by &lt;ang&gt;}} {offset &lt;offset&gt; | nooffset}
+                    { format "formatstring" } { font "name{,&lt;size&gt;}" }
+                    { textcolor &lt;colorspec&gt; }
+           set tics {front | back}
+           unset tics
+           show tics
+     
+</pre>
+   <p>The options in the first set above can be applied individually to
+any or all axes, i.e., x, y, z, x2, y2, and cb.
+
+   <p>Set tics `front` or `back` applies to all axes at once, but only for 2D plots
+(not splot).  It controls whether the tics are placed behind or in front of
+the plot elements, in the case that there is overlap.
+
+   <p>`axis` or <a href="border.html#border">border</a> tells `gnuplot` to put the tics (both the tics themselves
+and the accompanying labels) along the axis or the border, respectively.  If
+the axis is very close to the border, the `axis` option will move the
+tic labels to outside the border in case the border is printed (see
+<a href="border.html#border">border</a>).  The relevant margin settings will usually be sized badly by
+the automatic layout algorithm in this case.
+
+   <p>`mirror` tells `gnuplot` to put unlabelled tics at the same positions on the
+opposite border.  `nomirror` does what you think it does.
+
+   <p>`in` and `out` change the tic marks to be drawn inwards or outwards.
+
+   <p>With `scale`, the size of the tic marks can be adjusted. If &lt;minor&gt; is not
+specified, it is 0.5*&lt;major&gt;.  The default size 1.0 for major tics and 0.5
+for minor tics is requested by `scale default`.
+
+   <p>`rotate` asks `gnuplot` to rotate the text through 90 degrees, which will be
+done if the terminal driver in use supports text rotation.  `norotate`
+cancels this. `rotate by &lt;ang&gt;` asks for rotation by &lt;ang&gt; degrees, supported
+by some terminal types.
+
+   <p>The defaults are `border mirror norotate` for tics on the x and y axes, and
+`border nomirror norotate` for tics on the x2 and y2 axes.  For the z axis,
+the default is `nomirror`.
+
+   <p>The &lt;offset&gt; is specified by either x,y or x,y,z, and may be preceded by
+`first`, `second`, `graph`, `screen`, or `character` to select the
+coordinate system. &lt;offset&gt; is the offset of the tics texts from their
+default positions, while the default coordinate system is `character`. 
+See `coordinates` for details. `nooffset` switches off the offset.
+
+   <p>`set tics` with no options restores to place tics inwards. Every other
+options are retained.
+
+   <p>See also `set xtics` for more control of major (labelled) tic marks and
+<a href="mxtics.html#mxtics">mxtics</a> for control of minor tic marks.  These commands provide control
+at a axis by axis basis.
+
+   </body></html>
+

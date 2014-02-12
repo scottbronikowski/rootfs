@@ -1,0 +1,64 @@
+%%
+%% This is file `luaotfload.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% luaotfload.dtx  (with options: `package')
+%% This is a generated file.
+%% 
+%% Copyright (C) 2009 by Elie Roux <elie.roux@telecom-bretagne.eu>
+%% 
+%% This work is under the CC0 license.
+%% 
+%% This work consists of the main source file luaotfload.dtx
+%% and the derived files
+%%     luaotfload.sty, luaotfload.lua
+%% 
+\csname ifluaotfloadloaded\endcsname
+\let\ifluaotfloadloaded\endinput
+
+\expandafter\ifx\csname ProvidesPackage\endcsname\relax
+  \input luatextra.sty
+\else
+  \NeedsTeXFormat{LaTeX2e}
+  \ProvidesPackage{luaotfload}%
+    [2009/09/22 v1.04 ConTeXt font loading system]
+  \RequirePackage{luatextra}
+\fi
+
+\expandafter\edef\csname otfl@AtEnd\endcsname{%
+  \catcode64 \the\catcode64\relax
+}
+
+\catcode64 11
+
+
+\newluatexattribute\otfl@state
+\newluatexattribute\otfl@markbase
+\newluatexattribute\otfl@markdone
+\newluatexattribute\otfl@markmark
+\newluatexattribute\otfl@cursbase
+\newluatexattribute\otfl@curscurs
+\newluatexattribute\otfl@cursdone
+\newluatexattribute\otfl@kernpair
+\newluatexattribute\otfl@color
+
+
+\def\otfl@off{
+\luadirect{luaotfload.unregister_callbacks()}
+}
+
+\def\otfl@on{
+\luadirect{luaotfload.register_callbacks()}
+}
+
+
+\luatexUseModule{luaotfload}
+
+\otfl@on
+
+\otfl@AtEnd
+\endinput
+%%
+%% End of file `luaotfload.sty'.

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+    remove|deconfigure|upgrade)
+	## alternatives system
+	update-alternatives --quiet --remove \
+	    openjade /usr/bin/openjade-1.4devel
+    ;;
+
+esac
+
+# Automatically added by dh_installcatalogs
+if [ "$1" = "remove" ] || [ "$1" = "upgrade" ]; then
+	update-catalog --quiet --remove --super /etc/sgml/openjade.cat
+fi
+# End automatically added section
+
+
+exit 0

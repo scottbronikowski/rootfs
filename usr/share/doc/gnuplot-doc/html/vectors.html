@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+<title>vectors - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plotting_005fstyles.html#plotting_005fstyles" title="plotting_styles">
+<link rel="prev" href="rgbimage.html#rgbimage" title="rgbimage">
+<link rel="next" href="xerrorbars.html#xerrorbars" title="xerrorbars">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="vectors"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="xerrorbars.html#xerrorbars">xerrorbars</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="rgbimage.html#rgbimage">rgbimage</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plotting_005fstyles.html#plotting_005fstyles">plotting_styles</a>
+<hr>
+</div>
+
+<h3 class="section">2.21 vectors</h3>
+
+<!-- ?commands set style vectors -->
+<!-- ?set style vectors -->
+<!-- ?plotting styles vectors -->
+<!-- ?style vectors -->
+<p><a name="index-vectors-269"></a>
+The 2D <a href="vectors.html#vectors">vectors</a> style draws a vector from (x,y) to (x+xdelta,y+ydelta). 
+The 3D <a href="vectors.html#vectors">vectors</a> style is similar, but requires six columns of basic data. 
+A small arrowhead is drawn at the end of each vector.
+
+<pre class="example">          4 columns:  x  y  xdelta  ydelta
+          6 columns:  x  y  z  xdelta  ydelta  zdelta
+     
+</pre>
+   <p>splot with vectors is supported only for `set mapping cartesian`. 
+The keywords "with vectors" may be followed by arrow style specifications. 
+See `arrowstyle` for more details.
+
+   <p>Example:
+<pre class="example">           plot 'file.dat' using 1:2:3:4 with vectors head filled lt 2
+           splot 'file.dat' using 1:2:3:(1):(1):(1) with vectors filled head lw 2
+     
+</pre>
+   <p>`set clip one` and `set clip two` affect vectors drawn in 2D. 
+Please see <a href="clip.html#clip">clip</a> and `arrowstyle`.
+
+   </body></html>
+

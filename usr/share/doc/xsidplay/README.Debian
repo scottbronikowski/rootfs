@@ -1,0 +1,66 @@
+xsidplay for DEBIAN/Linux
+**************************
+
+This package was debianised, packaged and is currently maintained by me,
+Ulf Jaenicke-Roessler <ujr@debian.org>, from the sources that I obtained
+from the SidPlay HomePage at
+ http://www.geocities.com/SiliconValley/Lakes/5147/
+The author can be reached by mailing him to sidplay@geocities.com.
+
+Generally I'm using pristine sources (since version 1.1.6, well, at least
+approximately). First, there were .tgz's provided by the author. Later on he
+moved to src.rpm's. These were unpacked by
+ rpm -i xsidplay-{version}.src.rpm
+and
+ rpm -bp xsidplay-{version}.spec (or just rpm -bp xsidplay.spec)
+Sometimes the author supplies patches for new upstream versions before
+he uploads a complete new version to the location above. These patches
+are also used if appropriate.
+
+Version 1.3 (and newer) use GNU autoconf. Almost seemlessly integrates with
+the Debian package of libsidplay1.
+
+There's neither a man page nor an info file available, simply because the
+upstream sources don't contain it. Because lintian complains about that,
+I'm using the "undocumented" page - maybe, some day I'll find the time and
+inspiration to write a real man page.
+You may want to check the documentation on the SidPlay-Homepage, which
+is included in the libsidplay1 package for offline reading.
+
+The directory src/audio contains special audio drivers for certain other
+hardware (sparc, ...). Please check if you need it when you rebuild the
+package. If you can't find the correct driver for your system, you may
+want to look at the sidplay source package. The current setup uses Linux
+drivers.
+
+You can use '--expert' as commandline option (don't use the menu item then)
+in order to activate the oscilloscope. However this may cause breaks in the
+musics (therefore you need to be an 'expert' in order to activate this mode
+;-) while you're dragging windows around or while the computer needs to
+access the harddisk or has other important things to do. This seems due to
+restrictions of the free version of the Linux sound driver.
+
+If you use the history window (aka poor man's playlist ;-), you may get
+some weird problems which are probably related to outdated entries (ie.
+deleted or moved files, eg. during HVSC update). You should press the
+"clear" button in the history window after you made changes (aka updates)
+to the HVSC tree, in order to reset the history and to prevent or solve
+the problems.
+
+Some more notes:
+. xsidplay	refuses to run in a non-X environment.
+. xsidplay	recognizes a file name on the commandline as a tune's name
+. xsidplay	can read tune data from standard input
+
+You may want to download and install the HVSC songlength database as described
+in `Readme'.
+
+
+This software was developed with, and uses, QT. Please see file PACKAGING,
+as well as the QT license (e.g. LICENSE and README.QT in /usr/share/doc/qt1g
+or /usr/share/doc/qt2, resp.) for information.
+
+
+Ulf Jaenicke-Roessler <ujr@debian.org>, Sat, 14 Oct 2000 18:42:27 +0200
+
+ vim:tw=79

@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>ggi - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="png_005f.html#png_005f" title="png_">
+<link rel="next" href="Gnugraph_0028GNU_005fplotutils_0029.html#Gnugraph_0028GNU_005fplotutils_0029" title="Gnugraph(GNU_plotutils)">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ggi"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Gnugraph_0028GNU_005fplotutils_0029.html#Gnugraph_0028GNU_005fplotutils_0029">Gnugraph(GNU_plotutils)</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="png_005f.html#png_005f">png_</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.25 ggi</h5>
+
+<!-- ?commands set terminal ggi -->
+<!-- ?set terminal ggi -->
+<!-- ?set term ggi -->
+<!-- ?terminal ggi -->
+<!-- ?term ggi -->
+<p><a name="index-ggi-794"></a><a name="index-ggi-795"></a>
+
+   <p>The `ggi` driver can run on different targets as X or svgalib.
+
+   <p>Syntax:
+<pre class="example">        set terminal ggi [acceleration &lt;integer&gt;] [[mode] {mode}]
+     
+</pre>
+   <p>In X the window cannot be resized using window manager handles, but the
+mode can be given with the mode option, e.g.:
+<pre class="example">      - V1024x768
+      - V800x600
+      - V640x480
+      - V320x200
+</pre>
+   <p>Please refer to the ggi documentation for other modes. The 'mode' keyword
+is optional. It is recommended to select the target by environment variables
+as explained in the libggi manual page. To get DGA on X, you should for
+example
+<pre class="example">        bash&gt; export GGI_DISPLAY=DGA
+        csh&gt;  setenv GGI_DISPLAY DGA
+     
+</pre>
+   <p>'acceleration' is only used for targets which report relative pointer
+motion events (e.g. DGA) and is a strictly positive integer multiplication
+factor for the relative distances.  The default for acceleration is 7.
+
+   <p>Examples:
+<pre class="example">        set term ggi acc 10
+        set term ggi acc 1 mode V1024x768
+        set term ggi V1024x768"
+     
+</pre>
+   </body></html>
+

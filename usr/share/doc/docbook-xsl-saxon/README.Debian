@@ -1,0 +1,25 @@
+docbook-xsl-saxon for Debian
+----------------------------
+
+The package contains an example DocBook XML file using the extensions,
+provided by this package. To create output from these files, you need (besides
+this package and libsaxon-java) libxerces2-java and
+libxml-commons-resolver1.1-java.
+
+By running
+
+  make -C /usr/share/doc/docbook-xsl-saxon/examples/ DESTDIR=/tmp
+
+two HTML files are created in /tmp (you can of course use a directory other
+than /tmp too; simply use one, where you have write permissions). The one with
+the "noext" filename part is created with xsltproc. This means, no extensions
+have been used. The file without the "noext" part is created with Saxon and
+all extensions are used.
+
+Run the command
+
+  make -C /usr/share/doc/docbook-xsl-saxon/examples/ clean DESTDIR=/tmp
+
+to remove the HTML files and the created image.
+
+ -- Daniel Leidert (dale) <daniel.leidert@wgdd.de>  Tue, 18 Sep 2007 00:25:50 +0200

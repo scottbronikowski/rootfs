@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+<title>starting_values - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="fit.html#fit" title="fit">
+<link rel="prev" href="multi_002dbranch.html#multi_002dbranch" title="multi-branch">
+<link rel="next" href="tips.html#tips" title="tips">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="starting_values"></a>
+<a name="starting_005fvalues"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="tips.html#tips">tips</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="multi_002dbranch.html#multi_002dbranch">multi-branch</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="fit.html#fit">fit</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.6.6 starting values</h4>
+
+<!-- ?commands fit starting_values -->
+<!-- ?fit starting_values -->
+<p><a name="index-starting_005fvalues-298"></a>
+Nonlinear fitting is not guaranteed to converge to the global optimum (the
+solution with the smallest sum of squared residuals, SSR), and can get stuck
+at a local minimum.  The routine has no way to determine that;  it is up to
+you to judge whether this has happened.
+
+   <p><a href="fit.html#fit">fit</a> may, and often will get "lost" if started far from a solution, where
+SSR is large and changing slowly as the parameters are varied, or it may
+reach a numerically unstable region (e.g., too large a number causing a
+floating point overflow) which results in an "undefined value" message
+or `gnuplot` halting.
+
+   <p>To improve the chances of finding the global optimum, you should set the
+starting values at least roughly in the vicinity of the solution, e.g.,
+within an order of magnitude, if possible.  The closer your starting values
+are to the solution, the less chance of stopping at another minimum.  One way
+to find starting values is to plot data and the fitting function on the same
+graph and change parameter values and <a href="replot.html#replot">replot</a> until reasonable similarity
+is reached.  The same plot is also useful to check whether the fit stopped at
+a minimum with a poor fit.
+
+   <p>Of course, a reasonably good fit is not proof there is not a "better" fit (in
+either a statistical sense, characterized by an improved goodness-of-fit
+criterion, or a physical sense, with a solution more consistent with the
+model.)  Depending on the problem, it may be desirable to <a href="fit.html#fit">fit</a> with various
+sets of starting values, covering a reasonable range for each parameter.
+
+   </body></html>
+

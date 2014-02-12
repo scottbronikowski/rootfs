@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Environment - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="gnuplot.html#gnuplot" title="gnuplot">
+<link rel="prev" href="Enhanced_005ftext_005fmode.html#Enhanced_005ftext_005fmode" title="Enhanced_text_mode">
+<link rel="next" href="Expressions.html#Expressions" title="Expressions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Environment"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Expressions.html#Expressions">Expressions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Enhanced_005ftext_005fmode.html#Enhanced_005ftext_005fmode">Enhanced_text_mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="gnuplot.html#gnuplot">gnuplot</a>
+<hr>
+</div>
+
+<h3 class="section">1.12 Environment</h3>
+
+<p><a name="index-environment-24"></a>
+A number of shell environment variables are understood by `gnuplot`.  None of
+these are required, but may be useful.
+
+   <p>If GNUTERM is defined, it is used as the name of the terminal type to be
+used.  This overrides any terminal type sensed by `gnuplot` on start-up, but
+is itself overridden by the .gnuplot (or equivalent) start-up file
+(see `start-up`) and, of course, by later explicit changes.
+
+   <p>GNUHELP may be defined to be the pathname of the HELP file (gnuplot.gih).
+
+   <p>On VMS, the logical name GNUPLOT$HELP should be defined as the name of the
+help library for `gnuplot`.  The `gnuplot` help can be put inside any system
+help library, allowing access to help from both within and outside `gnuplot`
+if desired.
+
+   <p>On Unix, HOME is used as the name of a directory to search for a .gnuplot
+file if none is found in the current directory.  On AmigaOS,
+MS-DOS, Windows and OS/2, GNUPLOT is used.  On Windows, the NT-specific
+variable USERPROFILE is tried, too. VMS, SYS$LOGIN: is used. Type `help
+start-up`.
+
+   <p>On Unix, PAGER is used as an output filter for help messages.
+
+   <p>On Unix and AmigaOS, SHELL is used for the <a href="shell.html#shell">shell</a> command.  On
+MS-DOS and OS/2, COMSPEC is used for the <a href="shell.html#shell">shell</a> command.
+
+   <p>FIT_SCRIPT may be used to specify a `gnuplot` command to be executed when a
+fit is interrupted&mdash;see <a href="fit.html#fit">fit</a>.  FIT_LOG specifies the default filename of the
+logfile maintained by fit.
+
+   <p>GNUPLOT_LIB may be used to define additional search directories for data
+and command files. The variable may contain a single directory name, or
+a list of directories separated by a platform-specific path separator,
+eg. ':' on Unix, or ';' on DOS/Windows/OS/2/Amiga platforms. The contents
+of GNUPLOT_LIB are appended to the <a href="loadpath.html#loadpath">loadpath</a> variable, but not saved
+with the <a href="save.html#save">save</a> and `save set` commands.
+
+   <p>Several gnuplot terminal drivers access TrueType fonts via the gd library. 
+For these drivers the font search path is controlled by the environmental
+variable GDFONTPATH.  Furthermore, a default font for these drivers may be
+set via the environmental variable GNUPLOT_DEFAULT_GDFONT.
+
+   <p>The postscript terminal uses its own font search path. It is controlled by
+the environmental variable GNUPLOT_FONTPATH. The format is the same as for
+GNUPLOT_LIB. The contents of GNUPLOT_FONTPATH are appended to the <a href="fontpath.html#fontpath">fontpath</a>
+variable, but not saved with the <a href="save.html#save">save</a> and `save set` commands.
+
+   <p>GNUPLOT_PS_DIR is used by the postscript driver to use external prologue
+files. Depending on the build process, gnuplot contains either a builtin
+copy of those files or simply a default hardcoded path. Use this variable
+to test the postscript terminal with custom prologue files. See
+`postscript prologue`.
+
+   </body></html>
+

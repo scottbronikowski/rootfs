@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>decimalsign - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="datafile.html#datafile" title="datafile">
+<link rel="next" href="dgrid3d.html#dgrid3d" title="dgrid3d">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="decimalsign"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="dgrid3d.html#dgrid3d">dgrid3d</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="datafile.html#datafile">datafile</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.17 decimalsign</h4>
+
+<!-- ?commands set decimalsign -->
+<!-- ?commands show decimalsign -->
+<!-- ?commands unset decimalsign -->
+<!-- ?set decimalsign -->
+<!-- ?show decimalsign -->
+<!-- ?unset decimalsign -->
+<p><a name="index-decimalsign-426"></a><a name="index-decimalsign-427"></a>
+
+   <p><a name="index-locale-428"></a><a name="index-locale-429"></a>
+
+   <p>The <a href="decimalsign.html#decimalsign">decimalsign</a> command selects a decimal sign for numbers printed
+into tic labels or `set label` strings.
+
+   <p>Syntax:
+<pre class="example">           set decimalsign {&lt;value&gt; | locale {"&lt;locale&gt;"}}
+           unset decimalsign
+           show decimalsign
+     
+</pre>
+   <p>The argument &lt;value&gt; is a string to be used in place of the usual
+decimal point. Typical choices include the period, '.', and the comma,
+',', but others may be useful, too.  If you omit the &lt;value&gt; argument,
+the decimal separator is not modified from the usual default, which is
+a period.  Unsetting decimalsign has the same effect as omitting &lt;value&gt;.
+
+   <p>Example:
+
+   <p>Correct typesetting in most European countries requires:
+<pre class="example">           set decimalsign ','
+     
+</pre>
+   <p>Please note: If you set an explicit string, this affects only numbers that
+are printed using gnuplot's gprintf() formatting routine, include axis tics. 
+It does not affect the format expected for input data, and it does not affect
+numbers printed with the sprintf() formatting routine. To change the behavior
+of both input and output formatting, instead use the form
+
+<pre class="example">           set decimalsign locale
+     
+</pre>
+   <p>This instructs the program to use both input and output formats in accordance
+with the current setting of the LC_ALL, LC_NUMERIC, or LANG environmental
+variables.
+
+<pre class="example">           set decimalsign locale "foo"
+     
+</pre>
+   <p>This instructs the program to format all input and output in accordance with
+locale "foo", which must be installed.  If locale "foo" is not found then an
+error message is printed and the decimal sign setting is unchanged. 
+On linux systems you can get a list of the locales installed on your machine by
+typing "locale -a". A typical linux locale string is of the form "sl_SI.UTF-8". 
+A typical Windows locale string is of the form "Slovenian_Slovenia.1250" or
+"slovenian". Please note that interpretation of the locale settings is done by
+the C library at runtime. Older C libraries may offer only partial support for
+locale settings such as the thousands grouping separator character.
+
+<pre class="example">           set decimalsign locale; set decimalsign "."
+     
+</pre>
+   <p>This sets all input and output to use whatever decimal sign is correct for
+the current locale, but over-rides this with an explicit '.' in numbers
+formatted using gnuplot's internal gprintf() function.
+
+   </body></html>
+

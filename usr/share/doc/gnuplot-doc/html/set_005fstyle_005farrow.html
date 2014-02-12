@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>set_style_arrow - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="style.html#style" title="style">
+<link rel="prev" href="style.html#style" title="style">
+<link rel="next" href="set_005fstyle_005fdata.html#set_005fstyle_005fdata" title="set_style_data">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="set_style_arrow"></a>
+<a name="set_005fstyle_005farrow"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="set_005fstyle_005fdata.html#set_005fstyle_005fdata">set_style_data</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="style.html#style">style</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="style.html#style">style</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.61.1 set style arrow</h5>
+
+<!-- ?commands set style arrow -->
+<!-- ?commands unset style arrow -->
+<!-- ?commands show style arrow -->
+<!-- ?set style arrow -->
+<!-- ?unset style arrow -->
+<!-- ?show style arrow -->
+<p><a name="index-arrowstyle-542"></a>
+<!-- ^ <a name="arrowtype"></a> -->
+<!-- ^ <a name="arrowwidth"></a> -->
+Each terminal has a default set of arrow and point types, which can be seen
+by using the command <a href="test.html#test">test</a>.  <a href="arrow.html#arrow">arrow</a> defines a set of arrow types
+and widths and point types and sizes so that you can refer to them later by
+an index instead of repeating all the information at each invocation.
+
+   <p>Syntax:
+<pre class="example">           set style arrow &lt;index&gt; default
+           set style arrow &lt;index&gt; {nohead | head | heads}
+                                   {size &lt;length&gt;,&lt;angle&gt;{,&lt;backangle&gt;}}
+                                   {filled | empty | nofilled}
+                                   {front | back}
+                                   { {linestyle | ls &lt;line_style&gt;}
+                                     | {linetype | lt &lt;line_type&gt;}
+                                       {linewidth | lw &lt;line_width} }
+           unset style arrow
+           show style arrow
+     
+</pre>
+   <p>&lt;index&gt; is an integer that identifies the arrowstyle.
+
+   <p>If `default` is given all arrow style parameters are set to their default
+values.
+
+   <p>If the linestyle &lt;index&gt; already exists, only the given parameters are
+changed while all others are preserved.  If not, all undefined values are
+set to the default values.
+
+   <p>Specifying `nohead` produces arrows drawn without a head&mdash;a line segment. 
+This gives you yet another way to draw a line segment on the plot.  By
+default, arrows have one head. Specifying `heads` draws arrow heads on both
+ends of the line.
+
+   <p>Head size can be controlled by `size &lt;length&gt;,&lt;angle&gt;` or
+`size &lt;length&gt;,&lt;angle&gt;,&lt;backangle&gt;`, where `&lt;length&gt;` defines length of each
+branch of the arrow head and `&lt;angle&gt;` the angle (in degrees) they make with
+the arrow.  `&lt;Length&gt;` is in x-axis units; this can be changed by `first`,
+`second`, `graph`, `screen`, or `character` before the &lt;length&gt;;  see
+`coordinates` for details.  `&lt;Backangle&gt;` only takes effect when `filled`
+or `empty` is also used.  Then, `&lt;backangle&gt;` is the angle (in degrees) the
+back branches make with the arrow (in the same direction as `&lt;angle&gt;`). 
+The `fig` terminal has a restricted backangle function. It supports three
+different angles. There are two thresholds: Below 70 degrees, the arrow head
+gets an indented back angle. Above 110 degrees, the arrow head has an acute
+back angle. Between these thresholds, the back line is straight.
+
+   <p>Specifying `filled` produces filled arrow heads (if heads are used). 
+Filling is supported on filled-polygon capable terminals, see help of <a href="pm3d.html#pm3d">pm3d</a>
+for their list, otherwise the arrow heads are closed but not filled. 
+The same result (closed but not filled arrow head) is reached by specifying
+`empty`.  Further, filling and outline is obviously not supported on
+terminals drawing arrows by their own specific routines, like `metafont`,
+`metapost`, `latex` or `tgif`.
+
+   <p>The line style may be selected from a user-defined list of line styles
+(see `set style line`) or may be defined here by providing values for
+`&lt;line_type&gt;` (an index from the default list of styles) and/or
+`&lt;line_width&gt;` (which is a  multiplier for the default width).
+
+   <p>Note, however, that if a user-defined line style has been selected, its
+properties (type and width) cannot be altered merely by issuing another
+<a href="arrow.html#arrow">arrow</a> command with the appropriate index and `lt` or `lw`.
+
+   <p>If `front` is given, the arrows are written on top of the graphed data. If
+`back` is given (the default), the arrow is written underneath the graphed
+data.  Using `front` will prevent a arrow from being obscured by dense data.
+
+   <p>Examples:
+
+   <p>To draw an arrow without an arrow head and double width, use:
+<pre class="example">           set style arrow 1 nohead lw 2
+           set arrow arrowstyle 1
+     
+</pre>
+   <p>See also <a href="arrow.html#arrow">arrow</a> for further examples.
+
+   </body></html>
+

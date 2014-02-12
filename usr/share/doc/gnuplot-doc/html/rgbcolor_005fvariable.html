@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+<title>rgbcolor_variable - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="colorspec.html#colorspec" title="colorspec">
+<link rel="prev" href="colorspec.html#colorspec" title="colorspec">
+<link rel="next" href="linecolor_005fvariable.html#linecolor_005fvariable" title="linecolor_variable">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="rgbcolor_variable"></a>
+<a name="rgbcolor_005fvariable"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="linecolor_005fvariable.html#linecolor_005fvariable">linecolor_variable</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="colorspec.html#colorspec">colorspec</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="colorspec.html#colorspec">colorspec</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">1.16.1.1 rgbcolor variable</h5>
+
+<!-- ?rgbcolor variable -->
+<!-- ?lc rgbcolor variable -->
+<!-- ?tc rgbcolor variable -->
+<p>Most plot commands assign a single color (linetype) to each element of the
+plot.  If there are multiple plots on a single graph, the default color
+(linetype) is incremented sequentially.  You can instead assign a separate
+color for each data point, line segment, or label based on additional
+information in the input data file.  This is indicated by the colorspec
+keyword `variable`.
+
+   <p>`lc rgbcolor variable` tells the program to use a 24-bit RGB color from a
+separate column in the data file. This requires a corresponding additional
+column in the <a href="using.html#using">using</a> specifier.  The extra column is interpreted as a 24-bit
+packed RGB triple. These are most easily specified as hexidecimal values
+(see `rgbcolor`). Text colors are similarly set using `tc rgbcolor variable`.
+
+   <p>Example:
+
+<pre class="example">           # Place colored points in 3D at the x,y,z coordinates corresponding to
+           # their red, green, and blue components
+           rgb(r,g,b) = 65536 * int(r) + 256 * int(g) + int(b)
+           splot "data" using 1:2:3:(rgb($1,$2,$3)) with points lc rgb variable
+     
+</pre>
+   </body></html>
+

@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 4.  Utilisation de la ligne de commande</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DivX" /><link rel="start" href="index.html" title="Guide de l'utilisateur de VLC" /><link rel="up" href="index.html" title="Guide de l'utilisateur de VLC" /><link rel="prev" href="ch03.html" title="Chapter 3.  Installation de VLC" /><link rel="next" href="ch05.html" title="Chapter 5.  L'interface de contrôle HTTP" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. 
+
+Utilisation de la ligne de commande
+
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch05.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="cmdline"></a>Chapter 4. 
+
+Utilisation de la ligne de commande
+
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch04.html#id2580592">
+
+Introduction
+
+</a></span></dt><dt><span class="sect1"><a href="ch04.html#id2580535">
+
+Ouvrir un flux
+
+</a></span></dt><dt><span class="sect1"><a href="ch04.html#id2581540">
+
+Sélection des modules
+
+</a></span></dt><dt><span class="sect1"><a href="ch04.html#id2581626">Stream Output</a></span></dt><dt><span class="sect1"><a href="ch04.html#id2583534">
+
+Autres options
+
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2580592"></a>
+
+Introduction
+
+</h2></div></div></div><p>
+
+Un certain nombre d'options ne sont disponibles
+qu'en utilisant la ligne de commande. Elles sont détaillées ici
+
+.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2580535"></a>
+
+Ouvrir un flux
+
+</h2></div></div></div><p>
+
+Les commandes suivantes lancent VLC et ajoutent un
+élément à la liste de lecture
+
+.</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2580546"></a>
+
+Ouvrir un fichier
+
+</h3></div></div></div><p>
+
+Démarrez VLC 
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv my_file.mpg</code></strong>
+</pre><p>
+
+Dans la grande majorité des cas, VLC
+reconnaitra automatiquement le type de fichier, mais vous pouvez
+également lui spécifier quel codec utiliser, avec l'option
+<span class="emphasis"><em>--codec</em></span>. Par exemple, pour lire my_file.mpg à
+l'aide du codec audio/vidéo "ffmpeg", utilisez 
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --codec ffmpeg my_file.mpg</code></strong> 
+</pre><p>
+
+ Une liste de tous les codecs audio
+et vidéo supportés par VLC est disponible sur la <a class="ulink" href="http://www.videolan.org/vlc/features.html" target="_top">page des fonctionnalités
+de VLC</a>
+
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2581363"></a>
+
+Ouvrir un DVD, un VCD, ou un CD audio
+
+</h3></div></div></div><p>
+
+Lancez VLC 
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv dvd://[peripherique][@peripherique_raw][@[titre][,[chapitre][,angle]]]
+</code></strong>
+</pre><p>
+
+ou 
+
+(VCD):</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv vcd://[peripherique][@{E|P|S|T}[titre]]</code></strong>
+</pre><p>
+
+ou 
+
+(Audio CD):</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv cdda://[peripherique][@[piste]]</code></strong>
+</pre><p>
+
+où périphérique est le chemin complet à votre
+lecteur de DVD ou de CD
+
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2581444"></a>
+
+Recevoir un flux réseau
+
+</h3></div></div></div><p>
+
+Pour recevoir un flux unicast UDP (envoyé par VLC ou
+par le stream output de VLC), lancez VLC avec
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv udp:[@:port_UDP]</code></strong>
+</pre><p>
+
+Pour recevoir un flux multicast UDP (envoyé par VLC
+ou par le stream output de VLC), lancez VLC avec
+
+ :</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv udp:@multicast_address[:port_UDP]</code></strong>
+</pre><p>
+
+Pour recevoir un flux HTTP, lancez VLC avec
+
+ :</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv http://www.example.org/your_file.mpg</code></strong>
+</pre><p>
+Pour recevoir un flux RTSP, lancez VLC avec
+ :</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv rtsp://www.example.org/your_stream</code></strong>
+</pre></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2581540"></a>
+
+Sélection des modules
+
+</h2></div></div></div><p>
+
+VLC essaie de sélectionner l'interface, et les
+modules d'entrée/sortie les plus adaptés parmi ceux qui sont disponibles
+sur votre système, selon le flux à lire. Toutefois, vous pouvez
+également forcer l'utilisation d'un module particulier, avec les
+options suivantes (pour une liste complète des modules, voir la <a class="xref" href="ch02.html" title="Chapter 2.  Modules et options de VLC">
+Modules et options de VLC
+</a> section modules)
+
+:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--intf  &lt;module&gt;</em></span>
+
+vous permet de choisir le module d'interface
+
+.</p></li><li><p><span class="emphasis"><em>--extraintf  &lt;module&gt;</em></span>
+
+vous permet de sélectionner des interfaces
+supplémentaires qui seront lancées en plus de l'interface
+principale
+
+.</p></li><li><p><span class="emphasis"><em>--aout  &lt;module&gt;</em></span>
+
+vous permet de choisir la sortie audio
+
+.</p></li><li><p><span class="emphasis"><em>--vout  &lt;module&gt;</em></span>
+
+vous permet de choisir la sortie vidéo
+
+.</p></li><li><p><span class="emphasis"><em>--filter  &lt;module&gt;</em></span>
+
+vous permet d'ajouter un filtre vidéo
+
+.</p></li><li><p><span class="emphasis"><em>--memcpy  &lt;module&gt;</em></span>
+
+vous permet de choisir un module de copie de mémoire
+
+
+.</p></li></ul></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2581626"></a>Stream Output</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2582263"></a>Description 
+du
+stream output</h3></div></div></div><p>
+Le stream output du VLC permet à ce dernier de
+servir de serveur de streaming et non de client, et possède des
+fonctionnalités très étendues
+:</p><div class="itemizedlist"><ul type="disc"><li><p>
+envoi en unicast et en multicast, en IPv4 ou en
+IPv6, tout ce que VLC est capable de lire, par UDP, RTP, ou HTTP
+;</p></li><li><p>
+sauvegarde du flux d'entrée vers un fichier AVI, PS,
+TS ou OGG
+;</p></li><li><p>
+transcodage du flux d'entrée et envoi
+.</p></li></ul></div><p>
+Pour connaître toutes les possibilités du stream output, merci de regarder la <a class="ulink" href="http://www.videolan.org/streaming/features.html" target="_top">
+page de fonctionnalités de streaming</a>
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2582621"></a>
+Architecture et syntaxe
+</h3></div></div></div><p>
+le stream output possède une puissante architecture
+qui utilise des modules. Chaque module apporte des fonctionnalités,
+et il est possible de <span class="emphasis"><em>chaîner</em></span> les modules pour
+combiner ces possibilités
+.</p><p>
+Voici la liste des modules disponibles
+:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>standard</em></span>
+"envoie" le flux grâce à un <span class="emphasis"><em>module de
+sortie</em></span>: par exemple, UDP, fichier, HTTP, ... vous utiliserez
+probablement ce module à la fin de vos chaînes
+.</p></li><li><p><span class="emphasis"><em>transcode</em></span>
+
+
+ vous permet de transcoder à la volée l'audio 
+et la vidéo de votre flux d'entrée (si votre ordinateur dispose de 
+suffisament de puissance)
+.</p></li><li><p><span class="emphasis"><em>duplicate</em></span>
+ vous permet de créer une seconde chaîne dans
+laquelle le flux sera traité séparément
+.</p></li><li><p><span class="emphasis"><em>display</em></span> 
+vous permet d'afficher le flux d'entrée,
+comme VLC le ferait normalement. Utilisé avec le module
+<span class="emphasis"><em>duplicate</em></span>, il vous permet de voir le flux en même
+temps que vous l'envoyez
+.</p></li><li><p><span class="emphasis"><em>rtp</em></span>
+envoie en RTP (un port UDP par flux ÈlÈmentaire)
+.</p></li><li><p><span class="emphasis"><em>es</em></span> 
+vous permet de séparer les flux élémentaires (ES)
+d'un flux d'entrée
+.</p></li></ul></div><p>
+Chaque module prend des options. Voici la syntaxe à
+utiliser
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc input_stream --sout '#module1{option1=...,option2=...}:module2{option1=...,option2=...}:...'</code></strong>
+</pre><p>
+Par exemple, pour transcoder et envoyer un flux
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc input_stream --sout '#transcode{options}:standard{options}'</code></strong>
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2582760"></a>
+Description des modules
+</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2582764"></a>standard (alias std)</h4></div></div></div><p>
+Envoie un flux
+.</p><p>Options:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>access</em></span>: 
+comment envoyer
+<span class="emphasis"><em>file</em></span>, <span class="emphasis"><em>udp</em></span>,
+<span class="emphasis"><em>rtp</em></span>, <span class="emphasis"><em>http</em></span>.</p></li><li><p><span class="emphasis"><em>mux</em></span>: 
+quel multiplexeur (format) utiliser ? Doit
+être:
+<span class="emphasis"><em>avi</em></span>
+  (format AVI)
+<span class="emphasis"><em>ogg</em></span> 
+  (format Ogg)
+<span class="emphasis"><em>ps</em></span>
+  (format MPEG2-PS)
+<span class="emphasis"><em>ts</em></span> 
+   (format MPEG2-TS)
+.</p></li><li><p><span class="emphasis"><em>url</em></span>: 
+Si vous utilisez l'access <span class="emphasis"><em>file</em></span>, 
+l'emplacement du fichier, sinon, l'adresse IP multicast ou unicast
+.</p></li><li><p><span class="emphasis"><em>sap</em></span>: 
+si vous utilisez l'access <span class="emphasis"><em>udp</em></span>
+ou <span class="emphasis"><em>rtp</em></span>, utilisez ceci pour annoncer le flux
+par SAP/SDP. L'option contient le nom sous lequel le programme sera
+annoncé
+.</p></li><li><p><span class="emphasis"><em>slp</em></span>: 
+comme sap, en utilisant le protocole SLP. Vous 
+aurez besoin de libslp
+.</p></li><li><p><span class="emphasis"><em>sap_ipv</em></span>: 
+si vous utilisez <span class="emphasis"><em>sap</em></span>, utilisez
+ceci pour spécifier si vous désirez envoyer les annonces SAP en IPv4
+-défaut- ou IPv6. La valeur à utiliser est <span class="emphasis"><em>4</em></span> ou
+<span class="emphasis"><em>6</em></span>
+.</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Si vous utilisez le multicast, vous pouvez utiliser
+l'option globale <span class="command"><strong>--ttl 12</strong></span> pour régler le TTL
+</p></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2582896"></a>display</h4></div></div></div><p>
+Affiche le flux
+.</p><p>Options:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>noaudio</em></span>:
+Pas d'audio
+.</p></li><li><p><span class="emphasis"><em>novideo</em></span>:
+Pas de vidéo
+.</p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2582926"></a>duplicate</h4></div></div></div><p>
+Duplique le flux vers une nouvelle chaîne
+.</p><p>Options:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>dst</em></span>: 
+Une nouvelle chaîne de modules, comme décrit plus
+haut
+.</p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2582951"></a>transcode</h4></div></div></div><p>
+Change le format de compression et/ou le taux de
+compression d'un flux
+.</p><p>Options:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>acodec</em></span>: 
+Nouveau format audio. Peut être un de
+<span class="emphasis"><em>mpga</em></span> (MPEG audio layer 2), <span class="emphasis"><em>a52</em></span>
+or <span class="emphasis"><em>ac3</em></span> (son AC3) ou <span class="emphasis"><em>vorb</em></span>
+(Vorbis)
+</p></li><li><p><span class="emphasis"><em>ab</em></span>: 
+taux de compression audio, en Kbps
+.</p></li><li><p><span class="emphasis"><em>vcodec</em></span>: 
+Nouveau format vidéo. Peut être un de
+<span class="emphasis"><em>mp4v</em></span> (MPEG4), <span class="emphasis"><em>mpgv</em></span>
+(MPEG1), <span class="emphasis"><em>DIV1</em></span>, <span class="emphasis"><em>DIV2</em></span>,
+<span class="emphasis"><em>DIV3</em></span> (DivX 1,2,3), <span class="emphasis"><em>H263</em></span>
+(H263), <span class="emphasis"><em>I263</em></span> (H263I), <span class="emphasis"><em>WMV1</em></span>
+or <span class="emphasis"><em>WMV2</em></span> (Windows Media Video 1 or 2),
+<span class="emphasis"><em>MJPG</em></span> (MJPEG), <span class="emphasis"><em>MJPB</em></span>
+(MJPEGB)
+.</p></li><li><p><span class="emphasis"><em>width</em></span>:
+largeur de la vidéo
+.</p></li><li><p><span class="emphasis"><em>height</em></span>:
+hauteur de la vidéo
+.</p></li><li><p><span class="emphasis"><em>vb</em></span>: 
+taux de compression vidéo, en Kbps
+.</p></li><li><p><span class="emphasis"><em>vt</em></span>: 
+tolérance sur le bitrate vidéo, en bps
+.</p></li><li><p><span class="emphasis"><em>deinterlace</em></span>: 
+active le désentrelacement
+.</p></li><li><p><span class="emphasis"><em>croptop</em></span>: 
+nombre de pixels rognés sur le haut de la vidéo
+.</p></li><li><p><span class="emphasis"><em>cropbottom</em></span>: 
+nombre de pixels rognés sur le bas de la vidéo
+.</p></li><li><p><span class="emphasis"><em>cropleft</em></span>: 
+nombre de pixels rognés sur la gauche de la vidéo
+.</p></li><li><p><span class="emphasis"><em>cropright</em></span>: 
+nombre de pixels rognés sur la droite de la vidéo
+.</p></li><li><p><span class="emphasis"><em>hq</em></span>: 
+Haute qualité (nécessite plus de puissance)
+.</p></li><li><p><span class="emphasis"><em>qmin</em></span>: 
+FIXME
+</p></li><li><p><span class="emphasis"><em>qmax</em></span>:
+FIXME
+.</p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2583155"></a>rtp</h4></div></div></div><p>
+envoie un stream en RTP
+</p><p>
+Options:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>dst</em></span>:
+Addresse IP de destination (unicast ou multicast)
+.</p></li><li><p><span class="emphasis"><em>port</em></span>:
+port UDP de destination
+.</p></li><li><p><span class="emphasis"><em>sdp</em></span>:
+La façon d'envoyer le fichier sdp <span class="emphasis"><em>http://server_ip:server_port/path</em></span> pour de l'http, ou <span class="emphasis"><em>rtsp://server_ip:server_port/path</em></span> pour du rtsp, où <span class="emphasis"><em>server_ip</em></span> est l'adresse d'une dezs interfaces du serveur, et <span class="emphasis"><em>path</em></span> l'emplacement ou le fichier sdp sera accessible sur le serveur
+.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Avec l'option <span class="emphasis"><em>sdp=rtsp</em></span>, il est possible de ne pas donner d'adresse de destination. VLC enverra le flux à tout client se connectant au serveur
+.</p></div></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2583226"></a>es</h4></div></div></div><p>
+Sépare les flux élémentaires
+.</p><p>Options:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>access_audio</em></span>:
+Comment envoyer la piste audio :
+<span class="emphasis"><em>file</em></span>, <span class="emphasis"><em>udp</em></span>,
+<span class="emphasis"><em>rtp</em></span> ou <span class="emphasis"><em>http</em></span>
+.</p></li><li><p><span class="emphasis"><em>access_video</em></span>: 
+Comment envoyer la piste vidéo :
+<span class="emphasis"><em>file</em></span>, <span class="emphasis"><em>udp</em></span>,
+<span class="emphasis"><em>rtp</em></span> ou <span class="emphasis"><em>http</em></span>
+.</p></li><li><p><span class="emphasis"><em>access</em></span>:
+ si vous utilisez le même access pour l'audio et la
+vidéo, utilisez cette option au lieu des deux précédentes
+.</p></li><li><p><span class="emphasis"><em>mux_audio</em></span>: 
+quel multiplexeur (format) sera employé pour la
+piste audio ? Peut être un de <span class="emphasis"><em>avi</em></span> (format AVI)
+<span class="emphasis"><em>ogg</em></span> (format OGG), <span class="emphasis"><em>ps</em></span> (format
+MPEG2-PS), <span class="emphasis"><em>ts</em></span> (format MPEG2-TS)
+.</p></li><li><p><span class="emphasis"><em>mux_video</em></span>:
+quel multiplexeur (format) sera employé pour la
+piste vidéo ? Peut être un de <span class="emphasis"><em>avi</em></span> (format AVI)
+<span class="emphasis"><em>ogg</em></span> (format OGG), <span class="emphasis"><em>ps</em></span> (format
+MPEG2-PS), <span class="emphasis"><em>ts</em></span> (format MPEG2-TS)
+.</p></li><li><p><span class="emphasis"><em>mux</em></span>: 
+ si vous utilisez le même format pour l'audio et la
+vidéo, utilisez cette option au lieu des deux précédentes
+.</p></li><li><p><span class="emphasis"><em>url_audio</em></span>: 
+Si vous utilisez l'access <span class="emphasis"><em>file</em></span>,
+l'emplacement du fichier de la piste audio, sinon, l'adresse IP
+multicast ou unicast
+.</p></li><li><p><span class="emphasis"><em>url_video</em></span>: 
+Si vous utilisez l'access <span class="emphasis"><em>file</em></span>,
+l'emplacement du fichier de la piste vidéo, sinon, l'adresse IP
+multicast ou unicast
+.</p></li><li><p><span class="emphasis"><em>url</em></span>:
+ si vous utilisez la même addresse pour l'audio et la
+vidéo, utilisez cette option au lieu des deux précédentes
+.</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Dans les options <span class="emphasis"><em>url</em></span>, si vous
+utilisez l'access <span class="emphasis"><em>file</em></span>, vous pouvez utiliser ces
+macros dans le nom de fichier:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>%n</em></span> = 
+numéro de flux
+;</p></li><li><p><span class="emphasis"><em>%c</em></span> = FOURCC ;</p></li><li><p><span class="emphasis"><em>%m</em></span> = format</p></li><li><p><span class="emphasis"><em>%a</em></span> = access.</p></li></ul></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2583436"></a>
+Divers
+</h4></div></div></div><p>
+Voici quelques options globales supplémentaires
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--no-sout-audio</em></span>
+désactive le stream output audio
+.</p></li><li><p><span class="emphasis"><em>--no-sout-video</em></span> 
+désactive le stream output vidéo
+.</p></li></ul></div><p>
+Le stream output offre également une syntaxe
+simplifiée, qui ne vous permet que d'utiliser les options principales du
+module <span class="emphasis"><em>standard</em></span>
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc input_stream --sout access/mux:url</code></strong>
+</pre><p>
+où <span class="emphasis"><em>access</em></span>,
+<span class="emphasis"><em>mux</em></span> et <span class="emphasis"><em>url</em></span> sont telles que
+définies plus haut dans les options du module standard
+.</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583511"></a>
+Exemples
+</h3></div></div></div><p>
+Pour comprendre pleinement la complexe syntaxe du
+stream output du VLC, veuillez voir les exemples d'utilisation, dans le
+VideoLAN Howto
+VideoLAN HOWTO
+.</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2583534"></a>
+
+Autres options
+
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583538"></a>
+
+Options audio
+
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--noaudio</em></span> 
+
+désactive le son
+
+.</p></li><li><p><span class="emphasis"><em>--mono</em></span>
+
+force le mode audio mono
+
+.</p></li><li><p><span class="emphasis"><em>--volume  &lt;entier&gt;</em></span> 
+
+règle le volume audio
+
+.</p></li><li><p><span class="emphasis"><em>--aout-rate  &lt;entier&gt;</em></span>
+
+règle la fréquence de la sortie audio en Hz
+
+.</p></li><li><p><span class="emphasis"><em>--desync  &lt;entier&gt;</em></span>
+
+compense la désynchronisation audio (ms)
+
+.</p></li><li><p><span class="emphasis"><em>--headphone</em></span>
+active l'effet de spatialisation virtuelle
+du casque
+
+.</p></li><li><p><span class="emphasis"><em>--headphone-dim</em></span>
+
+ règle la dimension caractéristique du casque
+
+.</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583604"></a>
+
+Options vidéo
+
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--novideo</em></span> 
+
+désactive la vidéo
+
+.</p></li><li><p><span class="emphasis"><em>--greyscale</em></span>
+
+passe en nuances de gris la vidéo
+
+.</p></li><li><p><span class="emphasis"><em>--fullscreen</em></span>
+
+active le mode plein écran
+
+.</p></li><li><p><span class="emphasis"><em>--nooverlay</em></span>
+désactive l'accélération matérielle de la 
+sortie vidéo
+
+.</p></li><li><p><span class="emphasis"><em>--width, --height &lt;entier&gt;</em></span>
+
+règle la taille de la fenêtre vidéo
+
+.</p></li><li><p><span class="emphasis"><em>--zoom &lt;nombre flottant&gt;</em></span>
+
+ajoute un facteur de zoom
+
+.</p></li><li><p><span class="emphasis"><em>--aspect-ratio &lt;mode&gt;</em></span>
+
+force le ratio d'aspect
+
+.</p></li><li><p><span class="emphasis"><em>--spumargin  &lt;entier&gt;</em></span> 
+
+force la position des sous-titres
+
+.</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583679"></a>
+
+Options de liste de lecture
+
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--playlist</em></span>
+
+lance la liste de lecture au démarrage
+
+.</p></li><li><p><span class="emphasis"><em>--random</em></span>
+
+les fichiers sont lus indéfiniment et aléatoirement
+
+.</p></li><li><p><span class="emphasis"><em>--enqueue</em></span>
+
+met les items à la queue
+
+.</p></li><li><p><span class="emphasis"><em>--loop</em></span>
+
+la liste de lecture boucle
+
+.</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583720"></a>
+
+Options réseaux
+
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--server-port  &lt;entier&gt;</em></span>
+
+règle le port UDP
+
+.</p></li><li><p><span class="emphasis"><em>--iface  &lt;chaîne&gt;</em></span> 
+
+spécifie l'interface réseau à utiliser
+
+.</p></li><li><p><span class="emphasis"><em>--iface-addr  &lt;chaîne&gt;</em></span>
+
+spécifie l'adresse IP de l'interface réseau
+
+.</p></li><li><p><span class="emphasis"><em>--mtu  &lt;entier&gt;</em></span>
+
+spécifie le MTU de l'interface réseau
+
+.</p></li><li><p><span class="emphasis"><em>--ipv6</em></span>
+
+force l'utilisation d'IPv6
+
+.</p></li><li><p><span class="emphasis"><em>--ipv4</em></span>
+
+force l'utilisation d'IPv4
+
+.</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583778"></a>
+
+Options de processeur
+
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--nommx</em></span>
+
+empêche l'utilisation des extensions MMX du CPU
+
+.</p></li><li><p><span class="emphasis"><em>--no3dn</em></span>
+
+empêche l'utilisation des extensions 3D Now! du CPU
+
+.</p></li><li><p><span class="emphasis"><em>--nommxext</em></span>
+
+empêche l'utilisation des extensions MMX Ext du CPU
+
+.</p></li><li><p><span class="emphasis"><em>--nosse</em></span> 
+
+empêche l'utilisation des extensions SSE du CPU
+
+.</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583822"></a>
+
+Options diverses
+
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--quiet</em></span>
+
+ pas de messages dans la console
+
+.</p></li><li><p><span class="emphasis"><em>--color</em></span>
+
+ affiche des messages en couleur
+
+.</p></li><li><p><span class="emphasis"><em>--search-path  &lt;chaîne&gt;</em></span>
+
+spécifie le chemin de recherche
+
+.</p></li><li><p><span class="emphasis"><em>--plugin-path  &lt;chaîne&gt;</em></span>
+
+spécifie le chemin de recherche des plugins
+
+.</p></li><li><p><span class="emphasis"><em>--dvd  &lt;chaîne&gt;</em></span> 
+
+spécifie le périphérique DVD par défaut
+
+.</p></li><li><p><span class="emphasis"><em>--vcd  &lt;chaîne&gt;</em></span>
+
+spécifie le périphérique VCD par défaut
+
+.</p></li><li><p><span class="emphasis"><em>--program  &lt;;entier&gt;</em></span>
+
+spécifie le programme (SID) (pour les flux multi-programmes, tels les flux satellites)
+
+.</p></li><li><p><span class="emphasis"><em>--audio-type  &lt;entier&gt;</em></span>
+
+spécifie le type audio par défaut pour les DVDs
+ 
+.</p></li><li><p><span class="emphasis"><em>--audio-channel  &lt;entier&gt;</em></span>
+
+spécifie le canal audio par défaut pour les DVDs
+
+.</p></li><li><p><span class="emphasis"><em>--spu-channel  &lt;entier&gt;</em></span>
+
+spécifie le canal de sous-titre par défaut pour les DVDs
+
+.</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583918"></a>
+
+Options d'aide
+
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--verbose  &lt;verbosité&gt;</em></span>
+
+spécifie le niveau de verbosité
+
+.</p></li><li><p><span class="emphasis"><em>--help</em></span>
+
+vous donne toutes les options disponibles
+
+.</p></li><li><p><span class="emphasis"><em>--longhelp</em></span> 
+
+affiche l'aide détaillée
+
+.</p></li><li><p><span class="emphasis"><em>--version</em></span> 
+
+affiche les informations de version du VLC
+
+.</p></li><li><p><span class="emphasis"><em>--list</em></span> 
+
+affiche la liste des modules disponibles
+
+.</p></li><li><p><span class="emphasis"><em>--module  &lt;module&gt;</em></span> 
+
+affiche l'aide du module spécifié
+
+.</p></li></ul></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 3. 
+Installation de VLC
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 5. 
+L'interface de contrôle HTTP
+</td></tr></table></div></body></html>

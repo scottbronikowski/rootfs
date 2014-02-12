@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+<title>rectangle - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="object.html#object" title="object">
+<link rel="prev" href="object.html#object" title="object">
+<link rel="next" href="ellipse.html#ellipse" title="ellipse">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="rectangle"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ellipse.html#ellipse">ellipse</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="object.html#object">object</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="object.html#object">object</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.46.1 rectangle</h5>
+
+<p><a name="index-rectangle-506"></a>
+<!-- ?commands set object rectangle -->
+<!-- ?commands show object rectangle -->
+<!-- ?set object rectangle -->
+<!-- ?show object rectangle -->
+Syntax:
+<pre class="example">         set object &lt;index&gt; rectangle
+             {from &lt;position&gt; {to|rto} &lt;position&gt; |
+              center &lt;position&gt; size &lt;w&gt;,&lt;h&gt; |
+              at &lt;position&gt; size &lt;w&gt;,&lt;h&gt;}
+     
+</pre>
+   <p>The position of the rectangle may be specified by giving the position of two
+diagonal corners (bottom left and top right) or by giving the position of the
+center followed by the width and the height.  In either case the positions
+may be given in axis, graph, or screen coordinates. See `coordinates`. 
+The options `at` and `center` are synonyms.
+
+   <p>Examples:
+<pre class="example">         # Force the entire area enclosed by the axes to have background color cyan
+         set object 1 rect from graph 0, graph 0 to graph 1, graph 1 back
+         set object 1 rect fc rgb "cyan" fillstyle solid 1.0
+     
+</pre>
+   <pre class="example">         # Position a red square with lower left at 0,0 and upper right at 2,3
+         set object 2 rect from 0,0 to 2,3 fc lt 1
+     
+</pre>
+   <pre class="example">         # Position an empty rectangle (no fill) with a blue border
+         set object 3 rect from 0,0 to 2,3 fs empty border rgb "blue"
+     
+</pre>
+   <pre class="example">         # Return fill and color to the default style but leave vertices unchanged
+         set object 2 rect default
+     
+</pre>
+   </body></html>
+

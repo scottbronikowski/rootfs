@@ -1,0 +1,69 @@
+#! /bin/bash
+#                               -*- Mode: Sh -*- 
+# emacsen.remove --- 
+# Author           : Manoj Srivastava ( srivasta@tiamat.datasync.com ) 
+# Created On       : Mon Apr 13 01:38:03 1998
+# Created On Node  : tiamat.datasync.com
+# Last Modified By : Manoj Srivastava
+# Last Modified On : Mon Feb 16 21:13:32 2004
+# Last Machine Used: glaurung.internal.golden-gryphon.com
+# Update Count     : 18
+# Status           : Unknown, Use with caution!
+# HISTORY          : 
+# Description      : 
+# 
+# arch-tag: b8aad7ae-bfac-4637-83bb-972ad4de1062
+#
+
+
+set -e
+
+FLAVOUR=$1
+PACKAGE="psgml"
+VERSION="1.3.2-13"
+
+if [ "X$FLAVOUR" = "X" ]; then
+    echo Need argument to determine FLAVOUR of emacs;
+    exit 1
+fi
+
+if [ "X$PACKAGE" = "X" ]; then
+    echo Internal error: need package name;
+    exit 1;
+fi
+
+if [ "X$VERSION" = "X" ]; then
+    echo Internal error: need package version;
+    exit 1;
+fi
+
+
+ELDIR=/usr/share/emacs/site-lisp/$PACKAGE
+ELCDIR=/usr/share/$FLAVOUR/site-lisp/$PACKAGE/
+EFLAGS="-batch -q -l load-path-hack.el -f batch-byte-compile"
+INFO_FILES="psgml-api.info psgml.info";
+STARTDIR=/etc/$FLAVOUR/site-start.d
+STARTFILE="$PACKAGE-init.el";
+
+case $FLAVOUR in
+    emacs19 | emacs20 | emacs)
+	echo "remove/$PACKAGE: Ignoring emacsen flavor $FLAVOUR."       
+        ;;
+    emacs21 | emacs22 | emacs23 | emacs-snapshot)
+        echo -n "remove/$PACKAGE: Removing for $FLAVOUR..."
+	if [ -d $ELCDIR ]; then
+	    rm -rf $ELCDIR
+	fi
+        echo " done."	
+	;;
+    *)
+        echo "remove/$PACKAGE: Ignoring emacsen flavor $FLAVOUR."	
+	;;
+esac
+
+exit 0
+
+### Local Variables:
+### mode: shell-script
+### End:
+

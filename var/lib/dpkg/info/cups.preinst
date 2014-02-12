@@ -1,0 +1,16 @@
+#! /bin/sh
+set -e
+
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/blacklist-cups-usblp.conf 1.5.2-3  -- "$@"
+
+# On Ubuntu, replace the obsolete init script (replaced by an upstart job)
+if [ "`lsb_release -is 2>/dev/null`" = "Ubuntu" ] && [ ! -L /etc/init.d/cups ]; then
+    dpkg-maintscript-helper rm_conffile /etc/init.d/cups 1.4.4-5 -- "$@"
+    update-rc.d cups remove
+fi
+
+
+
+exit 0
+
+

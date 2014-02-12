@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>angles - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="next" href="arrow.html#arrow" title="arrow">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="angles"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="arrow.html#arrow">arrow</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="set_002dshow.html#set_002dshow">set-show</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.1 angles</h4>
+
+<!-- ?commands set angles -->
+<!-- ?commands show angles -->
+<!-- ?set angles -->
+<!-- ?show angles -->
+<p><a name="index-angles-386"></a><a name="index-angles-387"></a>
+
+<!-- ?commands set angles degrees -->
+<!-- ?set angles degrees -->
+<!-- ?angles degrees -->
+   <p><a name="index-degrees-388"></a>
+By default, `gnuplot` assumes the independent variable in polar graphs is in
+units of radians.  If `set angles degrees` is specified before `set polar`,
+then the default range is [0:360] and the independent variable has units of
+degrees.  This is particularly useful for plots of data files.  The angle
+setting also applies to 3D mapping as set via the <a href="mapping.html#mapping">mapping</a> command.
+
+   <p>Syntax:
+<pre class="example">           set angles {degrees | radians}
+           show angles
+     
+</pre>
+   <p>The angle specified in `set grid polar` is also read and displayed in the
+units specified by <a href="angles.html#angles">angles</a>.
+
+   <p><a href="angles.html#angles">angles</a> also affects the arguments of the machine-defined functions
+sin(x), cos(x) and tan(x), and the outputs of asin(x), acos(x), atan(x),
+atan2(x), and arg(x).  It has no effect on the arguments of hyperbolic
+functions or Bessel functions.  However, the output arguments of inverse
+hyperbolic functions of complex arguments are affected; if these functions
+are used, `set angles radians` must be in effect to maintain consistency
+between input and output arguments.
+
+<pre class="example">           x={1.0,0.1}
+           set angles radians
+           y=sinh(x)
+           print y         #prints {1.16933, 0.154051}
+           print asinh(y)  #prints {1.0, 0.1}
+</pre>
+   <p>but
+<pre class="example">           set angles degrees
+           y=sinh(x)
+           print y         #prints {1.16933, 0.154051}
+           print asinh(y)  #prints {57.29578, 5.729578}
+</pre>
+   <p>See also
+<a href="http://www.gnuplot.info/demo/poldat.html">poldat.dem: polar plot using <a href="angles.html#angles">angles</a> demo.</a>
+
+   </body></html>
+

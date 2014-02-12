@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+<title>fig - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="hercules.html#hercules" title="hercules">
+<link rel="next" href="png_005f.html#png_005f" title="png_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="fig"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="png_005f.html#png_005f">png_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="hercules.html#hercules">hercules</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.23 fig</h5>
+
+<!-- ?commands set terminal fig -->
+<!-- ?set terminal fig -->
+<!-- ?set term fig -->
+<!-- ?terminal fig -->
+<!-- ?term fig -->
+<p><a name="index-fig-790"></a>
+<a name="index-xfig-791"></a>
+The `fig` terminal device generates output in the Fig graphics language.
+
+   <p>Syntax:
+<pre class="example">           set terminal fig {monochrome | color}
+                            {landscape | portrait}
+                            {small | big | size &lt;xsize&gt; &lt;ysize&gt;}
+                            {metric | inches}
+                            {pointsmax &lt;max_points&gt;}
+                            {solid | dashed}
+                            {font &lt;fontname&gt;} {fontsize &lt;fsize&gt;}
+                            {textnormal | {textspecial texthidden textrigid}}
+                            {{thickness|linewidth} &lt;units&gt;}
+                            {depth &lt;layer&gt;}
+                            {version &lt;number&gt;}
+     
+</pre>
+   <p>`monochrome` and `color` determine whether the picture is black-and-white or
+`color`.  `small` and `big` produce a 5x3 or 8x5 inch graph in the default
+`landscape` mode and 3x5 or 5x8 inches in `portrait` mode. 
+<a href="size.html#size">size</a> sets (overrides) the size of the drawing
+area to &lt;xsize&gt;*&lt;ysize&gt; in units of inches or centimeters depending on the
+`inches` or `metric` setting in effect. 
+The latter settings is also used as default units for editing with "xfig".
+
+   <p>`pointsmax &lt;max_points&gt;` sets the maximum number of points per polyline.
+
+   <p>`solid` inhibits automatic usage of `dash`ed lines when solid linestyles are
+used up, which otherwise occurs.
+
+   <p>`fontsize` sets the size of the text font to &lt;fsize&gt; points.  `textnormal`
+resets the text flags and selects postscript fonts, `textspecial` sets the
+text flags for LaTeX specials, `texthidden` sets the hidden flag and
+`textrigid` the rigid flag.
+
+   <p>`depth` sets the default depth layer for all lines and text.  The default
+depth is 10 to leave room for adding material with "xfig" on top of the
+plot.
+
+   <p><a href="version.html#version">version</a> sets the format version of the generated fig output. Currently
+only versions 3.1 and 3.2 are supported.
+
+   <p>`thickness` sets the default line thickness, which is 1 if not specified. 
+Overriding the thickness can be achieved by adding a multiple of 100 to the
+`linetype` value for a `plot` command.  In a similar way the `depth`
+of plot elements (with respect to the default depth) can be controlled by
+adding a multiple of 1000 to &lt;linetype&gt;.  The depth is then &lt;layer&gt; +
+&lt;linetype&gt;/1000 and the thickness is (&lt;linetype&gt;%1000)/100 or, if that is
+zero, the default line thickness. `linewidth` is a synonym for `thickness`.
+
+   <p>Additional point-plot symbols are also available with the `fig` driver. The
+symbols can be used through `pointtype` values % 100 above 50, with different
+fill intensities controlled by &lt;pointtype&gt; % 5 and outlines in black (for
+&lt;pointtype&gt; % 10 &lt; 5) or in the current color.  Available symbols are
+<pre class="example">             50 - 59:  circles
+             60 - 69:  squares
+             70 - 79:  diamonds
+             80 - 89:  upwards triangles
+             90 - 99:  downwards triangles
+</pre>
+   <p>The size of these symbols is linked to the font size.  The depth of symbols
+is by default one less than the depth for lines to achieve nice error bars. 
+If &lt;pointtype&gt; is above 1000, the depth is &lt;layer&gt; + &lt;pointtype&gt;/1000-1.  If
+&lt;pointtype&gt;%1000 is above 100, the fill color is (&lt;pointtype&gt;%1000)/100-1.
+
+   <p>Available fill colors are (from 1 to 9): black, blue, green, cyan, red,
+magenta, yellow, white and dark blue (in monochrome mode: black for 1 to 6
+and white for 7 to 9).
+
+   <p>See <a href="with.html#with">with</a> for details of &lt;linetype&gt; and &lt;pointtype&gt;.
+
+   <p>The `big` option is a substitute for the `bfig` terminal in earlier versions,
+which is no longer supported.
+
+   <p>Examples:
+<pre class="example">           set terminal fig monochrome small pointsmax 1000  # defaults
+     
+</pre>
+   <pre class="example">           plot 'file.dat' with points linetype 102 pointtype 759
+</pre>
+   <p>would produce circles with a blue outline of width 1 and yellow fill color.
+
+<pre class="example">           plot 'file.dat' using 1:2:3 with err linetype 1 pointtype 554
+</pre>
+   <p>would produce errorbars with black lines and circles filled red.  These
+circles are one layer above the lines (at depth 9 by default).
+
+   <p>To plot the error bars on top of the circles use
+<pre class="example">           plot 'file.dat' using 1:2:3 with err linetype 1 pointtype 2554"
+     
+</pre>
+   </body></html>
+

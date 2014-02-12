@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+<title>cntrparam - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="clip.html#clip" title="clip">
+<link rel="next" href="color_005fbox.html#color_005fbox" title="color_box">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="cntrparam"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="color_005fbox.html#color_005fbox">color_box</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="clip.html#clip">clip</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.11 cntrparam</h4>
+
+<!-- ?commands set cntrparam -->
+<!-- ?commands show cntrparam -->
+<!-- ?set cntrparam -->
+<!-- ?show cntrparam -->
+<p><a name="index-cntrparam-411"></a><a name="index-cntrparam-412"></a>
+
+   <p><a href="cntrparam.html#cntrparam">cntrparam</a> controls the generation of contours and their smoothness for
+a contour plot. <a href="contour.html#contour">contour</a> displays current settings of <a href="cntrparam.html#cntrparam">cntrparam</a> as
+well as <a href="contour.html#contour">contour</a>.
+
+   <p>Syntax:
+<pre class="example">           set cntrparam { { linear
+                           | cubicspline
+                           | bspline
+                           | points &lt;n&gt;
+                           | order &lt;n&gt;
+                           | levels { auto {&lt;n&gt;} | &lt;n&gt;
+                                      | discrete &lt;z1&gt; {,&lt;z2&gt;{,&lt;z3&gt;...}}
+                                      | incremental &lt;start&gt;, &lt;incr&gt; {,&lt;end&gt;}
+                                    }
+                           }
+                         }
+           show contour
+     
+</pre>
+   <p>This command has two functions.  First, it sets the values of z for which
+contour points are to be determined (by linear interpolation between data
+points or function isosamples.)  Second, it controls the way contours are
+drawn between the points determined to be of equal z.  &lt;n&gt; should be an
+integral constant expression and &lt;z1&gt;, &lt;z2&gt; ... any constant expressions. 
+The parameters are:
+
+   <p>`linear`, `cubicspline`, `bspline`&mdash;Controls type of approximation or
+interpolation.  If `linear`, then straight line segments connect points of
+equal z magnitude.  If `cubicspline`, then piecewise-linear contours are
+interpolated between the same equal z points to form somewhat smoother
+contours, but which may undulate.  If `bspline`, a guaranteed-smoother curve
+is drawn, which only approximates the position of the points of equal-z.
+
+   <p>`points`&mdash;Eventually all drawings are done with piecewise-linear strokes. 
+This number controls the number of line segments used to approximate the
+`bspline` or `cubicspline` curve.  Number of cubicspline or bspline
+segments (strokes) = `points` * number of linear segments.
+
+   <p>`order`&mdash;Order of the bspline approximation to be used.  The bigger this
+order is, the smoother the resulting contour.  (Of course, higher order
+bspline curves will move further away from the original piecewise linear
+data.)  This option is relevant for `bspline` mode only.  Allowed values are
+integers in the range from 2 (linear) to 10.
+
+   <p>`levels`&mdash; Selection of contour levels,  controlled by `auto` (default),
+`discrete`, `incremental`, and &lt;n&gt;, number of contour levels.
+
+   <p>For `auto`, &lt;n&gt; specifies a nominal number of levels; the actual number will
+be adjusted to give simple labels. If the surface is bounded by zmin and zmax,
+contours will be generated at integer multiples of dz between zmin and zmax,
+where dz is 1, 2, or 5 times some power of ten (like the step between two
+tic marks).
+
+   <p>For `levels discrete`, contours will be generated at z = &lt;z1&gt;, &lt;z2&gt; ... as
+specified; the number of discrete levels sets the number of contour levels. 
+In `discrete` mode, any `set cntrparam levels &lt;n&gt;` are ignored.
+
+   <p>For `incremental`, contours are generated at values of z beginning at &lt;start&gt;
+and increasing by &lt;increment&gt;, until the number of contours is reached. &lt;end&gt;
+is used to determine the number of contour levels, which will be changed by
+any subsequent `set cntrparam levels &lt;n&gt;`.  If the z axis is logarithmic,
+&lt;increment&gt; will be interpreted as a factor, just like in <a href="ztics.html#ztics">ztics</a>.
+
+   <p>If the command <a href="cntrparam.html#cntrparam">cntrparam</a> is given without any arguments specified,  the
+defaults are used: linear, 5 points, order 4, 5 auto levels.
+
+   <p>Examples:
+<pre class="example">           set cntrparam bspline
+           set cntrparam points 7
+           set cntrparam order 10
+     
+</pre>
+   <p>To select levels automatically, 5 if the level increment criteria are met:
+<pre class="example">           set cntrparam levels auto 5
+     
+</pre>
+   <p>To specify discrete levels at .1, .37, and .9:
+<pre class="example">           set cntrparam levels discrete .1,1/exp(1),.9
+     
+</pre>
+   <p>To specify levels from 0 to 4 with increment 1:
+<pre class="example">           set cntrparam levels incremental  0,1,4
+     
+</pre>
+   <p>To set the number of levels to 10 (changing an incremental end or possibly
+the number of auto levels):
+<pre class="example">           set cntrparam levels 10
+     
+</pre>
+   <p>To set the start and increment while retaining the number of levels:
+<pre class="example">           set cntrparam levels incremental 100,50
+     
+</pre>
+   <p>See also <a href="contour.html#contour">contour</a> for control of where the contours are drawn, and
+<a href="clabel.html#clabel">clabel</a> for control of the format of the contour labels and linetypes.
+
+   <p>See also
+<a href="http://www.gnuplot.info/demo/contours.html">contours demo (contours.dem)</a>
+and
+<a href="http://www.gnuplot.info/demo/discrete.html">contours with user defined levels demo (discrete.dem).</a>
+
+   </body></html>
+

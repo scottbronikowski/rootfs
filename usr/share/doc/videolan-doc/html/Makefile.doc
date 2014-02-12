@@ -1,0 +1,92 @@
+# Makefile for the VideoLAN Documentation in DocBook XML
+# Written by Alexis de Lattre <alexis@videolan.org>
+# Mostly rewritten by Rémi Denis-Courmont <rem at videolan dot org>
+# To build another language than the default one, do 'make LNG=foo'
+
+# XML declaration
+XML_DECL1 = /usr/lib/sgml/declaration/xml.decl
+XML_DECL2 = /usr/share/sgml/declaration/xml.decl
+XML_DECL = `test -f $(XML_DECL1) && echo $(XML_DECL1) || echo $(XML_DECL2)`
+
+JADE = SP_CHARSET_FIXED=YES SP_ENCODING=XML jade
+RECURSEMAKE = $(MAKE) DOC=$(DOC) -f ../../Makefile.doc
+SINGLEZIP = rm -f $@ && zip $@ $<
+
+# Default language : en
+# DON'T USE «LANG» for that, it defines the system locale !!!
+LNG = en
+
+XSL = ../../common/videolan-doc.xsl
+XML = ../src/$(LNG)/$(DOC).xml
+
+# Build HTML, PDF, RTF and TXT outputs (for the web site)
+TYPES = html pdf rtf txt
+TARGETS = $(TYPES:%=$(DOC)-$(LNG).%) $(TYPES:%=$(DOC)-$(LNG).%.zip)
+
+all: recurse-$(LNG)
+
+$(LINGUAS:%=recurse-%): recurse-%: FORCE
+	mkdir -p $*
+	$(RECURSEMAKE) -C $* LNG=$* build-dir
+
+build-dir: prepare-dir $(TARGETS)
+
+prepare-dir: images screen.css .htaccess
+
+images:
+	ln -sf ../../../images/documentation images
+
+screen.css:
+	cp ../../common/screen.css .
+
+.htaccess:
+	cp ../../common/htaccess .htaccess
+
+# HTML output
+$(DOC)-$(LNG).html: $(XML)
+	xsltproc $(XSL) $<
+	cp index.html $@
+
+$(DOC)-$(LNG).html.zip: $(DOC)-$(LNG).html
+	rm -f $@
+	zip $@ *.html images/*.gif
+
+# PDF output
+$(DOC)-$(LNG).pdf: $(XML)
+	$(JADE) -t tex -d ../../common/stylesheet-print-noicones.dsl -o $(DOC)-$(LNG).tex $(XML_DECL) $<
+	-pdfjadetex $(DOC)-$(LNG).tex
+	-pdfjadetex $(DOC)-$(LNG).tex
+	-pdfjadetex $(DOC)-$(LNG).tex
+	rm -f *.tex *.out *.aux *.log
+
+%.pdf.zip: %.pdf
+	$(SINGLEZIP)
+
+# RTF output
+$(DOC)-$(LNG).rtf: $(XML)
+	$(JADE) -t rtf -d ../../common/stylesheet-print-noicones.dsl -o $@ $(XML_DECL) $<
+
+%.rtf.zip: %.rtf
+	$(SINGLEZIP)
+
+# TXT output
+$(DOC)-$(LNG).txt: $(XML)
+	$(JADE) -t sgml -d ../../common/stylesheet-txt.dsl -V nochunks $(XML_DECL) $(XML) > dumpfortxt.html
+	lynx -force_html -dump dumpfortxt.html > $@
+	rm -f dumpfortxt.html
+
+%.txt.zip: %.txt
+	$(SINGLEZIP)
+
+# Delete all outputs
+clean:
+	rm -Rf $(LINGUAS)
+
+mostlyclean: clean
+distclean: clean
+
+# All languages
+all-lang: $(LINGUAS:%=recurse-%)
+
+.PHONY: clean all FORCE
+

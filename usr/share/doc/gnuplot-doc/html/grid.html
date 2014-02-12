@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>grid - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="functions.html#functions" title="functions">
+<link rel="next" href="hidden3d.html#hidden3d" title="hidden3d">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="grid"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="hidden3d.html#hidden3d">hidden3d</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="functions.html#functions">functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.26 grid</h4>
+
+<!-- ?commands set grid -->
+<!-- ?commands unset grid -->
+<!-- ?commands show grid -->
+<!-- ?set grid -->
+<!-- ?unset grid -->
+<!-- ?show grid -->
+<p><a name="index-grid-448"></a><a name="index-grid-449"></a>
+
+   <p><a name="index-nogrid-450"></a>
+The `set grid` command allows grid lines to be drawn on the plot.
+
+   <p>Syntax:
+<pre class="example">           set grid {{no}{m}xtics} {{no}{m}ytics} {{no}{m}ztics}
+                    {{no}{m}x2tics} {{no}{m}y2tics}
+                    {{no}{m}cbtics}
+                    {polar {&lt;angle&gt;}}
+                    {layerdefault | front | back}
+                    { {linestyle &lt;major_linestyle&gt;}
+                      | {linetype | lt &lt;major_linetype&gt;}
+                        {linewidth | lw &lt;major_linewidth&gt;}
+                      { , {linestyle | ls &lt;minor_linestyle&gt;}
+                          | {linetype | lt &lt;minor_linetype&gt;}
+                            {linewidth | lw &lt;minor_linewidth&gt;} } }
+           unset grid
+           show grid
+     
+</pre>
+   <p>The grid can be enabled and disabled for the major and/or minor tic
+marks on any axis, and the linetype and linewidth can be specified
+for major and minor grid lines, also via a predefined linestyle, as
+far as the active terminal driver supports this.
+
+   <p>Additionally, a polar grid can be selected for 2D plots&mdash;circles are drawn
+to intersect the selected tics, and radial lines are drawn at definable
+intervals.  (The interval is given in degrees or radians, depending on the
+<a href="angles.html#angles">angles</a> setting.)  Note that a polar grid is no longer automatically
+generated in polar mode.
+
+   <p>The pertinent tics must be enabled before `set grid` can draw them; `gnuplot`
+will quietly ignore instructions to draw grid lines at non-existent tics, but
+they will appear if the tics are subsequently enabled.
+
+   <p>If no linetype is specified for the minor gridlines, the same linetype as the
+major gridlines is used.  The default polar angle is 30 degrees.
+
+   <p>If `front` is given, the grid is drawn on top of the graphed data. If
+`back` is given, the grid is drawn underneath the graphed data. Using
+`front` will prevent the grid from being obscured by dense data. The
+default setup, `layerdefault`, is equivalent to `back` for 2d plots. 
+In 3D plots the default is to split up the grid and the graph box into
+two layers: one behind, the other in front of the plotted data and
+functions. Since <a href="hidden3d.html#hidden3d">hidden3d</a> mode does its own sorting, it ignores
+all grid drawing order options and passes the grid lines through the
+hidden line removal machinery instead. These options actually affect
+not only the grid, but also the lines output by <a href="border.html#border">border</a> and the
+various ticmarks (see `set xtics`).
+
+   <p>Z grid lines are drawn on the bottom of the plot.  This looks better if a
+partial box is drawn around the plot&mdash;see <a href="border.html#border">border</a>.
+
+   </body></html>
+

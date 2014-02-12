@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on May 29, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>psgml: 9. Appearance of text in the buffer</title>
+
+<meta name="description" content="psgml: 9. Appearance of text in the buffer">
+<meta name="keywords" content="psgml: 9. Appearance of text in the buffer">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Display"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml_8.html#Translating-characters-and-entities" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Fold" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml_8.html#Edit" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_10.html#Miscellaneous-options" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Appearance-of-text-in-the-buffer"></a>
+<h1 class="chapter">9. Appearance of text in the buffer</h1>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Fold">9.1 Folding editing</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#Hiding-markup">9.2 Hiding markup</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">               
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Highlight">9.3 Highlighting markup</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
+
+<hr size="6">
+<a name="Fold"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Display" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Hiding-markup" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Display" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Display" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_10.html#Miscellaneous-options" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Folding-editing"></a>
+<h2 class="section">9.1 Folding editing</h2>
+
+<p>With these commands you can make parts of the text temporarily invisible
+to make it easier to see the overall structure of your text.  
+</p>
+<p>When folding a region all the lines but the first will be invisible.
+The first line of the region will still be visible with an ellipsis at
+the end.
+</p>
+<p>See <a href="../emacs/Outline-Mode.html#Outline-Mode">(emacs)Outline Mode</a> section &lsquo;Outline Mode&rsquo; in <cite>The Emacs Editor</cite>.
+</p>
+<dl compact="compact">
+<dd><a name="index-C_002dc-C_002df-C_002dr"></a>
+<a name="index-sgml_002dfold_002dregion"></a>
+</dd>
+<dt> <kbd>C-c C-f C-r</kbd></dt>
+<dd><p>The region between point and mark will be folded (<code>sgml-fold-region</code>).
+</p>
+<a name="index-C_002dc-C_002df-C_002de"></a>
+<a name="index-sgml_002dfold_002delement"></a>
+</dd>
+<dt> <kbd>C-c C-f C-e</kbd></dt>
+<dd><p>The region between the start and end of the current element will be
+folded (<code>sgml-fold-element</code>).
+</p>
+<p>This command can also fold the SGML declaration or the DOCTYPE
+declaration.
+</p>
+<a name="index-C_002dc-C_002df-C_002ds"></a>
+<a name="index-sgml_002dfold_002dsubelement"></a>
+</dd>
+<dt> <kbd>C-c C-f C-s</kbd></dt>
+<dd><p>Fold all the sub elements of the current element
+(<code>sgml-fold-subelement</code>).
+</p>
+<a name="index-C_002dc-C_002ds-1"></a>
+<a name="index-C_002dc-C_002du-C_002dl"></a>
+<a name="index-sgml_002dunfold_002dline"></a>
+</dd>
+<dt> <kbd>C-c C-s</kbd></dt>
+<dt> <kbd>C-c C-u C-l</kbd></dt>
+<dd><p>Unfold the current line, assuming it is the first line of a folded
+region (<code>sgml-unfold-line</code>).
+</p>
+<a name="index-C_002dc-C_002du-C_002de"></a>
+<a name="index-sgml_002dunfold_002delement"></a>
+</dd>
+<dt> <kbd>C-c C-u C-e</kbd></dt>
+<dd><p>Make all lines in current element visible (<code>sgml-unfold-element</code>).
+</p>
+<a name="index-C_002dc-C_002du-C_002da"></a>
+<a name="index-sgml_002dunfold_002dall"></a>
+</dd>
+<dt> <kbd>C-c C-u C-a</kbd></dt>
+<dd><p>Make all lines in current buffer visible (<code>sgml-unfold-all</code>).
+</p>
+<a name="index-C_002dc-C_002df-C_002dx"></a>
+<a name="index-sgml_002dexpand_002delement"></a>
+</dd>
+<dt> <kbd>C-c C-f C-x</kbd></dt>
+<dd><p>Unfold current element and then fold the subelements
+(<code>sgml-expand-element</code>).  If the current element is folded this
+expands what is visible.
+</p></dd>
+</dl>
+
+
+<hr size="6">
+<a name="Hiding-markup"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Fold" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Highlight" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Display" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Display" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_10.html#Miscellaneous-options" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Hiding-markup-1"></a>
+<h2 class="section">9.2 Hiding markup</h2>
+
+<p>*** Describe hide-tags
+</p>
+
+<hr size="6">
+<a name="Highlight"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Hiding-markup" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_10.html#Miscellaneous-options" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Display" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Display" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_10.html#Miscellaneous-options" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Highlighting-markup"></a>
+<h2 class="section">9.3 Highlighting markup</h2>
+
+
+<p>PSGML can highlight the markup giving the markup a different <em>face</em>
+(see <a href="../emacs/Faces.html#Faces">(emacs)Faces</a> section &lsquo;Using Multiple Typefaces&rsquo; in <cite>The Emacs Editor</cite>).
+The highlighting will only be done if the variable <code>sgml-set-face</code>
+is non-<code>nil</code>.  The default settings make tags bold and comments
+italic, but this can be modified with the variable
+<code>sgml-markup-faces</code>.  When highlighting is on PSGML will parse after
+every command until the whole buffer has been parsed or user event
+occurs. 
+</p>
+<a name="index-sgml_002dclear_002dfaces"></a>
+<p>To remove the highlighting type <kbd>M-x sgml-clear-faces</kbd>.
+</p>
+<dl>
+<dt><a name="index-sgml_002dset_002dface"></a><u>User Option:</u> <b>sgml-set-face</b></dt>
+<dd><p>If non-nil, psgml will set the face of parsed markup.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dmarkup_002dfaces"></a><u>User Option:</u> <b>sgml-markup-faces</b></dt>
+<dd><p>A list of markup to face mappings.
+Each element looks like <code>(<var>markup-type</var> . <var>face</var>)</code>.
+Possible values for <var>markup-type</var> is:
+</p>
+<dl compact="compact">
+<dt> <code>comment</code></dt>
+<dd><p>comment declaration
+</p></dd>
+<dt> <code>doctype</code></dt>
+<dd><p>doctype declaration
+</p></dd>
+<dt> <code>end-tag</code></dt>
+<dd><p>end-tag 
+</p></dd>
+<dt> <code>ignored</code></dt>
+<dd><p>ignored marked section
+</p></dd>
+<dt> <code>ms-start</code></dt>
+<dd><p>marked section end, if not ignored
+</p></dd>
+<dt> <code>ms-end</code></dt>
+<dd><p>marked section start, if not ignored 
+</p></dd>
+<dt> <code>pi</code></dt>
+<dd><p>processing instruction
+</p></dd>
+<dt> <code>sgml</code></dt>
+<dd><p>SGML declaration
+</p></dd>
+<dt> <code>start-tag</code></dt>
+<dd><p>start-tag
+</p></dd>
+<dt> <code>entity</code></dt>
+<dd><p>entity reference
+</p></dd>
+<dt> <code>shortref</code></dt>
+<dd><p>short reference
+</p></dd>
+</dl>
+</dd></dl>
+
+
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Display" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_10.html#Miscellaneous-options" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon user</em> on <em>May 29, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

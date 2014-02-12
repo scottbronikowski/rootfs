@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>contour - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="colornames.html#colornames" title="colornames">
+<link rel="next" href="data_005fstyle.html#data_005fstyle" title="data_style">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="contour"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="data_005fstyle.html#data_005fstyle">data_style</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="colornames.html#colornames">colornames</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.14 contour</h4>
+
+<!-- ?commands set contour -->
+<!-- ?commands unset contour -->
+<!-- ?commands show contour -->
+<!-- ?set contour -->
+<!-- ?unset contour -->
+<!-- ?show contour -->
+<p><a name="index-contour-416"></a><a name="index-contour-417"></a>
+
+   <p><a name="index-nocontour-418"></a>
+<a href="contour.html#contour">contour</a> enables contour drawing for surfaces.  This option is available
+for `splot` only.  It requires grid data, see `grid_data` for more details. 
+If contours are desired from non-grid data, <a href="dgrid3d.html#dgrid3d">dgrid3d</a> can be used to
+create an appropriate grid.
+
+   <p>Syntax:
+<pre class="example">           set contour {base | surface | both}
+           unset contour
+           show contour
+     
+</pre>
+   <p>The three options specify where to draw the contours: `base` draws the
+contours on the grid base where the x/ytics are placed, <a href="surface.html#surface">surface</a> draws the
+contours on the surfaces themselves, and `both` draws the contours on both
+the base and the surface.  If no option is provided, the default is `base`.
+
+   <p>See also <a href="cntrparam.html#cntrparam">cntrparam</a> for the parameters that affect the drawing of
+contours, and <a href="clabel.html#clabel">clabel</a> for control of labelling of the contours.
+
+   <p>The surface can be switched off (see <a href="surface.html#surface">surface</a>), giving a contour-only
+graph.  Though it is possible to use <a href="size.html#size">size</a> to enlarge the plot to fill
+the screen, more control over the output format can be obtained by writing
+the contour information to a file, and rereading it as a 2D datafile plot:
+
+<pre class="example">           unset surface
+           set contour
+           set cntrparam ...
+           set table 'filename'
+           splot ...
+           unset table
+           # contour info now in filename
+           set term &lt;whatever&gt;
+           plot 'filename'
+     
+</pre>
+   <p>In order to draw contours, the data should be organized as "grid data".  In
+such a file all the points for a single y-isoline are listed, then all the
+points for the next y-isoline, and so on.  A single blank line (a line
+containing no characters other than blank spaces and a carriage return and/or
+a line feed) separates one y-isoline from the next. 
+See also <a href="datafile.html#datafile">datafile</a>.
+
+   <p>See also
+<a href="http://www.gnuplot.info/demo/contours.html">contours demo (contours.dem)</a>
+and
+<a href="http://www.gnuplot.info/demo/discrete.html">contours with user defined levels demo (discrete.dem).</a>
+
+   </body></html>
+

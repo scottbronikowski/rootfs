@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>boxes - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plotting_005fstyles.html#plotting_005fstyles" title="plotting_styles">
+<link rel="prev" href="boxerrorbars.html#boxerrorbars" title="boxerrorbars">
+<link rel="next" href="boxxyerrorbars.html#boxxyerrorbars" title="boxxyerrorbars">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="boxes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="boxxyerrorbars.html#boxxyerrorbars">boxxyerrorbars</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="boxerrorbars.html#boxerrorbars">boxerrorbars</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plotting_005fstyles.html#plotting_005fstyles">plotting_styles</a>
+<hr>
+</div>
+
+<h3 class="section">2.2 boxes</h3>
+
+<!-- ?commands set style boxes -->
+<!-- ?set style boxes -->
+<!-- ?plotting styles boxes -->
+<!-- ?style boxes -->
+<p><a name="index-boxes-243"></a>
+The <a href="boxes.html#boxes">boxes</a> style is only relevant to 2D plotting.  It draws a box centered
+about the given x coordinate that extends from the x axis (not from the graph
+border) to the given y coordinate.  It uses 2 or 3 columns of basic data. 
+Additional input columns may be used to provide information such as
+variable line or fill color (see `rgbcolor variable`).
+
+<pre class="example">          2 columns:  x  y
+          3 columns:  x  y  x_width
+     
+</pre>
+   <p>The width of the box is obtained in one of three ways.  If the input data has a
+third column, this will be used to set the width of the box.  If not, if a
+width has been set using the <a href="boxwidth.html#boxwidth">boxwidth</a> command, this will be used. 
+If neither of these is available, the width of each box will be calculated
+automatically so that it touches the adjacent boxes.
+
+   <p>The interior of the boxes is drawn according to the current fillstyle. 
+See `set style fill` for details.  Alternatively a new fillstyle
+may be specified in the plot command.
+
+   <p>For fillstyle `empty` the box is not filled.
+
+   <p>For fillstyle `solid` the box is filled with a solid rectangle of the
+current drawing color. There is an optional parameter &lt;density&gt; that
+controls the fill density; it runs from 0 (background color) to 1
+(current drawing color).
+
+   <p>For fillstyle `pattern` the box is filled in the current drawing color with
+a pattern, if supported by the terminal driver.
+
+   <p>Examples:
+
+   <p>To plot a data file with solid filled boxes with a small vertical space
+separating them (bargraph):
+
+<pre class="example">           set boxwidth 0.9 relative
+           set style fill solid 1.0
+           plot 'file.dat' with boxes
+     
+</pre>
+   <p>To plot a sine and a cosine curve in pattern-filled boxes style:
+
+<pre class="example">           set style fill pattern
+           plot sin(x) with boxes, cos(x) with boxes
+     
+</pre>
+   <p>The sin plot will use pattern 0; the cos plot will use pattern 1. 
+Any additional plots would cycle through the patterns supported by the
+terminal driver.
+
+   <p>To specify explicit fillstyles for each dataset:
+
+<pre class="example">          plot 'file1' with boxes fs solid 0.25, \
+               'file2' with boxes fs solid 0.50, \
+               'file3' with boxes fs solid 0.75, \
+               'file4' with boxes fill pattern 1, \
+               'file5' with boxes fill empty
+     
+</pre>
+   </body></html>
+

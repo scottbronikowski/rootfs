@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>join</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="DSSSL Library Reference"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Miscellaneous"
+HREF="r300.htm"><LINK
+REL="PREVIOUS"
+TITLE="strip"
+HREF="strip.html"><LINK
+REL="NEXT"
+TITLE="pad-string"
+HREF="pad-string.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>DSSSL Library Reference: Part of the Modular DocBook Stylesheet distribution</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="strip.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="pad-string.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="JOIN"
+></A
+>join</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN403"
+></A
+><H2
+>Name</H2
+>join&nbsp;--&nbsp;Joins a list of strings together</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN406"
+></A
+><H2
+>Synopsis</H2
+><PRE
+CLASS="SYNOPSIS"
+>(join slist #!optional (space " "))</PRE
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN409"
+></A
+><H2
+>Description</H2
+><P
+>Given a list of strings and a space string, returns the string
+that results from joining all the strings in the list together,
+separated by space.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><TT
+CLASS="LITERAL"
+>slist</TT
+></DT
+><DD
+><P
+>The list of strings.</P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>space</TT
+></DT
+><DD
+><P
+>The string to place between each member of the list.  Defaults to
+a single space.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN423"
+></A
+><H2
+>Author</H2
+><P
+>David Carlisle</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN426"
+></A
+><H2
+>Source Code</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>(define (join slist #!optional (space " "))
+  ;; Joins a list of strings together
+  (letrec ((loop (lambda (l result)
+		   (if (null? l) 
+		       result
+		       (loop (cdr l) (cons space (cons (car l) result)))))))
+    (if (null? slist)
+	""
+	(apply string-append (cons (car slist) 
+				   (loop (reverse (cdr slist)) '() ))))))</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="strip.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="pad-string.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>strip</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="r300.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pad-string</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

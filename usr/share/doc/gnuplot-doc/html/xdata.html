@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>xdata - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="x2zeroaxis.html#x2zeroaxis" title="x2zeroaxis">
+<link rel="next" href="xdtics.html#xdtics" title="xdtics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="xdata"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="xdtics.html#xdtics">xdtics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="x2zeroaxis.html#x2zeroaxis">x2zeroaxis</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.86 xdata</h4>
+
+<!-- ?commands set xdata -->
+<!-- ?commands show xdata -->
+<!-- ?set xdata -->
+<!-- ?show xdata -->
+<p><a name="index-xdata-601"></a><a name="index-xdata-602"></a>
+
+   <p>This command sets the datatype on the x axis to time/date.  A similar command
+does the same thing for each of the other axes.
+
+   <p>Syntax:
+<pre class="example">           set xdata {time}
+           show xdata
+     
+</pre>
+   <p>The same syntax applies to <a href="ydata.html#ydata">ydata</a>, <a href="zdata.html#zdata">zdata</a>, <a href="x2data.html#x2data">x2data</a>, <a href="y2data.html#y2data">y2data</a> and <a href="cbdata.html#cbdata">cbdata</a>.
+
+   <p>The `time` option signals that the datatype is indeed time/date.  If the
+option is not specified, the datatype reverts to normal.
+
+   <p>See <a href="timefmt.html#timefmt">timefmt</a> to tell gnuplot how to read date or time data.  The
+time/date is converted to seconds from start of the century.  There is
+currently only one timefmt, which implies that all the time/date columns must
+conform to this format.  Specification of ranges should be supplied as quoted
+strings according to this format to avoid interpretation of the time/date as
+an expression.
+
+   <p>The function 'strftime' (type "man strftime" on unix to look it up) is used
+to print tic-mark labels.  `gnuplot` tries to figure out a reasonable format
+for this  unless the `set format x "string"` has supplied something that does
+not look like a decimal format (more than one '%' or neither %f nor %g).
+
+   <p>See also `Time/date` for more information.
+
+   </body></html>
+

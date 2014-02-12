@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>reread - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="replot.html#replot" title="replot">
+<link rel="next" href="reset.html#reset" title="reset">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="reread"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="reset.html#reset">reset</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="replot.html#replot">replot</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.21 reread</h3>
+
+<!-- ?commands reread -->
+<p><a name="index-reread-373"></a><a name="index-reread-374"></a>
+
+   <p>The <a href="reread.html#reread">reread</a> command causes the current `gnuplot` command file, as specified
+by a `load` command or on the command line, to be reset to its starting
+point before further commands are read from it.  This essentially implements
+an endless loop of the commands from the beginning of the command file to
+the <a href="reread.html#reread">reread</a> command.  (But this is not necessarily a disaster&mdash;<a href="reread.html#reread">reread</a> can
+be very useful when used in conjunction with <a href="if.html#if">if</a>.  See <a href="if.html#if">if</a> for details.) 
+The <a href="reread.html#reread">reread</a> command has no effect if input from standard input.
+
+   <p>Examples:
+
+   <p>Suppose the file "looper" contains the commands
+<pre class="example">           a=a+1
+           plot sin(x*a)
+           pause -1
+           if(a&lt;5) reread
+</pre>
+   <p>and from within `gnuplot` you submit the commands
+<pre class="example">           a=0
+           load 'looper'
+</pre>
+   <p>The result will be five plots (separated by the <a href="pause.html#pause">pause</a> message).
+
+   <p>Suppose the file "data" contains six columns of numbers with a total yrange
+from 0 to 10; the first is x and the next are five different functions of x. 
+Suppose also that the file "plotter" contains the commands
+<pre class="example">           c_p = c_p+1
+           plot "$0" using 1:c_p with lines linetype c_p
+           if(c_p &lt;  n_p) reread
+</pre>
+   <p>and from within `gnuplot` you submit the commands
+<pre class="example">           n_p=6
+           c_p=1
+           unset key
+           set yrange [0:10]
+           set multiplot
+           call 'plotter' 'data'
+           unset multiplot
+</pre>
+   <p>The result is a single graph consisting of five plots.  The yrange must be
+set explicitly to guarantee that the five separate graphs (drawn on top of
+each other in multiplot mode) will have exactly the same axes.  The linetype
+must be specified; otherwise all the plots would be drawn with the same type. 
+See animate.dem in demo directory for an animated example.
+
+   </body></html>
+

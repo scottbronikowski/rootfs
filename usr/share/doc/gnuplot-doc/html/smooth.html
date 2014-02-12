@@ -1,0 +1,219 @@
+<html lang="en">
+<head>
+<title>smooth - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="data.html#data" title="data">
+<link rel="prev" href="index.html#index" title="index">
+<link rel="next" href="special_002dfilenames.html#special_002dfilenames" title="special-filenames">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="smooth"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="special_002dfilenames.html#special_002dfilenames">special-filenames</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="index.html#index">index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="data.html#data">data</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.14.2.6 smooth</h5>
+
+<!-- ?commands plot datafile smooth -->
+<!-- ?plot datafile smooth -->
+<!-- ?plot smooth -->
+<!-- ?data-file smooth -->
+<!-- ?datafile smooth -->
+<p><a name="index-smooth-336"></a>
+`gnuplot` includes a few general-purpose routines for interpolation and
+approximation of data; these are grouped under the <a href="smooth.html#smooth">smooth</a> option.  More
+sophisticated data processing may be performed by preprocessing the data
+externally or by using <a href="fit.html#fit">fit</a> with an appropriate model.
+
+   <p>Syntax:
+<pre class="example">           smooth {unique | frequency | cumulative | kdensity | csplines | acsplines | bezier | sbezier}
+     
+</pre>
+   <p>`unique`, `frequency`, and `cumulative` plot the data after making them
+monotonic.  Each of the other routines uses the data to determine the
+coefficients of a continuous curve between the endpoints of the data. 
+This curve is then plotted in the same manner as a function, that is,
+by finding its value at uniform intervals along the abscissa
+(see <a href="samples.html#samples">samples</a>) and connecting these points with straight line
+segments (if a line style is chosen).
+
+   <p>If <a href="autoscale.html#autoscale">autoscale</a> is in effect, the ranges will be computed such that the
+plotted curve lies within the borders of the graph.
+
+   <p>If <a href="autoscale.html#autoscale">autoscale</a> is not in effect, and the smooth option is either `acspline`
+or `cspline`, the sampling of the generated curve is
+done across the intersection of the x range covered by the input data and
+the fixed abscissa range as defined by <a href="xrange.html#xrange">xrange</a>.
+
+   <p>If too few points are available to allow the selected option to be applied,
+an error message is produced.  The minimum number is one for `unique` and
+`frequency`, four for `acsplines`, and three for the others.
+
+   <p>The <a href="smooth.html#smooth">smooth</a> options have no effect on function plots.
+
+<p class="noindent">&mdash; ACSPLINES &mdash;
+
+<!-- ?commands plot datafile smooth acsplines -->
+<!-- ?plot datafile smooth acsplines -->
+<!-- ?data-file smooth acsplines -->
+<!-- ?datafile smooth acsplines -->
+<!-- ?plot smooth acsplines -->
+<!-- ?plot acsplines -->
+<!-- ?smooth acsplines -->
+   <p><a name="index-acsplines-337"></a>
+The `acsplines` option approximates the data with a "natural smoothing spline". 
+After the data are made monotonic in x (see `smooth unique`), a curve is
+piecewise constructed from segments of cubic polynomials whose coefficients
+are found by the weighting the data points; the weights are taken from the
+third column in the data file.  That default can be modified by the third
+entry in the <a href="using.html#using">using</a> list, e.g.,
+<pre class="example">           plot 'data-file' using 1:2:(1.0) smooth acsplines
+     
+</pre>
+   <p>Qualitatively, the absolute magnitude of the weights determines the number
+of segments used to construct the curve.  If the weights are large, the
+effect of each datum is large and the curve approaches that produced by
+connecting consecutive points with natural cubic splines.  If the weights are
+small, the curve is composed of fewer segments and thus is smoother; the
+limiting case is the single segment produced by a weighted linear least
+squares fit to all the data.  The smoothing weight can be expressed in terms
+of errors as a statistical weight for a point divided by a "smoothing factor"
+for the curve so that (standard) errors in the file can be used as smoothing
+weights.
+
+   <p>Example:
+<pre class="example">           sw(x,S)=1/(x*x*S)
+           plot 'data_file' using 1:2:(sw($3,100)) smooth acsplines
+     
+</pre>
+   <p class="noindent">&mdash; BEZIER &mdash;
+
+<!-- ?commands plot datafile smooth bezier -->
+<!-- ?plot datafile smooth bezier -->
+<!-- ?plot smooth bezier -->
+<!-- ?data-file smooth bezier -->
+<!-- ?datafile smooth bezier -->
+<!-- ?plot bezier -->
+<!-- ?smooth bezier -->
+   <p><a name="index-bezier-338"></a>
+The `bezier` option approximates the data with a Bezier curve of degree n
+(the number of data points) that connects the endpoints.
+
+<p class="noindent">&mdash; CSPLINES &mdash;
+
+<!-- ?commands plot datafile smooth csplines -->
+<!-- ?plot datafile smooth csplines -->
+<!-- ?plot smooth csplines -->
+<!-- ?data-file smooth csplines -->
+<!-- ?datafile smooth csplines -->
+<!-- ?plot csplines -->
+<!-- ?smooth csplines -->
+   <p><a name="index-csplines-339"></a>
+The `csplines` option connects consecutive points by natural cubic splines
+after rendering the data monotonic (see `smooth unique`).
+
+<p class="noindent">&mdash; SBEZIER &mdash;
+
+<!-- ?commands plot datafile smooth sbezier -->
+<!-- ?plot datafile smooth sbezier -->
+<!-- ?plot smooth sbezier -->
+<!-- ?data-file smooth sbezier -->
+<!-- ?datafile smooth sbezier -->
+<!-- ?plot sbezier -->
+<!-- ?smooth sbezier -->
+   <p><a name="index-sbezier-340"></a>
+The `sbezier` option first renders the data monotonic (`unique`) and then
+applies the `bezier` algorithm.
+
+<p class="noindent">&mdash; UNIQUE &mdash;
+
+<!-- ?commands plot datafile smooth unique -->
+<!-- ?plot datafile smooth unique -->
+<!-- ?plot smooth unique -->
+<!-- ?data-file smooth unique -->
+<!-- ?datafile smooth unique -->
+<!-- ?plot unique -->
+<!-- ?smooth unique -->
+   <p><a name="index-unique-341"></a>
+The `unique` option makes the data monotonic in x; points with the same
+x-value are replaced by a single point having the average y-value.  The
+resulting points are then connected by straight line segments.
+
+<p class="noindent">&mdash; FREQUENCY &mdash;
+
+<!-- ?commands plot datafile smooth frequency -->
+<!-- ?plot datafile smooth frequency -->
+<!-- ?plot smooth frequency -->
+<!-- ?data-file smooth frequency -->
+<!-- ?datafile smooth frequency -->
+<!-- ?plot frequency -->
+<!-- ?smooth frequency -->
+   <p><a name="index-frequency-342"></a>
+The `frequency` option makes the data monotonic in x; points with the same
+x-value are replaced by a single point having the summed y-values.  The
+resulting points are then connected by straight line segments. 
+See also
+<a href="http://www.gnuplot.info/demo/smooth.html">smooth.dem</a>
+
+<p class="noindent">&mdash; CUMULATIVE &mdash;
+
+<!-- ?commands plot datafile smooth cumulative -->
+<!-- ?plot datafile smooth cumulative -->
+<!-- ?plot smooth cumulative -->
+<!-- ?data-file smooth cumulative -->
+<!-- ?datafile smooth cumulative -->
+<!-- ?plot cumulative -->
+<!-- ?smooth cumulative -->
+   <p><a name="index-cumulative-343"></a>
+The `cumulative` option makes the data monotonic in x; points with the same
+x-value are replaced by a single point containing the cumulative sum of
+y-values of all data points with lower x-values (i.e. to the left of the
+current data point). This can be used to obtain a cumulative distribution
+function from data. 
+See also
+<a href="http://www.gnuplot.info/demo/smooth.html">smooth.dem</a>
+
+<p class="noindent">&mdash; KDENSITY &mdash;
+
+<!-- ?commands plot datafile smooth kdensity -->
+<!-- ?plot datafile smooth kdensity -->
+<!-- ?plot smooth kdensity -->
+<!-- ?data-file smooth kdensity -->
+<!-- ?datafile smooth kdensity -->
+<!-- ?plot kdensity -->
+<!-- ?smooth kdensity -->
+   <p><a name="index-kdensity-344"></a>
+The `kdensity` option is a way to plot a kernel density estimate (which is a
+smooth histogram) for a random collection of points, using Gaussian kernels. 
+A Gaussian is placed at the location of each point in the first column and
+the sum of all these Gaussians is plotted as a function. The value in the
+second column is taken as weight of the Gaussian. (To obtain a normalized
+histogram, this should be 1/number-of-points). The value of the third column,
+if supplied, is taken as the bandwidth for the kernels. If only two columns
+have been specified, or if the value of the third column is zero or less,
+gnuplot calculates the bandwidth which would be optimal if the input data was
+normally distributed. (This will usually be a very conservative, i.e. broad
+bandwidth.)
+
+   </body></html>
+

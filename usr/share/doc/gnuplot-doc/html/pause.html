@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>pause - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="lower.html#lower" title="lower">
+<link rel="next" href="plot.html#plot" title="plot">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="pause"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="plot.html#plot">plot</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="lower.html#lower">lower</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.13 pause</h3>
+
+<!-- ?commands pause -->
+<p><a name="index-pause-312"></a><a name="index-pause-313"></a>
+
+<!-- ?pause mouse -->
+   <p>The <a href="pause.html#pause">pause</a> command displays any text associated with the command and then
+waits a specified amount of time or until the carriage return is pressed. 
+<a href="pause.html#pause">pause</a> is especially useful in conjunction with `load` files.
+
+   <p>Syntax:
+<pre class="example">           pause &lt;time&gt; {"&lt;string&gt;"}
+           pause mouse {&lt;endcondition&gt;}{, &lt;endcondition&gt;} {"&lt;string&gt;"}
+     
+</pre>
+   <p>&lt;time&gt; may be any constant or expression.  Choosing -1 will wait until a
+carriage return is hit, zero (0) won't pause at all, and a positive number
+will wait the specified number of seconds.  The time is rounded to an integer
+number of seconds if subsecond time resolution is not supported by the given
+platform.  `pause 0` is synonymous with <a href="print.html#print">print</a>.
+
+   <p>If the current terminal supports `mousing`, then `pause mouse` will terminate
+on either a mouse click or on ctrl-C.  For all other terminals, or if mousing
+is not active, `pause mouse` is equivalent to `pause -1`.
+
+   <p>If one or more end conditions are given after `pause mouse`, then any one of
+the conditions will terminate the pause. The possible end conditions are
+`keypress`, `button1`, `button2`, `button3`, `close`, and `any`. 
+If the pause terminates on a keypress, then the ascii value of the key pressed
+is returned in MOUSE_KEY.  The character itself is returned as a one character
+string in MOUSE_CHAR. Hotkeys (bind command) are disabled if keypress is one of
+the end conditions.  Zooming is disabled if button3 is one of the end
+conditions.
+
+   <p>In all cases the coordinates of the mouse are returned in variables MOUSE_X,
+MOUSE_Y, MOUSE_X2, MOUSE_Y2.  See <a href="variables.html#variables">variables</a>.
+
+   <p>Note: Since <a href="pause.html#pause">pause</a> communicates with the operating system rather than the
+graphics, it may behave differently with different device drivers (depending
+upon how text and graphics are mixed).
+
+   <p>Examples:
+<pre class="example">           pause -1    # Wait until a carriage return is hit
+           pause 3     # Wait three seconds
+           pause -1  "Hit return to continue"
+           pause 10  "Isn't this pretty?  It's a cubic spline."
+           pause mouse "Click any mouse button on selected data point"
+           pause mouse keypress "Type a letter from A-F in the active window"
+           pause mouse button1,keypress
+           pause mouse any "Any key or button will terminate"
+     
+</pre>
+   <p>The variant "pause mouse key" will resume after any keypress in the active
+plot window. If you want to wait for a particular key to be pressed, you can
+use a reread loop such as:
+
+<pre class="example">           print "I will resume after you hit the Tab key in the plot window"
+           load "wait_for_tab"
+     
+</pre>
+   <p>File "wait_for_tab" contains the lines
+
+<pre class="example">           pause mouse key
+           if (MOUSE_KEY != 9) reread
+     
+</pre>
+   </body></html>
+

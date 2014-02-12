@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 11.  Stream from a DV camcorder</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DV, DVB, DVD, DivX" /><link rel="start" href="index.html" title="VideoLAN Streaming Howto" /><link rel="up" href="index.html" title="VideoLAN Streaming Howto" /><link rel="prev" href="ch10.html" title="Chapter 10.  Stream from encoding cards and other capture peripherals" /><link rel="next" href="ch12.html" title="Chapter 12.  Streaming over IPv6" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 11. 
+Stream from a DV camcorder
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch12.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="dv"></a>Chapter 11. 
+Stream from a DV camcorder
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch11.html#id2581201">
+Install the libraw1394 and libavc1394
+</a></span></dt><dt><span class="sect1"><a href="ch11.html#id2581935">
+Stream with DV
+</a></span></dt></dl></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+This is possible under GNU/Linux only.
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2581201"></a>
+Install the libraw1394 and libavc1394
+</h2></div></div></div><p>
+If you want to be able to stream from a DV camcorder, then you need to install the libraries libraw1394 and libavc1394:
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+if you use a Fedora Core distribution then you just need to install the libraries using:
+</p><pre class="screen">
+<code class="prompt">%</code><strong class="userinput"><code>yum update</code></strong>
+<code class="prompt">%</code><strong class="userinput"><code>yum install libraw1394 libavc1394</code></strong>
+</pre><p>
+</p></li><li><p>
+if you want to install the libraries from the source then you must download them from the <a class="ulink" href="http://www.linux1394.org/" target="_top">libraw1394</a> and <a class="ulink" href="http://sourceforge.net/projects/libavc1394" target="_top">libavc1394</a> from their projects website.
+</p></li><li><p>
+if you have a distribution that uses <a class="ulink" href="http://kernel.org/pub/linux/utils/kernel/hotplug" target="_top">udev</a>, then you must add/change the following line to the file 50-udev.rules in your /etc/udev/rules.d directory.
+</p><pre class="screen">
+<code class="prompt">%</code><strong class="userinput"><code>vi /etc/udev/rules.d/50-udev.rules</code></strong>
+<strong class="userinput"><code># IEEE1394 (firewire) devices (must be before raw devices below)</code></strong>
+<strong class="userinput"><code>KERNEL=="raw1394",              NAME="%k"</code></strong>
+<strong class="userinput"><code>KERNEL=="dv1394",               NAME="dv1394/%k"</code></strong>
+<strong class="userinput"><code>KERNEL=="video1394*",           NAME="video1394/%n"</code></strong>
+</pre><p>
+</p></li></ul></div><p>
+The following sections assume that you have a working linux installation with the IEEE 1394 (Firewire) libraries installed, either manually from the source code or through your distributions upgrade mechanism. 
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2581935"></a>
+Stream with DV
+</h2></div></div></div><p>
+Connect the DV camcorder with a Firewire cable to your computer, and check the creation of the file <code class="filename">/dev/raw1394</code>.
+</p><p>
+Run VLC with the following command line
+:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv dv/rawdv:///dev/raw1394 -dv-caching 10000&#8211;sout '#transcode{vcodec=WMV2,vb=512,scale=1,acodec=mp3,ab=192,channels=2}:std{access=mmsh,mux=asfh,url=:8080}' &#8211;sout-transcode-fps=25.0</code></strong>
+</pre><p>
+where:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>dv/rawdv://</em></span>
+ is the DV input and <code class="filename">/dev/raw1394</code> the device file
+,</p></li><li><p><span class="emphasis"><em>dv-caching</em></span>
+ is the delay is miliseconds (ms) (start with a high value, 10s or so, and lower it later)
+,</p></li><li><p><span class="emphasis"><em>sout</em></span>
+ is the stream output chain that is used to stream the DV camcorder as a multimedia stream over the network. The <span class="emphasis"><em>transcode</em></span> syntax is explained in the chapter about transcoding. The example as given above generates a multimedia stream that is compatible with Windows Media Player
+,</p></li><li><p><span class="emphasis"><em>sout-transcode-fps</em></span>
+ is the number of pictures per second <span class="emphasis"><em>25.0</em></span> that the transcode module should generate of the requested audio/video codec.
+</p></li></ul></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch12.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 10. 
+Stream from encoding cards and other capture peripherals
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 12. 
+Streaming over IPv6
+</td></tr></table></div></body></html>

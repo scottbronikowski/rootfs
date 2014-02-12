@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+<title>border - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="bmargin.html#bmargin" title="bmargin">
+<link rel="next" href="boxwidth.html#boxwidth" title="boxwidth">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="border"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="boxwidth.html#boxwidth">boxwidth</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="bmargin.html#bmargin">bmargin</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.7 border</h4>
+
+<!-- ?commands set border -->
+<!-- ?commands unset border -->
+<!-- ?commands show border -->
+<!-- ?set border -->
+<!-- ?unset border -->
+<!-- ?show border -->
+<p><a name="index-border-401"></a><a name="index-border-402"></a>
+
+   <p><a name="index-noborder-403"></a>
+The <a href="border.html#border">border</a> and <a href="border.html#border">border</a> commands control the display of the graph
+borders for the `plot` and `splot` commands.  Note that the borders do not
+necessarily coincide with the axes; with `plot` they often do, but with
+`splot` they usually do not.
+
+   <p>Syntax:
+<pre class="example">           set border {&lt;integer&gt;} {front | back} {linewidth | lw &lt;line_width&gt;}
+                      {{linestyle | ls &lt;line_style&gt;} | {linetype | lt &lt;line_type&gt;}}
+           unset border
+           show border
+     
+</pre>
+   <p>With a `splot` displayed in an arbitrary orientation, like `set view 56,103`,
+the four corners of the x-y plane can be referred to as "front", "back",
+"left" and "right".  A similar set of four corners exist for the top surface,
+of course.  Thus the border connecting, say, the back and right corners of the
+x-y plane is the "bottom right back" border, and the border connecting the top
+and bottom front corners is the "front vertical".  (This nomenclature is
+defined solely to allow the reader to figure out the table that follows.)
+
+   <p>The borders are encoded in a 12-bit integer: the bottom four bits control the
+border for `plot` and the sides of the base for `splot`; the next four bits
+control the verticals in `splot`; the top four bits control the edges on top
+of the `splot`.  In detail, `&lt;integer&gt;` should be the sum of the appropriate
+entries from the following table:
+
+<pre class="example">                 Bit     plot        splot
+                   1   bottom      bottom left front
+                   2   left        bottom left back
+                   4   top         bottom right front
+                   8   right       bottom right back
+                  16   no effect   left vertical
+                  32   no effect   back vertical
+                  64   no effect   right vertical
+                 128   no effect   front vertical
+                 256   no effect   top left back
+                 512   no effect   top right back
+                1024   no effect   top left front
+                2048   no effect   top right front
+     
+</pre>
+   <p>Various bits or combinations of bits may be added together in the command.
+
+   <p>The default is 31, which is all four sides for `plot`, and base and z axis
+for `splot`.
+
+   <p>In 2D plots the border is normally drawn on top of all plots elements
+(`front`). If you want the border to be drawn behind the plot elements,
+use `set border back`.
+
+   <p>Using the optional &lt;line_style&gt;, &lt;line_type&gt; and &lt;line_width&gt; specifiers, the
+way the border lines are drawn can be influenced (limited by what the current
+terminal driver supports).
+
+   <p>For `plot`, tics may be drawn on edges other than bottom and left by enabling
+the second axes &ndash; see `set xtics` for details.
+
+   <p>If a `splot` draws only on the base, as is the case with "`unset surface; set
+contour base`", then the verticals and the top are not drawn even if they are
+specified.
+
+   <p>The `set grid` options 'back', 'front' and 'layerdefault' also
+control the order in which the border lines are drawn with respect to
+the output of the plotted data.
+
+   <p>Examples:
+
+   <p>Draw default borders:
+<pre class="example">           set border
+     
+</pre>
+   <p>Draw only the left and bottom (`plot`) or both front and back bottom left
+(`splot`) borders:
+<pre class="example">           set border 3
+     
+</pre>
+   <p>Draw a complete box around a `splot`:
+<pre class="example">           set border 4095
+     
+</pre>
+   <p>Draw a topless box around a `splot`, omitting the front vertical:
+<pre class="example">           set border 127+256+512 # or set border 1023-128
+     
+</pre>
+   <p>Draw only the top and right borders for a `plot` and label them as axes:
+<pre class="example">           unset xtics; unset ytics; set x2tics; set y2tics; set border 12
+     
+</pre>
+   </body></html>
+

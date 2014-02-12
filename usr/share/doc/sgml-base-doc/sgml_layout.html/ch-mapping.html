@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+
+<title>SGML Entity Management - Proposed mapping of public identifiers to system identifiers</title>
+
+<link href="index.html" rel="start">
+<link href="ch-intro.html" rel="prev">
+<link href="ch-Other.html" rel="next">
+<link href="index.html#contents" rel="contents">
+<link href="index.html#copyright" rel="copyright">
+<link href="ch-intro.html" rel="chapter" title="1 Introduction and Scope">
+<link href="ch-mapping.html" rel="chapter" title="2 Proposed mapping of public identifiers to system identifiers">
+<link href="ch-Other.html" rel="chapter" title="3 Location of miscellaneous files">
+<link href="ch-examples.html" rel="chapter" title="4 Examples">
+
+</head>
+
+<body>
+
+<p><a name="ch-mapping"></a></p>
+<hr>
+
+<p>
+[ <a href="ch-intro.html">previous</a> ]
+[ <a href="index.html#contents">Contents</a> ]
+[ <a href="ch-intro.html">1</a> ]
+[ 2 ]
+[ <a href="ch-Other.html">3</a> ]
+[ <a href="ch-examples.html">4</a> ]
+[ <a href="ch-Other.html">next</a> ]
+</p>
+
+<hr>
+
+<h1>
+SGML Entity Management
+<br>Chapter 2 - Proposed mapping of public identifiers to system identifiers
+</h1>
+
+<hr>
+
+<p>
+SGML can refer to an external file (really an entity) with an <var>external
+identifier</var>: this is a <var>public identifier</var> or a <var>system
+identifier</var>, or both.
+</p>
+
+<p>
+A typical public identifier looks like
+</p>
+
+<pre>
+     	  PUBLIC &quot;ISO 8879-1986//ENTITIES Added Latin 1//EN&quot;
+</pre>
+
+<p>
+where <samp>ISO 8879-1986</samp> is the owner, <samp>ENTITIES</samp> is the
+text class and <samp>Added Latin 1</samp> is the text description, and
+<samp>EN</samp> is language.
+</p>
+
+<p>
+A system identifier looks like
+</p>
+
+<pre>
+     	  SYSTEM &quot;htmlplus.dtd&quot;
+</pre>
+
+<p>
+where <samp>htmlplus.dtd</samp> is a system-specific identifier.
+</p>
+
+<p>
+To map external identifiers to file names, one should first try the system
+identifier, as a file name, and then search entity catalog files and then
+search the list of file names derived from the public identifier.  The catalog
+format is according to SGML/Opens resolution on entity management.  The catalog
+consists of a series of entries and comments.  A comment is delimited by
+<samp>--</samp> like in a markup declaration.
+</p>
+
+<p>
+The fallback derivation of the file name is modelled after the
+<code>sgmls</code> environment variable <var>SGML_PATH</var>, and Emacs
+<code>psgml</code> mode's <var>sgml-public-map</var> variable.  There does not
+seem to be any official standards (this is left to the implementation), so this
+standard is simply an abstraction of real-world practice of SGML tools, and
+shall now be the standard for Debian systems, since this is the convention
+currently followed by all applications currently in Debian.
+</p>
+
+<p>
+Contiguous white space is compacted to a single space and replaced with an
+underscore (<samp>_</samp>); the characters <samp>/</samp> to <samp>%</samp>
+are also replaced with <samp>_</samp>.  The text class is down-cased.  The
+language specifier (i.e., <samp>//EN</samp>) and anything following it should
+be removed.
+</p>
+
+<hr>
+
+<p>
+[ <a href="ch-intro.html">previous</a> ]
+[ <a href="index.html#contents">Contents</a> ]
+[ <a href="ch-intro.html">1</a> ]
+[ 2 ]
+[ <a href="ch-Other.html">3</a> ]
+[ <a href="ch-examples.html">4</a> ]
+[ <a href="ch-Other.html">next</a> ]
+</p>
+
+<hr>
+
+<p>
+SGML Entity Management
+</p>
+
+<address>
+2 February 2010<br>
+<br>
+Manoj Srivastava <code><a href="mailto:srivasta@debian.org">srivasta@debian.org</a></code><br>
+<br>
+</address>
+<hr>
+
+</body>
+
+</html>
+

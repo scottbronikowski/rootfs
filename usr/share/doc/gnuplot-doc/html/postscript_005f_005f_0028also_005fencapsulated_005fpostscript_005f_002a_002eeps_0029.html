@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>postscript__(also_encapsulated_postscript_*.eps) - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fonts.html#Fonts" title="Fonts">
+<link rel="prev" href="gd_005f_0028png.html#gd_005f_0028png" title="gd_(png">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="postscript__(also_encapsulated_postscript_*.eps)"></a>
+<a name="postscript_005f_005f_0028also_005fencapsulated_005fpostscript_005f_002a_002eeps_0029"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="gd_005f_0028png.html#gd_005f_0028png">gd_(png</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fonts.html#Fonts">Fonts</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.14.3 postscript  (also encapsulated postscript *.eps)</h4>
+
+<!-- ?fonts postscript -->
+<p><a name="index-fonts-205"></a>
+<a name="index-postscript-206"></a>
+<a name="index-eps-207"></a>
+PostScript font handling is done by the printer or viewing program. 
+Gnuplot can create valid PostScript or encapsulated PostScript (*.eps) even if
+no fonts at all are installed on your computer.  Gnuplot simply refers to the
+font by name in the output file, and assumes that the printer or viewing
+program will know how to find or approximate a font by that name.
+
+   <p>All PostScript printers or viewers should know about the standard set of Adobe
+fonts `Times-Roman`, `Helvetica`, `Courier`, and `Symbol`.  It is likely that
+many additional fonts are also available, but the specific set depends on your
+system or printer configuration. Gnuplot does not know or care about this;
+the output *.ps or *.eps files that it creates will simply refer to whatever
+font names you request.
+
+   <p>Thus
+<pre class="example">          set term postscript eps font "Times-Roman,12"
+</pre>
+   <p>will produce output that is suitable for all printers and viewers.
+
+   <p>On the other hand
+<pre class="example">          set term postscript eps font "Garamond-Premier-Pro-Italic"
+</pre>
+   <p>will produce an output file that contains valid PostScript, but since it
+refers to a specialized font, only some printers or viewers will be able to
+display the specific font that was requested.  Most will substitute a
+different font.
+
+   <p>However, it is possible to embed a specific font in the output file so that
+all printers will be able to use it. This requires that the a suitable font
+description file is available on your system. Note that some font files require
+specific licensing if they are to be embedded in this way. 
+See `postscript fontfile` for more detailed description and examples.
+
+   </body></html>
+

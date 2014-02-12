@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>emf - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="eepic.html#eepic" title="eepic">
+<link rel="next" href="emxvga.html#emxvga" title="emxvga">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="emf"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="emxvga.html#emxvga">emxvga</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="eepic.html#eepic">eepic</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.18 emf</h5>
+
+<!-- ?commands set terminal emf -->
+<!-- ?set terminal emf -->
+<!-- ?set term emf -->
+<!-- ?terminal emf -->
+<!-- ?term emf -->
+<p><a name="index-emf-755"></a><a name="index-emf-756"></a>
+
+   <p>The `emf` terminal generates an Enhanced Metafile Format file. 
+This file format is recognized by many Windows applications.
+
+   <p>Syntax:
+<pre class="example">           set terminal emf {color | monochrome} {solid | dashed}
+                            {enhanced {noproportional}}
+                            {linewidth &lt;LW&gt;} {dashlength &lt;DL&gt;} {size XX,YY}
+                            {"&lt;fontname&gt;"} {&lt;fontsize&gt;}    #old syntax
+                            {font "&lt;fontname&gt;,&lt;fontsize&gt;"} #new syntax
+     
+</pre>
+   <p>In `monochrome` mode successive line types cycle through dash patterns. 
+In `color` mode successive line types use successive colors, and only after
+all 8 default colors are exhausted is the dash pattern incremented. 
+`solid` draws all curves with solid lines, overriding any dashed patterns;
+`linewidth &lt;factor&gt;` multiplies all line widths by this factor. 
+`dashlength &lt;factor&gt;` is useful for thick lines. 
+&lt;fontname&gt; is the name of a font; and
+`&lt;fontsize&gt;` is the size of the font in points.
+
+   <p>The nominal size of the output image defaults to 1024x768 in arbitrary
+units. You may specify a different nominal size using the <a href="size.html#size">size</a> option.
+
+   <p>Enhanced text mode tries to approximate proportional character spacing. 
+If you are using a monospaced font, or don't like the approximation, you
+can turn off this correction using the `noproportional` option.
+
+   <p>The default settings are `color dashed font "Arial,12" size 1024,768`
+Selecting `default` sets all options to their default values.
+
+   <p>Examples:
+<pre class="example">           set terminal emf 'Times Roman Italic' 12
+           set terminal emf color solid    # no pesky dashes!"
+     
+</pre>
+   </body></html>
+

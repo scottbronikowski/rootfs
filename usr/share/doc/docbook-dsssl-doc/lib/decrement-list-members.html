@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>decrement-list-members</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="DSSSL Library Reference"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Miscellaneous"
+HREF="r300.htm"><LINK
+REL="PREVIOUS"
+TITLE="list-put"
+HREF="list-put.html"><LINK
+REL="NEXT"
+TITLE="sgml-root-element"
+HREF="sgml-root-element.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>DSSSL Library Reference: Part of the Modular DocBook Stylesheet distribution</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="list-put.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="sgml-root-element.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="DECREMENT-LIST-MEMBERS"
+></A
+>decrement-list-members</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1696"
+></A
+><H2
+>Name</H2
+>decrement-list-members&nbsp;--&nbsp;Decrement each member of a list</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1699"
+></A
+><H2
+>Synopsis</H2
+><PRE
+CLASS="SYNOPSIS"
+>(decrement-list-members vlist #!optional (decr 1) (floor 0))</PRE
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1702"
+></A
+><H2
+>Description</H2
+><P
+>Decrement all the values of a list by <TT
+CLASS="LITERAL"
+>decr</TT
+>, not to fall below <TT
+CLASS="LITERAL"
+>floor</TT
+>.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><TT
+CLASS="LITERAL"
+>vlist</TT
+></DT
+><DD
+><P
+>The list of values.  All the values of this list should be numeric.</P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>decr</TT
+></DT
+><DD
+><P
+>The amount by which each element of the list should be decremented.
+The default is 1.</P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>floor</TT
+></DT
+><DD
+><P
+>The value below which each member of the list is not allowed to fall.
+The default is 0.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1723"
+></A
+><H2
+>Author</H2
+><P
+>David Carlisle</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1726"
+></A
+><H2
+>Source Code</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>(define (decrement-list-members vlist #!optional (decr 1) (floor 0))
+  ;; Decrement each member of a list
+  (map (lambda (a) 
+	 (if (&#60;= a (+ decr floor))
+	     floor
+	     (- a decr)))
+       vlist))</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="list-put.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="sgml-root-element.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>list-put</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="r300.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>sgml-root-element</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

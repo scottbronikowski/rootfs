@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+<title>boxerrorbars - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plotting_005fstyles.html#plotting_005fstyles" title="plotting_styles">
+<link rel="prev" href="plotting_005fstyles.html#plotting_005fstyles" title="plotting_styles">
+<link rel="next" href="boxes.html#boxes" title="boxes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="boxerrorbars"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="boxes.html#boxes">boxes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="plotting_005fstyles.html#plotting_005fstyles">plotting_styles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plotting_005fstyles.html#plotting_005fstyles">plotting_styles</a>
+<hr>
+</div>
+
+<h3 class="section">2.1 boxerrorbars</h3>
+
+<!-- ?commands set style boxerrorbars -->
+<!-- ?set style boxerrorbars -->
+<!-- ?plotting styles boxerrorbars -->
+<!-- ?style boxerrorbars -->
+<p><a name="index-boxerrorbars-242"></a>
+The <a href="boxerrorbars.html#boxerrorbars">boxerrorbars</a> style is only relevant to 2D data plotting.  It is a
+combination of the <a href="boxes.html#boxes">boxes</a> and <a href="yerrorbars.html#yerrorbars">yerrorbars</a> styles.  It uses 3, 4, or 5
+columns of data:
+
+<pre class="example">          3 columns:  x  y  ydelta
+          4 columns:  x  y  ydelta xdelta        # boxwidth != -2
+          4 columns:  x  y  ylow  yhigh          # boxwidth == -2
+          5 columns:  x  y  ylow  yhigh  xdelta
+     
+</pre>
+   <p>The boxwidth will come from the fourth column if the y errors are given as
+"ydelta" and the boxwidth was not previously set to -2.0 (`set boxwidth -2.0`)
+or from the fifth column if the y errors are in the form of "ylow yhigh".  The
+special case  `boxwidth = -2.0` is for four-column data with y errors in the
+form "ylow yhigh".  In this case the boxwidth will be calculated so that each
+box touches the adjacent boxes.  The width will also be calculated in cases
+where three-column data are used.
+
+   <p>The box height is determined from the y error in the same way as it is for
+the <a href="yerrorbars.html#yerrorbars">yerrorbars</a> style&mdash;either from y-ydelta to y+ydelta or from ylow to
+yhigh, depending on how many data columns are provided. 
+See also
+<a href="http://www.gnuplot.info/demo/mgr.html">errorbar demo.</a>
+
+   </body></html>
+

@@ -1,0 +1,240 @@
+<html lang="en">
+<head>
+<title>using - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="data.html#data" title="data">
+<link rel="prev" href="thru.html#thru" title="thru">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="using"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="thru.html#thru">thru</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="data.html#data">data</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.14.2.9 using</h5>
+
+<!-- ?commands plot datafile using -->
+<!-- ?plot datafile using -->
+<!-- ?plot using -->
+<!-- ?data-file using -->
+<!-- ?datafile using -->
+<p><a name="index-using-347"></a>
+The most common datafile modifier is <a href="using.html#using">using</a>.
+
+   <p>Syntax:
+<pre class="example">           plot 'file' using {&lt;entry&gt; {:&lt;entry&gt; {:&lt;entry&gt; ...}}} {'format'}
+     
+</pre>
+   <p>If a format is specified, each datafile record is read using the C library's
+'scanf' function, with the specified format string.  Otherwise the record is
+read and broken into columns. By default the separation between columns is
+whitespace (spaces and/or tabs), but see `datafile separator`.
+
+   <p>Each &lt;entry&gt; may be a simple column number that selects the value from one
+field of the input fit, an expression enclosed in parentheses, or empty.
+
+   <p>If the entry is an expression in parentheses, then the function column(N) may
+be used to indicate the value in column N. That is, column(1) refers to the
+first item read, column(2) to the second, and so on.  The special symbols
+$1, $2, ... are shorthand for column(1), column(2) ...  The function `valid(N)`
+tests whether the value in the Nth column is a valid number.
+
+   <p>In addition to the actual columns 1...N in the input data file, gnuplot
+presents data from several "pseudo-columns" that hold bookkeeping information. 
+E.g. $0 or column(0) returns the sequence number of this data record within a
+dataset.  Please see `pseudocolumns`.
+
+   <p>An empty &lt;entry&gt; will default to its order in the list of entries. 
+For example, `using ::4` is interpreted as `using 1:2:4`.
+
+   <p>If the <a href="using.html#using">using</a> list has but a single entry, that &lt;entry&gt; will be used for y
+and the data point number (pseudo-column $0) is used for x; for example,
+"`plot 'file' using 1`" is identical to "`plot 'file' using 0:1`". 
+If the <a href="using.html#using">using</a> list has two entries, these will be used for x and y. 
+See <a href="style.html#style">style</a> and <a href="fit.html#fit">fit</a> for details about plotting styles that make use of
+data from additional columns of input.
+
+   <p>'scanf' accepts several numerical specifications but `gnuplot`
+requires all inputs to be double-precision floating-point variables,
+so "%lf" is essentially the only permissible specifier. 
+A format string given by the user must contain at least one such
+input specifier, and no more than seven of them. 
+'scanf' expects to see white space&mdash;a blank, tab
+("\t"), newline ("\n"), or formfeed ("\f")&mdash;between numbers; anything else
+in the input stream must be explicitly skipped.
+
+   <p>Note that the use of "\t", "\n", or "\f" requires use of double-quotes
+rather than single-quotes.
+
+<p class="noindent">&mdash; USING_EXAMPLES &mdash;
+
+   <p><a name="index-examples-348"></a>
+<!-- ?commands plot datafile using examples -->
+<!-- ?plot datafile using examples -->
+<!-- ?datafile using examples -->
+<!-- ?using examples -->
+This creates a plot of the sum of the 2nd and 3rd data against the first:
+The format string specifies comma- rather than space-separated columns. 
+The same result could be achieved by specifying `set datafile separator ","`.
+<pre class="example">           plot 'file' using 1:($2+$3) '%lf,%lf,%lf'
+     
+</pre>
+   <p>In this example the data are read from the file "MyData" using a more
+complicated format:
+<pre class="example">           plot 'MyData' using "%*lf%lf%*20[^\n]%lf"
+     
+</pre>
+   <p>The meaning of this format is:
+
+<pre class="example">           %*lf        ignore a number
+           %lf         read a double-precision number (x by default)
+           %*20[^\n]   ignore 20 non-newline characters
+           %lf         read a double-precision number (y by default)
+     
+</pre>
+   <p>One trick is to use the ternary `?:` operator to filter data:
+
+<pre class="example">           plot 'file' using 1:($3&gt;10 ? $2 : 1/0)
+     
+</pre>
+   <p>which plots the datum in column two against that in column one provided
+the datum in column three exceeds ten.  `1/0` is undefined; `gnuplot`
+quietly ignores undefined points, so unsuitable points are suppressed. 
+Or you can use the pre-defined variable NaN to achieve the same result. 
+<a name="index-NaN-349"></a>
+
+   <p>In fact, you can use a constant expression for the column number, provided it
+doesn't start with an opening parenthesis; constructs like `using
+0+(complicated expression)` can be used.  The crucial point is that the
+expression is evaluated once if it doesn't start with a left parenthesis, or
+once for each data point read if it does.
+
+   <p>If timeseries data are being used, the time can span multiple columns.  The
+starting column should be specified.  Note that the spaces within the time
+must be included when calculating starting columns for other data.  E.g., if
+the first element on a line is a time with an embedded space, the y value
+should be specified as column three.
+
+   <p>It should be noted that `plot 'file'`, `plot 'file' using 1:2`, and `plot
+'file' using ($1):($2)` can be subtly different: 1) if <a href="file.html#file">file</a> has some lines
+with one column and some with two, the first will invent x values when they
+are missing, the second will quietly ignore the lines with one column, and
+the third will store an undefined value for lines with one point (so that in
+a plot with lines, no line joins points across the bad point); 2) if a line
+contains text at the first column, the first will abort the plot on an error,
+but the second and third should quietly skip the garbage.
+
+   <p>In fact, it is often possible to plot a file with lots of lines of garbage at
+the top simply by specifying
+
+<pre class="example">           plot 'file' using 1:2
+     
+</pre>
+   <p>However, if you want to leave text in your data files, it is safer to put the
+comment character (#) in the first column of the text lines. 
+<!-- ^ See also the web page -->
+<a href="http://www.gnuplot.info/demo/using.html">Feeble using demos.</a>
+
+<p class="noindent">&mdash; PSEUDOCOLUMNS &mdash;
+
+   <p><a name="index-pseudocolumns-350"></a>
+<!-- ?commands plot datafile using pseudocolumns -->
+<!-- ?plot datafile using pseudocolumns -->
+<!-- ?datafile using pseudocolumns -->
+<!-- ?using pseudocolumns -->
+Expressions in the <a href="using.html#using">using</a> clause of a plot statement can refer to additional
+bookkeeping values in addition to the actual data values contained in the input
+file. These are contained in "pseudocolumns".
+<pre class="example">           column(0)   The sequential order of each point within a data set.
+                       The counter starts at 0 and is reset by two sequential blank
+                       records.  The shorthand form $0 is available.
+           column(-1)  This counter starts at 0 and is reset by a single blank line.
+                       This corresponds to the data line in array or grid data.
+           column(-2)  The index number of the current data set within a file that
+                       contains multiple data sets.  See <a href="index.html#index">index</a>.
+     
+</pre>
+   <p class="noindent">&mdash; XTICLABELS &mdash;
+
+   <p><a name="index-xticlabels-351"></a>
+<!-- ?using xticlabels -->
+<!-- ?plot using xticlabels -->
+Axis tick labels can be generated via a string function, usually taking a data
+column as an argument. The simplest form uses the data column itself as a
+string. That is,  xticlabels(N) is shorthand for xticlabels(stringcolumn(N)). 
+This example uses the contents of column 3 as x-axis tick labels.
+
+<pre class="example">           plot 'datafile' using &lt;xcol&gt;:&lt;ycol&gt;:xticlabels(3) with &lt;plotstyle&gt;
+     
+</pre>
+   <p>Axis tick labels may be generated for any of the plot axes: x x2 y y2 z. 
+The `ticlabels(&lt;labelcol&gt;)` specifiers must come after all of the data
+coordinate specifiers in the <a href="using.html#using">using</a> portion of the command. 
+For each data point which has a valid set of X,Y[,Z] coordinates,
+the string value given to xticlabels() is added to the list of xtic labels
+at the same X coordinate as the point it belongs to. `xticlabels()`
+may be shortened to `xtic()` and so on.
+
+   <p>Example:
+
+<pre class="example">           splot "data" using 2:4:6:xtic(1):ytic(3):ztic(6)
+     
+</pre>
+   <p>In this example the x and y axis tic labels are taken from different columns
+than the x and y coordinate values. The z axis tics, however, are generated
+from the z coordinate of the corresponding point.
+
+   <p>Example:
+
+<pre class="example">           plot "data" using 1:2:xtic( $3 &gt; 10. ? "A" : "B" )
+     
+</pre>
+   <p>This example shows the use of a string-valued function to generate x-axis
+tick labels. Each point in the data file generates a tick mark on x labeled
+either "A" or "B" depending on the value in column 3.
+
+<p class="noindent">&mdash; X2TICLABELS &mdash;
+
+<!-- ?using x2ticlabels -->
+<!-- ?plot using x2ticlabels -->
+   <p>See `plot using xticlabels`.
+
+<p class="noindent">&mdash; YTICLABELS &mdash;
+
+<!-- ?using yticlabels -->
+<!-- ?plot using yticlabels -->
+   <p>See `plot using xticlabels`.
+
+<p class="noindent">&mdash; Y2TICLABELS &mdash;
+
+<!-- ?using y2ticlabels -->
+<!-- ?plot using y2ticlabels -->
+   <p>See `plot using xticlabels`.
+
+<p class="noindent">&mdash; ZTICLABELS &mdash;
+
+<!-- ?using zticlabels -->
+<!-- ?plot using zticlabels -->
+   <p>See `plot using xticlabels`.
+
+   </body></html>
+

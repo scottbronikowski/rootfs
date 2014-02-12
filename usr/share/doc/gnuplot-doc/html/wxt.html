@@ -1,0 +1,154 @@
+<html lang="en">
+<head>
+<title>wxt - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="windows.html#windows" title="windows">
+<link rel="next" href="x11.html#x11" title="x11">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="wxt"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="x11.html#x11">x11</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="windows.html#windows">windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.74 wxt</h5>
+
+<!-- ?set terminal wxt -->
+<!-- ?terminal wxt -->
+<!-- ?set term wxt -->
+<!-- ?term wxt -->
+<p><a name="index-wxt-922"></a><a name="index-wxt-923"></a>
+
+   <p>The `wxt` terminal device generates output in a separate window. The window
+is created by the wxWidgets library, where the 'wxt' comes from. The actual
+drawing is done via cairo, a 2D graphics library, and pango, a library for
+laying out and rendering text.
+
+   <p>Syntax:
+<pre class="example">             set term wxt {&lt;n&gt;}
+                          {size &lt;width&gt;,&lt;height&gt;}
+                          {{no}enhanced}
+                          {font &lt;font&gt;}
+                          {title "title"}
+                          {dashed|solid} {dashlength &lt;dl&gt;}
+                          {{no}persist}
+                          {{no}raise}
+                          {{no}ctrl}
+                          {close}
+     
+</pre>
+   <p>Multiple plot windows are supported: `set terminal wxt &lt;n&gt;` directs the
+output to plot window number n.
+
+   <p>The default window title is based on the window number. This title can also
+be specified with the keyword "title".
+
+   <p>Plot windows remain open even when the `gnuplot` driver is changed to a
+different device.  A plot window can be closed by pressing the letter 'q'
+while that window has input focus, by choosing `close` from a window
+manager menu, or with `set term wxt &lt;n&gt; close`.
+
+   <p>The size of the plot area is given in pixels, it defaults to 640x384. 
+In addition to that, the actual size of the window also includes the space
+reserved for the toolbar and the status bar. 
+When you resize a window, the plot is immediately scaled to fit in the
+new size of the window. Unlike other interactive terminals, the `wxt`
+terminal scales the whole plot, including fonts and linewidths, and keeps
+its global aspect ratio constant, leaving an empty space painted in gray. 
+If you type <a href="replot.html#replot">replot</a>, click the <a href="replot.html#replot">replot</a> icon in the terminal toolbar or
+type a new `plot` command, the new plot will completely fit in the window
+and the font size and the linewidths will be reset to their defaults.
+
+   <p>The active plot window (the one selected by `set term wxt &lt;n&gt;`) is
+interactive. Its behaviour is shared with other terminal types. See `mouse`
+for details. It also has some extra icons, which are supposed to be
+self-explanatory.
+
+   <p>This terminal supports an enhanced text mode, which allows font and other
+formatting commands (subscripts, superscripts, etc.) to be embedded in labels
+and other text strings. The enhanced text mode syntax is shared with other
+gnuplot terminal types. See `enhanced` for more details.
+
+   <p>&lt;font&gt; is in the format "FontFace,FontSize", i.e. the face and the size
+comma-separated in a single string. FontFace is a usual font face name, such
+as \'Arial\'. If you do not provide FontFace, the wxt terminal will use
+\'Sans\'. FontSize is the font size, in points. If you do not provide it,
+the wxt terminal will use a size of 10 points.
+<pre class="example">        For example :
+           set term wxt font "Arial,12"
+           set term wxt font "Arial" # to change the font face only
+           set term wxt font ",12" # to change the font size only
+           set term wxt font "" # to reset the font name and size
+     
+</pre>
+   <p>The fonts are retrieved from the usual fonts subsystems. Under Windows,
+those fonts are to be found and configured in the entry "Fonts" of the
+control panel. Under UNIX, they are handled by "fontconfig".
+
+   <p>Pango, the library used to layout the text, is based on utf-8. Thus, the wxt
+terminal has to convert from your encoding to utf-8. The default input
+encoding is based on your \'locale\'. If you want to use another encoding,
+make sure gnuplot knows which one you are using. See <a href="encoding.html#encoding">encoding</a> for more
+details.
+
+   <p>Pango may give unexpected results with fonts that do not respect the unicode
+mapping. With the Symbol font, for example, the wxt terminal will use the map
+provided by http://www.unicode.org/ to translate character codes to unicode. 
+Pango will do its best to find a font containing this character, looking for
+your Symbol font, or other fonts with a broad unicode coverage, like the
+DejaVu fonts. Note that "the Symbol font" is to be understood as the Adobe
+Symbol font, distributed with Acrobat Reader as "SY______.PFB". 
+Alternatively, the OpenSymbol font, distributed with OpenOffice.org as
+"opens___.ttf", offers the same characters. Microsoft has distributed a
+Symbol font ("symbol.ttf"), but it has a different character set with
+several missing or moved mathematic characters. If you experience problems
+with your default setup (if the demo enhancedtext.dem is not displayed
+properly for example), you probably have to install one of the Adobe or
+OpenOffice Symbol fonts, and remove the Microsoft one. 
+Other non-conform fonts, such as "wingdings" have been observed working.
+
+   <p>The rendering of the plot can be altered with a dialog available from the
+toolbar. To obtain the best output possible, the rendering involves three
+mechanisms : antialiasing, oversampling and hinting. 
+Antialiasing allows to display non-horizontal and non-vertical lines
+smoother. 
+Oversampling combined with antialiasing provides subpixel accuracy,
+so that gnuplot can draw a line from non-integer coordinates. This avoids
+wobbling effects on diagonal lines ('plot x' for example). 
+Hinting avoids the blur on horizontal and vertical lines caused by
+oversampling. The terminal will snap these lines to integer coordinates so
+that a one-pixel-wide line will actually be drawn on one and only one pixel.
+
+   <p>By default, the window is raised to the top of your desktop when a plot is
+drawn. This can be controlled with the keyword "raise". 
+The keyword "persist" will prevent gnuplot from exiting before you
+explicitely close all the plot windows. 
+Finally, by default the key &lt;space&gt; raises the gnuplot console window, and
+'q' closes the plot window. The keyword "ctrl" allows you to replace those
+bindings by &lt;ctrl&gt;+&lt;space&gt; and &lt;ctrl&gt;+'q', respectively. 
+These three keywords (raise, persist and ctrl) can also be set and remembered
+between sessions through the configuration dialog."
+
+   </body></html>
+

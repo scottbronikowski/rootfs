@@ -1,0 +1,189 @@
+<html lang="en">
+<head>
+<title>key - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="isosamples.html#isosamples" title="isosamples">
+<link rel="next" href="label.html#label" title="label">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="key"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="label.html#label">label</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="isosamples.html#isosamples">isosamples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.30 key</h4>
+
+<!-- ?commands set key -->
+<!-- ?commands unset key -->
+<!-- ?commands show key -->
+<!-- ?set key -->
+<!-- ?unset key -->
+<!-- ?show key -->
+<p><a name="index-key-459"></a><a name="index-key-460"></a>
+
+   <p><a name="index-nokey-461"></a>
+<a name="index-legend-462"></a>
+The `set key` command enables a key (or legend) describing plots on a plot.
+
+   <p>The contents of the key, i.e., the names given to each plotted data set and
+function and samples of the lines and/or symbols used to represent them, are
+determined by the <a href="title.html#title">title</a> and <a href="with.html#with">with</a> options of the {`s`}`plot` command. 
+Please see <a href="title.html#title">title</a> and <a href="with.html#with">with</a> for more information.
+
+   <p>Syntax:
+<pre class="example">           set key {on|off} {default}
+                   {{inside | outside} | {lmargin | rmargin | tmargin | bmargin}
+                     | {at &lt;position&gt;}}
+                   {left | right | center} {top | bottom | center}
+                   {vertical | horizontal} {Left | Right}
+                   {{no}reverse} {{no}invert}
+                   {samplen &lt;sample_length&gt;} {spacing &lt;vertical_spacing&gt;}
+                   {width &lt;width_increment&gt;}
+                   {height &lt;height_increment&gt;}
+                   {{no}autotitle {columnheader}}
+                   {title "&lt;text&gt;"} {{no}enhanced}
+                   {font "&lt;face&gt;,&lt;size&gt;"} {textcolor &lt;colorspec&gt;}
+                   {{no}box { {linestyle | ls &lt;line_style&gt;}
+                              | {linetype | lt &lt;line_type&gt;}
+                                {linewidth | lw &lt;line_width&gt;}}}
+           unset key
+           show key
+     
+</pre>
+   <p>The key contains a title and a sample (line, point, box) for each plot
+in the graph. The key may be turned off by requesting `set key off` or
+`unset key`.  Individual key entries may be turned off by using the
+`notitle` keyword in the corresponding plot command.
+
+   <p>Elements within the key are stacked according to `vertical` or `horizontal`. 
+In the case of `vertical`, the key occupies as few columns as possible.  That
+is, elements are aligned in a column until running out of vertical space at
+which point a new column is started.  In the case of `horizontal`, the key
+occupies as few rows as possible.
+
+   <p>By default the key is placed in the upper right inside corner of the graph. 
+The keywords `left`, `right`, `top`, `bottom`, `center`, `inside`, `outside`,
+<a href="lmargin.html#lmargin">lmargin</a>, <a href="rmargin.html#rmargin">rmargin</a>, <a href="tmargin.html#tmargin">tmargin</a>, <a href="bmargin.html#bmargin">bmargin</a> (, `above`, `over`, `below` and
+`under`) may be used to automatically place the key in other positions of the
+graph.  Also an `at &lt;position&gt;` may be given to indicate precisely where the
+plot should be placed.  In this case, the keywords `left`, `right`, `top`,
+`bottom` and `center` serve an analogous purpose for alignment. 
+For more information, see `key placement`.
+
+   <p>Justification of the plot titles within the key is controlled by `Left` or
+`Right` (default).  The text and sample can be reversed (`reverse`) and a
+box can be drawn around the key (`box {...}`) in a specified `linetype`
+and `linewidth`, or a user-defined `linestyle`.
+
+   <p>By default the first plot label is at the top of the key and successive labels
+are entered below it. The `invert` option causes the first label to be placed
+at the bottom of the key, with successive labels entered above it. This option
+is useful to force the vertical ordering of labels in the key to match the
+order of box types in a stacked histogram.
+
+   <p>The &lt;height_increment&gt; is a number of character heights to be added to or
+subtracted from the height of the key box.  This is useful mainly when you are
+putting a box around the key and want larger borders around the key entries.
+
+   <p>All plotted curves of `plot`s and `splot`s are titled according to the
+default option `autotitles`. The automatic generation of titles can be
+suppressed by `noautotitles`; then only those titles explicitly defined
+by `(s)plot ... title ...` will be drawn.
+
+   <p><a name="index-columnheader-463"></a>
+The command `set key autotitle columnheader` causes the first entry in each
+column of input data to be interpreted as a text string and used as a title for
+the corresponding plot. If the quantity being plotted is a function of data
+from several columns, gnuplot may be confused as to which column to draw the
+title from. In this case it is necessary to specify the column explicitly in
+the plot command, e.g.
+
+<pre class="example">           plot "datafile" using (($2+$3)/$4) title columnhead(3) with lines
+     
+</pre>
+   <p>An overall title can be put on the key (`title "&lt;text&gt;"`)&mdash;see also `syntax`
+for the distinction between text in single- or double-quotes.  The key title
+uses the same justification as do the plot titles.
+
+   <p>The defaults for `set key` are `on`, `right`, `top`, `vertical`, `Right`,
+`noreverse`, `noinvert`, `samplen 4`, `spacing 1.25`, `title ""`, and
+`nobox`.  The default &lt;linetype&gt; is the same as that used for the plot
+borders.  Entering `set key default` returns the key to its default
+configuration.
+
+   <p>The key is drawn as a sequence of lines, with one plot described on each
+line.  On the right-hand side (or the left-hand side, if `reverse` is
+selected) of each line is a representation that attempts to mimic the way the
+curve is plotted.  On the other side of each line is the text description
+(the line title), obtained from the `plot` command.  The lines are vertically
+arranged so that an imaginary straight line divides the left- and right-hand
+sides of the key.  It is the coordinates of the top of this line that are
+specified with the `set key` command.  In a `plot`, only the x and y
+coordinates are used to specify the line position.  For a `splot`, x, y and
+z are all used as a 3D location mapped using the same mapping as the graph
+itself to form the required 2D screen position of the imaginary line.
+
+   <p>When using the TeX or PostScript drivers, or similar drivers where formatting
+information is embedded in the string, `gnuplot` is unable to calculate
+correctly the width of the string for key positioning.  If the key is to be
+positioned at the left, it may be convenient to use the combination  `set key
+left Left reverse`.  The box and gap in the grid will be the width of the
+literal string.
+
+   <p>If `splot` is being used to draw contours, the contour labels will be listed
+in the key.  If the alignment of these labels is poor or a different number
+of decimal places is desired, the label format can be specified.  See
+<a href="clabel.html#clabel">clabel</a> for details.
+
+   <p>Examples:
+
+   <p>This places the key at the default location:
+<pre class="example">           set key default
+     
+</pre>
+   <p>This disables the key:
+<pre class="example">           unset key
+     
+</pre>
+   <p>This places a key at coordinates 2,3.5,2 in the default (first) coordinate
+system:
+<pre class="example">           set key at 2,3.5,2
+     
+</pre>
+   <p>This places the key below the graph:
+<pre class="example">           set key below
+     
+</pre>
+   <p>This places the key in the bottom left corner, left-justifies the text,
+gives it a title, and draws a box around it in linetype 3:
+<pre class="example">           set key left bottom Left title 'Legend' box 3
+     
+</pre>
+   <ul class="menu">
+<li><a accesskey="1" href="key_005fplacement.html#key_005fplacement">key_placement</a>
+<li><a accesskey="2" href="key_005fsamples.html#key_005fsamples">key_samples</a>
+</ul>
+
+   </body></html>
+

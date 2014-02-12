@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 4.  Das Befehlszeileninterface</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DivX" /><link rel="start" href="index.html" title="VLC Anwenderhandbuch" /><link rel="up" href="index.html" title="VLC Anwenderhandbuch" /><link rel="prev" href="ch03.html" title="Chapter 3.  Installation von VLC" /><link rel="next" href="ch05.html" title="Chapter 5.  Das HTTP-Interface" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. 
+
+Das Befehlszeileninterface
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch05.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="cmdline"></a>Chapter 4. 
+
+Das Befehlszeileninterface
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch04.html#id2581681">
+Einführung
+</a></span></dt><dt><span class="sect1"><a href="ch04.html#id2581695">
+
+Das Öffnen von Streams
+</a></span></dt><dt><span class="sect1"><a href="ch04.html#id2582695">
+Auswahl der Module
+</a></span></dt><dt><span class="sect1"><a href="ch04.html#id2582784">
+
+Streamausgabe
+</a></span></dt><dt><span class="sect1"><a href="ch04.html#id2584926">Andere Optionen</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2581681"></a>
+Einführung
+</h2></div></div></div><p>
+
+Viele Optionen sind nur über die Befehlszeile verfügbar.
+Sie werden hier aufgeführt und erklärt.
+
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2581695"></a>
+
+Das Öffnen von Streams
+</h2></div></div></div><p>
+
+Die folgenden Befehle starten VLC und fügen das
+erste Element der Wiedergabeliste hinzu.
+
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2581706"></a>
+
+Das Öffnen einer Datei
+</h3></div></div></div><p>
+
+Starten Sie VLC mit
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv my_file.mpg</code></strong>
+</pre><p>
+
+Obwohl VLC in der Lage sein sollte, den Dateityp 
+zu erkennen, können Sie VLC den zu benutzenden Codec mit der 
+<span class="emphasis"><em>--codec</em></span>-Option mitteilen. Um beispielsweise 
+die Datei my_file.mpg mit dem ffmpeg Ton/Bild - Dekoder wiederzugeben,
+machen Sie folgendes
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --codec ffmpeg my_file.mpg</code></strong> 
+</pre><p>
+
+Eine Liste aller von VLC unterstützten Audio- und 
+Videocodecs ist auf der Seite <a class="ulink" href="http://www.videolan.org/vlc/features.html" target="_top">VLC features list</a>
+verfügbar.
+
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2582518"></a>
+
+Das Öffnen einer DVD, VCD oder einer Audio-CD
+</h3></div></div></div><p>
+
+Starten Sie VLC mit
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv dvd://[Gerät][@Gerät_raw][@[Titel][,[Kapitel][,Winkel]]]
+</code></strong>
+</pre><p>
+
+oder 
+(VCD):</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv vcd://[Gerät][@{E|P|S|T}[Titel]]</code></strong>
+</pre><p>
+
+oder 
+(Audio CD):</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv cdda://[Gerät][@[Spur]]</code></strong>
+</pre><p>
+
+Wobei das Gerät der komplette Pfad zu Ihrer DVD oder
+Ihrer CD-ROM ist.
+
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2582602"></a>
+
+Empfangen eines Netzwerkstreams
+</h3></div></div></div><p>
+
+Um einen Unicast-UDP-Stream (gesendet von VLS oder
+VLCs Streamausgabe) zu empfangen, starten Sie VLC mit
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv udp:[@:Server_Port]</code></strong>
+</pre><p>
+
+Um einen Multicast-UDP-Stream (gesendet von VLS oder
+VLCs Streamausgabe) zu empfangen, starten Sie VLC mit
+ :</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv udp:@multicast_address[:Server_Port]</code></strong>
+</pre><p>
+
+Um einen HTTP-Stream zu empfangen, starten Sie VLC mit
+ :</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv http://www.example.org/your_file.mpg</code></strong>
+</pre><p>
+Um einen RTSP-Stream zu empfangen, starten Sie VLC mit
+ :</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv rtsp://www.example.org/your_stream</code></strong>
+</pre></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2582695"></a>
+Auswahl der Module
+</h2></div></div></div><p>
+
+VLC versucht das am Besten passende Interface und die entsprechenden
+Input- und Ausgabemodule unter den auf Ihrem System verfügbaren für den
+zu lesenden Stream zu wählen. Trotzdem möchten Sie eventuell die Benutzung
+eines bestimmten Moduls mit den folgenden Optionen erzwingen (Schauen Sie
+für die komplette Liste von Modulen in die <a class="xref" href="ch02.html" title="Chapter 2.  Module und Optionen von VLC">
+
+
+Module und Optionen von VLC
+</a>Module-Sektion)
+:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--intf  &lt;module&gt;</em></span>
+
+erlaubt Ihnen das Interface-Modul zu wählen.
+
+</p></li><li><p><span class="emphasis"><em>--extraintf  &lt;module&gt;</em></span>
+
+Erlaubt Ihnen zusätzliche Interface-Module auszuwählen,
+die zusätzlich zum Hauptinterface gestartet werden.
+
+</p></li><li><p><span class="emphasis"><em>--aout  &lt;module&gt;</em></span>
+
+Erlaubt Ihnen das Tonausgabemodul zu wählen.
+
+</p></li><li><p><span class="emphasis"><em>--vout  &lt;module&gt;</em></span>
+
+Erlaubt Ihnen das Bildausgabemodul zu wählen.
+
+</p></li><li><p><span class="emphasis"><em>--filter  &lt;module&gt;</em></span>
+
+Erlaubt Ihnen Bildfilter hinzuzufügen.
+
+</p></li><li><p><span class="emphasis"><em>--memcpy  &lt;module&gt;</em></span>
+
+Erlaubt Ihnen ein Speicherkopiermodul zu wählen.
+
+</p></li></ul></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2582784"></a>
+
+Streamausgabe
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583421"></a> 
+Beschreibung der Streamausgabe
+</h3></div></div></div><p>
+Die Streamausgabe von VLC erlaubt dessen
+Benutzung als Streamingserver anstelle eines Clients. Dieser hat eine große
+Zahl von Funktionen:</p><div class="itemizedlist"><ul type="disc"><li><p>
+Streamen von allem, was VLC lesen kann, über
+ein IPv4 oder IPv6 Netzwerk per UDP, RTP oder HTTP;</p></li><li><p>
+Sichern des Eingangsstream in eine Datei im AVI, PS, TS
+oder OGG Format;</p></li><li><p>
+Umkodieren eines Eingangsstreamen und anschließendes
+senden über das Netzwerk oder speichern in einer Datei.
+
+</p></li></ul></div><p>
+Um alle Möglichkeiten der Streamausgabe von VLC zu erfahren,
+schauen Sie bitte auf die <a class="ulink" href="http://www.videolan.org/streaming/features.html" target="_top">
+Streamingfeatures Seite.</a>
+
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583779"></a>
+Architektur und Syntax
+</h3></div></div></div><p>
+Die Streamausgabe hat eine leistungsfähige Architektur,
+die Module benutzt. Jedes Modul bringt Funktionen mit. Sie können die Modul
+untereinander <span class="emphasis"><em>verketten</em></span>, um die Möglichkeiten zu
+erweitern.
+</p><p>
+Hier ist eine Liste der derzeit verfügbaren Module:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>standard</em></span>
+Sendet den Stream über ein <span class="emphasis"><em>Zugriffsmodul</em></span>,
+beispielsweise UDP, file, HTTP usw. Sie werden dieses Modul wahrscheinlich am
+Ende Ihrer Ketten benutzen.
+</p></li><li><p><span class="emphasis"><em>transcode</em></span>
+
+Erlaubt Ihnen Ton und Bild des Eingangsstreams
+"on the fly" umzukodieren (wenn Ihr Computer leistungsfähig genug ist).
+
+</p></li><li><p><span class="emphasis"><em>duplicate</em></span>
+Erlaubt Ihnen eine zweite Kette zu erzeugen, wo
+der Stream unabhängig von der ersten bearbeitet wird.
+
+</p></li><li><p><span class="emphasis"><em>display</em></span> 
+Erlaubt Ihnen den Eingangsstream anzuzeigen, wie
+es VLC normalerweise tun würde. Wenn dieses Modul gemeinsam mit dem
+<span class="emphasis"><em>duplicate</em></span>-Modul benutzt wird, können Sie den
+Stream während des Sendens betrachten.
+
+</p></li><li><p><span class="emphasis"><em>rtp</em></span>
+Streamt über RTP (ein UDP-Port für jeden elementaren Stream).
+
+</p></li><li><p><span class="emphasis"><em>es</em></span> 
+Erlaubt Ihnen seperate Elementary Streams (ES) aus
+einem Eingangsstream zu erstellen.
+
+</p></li></ul></div><p>
+Jedes dieser Modul kann Optionen verarbeiten. Hier ist
+die Syntax, die Sie benutzen müssen:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc input_stream --sout '#module1{option1=...,option2=...}:module2{option1=...,option2=...}:...'</code></strong>
+</pre><p>
+Sie dürfen auch die folgende Syntax benutzen:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc input_stream --sout-module1-option1=... --sout-module1-option2=... --sout-module2-option1=... --sout-module2-option2=... ...</code></strong>
+</pre><p>
+Benutzen Sie beispielsweise zum Umkodieren und Senden
+eines Streams:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc input_stream --sout '#transcode{options}:standard{options}'</code></strong>
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2583942"></a>
+Beschreibung der Module
+</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2583947"></a>standard (alias std)</h4></div></div></div><p>
+Sendet einen Stream.
+</p><p>
+Optionen:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>access</em></span>: 
+wie gesendet wird (eine der folgenden Methoden):
+<span class="emphasis"><em>file</em></span>, <span class="emphasis"><em>udp</em></span>,
+<span class="emphasis"><em>rtp</em></span>, <span class="emphasis"><em>http</em></span>.
+
+</p></li><li><p><span class="emphasis"><em>mux</em></span>: 
+Welcher Muxer (d.h. welches Format) benutzt werden wid.
+Dies kann einer der folgenden sein:
+<span class="emphasis"><em>avi</em></span>
+  (für das AVI-Format),
+<span class="emphasis"><em>ogg</em></span> 
+  (für das Ogg-Format),
+<span class="emphasis"><em>ps</em></span>
+  (für das MPEG2-PS-Format),
+<span class="emphasis"><em>ts</em></span> 
+   (für das MPEG2-TS-Format).
+
+</p></li><li><p><span class="emphasis"><em>url</em></span>: 
+Wenn Sie den <span class="emphasis"><em>file</em></span>-Zugriff
+benutzen ist der Ort, an dem der Stream gespeichert wird. Sonst ist es die
+Uni- oder Multicast-Adresse.
+
+</p></li><li><p><span class="emphasis"><em>sap</em></span>: 
+wenn sie die <span class="emphasis"><em>udp</em></span> oder
+<span class="emphasis"><em>rtp</em></span> Ausgänge benutzen, nehmen Sie diese Option
+zum Ankündigen Ihres Streams über SAP/SDP.
+</p></li><li><p><span class="emphasis"><em>name</em></span>Diese Option enthält den Namen
+unter dem Sie den Stream ankündigen möchten.</p></li><li><p><span class="emphasis"><em>slp</em></span>: 
+Dieses Modul ist wie sap, benutzt aber das
+SLP-Protokoll. Sie benötigen dazu libslp.
+</p></li><li><p><span class="emphasis"><em>sap_ipv</em></span>: 
+Wenn Sie die <span class="emphasis"><em>sap</em></span>-Option
+benutzen, nehmen Sie diese Option um festzulegen, ob die SAP-Ankündigungen
+per IPv4 oder IPv6 gesendet werden. Der Wert dieser Option ist entweder
+<span class="emphasis"><em>4</em></span> oder <span class="emphasis"><em>6</em></span>.
+</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Wenn Sie per Multicast streamen, können SIe die globale
+Option <span class="command"><strong>--ttl 12</strong></span> zur Einstellung der TTL auf einen
+höheren Wert als 1 benutzen.
+</p></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2584096"></a>display</h4></div></div></div><p>
+Zeigt den Stream an.
+</p><p>
+Optionen:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>noaudio</em></span>:
+Den Ton ignorieren.
+</p></li><li><p><span class="emphasis"><em>novideo</em></span>:
+Das Bild ignorieren.
+</p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2584126"></a>duplicate</h4></div></div></div><p>
+Dupliziert den Stream zu einer neuen Streamausgabekette.
+</p><p>
+Optionen:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>dst</em></span>: 
+Eine neue Streamausgabekette von Modulen, wie sie
+bereits vorher beschrieben wurde.
+</p></li><li><p><span class="emphasis"><em>select</em></span>:
+Diese Option erlaubt Ihnen die Festlegung, welche Programme oder ES
+Sie über die vorherige dst senden möchten, falls der Eingangsstream
+mehrere enthält.
+</p><p>
+
+Das Format ist "program=<span class="emphasis"><em>programm_id</em></span>" oder es="<span class="emphasis"><em>es_id</em></span>".
+
+Sie können auch Bereiche benutzen, wie "program=<span class="emphasis"><em>start_programm-end_programm</em></span>". 
+
+Sie können nur ES eines hiermit angegeben Typs auswählen:</p><div class="itemizedlist"><ul type="circle"><li><p>no-audio, noaudio, audio</p></li><li><p>no-video, novideo, video</p></li><li><p>no-spu,   nospu,   spu</p></li></ul></div><p>Sie dürfen auch mehrere durch Kommata getrennte Selektoren verwenden.</p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2584205"></a>transcode</h4></div></div></div><p>
+Ändert das Kompressionsformat und/oder die
+Datenrate eines Streams.
+</p><p>
+Optionen:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>acodec</em></span>: 
+Das neue Tonformat. Es kann eines der folgenden sein:
+<span class="emphasis"><em>mpga</em></span> (MPEG audio layer 2), <span class="emphasis"><em>a52</em></span>
+oder <span class="emphasis"><em>ac3</em></span> (AC3 Ton) oder <span class="emphasis"><em>vorb</em></span>
+(Vorbis).
+
+</p></li><li><p><span class="emphasis"><em>ab</em></span>: 
+Tondatenrate in Kbps.
+</p></li><li><p><span class="emphasis"><em>vcodec</em></span>: 
+Das neue Bildkompressionsformat. Es kann eines der
+folgenden sein:
+<span class="emphasis"><em>mp4v</em></span> (MPEG4), <span class="emphasis"><em>mpgv</em></span>
+(MPEG1), <span class="emphasis"><em>DIV1</em></span>, <span class="emphasis"><em>DIV2</em></span>,
+<span class="emphasis"><em>DIV3</em></span> (DivX 1,2,3), <span class="emphasis"><em>H263</em></span>
+(H263), <span class="emphasis"><em>I263</em></span> (H263I), <span class="emphasis"><em>WMV1</em></span>
+or <span class="emphasis"><em>WMV2</em></span> (Windows Media Video 1 oder 2),
+<span class="emphasis"><em>MJPG</em></span> (MJPEG), <span class="emphasis"><em>MJPB</em></span>
+(MJPEGB).
+</p></li><li><p><span class="emphasis"><em>width</em></span>:
+Die Bildbreite.
+</p></li><li><p><span class="emphasis"><em>height</em></span>:
+Die Bildhöhe.
+</p></li><li><p><span class="emphasis"><em>vb</em></span>: 
+Die Bilddatenrate in Kbps.
+</p></li><li><p><span class="emphasis"><em>vt</em></span>: 
+Die Bilddatenratentoleranz in bps.
+</p></li><li><p><span class="emphasis"><em>deinterlace</em></span>: 
+Deinterlacing des Streams aktivieren.
+</p></li><li><p><span class="emphasis"><em>croptop</em></span>: 
+Anzahl von Pixeln, die von oben vom Bild entfernt werden.
+</p></li><li><p><span class="emphasis"><em>cropbottom</em></span>: 
+Anzahl von Pixeln, die von unten vom Bild entfernt werden.
+</p></li><li><p><span class="emphasis"><em>cropleft</em></span>: 
+Anzahl von Pixeln, die von links vom Bild entfernt werden.
+</p></li><li><p><span class="emphasis"><em>cropright</em></span>: 
+Anzahl von Pixeln, die von rechts vom Bild entfernt werden.
+</p></li><li><p><span class="emphasis"><em>hq</em></span>: 
+hoch qualitatives Umkodieren (benötigt mehr
+Prozessorleistung).
+</p></li><li><p><span class="emphasis"><em>qmin</em></span>: 
+minimale Bildskalierung (VBR)
+</p></li><li><p><span class="emphasis"><em>qmax</em></span>:
+maximale Bildskalierung (VBR).
+</p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2584403"></a>rtp</h4></div></div></div><p>
+Sendet einen Stream über RTP
+</p><p>
+Optionen:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>dst</em></span>:
+Ziel-IP-Adresse (Unicast oder Multicast).
+</p></li><li><p><span class="emphasis"><em>port</em></span>:
+Ziel-UDP-Port.
+</p></li><li><p><span class="emphasis"><em>sdp</em></span>:
+Die Art, wie die SDP-Datei gesendet wird: <span class="emphasis"><em>http://server_ip:server_port/pfad</em></span> für http oder <span class="emphasis"><em>rtsp://server_ip:server_port/pfad</em></span> für rtsp, wobei <span class="emphasis"><em>server_ip</em></span> die Adresse eines der Interfaces des Servers und <span class="emphasis"><em>pfad</em></span> der Ort ist, an dem auf die SDP-Datei auf dem Server zugegriffen werden kann.
+</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Wenn <span class="emphasis"><em>sdp=rtsp</em></span> benutzt wird, ist es nicht möglich, eine Zieladresse anzugeben. VLC wird dann den Stream an jeden Client schicken, der sich mit ihm verbindet.
+</p></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2584475"></a>es</h4></div></div></div><p>
+Seperate Elementary Streams erzeugen.
+</p><p>Optionen:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>access_audio</em></span>:
+Wie die Tonspur gesendet wird:
+<span class="emphasis"><em>file</em></span>, <span class="emphasis"><em>udp</em></span>,
+<span class="emphasis"><em>rtp</em></span> oder <span class="emphasis"><em>http</em></span>.
+</p></li><li><p><span class="emphasis"><em>access_video</em></span>: 
+Wie die Bildspur gesendet wird:
+<span class="emphasis"><em>file</em></span>, <span class="emphasis"><em>udp</em></span>,
+<span class="emphasis"><em>rtp</em></span> oder <span class="emphasis"><em>http</em></span>.
+</p></li><li><p><span class="emphasis"><em>access</em></span>:
+Wenn Sie möchten, dass die Bild- und Tonspuren
+den gleichen Zugriff benutzen, nehmen Sie diese Option anstatt
+der beiden oberen.
+</p></li><li><p><span class="emphasis"><em>mux_audio</em></span>: 
+Welcher Muxer (d.h. welches Kompressionsformat) für
+die Tonspur benutzt wird. Dies kann einer der folgenden sein: 
+<span class="emphasis"><em>avi</em></span> (für das AVI-Format), <span class="emphasis"><em>ogg</em></span>
+(für das Ogg-Format), <span class="emphasis"><em>ps</em></span> (für das MPEG2-PS-Format),
+<span class="emphasis"><em>ts</em></span> (für das MPEG2-TS-Format).
+</p></li><li><p><span class="emphasis"><em>mux_video</em></span>:
+Welcher Muxer (d.h. welches Kompressionsformat) für die
+Bildspur benutzt wird. Dies kann einer der folgenden sein:
+<span class="emphasis"><em>avi</em></span> (für das AVI-Format), <span class="emphasis"><em>ogg</em></span>
+(für das Ogg-Format), <span class="emphasis"><em>ps</em></span> (für das MPEG2-PS-Format),
+<span class="emphasis"><em>ts</em></span> (für das MPEG2-TS-Format).
+</p></li><li><p><span class="emphasis"><em>mux</em></span>: 
+Wenn Sie möchten, dass die Ton- und die Bildspur
+den gleichen Muxer benutzen, nehmen Sie diese Option anstatt der beiden
+oberen.
+</p></li><li><p><span class="emphasis"><em>url_audio</em></span>: 
+Wenn Sie den <span class="emphasis"><em>file</em></span>-Zugriff
+benutzen, ist es der Ort, an dem die Tonspur gespeichert wird. Sonst ist
+es die Unicast- oder Multicast-IP-Adresse sein.
+</p></li><li><p><span class="emphasis"><em>url_video</em></span>: 
+Wenn Sie den <span class="emphasis"><em>file</em></span>-Zugriff
+benutzen, ist es der Ort, an dem die Bildspur gespeichert wird. Sonst ist es
+die Uni- oder Multicast-IP-Adresse.
+</p></li><li><p><span class="emphasis"><em>url</em></span>:
+Wenn Sie die gleiche Adresse für Ton- und Bildspuren
+benutzen möchten, nehmen Sie diese Option anstatt der beiden oberen.
+</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Wenn Sie den <span class="emphasis"><em>file</em></span>-Zugriff benutzen,
+können Sie in den <span class="emphasis"><em>url</em></span>-Optionen die folgenden Makros
+benutzen:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>%n</em></span> = 
+Anzahl der Streams;</p></li><li><p><span class="emphasis"><em>%c</em></span> = FOURCC ;</p></li><li><p><span class="emphasis"><em>%m</em></span> =
+Format;</p></li><li><p><span class="emphasis"><em>%a</em></span> = access.</p></li></ul></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2584691"></a>
+Verschiedenes
+</h4></div></div></div><p>
+Hier sind einige zusätzliche globale Optionen
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--sout-all,  --no-sout-all</em></span>
+Streamen von allen ES aktivieren (standardmäßig deaktiviert). 
+Standardmäßig streamt VLC nur ein Ton-ES und ein Bild-ES (die ersten). Wenn
+Sie sout-all aktvieren, werden alle ES (Ton, Bild und SPU) gestreamt.
+</p></li><li><p><span class="emphasis"><em> --sout-keep, --no-sout-keep</em></span>
+Sout offen behalten (standardmäßig deaktiviert): die selbe Sout-Instanz über mehrere
+Wiedergabelistenobjekte hinweg benutzen, sofern möglich.
+</p></li><li><p><span class="emphasis"><em>--no-sout-audio</em></span>
+deaktiviert die Ausgabe des Tonstreams.
+</p></li><li><p><span class="emphasis"><em>--no-sout-video</em></span> 
+deaktiviert die Ausgabe des Bildstreams.
+</p></li></ul></div><p>
+Die Streamausgabe bietet außerdem eine vereinfachte
+Syntax, mit der Sie nur die Hauptoptionen des <span class="emphasis"><em>standard</em></span>
+-Moduls ansprechen können:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc input_stream --sout access/mux:url</code></strong>
+</pre><p>
+ wobei <span class="emphasis"><em>access</em></span>,
+<span class="emphasis"><em>mux</em></span> und <span class="emphasis"><em>url</em></span> so definiert sind,
+wie in den Optionen des standard-Moduls.
+</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2584791"></a>
+Beispiele
+</h3></div></div></div><p>
+Um die komplexe Syntax der Streamausgabe komplett
+zu verstehen, schauen Sie sich bitte die Anwendungsbeispiele aus VideoLAN
+HOWTO an.
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2584926"></a>Andere Optionen</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2584931"></a>
+
+Tonoptionen
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--noaudio</em></span> 
+
+Deaktiviert den Ton.
+
+</p></li><li><p><span class="emphasis"><em>--mono</em></span>
+
+Zwingt VLC Monoton zu anzuwenden.
+
+</p></li><li><p><span class="emphasis"><em>--volume  &lt;Ganzzahl&gt;</em></span> 
+
+Stellt die Lautstärke ein.
+
+</p></li><li><p><span class="emphasis"><em>--aout-rate  &lt;Ganzzahl&gt;</em></span>
+
+Stellt die Tonausgabefrequenz in Hz ein.
+
+</p></li><li><p><span class="emphasis"><em>--desync  &lt;Ganzzahl&gt;</em></span>
+
+Gleicht die Desynchronisation des Tons aus (ms).
+
+</p></li><li><p><span class="emphasis"><em>--headphone</em></span>
+Aktiviert den virtuellen Raumklangeffekt für Kopfhörer.
+
+</p></li><li><p><span class="emphasis"><em>--headphone-dim</em></span>
+
+Stellt die charakteristische Dimension des Kopfhörers ein.
+
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2584996"></a>
+
+Bildoptionen
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--novideo</em></span> 
+
+Deaktiviert die Bildausgabe.
+
+</p></li><li><p><span class="emphasis"><em>--greyscale</em></span>
+
+Aktiviert Graustufenausgabe des Bildes.
+
+</p></li><li><p><span class="emphasis"><em>--fullscreen</em></span>
+
+Aktiviert die Vollbildausgabe.
+
+</p></li><li><p><span class="emphasis"><em>--nooverlay</em></span>
+Deaktiviert Hardwarebeschleunigung für die
+Bildausgabe.
+
+</p></li><li><p><span class="emphasis"><em>--width, --height &lt;Ganzzahl&gt;</em></span>
+
+Stellt die Dimensionen des Bildausgabefensters ein.
+
+</p></li><li><p><span class="emphasis"><em>--zoom &lt;Fließkommazahl&gt;</em></span>
+
+Fügt einen Vergrößerungsfaktor hinzu.
+
+</p></li><li><p><span class="emphasis"><em>--aspect-ratio &lt;mode&gt;</em></span>
+
+Forciert das Seitenverhältnis.
+
+</p></li><li><p><span class="emphasis"><em>--spumargin  &lt;Ganzzahl&gt;</em></span> 
+
+Forciert die Position der SPU-Untertitel.
+
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2585070"></a>
+
+Wiedergabelistenoptionen
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--playlist</em></span>
+
+Startet die Wiedergabeliste beim Start von VLC.
+
+</p></li><li><p><span class="emphasis"><em>--random</em></span>
+
+Gibt die Datei immer in zufälliger Reihenfolge wieder.
+
+</p></li><li><p><span class="emphasis"><em>--enqueue</em></span>
+
+Fügt die Objekte der Wiedergabeliste hinzu.
+
+</p></li><li><p><span class="emphasis"><em>--loop</em></span>
+
+Wiederholt die Wiedergabeliste an deren Ende.
+
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2585112"></a>
+
+Netzwerkoptionen
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--server-port  &lt;Ganzzahl&gt;</em></span>
+
+Stellt den Port des Servers ein.
+
+</p></li><li><p><span class="emphasis"><em>--iface  &lt;Zeichenkette&gt;</em></span> 
+
+Legt die zu benutzende Netzwerkschnittstelle fest.
+
+</p></li><li><p><span class="emphasis"><em>--iface-addr  &lt;Zeichenkette&gt;</em></span>
+
+Legt die IP Ihrer Netzwerkschnittstelle fest.
+
+</p></li><li><p><span class="emphasis"><em>--mtu  &lt;Ganzzahl&gt;</em></span>
+
+Legt die MTU der Netzwerkschnittstelle fest.
+
+</p></li><li><p><span class="emphasis"><em>--ipv6</em></span>
+
+Erzwingt die Benutzung von IPv6.
+
+</p></li><li><p><span class="emphasis"><em>--ipv4</em></span>
+
+Erzwingt die Benutzung von IPv4.
+
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2585168"></a>
+
+Prozessoroptionen
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--nommx</em></span>
+
+Deaktiviert die Benutzung von MMX-Prozessorerweiterungen.
+
+</p></li><li><p><span class="emphasis"><em>--no3dn</em></span>
+
+Deaktiviert die Benutzung von 3D Now!-Prozessorerweiterungen.
+
+</p></li><li><p><span class="emphasis"><em>--nommxext</em></span>
+
+Deaktiviert die Benutzung von MMX-Ext-Prozessorerweiterungen.
+
+</p></li><li><p><span class="emphasis"><em>--nosse</em></span> 
+
+Deaktiviert die Benutzung von SSE-Prozessorerweiterungen.
+
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2585208"></a>
+
+Diverse Optionen
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--quiet</em></span>
+
+ Deaktiviert die Meldungen in der Console.
+
+</p></li><li><p><span class="emphasis"><em>--color</em></span>
+
+ Zeigt farbige Meldungen an.
+
+</p></li><li><p><span class="emphasis"><em>--search-path  &lt;Zeichenkette&gt;</em></span>
+
+Legt den standardmäßigen Interface-Suchpfad fest.
+
+</p></li><li><p><span class="emphasis"><em>--plugin-path  &lt;Zeichenkette&gt;</em></span>
+
+Legt den Plugin-Suchpfad fest.
+
+</p></li><li><p><span class="emphasis"><em>--dvd  &lt;Zeichenkette&gt;</em></span> 
+
+Legt das standardmäßige DVD-Gerät fest.
+
+</p></li><li><p><span class="emphasis"><em>--vcd  &lt;Zeichenkette&gt;</em></span>
+
+Legt das standardmäßige VCD-Gerät fest.
+
+</p></li><li><p><span class="emphasis"><em>--program  &lt;;Ganzzahl&gt;</em></span>
+
+Gibt das Programm (SID) an (für Streams mit mehreren Programmen, wie
+die von Satelliten).
+
+</p></li><li><p><span class="emphasis"><em>--audio-type  &lt;&gt;</em></span>
+
+Legt den standardmäßigen Audiotyp bei DVDs fest .
+
+</p></li><li><p><span class="emphasis"><em>--audio-channel  &lt;Ganzzahl&gt;</em></span>
+
+Legt den standardmäßigen Tonkanal bei DVDs fest.
+
+</p></li><li><p><span class="emphasis"><em>--spu-channel  &lt;Ganzzahl&gt;</em></span>
+
+Legt den standardmäßigen Untertitelkanal bei DVDs fest.
+
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2585305"></a>
+
+Hilfe-Optionen
+</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>--verbose  &lt;Verbosity&gt;</em></span>
+
+Legt das Verbosity-Level fest, d.h. wie viele Meldungen
+ausgegeben werden.
+
+</p></li><li><p><span class="emphasis"><em>--help</em></span>
+
+Zeigt Ihnen alle verfügbaren Optionen an.
+
+</p></li><li><p><span class="emphasis"><em>--longhelp</em></span> 
+
+Zeigt Ihnen eine detailierte Hilfe über alle verfügbaren
+Optionen an.
+
+</p></li><li><p><span class="emphasis"><em>--version</em></span> 
+
+Zeigt Ihnen Informationen über die Version von VLC an.
+
+</p></li><li><p><span class="emphasis"><em>--list</em></span> 
+
+Zeigt Ihnen eine Liste aller verfügbaren Plugins an.
+
+</p></li><li><p><span class="emphasis"><em>--module  &lt;module&gt;</em></span> 
+
+Zeigt Hilfe über das angegebene Modul an.
+
+</p></li></ul></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 3. 
+Installation von VLC
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 5. 
+Das HTTP-Interface
+</td></tr></table></div></body></html>

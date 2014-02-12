@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>linecolor_variable - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="colorspec.html#colorspec" title="colorspec">
+<link rel="prev" href="rgbcolor_005fvariable.html#rgbcolor_005fvariable" title="rgbcolor_variable">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="linecolor_variable"></a>
+<a name="linecolor_005fvariable"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="rgbcolor_005fvariable.html#rgbcolor_005fvariable">rgbcolor_variable</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="colorspec.html#colorspec">colorspec</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">1.16.1.2 linecolor variable</h5>
+
+<!-- ?linecolor variable -->
+<!-- ?lc variable -->
+<!-- ?textcolor variable -->
+<!-- ?tc variable -->
+<p>Most plot commands assign a single color (linetype) to each element of the
+plot.  If there are multiple plots on a single graph, the default color
+(linetype) is incremented sequentially.  You can instead assign a separate
+color for each data point, line segment, or label based on additional
+information in the input data file.  This is indicated by the colorspec
+keyword `variable`.
+
+   <p>`lc variable` tells the program to use the value read from one column of the
+input data as a linestyle index, and use the color belonging to that linestyle. 
+This requires a corresponding additional column in the <a href="using.html#using">using</a> specifier. 
+Text colors can be set similarly using `tc variable`.
+
+   <p>A single data file may contain multiple sets of data, separated by two blank
+lines. Each of these separate sets is assigned an index value (see <a href="index.html#index">index</a>)
+that can be retrieved via the using specifier column(-2). See `pseudocolumns`. 
+All data in the file is drawn with the same color/linestyle/pointtype
+properties by default.  The command `lc variable` can be used to assign
+different colors to each data set in the file by using the index value from
+pseudocolumn -2.
+
+   <p>Examples:
+<pre class="example">           # Use the third column of data to assign colors to individual points
+           plot 'data' using 1:2:3 with points lc variable
+     
+</pre>
+   <pre class="example">           # Use the data set index to choose a linestyle color
+           plot 'data' using 1:2:(column(-2)) with lines lc variable
+     
+</pre>
+   </body></html>
+

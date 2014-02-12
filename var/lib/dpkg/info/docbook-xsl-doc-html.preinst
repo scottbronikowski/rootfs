@@ -1,0 +1,16 @@
+#! /bin/sh
+# preinst script for docbook-xsl-doc-html
+#
+# see: dh_installdeb(1)
+
+set -e
+
+# If the symlink of docbook-xsl-doc-html (<< 1.74) exists,
+# then remove it, so the package can install it's directory.
+if [ -h /usr/share/doc/docbook-xsl-doc-html/doc ]; then
+	rm -f /usr/share/doc/docbook-xsl-doc-html/doc
+fi
+
+
+
+exit 0

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 3.  Recibir y salvar un flujo</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch02.html" title="Chapter 2.  Instalación del software y hardware requeridos" /><link rel="next" href="ch04.html" title="Chapter 4.  Transmitir un fichero" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. 
+
+
+Recibir y salvar un flujo
+
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="receive"></a>Chapter 3. 
+
+
+Recibir y salvar un flujo
+
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch03.html#id2572293">
+
+
+Recibir un flujo con VLC
+
+</a></span></dt><dt><span class="sect1"><a href="ch03.html#id2573110">
+
+
+Guardar un flujo con VLC
+
+</a></span></dt><dt><span class="sect1"><a href="ch03.html#id2573208">
+
+
+Recibir un flujo con un set-top-box
+
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2572293"></a>
+
+
+Recibir un flujo con VLC
+
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572298"></a>
+
+
+Recibir un flujo unicast
+
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv udp:</code></strong>
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572319"></a>
+
+
+Recibir un flujo multicast
+
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv udp:@239.255.12.42</code></strong>
+</pre><p>
+
+
+ donde <span class="emphasis"><em>239.255.12.42</em></span> es la
+dirección IP multicast del flujo
+
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572957"></a>
+
+
+Recibir un flujo HTTP/FTP/MMS
+
+</h3></div></div></div><p>
+
+
+Utilice uno de los siquientes comandos
+
+ :</p><div class="itemizedlist"><ul type="disc"><li><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv http://example/stream.xyz</code></strong>
+</pre><p>
+
+
+donde <span class="emphasis"><em>http://example/stream.xyz</em></span>
+es la dirección HTTP del flujo
+
+ ;</p></li><li><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv ftp://example/stream.xyz</code></strong>
+</pre><p>
+
+
+donde <span class="emphasis"><em>ftp://example/stream.xyz</em></span>
+es la dirección FTP del flujo
+
+ ;</p></li><li><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv mms://viptvr.yacast.fr/encoderfranceinfo</code></strong>
+</pre><p>
+
+
+donde
+<span class="emphasis"><em>mms://viptvr.yacast.fr/encoderfranceinfo</em></span> es
+la dirección MMS del flujo
+
+.</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573055"></a>
+
+
+Recibir un flujo RTP disponible por RTSP 
+
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv rtsp://www.hardradio.com/tonbeme.mov</code></strong>
+</pre><p>
+
+
+ donde <span class="emphasis"><em>rtsp://www.hardradio.com/tonbeme.mov</em></span> es la
+dirección del flujo RTSP
+
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573086"></a>
+
+
+Recibir un flujo representado en un fichero SDP
+
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv http://server.example.org/stream.sdp</code></strong>
+</pre></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573110"></a>
+
+
+Guardar un flujo con VLC
+
+</h2></div></div></div><p>
+
+
+VLC puede guardar el flujo a un disco. Para
+hacer esto, utilice el Stream Output de VLC : puede hacerlo a través del
+interfaz gráfico, o a través de la línea de comandos con el siguiente
+argumento
+
+ :</p><pre class="screen">
+<strong class="userinput"><code>--sout file/muxer:stream.xyz</code></strong>
+</pre><p>
+
+
+donde 
+
+:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>muxer</em></span> 
+
+
+es uno de los formatos soportados por el stream output
+de VLC, esto es
+
+:</p><div class="itemizedlist"><ul type="circle"><li><p><span class="emphasis"><em>avi</em></span>
+ 
+ 
+  para el formato AVI
+ 
+,</p></li><li><p><span class="emphasis"><em>ogg</em></span>
+ 
+ 
+  para el formato OGG
+ 
+,</p></li><li><p><span class="emphasis"><em>ps</em></span> 
+ 
+ 
+  para el formato MPEG2-PS
+ 
+,</p></li><li><p><span class="emphasis"><em>ts</em></span> or
+<span class="emphasis"><em>ts_dvbpsi</em></span> 
+ 
+  
+  para el formato MPEG2-PS (el segundo utiliza
+<span class="emphasis"><em>libdvbpsi</em></span>)
+  
+.</p></li></ul></div></li><li><p>
+
+
+y <code class="filename">stream.xyz</code> es el nombre
+del fichero donde se quiere guardar el flujo, con la extensión adecuada
+
+.</p></li></ul></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573208"></a>
+
+
+Recibir un flujo con un set-top-box
+
+</h2></div></div></div><p>
+
+
+Algunos set-top-boxes con tarjeta Ethernet son capaces de
+recibir flujo MPEG2-TS sobre UDP, y soportan multicast. Este es el caso
+de los set-top-boxes de <a class="ulink" href="http://www.pace.co.uk" target="_top">Pace</a> y <a class="ulink" href="http://www.aminocom.com" target="_top">Aminocom</a>. Hemos realizado pruebas
+con el <span class="emphasis"><em>AmiNET 100</em></span> de Aminocom: es
+pequeño, y trabaja muy bien con VideoLAN
+
+.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. 
+
+
+Instalación del software y hardware requeridos
+
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 4. 
+
+
+Transmitir un fichero
+
+</td></tr></table></div></body></html>

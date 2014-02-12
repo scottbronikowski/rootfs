@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>filledcurves - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plotting_005fstyles.html#plotting_005fstyles" title="plotting_styles">
+<link rel="prev" href="dots.html#dots" title="dots">
+<link rel="next" href="financebars.html#financebars" title="financebars">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="filledcurves"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="financebars.html#financebars">financebars</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="dots.html#dots">dots</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plotting_005fstyles.html#plotting_005fstyles">plotting_styles</a>
+<hr>
+</div>
+
+<h3 class="section">2.7 filledcurves</h3>
+
+<!-- ?commands set style filledcurves -->
+<!-- ?set style filledcurves -->
+<!-- ?plotting styles filledcurves -->
+<!-- ?style filledcurves -->
+<p><a name="index-filledcurves-248"></a>
+The <a href="filledcurves.html#filledcurves">filledcurves</a> style is only relevant to 2D plotting. Three variants
+are possible. The first two variants require either a function or two columns
+of input data, and may be further modified by the options listed below.
+
+   <p>Syntax:
+
+<pre class="example">         plot ... with filledcurves [option]
+     
+</pre>
+   <p>where the option can be one of the following
+
+<pre class="example">         [closed | {above | below}
+         {x1 | x2 | y1 | y2}[=&lt;a&gt;] | xy=&lt;x&gt;,&lt;y&gt;]
+     
+</pre>
+   <p>The first variant, `closed`, treats the curve itself as a closed polygon. 
+This is the default if there are two columns of input data.
+
+   <p>The second variant is to fill the area between the curve and a given axis,
+a horizontal or vertical line, or a point.
+
+<pre class="example">         filledcurves closed   ... just filled closed curve,
+         filledcurves x1       ... x1 axis,
+         filledcurves x2       ... x2 axis, etc for y1 and y2 axes,
+         filledcurves y1=0     ... line y=0 (at y1 axis) ie parallel to x1 axis,
+         filledcurves y2=42    ... line y=42 (at y2 axis) ie parallel to x2, etc,
+         filledcurves xy=10,20 ... point 10,20 of x1,y1 axes (arc-like shape).
+     
+</pre>
+   <p>The third variant requires three columns of input data: the x coordinate and
+two y coordinates corresponding to two curves sampled at the same set of
+x coordinates; the area between the two curves is filled. 
+This is the default if there are three or more columns of input data.
+
+<pre class="example">          3 columns:  x  y1  y2
+     
+</pre>
+   <p>Example of filling the area between two input curves. 
+<a href="http://www.gnuplot.info/demo/fillbetween.html">fill between curves demo.</a>
+
+<pre class="example">         plot 'data' using 1:2:3 with filledcurves
+     
+</pre>
+   <p>The `above` and `below` options apply both to commands of the form
+<pre class="example">         ... filledcurves above {x1|x2|y1|y2}=&lt;val&gt;
+</pre>
+   <p>and to commands of the form
+<pre class="example">         ... using 1:2:3 with filledcurves below
+</pre>
+   <p>In either case the option limits the filled area to one side of the bounding
+line or curve.
+
+   <p>Note: Not all terminal types support this plotting mode.
+
+   <p>Zooming a filled curve drawn from a datafile may produce empty or incorrect
+areas because gnuplot is clipping points and lines, and not areas.
+
+   <p>If the values of &lt;a&gt;, &lt;x&gt;, &lt;y&gt; are out of the drawing boundary, then they
+are moved to the graph boundary. Then the actually filled area in the case
+of option xy=&lt;x&gt;,&lt;y&gt; will depend on xrange and yrange.
+
+   </body></html>
+

@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+<title>xyerrorlines - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plotting_005fstyles.html#plotting_005fstyles" title="plotting_styles">
+<link rel="prev" href="xerrorlines.html#xerrorlines" title="xerrorlines">
+<link rel="next" href="yerrorlines.html#yerrorlines" title="yerrorlines">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="xyerrorlines"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="yerrorlines.html#yerrorlines">yerrorlines</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="xerrorlines.html#xerrorlines">xerrorlines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plotting_005fstyles.html#plotting_005fstyles">plotting_styles</a>
+<hr>
+</div>
+
+<h3 class="section">2.26 xyerrorlines</h3>
+
+<!-- ?commands set style xyerrorlines -->
+<!-- ?set style xyerrorlines -->
+<!-- ?plotting styles xyerrorlines -->
+<!-- ?style xyerrorlines -->
+<p><a name="index-xyerrorlines-274"></a>
+The <a href="xyerrorlines.html#xyerrorlines">xyerrorlines</a> style is only relevant to 2D data plots. 
+<a href="xyerrorlines.html#xyerrorlines">xyerrorlines</a> is like <a href="linespoints.html#linespoints">linespoints</a>, except that horizontal and
+vertical error bars are also drawn. At each point (x,y), lines are
+drawn from (x,y-ydelta) to (x,y+ydelta) and from (x-xdelta,y) to
+(x+xdelta,y) or from (x,ylow) to (x,yhigh) and from (xlow,y) to
+(xhigh,y), depending upon the number of data columns provided. A tic
+mark is placed at the ends of the error bar (unless <a href="bars.html#bars">bars</a> is
+used&mdash;see <a href="bars.html#bars">bars</a> for details).  Either 4 or 6 input columns are required.
+
+<pre class="example">          4 columns:  x  y  xdelta  ydelta
+          6 columns:  x  y  xlow  xhigh  ylow  yhigh
+     
+</pre>
+   <p>If data are provided in an unsupported mixed form, the <a href="using.html#using">using</a> filter on the
+`plot` command should be used to set up the appropriate form.  For example,
+if the data are of the form (x,y,xdelta,ylow,yhigh), then you can use
+
+<pre class="example">           plot 'data' using 1:2:($1-$3):($1+$3):4:5 with xyerrorlines
+     
+</pre>
+   </body></html>
+

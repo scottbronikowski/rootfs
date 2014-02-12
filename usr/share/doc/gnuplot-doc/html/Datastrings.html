@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>Datastrings - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="gnuplot.html#gnuplot" title="gnuplot">
+<link rel="prev" href="Coordinates.html#Coordinates" title="Coordinates">
+<link rel="next" href="Enhanced_005ftext_005fmode.html#Enhanced_005ftext_005fmode" title="Enhanced_text_mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Datastrings"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Enhanced_005ftext_005fmode.html#Enhanced_005ftext_005fmode">Enhanced_text_mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Coordinates.html#Coordinates">Coordinates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="gnuplot.html#gnuplot">gnuplot</a>
+<hr>
+</div>
+
+<h3 class="section">1.10 Datastrings</h3>
+
+<p><a name="index-datastrings-21"></a>
+Data files may contain string data consisting of either an arbitrary string
+of printable characters containing no whitespace or an arbitrary string of
+characters, possibly including whitespace, delimited by double quotes. 
+The following sample line from a datafile is interpreted to contain four
+columns, with a text field in column 3:
+
+<pre class="example">       1.000 2.000 "Third column is all of this text" 4.00
+     
+</pre>
+   <p>Text fields can be positioned within a 2-D or 3-D plot using the commands:
+
+<pre class="example">       plot 'datafile' using 1:2:4 with labels
+       splot 'datafile using 1:2:3:4 with labels
+     
+</pre>
+   <p>A column of text data can also be used to label the ticmarks along one or more
+of the plot axes. The example below plots a line through a series of points
+with (X,Y) coordinates taken from columns 3 and 4 of the input datafile. 
+However, rather than generating regularly spaced tics along the x axis
+labeled numerically, gnuplot will position a tic mark along the x axis at the
+X coordinate of each point and label the tic mark with text taken from column
+1 of the input datafile.
+
+<pre class="example">       set xtics
+       plot 'datafile' using 3:4:xticlabels(1) with linespoints
+     
+</pre>
+   <p><a name="index-columnheader-22"></a>
+There is also an option that will interpret the first entry in a column of
+input data (i.e. the column heading) as a text field, and use it as the key
+title for data plotted from that column. The example given below will use the
+first entry in column 2 to generate a title in the key box, while processing
+the remainder of columns 2 and 4 to draw the required line:
+
+<pre class="example">       plot 'datafile' using 1:(f($2)/$4) with lines title columnhead(2)
+     
+</pre>
+   <p>See <a href="labels.html#labels">labels</a>, `using xticlabels`, <a href="title.html#title">title</a>, <a href="using.html#using">using</a>.
+
+   </body></html>
+

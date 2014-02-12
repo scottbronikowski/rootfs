@@ -1,0 +1,57 @@
+<html lang="en">
+<head>
+<title>xtics_rangelimited - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="xtics.html#xtics" title="xtics">
+<link rel="prev" href="xtics_005ftime_005fdata.html#xtics_005ftime_005fdata" title="xtics_time_data">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="xtics_rangelimited"></a>
+<a name="xtics_005frangelimited"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="xtics_005ftime_005fdata.html#xtics_005ftime_005fdata">xtics_time_data</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="xtics.html#xtics">xtics</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.91.2 xtics rangelimited</h5>
+
+<!-- ?set xtics rangelimited -->
+<!-- ?xtics rangelimited -->
+<p><a name="index-rangelimited-618"></a>
+<a name="index-range_002dframe-619"></a>
+This option limits both the auto-generated axis tic labels and the
+corresponding plot border to the range of values actually present in the data
+that has been plotted.  Note that this is independent of the current range
+limits for the plot. For example, suppose that the data in "file.dat" all lies
+in the range 2 &lt; y &lt; 4.  Then the following commands will create a plot for
+which the left-hand plot border (y axis) is drawn for only this portion of the
+total y range, and only the axis tics in this region are generated. 
+I.e., the plot will be scaled to the full range on y, but there will be a gap
+between 0 and 2 on the left border and another gap between 4 and 10. This
+style is sometimes refered to as a `range-frame` graph.
+<pre class="example">           set border 3
+           set yrange [0:10]
+           set ytics nomirror rangelimited
+           plot "file.dat"
+     
+</pre>
+   </body></html>
+

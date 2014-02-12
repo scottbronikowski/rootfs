@@ -1,0 +1,166 @@
+<html lang="en">
+<head>
+<title>hidden3d - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="grid.html#grid" title="grid">
+<link rel="next" href="historysize.html#historysize" title="historysize">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="hidden3d"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="historysize.html#historysize">historysize</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="grid.html#grid">grid</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.27 hidden3d</h4>
+
+<!-- ?commands set hidden3d -->
+<!-- ?commands unset hidden3d -->
+<!-- ?commands show hidden3d -->
+<!-- ?set hidden3d -->
+<!-- ?unset hidden3d -->
+<!-- ?show hidden3d -->
+<p><a name="index-hidden3d-451"></a><a name="index-hidden3d-452"></a>
+
+   <p><a name="index-nohidden3d-453"></a>
+The <a href="hidden3d.html#hidden3d">hidden3d</a> command enables hidden line removal for surface plotting
+(see `splot`).  Some optional features of the underlying algorithm can also
+be controlled using this command.
+
+   <p>Syntax:
+<pre class="example">           set hidden3d {defaults} |
+                        { {front|back}
+                          {{offset &lt;offset&gt;} | {nooffset}}
+                          {trianglepattern &lt;bitpattern&gt;}
+                          {{undefined &lt;level&gt;} | {noundefined}}
+                          {{no}altdiagonal}
+                          {{no}bentover} }
+           unset hidden3d
+           show hidden3d
+     
+</pre>
+   <p>In contrast to the usual display in gnuplot, hidden line removal actually
+treats the given function or data grids as real surfaces that can't be seen
+through, so plot elements behind the surface will be hidden by it.  For this
+to work, the surface needs to have 'grid structure' (see <a href="datafile.html#datafile">datafile</a>
+about this), and it has to be drawn `with lines` or <a href="linespoints.html#linespoints">linespoints</a>.
+
+   <p>When <a href="hidden3d.html#hidden3d">hidden3d</a> is set, both the hidden portion of the surface and possibly
+its contours drawn on the base (see <a href="contour.html#contour">contour</a>) as well as the grid will
+be hidden.  Each surface has its hidden parts removed with respect to itself
+and to other surfaces, if more than one surface is plotted.  Contours drawn
+on the surface (<a href="surface.html#surface">surface</a>) don't work.
+
+   <p>Labels and arrows are always visible and are unaffected.  The key box is never
+hidden by the surface. As of gnuplot version 4.5, hidden3d also affects 3D
+plotting styles `points`, <a href="labels.html#labels">labels</a>, <a href="vectors.html#vectors">vectors</a>, and <a href="impulses.html#impulses">impulses</a> even if no
+surface is present in the graph.  Individual plots within the graph may be
+explicitly excluded from this processing by appending the extra option
+`nohidden3d` to the <a href="with.html#with">with</a> specifier.
+
+   <p>Hidden3d does not affect solid surfaces drawn using the pm3d mode. To achieve
+a similar effect purely for pm3d surfaces, use instead <a href="depthorder.html#depthorder">depthorder</a>. 
+To mix pm3d surfaces with normal <a href="hidden3d.html#hidden3d">hidden3d</a> processing, use the option
+`set hidden3d front` to force all elements included in hidden3d processing to
+be drawn after any remaining plot elements. Then draw the surface twice, once
+`with lines lt -2` and a second time <a href="pm3d.html#pm3d">pm3d</a>. The first instance will
+include the surface during calculation of occluded elements but will not draw
+the surface itself.
+
+   <p>Functions are evaluated at isoline intersections.  The algorithm interpolates
+linearly between function points or data points when determining the visible
+line segments.  This means that the appearance of a function may be different
+when plotted with <a href="hidden3d.html#hidden3d">hidden3d</a> than when plotted with `nohidden3d` because in
+the latter case functions are evaluated at each sample.  Please see
+<a href="samples.html#samples">samples</a> and <a href="isosamples.html#isosamples">isosamples</a> for discussion of the difference.
+
+   <p>The algorithm used to remove the hidden parts of the surfaces has some
+additional features controllable by this command.  Specifying `defaults` will
+set them all to their default settings, as detailed below.  If `defaults` is
+not given, only explicitly specified options will be influenced: all others
+will keep their previous values, so you can turn on/off hidden line removal
+via `set {no}hidden3d`, without modifying the set of options you chose.
+
+   <p>The first option, `offset`, influences the linestyle used for lines on the
+'back' side.  Normally, they are drawn in a linestyle one index number higher
+than the one used for the front, to make the two sides of the surface
+distinguishable.  You can specify a different line style offset to add
+instead of the default 1, by `offset &lt;offset&gt;`.  Option `nooffset` stands for
+`offset 0`, making the two sides of the surface use the same linestyle.
+
+   <p>Next comes the option `trianglepattern &lt;bitpattern&gt;`.  &lt;bitpattern&gt; must be
+a number between 0 and 7, interpreted as a bit pattern.  Each bit determines
+the visibility of one edge of the triangles each surface is split up into. 
+Bit 0 is for the 'horizontal' edges of the grid, Bit 1 for the 'vertical'
+ones, and Bit 2 for the diagonals that split each cell of the original grid
+into two triangles.  The default pattern is 3, making all horizontal and
+vertical lines visible, but not the diagonals.  You may want to choose 7 to
+see those diagonals as well.
+
+   <p>The `undefined &lt;level&gt;` option lets you decide what the algorithm is to do
+with data points that are undefined (missing data, or undefined function
+values), or exceed the given x-, y- or z-ranges.  Such points can either be
+plotted nevertheless, or taken out of the input data set.  All surface
+elements touching a point that is taken out will be taken out as well, thus
+creating a hole in the surface.  If &lt;level&gt; = 3, equivalent to option
+`noundefined`, no points will be thrown away at all.  This may produce all
+kinds of problems elsewhere, so you should avoid this.  &lt;level&gt; = 2 will
+throw away undefined points, but keep the out-of-range ones.  &lt;level&gt; = 1,
+the default, will get rid of out-of-range points as well.
+
+   <p>By specifying `noaltdiagonal`, you can override the default handling of a
+special case can occur if `undefined` is active (i.e. &lt;level&gt; is not 3). 
+Each cell of the grid-structured input surface will be divided in two
+triangles along one of its diagonals.  Normally, all these diagonals have
+the same orientation relative to the grid.  If exactly one of the four cell
+corners is excluded by the `undefined` handler, and this is on the usual
+diagonal, both triangles will be excluded.  However if the default setting
+of `altdiagonal` is active, the other diagonal will be chosen for this cell
+instead, minimizing the size of the hole in the surface.
+
+   <p>The `bentover` option controls what happens to another special case, this
+time in conjunction with the `trianglepattern`.  For rather crumply surfaces,
+it can happen that the two triangles a surface cell is divided into are seen
+from opposite sides (i.e. the original quadrangle is 'bent over'), as
+illustrated in the following ASCII art:
+
+<pre class="example">                                                                   C----B
+         original quadrangle:  A--B      displayed quadrangle:     |\   |
+           ("set view 0,0")    | /|    ("set view 75,75" perhaps)  | \  |
+                               |/ |                                |  \ |
+                               C--D                                |   \|
+                                                                   A    D
+     
+</pre>
+   <p>If the diagonal edges of the surface cells aren't generally made visible by
+bit 2 of the &lt;bitpattern&gt; there, the edge CB above wouldn't be drawn at all,
+normally, making the resulting display hard to understand.  Therefore, the
+default option of `bentover` will turn it visible in this case.  If you don't
+want that, you may choose `nobentover` instead. 
+See also
+<a href="http://www.gnuplot.info/demo/hidden.html">hidden line removal demo (hidden.dem)</a>
+and
+<a href="http://www.gnuplot.info/demo/singulr.html">complex hidden line demo (singulr.dem).</a>
+
+   </body></html>
+

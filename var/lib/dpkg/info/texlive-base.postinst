@@ -1,0 +1,319 @@
+#!/bin/sh -e
+# common.functions.postinst start
+# $Id: common.functions.postinst 4854 2011-05-24 10:34:28Z frank $
+handle_config_file_postinst() 
+{
+    # this function handles two things: It moves conffiles to their
+    # new place if they had been changed, and it ignores the possible
+    # removal of the conffile because of bug #420390, fixing upgrades
+    # from etch.
+    #
+    # Note that the consequences of this bug for users of sid are
+    # dealt with separately, in the function resurrect_conffile_sid()
+    # which is only called for the critical conffiles.
+    cfgfile="$1"
+    action="$2"
+    version="$3"
+    case "$action" in
+      configure) # not reconfigure
+	if dpkg --compare-versions "$version" ge 2007; then
+	  return 0
+	fi
+	;;
+      *)
+	return 0
+	;;
+    esac
+    if [ -f "$cfgfile.preinst-deleted" ]; then
+      echo "It looks like $cfgfile has been removed."
+      echo "In most cases this is a consequence of bug #420390."
+      echo "We are reinstatiating this config file."
+      echo "If you *really* want this to be removed, do it again,"
+      echo "but beware of the consequences."
+      echo ""
+      #mv "$cfgfile" "$cfgfile.dpkg-new"
+      rm "$cfgfile.preinst-deleted"
+    fi
+    if [ -f "$cfgfile.preinst-copy" ]; then
+      echo "Preserving user changes to $cfgfile"
+      # this only works as intended as long as the shipped version
+      # does not change!
+      mv -f "$cfgfile" "$cfgfile.dpkg-new"
+      mv -f "$cfgfile.preinst-copy" "$cfgfile"
+    fi
+}
+
+# common.functions.postinst end
+# Local Variables:
+# mode: shell-script
+# End:
+# vim:set expandtab: #
+# texlive-base postinst.pre begin
+# initial version 2010 by Frank Küster, frank@debian.org
+# probably not copyrightable as it looks now, but anyway the code maybe 
+# freely copied, distributed and/or modified
+# changelog:
+# 2010-08-15 initial version; ucf and libpaper-specific code for
+#            pagesize configuration 
+
+# install configuration files that set a papersize, and handle upgrades smoothly
+
+# We want to use the libpaper hook after the config files have been
+# installed, and only show papersize-related questions at that
+# time. Therefore, ignore any papersize changes in upstream's files.
+# This is the plan:
+
+# 1. if the files exit - no matter whether as conffiles or ucf-managed
+#    configuration files -, get the papersize settings in them and set
+#    the setting in the new, ucf-managed files to be the same.  We can
+#    use texconfig-sys for that, since we depend on texlive-binaries
+# 2. install the adapted new files with ucf
+# 3. at configuration time, if libpaper has not been used before
+#    (i.e. on new installs or upgrades from older versions), call the
+#    libpaper hook
+# (4.) if we later add binaries that have a papersize setting in their
+#    conffile, we need to check the versions that we are upgrading from
+#    the right version. Then set the chooser question to unseen and run
+#    the libpaper hook.
+
+pkgdir=/usr/share/texlive-base
+tempdir_paper=$(mktemp -d)
+mkdir -p $tempdir_paper/dvips/config
+mkdir -p $tempdir_paper/tex/generic/config
+mkdir    $tempdir_paper/dvipdfmx
+mkdir    $tempdir_paper/xdvi
+cp $pkgdir/config.ps $tempdir_paper/dvips/config/
+cp $pkgdir/pdftexconfig.tex $tempdir_paper/tex/generic/config/
+cp $pkgdir/dvipdfmx.cfg $tempdir_paper/dvipdfmx/
+cp $pkgdir/XDvi $tempdir_paper/xdvi/
+cp $pkgdir/config.ps.md5sum $tempdir_paper/dvips/config/
+cp $pkgdir/pdftexconfig.tex.md5sum $tempdir_paper/tex/generic/config/
+cp $pkgdir/dvipdfmx.cfg.md5sum $tempdir_paper/dvipdfmx/
+cp $pkgdir/XDvi.md5sum $tempdir_paper/xdvi/
+
+# if the paper setting in dvipdfmx.cfg still contains two spaces, remove one
+if [ -e /etc/texmf/dvipdfmx/dvipdfmx.cfg ]; then
+   sed -i '/^p/ s/^p[[:space:]]\{2\}/p /' /etc/texmf/dvipdfmx/dvipdfmx.cfg
+fi
+
+# texconfig-sys only works after calling mktexlsr
+mktexlsr /usr/share/texmf-texlive /usr/share/texmf /var/lib/texmf 
+for binary in dvips dvipdfmx xdvi pdftex; do
+  if localpaper=$(texconfig-sys $binary paperconf); then
+    # stop ucf from asking by setting UCF_FORCE_CONFNEW
+    # TEXMFSYSVAR needs to be set, so that texconfig-sys won't create
+    # pdftex formats in the real hierarchy
+    UCF_FORCE_CONFFNEW=true TEXMFSYSCONFIG=$tempdir_paper TEXMFSYSVAR=$tempdir_paper \
+      texconfig-sys $binary paper $localpaper no-recreate-formats >/dev/null 2>&1
+  else
+    # this means that there is no existing configuration file. Do nothing.
+    # Warning: texconfig will only fail if it has the "set -e" patch!
+    :
+  fi
+done
+ucf --purge $tempdir_paper/dvips/config/config.ps # >/dev/null 2>&1
+ucf --purge $tempdir_paper/tex/generic/config/pdftexconfig.tex # >/dev/null 2>&1
+ucf --purge $tempdir_paper/dvipdfmx/dvipdfmx.cfg # >/dev/null 2>&1
+ucf --purge $tempdir_paper/xdvi/XDvi >/dev/null # 2>&1
+
+# Now install the files with their paper size adapted to the current local setting
+
+ucf --three-way --debconf-ok $tempdir_paper/dvips/config/config.ps \
+                             /etc/texmf/dvips/config/config.ps
+ucf --three-way --debconf-ok $tempdir_paper/tex/generic/config/pdftexconfig.tex \
+                             /etc/texmf/tex/generic/config/pdftexconfig.tex
+ucf --three-way --debconf-ok $tempdir_paper/dvipdfmx/dvipdfmx.cfg \
+                             /etc/texmf/dvipdfmx/dvipdfmx.cfg
+ucf --three-way --debconf-ok $tempdir_paper/xdvi/XDvi /etc/texmf/xdvi/XDvi
+
+rm -rf $tempdir_paper
+
+if [ "$1" = "configure" ]; then
+  old_version=$2
+  last_version_without_libpaper=2009-11 # update, we are not going to upload now!
+  if [ -n $old_version ] || dpkg --compare-versions $old_version lt $last_version_without_libpaper; then
+    # we are installing from scratch or upgrading from an older version
+    /etc/libpaper.d/texlive-base
+  fi
+fi
+handle_config_file_postinst /etc/texmf/dvipdfm/config/config $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/alt-rule.pro $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/canonex.cfg $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.bakoma $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.canonex $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.cx $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.deskjet $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.dvired $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.epson $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.ibmvga $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.ljfour $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.luc $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.mbn $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.mga $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.mirrorprint $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.ot2 $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.qms $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.toshiba $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.unms $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/config.xyp $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/cx.cfg $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/deskjet.cfg $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/dfaxhigh.cfg $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/dvired.cfg $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/epson.cfg $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/ibmvga.cfg $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/ljfour.cfg $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/qms.cfg $1 $2
+handle_config_file_postinst /etc/texmf/dvips/config/toshiba.cfg $1 $2
+handle_config_file_postinst /etc/texmf/xdvi/xdvi.cfg $1 $2
+handle_config_file_postinst /etc/texmf/texdoc/texdoc.cnf $1 $2
+handle_config_file_postinst /etc/texmf/texdoctk/texdocrc.defaults $1 $2
+
+# Automatically added by dh_installmenu
+if [ "$1" = "configure" ] && [ -x "`which update-menus 2>/dev/null`" ]; then
+	update-menus
+fi
+# End automatically added section
+# Automatically added by dh_installtex
+##
+## postinst-tex
+##
+## postinst snippets for everything TeX related (mktlsr, hyphenation
+## patterns, formats, font maps)
+##
+## Authors:
+##       Florent Rougon <f.rougon@free.fr>
+##       Norbert Preining <preining@logic.at>
+##
+#
+
+TEXMFTREES="/usr/share/texmf /var/lib/texmf"
+FULLTEXMFTREES="$TEXMFTREES /usr/share/texmf-texlive"
+
+#
+#
+dhit_libkpathsea_configured ()
+{
+    kpsewhich --version >/dev/null 2>&1
+}
+
+dhit_update_lsr_files ()
+{
+    tempfile=$(mktemp -p /tmp mktexlsr.XXXXXXXX)
+    printf "Running mktexlsr. This may take some time... "
+    if mktexlsr $* > $tempfile 2>&1 ; then
+        rm -f $tempfile
+        echo "done."
+    else
+        exec >&2
+        echo
+        echo "mktexlsr $* failed. Output has been stored in"
+        echo "$tempfile"
+        echo "Please include this file if you report a bug."
+        echo
+        exit 1
+    fi
+}
+
+
+dhit_build_hyphen_format_if_format_exists ()
+{
+    v=$(kpsewhich -var-value TEXMFSYSVAR)
+    c=$(kpsewhich -var-value TEXMFSYSCONFIG)
+    TEXMFVAR="$v"
+    TEXMFCONFIG="$c"
+    export TEXMFVAR TEXMFCONFIG
+    fmtcnffile=$(kpsewhich --format='web2c files' fmtutil.cnf)
+    X=$(grep "^[[:space:]]*$1[[:space:]]" $fmtcnffile || true)
+    if [ -n "$X" ] ; then
+        dhit_build_format --byhyphen "$2"
+    fi
+}
+
+dhit_build_format ()
+{
+
+    tempfile=$(mktemp -p /tmp fmtutil.XXXXXXXX)
+    printf "Building format(s) $*.\n\tThis may take some time... "
+    if fmtutil-sys "$@" > $tempfile 2>&1 ; then
+        rm -f $tempfile
+        echo "done."
+    else
+        exec >&2
+        echo
+        echo "fmtutil-sys failed. Output has been stored in"
+        echo "$tempfile"
+        echo "Please include this file if you report a bug."
+        echo
+        exit 1
+    fi
+}
+
+
+case "$1" in
+    configure|abort-upgrade|abort-remove|abort-deconfigure)
+        update-updmap --quiet
+        update-language
+        update-fmtutil
+        if dhit_libkpathsea_configured; then
+            #
+            do_lsr=0
+            for i in map hyphen format lsrfull ; do
+                if [ "$i" = lsrfull ] ; then
+                    TEXMFTREES=$FULLTEXMFTREES
+                fi
+                if [ "$i" = allformats ] ; then
+                    do_lsr=1
+                fi
+                if [ "$i" = format ] ; then
+                    do_lsr=1
+                fi
+            done
+            if [ $do_lsr = 1 ] ; then
+                if which mktexlsr >/dev/null; then
+                    dhit_update_lsr_files $TEXMFTREES
+                fi
+            fi
+            for i in map hyphen format lsrfull ; do
+                if [ "$i" = lsr ] ; then
+                    if [ $do_lsr = 0 ] ; then
+                        update-texmf-config lsr
+                    fi
+                fi
+                if [ "$i" = lsrfull ] ; then
+                    if [ $do_lsr = 0 ] ; then
+                        update-texmf-config lsrfull
+                    fi
+                fi
+                if [ "$i" = map ] ; then
+                    update-texmf-config map
+                fi
+                if [ "$i" = allformats ] ; then
+                    dhit_build_format --all
+                fi
+                if [ "$i" = format ] ; then
+                    for fmt in 10texlive-base ; do
+                        dhit_build_format --all --cnffile "/etc/texmf/fmt.d/$fmt.cnf"
+                    done
+                fi
+                if [ "$i" = hyphen ] ; then
+                    update-texmf-config hyphen
+                fi
+            done
+        fi
+    ;;
+
+    *)
+        echo "postinst called with unknown argument '$1'" >&2
+        exit 1
+    ;;
+esac
+
+# End automatically added section
+# Automatically added by dh_installmime
+if [ "$1" = "configure" ] && [ -x "`which update-mime 2>/dev/null`" ]; then
+	update-mime
+fi
+# End automatically added section
+
+exit 0

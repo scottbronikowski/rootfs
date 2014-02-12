@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+<title>set_style_line - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="style.html#style" title="style">
+<link rel="prev" href="set_005fstyle_005fincrement.html#set_005fstyle_005fincrement" title="set_style_increment">
+<link rel="next" href="set_005fstyle_005fcircle.html#set_005fstyle_005fcircle" title="set_style_circle">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="set_style_line"></a>
+<a name="set_005fstyle_005fline"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="set_005fstyle_005fcircle.html#set_005fstyle_005fcircle">set_style_circle</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="set_005fstyle_005fincrement.html#set_005fstyle_005fincrement">set_style_increment</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="style.html#style">style</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.61.6 set style line</h5>
+
+<!-- ?commands set style line -->
+<!-- ?commands unset style line -->
+<!-- ?commands show style line -->
+<!-- ?set style line -->
+<!-- ?unset style line -->
+<!-- ?show style line -->
+<p><a name="index-linestyle-545"></a>
+<a name="index-linewidth-546"></a>
+<a name="index-linewidth-547"></a>
+<a name="index-interval-548"></a>
+<a name="index-linespoints-549"></a>
+<a name="index-pointinterval-550"></a>
+Each terminal has a default set of line and point types, which can be seen
+by using the command <a href="test.html#test">test</a>.  `set style line` defines a set of line types
+and widths and point types and sizes so that you can refer to them later by
+an index instead of repeating all the information at each invocation.
+
+   <p>Syntax:
+<pre class="example">           set style line &lt;index&gt; default
+           set style line &lt;index&gt; {{linetype  | lt} &lt;line_type&gt; | &lt;colorspec&gt;}
+                                  {{linecolor | lc} &lt;colorspec&gt;}
+                                  {{linewidth | lw} &lt;line_width&gt;}
+                                  {{pointtype | pt} &lt;point_type&gt;}
+                                  {{pointsize | ps} &lt;point_size&gt;}
+                                  {{pointinterval | pi} &lt;interval&gt;}
+                                  {palette}
+           unset style line
+           show style line
+     
+</pre>
+   <p>If `default` is given all line style parameters are set to their default
+values.
+
+   <p>If the linestyle &lt;index&gt; already exists, only the given parameters are
+changed while all others are preserved.  If not, all undefined values are
+set to the default values.
+
+   <p>The line and point types default to the index value. The exact symbol that is
+drawn for that index value may vary from one terminal type to another.
+
+   <p>The line width and point size are multipliers for the current terminal's
+default width and size (but note that &lt;point_size&gt; here is unaffected by
+the multiplier given by the command<a href="pointsize.html#pointsize">pointsize</a>).
+
+   <p>The `pointinterval` controls the spacing between points in a plot drawn with
+style <a href="linespoints.html#linespoints">linespoints</a>.  The default is 0 (every point is drawn). For example,
+`set style line N pi 3` defines a linestyle that uses pointtype N, pointsize
+and linewidth equal to the current defaults for the terminal, and will draw
+every 3rd point in plots using <a href="linespoints.html#linespoints">linespoints</a>.  A negative value for the
+interval is treated the same as a positive value, except that some terminals
+will try to interrupt the line where it passes through the point symbol.
+
+   <p>Linestyles created by this mechanism do not replace the default linetype
+styles; both may be used.  If you want plots to use the defined styles in
+preference to the default linetypes, please see `set style increment`.
+
+   <p>Not all terminals support the `linewidth` and <a href="pointsize.html#pointsize">pointsize</a> features; if
+not supported, the option will be ignored.
+
+   <p>Terminal-independent colors may be assigned using either
+`linecolor &lt;colorspec&gt;` or `linetype &lt;colorspec&gt;`, abbreviated `lc` or `lt`. 
+This requires giving a RGB color triple, a known palette color name,
+a fractional index into the current palette, or a constant value from the
+current mapping of the palette onto cbrange. 
+See `colors`, <a href="colorspec.html#colorspec">colorspec</a>, <a href="palette.html#palette">palette</a>, <a href="colornames.html#colornames">colornames</a>, <a href="cbrange.html#cbrange">cbrange</a>.
+
+   <p>`set style line &lt;n&gt; linetype &lt;lt&gt;` will set both a terminal-dependent dot/dash
+pattern and color. The commands`set style line &lt;n&gt; linecolor &lt;colorspec&gt;` or
+`set style line &lt;n&gt; linetype &lt;colorspec&gt;` will set a new line color while
+leaving the existing dot-dash pattern unchanged.
+
+   <p>In 3d mode (`splot` command), the special keyword <a href="palette.html#palette">palette</a> is allowed as a
+shorthand for "linetype palette z".  The color value corresponds to the
+z-value (elevation) of the splot, and varies smoothly along a line or surface.
+
+   <p>Examples:
+Suppose that the default lines for indices 1, 2, and 3 are red, green, and
+blue, respectively, and the default point shapes for the same indices are a
+square, a cross, and a triangle, respectively.  Then
+
+<pre class="example">           set style line 1 lt 2 lw 2 pt 3 ps 0.5
+     
+</pre>
+   <p>defines a new linestyle that is green and twice the default width and a new
+pointstyle that is a half-sized triangle.  The commands
+
+<pre class="example">           set style function lines
+           plot f(x) lt 3, g(x) ls 1
+     
+</pre>
+   <p>will create a plot of f(x) using the default blue line and a plot of g(x)
+using the user-defined wide green line.  Similarly the commands
+
+<pre class="example">           set style function linespoints
+           plot p(x) lt 1 pt 3, q(x) ls 1
+     
+</pre>
+   <p>will create a plot of p(x) using the default triangles connected by a red
+line and q(x) using small triangles connected by a green line.
+
+<pre class="example">           splot sin(sqrt(x*x+y*y))/sqrt(x*x+y*y) w l pal
+     
+</pre>
+   <p>creates a surface plot using smooth colors according to <a href="palette.html#palette">palette</a>. Note,
+that this works only on some terminals. See also <a href="palette.html#palette">palette</a>, <a href="pm3d.html#pm3d">pm3d</a>.
+
+<pre class="example">           set style line 10 linetype 1 linecolor rgb "cyan"
+     
+</pre>
+   <p>will assign linestyle 10 to be a solid cyan line on any terminal that
+supports rgb colors.
+
+   </body></html>
+

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 11.  Video à la demande</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch10.html" title="Chapter 10.  Diffusez en IPv6" /><link rel="next" href="ch12.html" title="Chapter 12.  Add a channel information service" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 11. 
+Video à la demande
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch12.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="vod"></a>Chapter 11. 
+Video à la demande
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch11.html#id2578542">
+Apercu
+</a></span></dt><dt><span class="sect1"><a href="ch11.html#id2578503">
+Sur le serveur
+</a></span></dt><dt><span class="sect1"><a href="ch11.html#id2578593">
+Du côté client
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2578542"></a>
+Apercu
+</h2></div></div></div><p>A l'aide de la Vidéo à la Demande (VOD, Video On Demand),
+l'utilisateur peut démarrer la vidéo, mettre en pause, avancer et
+reculer, ... Il est évident qu'il s'agit d'un must pour la diffusion
+vidéo et le rêve de chaque utilisateur.</p><p>La VOD nécessite d'importantes ressources système sur le serveur
+et sur le réseau. La VOD fonctionne en unicast, pas en multicast: cela
+signifie que le les ressources nécessaires sur le serveur et sur le
+réseau sont directement proportionnelles au nombre de clients</p><p>Le principe de la solution de VOD VideoLAN est extrèmement simple.
+L'idée est de faire du streaming HTTP, c'est à dire diffuser un flux
+vidéo MPEG encapsulé dans de l'HTTP. La régulation du débit entre le
+client et le serveur se fait automatiquement par le protocole TCP. Avec
+le protocole HTTP 1.1, il est possible de se déplacer dans un fichier
+téléchargé, et c'est ce que nous utilisons pour permettre le déplacement
+dans la vidéo.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2578503"></a>
+Sur le serveur
+</h2></div></div></div><p>Sur le serveur de VOD, vous avez besoin d'un serveur Web. Vous
+pouvez par exemple utiliser un serveur Linux utilisant le serveur
+Apache. D'autres systèmes d'exploitations et d'autres serveurs Web
+devraient marcher, mais n'ont jamais été testés.</p><p>Rendez vos fichier MPEG-1, MPEG-2 ou MPEG-4 / DivX disponibles
+pour les clients sur le serveur web.</p><p>Par exemple, si vous avez un serveur web dont le nom DNS est
+<span class="emphasis"><em>serveurlocal</em></span>; sur ce serveur, nous mettons un fichier MPEG <code class="filename">video1.mpg</code>, qui sera disponible pour les clients à l'URL
+<code class="filename">http://serveurlocal/video1.mpg</code>.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2578593"></a>
+Du côté client
+</h2></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv http://serveurlocal/video1.mpg</code></strong>
+</pre><p>VLC commence à lire le flux presque immédiatement, et vous pouvez
+vous déplacer dans le flux, faire des pauses, ... comme si le flux était
+un fichier local.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch12.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 10. 
+Diffusez en IPv6
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 12. 
+Add a channel information service
+</td></tr></table></div></body></html>

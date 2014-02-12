@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 5.  Eine DVD streamen</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch04.html" title="Chapter 4.  Eine Datei streamen" /><link rel="next" href="ch06.html" title="Chapter 6.  Einen DVB-Kanal (Satellit oder digitales terrestrisches TV) streamen" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. 
+Eine DVD streamen
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch06.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="dvd"></a>Chapter 5. 
+Eine DVD streamen
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch05.html#id2574210">
+
+
+
+Eine DVD mit VLC streamen
+</a></span></dt><dt><span class="sect1"><a href="ch05.html#id2574313">
+
+
+
+Eine DVD mit VLS streamen
+</a></span></dt></dl></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+
+
+
+
+Unter Unix/Linux müssen Sie schreibzugriff auf das Device haben, das Ihrem
+DVD-Laufwerk entspricht. Dazu sollte Sie in der <span class="emphasis"><em>disk</em></span>
+or <span class="emphasis"><em>cdrom</em></span> Gruppe sein (schauen auf die Rechte in
+<code class="filename">/dev</code>). Wenn Sie dies nicht sind, fügen Sie sichselbst
+der Gruppe hinzu
+:</p><pre class="screen">
+<code class="prompt"># </code><strong class="userinput"><code>adduser Ihre_login disk_oder_cdrom</code></strong>
+</pre><p>
+
+
+
+und starten Sie dann Ihre Session neu.
+
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2574210"></a>
+
+
+
+Eine DVD mit VLC streamen
+</h2></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv dvdsimple:/dev/dvd --sout udp:192.168.0.12 --ttl 12</code></strong>
+</pre><p>
+
+
+
+wobei 
+:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">/dev/dvd</code> 
+
+
+
+ist der Name Ihres DVD-Laufwerkes (nehmen Sie
+<code class="filename">D:</code> unter Windows, wenn <code class="filename">D</code> der
+Buchstabe Ihres DVD-Laufwerkes ist) oder das Verzeichnis, in das Sie Ihre DVD
+kopiert haben
+,</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+
+
+
+ ist entweder 
+:</p><div class="itemizedlist"><ul type="circle"><li><p>
+
+
+
+die IP-Adresse des Rechners, den Sie via Unicast erreichen
+möchten
+;</p></li><li><p>
+
+
+
+oder der DNS-Name des Rechners, den Sie via Unicast
+erreichen möchten
+;</p></li><li><p>
+
+
+
+oder eine Multicast-IP-Adresse.
+
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+
+
+
+ ist der Wert der TTL (Time To Live) Ihrer IP-Pakete (was
+bedeutet, dass der Stream in der Lage sein wird, 11 Router zu überqueren).
+
+</p></li></ul></div><p>
+
+
+
+Wenn Sie die DVD fortlaufend streamen möchten, fügen
+Sie die Option <span class="emphasis"><em>--loop</em></span> hinzu.
+
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2574313"></a>
+
+
+
+Eine DVD mit VLS streamen
+</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+
+
+Dies ist nur unter GNU/Linux möglich.
+
+</p></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vls -vv -d udp:192.168.0.42 dvd:/dev/dvd --ttl 12</code></strong>
+</pre><p>
+
+
+wobei
+:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">/dev/dvd</code>
+
+
+
+
+
+ 
+der Name Ihres DVD-Laufwerkes oder des Verzeichnisses
+ist, in das Sie Ihre DVD kopiert haben
+,</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+
+
+
+ ist entweder 
+:</p><div class="itemizedlist"><ul type="circle"><li><p>
+
+
+
+die IP-Adresse des Rechners, den Sie via Unicast erreichen möchten
+;</p></li><li><p>
+
+
+
+oder der DNS-Name des Rechners, den Sie via Unicast
+erreichen möchten
+;</p></li><li><p>
+
+
+
+oder eine Multicast-IP-Adresse.
+
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+
+
+
+ ist der Wert der TTL (Time To Live) Ihrer IP-Pakete (was
+bedeutet, dass der Stream in der Lage sein wird, 11 Router zu überqueren).
+
+</p></li></ul></div><p>
+
+
+
+Wenn Sie die DVD fortlaufend streamen möchten, fügen Sie
+die Option <span class="emphasis"><em>--loop</em></span> hinzu.
+
+</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. 
+
+
+
+Eine Datei streamen
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 6. 
+Einen DVB-Kanal (Satellit oder digitales terrestrisches
+TV) streamen
+</td></tr></table></div></body></html>

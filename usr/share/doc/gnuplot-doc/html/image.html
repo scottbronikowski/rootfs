@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>image - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plotting_005fstyles.html#plotting_005fstyles" title="plotting_styles">
+<link rel="prev" href="histograms.html#histograms" title="histograms">
+<link rel="next" href="impulses.html#impulses" title="impulses">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="image"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="impulses.html#impulses">impulses</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="histograms.html#histograms">histograms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plotting_005fstyles.html#plotting_005fstyles">plotting_styles</a>
+<hr>
+</div>
+
+<h3 class="section">2.12 image</h3>
+
+<!-- ?commands set style image -->
+<!-- ?set style image -->
+<!-- ?plotting styles image -->
+<!-- ?style image -->
+<p><a name="index-image-255"></a>
+<a name="index-rgbimage-256"></a>
+<a name="index-rgbalpha-257"></a>
+The `image`, <a href="rgbimage.html#rgbimage">rgbimage</a>, and <a href="rgbalpha.html#rgbalpha">rgbalpha</a> plotting styles all project a
+uniformly sampled grid of data values onto a plane  in either a 2D or 3D. 
+The input data may be an actual bitmapped image, perhaps converted from a
+standard format such as PNG, or a simple array of numerical values.
+
+   <p><a name="index-heatmap-258"></a>
+This figure illustrates generation of a heat map from an array of scalar values. 
+The current palette is used to map each value onto the color assigned to the
+corresponding pixel.
+<pre class="example">           plot '-' matrix with image
+           5 4 3 1 0
+           2 2 0 0 1
+           0 0 0 1 0
+           0 1 2 4 3
+           e
+           e
+     
+</pre>
+   <p>Each pixel (data point) of the input 2D image will become a rectangle or
+parallelipiped in the plot. The coordinates of each data point will determine
+the center of the parallelipiped.  That is, an M x N set of data will form an
+image with M x N pixels.  This is different from the pm3d plotting style, where
+an M x N set of data will form a surface of (M-1) x (N-1) elements.  The scan
+directions for a binary image data grid can be further controlled by additional
+keywords. See `binary general keywords flipx`, `center`, and `rotate`.
+
+   <p>Image data can be scaled to fill a particular rectangle within a 2D plot
+coordinate system by specifying the x and y extent of each pixel. 
+See `binary general keywords dx` and `dy`. To generate the figure at the right,
+the same input image was placed multiple times, each with a specified dx, dy,
+and origin. The input PNG image of a building is 50x128 pixels.  The tall
+building was drawn by mapping this using `dx=0.5 dy=1.5`.  The short building
+used a mapping `dx=0.5 dy=0.35`.
+
+   <p>The `image` style handles input pixels containing a grayscale or color palette
+value. Thus 2D plots (`plot` command) require 3 columns of data (x,y,value),
+while 3D plots (`splot` command) require 4 columns of data (x,y,z,value).
+
+   <p>The <a href="rgbimage.html#rgbimage">rgbimage</a> style handles input pixels that are described by three separate
+values for the red, green, and blue components.  Thus 5D data (x,y,r,g,b) is
+needed for `plot` and 6D data (x,y,z,r,g,b) for `splot`.  The individual red,
+green, and blue components are assumed to lie in the range [0:255].
+
+   <p>The <a href="rgbalpha.html#rgbalpha">rgbalpha</a> style handles input pixels that contain alpha channel
+(transparency) information in addition to the red, green, and blue components. 
+Thus 6D data (x,y,r,g,b,a) is needed for `plot` and 7D data (x,y,z,r,g,b,a)
+for `splot`.  The r, g, b, and alpha components are assumed to lie in the range
+[0:255].
+
+<ul class="menu">
+<li><a accesskey="1" href="transparency.html#transparency">transparency</a>
+<li><a accesskey="2" href="image_005ffailsafe.html#image_005ffailsafe">image_failsafe</a>
+</ul>
+
+   </body></html>
+

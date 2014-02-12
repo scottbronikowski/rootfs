@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>xrange - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="xmtics.html#xmtics" title="xmtics">
+<link rel="next" href="xtics.html#xtics" title="xtics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="xrange"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="xtics.html#xtics">xtics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="xmtics.html#xmtics">xmtics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.90 xrange</h4>
+
+<!-- ?commands set xrange -->
+<!-- ?commands show xrange -->
+<!-- ?set xrange -->
+<!-- ?show xrange -->
+<p><a name="index-writeback-611"></a>
+<a name="index-restore-612"></a>
+<a name="index-xrange-613"></a><a name="index-xrange-614"></a>
+
+   <p>The <a href="xrange.html#xrange">xrange</a> command sets the horizontal range that will be displayed. 
+A similar command exists for each of the other axes, as well as for the
+polar radius r and the parametric variables t, u, and v.
+
+   <p>Syntax:
+<pre class="example">           set xrange { [{{&lt;min&gt;}:{&lt;max&gt;}}] {{no}reverse} {{no}writeback} }
+                      | restore
+           show xrange
+     
+</pre>
+   <p>where &lt;min&gt; and &lt;max&gt; terms are constants, expressions or an asterisk to set
+autoscaling.  If the data are time/date, you must give the range as a quoted
+string according to the <a href="timefmt.html#timefmt">timefmt</a> format.  Any value omitted will not be
+changed.
+
+   <p>The same syntax applies to <a href="yrange.html#yrange">yrange</a>, <a href="zrange.html#zrange">zrange</a>, <a href="x2range.html#x2range">x2range</a>, <a href="y2range.html#y2range">y2range</a>, <a href="cbrange.html#cbrange">cbrange</a>,
+<a href="rrange.html#rrange">rrange</a>, <a href="trange.html#trange">trange</a>, <a href="urange.html#urange">urange</a> and <a href="vrange.html#vrange">vrange</a>.
+
+   <p>The `reverse` option reverses the direction of the axis, e.g., `set xrange
+[0:1] reverse` will produce an axis with 1 on the left and 0 on the right. 
+This is identical to the axis produced by `set xrange [1:0]`, of course. 
+`reverse` is intended primarily for use with <a href="autoscale.html#autoscale">autoscale</a>.
+
+   <p>The `writeback` option essentially saves the range found by <a href="autoscale.html#autoscale">autoscale</a> in
+the buffers that would be filled by <a href="xrange.html#xrange">xrange</a>.  This is useful if you wish
+to plot several functions together but have the range determined by only
+some of them.  The `writeback` operation is performed during the `plot`
+execution, so it must be specified before that command.  To restore,
+the last saved horizontal range use `set xrange restore`.  For example,
+
+<pre class="example">           set xrange [-10:10]
+           set yrange [] writeback
+           plot sin(x)
+           set yrange restore
+           replot x/2
+     
+</pre>
+   <p>results in a yrange of [-1:1] as found only from the range of sin(x); the
+[-5:5] range of x/2 is ignored.  Executing <a href="yrange.html#yrange">yrange</a> after each command
+in the above example should help you understand what is going on.
+
+   <p>In 2-d, <a href="xrange.html#xrange">xrange</a> and <a href="yrange.html#yrange">yrange</a> determine the extent of the axes, <a href="trange.html#trange">trange</a>
+determines the range of the parametric variable in parametric mode or the
+range of the angle in polar mode.  Similarly in parametric 3-d, <a href="xrange.html#xrange">xrange</a>,
+<a href="yrange.html#yrange">yrange</a>, and <a href="zrange.html#zrange">zrange</a> govern the axes and <a href="urange.html#urange">urange</a> and <a href="vrange.html#vrange">vrange</a> govern the
+parametric variables.
+
+   <p>In polar mode, <a href="rrange.html#rrange">rrange</a> determines the radial range plotted.  &lt;rmin&gt; acts as
+an additive constant to the radius, whereas &lt;rmax&gt; acts as a clip to the
+radius&mdash;no point with radius greater than &lt;rmax&gt; will be plotted.  <a href="xrange.html#xrange">xrange</a>
+and <a href="yrange.html#yrange">yrange</a> are affected&mdash;the ranges can be set as if the graph was of
+r(t)-rmin, with rmin added to all the labels.
+
+   <p>Any range may be partially or totally autoscaled, although it may not make
+sense to autoscale a parametric variable unless it is plotted with data.
+
+   <p>Ranges may also be specified on the `plot` command line.  A range given on
+the plot line will be used for that single `plot` command; a range given by
+a `set` command will be used for all subsequent plots that do not specify
+their own ranges.  The same holds true for `splot`.
+
+   <p>Examples:
+
+   <p>To set the xrange to the default:
+<pre class="example">           set xrange [-10:10]
+     
+</pre>
+   <p>To set the yrange to increase downwards:
+<pre class="example">           set yrange [10:-10]
+     
+</pre>
+   <p>To change zmax to 10 without affecting zmin (which may still be autoscaled):
+<pre class="example">           set zrange [:10]
+     
+</pre>
+   <p>To autoscale xmin while leaving xmax unchanged:
+<pre class="example">           set xrange [*:]
+     
+</pre>
+   </body></html>
+

@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>latex - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="kyo.html#kyo" title="kyo">
+<link rel="next" href="linux.html#linux" title="linux">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="latex"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="linux.html#linux">linux</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="kyo.html#kyo">kyo</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.39 latex</h5>
+
+<!-- ?commands set terminal emtex -->
+<!-- ?set terminal emtex -->
+<!-- ?set term emtex -->
+<!-- ?terminal emtex -->
+<!-- ?term emtex -->
+<p><a name="index-emtex-828"></a><a name="index-emtex-829"></a>
+
+<!-- ?commands set terminal latex -->
+<!-- ?set terminal latex -->
+<!-- ?set term latex -->
+<!-- ?terminal latex -->
+<!-- ?term latex -->
+   <p><a name="index-latex-830"></a><a name="index-latex-831"></a>
+
+   <p>Syntax:
+<pre class="example">           set terminal {latex | emtex} {default | {courier|roman} {&lt;fontsize&gt;}}
+                        {size &lt;XX&gt;{unit}, &lt;YY&gt;{unit}} {rotate | norotate}
+     
+</pre>
+   <p>By default the plot will inherit font settings from the embedding document. 
+You have the option of forcing either Courier (cmtt) or Roman (cmr) fonts
+instead. In this case you may also specify a fontsize. 
+Unless your driver is capable of building fonts at any size (e.g. dvips),
+stick to the standard 10, 11 and 12 point sizes.
+
+   <p>METAFONT users beware: METAFONT does not like odd sizes.
+
+   <p>All drivers for LaTeX offer a special way of controlling text positioning:
+If any text string begins with '{', you also need to include a '}' at the
+end of the text, and the whole text will be centered both horizontally and
+vertically.  If the text string begins with '[', you need to follow this with
+a position specification (up to two out of t,b,l,r), ']{', the text itself,
+and finally '}'.  The text itself may be anything LaTeX can typeset as an
+LR-box.  '\\rule{}{}'s may help for best positioning.
+
+   <p>Points, among other things, are drawn using the LaTeX commands "\\Diamond" and
+"\\Box".  These commands no longer belong to the LaTeX2e core; they are included
+in the latexsym package, which is part of the base distribution and thus part
+of any LaTeX implementation.  Please do not forget to use this package. 
+Other point types use symbols from the amssymb package.
+
+   <p>The default size for the plot is 5 inches by 3 inches. The <a href="size.html#size">size</a> option
+changes this to whatever the user requests. By default the X and Y sizes
+are taken to be in inches, but other units are possible (currently only cm).
+
+   <p>If 'rotate' is specified, rotated text, especially a rotated y-axis label,
+is possible (the packages graphics or graphicx are needed). The 'stacked'
+y-axis label mechanism is then deactivated.
+
+   <p>Examples:
+About label positioning:
+Use gnuplot defaults (mostly sensible, but sometimes not really best):
+<pre class="example">            set title '\\LaTeX\\ -- $ \\gamma $'
+</pre>
+   <p>Force centering both horizontally and vertically:
+<pre class="example">            set label '{\\LaTeX\\ -- $ \\gamma $}' at 0,0
+</pre>
+   <p>Specify own positioning (top here):
+<pre class="example">            set xlabel '[t]{\\LaTeX\\ -- $ \\gamma $}'
+</pre>
+   <p>The other label &ndash; account for long ticlabels:
+<pre class="example">            set ylabel '[r]{\\LaTeX\\ -- $ \\gamma $\\rule{7mm}{0pt}}'"
+     
+</pre>
+   </body></html>
+

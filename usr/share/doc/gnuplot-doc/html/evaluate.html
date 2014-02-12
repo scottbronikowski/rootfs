@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+<title>evaluate - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="clear.html#clear" title="clear">
+<link rel="next" href="exit.html#exit" title="exit">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="evaluate"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="exit.html#exit">exit</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="clear.html#clear">clear</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.4 evaluate</h3>
+
+<!-- ?commands evaluate -->
+<p><a name="index-evaluate-283"></a><a name="index-evaluate-284"></a>
+
+   <p>The <a href="evaluate.html#evaluate">evaluate</a> command executes the commands given as an argument string. 
+Newline characters are not allowed within the string.
+
+   <p>Syntax:
+<pre class="example">           eval &lt;string expression&gt;
+     
+</pre>
+   <p>This is especially useful for a repetition of similar commands.
+
+   <p>Example:
+<pre class="example">           set_label(x, y, text) \
+             = sprintf("set label '%s' at %f, %f point pt 5", text, x, y)
+           eval set_label(1., 1., 'one/one')
+           eval set_label(2., 1., 'two/one')
+           eval set_label(1., 2., 'one/two')
+     
+</pre>
+   <p>Please see <a href="macros.html#macros">macros</a> for another way to execute commands
+from a string.
+
+   </body></html>
+

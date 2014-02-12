@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>Substitution_of_system_commands_in_backquotes - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Substitution_005fand_005fCommand_005fline_005fmacros.html#Substitution_005fand_005fCommand_005fline_005fmacros" title="Substitution_and_Command_line_macros">
+<link rel="prev" href="Substitution_005fand_005fCommand_005fline_005fmacros.html#Substitution_005fand_005fCommand_005fline_005fmacros" title="Substitution_and_Command_line_macros">
+<link rel="next" href="Substitution_005fof_005fstring_005fvariables_005fas_005fmacros.html#Substitution_005fof_005fstring_005fvariables_005fas_005fmacros" title="Substitution_of_string_variables_as_macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Substitution_of_system_commands_in_backquotes"></a>
+<a name="Substitution_005fof_005fsystem_005fcommands_005fin_005fbackquotes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Substitution_005fof_005fstring_005fvariables_005fas_005fmacros.html#Substitution_005fof_005fstring_005fvariables_005fas_005fmacros">Substitution_of_string_variables_as_macros</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Substitution_005fand_005fCommand_005fline_005fmacros.html#Substitution_005fand_005fCommand_005fline_005fmacros">Substitution_and_Command_line_macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Substitution_005fand_005fCommand_005fline_005fmacros.html#Substitution_005fand_005fCommand_005fline_005fmacros">Substitution_and_Command_line_macros</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.21.1 Substitution of system commands in backquotes</h4>
+
+<!-- ?substitution backquotes -->
+<p><a name="index-backquotes-231"></a>
+<!-- ?shell commands -->
+Command-line substitution is specified by a system command enclosed in
+backquotes.  This command is spawned and the output it produces replaces
+the backquoted text on the command line.  Some implementations also support
+pipes;  see <a href="special_002dfilenames.html#special_002dfilenames">special-filenames</a>.
+
+   <p>Command-line substitution can be used anywhere on the `gnuplot` command
+line, except inside strings delimited by single quotes.
+
+   <p>Example:
+
+   <p>This will run the program `leastsq` and replace `leastsq` (including
+backquotes) on the command line with its output:
+<pre class="example">           f(x) = `leastsq`
+     
+</pre>
+   <p>or, in VMS
+<pre class="example">           f(x) = `run leastsq`
+     
+</pre>
+   <p>These will generate labels with the current time and userid:
+<pre class="example">           set label "generated on `date +%Y-%m-%d` by `whoami`" at 1,1
+           set timestamp "generated on %Y-%m-%d by `whoami`"
+     
+</pre>
+   </body></html>
+

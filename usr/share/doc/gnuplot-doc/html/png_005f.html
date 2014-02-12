@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>png_ - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="fig.html#fig" title="fig">
+<link rel="next" href="ggi.html#ggi" title="ggi">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="png_"></a>
+<a name="png_005f"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ggi.html#ggi">ggi</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="fig.html#fig">fig</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.24 png</h5>
+
+<!-- ?commands set terminal png -->
+<!-- ?set terminal png -->
+<!-- ?set term png -->
+<!-- ?terminal png -->
+<!-- ?term png -->
+<p><a name="index-png-792"></a><a name="index-png-793"></a>
+
+   <p>Syntax:
+<pre class="example">           set terminal png
+                  {{no}transparent} {{no}interlace}
+                  {{no}truecolor} {rounded|butt}
+                  {linewidth &lt;lw&gt;} {dashlength &lt;dl&gt;}
+                  {tiny | small | medium | large | giant}
+                  {font "&lt;face&gt; {,&lt;pointsize&gt;}"} {{no}enhanced}
+                  {size &lt;x&gt;,&lt;y&gt;} {{no}crop}
+                  {&lt;background_color&gt;}
+     
+</pre>
+   <p>PNG, JPEG and GIF images are created using the external library libgd. 
+PNG plots may be viewed interactively by piping the output to the
+'display' program from the ImageMagick package as follows:
+<pre class="example">                    set term png
+                    set output '| display png:-'
+</pre>
+   <p>You can view the output from successive plot commands interactively by typing
+&lt;space&gt; in the display window.  To save the current plot to a file,
+left click in the display window and choose <a href="save.html#save">save</a>.
+
+   <p>`transparent` instructs the driver to make the background color transparent. 
+Default is `notransparent`.
+
+   <p>`interlace` instructs the driver to generate interlaced PNGs. 
+Default is `nointerlace`.
+
+   <p>The `linewidth` and `dashlength` options are scaling factors that affect all
+lines drawn, i.e. they are multiplied by values requested in various drawing
+commands.
+
+   <p>By default output png images use 256 indexed colors. The `truecolor` option
+instead creates TrueColor images with 24 bits of color information per pixel. 
+Transparent fill styles require the `truecolor` option. See `fillstyle`. 
+A transparent background is possible in either indexed or TrueColor images.
+
+   <p>`butt` instructs the driver to use a line drawing method that does
+not overshoot the desired end point of a line.  This setting is only
+applicable for line widths greater than 1.  This setting is most useful when
+drawing horizontal or vertical lines.  Default is `rounded`.
+
+   <p>The details of font selection are complicated. 
+Two equivalent simple examples are given below:
+<pre class="example">          set term png font arial 11
+          set term png font "arial,11"
+</pre>
+   <p>For more information please see the separate section under `fonts`.
+
+   <p>The output plot size &lt;x,y&gt; is given in pixels&mdash;it defaults to 640x480. 
+Please see additional information under `canvas` and <a href="size.html#size">size</a>. 
+Blank space at the edges of the finished plot may be trimmed using the `crop`
+option, resulting in a smaller final image size. Default is `nocrop`.
+
+   <p>The background color must be given in the form 'xrrggbb', where x is the
+literal character 'x' and 'rrggbb' are the red, green and blue components
+in hexadecimal.  For example, 'x00ff00' is green.  The specification of
+additional colors other than the background is deprecated.
+
+<p class="noindent">&mdash; EXAMPLES &mdash;
+
+<!-- ?set term png examples -->
+<pre class="example">           set terminal png medium size 640,480 xffffff
+     
+</pre>
+   <p>Use the medium size built-in non-scaleable, non-rotatable font. 
+Use white (xffffff) for the non-transparent background.
+
+<pre class="example">           set terminal png font arial 14 size 800,600
+     
+</pre>
+   <p>Searches for a scalable font with face name 'arial' and sets the font
+size to 14pt.  Please see `fonts` for details of how the font search
+is done.
+
+<pre class="example">           set terminal png transparent truecolor enhanced
+     
+</pre>
+   <p>Use 24 bits of color information per pixel, with a transparent background. 
+Use the `enhanced text` mode to control the layout of strings to be printed.
+
+   </body></html>
+

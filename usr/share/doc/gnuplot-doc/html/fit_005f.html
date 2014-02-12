@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>fit_ - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="encoding.html#encoding" title="encoding">
+<link rel="next" href="fontpath.html#fontpath" title="fontpath">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="fit_"></a>
+<a name="fit_005f"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="fontpath.html#fontpath">fontpath</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="encoding.html#encoding">encoding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.21 fit</h4>
+
+<!-- ?commands set fit -->
+<!-- ?commands show fit -->
+<!-- ?set fit -->
+<!-- ?show fit -->
+<p>The <a href="fit.html#fit">fit</a> setting defines where the <a href="fit.html#fit">fit</a> command writes its output. 
+If this option was built into your version of gnuplot, it also controls
+whether parameter errors from the fit will be written into variables.
+
+   <p>Syntax:
+<pre class="example">           set fit {logfile {"&lt;filename&gt;"}} {{no}errorvariables}
+           unset fit
+           show fit
+     
+</pre>
+   <p>The &lt;filename&gt; argument must be enclosed in single or double quotes.
+
+   <p>If no filename is given or <a href="fit.html#fit">fit</a> is used the log file is
+reset to its default value "fit.log" or the value of the environmental
+variable `FIT_LOG`.
+
+   <p>If the given logfile name ends with a / or \, it is interpreted to be
+a directory name, and the actual filename will be "fit.log" in that
+directory.
+
+   <p>If the `errorvariables` option is turned on, the error of each fitted
+parameter computed by <a href="fit.html#fit">fit</a> will be copied to a user-defined variable
+whose name is formed by appending "_err" to the name of the parameter
+itself.  This is useful mainly to put the parameter and its error onto
+a plot of the data and the fitted function, for reference, as in:
+
+<pre class="example">            set fit errorvariables
+            fit f(x) 'datafile' using 1:2 via a, b
+            print "error of a is:", a_err
+            set label 'a=%6.2f', a, '+/- %6.2f', a_err
+            plot 'datafile' using 1:2, f(x)
+     
+</pre>
+   </body></html>
+

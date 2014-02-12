@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 6.  Stream a DVB channel (satellite or digital terrestial TV)</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch05.html" title="Chapter 5.  Stream a DVD" /><link rel="next" href="ch07.html" title="Chapter 7.  Stream from an MPEG encoding card" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. 
+Stream a DVB channel (satellite or digital
+terrestial TV)
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch07.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="dvb"></a>Chapter 6. 
+Stream a DVB channel (satellite or digital
+terrestial TV)
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch06.html#id2573592">
+Install the DVB drivers
+</a></span></dt><dt><span class="sect1"><a href="ch06.html#id2574946">
+Stream with VLS
+</a></span></dt><dt><span class="sect1"><a href="ch06.html#id2575044">
+Stream with VLC
+</a></span></dt></dl></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+This is possible under GNU/Linux only.
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573592"></a>
+Install the DVB drivers
+</h2></div></div></div><p>
+If you want to be able to stream from a DVB card (a
+satellite card or a digital terrestial TV card), you need to install the
+DVB drivers:
+
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+if you use a Linux 2.6.x kernel, you just need to
+compile the right modules;
+
+</p></li><li><p>
+
+if you are using a Linux 2.4.x
+kernel, you must download the latest release of the DVB drivers from the <a class="ulink" href="http://www.linuxtv.org/download/dvb/" target="_top">DVB drivers download
+page</a> of the <a class="ulink" href="http://www.linuxtv.org/" target="_top">LinuxTV</a>
+Project.
+
+</p></li></ul></div><p>
+Uncompress the tarball and follow the instructions
+written in the <code class="filename">INSTALL</code> file to compile and install
+the drivers.
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2574946"></a>
+Stream with VLS
+</h2></div></div></div><p>
+Put a <code class="filename">.dvbrc</code> file containing
+the DVB channels (satellite or digital terrestial TV channels) you
+want to stream in your home directory (some are provided in the
+<span class="emphasis"><em>libdvb</em></span> tarball for the satellite channels).
+</p><p>
+Run VLS with the following command line
+:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vls -vv -d udp:192.168.0.42 dvb:"EUROSPORT" --ttl 12</code></strong>
+</pre><p>
+where:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>"EUROSPORT"</em></span>
+ is the channel you want to stream as written in
+your <code class="filename">~/.dvbrc</code> file
+,</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+ is either 
+:</p><div class="itemizedlist"><ul type="circle"><li><p>
+the IP address of the machine you want to unicast
+to;
+</p></li><li><p>
+or the DNS name the machine you want to unicast
+to;
+</p></li><li><p>
+or a multicast IP address.
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+ is the value of the TTL (Time To
+Live) of your IP packets (which means that the stream will be
+able to cross 11 routers).
+</p></li></ul></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2575044"></a>
+Stream with VLC
+</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+For this, you must use the SVN version of VLC and compile
+it with <span class="command"><strong>./configure --enable-dvb</strong></span> This feature should
+still be considered as experimental.</p></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --program 8211 dvb:12597000:0:3:27500000 --sout udp:192.168.0.12 --ttl 12</code></strong>
+</pre><p>
+where:
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+<code class="filename">8211</code> is the PID of the DVB
+channel you would like to stream, expressed as a decimal number;
+</p></li><li><p>
+<code class="filename">12597000</code> is the frequency of the
+transponder you want to stream from in Hz;</p></li><li><p>
+<code class="filename">0</code> is the polarization (0 for
+vertical, 1 for horizontal);</p></li><li><p>
+<code class="filename">3</code> is the FEC (3 for 3/4, 9 for
+auto);</p></li><li><p>
+<code class="filename">27500000</code> is the transponder
+symbolrate in Hz;</p></li><li><p><span class="emphasis"><em>192.168.0.12</em></span>
+ is either:</p><div class="itemizedlist"><ul type="circle"><li><p>
+the IP address of the machine you want to unicast to;
+</p></li><li><p>
+or the DNS name the machine you want to unicast to;
+</p></li><li><p>
+or the multicast IP address.</p></li></ul></div></li><li><p>
+<span class="emphasis"><em>12</em></span> is the value of the TTL (Time
+To Live) of your IP packets (which means that the stream will be able to cross 11
+routers).</p></li></ul></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 5. 
+Stream a DVD
+
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 7. 
+
+Stream from an MPEG encoding card
+</td></tr></table></div></body></html>

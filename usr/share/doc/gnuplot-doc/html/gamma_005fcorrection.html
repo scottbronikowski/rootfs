@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>gamma_correction - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="palette.html#palette" title="palette">
+<link rel="prev" href="file.html#file" title="file">
+<link rel="next" href="postscript.html#postscript" title="postscript">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="gamma_correction"></a>
+<a name="gamma_005fcorrection"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="postscript.html#postscript">postscript</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="file.html#file">file</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="palette.html#palette">palette</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.53.5 gamma correction</h5>
+
+<!-- ?commands set palette gamma-correction -->
+<!-- ?set palette gamma-correction -->
+<!-- ?palette gamma-correction -->
+<p><a name="index-gamma_002dcorrection-528"></a>
+For gray mappings gamma correction can be turned on by `set palette gamma
+&lt;gamma&gt;`.  &lt;gamma&gt; defaults to 1.5 which is quite suitable for most
+terminals.
+
+   <p>For color mappings no automatic gamma correction is done by gnuplot.  However,
+you may easily implement gamma correction.  Here is an example for a gray
+scale image by use of explicit functions for the red, green and blue component
+with slightly different values of gamma
+
+   <p>Example:
+<pre class="example">           set palette model RGB
+           set palette functions gray**0.64, gray**0.67, gray**0.70
+     
+</pre>
+   <p>To use gamma correction with interpolated gradients specify intermediate
+gray values with appropriate colors.  Instead of
+
+<pre class="example">           set palette defined ( 0 0 0 0, 1 1 1 1 )
+     
+</pre>
+   <p>use e.g.
+
+<pre class="example">           set palette defined ( 0 0 0 0, 0.5 .73 .73 .73, 1 1 1 1 )
+     
+</pre>
+   <p>or even more intermediate points until the linear interpolation fits the
+"gamma corrected" interpolation well enough.
+
+   </body></html>
+

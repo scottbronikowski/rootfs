@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>multi-branch - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="fit.html#fit" title="fit">
+<link rel="prev" href="control.html#control" title="control">
+<link rel="next" href="starting_005fvalues.html#starting_005fvalues" title="starting_values">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="multi-branch"></a>
+<a name="multi_002dbranch"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="starting_005fvalues.html#starting_005fvalues">starting_values</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="control.html#control">control</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="fit.html#fit">fit</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.6.5 multi-branch</h4>
+
+<!-- ?commands fit multi-branch -->
+<!-- ?fit multi-branch -->
+<p><a name="index-multi_002dbranch-296"></a>
+<a name="index-branch-297"></a>
+In multi-branch fitting, multiple data sets can be simultaneously fit with
+functions of one independent variable having common parameters by minimizing
+the total WSSR.  The function and parameters (branch) for each data set are
+selected by using a 'pseudo-variable', e.g., either the dataline number (a
+'column' index of -1) or the datafile index (-2), as the second independent
+variable.
+
+   <p>Example:  Given two exponential decays of the form, z=f(x), each describing
+a different data set but having a common decay time, estimate the values of
+the parameters.  If the datafile has the format x:z:s, then
+<pre class="example">          f(x,y) = (y==0) ? a*exp(-x/tau) : b*exp(-x/tau)
+          fit f(x,y) 'datafile' using  1:-2:2:3  via a, b, tau
+     
+</pre>
+   <p>For a more complicated example, see the file "hexa.fnc" used by the
+"fit.dem" demo.
+
+   <p>Appropriate weighting may be required since unit weights may cause one
+branch to predominate if there is a difference in the scale of the dependent
+variable.  Fitting each branch separately, using the multi-branch solution
+as initial values, may give an indication as to the relative effect of each
+branch on the joint solution.
+
+   </body></html>
+

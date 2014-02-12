@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>format_ - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="fontpath.html#fontpath" title="fontpath">
+<link rel="next" href="function_005fstyle.html#function_005fstyle" title="function_style">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="format_"></a>
+<a name="format_005f"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="function_005fstyle.html#function_005fstyle">function_style</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="fontpath.html#fontpath">fontpath</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.23 format</h4>
+
+<!-- ?commands set format -->
+<!-- ?commands show format -->
+<!-- ?set format -->
+<!-- ?show format -->
+<p><a name="index-format-441"></a><a name="index-format-442"></a>
+
+<!-- ?format cb -->
+   <p>The format of the tic-mark labels can be set with the `set format` command
+or with the `set tics format` or individual `set {axis}tics format` commands.
+
+   <p>Syntax:
+<pre class="example">           set format {&lt;axes&gt;} {"&lt;format-string&gt;"}
+           set format {&lt;axes&gt;} {'&lt;format-string&gt;'}
+           show format
+     
+</pre>
+   <p>where &lt;axes&gt; is either `x`, `y`, `xy`, `x2`, `y2`, `z`, `cb` or nothing
+(which applies the format to all axes). The following two commands are
+equivalent:
+<pre class="example">           set format y "%.2f"
+           set ytics format "%.2f"
+     
+</pre>
+   <p>The length of the string is restricted to 100 characters.  The default format
+is "% g", but other formats such as "%.2f" or "%3.0em" are often desirable. 
+The format "$%g$" is often desirable for LaTeX.  If no format string is given,
+the format will be returned to the default.  If the empty string "" is given,
+tics will have no labels, although the tic mark will still be plotted. 
+To eliminate the tic marks, use `unset xtics` or `set tics scale 0`.
+
+   <p>Newline (\n) and enhanced text markup is accepted in the format string. 
+Use double-quotes rather than single-quotes in this case.  See also `syntax`. 
+Characters not preceded by "%" are printed verbatim.  Thus you can include
+spaces and labels in your format string, such as "%g m", which will put " m"
+after each number.  If you want "%" itself, double it: "%g %%".
+
+   <p>See also `set xtics` for more information about tic labels, and
+<a href="decimalsign.html#decimalsign">decimalsign</a> for how to use non-default decimal separators in numbers
+printed this way. 
+See also
+<a href="http://www.gnuplot.info/demo/electron.html">electron demo (electron.dem).</a>
+
+<ul class="menu">
+<li><a accesskey="1" href="gprintf_005f.html#gprintf_005f">gprintf_</a>
+<li><a accesskey="2" href="format_005fspecifiers.html#format_005fspecifiers">format_specifiers</a>
+<li><a accesskey="3" href="time_002fdate_005fspecifiers.html#time_002fdate_005fspecifiers">time/date_specifiers</a>
+</ul>
+
+   </body></html>
+

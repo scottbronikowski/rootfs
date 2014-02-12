@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on May 29, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>psgml: 1. Introduction</title>
+
+<meta name="description" content="psgml: 1. Introduction">
+<meta name="keywords" content="psgml: 1. Introduction">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Introduction"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml.html#Top" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_2.html#Install" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_2.html#Install" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Introduction-1"></a>
+<h1 class="chapter">1. Introduction</h1>
+<a name="index-CONCUR"></a>
+<a name="index-DATATAG"></a>
+<a name="index-LINK"></a>
+<a name="index-RANK"></a>
+<a name="index-SGML-Declaration"></a>
+
+<p>PSGML is a major mode for editing SGML and XML documents.  It works with
+GNU Emacs 19.34, 20.3 and later or with XEmacs 19.9 and later.  PSGML
+contains a simple SGML parser and can work with any DTD.  Functions
+provided includes menus and commands for inserting tags with only the
+contextually valid tags, identification of structural errors, editing of
+attribute values in a separate window with information about types and
+defaults, and structure based editing.
+</p>
+<p>SGML, a language for encoding the structure of a document, is an ISO
+standard: ISO 8879:1986 &ldquo;Information processing &ndash; Text and office
+systems &ndash; Standard Generalized Markup Language (SGML)&rdquo;.
+</p>
+<p>A good introduction to SGML is <cite>A Gentle Introduction to SGML</cite>
+produced by Text Encoding Initiative (this is really chapter 2 of TEI
+P3).  This can be found on
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="display">&lsquo;<tt>ftp://ftp.ifi.uio.no/pub/SGML/TEI/P3SG.DOC</tt>&rsquo;.
+</pre></td></tr></table>
+
+<p>A SGML document has three major parts, in order:
+</p>
+<ol>
+<li>
+SGML Declaration (&lsquo;<samp>&lt;!SGML &quot;ISO 8879:1986&quot; &hellip; &gt;</samp>&rsquo;)
+</li><li>
+Document Type Declaration (&lsquo;<samp>&lt;!DOCTYPE <var>name</var> &hellip; &gt;</samp>&rsquo;)
+</li><li>
+Document Element (&lsquo;<samp>&lt;<var>name</var>&gt; &hellip; &lt;/<var>name</var>&gt;</samp>&rsquo;)
+</li></ol>
+
+<p>The SGML declaration contains general information about character sets,
+concrete syntax, and SGML features used.  PSGML does not use the SGML
+Declaration, it can be left out, and if included is ignored.  Many SGML
+systems allow the SGML declaration to be defaulted.  PSGML always use
+the Concrete Reference Syntax but without limitations on
+lengths.  Features used has to be indicated with variables (see section <a href="psgml_6.html#SGML-declaration">SGML Declaration</a>).
+</p>
+<p>The document type declaration specifies the valid elements and entities
+and how they can be nested. A document type is usually needed, but can
+reside in another file (see section <a href="psgml_7.html#Managing-the-DTD">Document Type Declaration</a>).
+</p>
+<p>The system declaration for PSGML:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">SYSTEM &quot;ISO 8879:1986&quot;
+   CHARSET
+     BASESET  &quot;ISO 646-1983//CHARSET
+               International Reference Version (IRV)//ESC 2/5 4/0&quot;
+     DESCSET  0 128 0
+     CAPACITY PUBLIC  &quot;ISO 8879:1986//CAPACITY Reference//EN&quot;
+   FEATURES
+     MINIMIZE DATATAG NO  OMITTAG  YES   RANK     NO  SHORTTAG YES
+     LINK     SIMPLE  NO  IMPLICIT NO    EXPLICIT NO
+     OTHER    CONCUR  NO  SUBDOC   YES 1 FORMAL   YES
+     SCOPE    DOCUMENT
+     SYNTAX   PUBLIC  &quot;ISO 8879:1986//SYNTAX Reference//EN&quot;
+     VALIDATE
+              GENERAL NO  MODEL    NO   EXCLUDE  NO  CAPACITY NO
+              NONSGML NO  SGML     NO   FORMAL   NO
+     SDIF     PACK    NO  UNPACK   NO
+</pre></td></tr></table>
+
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml.html#Top" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_2.html#Install" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon user</em> on <em>May 29, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

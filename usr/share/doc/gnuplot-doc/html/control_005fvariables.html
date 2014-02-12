@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>control_variables - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="control.html#control" title="control">
+<link rel="prev" href="control.html#control" title="control">
+<link rel="next" href="environment_005fvariables.html#environment_005fvariables" title="environment_variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="control_variables"></a>
+<a name="control_005fvariables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="environment_005fvariables.html#environment_005fvariables">environment_variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="control.html#control">control</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="control.html#control">control</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.6.4.1 control variables</h5>
+
+<!-- ?commands fit control variables -->
+<!-- ?fit control variables -->
+<p>The default epsilon limit (1e-5) may be changed by declaring a value for
+<pre class="example">           FIT_LIMIT
+</pre>
+   <p>When the sum of squared residuals changes between two iteration steps by
+a factor less than this number (epsilon), the fit is considered to have
+'converged'.
+
+   <p>The maximum number of iterations may be limited by declaring a value for
+<pre class="example">           FIT_MAXITER
+</pre>
+   <p>A value of 0 (or not defining it at all)  means that there is no limit.
+
+   <p>If you need even more control about the algorithm, and know the
+Marquardt-Levenberg algorithm well, there are some more variables to
+influence it. The startup value of `lambda` is normally calculated
+automatically from the ML-matrix, but if you want to, you may provide
+your own one with
+<pre class="example">           FIT_START_LAMBDA
+</pre>
+   <p>Specifying FIT_START_LAMBDA as zero or less will re-enable the automatic
+selection. The variable
+<pre class="example">           FIT_LAMBDA_FACTOR
+</pre>
+   <p>gives the factor by which `lambda` is increased or decreased whenever
+the chi-squared target function increased or decreased significantly. 
+Setting FIT_LAMBDA_FACTOR to zero re-enables the default factor of
+10.0.
+
+   <p>Other variables with the FIT_ prefix may be added to <a href="fit.html#fit">fit</a>, so it is safer
+not to use that prefix for user-defined variables.
+
+   <p>The variables FIT_SKIP and FIT_INDEX were used by earlier releases of
+`gnuplot` with a 'fit' patch called `gnufit` and are no longer available. 
+The datafile <a href="every.html#every">every</a> modifier provides the functionality of FIT_SKIP. 
+FIT_INDEX was used for multi-branch fitting, but multi-branch fitting of
+one independent variable is now done as a pseudo-3D fit in which the
+second independent variable and <a href="using.html#using">using</a> are used to specify the branch. 
+See <a href="multi_002dbranch.html#multi_002dbranch">multi-branch</a>.
+
+   </body></html>
+

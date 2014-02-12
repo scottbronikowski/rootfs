@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>format_specifiers - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="format_005f.html#format_005f" title="format_">
+<link rel="prev" href="gprintf_005f.html#gprintf_005f" title="gprintf_">
+<link rel="next" href="time_002fdate_005fspecifiers.html#time_002fdate_005fspecifiers" title="time/date_specifiers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="format_specifiers"></a>
+<a name="format_005fspecifiers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="time_002fdate_005fspecifiers.html#time_002fdate_005fspecifiers">time/date_specifiers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="gprintf_005f.html#gprintf_005f">gprintf_</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="format_005f.html#format_005f">format_</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.23.2 format specifiers</h5>
+
+<!-- ?commands set format specifiers -->
+<!-- ?set format specifiers -->
+<!-- ?format specifiers -->
+<p><a name="index-format_005fspecifiers-445"></a>
+The acceptable formats (if not in time/date mode) are:
+
+<pre class="example">           Format       Explanation
+           %f           floating point notation
+           %e or %E     exponential notation; an "e" or "E" before the power
+           %g or %G     the shorter of %e (or %E) and %f
+           %x or %X     hex
+           %o or %O     octal
+           %t           mantissa to base 10
+           %l           mantissa to base of current logscale
+           %s           mantissa to base of current logscale; scientific power
+           %T           power to base 10
+           %L           power to base of current logscale
+           %S           scientific power
+           %c           character replacement for scientific power
+           %P           multiple of pi
+     
+</pre>
+   <p>A 'scientific' power is one such that the exponent is a multiple of three. 
+Character replacement of scientific powers (`"%c"`) has been implemented
+for powers in the range -18 to +18.  For numbers outside of this range the
+format reverts to exponential.
+
+   <p>Other acceptable modifiers (which come after the "%" but before the format
+specifier) are "-", which left-justifies the number; "+", which forces all
+numbers to be explicitly signed; " " (a space), which makes positive numbers
+have a space in front of them where negative numbers have "-";
+"#", which places a decimal point after
+floats that have only zeroes following the decimal point; a positive integer,
+which defines the field width; "0" (the digit, not the letter) immediately
+preceding the field width, which indicates that leading zeroes are to be used
+instead of leading blanks; and a decimal point followed by a non-negative
+integer, which defines the precision (the minimum number of digits of an
+integer, or the number of digits following the decimal point of a float).
+
+   <p>Some systems may not support all of these modifiers but may also support
+others; in case of doubt, check the appropriate documentation and
+then experiment.
+
+   <p>Examples:
+<pre class="example">           set format y "%t"; set ytics (5,10)          # "5.0" and "1.0"
+           set format y "%s"; set ytics (500,1000)      # "500" and "1.0"
+           set format y "%+-12.3f"; set ytics(12345)    # "+12345.000  "
+           set format y "%.2t*10^%+03T"; set ytic(12345)# "1.23*10^+04"
+           set format y "%s*10^{%S}"; set ytic(12345)   # "12.345*10^{3}"
+           set format y "%s %cg"; set ytic(12345)       # "12.345 kg"
+           set format y "%.0P pi"; set ytic(6.283185)   # "2 pi"
+           set format y "%.0f%%"; set ytic(50)          # "50%"
+     
+</pre>
+   <pre class="example">           set log y 2; set format y '%l'; set ytics (1,2,3)
+           #displays "1.0", "1.0" and "1.5" (since 3 is 1.5 * 2^1)
+     
+</pre>
+   <p>There are some problem cases that arise when numbers like 9.999 are printed
+with a format that requires both rounding and a power.
+
+   <p>If the data type for the axis is time/date, the format string must contain
+valid codes for the 'strftime' function (outside of `gnuplot`, type "man
+strftime").  See <a href="timefmt.html#timefmt">timefmt</a> for a list of the allowed input format codes.
+
+   </body></html>
+

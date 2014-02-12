@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+<title>mf - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="macintosh.html#macintosh" title="macintosh">
+<link rel="next" href="mp.html#mp" title="mp">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="mf"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="mp.html#mp">mp</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="macintosh.html#macintosh">macintosh</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.44 mf</h5>
+
+<!-- ?commands set terminal mf -->
+<!-- ?set terminal mf -->
+<!-- ?set term mf -->
+<!-- ?terminal mf -->
+<!-- ?term mf -->
+<p><a name="index-mf-840"></a>
+<a name="index-metafont-841"></a>
+The `mf` terminal driver creates an input file to the METAFONT program.  Thus a
+figure may be used in the TeX document in the same way as is a character.
+
+   <p>To use a picture in a document, the METAFONT program must be run with the
+output file from `gnuplot` as input.  Thus, the user needs a basic knowledge
+of the font creating process and the procedure for including a new font in a
+document.  However, if the METAFONT program is set up properly at the local
+site, an unexperienced user could perform the operation without much trouble.
+
+   <p>The text support is based on a METAFONT character set.  Currently the
+Computer Modern Roman font set is input, but the user is in principal free to
+choose whatever fonts he or she needs.  The METAFONT source files for the
+chosen font must be available.  Each character is stored in a separate
+picture variable in METAFONT.  These variables may be manipulated (rotated,
+scaled etc.) when characters are needed.  The drawback is the interpretation
+time in the METAFONT program.  On some machines (i.e. PC) the limited amount
+of memory available may also cause problems if too many pictures are stored.
+
+   <p>The `mf` terminal has no options.
+
+<p class="noindent">&mdash; METAFONT INSTRUCTIONS &mdash;
+
+<!-- ?commands set terminal mf detailed -->
+<!-- ?set terminal mf detailed -->
+<!-- ?set term mf detailed -->
+<!-- ?mf detailed -->
+<!-- ?metafont detailed -->
+   <p>- Set your terminal to METAFONT:
+<pre class="example">       set terminal mf
+</pre>
+   <p>- Select an output-file, e.g.:
+<pre class="example">       set output "myfigures.mf"
+</pre>
+   <p>- Create your pictures. Each picture will generate a separate character. Its
+default size will be 5*3 inches. You can change the size by saying `set size
+0.5,0.5` or whatever fraction of the default size you want to have.
+
+   <p>- Quit `gnuplot`.
+
+   <p>- Generate a TFM and GF file by running METAFONT on the output of `gnuplot`. 
+Since the picture is quite large (5*3 in), you will have to use a version of
+METAFONT that has a value of at least 150000 for memmax.  On Unix systems
+these are conventionally installed under the name bigmf.  For the following
+assume that the command virmf stands for a big version of METAFONT.  For
+example:
+
+   <p>- Invoke METAFONT:
+<pre class="example">         virmf '&amp;plain'
+</pre>
+   <p>- Select the output device: At the METAFONT prompt ('*') type:
+<pre class="example">         \\mode:=CanonCX;     % or whatever printer you use
+</pre>
+   <p>- Optionally select a magnification:
+<pre class="example">         mag:=1;             % or whatever you wish
+</pre>
+   <p>- Input the `gnuplot`-file:
+<pre class="example">         input myfigures.mf
+</pre>
+   <p>On a typical Unix machine there will usually be a script called "mf" that
+executes virmf '&amp;plain', so you probably can substitute mf for virmf &amp;plain. 
+This will generate two files: mfput.tfm and mfput.$$$gf (where $$$ indicates
+the resolution of your device).  The above can be conveniently achieved by
+typing everything on the command line, e.g.:
+virmf '&amp;plain' '\\mode:=CanonCX; mag:=1; input myfigures.mf'
+In this case the output files will be named myfigures.tfm and
+myfigures.300gf.
+
+   <p>- Generate a PK file from the GF file using gftopk:
+<pre class="example">       gftopk myfigures.300gf myfigures.300pk
+</pre>
+   <p>The name of the output file for gftopk depends on the DVI driver you use. 
+Ask your local TeX administrator about the naming conventions.  Next, either
+install the TFM and PK files in the appropriate directories, or set your
+environment variables properly.  Usually this involves setting TEXFONTS to
+include the current directory and doing the same thing for the environment
+variable that your DVI driver uses (no standard name here...).  This step is
+necessary so that TeX will find the font metric file and your DVI driver will
+find the PK file.
+
+   <p>- To include your pictures in your document you have to tell TeX the font:
+<pre class="example">       \\font\\gnufigs=myfigures
+</pre>
+   <p>Each picture you made is stored in a single character.  The first picture is
+character 0, the second is character 1, and so on...  After doing the above
+step, you can use the pictures just like any other characters.  Therefore, to
+place pictures 1 and 2 centered in your document, all you have to do is:
+<pre class="example">       \\centerline{\\gnufigs\\char0}
+       \\centerline{\\gnufigs\\char1}
+</pre>
+   <p>in plain TeX.  For LaTeX you can, of course, use the picture environment and
+place the picture wherever you wish by using the \\makebox and \\put macros.
+
+   <p>This conversion saves you a lot of time once you have generated the font;
+TeX handles the pictures as characters and uses minimal time to place them,
+and the documents you make change more often than the pictures do.  It also
+saves a lot of TeX memory.  One last advantage of using the METAFONT driver
+is that the DVI file really remains device independent, because no \\special
+commands are used as in the eepic and tpic drivers."
+
+   </body></html>
+

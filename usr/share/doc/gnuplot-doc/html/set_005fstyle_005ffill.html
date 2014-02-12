@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>set_style_fill - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="style.html#style" title="style">
+<link rel="prev" href="set_005fstyle_005fdata.html#set_005fstyle_005fdata" title="set_style_data">
+<link rel="next" href="set_005fstyle_005ffunction.html#set_005fstyle_005ffunction" title="set_style_function">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="set_style_fill"></a>
+<a name="set_005fstyle_005ffill"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="set_005fstyle_005ffunction.html#set_005fstyle_005ffunction">set_style_function</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="set_005fstyle_005fdata.html#set_005fstyle_005fdata">set_style_data</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="style.html#style">style</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.61.3 set style fill</h5>
+
+<!-- ?commands set style fill -->
+<!-- ?commands show style fill -->
+<!-- ?set style fill -->
+<!-- ?show style fill -->
+<p><a name="index-fillstyle-543"></a>
+The `set style fill` command is used to set the default style of the plot
+elements in plots with boxes, histograms, candlesticks and filledcurves. 
+This default can be superseded by fillstyles attached to individual plots. 
+See also 'set style rectangle'.
+
+   <p>Syntax:
+<pre class="example">           set style fill {empty
+                           | {transparent} solid {&lt;density&gt;}
+                           | {transparent} pattern {&lt;n&gt;}}
+                          {border {&lt;colorspec&gt;} | noborder}
+     
+</pre>
+   <p>The default fillstyle is `empty`.
+
+   <p>The `solid` option causes filling with a solid color, if the terminal
+supports that. The &lt;density&gt; parameter specifies the intensity of the
+fill color. At a &lt;density&gt; of 0.0, the box is empty, at &lt;density&gt; of 1.0,
+the inner area is of the same color as the current linetype. 
+Some terminal types can vary the density continuously; others implement
+only a few levels of partial fill.  If no &lt;density&gt; parameter is given,
+it defaults to 1.
+
+   <p>The `pattern` option causes filling to be done with a fill pattern supplied
+by the terminal driver.  The kind and number of available fill patterns
+depend on the terminal driver.  If multiple datasets using filled boxes are
+plotted, the pattern cycles through all available pattern types, starting
+from pattern &lt;n&gt;, much as the line type cycles for multiple line plots.
+
+   <p>The `empty` option causes filled boxes not to be filled. This is the default.
+
+   <p>By default, <a href="border.html#border">border</a>, the box is bounded by a solid line of the current
+linetype. `border &lt;colorspec&gt;` allows you to change the color of the border. 
+`noborder` specifies that no bounding lines are drawn.
+
+<p class="noindent">&mdash; SET STYLE FILL TRANSPARENT &mdash;
+
+<!-- ?commands set style fill transparent -->
+<!-- ?set style fill transparent -->
+<!-- ?fillstyle transparent -->
+   <p><a name="index-transparent-544"></a>
+Some terminals support the attribute `transparent` for filled areas. 
+In the case of transparent solid fill areas, the `density` parameter is
+interpreted as an alpha value; that is, density 0 is fully transparent,
+density 1 is fully opaque.  In the case of transparent pattern fill, the
+background of the pattern is either fully transparent or fully opaque.
+
+<pre class="example">           terminal   solid pattern    pm3d
+           --------------------------------
+           gif           no     yes      no
+           jpeg         yes      no     yes
+           pdf          yes     yes     yes
+           png    TrueColor   index     yes
+           post          no     yes      no
+           svg          yes      no     yes
+           wxt          yes     yes     yes
+           x11           no     yes      no
+     
+</pre>
+   <p>Note that there may be additional limitations on the creation or viewing of
+graphs containing transparent fill areas.  For example, the png terminal can
+only use transparent fill if the "truecolor" option is set.  Some pdf viewers
+may not correctly display the fill areas even if they are correctly described
+in the pdf file. Ghostscript/gv does not correctly display pattern-fill areas
+even though actual PostScript printers generally have no problem.
+
+   </body></html>
+

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 2.  Installation de VLS</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, VLS, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB" /><link rel="start" href="index.html" title="Guide de l'utilisateur de VLS" /><link rel="up" href="index.html" title="Guide de l'utilisateur de VLS" /><link rel="prev" href="ch01.html" title="Chapter 1. Introduction" /><link rel="next" href="ch03.html" title="Chapter 3.  Concepts et mode de fonctionnement" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. 
+
+Installation de VLS
+
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="install"></a>Chapter 2. 
+
+Installation de VLS
+
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch02.html#id2568059">
+
+Installation de VLS
+
+</a></span></dt><dt><span class="sect1"><a href="ch02.html#id2568159">
+
+Désinstallation de VLS
+
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2568059"></a>
+
+Installation de VLS
+
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2568549"></a>Windows</h3></div></div></div><p>
+Téléchargez le fichier Zip depuis <a class="ulink" href="http://www.videolan.org/streaming/download-vls-windows.html" target="_top">la
+page de téléchargement de VLS pour Windows</a>, décompressez-le, et
+lancez <code class="filename">setup.exe</code>
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2568069"></a>GNULinux &amp; Mac OS X</h3></div></div></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2568073"></a>
+Installez les librairies
+</h4></div></div></div><p>
+Plusieurs librairies sont requises
+:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>libdvbpsi</em></span> 
+(obligatoire)
+</p></li><li><p><span class="emphasis"><em>libdvdcss</em></span>
+pour lire des DVDs encryptés
+,</p></li><li><p><span class="emphasis"><em>libdvdread</em></span>
+pour diffuser des DVDs
+,</p></li><li><p><span class="emphasis"><em>libdvb</em></span>
+pour pouvoir diffuser depuis une carte DVB
+(satellite ou télévision numérique terrestre)
+.</p></li></ul></div><p>
+Téléchargez les librairies depuis la <a class="ulink" href="http://www.videolan.org/streaming/download-vls-sources.html" target="_top">page
+des sources de VLS</a>
+.</p><p>
+Pour chaque librairie, décompressez,
+configurez (sauf pour <span class="emphasis"><em>libdvb</em></span> qui n'a pas de
+<span class="emphasis"><em>./configure</em></span>), compilez et installez
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>tar xvzf library.tar.gz</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>cd library</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>./configure</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>make</code></strong>
+<code class="prompt"># </code><strong class="userinput"><code>make install</code></strong>
+</pre><p>
+Vérifiez que le fichier de configuration
+<code class="filename">/etc/ld.so.conf</code> contient la ligne
+ :</p><pre class="programlisting">
+/usr/local/lib
+</pre><p>
+Dans le cas contraire, ajoutez-la, et lancez
+starten Sie dann
+ :</p><pre class="screen">
+<code class="prompt"># </code><strong class="userinput"><code>ldconfig</code></strong>
+</pre></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2570059"></a>
+Installez VLS
+</h4></div></div></div><p>
+Téléchargez les sources de la dernière version :
+récupérez le fichier <code class="filename">vls-version.tar.gz</code>de la <a class="ulink" href="http://www.videolan.org/streaming/download-vls-sources.html" target="_top">page
+des sources de VLS</a>. Décompressez-la et générez
+<span class="emphasis"><em>./configure</em></span> 
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>tar xvzf vls-version.tar.gz</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>cd vls-version</code></strong>
+</pre><p>
+Pour avoir la liste des options, faites
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./configure --help</code></strong>
+</pre><p>
+Configurez ensuite VLS
+:</p><div class="itemizedlist"><ul type="disc"><li><p>
+pour un VLS simple, sans support de DVD, faites
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./configure --disable-dvd</code></strong>
+</pre></li><li><p>
+pour un VLS avec support du DVD, faites
+ :</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./configure</code></strong>
+</pre></li><li><p>
+pour un VLS avec support du DVB, faites
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./configure --enable-dvb --with-dvb=PATH_TO_DVB_DRIVERS --with-libdvb=PATH_TO_LIBDVB</code></strong>
+</pre></li></ul></div><p>
+Puis, compilez et installez
+ :</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>make</code></strong>
+<code class="prompt"># </code><strong class="userinput"><code>make install</code></strong>
+</pre><p>
+Vous pouvez également faire <span class="command"><strong>make
+uninstall</strong></span>, <span class="command"><strong>make clean</strong></span> ou <span class="command"><strong>make
+distclean</strong></span>
+.</p></div></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2568159"></a>
+
+Désinstallation de VLS
+
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2568523"></a>Windows</h3></div></div></div><p>
+Allez dans le <span class="emphasis"><em>Panneau de
+contrôle</em></span>, cliquez sur <span class="emphasis"><em>Ajoutez et supprimer des
+programmes</em></span>, choisissez <span class="emphasis"><em>VLS</em></span> et cliquez
+sur <span class="emphasis"><em>Modifier/Enlever</em></span> et suivez les étapes pour
+désinstaller le programme
+.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2568516"></a>
+Si vous avez compilé VLS depuis les sources
+</h3></div></div></div><p>
+Allez dans le répertoire contenant les sources et 
+faites
+:</p><pre class="screen">
+<code class="prompt"># </code><strong class="userinput"><code>make uninstall</code></strong>
+</pre><p>
+Vous pouvez ensuite enlever les sources de VLS
+.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. Introduction </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. 
+
+Concepts et mode de fonctionnement
+
+</td></tr></table></div></body></html>

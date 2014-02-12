@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>boxwidth - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="border.html#border" title="border">
+<link rel="next" href="clabel.html#clabel" title="clabel">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="boxwidth"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="clabel.html#clabel">clabel</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="border.html#border">border</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.8 boxwidth</h4>
+
+<!-- ?commands set boxwidth -->
+<!-- ?commands show boxwidth -->
+<!-- ?set boxwidth -->
+<!-- ?show boxwidth -->
+<p><a name="index-boxwidth-404"></a><a name="index-boxwidth-405"></a>
+
+   <p>The <a href="boxwidth.html#boxwidth">boxwidth</a> command is used to set the default width of boxes in the
+<a href="boxes.html#boxes">boxes</a>, <a href="boxerrorbars.html#boxerrorbars">boxerrorbars</a>, <a href="candlesticks.html#candlesticks">candlesticks</a> and <a href="histograms.html#histograms">histograms</a> styles.
+
+   <p>Syntax:
+<pre class="example">           set boxwidth {&lt;width&gt;} {absolute|relative}
+           show boxwidth
+     
+</pre>
+   <p>By default, adjacent boxes are extended in width until they touch each other. 
+A different default width may be specified using the <a href="boxwidth.html#boxwidth">boxwidth</a> command. 
+`Relative` widths are interpreted as being a fraction of this default width.
+
+   <p>An explicit value for the boxwidth is interpreted as being a number of units
+along the current x axis (`absolute`) unless the modifier `relative` is given. 
+If the x axis is a log-scale (see `set log`) then the value of boxwidth is
+truly "absolute" only at x=1; this physical width is maintained everywhere
+along the axis (i.e. the boxes do not become narrower the value of x
+increases). If the range spanned by a log scale x axis is far from x=1,
+some experimentation may be required to find a useful value of boxwidth.
+
+   <p>The default is superseded by explicit width information taken from an extra
+data column in styles <a href="boxes.html#boxes">boxes</a> or <a href="boxerrorbars.html#boxerrorbars">boxerrorbars</a>.  In a four-column data set,
+the fourth column will be interpreted as the box width unless the width is set
+to -2.0, in which case the width will be calculated automatically. 
+See <a href="boxes.html#boxes">boxes</a> and <a href="boxerrorbars.html#boxerrorbars">boxerrorbars</a> for more details.
+
+   <p>To set the box width to automatic use the command
+<pre class="example">           set boxwidth
+     
+</pre>
+   <p>or, for four-column data,
+<pre class="example">           set boxwidth -2
+     
+</pre>
+   <p>The same effect can be achieved with the <a href="using.html#using">using</a> keyword in `plot`:
+<pre class="example">           plot 'file' using 1:2:3:4:(-2)
+     
+</pre>
+   <p>To set the box width to half of the automatic size use
+<pre class="example">           set boxwidth 0.5 relative
+     
+</pre>
+   <p>To set the box width to an absolute value of 2 use
+<pre class="example">           set boxwidth 2 absolute
+     
+</pre>
+   </body></html>
+

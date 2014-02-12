@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 12.  Add a channel information service</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch11.html" title="Chapter 11.  Video à la demande" /><link rel="next" href="apa.html" title="Appendix A. GNU General Public License" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 12. 
+Add a channel information service
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch11.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="sap"></a>Chapter 12. 
+Add a channel information service
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch12.html#id2579262">
+Send announces when streaming with VLC
+</a></span></dt><dt><span class="sect1"><a href="ch12.html#id2580155">
+Send announces for the programs streamed by VLS with the
+mini-SAP-server
+</a></span></dt><dt><span class="sect1"><a href="ch12.html#id2580328">
+Start VLC(s) on the client(s)
+</a></span></dt></dl></div><p>Typing multicast addresses is not very fun... that's why you need
+a channel information service ! VideoLAN has implemented a channel
+information service based on the SAP/SDP standard. The SAP announces
+about the multicast programs are sent on the network (via the multicast
+address <span class="emphasis"><em>224.2.127.254</em></span> reserved for this purpose).
+On the client side, VLCs receive these annouces and automatically add
+the programs announced to their playlist.</p><p>VLC can send the SAP announces associated with the programs
+it is streaming. VLS can't do that, but an independant program, the
+mini-SAP-server, can send the announces for the programs sent by
+VLS.</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2579262"></a>
+Send announces when streaming with VLC
+</h2></div></div></div><p>
+To send announces with VLC, you need to use the complex syntax of
+VLC's stream output, like this:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#standard{access=udp,url=239.255.12.42,sap,name="Test Stream"}' --ttl 12</code></strong></pre><p>where <code class="filename">video1.xyz</code> is the file you want
+to stream, <span class="emphasis"><em>239.255.12.42</em></span> is the multicast IP
+address you want to stream on, <span class="emphasis"><em>Test Stream</em></span> is
+the name that will be used for this program in the SAP announces and
+<span class="emphasis"><em>12</em></span> is the value of the TTL (Time To Live) of the
+stream and of the SAP announces.</p><p>
+To do the SAP announces in IPv6, just add the
+<span class="emphasis"><em>sap_ipv=6</em></span> option:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#standard{access=udp,url=239.255.12.42,sap,name="Test Stream",sap_ipv=6}' --ttl 12</code></strong>
+</pre></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2580155"></a>
+Send announces for the programs streamed by VLS with the
+mini-SAP-server
+</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+The mini-SAP-server is only available for Linux and Mac OSX.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2580166"></a>
+Install the mini-SAP-server
+</h3></div></div></div><p>
+Download the latest version of the mini-SAP-server from the <a class="ulink" href="http://www.videolan.org/streaming/" target="_top">streaming download page</a>.
+</p><p>
+Install-it:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>tar xvzf miniSAPserver-version.tar.gz</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>cd miniSAPserver-version</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>./configure</code></strong>
+<code class="prompt">% </code><strong class="userinput"><code>make</code></strong>
+</pre></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2580233"></a>
+Configure the mini-SAP-server
+</h3></div></div></div><p>Edit the configuration file <code class="filename">sap.cfg</code> shipped
+with the tarball. It should contain a global section with the Time To
+Live (TTL) and the IP version (IPv4 or IPv6) used for the SAP announces
+and a section per program announced. Use the comments to understand each
+parameter.</p><p>The Time To Live option indicates the maximum number of routers
+that the SAP announce packets can cross before being dropped.</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2580258"></a>
+Run the mini-SAP-server
+</h3></div></div></div><p>
+Start the mini-SAP-server:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./sapserver -c sap.cfg</code></strong>
+</pre><p>
+If you want to run the mini-SAP-server in the
+background, use the <span class="command"><strong>-d</strong></span> command line switch. For
+instance:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>./sapserver -d -c sap.cfg</code></strong>
+</pre><p>
+You can also omit the <span class="command"><strong>-c</strong></span> 
+command line switch if your config file is <code class="filename">/etc/sap.cfg</code>.
+
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2580328"></a>
+Start VLC(s) on the client(s)
+</h2></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+If the announces are sent in IPv4 :
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --extraintf sap</code></strong>
+</pre></li><li><p>
+If the announces are sent in IPv6 :
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --extraintf sap --sap-ipv6</code></strong>
+</pre></li></ul></div><p>Then open the playlist: you should see the names of the programs
+announced in SAP. When you double-click on the name of a program,
+VLC will subscribe to the multicast address and start to play the stream
+!</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch11.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 11. 
+Video à la demande
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Appendix A. GNU General Public License</td></tr></table></div></body></html>

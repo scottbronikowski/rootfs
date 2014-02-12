@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>color_box - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="cntrparam.html#cntrparam" title="cntrparam">
+<link rel="next" href="colornames.html#colornames" title="colornames">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="color_box"></a>
+<a name="color_005fbox"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="colornames.html#colornames">colornames</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="cntrparam.html#cntrparam">cntrparam</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.12 color box</h4>
+
+<!-- ?commands set colorbox -->
+<!-- ?commands show colorbox -->
+<!-- ?commands unset colorbox -->
+<!-- ?set colorbox -->
+<!-- ?show colorbox -->
+<!-- ?unset colorbox -->
+<p><a name="index-colorbox-413"></a>
+
+   <p>The color scheme, i.e. the gradient of the smooth color with min_z and
+max_z values of <a href="pm3d.html#pm3d">pm3d</a>'s <a href="palette.html#palette">palette</a>, is drawn in a color box unless `unset
+colorbox`.
+
+<pre class="example">           set colorbox
+           set colorbox {
+                      { vertical | horizontal }
+                      { default | user }
+                      { origin x, y }
+                      { size x, y }
+                      { front | back }
+                      { noborder | bdefault | border [line style] }
+                    }
+           show colorbox
+           unset colorbox
+     
+</pre>
+   <p>Color box position can be `default` or `user`.  If the latter is specified the
+values as given with the <a href="origin.html#origin">origin</a> and <a href="size.html#size">size</a> subcommands are used. The box
+can be drawn after (`front`) or before (`back`) the graph or the surface.
+
+   <p>The orientation of the color gradient can be switched by options `vertical`
+and `horizontal`.
+
+   <p>`origin x, y` and `size x, y` are used only in combination with the `user`
+option. The x and y values are interpreted as screen coordinates by default,
+and this is the only legal option for 3D plots. 2D plots, including splot with
+`set view map`, allow any coordinate system to be specified.  Try for example:
+<pre class="example">         set colorbox horiz user origin .1,.02 size .8,.04
+</pre>
+   <p>which will draw a horizontal gradient somewhere at the bottom of the graph.
+
+   <p><a href="border.html#border">border</a> turns the border on (this is the default). `noborder` turns the border
+off. If an positive integer argument is given after <a href="border.html#border">border</a>, it is used as a
+line style tag which is used for drawing the border, e.g.:
+<pre class="example">         set style line 2604 linetype -1 linewidth .4
+         set colorbox border 2604
+</pre>
+   <p>will use line style `2604`, a thin line with the default border color (-1)
+for drawing the border. `bdefault` (which is the default) will use the default
+border line style for drawing the border of the color box.
+
+   <p>The axis of the color box is called `cb` and it is controlled by means of the
+usual axes commands, i.e. `set/unset/show` with <a href="cbrange.html#cbrange">cbrange</a>, `[m]cbtics`,
+`format cb`, `grid [m]cb`, <a href="cblabel.html#cblabel">cblabel</a>, and perhaps even <a href="cbdata.html#cbdata">cbdata</a>, `[no]cbdtics`,
+`[no]cbmtics`.
+
+   <p>`set colorbox` without any parameter switches the position to default. 
+`unset colorbox` resets the default parameters for the colorbox and switches
+the colorbox off.
+
+   <p>See also help for <a href="pm3d.html#pm3d">pm3d</a>, <a href="palette.html#palette">palette</a>, <a href="pm3d.html#pm3d">pm3d</a>, and `set style line`.
+
+   </body></html>
+

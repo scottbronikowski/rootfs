@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>iteration_ - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plot.html#plot" title="plot">
+<link rel="prev" href="ranges.html#ranges" title="ranges">
+<link rel="next" href="title.html#title" title="title">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="iteration_"></a>
+<a name="iteration_005f"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="title.html#title">title</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ranges.html#ranges">ranges</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plot.html#plot">plot</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.14.7 iteration</h4>
+
+<!-- ?commands plot iteration -->
+<!-- ?commands splot iteration -->
+<!-- ?plot iteration -->
+<!-- ?splot iteration -->
+<p><a name="index-iteration-355"></a><a name="index-iteration-356"></a>
+
+   <p>If many similar files or functions are to be plotted together, it may be
+convenient to do so by iterating over a shared plot command.
+
+   <p>Syntax:
+<pre class="example">           plot for [&lt;variable&gt; = &lt;start&gt; : &lt;end&gt; {:&lt;increment&gt;}]
+           plot for [&lt;variable&gt; in "string of words"]
+     
+</pre>
+   <p>The scope of an iteration ends at the next comma or the end of the
+command, whichever comes first.  Iteration can not be nested.
+
+   <p>This will plot one curve, sin(3x), because iteration ends at the comma
+<pre class="example">           plot for [i=1:3] j=i, sin(j*x)
+</pre>
+   <p>This will plot three curves because there is no comma after the definition of j
+<pre class="example">           plot for [i=1:3] j=i sin(j*x)
+     
+</pre>
+   <p>Example:
+<pre class="example">           plot for [dataset in "apples bananas"] dataset."dat" title dataset
+     
+</pre>
+   <p>In this example iteration is used both to generate a file name and a
+corresponding title.
+
+   <p>Example:
+<pre class="example">           file(n) = sprintf("dataset_%d.dat",n)
+           splot for [i=1:10] file(i) title sprintf("dataset %d",i)
+     
+</pre>
+   <p>This example defines a string-valued function that generates file names,
+and plots ten such files together. The iteration variable ('i' in this
+example) is treated as an integer, and may be used more than once.
+
+   <p>Example:
+<pre class="example">           set key left
+           plot [0:1] for [n=1:4] x**n sprintf("%d",n)
+     
+</pre>
+   <p>This example plots a family of functions.
+
+   <p>Example:
+<pre class="example">           list = "apple banana cabbage daikon eggplant"
+           item(n) = word(list,n)
+           plot for [i=1:words(list)] item[i].".dat" title item(i)
+           list = "new stuff"
+           replot
+     
+</pre>
+   <p>This example steps through a list and plots once per item. 
+Because the items are retrieved dynamically, you can change the list
+and then replot.
+
+   <p>Example:
+<pre class="example">           list = "apple banana cabbage daikon eggplant"
+           plot for [i in list] i.".dat" title i
+           list = "new stuff"
+           replot
+     
+</pre>
+   <p>This is example does exactly the same thing as the previous example, but uses
+the string iterator form of the command rather than an integer iterator.
+
+   </body></html>
+

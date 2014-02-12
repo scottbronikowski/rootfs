@@ -1,0 +1,27 @@
+libsaxon-java for debian
+-------------------------
+
+To process with Saxon, issue a command like the following (all on one line):
+
+java -classpath /usr/share/java/saxon.jar com.icl.saxon.StyleSheet \
+      file.xml stylesheet.xsl 
+
+See the html docs for more details.
+
+SECURITY WARNING:
+By default, saxon allows arbitrary java methods to be executed from an XSLT.
+If you do not trust the XSLTs or you use saxon inside e.g. servlet where you 
+cannot control which stylesheets get executed, be sure to disable the use of 
+extension functions.
+
+How to disable execution of extensions:
+
+From the commandline:
+Use the -noext switch to suppress calls on extension functions, other than 
+system-supplied Saxon and EXSLT extension functions.
+
+From inside Java:
+Set the Attribute 'FeatureKeys.ALLOW_EXTERNAL_FUNCTIONS' to 'false'
+on the TransformerFactory used to process the Stylesheet.
+
+-  Wolfgang Baer <WBaer@gmx.de>  Thu,  5 Jan 2006 11:25:01 +0100

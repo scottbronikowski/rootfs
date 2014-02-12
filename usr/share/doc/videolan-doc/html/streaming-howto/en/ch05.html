@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 5.  VLM - Multiple streaming and Video on demand</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DV, DVB, DVD, DivX" /><link rel="start" href="index.html" title="VideoLAN Streaming Howto" /><link rel="up" href="index.html" title="VideoLAN Streaming Howto" /><link rel="prev" href="ch04.html" title="Chapter 4.  Examples for advanced use of VLC's stream output (transcoding, multiple streaming, etc...)" /><link rel="next" href="ch06.html" title="Chapter 6.  Receive and save a stream" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. 
+VLM - Multiple streaming and Video on demand
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch06.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="vlm"></a>Chapter 5. 
+VLM - Multiple streaming and Video on demand
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch05.html#id2575052">VLM</a></span></dt><dt><span class="sect1"><a href="ch05.html#id2576429">Examples</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2575052"></a>VLM</h2></div></div></div><p><span class="emphasis"><em>VideoLAN Manager</em></span> is a small media manager
+designed to control multiple streams with <span class="emphasis"><em>only one instance of
+VLC</em></span>. It allows multiple streaming and video on demand (VoD).
+This manager being a new feature, it can only be controlled by the telnet
+interface or the http interface.</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575070"></a>Interfaces</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2575075"></a>Telnet interface</h4></div></div></div><p>You can launch the telnet interface as a common interface using
+the command line :</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc --intf telnet</code></strong>
+</pre><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc --extraintf telnet</code></strong>
+</pre><p>The telnet interface can also be launched in the wxWindows
+interface :</p><div class="mediaobject"><img src="images/streaming-howto/intf-wx-extraintf-telnet.jpg" longdesc="ld-id2575728.html" /><div class="longdesc-link" align="right"><br clear="all" /><span class="longdesc-link">[<a href="ld-id2575728.html" target="longdesc">D</a>]</span></div><div class="caption"><p>Launching the Telnet interface - wxWindows interface</p></div></div><p>The default port is 4212. The default password is
+"admin". These can be changed using <span class="command"><strong>--telnet-port
+&lt;integer&gt;</strong></span> and <span class="command"><strong>--telnet-password
+&lt;string&gt;</strong></span> command line options. They can also be changed
+in the preferences panel when using the wxWindows interface in the
+<span class="emphasis"><em>Modules</em></span>-&gt;<span class="emphasis"><em>interface</em></span>-&gt;<span class="emphasis"><em>
+telnet</em></span> section (check the <span class="emphasis"><em>Advanced
+options</em></span> checkbox).</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2575788"></a>HTTP interface</h4></div></div></div><p>Launching the HTTP interface is described in the <a class="ulink" href="http://www.videolan.org/doc/" target="_top">Play-with-VLC Howto.</a></p><p>To access the vlm section of the http interface, use the following
+URL: <span class="emphasis"><em> http://host:port/vlm.html</em></span> (<span class="emphasis"><em>http://host:port/vlm/</em></span> for VLC 0.8.4 and older).</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575815"></a>VLM Elements</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2575820"></a>Medias</h4></div></div></div><p>A <span class="emphasis"><em>Media</em></span> is composed with a list of inputs (the video and audio
+streams you want to stream), an output (how and where you want to stream
+them) and some options.</p><p>There are two types of medias:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>vod</em></span>: A vod media is commonly used
+for Video on Demand. It will be launched only if a vod client asks for
+it.</p></li><li><p><span class="emphasis"><em>broadcast</em></span>: A broadcast media is
+very close to a TV program or channel. It is launched, stopped or paused
+by the administrator and may be repeated several times. The client has
+no control over this media.</p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2575860"></a>Schedules</h4></div></div></div><p>A <span class="emphasis"><em>Schedule</em></span> is a script with a date. When the
+schedule date is reached, the script is launched. There are several
+options available like a period or a number of repetitions.</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2575875"></a>Command line syntax</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2575880"></a>Command lines</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="command"><strong>help</strong></span> : Displays an exhaustive command
+lines list</p></li><li><p><span class="command"><strong>new (name) vod|broadcast|schedule
+[properties]</strong></span> : Create a new vod, broadcast or schedule
+element. Element names must be unique and cannot be "media" or
+"schedule". You can specify properties in this command line or later on
+by using the <span class="command"><strong>setup</strong></span> command. </p></li><li><p><span class="command"><strong>setup (name) (properties)</strong></span> : Set
+an elements property. See <a class="xref" href="ch05.html#vlmprop" title="Media Properties">Media Properties</a>.</p></li><li><p><span class="command"><strong>show [(name)|media|schedule]</strong></span>
+: Display current element states and configurations.
+</p><div class="itemizedlist"><ul type="circle"><li><p><span class="command"><strong>show (name)</strong></span> - Specify
+an element's name to show all information concerning this
+element.</p></li><li><p><span class="command"><strong>show media</strong></span> displays
+a summary of media states.</p></li><li><p><span class="command"><strong>show
+schedule</strong></span> displays a summary of schedule
+states.</p></li></ul></div></li><li><p><span class="command"><strong>del (name)|all|media|schedule</strong></span>
+: Delete an element or a group of elements. If the
+element wasn't stopped, it is first stopped before being
+deleted.</p><div class="itemizedlist"><ul type="circle"><li><p><span class="command"><strong>del
+(name)</strong></span> - Delete the (name)
+element.</p></li><li><p><span class="command"><strong>del all</strong></span>
+- Delete all elements</p></li><li><p><span class="command"><strong>del
+media</strong></span> - Delete all media
+elements.</p></li><li><p><span class="command"><strong>del
+schedule</strong></span> - Delete all schedule
+elements</p></li></ul></div></li><li><p><span class="command"><strong>control (name) [instance_name]
+(command)</strong></span> : Change the state of the (instance_name) instance
+of the (name) media. If (instance_name) isn't specified, the control
+command affects the default instance. See <a class="xref" href="ch05.html#vlmctrl" title="Control Commands">Control Commands</a> for available control commands.</p></li><li><p><span class="command"><strong>save (config_file)</strong></span> : Save all media
+and schedule configurations in the specified config file. The config
+file path is relative to the directory in which vlc was launched. If
+the file exists it will be overwritten. Note that states, such as
+playing, paused or stop, are not saved. See <a class="xref" href="ch05.html#vlmconf" title="Configuration Files">Configuration Files </a> for more info.</p></li><li><p><span class="command"><strong>load (config_file)</strong></span> : Load a
+configuration file. The config file path is relative to the directory in
+which vlc was launched. See <a class="xref" href="ch05.html#vlmconf" title="Configuration Files">Configuration Files </a>
+for more info.</p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="vlmprop"></a>Media Properties</h4></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Except the "append" property, all properties can be followed
+by another one.</p></div><div class="itemizedlist"><ul type="disc"><li><p><span class="command"><strong>input (input_name)</strong></span> : Add an input to
+the end of the media's input list.</p></li><li><p><span class="command"><strong>output (output_name)</strong></span> : Define the
+media's output. The syntax is the same as the vlc ":sout=..." vlc
+option but you do not have to put the ":sout=..." string. See <a class="xref" href="ch03.html" title="Chapter 3.  Advanced streaming using the command line">
+Advanced streaming using the command line</a> for more information concerning
+stream outputs (sout).</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>You do not have to specify an output
+for vod elements.</p></div></li><li><p><span class="command"><strong>option (option_name)[=value]</strong></span> : Adds
+the (option_name) to the media option list. The syntax is equivalent
+to the ":(option)=..." option , but you do not have to put the ":"
+string. Options are global: they are applied to all inputs of the
+media.</p></li><li><p><span class="command"><strong>enabled|disabled</strong></span> : Enable or Disable
+the media. If a media is disabled, it cannot be streamed, paused,
+launched by a schedule, or played as VoD.</p></li><li><p><span class="command"><strong>loop|unloop (broadcast only)</strong></span> : If
+a media with the "loop" option receives the "play" command, it will
+automatically restart to play the input list once the end of the input
+list is reached. </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><span class="command"><strong>loop|unloop</strong></span> is only used
+for broadcast media types.</p></div></li><li><p><span class="command"><strong>mux (mux_name)</strong></span> : This option
+should only be specified if you want the elementary streams to
+be sent encapsulated instead of raw. The (mux_name) should be
+specified as a four characters length identifier such as mp2t for
+MPEG TS or mp2p for MPEG PS. See <a class="xref" href="ch01.html" title="Chapter 1.  Streaming, Muxers and Codecs">
+Streaming, Muxers and Codecs</a>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The <span class="command"><strong>mux</strong></span> property is only used for vod
+media types.</p></div></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2576226"></a>Schedule Properties</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="command"><strong>enabled|disabled</strong></span> : A disabled
+schedule will never be launched.</p></li><li><p><span class="command"><strong>append
+(command_until_rest_of_the_line)</strong></span> : Add a command to the
+command line lit. The command line can be every command VLM can
+understand.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The rest of the line will be considered as
+part of the command line. You cannot put another option after the
+<span class="command"><strong>append</strong></span> one.</p></div></li><li><p><span class="command"><strong>date
+(year)/(month)/(day)-(hour):(minutes):(seconds)|now</strong></span>
+: Specify the first date the schedule should
+be launched. You can specify a date using the
+<span class="command"><strong>(year)/(month)/(day)-(hour):(minutes):(seconds)</strong></span>
+format (example: 2004/11/16-00:43:12) or using the
+<span class="command"><strong>now</strong></span> keyword. If <span class="command"><strong>now</strong></span> is used, the
+schedule will be launched as soon as possible (i.e. as soon as it is
+enabled) and the current date will be used as the first date of the
+schedule.</p></li><li><p><span class="command"><strong>period
+(years_aka_12_months)/(months_aka_30_days)/(days)-(hours):(minutes):(sec
+onds)</strong></span> : Specify the period of time a schedule must wait
+for launching itself another time. (Months are considered as 30
+days, Years as 12 months) If a period is specified without a
+<span class="command"><strong>repeat</strong></span> property, the schedule will be launched
+endlessly.</p></li><li><p><span class="command"><strong>repeat (number_of_repetitions)</strong></span> :
+Specify the number of times the schedule will be launched again. For
+example, if a schedule has <span class="command"><strong>repeat 11</strong></span>, it will be
+launched 12 times.</p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="vlmctrl"></a>Control Commands</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="command"><strong>play</strong></span> : Stat a broadcast media. The
+media begins to launch the first item of the input list, then launches
+the next one and so on. (like a play list)</p></li><li><p><span class="command"><strong>pause</strong></span> : Put the broadcast media in
+paused status.</p></li><li><p><span class="command"><strong>stop</strong></span> : Stop the broadcast
+media.</p></li><li><p><span class="command"><strong>seek (percentage)</strong></span> : Seek in the
+current playing item of the input list.</p></li></ul></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="vlmconf"></a>Configuration Files </h3></div></div></div><p>A VLM configuration file is a list of command lines : one line
+corresponds to one command line.</p><p>To create a configuration file, just edit a text file and type
+a list of VLM commands. Beware of recursive calls: you an put a
+<span class="command"><strong>load (file)</strong></span> in a configuration file which can lead to
+recursive inclusion of the same file and result in VLC's crash.</p><p>As of versions &gt; 0.8.1, any line where the first non white space
+character is a # is considered as a comment.</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2576429"></a>Examples</h2></div></div></div><p>This section provides several small vlm configuration files.</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2576438"></a>Multiple streaming</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2576443"></a>Simple broadcasting</h4></div></div></div><pre class="programlisting">
+new channel1 broadcast enabled
+setup channel1 input http://host.mydomain/movie.mpeg
+setup channel1 output #standard{mux=ts,access=udp,dst=239.255.1.1,sap,name="Channel 1"}
+
+new channel2 broadcast enabled
+setup channel2 input udp://@239.255.12.42
+setup channel2 output #standard{mux=ts,access=udp,dst=239.255.1.2,sap,name="Channel 2"}
+
+control channel1 play
+control channel2 play
+</pre></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2576461"></a>Scheduled broadcasting</h4></div></div></div><pre class="programlisting">
+new my_media broadcast enabled
+setup my_media input my_video.mpeg input my_other_movie.mpeg
+setup my_media output #standard{mux=ts,access=udp,dst=239.255.1.1,sap,name="My Media"}
+
+new my_sched schedule enabled
+setup my_sched date 2012/12/12-12:12:12
+setup my_sched append control my_media play
+</pre></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2576477"></a>Video On Demand</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2576482"></a>Basic example</h4></div></div></div><p>First launch the vlc</p><pre class="screen"><code class="prompt">% </code><strong class="userinput"><code>vlc --ttl 12 -vvv --color -I telnet --telnet-password videolan --rtsp-host 0.0.0.0:5554</code></strong></pre><p>where:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>12</em></span>
+ is the value of the TTL (Time To
+Live) of your IP packets (which means that the stream will be
+able to cross 11 routers).
+</p></li><li><p><span class="emphasis"><em>telnet</em></span>
+ launches the telnet interface of the vlc.
+</p></li><li><p><span class="emphasis"><em>videolan</em></span>
+ is the password to connect to the telnet interface.
+</p></li><li><p><span class="emphasis"><em>0.0.0.0</em></span>
+ is the host address. 
+</p></li><li><p><span class="emphasis"><em>5554</em></span>
+ is the port on which you stream.
+</p></li></ul></div><p>Then you connect to the vlc telnet interface and create the vod object</p><pre class="programlisting">
+new Test vod enabled
+setup Test input my_video.mpg
+</pre><p>You can access to the stream with:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc rtsp://server:5554/Test</code></strong>
+</pre><p>where:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>server</em></span> is the address of the streaming server (IP or DNS)</p></li></ul></div></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. 
+Examples for advanced use of VLC's stream output
+(transcoding, multiple streaming, etc...)
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 6. 
+Receive and save a stream
+</td></tr></table></div></body></html>

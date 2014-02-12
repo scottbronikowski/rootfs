@@ -1,0 +1,1 @@
+../../../../../../share/pyshared/mx/TextTools/Constants/TagTables.py

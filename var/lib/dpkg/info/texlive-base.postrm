@@ -1,0 +1,230 @@
+#!/bin/sh -e
+# common.functions.postrm start
+# $Id: common.functions.postrm 2876 2007-05-22 08:12:07Z frank $
+check_move_back () 
+{
+  orig="$1"
+  new="$2"
+  if [ -r "$new" ] ; then
+    mkdir -p $(dirname "$orig")
+    mv "$new" "$orig" 
+  fi
+}
+
+handle_config_file_postrm() 
+{
+    cfgfile="$1"
+    action="$2"
+    version="$3"
+    case "$action" in
+      abort-upgrade)
+	if dpkg --compare-versions "$version" ge 2007; then
+	  return 0
+	fi
+	;;
+      *)
+	return 0
+	;;
+    esac
+    conf_relpath=${cfgfile#/etc/texmf/}
+    conf_oldpath="/etc/texmf/texlive/$conf_relpath"
+    case "$cfgfile" in 
+        /etc/texmf/dvips/config/*)
+	    # special case for dvips config
+	    conf_oldpath="/etc/texmf/texlive/dvips/${conf_oldpath#/etc/texmf/dvips/config}"
+            ;;
+        # files which were only present in tetex
+        /etc/texmf/texdoctk/texdoctk.dat)
+	    conf_oldpath="/etc/texdoctk/texdoctk.dat"
+            ;;
+        /etc/texmf/xdvi/xdvi.cfg)
+	    # old tetex version
+	    if [ -r "$cfgfile" ]; then
+	      cp $cfgfile /etc/texmf/xdvi.cfg
+	    fi
+            # old texlive version 
+	    conf_oldpath="/etc/texmf/texlive/xdvi.cfg"
+    esac
+    check_move_back $conf_oldpath $cfgfile 
+}
+
+# common.functions.postrm end
+# Local Variables:
+# mode: shell-script
+# End:
+# vim:set expandtab: #
+handle_config_file_postrm /etc/texmf/dvipdfm/config/config $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/alt-rule.pro $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/canonex.cfg $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.bakoma $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.canonex $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.cx $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.deskjet $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.dvired $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.epson $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.ibmvga $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.ljfour $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.luc $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.mbn $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.mga $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.mirrorprint $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.ot2 $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.qms $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.toshiba $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.unms $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/config.xyp $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/cx.cfg $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/deskjet.cfg $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/dfaxhigh.cfg $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/dvired.cfg $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/epson.cfg $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/ibmvga.cfg $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/ljfour.cfg $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/qms.cfg $1 $2
+handle_config_file_postrm /etc/texmf/dvips/config/toshiba.cfg $1 $2
+handle_config_file_postrm /etc/texmf/xdvi/xdvi.cfg $1 $2
+handle_config_file_postrm /etc/texmf/texdoc/texdoc.cnf $1 $2
+handle_config_file_postrm /etc/texmf/texdoctk/texdocrc.defaults $1 $2
+
+# Automatically added by dh_installmenu
+if [ -x "`which update-menus 2>/dev/null`" ]; then update-menus ; fi
+# End automatically added section
+# Automatically added by dh_installtex
+##
+## postrm-tex
+##
+## postrm snippets for registering hyphenation patterns, font maps, and formats
+##
+## Authors:
+##       Florent Rougon <f.rougon@free.fr>
+##       Norbert Preining <preining@logic.at>
+##
+#
+
+dhit_call_update_texmf_config ()
+{
+    if which update-texmf-config >/dev/null; then
+        update-texmf-config $*
+    else
+        echo "update-texmf-config not present: is tex-common installed?" >&2
+    fi
+}
+
+dhit_check_run_without_errors ()
+{
+    silent=0
+    if [ "$1" = "-silent" ] ; then
+        silent=1
+        shift
+    fi
+    if which "$1" >/dev/null; then
+        tempfile=$(mktemp -p /tmp checkrun.XXXXXXXX)
+        if [ $silent = 0 ] ; then
+            printf "Running '$*'.\nThis may take some time..."
+        fi
+        set +e
+        if "$@" > $tempfile 2>&1 ; then
+            rm -f $tempfile
+            [ $silent = 0 ] && echo " done."
+        else
+            echo
+            echo "$* failed. Output has been stored in"
+            echo "$tempfile"
+            echo "If tex-common is not configured you can ignore this error" \
+                 "message!"
+            echo "Otherwise, please include this file if you report a bug."
+            echo
+        fi
+        set -e
+    fi
+
+    return 0
+}
+
+
+case "$1" in
+    remove|disappear)
+        dhit_check_run_without_errors -silent update-updmap --quiet
+        dhit_check_run_without_errors -silent update-language
+        dhit_check_run_without_errors -silent update-fmtutil
+        for i in map hyphen format lsrfull ; do
+            if [ "$i" = lsr ] ; then
+                dhit_call_update_texmf_config lsr
+            fi
+            if [ "$i" = lsrfull ] ; then
+                dhit_call_update_texmf_config lsrfull
+            fi
+            if [ "$i" = map ] ; then
+                dhit_call_update_texmf_config map
+            fi
+            if [ "$i" = allformats ] ; then
+                for fmt in pdftex/etex etex pdftex/pdfetex pdfetex luatex/luatex luatex luatex/dviluatex dviluatex pdftex/pdftex pdftex metafont/mf mf tex/tex tex ; do
+                    rm -f /var/lib/texmf/web2c/$fmt.*
+                done
+            fi
+            if [ "$i" = format ] ; then
+                for fmt in pdftex/etex etex pdftex/pdfetex pdfetex luatex/luatex luatex luatex/dviluatex dviluatex pdftex/pdftex pdftex metafont/mf mf tex/tex tex ; do
+                    rm -f /var/lib/texmf/web2c/$fmt.*
+                done
+            fi
+            if [ "$i" = hyphen ] ; then
+                dhit_call_update_texmf_config hyphen
+            fi
+        done
+    ;;
+
+    purge|upgrade|failed-upgrade|abort-upgrade|abort-install)
+    ;;
+
+    *)
+        echo "postrm called with unknown argument '$1'" >&2
+        exit 1
+    ;;
+esac
+
+# End automatically added section
+# Automatically added by dh_installmime
+if which update-mime >/dev/null 2>&1; then update-mime; fi
+# End automatically added section
+
+# texlive-base.postrm.post 
+# written 2010 by Frank Küster frank@debian.org. this code is probably
+# not copyrightable.  If it is, it may be freely used, distributed
+# and/or modified.
+
+purge_file () {
+  local conffile
+  conffile="$1"
+  for ext in $PURGE_EXTENSIONS; do
+    rm -f "${conffile}.${ext}"
+  done
+  rm -f "${conffile}"
+}
+purge_ucf_file () {
+  local conffile
+  conffile="$1"
+  purge_file $conffile
+  if [ -x /usr/bin/ucf ]; then
+    ucf --purge "${conffile}"
+  fi
+  if [ -x /usr/bin/ucfr ]; then
+    ucfr --purge tex-common "${conffile}"
+  fi
+}
+
+PURGE_EXTENSIONS="ucf-dist ucf-new"
+
+UCF_FILES="\
+    dvips/config/config.ps \
+    tex/generic/config/pdftexconfig.tex \
+    dvipdfmx/dvipdfmx.cfg \
+    xdvi/XDvi"
+
+case $1 in
+  purge)
+    for file in $UCF_FILES; do
+      purge_ucf_file /etc/texmf/$file
+    done
+    ;;
+esac
+exit 0

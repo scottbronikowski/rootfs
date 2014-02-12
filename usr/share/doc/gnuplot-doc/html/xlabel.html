@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>xlabel - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="xdtics.html#xdtics" title="xdtics">
+<link rel="next" href="xmtics.html#xmtics" title="xmtics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="xlabel"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="xmtics.html#xmtics">xmtics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="xdtics.html#xdtics">xdtics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.88 xlabel</h4>
+
+<!-- ?commands set xlabel -->
+<!-- ?commands show xlabel -->
+<!-- ?set xlabel -->
+<!-- ?show xlabel -->
+<p><a name="index-xlabel-606"></a><a name="index-xlabel-607"></a>
+
+   <p>The <a href="xlabel.html#xlabel">xlabel</a> command sets the x axis label.  Similar commands set labels
+on the other axes.
+
+   <p>Syntax:
+<pre class="example">           set xlabel {"&lt;label&gt;"} {offset &lt;offset&gt;} {font "&lt;font&gt;{,&lt;size&gt;}"}
+                      {{textcolor | tc} {lt &lt;line_type&gt; | default}} {{no}enhanced}
+                      {rotate by &lt;degrees&gt;}
+           show xlabel
+     
+</pre>
+   <p>The same syntax applies to <a href="x2label.html#x2label">x2label</a>, <a href="ylabel.html#ylabel">ylabel</a>, <a href="y2label.html#y2label">y2label</a>, <a href="zlabel.html#zlabel">zlabel</a> and
+<a href="cblabel.html#cblabel">cblabel</a>.
+
+   <p>If &lt;offset&gt; is specified by either x,y or x,y,z the label is moved by the
+given offset.  It may be preceded by `first`, `second`, `graph`, `screen`,
+or `character` to select the coordinate system.  See `coordinates` for
+details.  By default, the `character` coordinate system is used.  For
+example, "`set xlabel offset -1,0`" will change only the x offset of the
+title, moving the label roughly one character width to the left.  The size
+of a character depends on both the font and the terminal.
+
+   <p>&lt;font&gt; is used to specify the font in which the label is written; the units
+of the font &lt;size&gt; depend upon which terminal is used.
+
+   <p>`textcolor lt &lt;n&gt;` sets the text color to that of line type &lt;n&gt;.
+
+   <p>`noenhanced` requests that the label text not be processed by the enhanced text
+mode parser, even if enhanced text mode is currently active.
+
+   <p>To clear a label, put no options on the command line, e.g., "<a href="y2label.html#y2label">y2label</a>".
+
+   <p>The default positions of the axis labels are as follows:
+
+   <p>xlabel:  The x-axis label is centered below the bottom axis.
+
+   <p>ylabel:  The position of the y-axis label depends on the terminal, and can be
+one of the following three positions:
+
+   <p>1. Horizontal text flushed left at the top left of the plot.  Terminals that
+cannot rotate text will probably use this method.  If <a href="x2tics.html#x2tics">x2tics</a> is also
+in use, the ylabel may overwrite the left-most x2tic label.  This may be
+remedied by adjusting the ylabel position or the left margin.
+
+   <p>2. Vertical text centered vertically at the left of the plot.  Terminals
+that can rotate text will probably use this method.
+
+   <p>3. Horizontal text centered vertically at the left of the plot.  The EEPIC,
+LaTeX and TPIC drivers use this method.  The EEPIC driver will produce a
+stack of characters so as not to overwrite the plot. With other drivers
+(such as LaTeX and TPIC), the user probably has to insert line breaks
+using \\ to prevent the ylabel from overwriting the plot.
+
+   <p>zlabel: The z-axis label is centered along the z axis and placed in the space
+above the grid level.
+
+   <p>cblabel: The color box axis label is centered along the box and placed below
+or right according to horizontal or vertical color box gradient.
+
+   <p>y2label: The y2-axis label is placed to the right of the y2 axis.  The
+position is terminal-dependent in the same manner as is the y-axis label.
+
+   <p>x2label: The x2-axis label is placed above the top axis but below the plot
+title.  It is also possible to create an x2-axis label by using new-line
+characters to make a multi-line plot title, e.g.,
+
+<pre class="example">           set title "This is the title\n\nThis is the x2label"
+     
+</pre>
+   <p>Note that double quotes must be used.  The same font will be used for both
+lines, of course.
+
+   <p>The orientation (rotation angle) of the x, x2, y and y2 axis labels can be
+explicitly changed from the default setting, but this applies only to 2D plots
+and only on terminals that support text rotation.
+
+   <p>If you are not satisfied with the default position of an axis label, use `set
+label` instead&ndash;that command gives you much more control over where text is
+placed.
+
+   <p>Please see `syntax` for further information about backslash processing
+and the difference between single- and double-quoted strings.
+
+   </body></html>
+

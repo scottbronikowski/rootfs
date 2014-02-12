@@ -1,0 +1,190 @@
+<html lang="en">
+<head>
+<title>data - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plot.html#plot" title="plot">
+<link rel="prev" href="axes.html#axes" title="axes">
+<link rel="next" href="errorbars.html#errorbars" title="errorbars">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="data"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="errorbars.html#errorbars">errorbars</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="axes.html#axes">axes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plot.html#plot">plot</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.14.2 data</h4>
+
+<!-- ?commands plot datafile -->
+<!-- ?plot datafile -->
+<p><a name="index-data_002dfile-317"></a>
+<a name="index-datafile-318"></a><a name="index-datafile-319"></a>
+
+   <p><a name="index-data-320"></a>
+<a name="index-file-321"></a>
+<a name="index-volatile-322"></a>
+<!-- ?plot datafile volatile -->
+Discrete data contained in a file can be displayed by specifying the name of
+the data file (enclosed in single or double quotes) on the `plot` command line.
+
+   <p>Syntax:
+<pre class="example">           plot '&lt;file_name&gt;' {binary &lt;binary list&gt;}
+                              {matrix}
+                              {index &lt;index list&gt; | index "&lt;name&gt;"}
+                              {every &lt;every list&gt;}
+                              {thru &lt;thru expression&gt;}
+                              {using &lt;using list&gt;}
+                              {smooth &lt;option&gt;}
+                              {volatile} {noautoscale}
+     
+</pre>
+   <p>The modifiers `binary`, <a href="index.html#index">index</a>, <a href="every.html#every">every</a>, <a href="thru.html#thru">thru</a>, <a href="using.html#using">using</a>, and <a href="smooth.html#smooth">smooth</a> are
+discussed separately.  In brief, `binary` allows data entry from a binary
+file (default is ASCII), <a href="index.html#index">index</a> selects which data sets in a multi-data-set
+file are to be plotted, <a href="every.html#every">every</a> specifies which points within a single data
+set are to be plotted, <a href="using.html#using">using</a> determines how the columns within a single
+record are to be interpreted (<a href="thru.html#thru">thru</a> is a special case of <a href="using.html#using">using</a>), and
+<a href="smooth.html#smooth">smooth</a> allows for simple interpolation and approximation.  (`splot` has a
+similar syntax, but does not support the <a href="smooth.html#smooth">smooth</a> and <a href="thru.html#thru">thru</a> options.)
+
+   <p>The `volatile` keyword indicates that the contents of the data file may be
+different if the file is re-read.  This tells the program to use <a href="refresh.html#refresh">refresh</a>
+rather than <a href="replot.html#replot">replot</a> commands whenever possible.  See <a href="refresh.html#refresh">refresh</a>.
+
+   <p>The `noautoscale` keyword means that the points making up this plot will be
+ignored when automatically determining axis range limits.
+
+   <p>ASCII DATA FILES:
+
+   <p>Data files should contain at least one data point per record (<a href="using.html#using">using</a>
+can select one data point from the record). Records beginning with `#`
+(and also with `!` on VMS) will be treated as comments and ignored. 
+Each data point represents an (x,y) pair. For `plot`s with error bars or
+error bars with lines (see <a href="errorbars.html#errorbars">errorbars</a> or <a href="errorlines.html#errorlines">errorlines</a>),
+each data point is (x,y,ydelta), (x,y,ylow,yhigh),
+(x,y,xdelta), (x,y,xlow,xhigh), or (x,y,xlow,xhigh,ylow,yhigh).
+
+   <p>In all cases, the numbers of each record of a data file must be separated
+by white space (one or more blanks or tabs) unless a format specifier is
+provided by the <a href="using.html#using">using</a> option. This white space divides each record into
+columns. However, whitespace inside a pair of double quotes is ignored when
+counting columns, so the following datafile line has three columns:
+<pre class="example">           1.0 "second column" 3.0
+     
+</pre>
+   <p>Data may be written in exponential format with the exponent preceded by the
+letter e or E.  The fortran exponential specifiers d, D, q, and Q may also
+be used if the command `set datafile fortran` is in effect.
+
+   <p>Only one column (the y value) need be provided.  If x is omitted, `gnuplot`
+provides integer values starting at 0.
+
+   <p>In datafiles, blank records (records with no characters other than blanks and
+a newline and/or carriage return) are significant.
+
+   <p>Single blank records designate discontinuities in a `plot`; no line will join
+points separated by a blank records (if they are plotted with a line style).
+
+   <p>Two blank records in a row indicate a break between separate data sets. 
+See <a href="index.html#index">index</a>.
+
+   <p>If autoscaling has been enabled (<a href="autoscale.html#autoscale">autoscale</a>), the axes are automatically
+extended to include all datapoints, with a whole number of tic marks if tics
+are being drawn.  This has two consequences: i) For `splot`, the corner of
+the surface may not coincide with the corner of the base.  In this case, no
+vertical line is drawn.  ii) When plotting data with the same x range on a
+dual-axis graph, the x coordinates may not coincide if the x2tics are not
+being drawn.  This is because the x axis has been autoextended to a whole
+number of tics, but the x2 axis has not.  The following example illustrates
+the problem:
+
+<pre class="example">           reset; plot '-', '-' axes x2y1
+           1 1
+           19 19
+           e
+           1 1
+           19 19
+           e
+     
+</pre>
+   <p>To avoid this, you can use the `fixmin`/`fixmax` feature of the
+<a href="autoscale.html#autoscale">autoscale</a> command, which turns off the automatic extension of the
+axis range upto the next tic mark.
+
+   <p>Label coordinates and text can also be read from a data file (see <a href="labels.html#labels">labels</a>).
+
+   <p>BINARY DATA FILES:
+
+   <p>Gnuplot can read binary data files.  However, adequate information about
+details of the file format must be given on the command line or extracted
+from the file itself for a supported binary `filetype`.  In particular,
+there are two structures for binary files, a matrix binary format and a
+general binary format.
+
+   <p>The matrix binary format contains a two dimensional array of 32 bit IEEE
+float values with an additional column and row of coordinate values.  As
+with ASCII matrix, in the <a href="using.html#using">using</a> list, repetition of the coordinate row
+constitutes column 1, repetition of the coordinate column constitutes
+column 2, and the array of values constitutes column 3.
+
+   <p>The general binary format contains an arbitrary number of columns for which
+information must be specified at the command line.  For example, `array`,
+`record`, `format` and <a href="using.html#using">using</a> can indicate the size, format and dimension
+of data.  There are a variety of useful commands for skipping file headers
+and changing endianess.  There are a set of commands for positioning and
+translating data since often coordinates are not part of the file when
+uniform sampling is inherent in the data.  Different from matrix binary or
+ASCII, general binary does not treat the generated columns as 1, 2 or 3 in
+the <a href="using.html#using">using</a> list.  Rather, column 1 begins with column 1 of the file, or as
+specified in the `format` list.
+
+   <p>There are global default settings for the various binary options which may
+be set using the same syntax as the options when used as part of the `(s)plot
+&lt;filename&gt; binary ...` command.  This syntax is `set datafile binary ...`. 
+The general rule is that common command-line specified parameters override
+file-extracted parameters which override default parameters.
+
+   <p>Matrix binary is the default binary format when no keywords specific to
+general binary are given, i.e., `array`, `record`, `format`, `filetype`.
+
+   <p>General binary data can be entered at the command line via the special file
+name '-'.  However, this is intended for use through a pipe where programs
+can exchange binary data, not for keyboards.  There is no "end of record"
+character for binary data.  Gnuplot continues reading from a pipe until it
+has read the number of points declared in the `array` qualifier.
+
+   <p>See `datafile binary` for more details.
+
+<ul class="menu">
+<li><a accesskey="1" href="binary.html#binary">binary</a>
+<li><a accesskey="2" href="binary_005fgeneral.html#binary_005fgeneral">binary_general</a>
+<li><a accesskey="3" href="every.html#every">every</a>
+<li><a accesskey="4" href="example_005fdatafile.html#example_005fdatafile">example_datafile</a>
+<li><a accesskey="5" href="index.html#index">index</a>
+<li><a accesskey="6" href="smooth.html#smooth">smooth</a>
+<li><a accesskey="7" href="special_002dfilenames.html#special_002dfilenames">special-filenames</a>
+<li><a accesskey="8" href="thru.html#thru">thru</a>
+<li><a accesskey="9" href="using.html#using">using</a>
+</ul>
+
+   </body></html>
+

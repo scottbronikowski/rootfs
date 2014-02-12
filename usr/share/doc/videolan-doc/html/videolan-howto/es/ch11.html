@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 11.  Vídeo Bajo Demanda</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch10.html" title="Chapter 10.  Transmitir sobre IPv6" /><link rel="next" href="ch12.html" title="Chapter 12.  Add a channel information service" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 11. 
+Vídeo Bajo Demanda
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch12.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="vod"></a>Chapter 11. 
+Vídeo Bajo Demanda
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch11.html#id2578676">
+Visión General
+</a></span></dt><dt><span class="sect1"><a href="ch11.html#id2578639">
+
+
+Parte servidor
+
+</a></span></dt><dt><span class="sect1"><a href="ch11.html#id2578730">
+
+
+Parte cliente
+
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2578676"></a>
+Visión General
+</h2></div></div></div><p>El vídeo bajo demanda (VOD) permite al usuario visualizar el vídeo,
+cuando el quiera, hacer pausas y rebobinar. Ésta es la principal ventaja de la difusión de vídeo
+mediante flujo de datos, en pocas palabras: el sueño de cualquier usuario.</p><p>VOD es una de las principales fuentes de consumo de recursos
+tanto de la red como del servidor. VOD es unicast, no multicast : esto significa que los recursos
+de la red y del servidor necesarios, son directamente proporcionales al número de clientes.</p><p>La solución que VideoLAN's VOD propone es muy simple. La idea es hacer una 
+difusión HTTP, por ejemplo: encapsular el flujo de datos de vídeo (MPEG) en HTTP.
+El control del flujo de datos entre el cliente y el servidor se hace automaticamente 
+mediante TCP. Con HTTP versión  1.1, existe la posibilidad de buscar en un fichero descargado,	
+que es lo que nosotros hacemos para buscar el video</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2578639"></a>
+
+
+Parte servidor
+
+</h2></div></div></div><p>En un servidor de VOD se necesita un servidor Web. 			
+Por ejemplo, se podría usar el Servidor de Linux Apache. Otros sistemas operativos
+y servidores web deberían funcionar también, pero no se ha comprobado.</p><p>Esto hace que los ficheros MPEG-1, MPEG-2 or MPEG-4 / DivX
+esten disponibles para los clientes.</p><p>Por ejemplo, nosotros tenemos un servidor Web con cuyos DNS
+son <span class="emphasis"><em>servidorlocal</em></span>. En este servidor se puede poner el 
+fichero MPEG <code class="filename">video1.mpg</code> y hacer que este disponible para los clientes
+en la URL <code class="filename">http://localserver/video1.mpg</code>.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2578730"></a>
+
+
+Parte cliente
+
+</h2></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv http://servidorlocal/video1.mpg</code></strong>
+</pre><p>VLC empieza a leer el flujo de datos casi inmediatamente, y además le permite 
+hacer búsquedas, pausas etc...como si el flujo de datos fuera un fichero local </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch12.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 10. 
+
+
+Transmitir sobre IPv6
+
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 12. 
+Add a channel information service
+</td></tr></table></div></body></html>

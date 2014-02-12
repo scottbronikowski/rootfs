@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>statistical_overview - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="error_005festimates.html#error_005festimates" title="error_estimates">
+<link rel="prev" href="error_005festimates.html#error_005festimates" title="error_estimates">
+<link rel="next" href="practical_005fguidelines.html#practical_005fguidelines" title="practical_guidelines">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="statistical_overview"></a>
+<a name="statistical_005foverview"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="practical_005fguidelines.html#practical_005fguidelines">practical_guidelines</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="error_005festimates.html#error_005festimates">error_estimates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="error_005festimates.html#error_005festimates">error_estimates</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.6.3.1 statistical overview</h5>
+
+<!-- ?commands fit error statistical_overview -->
+<!-- ?fit error statistical_overview -->
+<p><a name="index-statistical_005foverview-293"></a>
+The theory of non-linear least-squares (NLLS) is generally described in terms
+of a normal distribution of errors, that is, the input data is assumed to be
+a sample from a population having a given mean and a Gaussian (normal)
+distribution about the mean with a given standard deviation.  For a sample of
+sufficiently large size, and knowing the population standard deviation, one
+can use the statistics of the chisquare distribution to describe a "goodness
+of fit" by looking at the variable often called "chisquare".  Here, it is
+sufficient to say that a reduced chisquare (chisquare/degrees of freedom,
+where degrees of freedom is the number of datapoints less the number of
+parameters being fitted) of 1.0 is an indication that the weighted sum of
+squared deviations between the fitted function and the data points is the
+same as that expected for a random sample from a population characterized by
+the function with the current value of the parameters and the given standard
+deviations.
+
+   <p>If the standard deviation for the population is not constant, as in counting
+statistics where variance = counts, then each point should be individually
+weighted when comparing the observed sum of deviations and the expected sum
+of deviations.
+
+   <p>At the conclusion <a href="fit.html#fit">fit</a> reports 'stdfit', the standard deviation of the fit,
+which is the rms of the residuals, and the variance of the residuals, also
+called 'reduced chisquare' when the data points are weighted.  The number of
+degrees of freedom (the number of data points minus the number of fitted
+parameters) is used in these estimates because the parameters used in
+calculating the residuals of the datapoints were obtained from the same data. 
+These values are exported to the variables
+<pre class="example">           FIT_NDF = Number of degrees of freedom
+           FIT_WSSR = Weighted sum-of-squares residual
+           FIT_STDFIT = sqrt(WSSR/NDF)
+     
+</pre>
+   <p>To estimate confidence levels for the parameters, one can use the minimum
+chisquare obtained from the fit and chisquare statistics to determine the
+value of chisquare corresponding to the desired confidence level, but
+considerably more calculation is required to determine the combinations of
+parameters which produce such values.
+
+   <p>Rather than determine confidence intervals, <a href="fit.html#fit">fit</a> reports parameter error
+estimates which are readily obtained from the variance-covariance matrix
+after the final iteration.  By convention, these estimates are called
+"standard errors" or "asymptotic standard errors", since they are calculated
+in the same way as the standard errors (standard deviation of each parameter)
+of a linear least-squares problem, even though the statistical conditions for
+designating the quantity calculated to be a standard deviation are not
+generally valid for the NLLS problem.  The asymptotic standard errors are
+generally over-optimistic and should not be used for determining confidence
+levels, but are useful for qualitative purposes.
+
+   <p>The final solution also produces a correlation matrix, which gives an
+indication of the correlation of parameters in the region of the solution;
+if one parameter is changed, increasing chisquare, does changing another
+compensate?  The main diagonal elements, autocorrelation, are all 1; if
+all parameters were independent, all other elements would be nearly 0.  Two
+variables which completely compensate each other would have an off-diagonal
+element of unit magnitude, with a sign depending on whether the relation is
+proportional or inversely proportional.  The smaller the magnitudes of the
+off-diagonal elements, the closer the estimates of the standard deviation
+of each parameter would be to the asymptotic standard error.
+
+   </body></html>
+

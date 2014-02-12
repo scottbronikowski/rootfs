@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>Batch/Interactive_Operation - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="gnuplot.html#gnuplot" title="gnuplot">
+<link rel="prev" href="Backwards_005fcompatibility.html#Backwards_005fcompatibility" title="Backwards_compatibility">
+<link rel="next" href="Command_002dline_002dediting.html#Command_002dline_002dediting" title="Command-line-editing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Batch%2fInteractive_Operation"></a>
+<a name="Batch_002fInteractive_005fOperation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Command_002dline_002dediting.html#Command_002dline_002dediting">Command-line-editing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Backwards_005fcompatibility.html#Backwards_005fcompatibility">Backwards_compatibility</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="gnuplot.html#gnuplot">gnuplot</a>
+<hr>
+</div>
+
+<h3 class="section">1.6 Batch/Interactive Operation</h3>
+
+<p><a name="index-batch_002finteractive-14"></a>
+<!-- ?command line options -->
+`Gnuplot` may be executed in either batch or interactive modes, and the two
+may even be mixed together on many systems.
+
+   <p>Any command-line arguments are assumed to be either program options (first
+character is -) or names of files containing `gnuplot` commands. The option
+-e "command" may be used to force execution of a gnuplot command. Each file
+or command string will be executed in the order specified.  The special
+filename "-" is indicates that commands are to be read from stdin. 
+`Gnuplot` exits after the last file is processed.  If no load files and no
+command strings are specified, `gnuplot` accepts interactive input from
+stdin.
+
+   <p>Both the <a href="exit.html#exit">exit</a> and <a href="quit.html#quit">quit</a> commands terminate the current command file and
+`load` the next one, until all have been processed.
+
+   <p>Examples:
+
+   <p>To launch an interactive session:
+<pre class="example">           gnuplot
+     
+</pre>
+   <p>To launch a batch session using two command files "input1" and "input2":
+<pre class="example">           gnuplot input1 input2
+     
+</pre>
+   <p>To launch an interactive session after an initialization file "header" and
+followed by another command file "trailer":
+<pre class="example">           gnuplot header - trailer
+     
+</pre>
+   <p>To give `gnuplot` commands directly in the command line, using the "-persist"
+option so that the plot remains on the screen afterwards:
+<pre class="example">           gnuplot -persist -e "set title 'Sine curve'; plot sin(x)"
+     
+</pre>
+   <p>To set user-defined variables a and s prior to executing commands from a file:
+<pre class="example">           gnuplot -e "a=2; s='file.png'" input.gpl
+     
+</pre>
+   </body></html>
+

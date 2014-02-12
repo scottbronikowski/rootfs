@@ -1,0 +1,1805 @@
+<!?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for FrameMaker 8.0.8.2296" />
+    <meta name="TEMPLATEBASE" content="HDF4 Version 1.0" />
+    <meta name="LASTUPDATED" content="07/16/09 01:40:41" />
+    <title>create_vdatas.c</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+<link rel="first" title="First" href="UGTop.html" />
+<link rel="last" title="Last" href="UG_BookIX.html" />
+<link rel="previous" title="Previous" href="Example_Vg.html" />
+<link rel="next" title="Next" href="Example_R24.html" />
+
+    <script type="text/javascript" language="JavaScript1.2" src="scripts/expand.js"></script>
+    <script type="text/javascript" language="JavaScript1.2" src="scripts/seealso.js"></script>
+
+    <script type="text/javascript" language="JavaScript1.2">
+     <!--
+      var  WebWorksSeeAlso = new WebWorksSeeAlso_Object();
+     // -->
+    </script>
+  </head>
+
+  <body>
+
+    <p>
+    <table id="SummaryNotReq1" border="0" width="850"cellspacing="0" cellpadding="0">
+      <tr>
+        <td align="left">
+          <a href="http://www.hdfgroup.org"><img id="LongDescNotReq1" border="0" src="images/hdf_logo.jpg" width="90" height="70" alt="The HDF Group" valign="top" /></a>
+        </td>
+        <td valign="middle" align="center">
+          <b><H1>HDF User’s Guide</H1>
+           Version 4.2r4</b><br />
+        </td>
+        <td valign="middle" align="right">
+        <br/>
+<b><a HREF="UGTOP.html">[Top]</a>
+<a accesskey="3" href="Example_Vg.html"><b>[Prev]</b><a accesskey="4" href="Example_R24.html"><b>[Next]</b></b>
+        </td>
+      </tr>
+    </table>
+    </p>
+    <hr />
+
+    <blockquote>
+<a name="wp473591"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+create_vdatas.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp928478"> </a>
+#define  FILE1_NAME     &quot;General_Vdatas.hdf&quot; <a name="wp928530"> </a>
+#define  FILE2_NAME     &quot;Two_Vdatas.hdf&quot; <a name="wp928531"> </a>
+#define  VDATA_NAME     &quot;Vdata 1&quot;<a name="wp928532"> </a>
+#define  VDATA_CLASS    &quot;Empty Vdatas&quot;<a name="wp928533"> </a>
+main( )<a name="wp928535"> </a>
+{<a name="wp928536"> </a>
+   /************************* Variable declaration **************************/<a name="wp928537"> </a>
+   intn  status_n;      /* returned status for functions returning an intn  */<a name="wp928539"> </a>
+   int32 status_32,     /* returned status for functions returning an int32 */<a name="wp928540"> </a>
+         file1_id, file2_id,<a name="wp928541"> </a>
+         vdata_id, vdata1_id, vdata2_id,<a name="wp928542"> </a>
+         vdata_ref = -1;     /* ref number of a vdata, set to -1 to create  */<a name="wp928543"> </a>
+   /********************** End of variable declaration **********************/<a name="wp928545"> </a>
+   /* <a name="wp928547"> </a>
+   * Create the first HDF file. <a name="wp928548"> </a>
+   */<a name="wp928549"> </a>
+   file1_id = Hopen (FILE1_NAME, DFACC_CREATE, 0);<a name="wp928550"> </a>
+   /* <a name="wp928552"> </a>
+   * Initialize the VS interface associated with the first HDF file. <a name="wp928553"> </a>
+   */<a name="wp928554"> </a>
+   status_n = Vstart (file1_id);<a name="wp928555"> </a>
+   /* <a name="wp928557"> </a>
+   * Create a vdata in the first HDF file. <a name="wp928558"> </a>
+   */<a name="wp928559"> </a>
+   vdata_id = VSattach (file1_id, vdata_ref, &quot;w&quot;);<a name="wp928560"> </a>
+   /*<a name="wp928562"> </a>
+   * Assign a name to the vdata.<a name="wp928563"> </a>
+   */<a name="wp928564"> </a>
+   status_32 = VSsetname (vdata_id, VDATA_NAME);<a name="wp928565"> </a>
+   /* <a name="wp928567"> </a>
+   * Other operations on the vdata identified by vdata_id can be carried<a name="wp928568"> </a>
+   * out starting from this point.<a name="wp928569"> </a>
+   */<a name="wp928570"> </a>
+   /* <a name="wp928572"> </a>
+   * Create the second HDF file. <a name="wp928573"> </a>
+   */<a name="wp928574"> </a>
+   file2_id = Hopen (FILE2_NAME, DFACC_CREATE, 0);<a name="wp928575"> </a>
+   /* <a name="wp928577"> </a>
+   * Initialize the VS interface associated with the second HDF file. <a name="wp928578"> </a>
+   */<a name="wp928579"> </a>
+   status_n = Vstart (file2_id);<a name="wp928580"> </a>
+   /* <a name="wp928582"> </a>
+   * Create the first vdata in the second HDF file. <a name="wp928583"> </a>
+   */<a name="wp928584"> </a>
+   vdata1_id = VSattach (file2_id, vdata_ref, &quot;w&quot;);<a name="wp928585"> </a>
+   /* <a name="wp928587"> </a>
+   * Create the second vdata in the second HDF file. <a name="wp928588"> </a>
+   */<a name="wp928589"> </a>
+   vdata2_id = VSattach (file2_id, vdata_ref, &quot;w&quot;);<a name="wp928590"> </a>
+   /*<a name="wp928592"> </a>
+   * Assign a class name to these vdatas.<a name="wp928593"> </a>
+   */<a name="wp928594"> </a>
+   status_32 = VSsetclass (vdata1_id, VDATA_CLASS);<a name="wp928595"> </a>
+   status_32 = VSsetclass (vdata2_id, VDATA_CLASS);<a name="wp928596"> </a>
+   /* <a name="wp928598"> </a>
+   * Other operations on the vdatas identified by vdata1_id and vdata2_id <a name="wp928599"> </a>
+   * can be carried out starting from this point.<a name="wp928600"> </a>
+   */<a name="wp928601"> </a>
+   /* <a name="wp928603"> </a>
+   * Terminate access to the first vdata in the second HDF file. <a name="wp928604"> </a>
+   */<a name="wp928605"> </a>
+   status_32 = VSdetach (vdata1_id);<a name="wp928606"> </a>
+   /* <a name="wp928608"> </a>
+   * Terminate access to the second vdata in the second HDF file. <a name="wp928609"> </a>
+   */<a name="wp928610"> </a>
+   status_32 = VSdetach (vdata2_id);<a name="wp928611"> </a>
+   /* <a name="wp928613"> </a>
+   * From this point on, any operations on the vdatas identified by vdata1_id <a name="wp928614"> </a>
+   and vdata2_id are invalid but not on the vdata identified by vdata_id.<a name="wp928615"> </a>
+   */<a name="wp928616"> </a>
+   /* <a name="wp928618"> </a>
+   * Terminate access to the VS interface associated with the second HDF file. <a name="wp928619"> </a>
+   */<a name="wp928620"> </a>
+   status_n = Vend (file2_id);<a name="wp928621"> </a>
+   /* <a name="wp928623"> </a>
+   * Close the second HDF file. <a name="wp928624"> </a>
+   */<a name="wp928625"> </a>
+   status_n = Hclose (file2_id);<a name="wp928626"> </a>
+   /* <a name="wp928628"> </a>
+   * Terminate access to the vdata in the first HDF file. <a name="wp928629"> </a>
+   */<a name="wp928630"> </a>
+   status_32 = VSdetach (vdata_id);<a name="wp928631"> </a>
+   /* <a name="wp928633"> </a>
+   * Terminate access to the VS interface associated with the first HDF file. <a name="wp928634"> </a>
+   */<a name="wp928635"> </a>
+   status_n = Vend (file1_id);<a name="wp928636"> </a>
+   /* <a name="wp928638"> </a>
+   * Close the first HDF file. <a name="wp928639"> </a>
+   */<a name="wp928640"> </a>
+   status_n = Hclose (file1_id);<a name="wp928641"> </a>
+}<a name="wp928642"> </a>
+</pre></div>
+<a name="wp928476"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+create_vdatas.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      program create_vdatas<a name="wp928664"> </a>
+      implicit none<a name="wp928669"> </a>
+C<a name="wp928670"> </a>
+C     Parameter declaration<a name="wp928671"> </a>
+C<a name="wp928672"> </a>
+      character*18 FILE1_NAME<a name="wp928673"> </a>
+      character*14 FILE2_NAME<a name="wp928674"> </a>
+      character*7  VDATA_NAME<a name="wp928675"> </a>
+      character*12 VDATA_CLASS<a name="wp928676"> </a>
+C<a name="wp928677"> </a>
+      parameter (FILE1_NAME  = `General_Vdatas.hdf&#39;,<a name="wp928678"> </a>
+     +           FILE2_NAME  = `Two_Vdatas.hdf&#39;,<a name="wp928679"> </a>
+     +           VDATA_NAME  = `Vdata 1&#39;,<a name="wp928680"> </a>
+     +           VDATA_CLASS = `Empty Vdatas&#39;)<a name="wp928681"> </a>
+      integer DFACC_CREATE<a name="wp928682"> </a>
+      parameter (DFACC_CREATE = 4)<a name="wp928683"> </a>
+C<a name="wp928684"> </a>
+C     Function declaration<a name="wp928685"> </a>
+C<a name="wp928686"> </a>
+      integer hopen, hclose<a name="wp928687"> </a>
+      integer vfstart, vsfatch, vsfsnam, vsfscls, vsfdtch, vfend <a name="wp928688"> </a>
+C<a name="wp928690"> </a>
+C**** Variable declaration *******************************************<a name="wp928691"> </a>
+C<a name="wp928692"> </a>
+      integer status<a name="wp928693"> </a>
+      integer file1_id, file2_id<a name="wp928694"> </a>
+      integer vdata_id, vdata1_id, vdata2_id <a name="wp928695"> </a>
+      integer vdata_ref<a name="wp928696"> </a>
+C<a name="wp928697"> </a>
+C**** End of variable declaration ************************************<a name="wp928698"> </a>
+C<a name="wp928699"> </a>
+C<a name="wp928700"> </a>
+C     Create the first HDF file.<a name="wp928701"> </a>
+C<a name="wp928702"> </a>
+      file1_id = hopen(FILE1_NAME, DFACC_CREATE, 0)<a name="wp928703"> </a>
+C<a name="wp928704"> </a>
+C     Initialize the VS interface associated with the first HDF file.<a name="wp928705"> </a>
+C<a name="wp928706"> </a>
+      status = vfstart(file1_id) <a name="wp928707"> </a>
+C<a name="wp928708"> </a>
+C     Create a vdata in the first HDF file.<a name="wp928709"> </a>
+C<a name="wp928710"> </a>
+      vdata_ref = -1<a name="wp928711"> </a>
+      vdata_id = vsfatch(file1_id, vdata_ref, `w&#39;)<a name="wp928712"> </a>
+C<a name="wp928713"> </a>
+C     Assign a name to the vdata.<a name="wp928714"> </a>
+C<a name="wp928715"> </a>
+      status = vsfsnam(vdata_id, VDATA_NAME)<a name="wp928716"> </a>
+C<a name="wp928717"> </a>
+C     Other operations on the vdata identified by vdata_id can be carried out<a name="wp928718"> </a>
+C     starting from this point.<a name="wp928719"> </a>
+C<a name="wp928720"> </a>
+C     Create the second HDF file.<a name="wp928721"> </a>
+C<a name="wp928722"> </a>
+      file2_id = hopen(FILE2_NAME, DFACC_CREATE, 0) <a name="wp928723"> </a>
+C<a name="wp928724"> </a>
+C     Initialize the VS interface associated with the second HDF file.<a name="wp928725"> </a>
+C<a name="wp928726"> </a>
+      status = vfstart(file2_id) <a name="wp928727"> </a>
+C<a name="wp928728"> </a>
+C     Create the first vdata in the second HDF file.<a name="wp928729"> </a>
+C<a name="wp928730"> </a>
+      vdata1_id = vsfatch(file2_id, vdata_ref, `w&#39;)<a name="wp928731"> </a>
+C<a name="wp928732"> </a>
+C     Create the second vdata in the second HDF file.<a name="wp928733"> </a>
+C<a name="wp928734"> </a>
+      vdata2_id = vsfatch(file2_id, vdata_ref, `w&#39;)<a name="wp928735"> </a>
+C<a name="wp928736"> </a>
+C     Assign a class name to these vdatas.<a name="wp928737"> </a>
+C<a name="wp928738"> </a>
+      status = vsfscls(vdata1_id, VDATA_CLASS)<a name="wp928739"> </a>
+      status = vsfscls(vdata2_id, VDATA_CLASS)<a name="wp928740"> </a>
+C<a name="wp928741"> </a>
+C     Other operations on the vdatas identified by vdata1_id and vdata2_id<a name="wp928742"> </a>
+C     can be carried out starting from this point.<a name="wp928743"> </a>
+C<a name="wp928744"> </a>
+C<a name="wp928745"> </a>
+C     Terminate access to the first vdata in the second HDF file.<a name="wp928746"> </a>
+C<a name="wp928747"> </a>
+      status = vsfdtch(vdata1_id)<a name="wp928748"> </a>
+C<a name="wp928749"> </a>
+C     Terminate access to the second vdata in the second HDF file.<a name="wp928750"> </a>
+C<a name="wp928751"> </a>
+      status = vsfdtch(vdata2_id)<a name="wp928752"> </a>
+C<a name="wp928753"> </a>
+C     Terminate access to the VS interface associated with the second HDF file.<a name="wp928754"> </a>
+C<a name="wp928755"> </a>
+      status = vfend(file2_id)<a name="wp928756"> </a>
+C<a name="wp928757"> </a>
+C     Close the second HDF file.<a name="wp928758"> </a>
+C<a name="wp928759"> </a>
+      status = hclose(file2_id)<a name="wp928760"> </a>
+C<a name="wp928761"> </a>
+C     Terminate access to the vdata in the first HDF file.<a name="wp928762"> </a>
+C<a name="wp928763"> </a>
+      status = vsfdtch(vdata_id)<a name="wp928764"> </a>
+C<a name="wp928765"> </a>
+C     terminate access to the VS interface associated with the first HDF file.<a name="wp928766"> </a>
+C<a name="wp928767"> </a>
+      status = vfend(file1_id)<a name="wp928768"> </a>
+C<a name="wp928769"> </a>
+C     Close the first HDF file.<a name="wp928770"> </a>
+C<a name="wp928771"> </a>
+      status = hclose(file1_id)<a name="wp928772"> </a>
+      end<a name="wp928773"> </a>
+</pre></div>
+<a name="wp928479"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+create_onefield_vdata.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot; <a name="wp928810"> </a>
+#define  FILE_NAME      &quot;General_Vdatas.hdf&quot;<a name="wp928816"> </a>
+#define  CLASS1_NAME    &quot;5x1 Array&quot;<a name="wp928817"> </a>
+#define  CLASS2_NAME    &quot;6x4 Array&quot;<a name="wp928818"> </a>
+#define  VDATA1_NAME    &quot;First Vdata&quot;<a name="wp928819"> </a>
+#define  VDATA2_NAME    &quot;Second Vdata&quot;<a name="wp928820"> </a>
+#define  FIELD1_NAME    &quot;Single-component Field&quot;<a name="wp928821"> </a>
+#define  FIELD2_NAME    &quot;Multi-component Field&quot;<a name="wp928822"> </a>
+#define  N_RECORDS_1    5    /* number of records the first vdata contains  */<a name="wp928823"> </a>
+#define  N_RECORDS_2    6    /* number of records the second vdata contains */<a name="wp928824"> </a>
+#define  ORDER_2        4    /* order of the field in the second vdata      */<a name="wp928825"> </a>
+                /* Note that the order of the field in the first vdata is 1 */<a name="wp928826"> </a>
+main( )<a name="wp928828"> </a>
+{<a name="wp928829"> </a>
+   /************************* Variable declaration **************************/<a name="wp928830"> </a>
+   intn  status_n;      /* returned status for functions returning an intn  */<a name="wp928832"> </a>
+   int32 status_32;     /* returned status for functions returning an int32 */<a name="wp928833"> </a>
+   int32 file_id, vdata1_ref, vdata2_ref; <a name="wp928834"> </a>
+   /*<a name="wp928836"> </a>
+   * Define an array to buffer the data of the first vdata.<a name="wp928837"> </a>
+   */<a name="wp928838"> </a>
+   char8 vdata1_buf [N_RECORDS_1] = {`V&#39;, `D&#39;, `A&#39;, `T&#39;, `A&#39;};<a name="wp928839"> </a>
+   /*<a name="wp928841"> </a>
+   * Define an array to buffer the data of the second vdata.<a name="wp928842"> </a>
+   */<a name="wp928843"> </a>
+   int32 vdata2_buf [N_RECORDS_2][ORDER_2] = {{1, 2, 3, 4}, {2, 4, 6, 8},<a name="wp928844"> </a>
+                                              {3, 6, 9, 12}, {4, 8, 12, 16},<a name="wp928845"> </a>
+                                              {5, 10, 15, 20}, {6, 12, 18, 24}};<a name="wp928846"> </a>
+   /********************** End of variable declaration **********************/<a name="wp928848"> </a>
+   /*<a name="wp928850"> </a>
+   * Open the HDF file for writing.<a name="wp928851"> </a>
+   */<a name="wp928852"> </a>
+   file_id = Hopen (FILE_NAME, DFACC_WRITE, 0);<a name="wp928853"> </a>
+   /*<a name="wp928855"> </a>
+   * Initialize the VS interface.<a name="wp928856"> </a>
+   */<a name="wp928857"> </a>
+   status_n = Vstart (file_id);<a name="wp928858"> </a>
+    <a name="wp928859"> </a>
+   /*<a name="wp928860"> </a>
+   * Create the first vdata and populate it with data from the vdata1_buf <a name="wp928861"> </a>
+   * array. Note that the buffer vdata1_buf is cast to (uint8 *) for the <a name="wp928862"> </a>
+   * benefit of generic data type.<a name="wp928863"> </a>
+   */<a name="wp928864"> </a>
+   vdata1_ref = VHstoredata (file_id, FIELD1_NAME, (uint8 *)vdata1_buf, <a name="wp928865"> </a>
+                       N_RECORDS_1, DFNT_CHAR8, VDATA1_NAME, CLASS1_NAME); <a name="wp928866"> </a>
+   /* <a name="wp928868"> </a>
+   * Create the second vdata and populate it with data from the vdata2_buf <a name="wp928869"> </a>
+   * array. <a name="wp928870"> </a>
+   */<a name="wp928871"> </a>
+   vdata2_ref = VHstoredatam (file_id, FIELD2_NAME, (uint8 *)vdata2_buf, <a name="wp928872"> </a>
+               N_RECORDS_2, DFNT_INT32, VDATA2_NAME, CLASS2_NAME, ORDER_2); <a name="wp928873"> </a>
+   /* <a name="wp928875"> </a>
+   * Terminate access to the VS interface and close the HDF file.<a name="wp928876"> </a>
+   */<a name="wp928877"> </a>
+   status_n = Vend (file_id);<a name="wp928878"> </a>
+   status_32 = Hclose (file_id);<a name="wp928879"> </a>
+}<a name="wp928880"> </a>
+</pre></div>
+<a name="wp928481"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+create_onefield_vdata.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      program create_onefield_vdatas<a name="wp928886"> </a>
+      implicit none<a name="wp928891"> </a>
+C<a name="wp928892"> </a>
+C     Parameter declaration<a name="wp928893"> </a>
+C<a name="wp928894"> </a>
+      character*18 FILE_NAME<a name="wp928895"> </a>
+      character*9  CLASS1_NAME<a name="wp928896"> </a>
+      character*9  CLASS2_NAME<a name="wp928897"> </a>
+      character*11 VDATA1_NAME<a name="wp928898"> </a>
+      character*12 VDATA2_NAME<a name="wp928899"> </a>
+      character*22 FIELD1_NAME<a name="wp928900"> </a>
+      character*21 FIELD2_NAME<a name="wp928901"> </a>
+      integer      N_RECORDS_1, N_RECORDS_2<a name="wp928902"> </a>
+      integer      ORDER_2<a name="wp928903"> </a>
+C<a name="wp928904"> </a>
+      parameter (FILE_NAME   = `General_Vdatas.hdf&#39;,<a name="wp928905"> </a>
+     +           CLASS1_NAME = `5x1 Array&#39;,<a name="wp928906"> </a>
+     +           CLASS2_NAME = `6x4 Array&#39;,<a name="wp928907"> </a>
+     +           VDATA1_NAME = `First Vdata&#39;,<a name="wp928908"> </a>
+     +           VDATA2_NAME = `Second Vdata&#39;,<a name="wp928909"> </a>
+     +           FIELD1_NAME = `Single-component Field&#39;,<a name="wp928910"> </a>
+     +           FIELD2_NAME = `Multi-component Field&#39;)<a name="wp928911"> </a>
+      parameter (N_RECORDS_1 = 5,<a name="wp928912"> </a>
+     +           N_RECORDS_2 = 6,<a name="wp928913"> </a>
+     +           ORDER_2     = 4)               <a name="wp928914"> </a>
+   <a name="wp928915"> </a>
+      integer DFACC_WRITE, DFNT_CHAR8, DFNT_INT32<a name="wp928916"> </a>
+      parameter (DFACC_WRITE = 2,<a name="wp928917"> </a>
+     +           DFNT_CHAR8  = 4,<a name="wp928918"> </a>
+     +           DFNT_INT32  = 24)<a name="wp928919"> </a>
+C<a name="wp928920"> </a>
+C     Function declaration<a name="wp928921"> </a>
+C<a name="wp928922"> </a>
+      integer hopen, hclose<a name="wp928923"> </a>
+      integer vfstart, vhfscd, vhfsdm, vfend <a name="wp928924"> </a>
+C<a name="wp928926"> </a>
+C**** Variable declaration *******************************************<a name="wp928927"> </a>
+C<a name="wp928928"> </a>
+      integer   status<a name="wp928929"> </a>
+      integer   file_id<a name="wp928930"> </a>
+      integer   vdata1_ref, vdata2_ref <a name="wp928931"> </a>
+      character vdata1_buf(N_RECORDS_1)<a name="wp928932"> </a>
+      integer   vdata2_buf(ORDER_2, N_RECORDS_2)<a name="wp928933"> </a>
+      data vdata1_buf /&#39;V&#39;,&#39;D&#39;,&#39;A&#39;,&#39;T&#39;,&#39;A&#39;/<a name="wp928934"> </a>
+      data vdata2_buf / 1,  2,  3,  4,<a name="wp928935"> </a>
+     +                  2,  4,  6,  8,<a name="wp928936"> </a>
+     +                  3,  6,  9, 12,<a name="wp928937"> </a>
+     +                  4,  8, 12, 16,<a name="wp928938"> </a>
+     +                  5, 10, 15, 20,<a name="wp928939"> </a>
+     +                  6, 12, 18, 24/<a name="wp928940"> </a>
+C<a name="wp928941"> </a>
+C**** End of variable declaration ************************************<a name="wp928942"> </a>
+C<a name="wp928943"> </a>
+C<a name="wp928944"> </a>
+C     Open the HDF file for writing.<a name="wp928945"> </a>
+C<a name="wp928946"> </a>
+      file_id = hopen(FILE_NAME, DFACC_WRITE, 0)<a name="wp928947"> </a>
+C<a name="wp928948"> </a>
+C     Initialize the VS interface.<a name="wp928949"> </a>
+C<a name="wp928950"> </a>
+      status = vfstart(file_id) <a name="wp928951"> </a>
+C<a name="wp928952"> </a>
+C     Create the first vdata and populate it with data from vdata1_buf array.<a name="wp928953"> </a>
+C     <a name="wp928954"> </a>
+      vdata1_ref = vhfscd(file_id, FIELD1_NAME, vdata1_buf, N_RECORDS_1,<a name="wp928955"> </a>
+     +                    DFNT_CHAR8, VDATA1_NAME, CLASS1_NAME)<a name="wp928956"> </a>
+C<a name="wp928957"> </a>
+C     Create the second vdata and populate it with data from vdata2_buf array.<a name="wp928958"> </a>
+C     <a name="wp928959"> </a>
+      vdata2_ref = vhfsdm(file_id, FIELD2_NAME, vdata2_buf, N_RECORDS_2,<a name="wp928960"> </a>
+     +                    DFNT_INT32, VDATA2_NAME, CLASS2_NAME,<a name="wp928961"> </a>
+     +                    ORDER_2)<a name="wp928962"> </a>
+C<a name="wp928963"> </a>
+C     Terminate access to the VS interface and close the HDF file.<a name="wp928964"> </a>
+C<a name="wp928965"> </a>
+      status = vfend(file_id)<a name="wp928966"> </a>
+      status = hclose(file_id)<a name="wp928967"> </a>
+      end<a name="wp928968"> </a>
+</pre></div>
+<a name="wp928487"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+write_to_vdata.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp928974"> </a>
+#define  FILE_NAME        &quot;General_Vdatas.hdf&quot;<a name="wp928980"> </a>
+#define  N_RECORDS        10        /* number of records the vdata contains */<a name="wp928981"> </a>
+#define  ORDER_1          3         /* order of first field */<a name="wp928982"> </a>
+#define  ORDER_2          1         /* order of second field */<a name="wp928983"> </a>
+#define  ORDER_3          2         /* order of third field */<a name="wp928984"> </a>
+#define  CLASS_NAME       &quot;Particle Data&quot;<a name="wp928985"> </a>
+#define  VDATA_NAME       &quot;Solid Particle&quot;<a name="wp928986"> </a>
+#define  FIELD1_NAME      &quot;Position&quot;      /* contains x, y, z values */<a name="wp928987"> </a>
+#define  FIELD2_NAME      &quot;Mass&quot;          /* contains weight values */<a name="wp928988"> </a>
+#define  FIELD3_NAME      &quot;Temperature&quot;   /* contains min and max values */<a name="wp928989"> </a>
+#define  FIELDNAME_LIST   &quot;Position,Mass,Temperature&quot; /* No spaces b/w names */<a name="wp928990"> </a>
+/* number of values per record */<a name="wp928992"> </a>
+#define  N_VALS_PER_REC   (ORDER_1 + ORDER_2 + ORDER_3)<a name="wp928993"> </a>
+main( ) <a name="wp928995"> </a>
+{<a name="wp928996"> </a>
+   /************************* Variable declaration **************************/<a name="wp928997"> </a>
+   intn   status_n;     /* returned status for functions returning an intn  */<a name="wp928999"> </a>
+   int32  status_32,    /* returned status for functions returning an int32 */<a name="wp929000"> </a>
+          file_id, vdata_id,<a name="wp929001"> </a>
+          vdata_ref = -1,    /* ref number of a vdata, set to -1 to create  */<a name="wp929002"> </a>
+          num_of_records;    /* number of records actually written to vdata */<a name="wp929003"> </a>
+   int16  rec_num;           /* current record number */<a name="wp929004"> </a>
+   float32  data_buf[N_RECORDS][N_VALS_PER_REC]; /* buffer for vdata values */<a name="wp929005"> </a>
+   /********************** End of variable declaration **********************/<a name="wp929007"> </a>
+   /* <a name="wp929009"> </a>
+   * Open the HDF file for writing.<a name="wp929010"> </a>
+   */<a name="wp929011"> </a>
+   file_id = Hopen (FILE_NAME, DFACC_WRITE, 0);<a name="wp929012"> </a>
+   /* <a name="wp929014"> </a>
+   * Initialize the VS interface.<a name="wp929015"> </a>
+   */<a name="wp929016"> </a>
+   status_n = Vstart (file_id);<a name="wp929017"> </a>
+   /* <a name="wp929019"> </a>
+   * Create a new vdata.<a name="wp929020"> </a>
+   */<a name="wp929021"> </a>
+   vdata_id = VSattach (file_id, vdata_ref, &quot;w&quot;);<a name="wp929022"> </a>
+   /* <a name="wp929024"> </a>
+   * Set name and class name of the vdata.<a name="wp929025"> </a>
+   */<a name="wp929026"> </a>
+   status_32 = VSsetname (vdata_id, VDATA_NAME);<a name="wp929027"> </a>
+   status_32 = VSsetclass (vdata_id, CLASS_NAME);<a name="wp929028"> </a>
+   /* <a name="wp929030"> </a>
+   * Introduce each field&#39;s name, data type, and order.  This is the first<a name="wp929031"> </a>
+   * part in defining a field.<a name="wp929032"> </a>
+   */<a name="wp929033"> </a>
+   status_n = VSfdefine (vdata_id, FIELD1_NAME, DFNT_FLOAT32, ORDER_1 );<a name="wp929034"> </a>
+   status_n = VSfdefine (vdata_id, FIELD2_NAME, DFNT_FLOAT32, ORDER_2 );<a name="wp929035"> </a>
+   status_n = VSfdefine (vdata_id, FIELD3_NAME, DFNT_FLOAT32, ORDER_3 );<a name="wp929036"> </a>
+   /* <a name="wp929038"> </a>
+   * Finalize the definition of the fields.<a name="wp929039"> </a>
+   */<a name="wp929040"> </a>
+   status_n = VSsetfields (vdata_id, FIELDNAME_LIST);<a name="wp929041"> </a>
+   /* <a name="wp929043"> </a>
+   * Buffer the data by the record for fully interlaced mode.  Note that the<a name="wp929044"> </a>
+   * first three elements contain the three values of the first field, the<a name="wp929045"> </a>
+   * fourth element contains the value of the second field, and the last two<a name="wp929046"> </a>
+   * elements contain the two values of the third field.<a name="wp929047"> </a>
+   */<a name="wp929048"> </a>
+   for (rec_num = 0; rec_num &lt; N_RECORDS; rec_num++)<a name="wp929049"> </a>
+   {<a name="wp929050"> </a>
+      data_buf[rec_num][0] = 1.0 * rec_num;<a name="wp929051"> </a>
+      data_buf[rec_num][1] = 2.0 * rec_num;<a name="wp929052"> </a>
+      data_buf[rec_num][2] = 3.0 * rec_num;<a name="wp929053"> </a>
+      data_buf[rec_num][3] = 0.1 + rec_num;<a name="wp929054"> </a>
+      data_buf[rec_num][4] = 0.0;<a name="wp929055"> </a>
+      data_buf[rec_num][5] = 65.0;<a name="wp929056"> </a>
+   }<a name="wp929057"> </a>
+   /* <a name="wp929059"> </a>
+   * Write the data from data_buf to the vdata with full interlacing mode.<a name="wp929060"> </a>
+   */<a name="wp929061"> </a>
+   num_of_records = VSwrite (vdata_id, (uint8 *)data_buf, N_RECORDS, <a name="wp929062"> </a>
+                             FULL_INTERLACE);<a name="wp929063"> </a>
+   /* <a name="wp929065"> </a>
+   * Terminate access to the vdata and to the VS interface, then close <a name="wp929066"> </a>
+   * the HDF file.<a name="wp929067"> </a>
+   */<a name="wp929068"> </a>
+   status_32 = VSdetach (vdata_id);<a name="wp929069"> </a>
+   status_n  = Vend (file_id);<a name="wp929070"> </a>
+   status_32 = Hclose (file_id);<a name="wp929071"> </a>
+}<a name="wp929072"> </a>
+</pre></div>
+<a name="wp928489"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+write_to_vdata.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      program write_to_vdata <a name="wp929082"> </a>
+      implicit none<a name="wp929087"> </a>
+C<a name="wp929088"> </a>
+C     Parameter declaration<a name="wp929089"> </a>
+C<a name="wp929090"> </a>
+      character*18 FILE_NAME<a name="wp929091"> </a>
+      character*13 CLASS_NAME<a name="wp929092"> </a>
+      character*14 VDATA_NAME<a name="wp929093"> </a>
+      character*8  FIELD1_NAME<a name="wp929094"> </a>
+      character*4  FIELD2_NAME<a name="wp929095"> </a>
+      character*11 FIELD3_NAME<a name="wp929096"> </a>
+      character*27 FIELDNAME_LIST<a name="wp929097"> </a>
+      integer      N_RECORDS<a name="wp929098"> </a>
+      integer      ORDER_1, ORDER_2, ORDER_3<a name="wp929099"> </a>
+      integer      N_VALS_PER_REC<a name="wp929100"> </a>
+C<a name="wp929101"> </a>
+      parameter (FILE_NAME       = `General_Vdatas.hdf&#39;,<a name="wp929102"> </a>
+     +           CLASS_NAME      = `Particle Data&#39;,<a name="wp929103"> </a>
+     +           VDATA_NAME      = `Solid Particle&#39;,<a name="wp929104"> </a>
+     +           FIELD1_NAME     = `Position&#39;,<a name="wp929105"> </a>
+     +           FIELD2_NAME     = `Mass&#39;,<a name="wp929106"> </a>
+     +           FIELD3_NAME     = `Temperature&#39;,<a name="wp929107"> </a>
+     +           FIELDNAME_LIST = `Position,Mass,Temperature&#39;)<a name="wp929108"> </a>
+      parameter (N_RECORDS = 10,<a name="wp929109"> </a>
+     +           ORDER_1   = 3,<a name="wp929110"> </a>
+     +           ORDER_2   = 1,<a name="wp929111"> </a>
+     +           ORDER_3   = 2,<a name="wp929112"> </a>
+     +           N_VALS_PER_REC = ORDER_1 + ORDER_2 + ORDER_3)               <a name="wp929113"> </a>
+   <a name="wp929114"> </a>
+      integer DFACC_WRITE, DFNT_FLOAT32, FULL_INTERLACE<a name="wp929115"> </a>
+      parameter (DFACC_WRITE    = 2,<a name="wp929116"> </a>
+     +           DFNT_FLOAT32   = 5,<a name="wp929117"> </a>
+     +           FULL_INTERLACE = 0)<a name="wp929118"> </a>
+C<a name="wp929119"> </a>
+C     Function declaration<a name="wp929120"> </a>
+C<a name="wp929121"> </a>
+      integer hopen, hclose<a name="wp929122"> </a>
+      integer vfstart, vsfatch, vsfsnam, vsfscls, vsffdef, vsfsfld,<a name="wp929123"> </a>
+     +        vsfwrt, vsfdtch, vfend <a name="wp929124"> </a>
+C<a name="wp929126"> </a>
+C**** Variable declaration *******************************************<a name="wp929127"> </a>
+C<a name="wp929128"> </a>
+      integer status<a name="wp929129"> </a>
+      integer file_id, vdata_id<a name="wp929130"> </a>
+      integer vdata_ref, rec_num, num_of_records<a name="wp929131"> </a>
+      real    data_buf(N_VALS_PER_REC, N_RECORDS)<a name="wp929132"> </a>
+C<a name="wp929133"> </a>
+C**** End of variable declaration ************************************<a name="wp929134"> </a>
+C<a name="wp929135"> </a>
+C<a name="wp929136"> </a>
+C     Open the HDF file for writing.<a name="wp929137"> </a>
+C<a name="wp929138"> </a>
+      file_id = hopen(FILE_NAME, DFACC_WRITE, 0)<a name="wp929139"> </a>
+C<a name="wp929140"> </a>
+C     Initialize the VS interface.<a name="wp929141"> </a>
+C<a name="wp929142"> </a>
+      status = vfstart(file_id) <a name="wp929143"> </a>
+C<a name="wp929144"> </a>
+C     Create a new vdata.<a name="wp929145"> </a>
+C     <a name="wp929146"> </a>
+      vdata_ref = -1<a name="wp929147"> </a>
+      vdata_id = vsfatch(file_id, vdata_ref, `w&#39;) <a name="wp929148"> </a>
+C<a name="wp929149"> </a>
+C     Set name and class name of the vdata.<a name="wp929150"> </a>
+C<a name="wp929151"> </a>
+      status = vsfsnam(vdata_id, VDATA_NAME)<a name="wp929152"> </a>
+      status = vsfscls(vdata_id, CLASS_NAME)<a name="wp929153"> </a>
+C<a name="wp929154"> </a>
+C     Introduce each field&#39;s name, data type, and order. This is the<a name="wp929155"> </a>
+C     first part in defining a field.<a name="wp929156"> </a>
+C<a name="wp929157"> </a>
+      status = vsffdef(vdata_id, FIELD1_NAME, DFNT_FLOAT32, ORDER_1)<a name="wp929158"> </a>
+      status = vsffdef(vdata_id, FIELD2_NAME, DFNT_FLOAT32, ORDER_2)<a name="wp929159"> </a>
+      status = vsffdef(vdata_id, FIELD3_NAME, DFNT_FLOAT32, ORDER_3)<a name="wp929160"> </a>
+C<a name="wp929161"> </a>
+C     Finalize the definition of the fields.<a name="wp929162"> </a>
+C<a name="wp929163"> </a>
+      status = vsfsfld(vdata_id, FIELDNAME_LIST)<a name="wp929164"> </a>
+C<a name="wp929165"> </a>
+C     Buffer the data by the record for fully interlaced mode. Note that the<a name="wp929166"> </a>
+C     first three elements contain the three values of the first field,<a name="wp929167"> </a>
+C     the forth element contains the value of the second field, and the last two<a name="wp929168"> </a>
+C     elements contain the two values of the third field.<a name="wp929169"> </a>
+C<a name="wp929170"> </a>
+      do 10 rec_num = 1, N_RECORDS<a name="wp929171"> </a>
+         data_buf(1, rec_num) = 1.0 * rec_num<a name="wp929172"> </a>
+         data_buf(2, rec_num) = 2.0 * rec_num<a name="wp929173"> </a>
+         data_buf(3, rec_num) = 3.0 * rec_num<a name="wp929174"> </a>
+         data_buf(4, rec_num) = 0.1 + rec_num<a name="wp929175"> </a>
+         data_buf(5, rec_num) = 0.0<a name="wp929176"> </a>
+         data_buf(6, rec_num) = 65.0<a name="wp929177"> </a>
+10    continue<a name="wp929178"> </a>
+C<a name="wp929179"> </a>
+C     Write the data from data_buf to the vdata with the full interlacing mode.<a name="wp929180"> </a>
+C<a name="wp929181"> </a>
+      num_of_records = vsfwrt(vdata_id, data_buf, N_RECORDS,<a name="wp929182"> </a>
+     +                        FULL_INTERLACE)<a name="wp929183"> </a>
+C<a name="wp929184"> </a>
+C     Terminate access to the vdata and to the VS interface, and<a name="wp929185"> </a>
+C     close the HDF file.<a name="wp929186"> </a>
+C<a name="wp929187"> </a>
+      status = vsfdtch(vdata_id)<a name="wp929188"> </a>
+      status = vfend(file_id)<a name="wp929189"> </a>
+      status = hclose(file_id)<a name="wp929190"> </a>
+      end<a name="wp929191"> </a>
+</pre></div>
+<a name="wp928491"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+write_mixed_vdata.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp929201"> </a>
+#define  FILE_NAME        &quot;Packed_Vdata.hdf&quot;<a name="wp929207"> </a>
+#define  VDATA_NAME       &quot;Mixed Data Vdata&quot;<a name="wp929208"> </a>
+#define  CLASS_NAME       &quot;General Data Class&quot;<a name="wp929209"> </a>
+#define  FIELD1_NAME      &quot;Temp&quot; <a name="wp929210"> </a>
+#define  FIELD2_NAME      &quot;Height&quot; <a name="wp929211"> </a>
+#define  FIELD3_NAME      &quot;Speed&quot; <a name="wp929212"> </a>
+#define  FIELD4_NAME      &quot;Ident&quot;<a name="wp929213"> </a>
+#define  ORDER            1        /* number of values in the field         */<a name="wp929214"> </a>
+#define  N_RECORDS        20       /* number of records the vdata contains  */<a name="wp929215"> </a>
+#define  N_FIELDS         4        /* number of fields in the vdata         */<a name="wp929216"> </a>
+#define  FIELDNAME_LIST   &quot;Temp,Height,Speed,Ident&quot;  /* No spaces b/w names */<a name="wp929217"> </a>
+/* number of bytes of the data to be written, i.e., the size of all the<a name="wp929219"> </a>
+   field values combined times the number of records */<a name="wp929220"> </a>
+#define BUF_SIZE (2*sizeof(float32) + sizeof(int16) + sizeof(char)) * N_RECORDS<a name="wp929221"> </a>
+main( ) <a name="wp929223"> </a>
+{<a name="wp929224"> </a>
+   /************************* Variable declaration **************************/<a name="wp929225"> </a>
+   intn  status_n;      /* returned status for functions returning an intn  */<a name="wp929227"> </a>
+   int32 status_32,     /* returned status for functions returning an int32 */<a name="wp929228"> </a>
+         file_id, vdata_id,<a name="wp929229"> </a>
+         vdata_ref = -1,   /* vdata&#39;s reference number, set to -1 to create */<a name="wp929230"> </a>
+         num_of_records; /* number of records actually written to the vdata */<a name="wp929231"> </a>
+   float32 temp[N_RECORDS];       /* buffer to hold values of first field   */<a name="wp929232"> </a>
+   int16   height[N_RECORDS];     /* buffer to hold values of second field  */<a name="wp929233"> </a>
+   float32 speed[N_RECORDS];      /* buffer to hold values of third field   */<a name="wp929234"> </a>
+   char8   ident[N_RECORDS];      /* buffer to hold values of fourth field  */<a name="wp929235"> </a>
+   VOIDP   fldbufptrs[N_FIELDS];/*pointers to be pointing to the field buffers*/<a name="wp929236"> </a>
+   uint16  databuf[BUF_SIZE]; /* buffer to hold the data after being packed*/<a name="wp929237"> </a>
+   int     i;<a name="wp929238"> </a>
+   /********************** End of variable declaration **********************/<a name="wp929240"> </a>
+   /* <a name="wp929242"> </a>
+   * Create an HDF file. <a name="wp929243"> </a>
+   */<a name="wp929244"> </a>
+   file_id = Hopen (FILE_NAME, DFACC_CREATE, 0);<a name="wp929245"> </a>
+   /* <a name="wp929247"> </a>
+   * Initialize the VS interface. <a name="wp929248"> </a>
+   */<a name="wp929249"> </a>
+   status_n = Vstart (file_id);<a name="wp929250"> </a>
+   /* <a name="wp929252"> </a>
+   * Create a new vdata. <a name="wp929253"> </a>
+   */<a name="wp929254"> </a>
+   vdata_id = VSattach (file_id, vdata_ref, &quot;w&quot;);<a name="wp929255"> </a>
+   /* <a name="wp929257"> </a>
+   * Set name and class name of the vdata. <a name="wp929258"> </a>
+   */<a name="wp929259"> </a>
+   status_32 = VSsetname (vdata_id, VDATA_NAME);<a name="wp929260"> </a>
+   status_32 = VSsetclass (vdata_id, CLASS_NAME);<a name="wp929261"> </a>
+   /* <a name="wp929263"> </a>
+   * Introduce each field&#39;s name, data type, and order.  This is the first<a name="wp929264"> </a>
+   * part in defining a vdata field.<a name="wp929265"> </a>
+   */<a name="wp929266"> </a>
+   status_n = VSfdefine (vdata_id, FIELD1_NAME, DFNT_FLOAT32, ORDER); <a name="wp929267"> </a>
+   status_n = VSfdefine (vdata_id, FIELD2_NAME, DFNT_INT16, ORDER); <a name="wp929268"> </a>
+   status_n = VSfdefine (vdata_id, FIELD3_NAME, DFNT_FLOAT32, ORDER); <a name="wp929269"> </a>
+   status_n = VSfdefine (vdata_id, FIELD4_NAME, DFNT_CHAR8, ORDER); <a name="wp929270"> </a>
+   /*<a name="wp929272"> </a>
+   * Finalize the definition of the fields of the vdata.<a name="wp929273"> </a>
+   */<a name="wp929274"> </a>
+   status_n = VSsetfields (vdata_id, FIELDNAME_LIST);<a name="wp929275"> </a>
+   /* <a name="wp929277"> </a>
+   * Enter data values into the field buffers by the records.<a name="wp929278"> </a>
+   */<a name="wp929279"> </a>
+   for (i = 0; i &lt; N_RECORDS; i++)<a name="wp929280"> </a>
+   {<a name="wp929281"> </a>
+      temp[i] = 1.11 * (i+1);<a name="wp929282"> </a>
+      height[i] = i;<a name="wp929283"> </a>
+      speed[i] = 1.11 * (i+1);<a name="wp929284"> </a>
+      ident[i] = `A&#39; + i;<a name="wp929285"> </a>
+   }<a name="wp929286"> </a>
+   /* <a name="wp929288"> </a>
+   * Build an array of pointers each of which points to a field buffer that<a name="wp929289"> </a>
+   * holds all values of the field.<a name="wp929290"> </a>
+   */<a name="wp929291"> </a>
+   fldbufptrs[0] = &amp;temp[0];<a name="wp929292"> </a>
+   fldbufptrs[1] = &amp;height[0];<a name="wp929293"> </a>
+   fldbufptrs[2] = &amp;speed[0];<a name="wp929294"> </a>
+   fldbufptrs[3] = &amp;ident[0];<a name="wp929295"> </a>
+   /* <a name="wp929297"> </a>
+   * Pack all data in the field buffers that are pointed to by the set of<a name="wp929298"> </a>
+   * pointers fldbufptrs, and store the packed data into the buffer <a name="wp929299"> </a>
+   * databuf.  Note that the second parameter is _HDF_VSPACK for packing.<a name="wp929300"> </a>
+   */<a name="wp929301"> </a>
+   status_n = VSfpack (vdata_id,_HDF_VSPACK, NULL, (VOIDP)databuf,<a name="wp929302"> </a>
+           BUF_SIZE, N_RECORDS, NULL, (VOIDP)fldbufptrs);<a name="wp929303"> </a>
+   /* <a name="wp929305"> </a>
+   * Write all records of the packed data to the vdata. <a name="wp929306"> </a>
+   */<a name="wp929307"> </a>
+   num_of_records = VSwrite (vdata_id, (uint8 *)databuf, N_RECORDS, <a name="wp929308"> </a>
+                             FULL_INTERLACE); <a name="wp929309"> </a>
+   /* <a name="wp929311"> </a>
+   * Terminate access to the vdata and the VS interface, then close <a name="wp929312"> </a>
+   * the HDF file.<a name="wp929313"> </a>
+   */<a name="wp929314"> </a>
+   status_32 = VSdetach (vdata_id);<a name="wp929315"> </a>
+   status_n = Vend (file_id);<a name="wp929316"> </a>
+   status_32 = Hclose (file_id);<a name="wp929317"> </a>
+}<a name="wp929318"> </a>
+</pre></div>
+<a name="wp928493"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+write_mixed_vdata.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      program write_mixed_vdata <a name="wp929328"> </a>
+      implicit none<a name="wp929333"> </a>
+C<a name="wp929334"> </a>
+C     Parameter declaration<a name="wp929335"> </a>
+C<a name="wp929336"> </a>
+      character*16 FILE_NAME<a name="wp929337"> </a>
+      character*18 CLASS_NAME<a name="wp929338"> </a>
+      character*16 VDATA_NAME<a name="wp929339"> </a>
+      character*4  FIELD1_NAME<a name="wp929340"> </a>
+      character*6  FIELD2_NAME<a name="wp929341"> </a>
+      character*5  FIELD3_NAME<a name="wp929342"> </a>
+      character*5  FIELD4_NAME<a name="wp929343"> </a>
+      character*23 FIELDNAME_LIST<a name="wp929344"> </a>
+      integer      N_RECORDS, N_FIELDS, ORDER<a name="wp929345"> </a>
+      integer      BUF_SIZE <a name="wp929346"> </a>
+C<a name="wp929347"> </a>
+      parameter (FILE_NAME       = `Packed_Vdata.hdf&#39;,<a name="wp929348"> </a>
+     +           CLASS_NAME      = `General Data Class&#39;,<a name="wp929349"> </a>
+     +           VDATA_NAME      = `Mixed Data Vdata&#39;,<a name="wp929350"> </a>
+     +           FIELD1_NAME     = `Temp&#39;,<a name="wp929351"> </a>
+     +           FIELD2_NAME     = `Height&#39;,<a name="wp929352"> </a>
+     +           FIELD3_NAME     = `Speed&#39;,<a name="wp929353"> </a>
+     +           FIELD4_NAME     = `Ident&#39;,<a name="wp929354"> </a>
+     +           FIELDNAME_LIST = `Temp,Height,Speed,Ident&#39;)<a name="wp929355"> </a>
+      parameter (N_RECORDS = 20,<a name="wp929356"> </a>
+     +           N_FIELDS  = 4, <a name="wp929357"> </a>
+     +           ORDER     = 1,<a name="wp929358"> </a>
+     +           BUF_SIZE = (4 + 2 + 4 + 1)*N_RECORDS)               <a name="wp929359"> </a>
+   <a name="wp929360"> </a>
+      integer DFACC_WRITE, DFNT_FLOAT32, DFNT_INT16, DFNT_CHAR8,<a name="wp929361"> </a>
+     +        FULL_INTERLACE, HDF_VSPACK  <a name="wp929362"> </a>
+      parameter (DFACC_WRITE    = 2,<a name="wp929363"> </a>
+     +           DFNT_FLOAT32   = 5,<a name="wp929364"> </a>
+     +           DFNT_INT16     = 22,<a name="wp929365"> </a>
+     +           DFNT_CHAR8     = 4,<a name="wp929366"> </a>
+     +           FULL_INTERLACE = 0,<a name="wp929367"> </a>
+     +           HDF_VSPACK     = 0)<a name="wp929368"> </a>
+C<a name="wp929369"> </a>
+C     Function declaration<a name="wp929370"> </a>
+C<a name="wp929371"> </a>
+      integer hopen, hclose<a name="wp929372"> </a>
+      integer vfstart, vsfatch, vsfsnam, vsfscls, vsffdef, vsfsfld,<a name="wp929373"> </a>
+     +        vsfnpak, vsfcpak, vsfwrit, vsfdtch, vfend <a name="wp929374"> </a>
+C<a name="wp929376"> </a>
+C**** Variable declaration *******************************************<a name="wp929377"> </a>
+C<a name="wp929378"> </a>
+      integer   status<a name="wp929379"> </a>
+      integer   file_id, vdata_id<a name="wp929380"> </a>
+      integer   vdata_ref, num_of_records<a name="wp929381"> </a>
+      real      temp(N_RECORDS)<a name="wp929382"> </a>
+      integer*2 height(N_RECORDS)<a name="wp929383"> </a>
+      real      speed(N_RECORDS)<a name="wp929384"> </a>
+      character ident(N_RECORDS) <a name="wp929385"> </a>
+      integer   i<a name="wp929386"> </a>
+C<a name="wp929387"> </a>
+C     Buffer for packed data should be big enough to hold N_RECORDS.<a name="wp929388"> </a>
+C<a name="wp929389"> </a>
+      integer   databuf(BUF_SIZE/4 + 1)<a name="wp929390"> </a>
+C<a name="wp929391"> </a>
+C**** End of variable declaration ************************************<a name="wp929392"> </a>
+C<a name="wp929393"> </a>
+C<a name="wp929394"> </a>
+C     Open the HDF file for writing.<a name="wp929395"> </a>
+C<a name="wp929396"> </a>
+      file_id = hopen(FILE_NAME, DFACC_WRITE, 0)<a name="wp929397"> </a>
+C<a name="wp929398"> </a>
+C     Initialize the VS interface.<a name="wp929399"> </a>
+C<a name="wp929400"> </a>
+      status = vfstart(file_id) <a name="wp929401"> </a>
+C<a name="wp929402"> </a>
+C     Create a new vdata.<a name="wp929403"> </a>
+C     <a name="wp929404"> </a>
+      vdata_ref = -1<a name="wp929405"> </a>
+      vdata_id = vsfatch(file_id, vdata_ref, `w&#39;) <a name="wp929406"> </a>
+C<a name="wp929407"> </a>
+C     Set name and class name of the vdata.<a name="wp929408"> </a>
+C<a name="wp929409"> </a>
+      status = vsfsnam(vdata_id, VDATA_NAME)<a name="wp929410"> </a>
+      status = vsfscls(vdata_id, CLASS_NAME)<a name="wp929411"> </a>
+C<a name="wp929412"> </a>
+C     Introduce each field&#39;s name, data type, and order. This is the<a name="wp929413"> </a>
+C     first part in defining a field.<a name="wp929414"> </a>
+C<a name="wp929415"> </a>
+      status = vsffdef(vdata_id, FIELD1_NAME, DFNT_FLOAT32, ORDER)<a name="wp929416"> </a>
+      status = vsffdef(vdata_id, FIELD2_NAME, DFNT_INT16, ORDER)<a name="wp929417"> </a>
+      status = vsffdef(vdata_id, FIELD3_NAME, DFNT_FLOAT32, ORDER)<a name="wp929418"> </a>
+      status = vsffdef(vdata_id, FIELD4_NAME, DFNT_CHAR8, ORDER)<a name="wp929419"> </a>
+C<a name="wp929420"> </a>
+C     Finalize the definition of the fields.<a name="wp929421"> </a>
+C<a name="wp929422"> </a>
+      status = vsfsfld(vdata_id, FIELDNAME_LIST)<a name="wp929423"> </a>
+C<a name="wp929424"> </a>
+C     Enter data values into the field databufs by the records.<a name="wp929425"> </a>
+C<a name="wp929426"> </a>
+      do 10 i = 1, N_RECORDS<a name="wp929427"> </a>
+         temp(i)   = 1.11 * i<a name="wp929428"> </a>
+         height(i) = i - 1<a name="wp929429"> </a>
+         speed(i)  = 1.11 * i<a name="wp929430"> </a>
+         ident(i)  = char(64+i)<a name="wp929431"> </a>
+10    continue<a name="wp929432"> </a>
+C<a name="wp929433"> </a>
+C     Pack N_RECORDS of data into databuf. In Fortran, each field is packed <a name="wp929434"> </a>
+C     using separate calls to vsfnpak or vsfcpak.<a name="wp929435"> </a>
+C<a name="wp929436"> </a>
+      status = vsfnpak(vdata_id, HDF_VSPACK, ` `, databuf, BUF_SIZE,<a name="wp929437"> </a>
+     +                 N_RECORDS, FIELD1_NAME, temp) <a name="wp929438"> </a>
+      status = vsfnpak(vdata_id, HDF_VSPACK, ` `, databuf, BUF_SIZE,<a name="wp929439"> </a>
+     +                 N_RECORDS, FIELD2_NAME, height) <a name="wp929440"> </a>
+      status = vsfnpak(vdata_id, HDF_VSPACK, ` `, databuf, BUF_SIZE,<a name="wp929441"> </a>
+     +                 N_RECORDS, FIELD3_NAME, speed) <a name="wp929442"> </a>
+      status = vsfcpak(vdata_id, HDF_VSPACK, ` `, databuf, BUF_SIZE,<a name="wp929443"> </a>
+     +                 N_RECORDS, FIELD4_NAME, ident) <a name="wp929444"> </a>
+C<a name="wp929445"> </a>
+C     Write all the records of the packed data to the vdata.<a name="wp929446"> </a>
+C<a name="wp929447"> </a>
+      num_of_records = vsfwrit(vdata_id, databuf, N_RECORDS,<a name="wp929448"> </a>
+     +                         FULL_INTERLACE)<a name="wp929449"> </a>
+C<a name="wp929450"> </a>
+C     Terminate access to the vdata and to the VS interface, and<a name="wp929451"> </a>
+C     close the HDF file.<a name="wp929452"> </a>
+C<a name="wp929453"> </a>
+      status = vsfdtch(vdata_id)<a name="wp929454"> </a>
+      status = vfend(file_id)<a name="wp929455"> </a>
+      status = hclose(file_id)<a name="wp929456"> </a>
+      end<a name="wp929457"> </a>
+</pre></div>
+<a name="wp928495"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+read_from_vdata.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp929467"> </a>
+#define  FILE_NAME       &quot;General_Vdatas.hdf&quot;<a name="wp929473"> </a>
+#define  VDATA_NAME      &quot;Solid Particle&quot;<a name="wp929474"> </a>
+#define  N_RECORDS       5    /* number of records the vdata contains */<a name="wp929475"> </a>
+#define  RECORD_INDEX    3    /* position where reading starts - 4th record */<a name="wp929476"> </a>
+#define  ORDER_1         3    /* order of first field to be read */<a name="wp929477"> </a>
+#define  ORDER_2         2    /* order of second field to be read */<a name="wp929478"> </a>
+#define  FIELDNAME_LIST  &quot;Position,Temperature&quot; /* only two fields are read */<a name="wp929479"> </a>
+#define  N_VALS_PER_REC  (ORDER_1 + ORDER_2)   <a name="wp929480"> </a>
+                         /* number of values per record */<a name="wp929481"> </a>
+main( ) <a name="wp929483"> </a>
+{<a name="wp929484"> </a>
+   /************************* Variable declaration **************************/<a name="wp929485"> </a>
+   intn  status_n;      /* returned status for functions returning an intn  */<a name="wp929487"> </a>
+   int32 status_32,     /* returned status for functions returning an int32 */<a name="wp929488"> </a>
+         file_id, vdata_id, <a name="wp929489"> </a>
+         vdata_ref,     /* vdata&#39;s reference number */<a name="wp929490"> </a>
+         num_of_records, /* number of records actually written to the vdata */<a name="wp929491"> </a>
+         record_pos;    /* position of the current record */<a name="wp929492"> </a>
+   int16 i, rec_num;    /* current record number in the vdata */<a name="wp929493"> </a>
+   float32 databuf[N_RECORDS][N_VALS_PER_REC];   /* buffer for vdata values */<a name="wp929494"> </a>
+   /********************** End of variable declaration **********************/<a name="wp929496"> </a>
+   /* <a name="wp929498"> </a>
+   * Open the HDF file for reading.<a name="wp929499"> </a>
+   */<a name="wp929500"> </a>
+   file_id = Hopen (FILE_NAME, DFACC_READ, 0);<a name="wp929501"> </a>
+   /* <a name="wp929503"> </a>
+   * Initialize the VS interface.<a name="wp929504"> </a>
+   */<a name="wp929505"> </a>
+   status_n = Vstart (file_id);<a name="wp929506"> </a>
+   /*<a name="wp929508"> </a>
+   * Get the reference number of the vdata, whose name is specified in <a name="wp929509"> </a>
+   * VDATA_NAME, using VSfind, which will be discussed in Section 4.7.3.<a name="wp929510"> </a>
+   */<a name="wp929511"> </a>
+   vdata_ref = VSfind (file_id, VDATA_NAME);<a name="wp929512"> </a>
+   /* <a name="wp929514"> </a>
+   * Attach to the vdata for reading if it is found, otherwise <a name="wp929515"> </a>
+   * exit the program.<a name="wp929516"> </a>
+   */<a name="wp929517"> </a>
+   if (vdata_ref == 0) exit;<a name="wp929518"> </a>
+   vdata_id = VSattach (file_id, vdata_ref, &quot;r&quot;);<a name="wp929519"> </a>
+   /* <a name="wp929521"> </a>
+   * Specify the fields that will be read.<a name="wp929522"> </a>
+   */<a name="wp929523"> </a>
+   status_n = VSsetfields (vdata_id, FIELDNAME_LIST);<a name="wp929524"> </a>
+   /*<a name="wp929526"> </a>
+   * Place the current point to the position specified in RECORD_INDEX.<a name="wp929527"> </a>
+   */<a name="wp929528"> </a>
+   record_pos = VSseek (vdata_id, RECORD_INDEX);<a name="wp929529"> </a>
+   /* <a name="wp929531"> </a>
+   * Read the next N_RECORDS records from the vdata and store the data <a name="wp929532"> </a>
+   * in the buffer databuf with fully interlaced mode.<a name="wp929533"> </a>
+   */<a name="wp929534"> </a>
+   num_of_records = VSread (vdata_id, (uint8 *)databuf, N_RECORDS, <a name="wp929535"> </a>
+                            FULL_INTERLACE);<a name="wp929536"> </a>
+   /*<a name="wp929538"> </a>
+   * Display the read data as many records as the number of records <a name="wp929539"> </a>
+   * returned by VSread.<a name="wp929540"> </a>
+   */<a name="wp929541"> </a>
+   printf (&quot;\n       Particle Position        Temperature Range\n\n&quot;);<a name="wp929542"> </a>
+   for (rec_num = 0; rec_num &lt; num_of_records; rec_num++)<a name="wp929543"> </a>
+   {<a name="wp929544"> </a>
+      printf (&quot;   %6.2f, %6.2f, %6.2f        %6.2f, %6.2f\n&quot;, <a name="wp929545"> </a>
+        databuf[rec_num][0], databuf[rec_num][1], databuf[rec_num][2], <a name="wp929546"> </a>
+        databuf[rec_num][3], databuf[rec_num][4]);<a name="wp929547"> </a>
+   }<a name="wp929548"> </a>
+   /* <a name="wp929550"> </a>
+   * Terminate access to the vdata and to the VS interface, then close <a name="wp929551"> </a>
+   * the HDF file.<a name="wp929552"> </a>
+   */<a name="wp929553"> </a>
+   status_32 = VSdetach (vdata_id);<a name="wp929554"> </a>
+   status_n = Vend (file_id);<a name="wp929555"> </a>
+   status_32 = Hclose (file_id);<a name="wp929556"> </a>
+}<a name="wp929557"> </a>
+</pre></div>
+<a name="wp928497"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+read_from_vdata.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      program read_from_vdata <a name="wp929567"> </a>
+      implicit none<a name="wp929572"> </a>
+C<a name="wp929573"> </a>
+C     Parameter declaration<a name="wp929574"> </a>
+C<a name="wp929575"> </a>
+      character*18 FILE_NAME<a name="wp929576"> </a>
+      character*14 VDATA_NAME<a name="wp929577"> </a>
+      character*20 FIELDNAME_LIST<a name="wp929578"> </a>
+      integer      N_RECORDS, RECORD_INDEX<a name="wp929579"> </a>
+      integer      ORDER_1, ORDER_2<a name="wp929580"> </a>
+      integer      N_VALS_PER_REC<a name="wp929581"> </a>
+C<a name="wp929582"> </a>
+      parameter (FILE_NAME       = `General_Vdatas.hdf&#39;,<a name="wp929583"> </a>
+     +           VDATA_NAME      = `Solid Particle&#39;,<a name="wp929584"> </a>
+     +           FIELDNAME_LIST = `Position,Temperature&#39;)<a name="wp929585"> </a>
+      parameter (N_RECORDS  = 5,<a name="wp929586"> </a>
+     +           RECORD_INDEX = 3,<a name="wp929587"> </a>
+     +           ORDER_1    = 3,<a name="wp929588"> </a>
+     +           ORDER_2    = 2,<a name="wp929589"> </a>
+     +           N_VALS_PER_REC = ORDER_1 + ORDER_2 )               <a name="wp929590"> </a>
+   <a name="wp929591"> </a>
+      integer DFACC_READ, FULL_INTERLACE<a name="wp929592"> </a>
+      parameter (DFACC_READ     = 1,<a name="wp929593"> </a>
+     +           FULL_INTERLACE = 0)<a name="wp929594"> </a>
+C<a name="wp929595"> </a>
+C     Function declaration<a name="wp929596"> </a>
+C<a name="wp929597"> </a>
+      integer hopen, hclose<a name="wp929598"> </a>
+      integer vfstart, vsffnd, vsfatch, vsfsfld, vsfrd, vsfseek,<a name="wp929599"> </a>
+     +        vsfdtch, vfend <a name="wp929600"> </a>
+C<a name="wp929602"> </a>
+C**** Variable declaration *******************************************<a name="wp929603"> </a>
+C<a name="wp929604"> </a>
+      integer status<a name="wp929605"> </a>
+      integer file_id, vdata_id<a name="wp929606"> </a>
+      integer vdata_ref, rec_num, num_of_records, rec_pos<a name="wp929607"> </a>
+      real    databuf(N_VALS_PER_REC, N_RECORDS)<a name="wp929608"> </a>
+      integer i<a name="wp929609"> </a>
+C<a name="wp929610"> </a>
+C**** End of variable declaration ************************************<a name="wp929611"> </a>
+C<a name="wp929612"> </a>
+C<a name="wp929613"> </a>
+C     Open the HDF file for reading.<a name="wp929614"> </a>
+C<a name="wp929615"> </a>
+      file_id = hopen(FILE_NAME, DFACC_READ, 0)<a name="wp929616"> </a>
+C<a name="wp929617"> </a>
+C     Initialize the VS interface.<a name="wp929618"> </a>
+C<a name="wp929619"> </a>
+      status = vfstart(file_id) <a name="wp929620"> </a>
+C<a name="wp929621"> </a>
+C     Get the reference number of the vdata, whose name is specified in<a name="wp929622"> </a>
+C     VDATA_NAME, using vsffnd, which will be discussed in Section 4.7.3. <a name="wp929623"> </a>
+C     <a name="wp929624"> </a>
+      vdata_ref = vsffnd(file_id, VDATA_NAME)<a name="wp929625"> </a>
+C<a name="wp929626"> </a>
+C     Attach to the vdata for reading if it is found, <a name="wp929627"> </a>
+C     otherwise exit the program.<a name="wp929628"> </a>
+C<a name="wp929629"> </a>
+      if (vdata_ref .eq. 0) stop<a name="wp929630"> </a>
+      vdata_id = vsfatch(file_id, vdata_ref, `r&#39;) <a name="wp929631"> </a>
+C<a name="wp929632"> </a>
+C     Specify the fields that will be read. <a name="wp929633"> </a>
+C<a name="wp929634"> </a>
+      status = vsfsfld(vdata_id, FIELDNAME_LIST)<a name="wp929635"> </a>
+C<a name="wp929636"> </a>
+C     Place the current point to the position specified in RECORD_INDEX.<a name="wp929637"> </a>
+C<a name="wp929638"> </a>
+      rec_pos = vsfseek(vdata_id, RECORD_INDEX) <a name="wp929639"> </a>
+C<a name="wp929640"> </a>
+C     Read the next N_RECORDS from the vdata and store the data in the buffer <a name="wp929641"> </a>
+C     databuf with fully interlace mode. <a name="wp929642"> </a>
+C<a name="wp929643"> </a>
+      num_of_records = vsfrd(vdata_id, databuf, N_RECORDS,<a name="wp929644"> </a>
+     +                        FULL_INTERLACE)<a name="wp929645"> </a>
+C<a name="wp929646"> </a>
+C     Display the read data as many records as the number of records returned<a name="wp929647"> </a>
+C     by vsfrd.<a name="wp929648"> </a>
+C<a name="wp929649"> </a>
+      write(*,*) `  Particle Position     Temperature Range&#39;<a name="wp929650"> </a>
+      write(*,*)<a name="wp929651"> </a>
+      do 10 rec_num = 1, num_of_records<a name="wp929652"> </a>
+         write(*,1000) (databuf(i, rec_num), i = 1, N_VALS_PER_REC)<a name="wp929653"> </a>
+10    continue <a name="wp929654"> </a>
+1000  format(1x,3(f6.2), 8x,2(f6.2))<a name="wp929655"> </a>
+C<a name="wp929656"> </a>
+C     Terminate access to the vdata and to the VS interface, and<a name="wp929657"> </a>
+C     close the HDF file.<a name="wp929658"> </a>
+C<a name="wp929659"> </a>
+      status = vsfdtch(vdata_id)<a name="wp929660"> </a>
+      status = vfend(file_id)<a name="wp929661"> </a>
+      status = hclose(file_id)<a name="wp929662"> </a>
+      end<a name="wp929663"> </a>
+</pre></div>
+<a name="wp928499"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+read_mixed_vdata.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp929673"> </a>
+#define  N_RECORDS       20      /* number of records to be read */<a name="wp929679"> </a>
+#define  N_FIELDS        2       /* number of fields to be read */<a name="wp929680"> </a>
+#define  FILE_NAME       &quot;Packed_Vdata.hdf&quot;<a name="wp929681"> </a>
+#define  VDATA_NAME      &quot;Mixed Data Vdata&quot;<a name="wp929682"> </a>
+#define  FIELDNAME_LIST  &quot;Temp,Ident&quot;<a name="wp929683"> </a>
+/* number of bytes of the data to be read */<a name="wp929685"> </a>
+#define  BUFFER_SIZE     ( sizeof(float32) + sizeof(char)) * N_RECORDS <a name="wp929686"> </a>
+main ()<a name="wp929688"> </a>
+{<a name="wp929689"> </a>
+   /************************* Variable declaration **************************/<a name="wp929690"> </a>
+   intn  status_n;      /* returned status for functions returning an intn  */<a name="wp929692"> </a>
+   int32 status_32,     /* returned status for functions returning an int32 */<a name="wp929693"> </a>
+         file_id, vdata_id, <a name="wp929694"> </a>
+         num_of_records,        /* number of records actually read */<a name="wp929695"> </a>
+         vdata_ref,             /* reference number of the vdata to be read */<a name="wp929696"> </a>
+         buffer_size;           /* number of bytes the vdata can hold       */<a name="wp929697"> </a>
+   float32 itemp[N_RECORDS];    /* buffer to hold values of first field     */<a name="wp929698"> </a>
+   char  idents[N_RECORDS];     /* buffer to hold values of fourth field    */<a name="wp929699"> </a>
+   uint8 databuf[BUFFER_SIZE];  /* buffer to hold read data, still packed   */<a name="wp929700"> </a>
+   VOIDP fldbufptrs[N_FIELDS];/*pointers to be pointing to the field buffers*/<a name="wp929701"> </a>
+   int   i;<a name="wp929702"> </a>
+   /********************** End of variable declaration **********************/<a name="wp929704"> </a>
+   /*<a name="wp929706"> </a>
+   * Open the HDF file for reading. <a name="wp929707"> </a>
+   */<a name="wp929708"> </a>
+   file_id = Hopen (FILE_NAME, DFACC_READ, 0);<a name="wp929709"> </a>
+   /*<a name="wp929711"> </a>
+   * Initialize the VS interface. <a name="wp929712"> </a>
+   */<a name="wp929713"> </a>
+   status_n = Vstart (file_id);<a name="wp929714"> </a>
+   /*<a name="wp929716"> </a>
+   * Get the reference number of the vdata, whose name is specified in<a name="wp929717"> </a>
+   * VDATA_NAME, using VSfind, which will be discussed in Section 4.7.3.<a name="wp929718"> </a>
+   */<a name="wp929719"> </a>
+   vdata_ref = VSfind (file_id, VDATA_NAME);<a name="wp929720"> </a>
+   /*<a name="wp929722"> </a>
+   * Attach to the vdata for reading. <a name="wp929723"> </a>
+   */<a name="wp929724"> </a>
+   vdata_id = VSattach (file_id, vdata_ref, &quot;r&quot;);<a name="wp929725"> </a>
+   /*<a name="wp929727"> </a>
+   * Specify the fields that will be read. <a name="wp929728"> </a>
+   */<a name="wp929729"> </a>
+   status_n = VSsetfields(vdata_id, FIELDNAME_LIST);<a name="wp929730"> </a>
+   /*<a name="wp929732"> </a>
+   * Read N_RECORDS records of the vdata and store the values into the <a name="wp929733"> </a>
+   * buffer databuf. <a name="wp929734"> </a>
+   */<a name="wp929735"> </a>
+   num_of_records = VSread (vdata_id, (uint8 *)databuf, N_RECORDS, <a name="wp929736"> </a>
+                            FULL_INTERLACE);<a name="wp929737"> </a>
+   /*<a name="wp929739"> </a>
+   * Build an array of pointers each of which points to an array that<a name="wp929740"> </a>
+   * will hold all values of a field after being unpacked.<a name="wp929741"> </a>
+   */<a name="wp929742"> </a>
+   fldbufptrs[0] = &amp;itemp[0];<a name="wp929743"> </a>
+   fldbufptrs[1] = &amp;idents[0];<a name="wp929744"> </a>
+   <a name="wp929745"> </a>
+   /*<a name="wp929746"> </a>
+   * Unpack the data from the buffer databuf and store the values into the <a name="wp929747"> </a>
+   * appropriate field buffers pointed to by the set of pointers fldbufptrs.<a name="wp929748"> </a>
+   * Note that the second parameter is _HDF_VSUNPACK for unpacking and the<a name="wp929749"> </a>
+   * number of records is the one returned by VSread.<a name="wp929750"> </a>
+   */<a name="wp929751"> </a>
+   status_n = VSfpack (vdata_id, _HDF_VSUNPACK, FIELDNAME_LIST, (VOIDP)databuf,<a name="wp929752"> </a>
+               BUFFER_SIZE, num_of_records, NULL, (VOIDP)fldbufptrs);<a name="wp929753"> </a>
+   /*<a name="wp929755"> </a>
+   * Display the read data being stored in the field buffers.<a name="wp929756"> </a>
+   */<a name="wp929757"> </a>
+   printf (&quot;\n     Temp      Ident\n&quot;);<a name="wp929758"> </a>
+   for (i=0; i &lt; num_of_records; i++)<a name="wp929759"> </a>
+       printf (&quot;   %6.2f        %c\n&quot;, itemp[i], idents[i]);<a name="wp929760"> </a>
+   /*<a name="wp929762"> </a>
+   * Terminate access to the vdata and the VS interface, then close <a name="wp929763"> </a>
+   * the HDF file. <a name="wp929764"> </a>
+   */<a name="wp929765"> </a>
+   status_32 = VSdetach (vdata_id);<a name="wp929766"> </a>
+   status_n = Vend (file_id);<a name="wp929767"> </a>
+   status_32 = Hclose (file_id);<a name="wp929768"> </a>
+}<a name="wp929769"> </a>
+</pre></div>
+<a name="wp928501"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+read_mixed_vdata.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      program read_mixed_vdata <a name="wp929775"> </a>
+      implicit none<a name="wp929780"> </a>
+C<a name="wp929781"> </a>
+C     Parameter declaration<a name="wp929782"> </a>
+C<a name="wp929783"> </a>
+      character*16 FILE_NAME<a name="wp929784"> </a>
+      character*16 VDATA_NAME<a name="wp929785"> </a>
+      character*4  FIELD1_NAME<a name="wp929786"> </a>
+      character*5  FIELD2_NAME<a name="wp929787"> </a>
+      character*10 FIELDNAME_LIST<a name="wp929788"> </a>
+      integer      N_RECORDS, N_FIELDS<a name="wp929789"> </a>
+      integer      BUFFER_SIZE <a name="wp929790"> </a>
+C<a name="wp929791"> </a>
+      parameter (FILE_NAME       = `Packed_Vdata.hdf&#39;,<a name="wp929792"> </a>
+     +           VDATA_NAME      = `Mixed Data Vdata&#39;,<a name="wp929793"> </a>
+     +           FIELD1_NAME     = `Temp&#39;,<a name="wp929794"> </a>
+     +           FIELD2_NAME     = `Ident&#39;,<a name="wp929795"> </a>
+     +           FIELDNAME_LIST = `Temp,Ident&#39;)<a name="wp929796"> </a>
+      parameter (N_RECORDS   = 20,<a name="wp929797"> </a>
+     +           N_FIELDS    = 2, <a name="wp929798"> </a>
+     +           BUFFER_SIZE = (4 + 1)*N_RECORDS)               <a name="wp929799"> </a>
+   <a name="wp929800"> </a>
+      integer DFACC_READ, DFNT_FLOAT32, DFNT_CHAR8,<a name="wp929801"> </a>
+     +        FULL_INTERLACE, HDF_VSUNPACK  <a name="wp929802"> </a>
+      parameter (DFACC_READ       = 1,<a name="wp929803"> </a>
+     +           DFNT_FLOAT32     = 5,<a name="wp929804"> </a>
+     +           DFNT_CHAR8       = 4,<a name="wp929805"> </a>
+     +           FULL_INTERLACE   = 0,<a name="wp929806"> </a>
+     +           HDF_VSUNPACK     = 1)<a name="wp929807"> </a>
+C<a name="wp929808"> </a>
+C     Function declaration<a name="wp929809"> </a>
+C<a name="wp929810"> </a>
+      integer hopen, hclose<a name="wp929811"> </a>
+      integer vfstart, vsfatch, vsffnd, vsfsfld,<a name="wp929812"> </a>
+     +        vsfnpak, vsfcpak, vsfread, vsfdtch, vfend <a name="wp929813"> </a>
+C<a name="wp929815"> </a>
+C**** Variable declaration *******************************************<a name="wp929816"> </a>
+C<a name="wp929817"> </a>
+      integer   status<a name="wp929818"> </a>
+      integer   file_id, vdata_id<a name="wp929819"> </a>
+      integer   vdata_ref, num_of_records<a name="wp929820"> </a>
+      real      temp(N_RECORDS)<a name="wp929821"> </a>
+      character ident(N_RECORDS) <a name="wp929822"> </a>
+      integer   i<a name="wp929823"> </a>
+C<a name="wp929824"> </a>
+C     Buffer for read packed data should be big enough to hold N_RECORDS.<a name="wp929825"> </a>
+C<a name="wp929826"> </a>
+      integer   databuf(BUFFER_SIZE/4 + 1)<a name="wp929827"> </a>
+C<a name="wp929828"> </a>
+C**** End of variable declaration ************************************<a name="wp929829"> </a>
+C<a name="wp929830"> </a>
+C<a name="wp929831"> </a>
+C     Open the HDF file for reading.<a name="wp929832"> </a>
+C<a name="wp929833"> </a>
+      file_id = hopen(FILE_NAME, DFACC_READ, 0)<a name="wp929834"> </a>
+C<a name="wp929835"> </a>
+C     Initialize the VS interface.<a name="wp929836"> </a>
+C<a name="wp929837"> </a>
+      status = vfstart(file_id) <a name="wp929838"> </a>
+C<a name="wp929839"> </a>
+C     Get the reference number of the vdata, whose name is specified in<a name="wp929840"> </a>
+C     VDATA_NAME, using vsffnd, which will be discussed in Section 4.7.3. <a name="wp929841"> </a>
+C     <a name="wp929842"> </a>
+      vdata_ref = vsffnd(file_id, VDATA_NAME)<a name="wp929843"> </a>
+C<a name="wp929844"> </a>
+C     Attach to the vdata for reading if it is found, <a name="wp929845"> </a>
+C     otherwise exit the program.<a name="wp929846"> </a>
+C<a name="wp929847"> </a>
+      if (vdata_ref .eq. 0) stop<a name="wp929848"> </a>
+      vdata_id = vsfatch(file_id, vdata_ref, `r&#39;) <a name="wp929849"> </a>
+C<a name="wp929850"> </a>
+C     Specify the fields that will be read. <a name="wp929851"> </a>
+C<a name="wp929852"> </a>
+      status = vsfsfld(vdata_id, FIELDNAME_LIST)<a name="wp929853"> </a>
+C<a name="wp929855"> </a>
+C     Read N_RECORDS records of the vdata and store the values into the databuf.<a name="wp929856"> </a>
+C<a name="wp929857"> </a>
+      num_of_records = vsfread(vdata_id, databuf, N_RECORDS,<a name="wp929858"> </a>
+     +                         FULL_INTERLACE)<a name="wp929859"> </a>
+C<a name="wp929860"> </a>
+C     Unpack N_RECORDS from databuf into temp and ident arrays.<a name="wp929861"> </a>
+C     In Fortran, each field is unpacked using separate calls to <a name="wp929862"> </a>
+C     vsfnpak or vsfcpak.<a name="wp929863"> </a>
+C<a name="wp929864"> </a>
+      status = vsfnpak(vdata_id, HDF_VSUNPACK, FIELDNAME_LIST, databuf,<a name="wp929865"> </a>
+     +                 BUFFER_SIZE, num_of_records, FIELD1_NAME, temp) <a name="wp929866"> </a>
+      status = vsfcpak(vdata_id, HDF_VSUNPACK, FIELDNAME_LIST, databuf,<a name="wp929867"> </a>
+     +                 BUFFER_SIZE, num_of_records, FIELD2_NAME, ident) <a name="wp929868"> </a>
+C<a name="wp929869"> </a>
+C     Display the read data being stored in the field databufs.<a name="wp929870"> </a>
+C<a name="wp929871"> </a>
+      write (*,*) `    Temp  Ident&#39;<a name="wp929872"> </a>
+      do 10 i = 1, num_of_records<a name="wp929873"> </a>
+         write(*,1000) temp(i), ident(i)<a name="wp929874"> </a>
+10    continue <a name="wp929875"> </a>
+1000  format (3x,F6.2, 4x, a)<a name="wp929876"> </a>
+C<a name="wp929877"> </a>
+C     Terminate access to the vdata and to the VS interface, and<a name="wp929878"> </a>
+C     close the HDF file.<a name="wp929879"> </a>
+C<a name="wp929880"> </a>
+      status = vsfdtch(vdata_id)<a name="wp929881"> </a>
+      status = vfend(file_id)<a name="wp929882"> </a>
+      status = hclose(file_id)<a name="wp929883"> </a>
+      end<a name="wp929884"> </a>
+</pre></div>
+<a name="wp928503"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+locate_vdata.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp929894"> </a>
+#define  FILE_NAME         &quot;General_Vdatas.hdf&quot;<a name="wp929900"> </a>
+#define  SEARCHED_FIELDS   &quot;Position,Temperature&quot;<a name="wp929901"> </a>
+main( )<a name="wp929903"> </a>
+{<a name="wp929904"> </a>
+   /************************* Variable declaration **************************/<a name="wp929905"> </a>
+   intn  status_n;      /* returned status for functions returning an intn  */<a name="wp929907"> </a>
+   int32 status_32,     /* returned status for functions returning an int32 */<a name="wp929908"> </a>
+         file_id, vdata_id, vdata_ref,<a name="wp929909"> </a>
+         index = 0;     /* index of the vdata in the file - manually kept   */<a name="wp929910"> </a>
+   int8  found_fields;  /* TRUE if the specified fields exist in the vdata  */<a name="wp929911"> </a>
+   /********************** End of variable declaration **********************/<a name="wp929913"> </a>
+   /*<a name="wp929915"> </a>
+   * Open the HDF file for reading.<a name="wp929916"> </a>
+   */<a name="wp929917"> </a>
+   file_id = Hopen (FILE_NAME, DFACC_READ, 0);<a name="wp929918"> </a>
+   /*<a name="wp929920"> </a>
+   * Initialize the VS interface.<a name="wp929921"> </a>
+   */<a name="wp929922"> </a>
+   status_n = Vstart (file_id);<a name="wp929923"> </a>
+   /*<a name="wp929925"> </a>
+   * Set the reference number to -1 to start the search from <a name="wp929926"> </a>
+   * the beginning of file.<a name="wp929927"> </a>
+   */<a name="wp929928"> </a>
+   vdata_ref = -1;<a name="wp929929"> </a>
+   /*<a name="wp929931"> </a>
+   * Assume that the specified fields are not found in the current vdata.<a name="wp929932"> </a>
+   */<a name="wp929933"> </a>
+   found_fields = FALSE;<a name="wp929934"> </a>
+   <a name="wp929935"> </a>
+   /*<a name="wp929936"> </a>
+   * Use VSgetid to obtain each vdata by its reference number then<a name="wp929937"> </a>
+   * attach to the vdata and search for the fields.  The loop<a name="wp929938"> </a>
+   * terminates when the last vdata is reached or when a vdata which<a name="wp929939"> </a>
+   * contains the fields listed in SEARCHED_FIELDS is found.  <a name="wp929940"> </a>
+   */<a name="wp929941"> </a>
+   while ((vdata_ref = VSgetid (file_id, vdata_ref)) != FAIL)<a name="wp929942"> </a>
+   {<a name="wp929943"> </a>
+      vdata_id = VSattach (file_id, vdata_ref, &quot;r&quot;);<a name="wp929944"> </a>
+      if ((status_n = VSfexist (vdata_id, SEARCHED_FIELDS)) != FAIL)<a name="wp929945"> </a>
+      {<a name="wp929946"> </a>
+         found_fields = TRUE;<a name="wp929947"> </a>
+         break;<a name="wp929948"> </a>
+      }<a name="wp929949"> </a>
+      /*<a name="wp929951"> </a>
+      * Detach from the current vdata before continuing searching.<a name="wp929952"> </a>
+      */<a name="wp929953"> </a>
+      status_32 = VSdetach (vdata_id);<a name="wp929954"> </a>
+      index++;		/* advance the index by 1 for the next vdata */<a name="wp929956"> </a>
+   }<a name="wp929957"> </a>
+   <a name="wp929958"> </a>
+   /*<a name="wp929959"> </a>
+   * Print the index of the vdata containing the fields or a &quot;not found&quot; <a name="wp929960"> </a>
+   * message if no such vdata is found.  Also detach from the vdata found.<a name="wp929961"> </a>
+   */<a name="wp929962"> </a>
+   if (!found_fields) <a name="wp929963"> </a>
+      printf (&quot;Fields Position and Temperature were not found.\n&quot;);<a name="wp929964"> </a>
+   else <a name="wp929965"> </a>
+   {<a name="wp929966"> </a>
+      printf<a name="wp929967"> </a>
+     (&quot;Fields Position and Temperature found in the vdata at position %d\n&quot;, <a name="wp929968"> </a>
+       index);<a name="wp929969"> </a>
+      status_32 = VSdetach (vdata_id);<a name="wp929970"> </a>
+   }<a name="wp929971"> </a>
+   /*<a name="wp929973"> </a>
+   * Terminate access to the VS interface and close the HDF file.<a name="wp929974"> </a>
+   */<a name="wp929975"> </a>
+   status_n = Vend (file_id);<a name="wp929976"> </a>
+   status_32 = Hclose (file_id);<a name="wp929977"> </a>
+}<a name="wp929978"> </a>
+</pre></div>
+<a name="wp928512"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+locate_vdata.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      program locate_vdata <a name="wp929988"> </a>
+      implicit none<a name="wp929993"> </a>
+C<a name="wp929994"> </a>
+C     Parameter declaration<a name="wp929995"> </a>
+C<a name="wp929996"> </a>
+      character*18 FILE_NAME<a name="wp929997"> </a>
+      character*20 SEARCHED_FIELDS <a name="wp929998"> </a>
+C<a name="wp929999"> </a>
+      parameter (FILE_NAME       = `General_Vdatas.hdf&#39;,<a name="wp930000"> </a>
+     +           SEARCHED_FIELDS = `Position,Temperature&#39;)<a name="wp930001"> </a>
+      integer DFACC_READ<a name="wp930002"> </a>
+      parameter (DFACC_READ = 1)<a name="wp930003"> </a>
+C<a name="wp930004"> </a>
+C     Function declaration<a name="wp930005"> </a>
+C<a name="wp930006"> </a>
+      integer hopen, hclose<a name="wp930007"> </a>
+      integer vfstart, vsfatch, vsfgid, vsfex, vsfdtch, vfend <a name="wp930008"> </a>
+C<a name="wp930010"> </a>
+C**** Variable declaration *******************************************<a name="wp930011"> </a>
+C<a name="wp930012"> </a>
+      integer status<a name="wp930013"> </a>
+      integer file_id, vdata_id, vdata_ref<a name="wp930014"> </a>
+      integer index <a name="wp930015"> </a>
+      logical found_fields <a name="wp930016"> </a>
+C<a name="wp930017"> </a>
+C**** End of variable declaration ************************************<a name="wp930018"> </a>
+C<a name="wp930019"> </a>
+C<a name="wp930020"> </a>
+C     Open the HDF file for reading.<a name="wp930021"> </a>
+C<a name="wp930022"> </a>
+      file_id = hopen(FILE_NAME, DFACC_READ, 0)<a name="wp930023"> </a>
+C<a name="wp930024"> </a>
+C     Initialize the VS interface.<a name="wp930025"> </a>
+C<a name="wp930026"> </a>
+      status = vfstart(file_id) <a name="wp930027"> </a>
+      index = 0<a name="wp930028"> </a>
+C<a name="wp930029"> </a>
+C     Set the reference number to -1 to start the search from the beginning<a name="wp930030"> </a>
+C     of the file. <a name="wp930031"> </a>
+C     <a name="wp930032"> </a>
+      vdata_ref = -1<a name="wp930033"> </a>
+C<a name="wp930034"> </a>
+C     Assume that the specified fields are not found in the current vdata.<a name="wp930035"> </a>
+C<a name="wp930036"> </a>
+      found_fields = .FALSE.<a name="wp930037"> </a>
+10    continue<a name="wp930038"> </a>
+C<a name="wp930039"> </a>
+C     Use vsfgid to obtain each vdata by its reference number then<a name="wp930040"> </a>
+C     attach to the vdata and search for the fields. The loop terminates<a name="wp930041"> </a>
+C     when the last vdata is reached or when a vdata which contains the<a name="wp930042"> </a>
+C     fields listed in SEARCHED_FIELDS is found.<a name="wp930043"> </a>
+C<a name="wp930044"> </a>
+      vdata_ref = vsfgid(file_id, vdata_ref)<a name="wp930045"> </a>
+      if (vdata_ref .eq. -1) goto 100<a name="wp930046"> </a>
+      vdata_id = vsfatch(file_id, vdata_ref, `r&#39;)<a name="wp930047"> </a>
+      status = vsfex(vdata_id, SEARCHED_FIELDS)<a name="wp930048"> </a>
+      if (status .ne. -1) then<a name="wp930049"> </a>
+          found_fields = .TRUE.<a name="wp930050"> </a>
+          goto 100<a name="wp930051"> </a>
+      endif<a name="wp930052"> </a>
+      status = vsfdtch(vdata_id)<a name="wp930053"> </a>
+      index = index + 1 <a name="wp930054"> </a>
+      goto 10<a name="wp930055"> </a>
+100   continue<a name="wp930056"> </a>
+C<a name="wp930057"> </a>
+C     Print the index of the vdata containing the fields or a `not found&#39;<a name="wp930058"> </a>
+C     message if no such vdata is found. Also detach from the vdata found.<a name="wp930059"> </a>
+C<a name="wp930060"> </a>
+      if(.NOT.found_fields) then<a name="wp930061"> </a>
+         write(*,*) `Fields Positions and Temperature were not found&#39;<a name="wp930062"> </a>
+      else<a name="wp930063"> </a>
+         write(*,*)<a name="wp930064"> </a>
+     +   `Fields Positions and Temperature were found in the vdata&#39;,<a name="wp930065"> </a>
+     +   ` at position `, index<a name="wp930066"> </a>
+C<a name="wp930067"> </a>
+C        Terminate access to the vdata<a name="wp930068"> </a>
+C<a name="wp930069"> </a>
+         status = vsfdtch(vdata_id)<a name="wp930070"> </a>
+      endif  <a name="wp930071"> </a>
+C<a name="wp930072"> </a>
+C     Terminate access to the VS interface and close the HDF file.<a name="wp930073"> </a>
+C<a name="wp930074"> </a>
+      status = vsfdtch(vdata_id)<a name="wp930075"> </a>
+      status = vfend(file_id)<a name="wp930076"> </a>
+      status = hclose(file_id)<a name="wp930077"> </a>
+      end<a name="wp930078"> </a>
+</pre></div>
+<a name="wp928514"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+set_get_vdata_attr.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp930084"> </a>
+#define  FILE_NAME        &quot;General_Vdatas.hdf&quot;<a name="wp930094"> </a>
+#define  VDATA_NAME       &quot;Solid Particle&quot;<a name="wp930095"> </a>
+#define  FIELD_NAME       &quot;Mass&quot;<a name="wp930096"> </a>
+#define  VATTR_NAME       &quot;Site Ident&quot;      /* name of the vdata attribute  */<a name="wp930097"> </a>
+#define  FATTR_NAME       &quot;Scales&quot;          /* name of the field attribute  */<a name="wp930098"> </a>
+#define  VATTR_N_VALUES   3      /* number of values in the vdata attribute */<a name="wp930099"> </a>
+#define  FATTR_N_VALUES   4      /* number of values in the field attribute */<a name="wp930100"> </a>
+main( )<a name="wp930102"> </a>
+{   <a name="wp930103"> </a>
+   /************************* Variable declaration **************************/<a name="wp930104"> </a>
+   intn  status_n;      /* returned status for functions returning an intn  */<a name="wp930106"> </a>
+   int32 status_32,     /* returned status for functions returning an int32 */<a name="wp930107"> </a>
+         file_id, vdata_ref, vdata_id,<a name="wp930108"> </a>
+         field_index,   /* index of a field within the vdata */<a name="wp930109"> </a>
+         n_vdattrs,     /* number of vdata attributes */<a name="wp930110"> </a>
+         n_fldattrs,    /* number of field attributes */<a name="wp930111"> </a>
+         vdata_type,    /* to hold the type of vdata&#39;s attribute */ <a name="wp930112"> </a>
+         vdata_n_values,/* to hold the number of vdata&#39;s attribute values   */ <a name="wp930113"> </a>
+         vdata_size,    /* to hold the size of vdata&#39;s attribute values     */ <a name="wp930114"> </a>
+         field_type,    /* to hold the type of field&#39;s attribute            */ <a name="wp930115"> </a>
+         field_n_values,/* to hold the number of field&#39;s attribute values   */ <a name="wp930116"> </a>
+         field_size;    /* to hold the size of field&#39;s attribute values     */<a name="wp930117"> </a>
+   char  vd_attr[VATTR_N_VALUES] = {`A&#39;, `B&#39;, `C&#39;};/* vdata attribute values*/<a name="wp930118"> </a>
+   int32 fld_attr[FATTR_N_VALUES] = {2, 4, 6, 8};  /* field attribute values*/<a name="wp930119"> </a>
+   char  vattr_buf[VATTR_N_VALUES];     /* to hold vdata attribute&#39;s values */<a name="wp930120"> </a>
+   int32 fattr_buf[FATTR_N_VALUES];     /* to hold field attribute&#39;s values */<a name="wp930121"> </a>
+   char  vattr_name[30],                /* name of vdata attribute */<a name="wp930122"> </a>
+         fattr_name[30];                /* name of field attribute */<a name="wp930123"> </a>
+   /********************** End of variable declaration **********************/<a name="wp930125"> </a>
+   /*<a name="wp930127"> </a>
+   * Open the HDF file for writing.<a name="wp930128"> </a>
+   */<a name="wp930129"> </a>
+   file_id = Hopen (FILE_NAME, DFACC_WRITE, 0);<a name="wp930130"> </a>
+   /* <a name="wp930132"> </a>
+   * Initialize the VS interface. <a name="wp930133"> </a>
+   */<a name="wp930134"> </a>
+   status_n = Vstart (file_id);<a name="wp930135"> </a>
+   /* <a name="wp930137"> </a>
+   * Get the reference number of the vdata named VDATA_NAME.<a name="wp930138"> </a>
+   */<a name="wp930139"> </a>
+   vdata_ref = VSfind (file_id, VDATA_NAME);<a name="wp930140"> </a>
+   /*<a name="wp930142"> </a>
+   * Attach to the vdata for writing. <a name="wp930143"> </a>
+   */<a name="wp930144"> </a>
+   vdata_id = VSattach (file_id, vdata_ref, &quot;w&quot;);<a name="wp930145"> </a>
+   /*<a name="wp930147"> </a>
+   * Attach an attribute to the vdata, i.e., indicated by the second parameter.<a name="wp930148"> </a>
+   */<a name="wp930149"> </a>
+   status_n = VSsetattr (vdata_id, _HDF_VDATA, VATTR_NAME, DFNT_CHAR,<a name="wp930150"> </a>
+                                                   VATTR_N_VALUES, vd_attr);<a name="wp930151"> </a>
+   /*<a name="wp930153"> </a>
+   * Get the index of the field FIELD_NAME within the vdata.<a name="wp930154"> </a>
+   */<a name="wp930155"> </a>
+   status_n = VSfindex (vdata_id, FIELD_NAME, &amp;field_index);<a name="wp930156"> </a>
+   /*<a name="wp930158"> </a>
+   * Attach an attribute to the field field_index.<a name="wp930159"> </a>
+   */<a name="wp930160"> </a>
+   status_n = VSsetattr (vdata_id, field_index, FATTR_NAME, DFNT_INT32, <a name="wp930161"> </a>
+                                                   FATTR_N_VALUES, fld_attr);<a name="wp930162"> </a>
+   /*<a name="wp930164"> </a>
+   * Get the number of attributes attached to the vdata&#39;s first <a name="wp930165"> </a>
+   * field - should be 0. <a name="wp930166"> </a>
+   */<a name="wp930167"> </a>
+   n_fldattrs = VSfnattrs (vdata_id, 0);<a name="wp930168"> </a>
+   printf ( &quot;Number of attributes of the first field of the vdata: %d\n&quot;, <a name="wp930169"> </a>
+             n_fldattrs);<a name="wp930170"> </a>
+   /*<a name="wp930172"> </a>
+   * Get the number of attributes attached to the field specified by <a name="wp930173"> </a>
+   * field_index - should be 1.<a name="wp930174"> </a>
+   */<a name="wp930175"> </a>
+   n_fldattrs = VSfnattrs (vdata_id, field_index);<a name="wp930176"> </a>
+   printf ( &quot;Number of attributes of field %s: %d\n&quot;, FIELD_NAME, n_fldattrs);<a name="wp930177"> </a>
+   /*<a name="wp930179"> </a>
+   * Get the total number of the field&#39;s and vdata&#39;s attributes - should be 2. <a name="wp930180"> </a>
+   */<a name="wp930181"> </a>
+   n_vdattrs = VSnattrs (vdata_id);<a name="wp930182"> </a>
+   printf ( &quot;Number of attributes of the vdata and its fields: %d\n&quot;, <a name="wp930183"> </a>
+             n_vdattrs);<a name="wp930184"> </a>
+   /*<a name="wp930186"> </a>
+   * Get information about the vdata&#39;s first attribute, indicated<a name="wp930187"> </a>
+   * by the third parameter which is the index of the attribute. <a name="wp930188"> </a>
+   */<a name="wp930189"> </a>
+   status_n = VSattrinfo (vdata_id, _HDF_VDATA, 0, vattr_name, <a name="wp930190"> </a>
+                          &amp;vdata_type, &amp;vdata_n_values, &amp;vdata_size);<a name="wp930191"> </a>
+   /*<a name="wp930193"> </a>
+   * Get information about the first attribute of the field specified by <a name="wp930194"> </a>
+   * field_index. <a name="wp930195"> </a>
+   */<a name="wp930196"> </a>
+   status_n = VSattrinfo (vdata_id, field_index, 0, fattr_name, &amp;field_type, <a name="wp930197"> </a>
+                          &amp;field_n_values, &amp;field_size);<a name="wp930198"> </a>
+   /*<a name="wp930200"> </a>
+   * Get the vdata&#39;s first attribute. <a name="wp930201"> </a>
+   */<a name="wp930202"> </a>
+   status_n = VSgetattr (vdata_id, _HDF_VDATA, 0, vattr_buf);<a name="wp930203"> </a>
+   printf(&quot;Values of the vdata attribute = %c %c %c\n&quot;, vattr_buf[0],<a name="wp930204"> </a>
+                          vattr_buf[1], vattr_buf[2]);<a name="wp930205"> </a>
+   /*<a name="wp930207"> </a>
+   * Get the first attribute of the field specified by field_index.<a name="wp930208"> </a>
+   */<a name="wp930209"> </a>
+   status_n = VSgetattr (vdata_id, field_index, 0, fattr_buf);<a name="wp930210"> </a>
+   printf(&quot;Values of the field attribute = %d %d %d %d\n&quot;, fattr_buf[0], <a name="wp930211"> </a>
+                          fattr_buf[1], fattr_buf[2], fattr_buf[3]);<a name="wp930212"> </a>
+   /*<a name="wp930214"> </a>
+   * Terminate access to the vdata and to the VS interface, then close <a name="wp930215"> </a>
+   * the HDF file. <a name="wp930216"> </a>
+   */<a name="wp930217"> </a>
+   status_32 = VSdetach (vdata_id);<a name="wp930218"> </a>
+   status_n  = Vend (file_id);<a name="wp930219"> </a>
+   status_32 = Hclose (file_id);<a name="wp930220"> </a>
+}<a name="wp930221"> </a>
+</pre></div>
+<a name="wp928516"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+set_get_vdata_attr.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      program vdata_attributes <a name="wp930231"> </a>
+      implicit none<a name="wp930236"> </a>
+C<a name="wp930237"> </a>
+C     Parameter declaration<a name="wp930238"> </a>
+C<a name="wp930239"> </a>
+      character*18 FILE_NAME<a name="wp930240"> </a>
+      character*14 VDATA_NAME<a name="wp930241"> </a>
+      character*4  FIELD_NAME<a name="wp930242"> </a>
+      character*10 VATTR_NAME<a name="wp930243"> </a>
+      character*6  FATTR_NAME<a name="wp930244"> </a>
+      integer      VATTR_N_VALUES, FATTR_N_VALUES <a name="wp930245"> </a>
+C<a name="wp930246"> </a>
+      parameter (FILE_NAME    = `General_Vdatas.hdf&#39;,<a name="wp930247"> </a>
+     +           VDATA_NAME   = `Solid Particle&#39;,<a name="wp930248"> </a>
+     +           FIELD_NAME   = `Mass&#39;,<a name="wp930249"> </a>
+     +           VATTR_NAME   = `Site Ident&#39;,<a name="wp930250"> </a>
+     +           FATTR_NAME   = `Scales&#39;)<a name="wp930251"> </a>
+      parameter (VATTR_N_VALUES = 3,<a name="wp930252"> </a>
+     +           FATTR_N_VALUES = 4)<a name="wp930253"> </a>
+   <a name="wp930254"> </a>
+      integer DFACC_WRITE, FULL_INTERLACE, HDF_VDATA<a name="wp930255"> </a>
+      integer DFNT_INT32, DFNT_CHAR8<a name="wp930256"> </a>
+      parameter (DFACC_WRITE    =  2,<a name="wp930257"> </a>
+     +           FULL_INTERLACE =  0,<a name="wp930258"> </a>
+     +           HDF_VDATA      = -1,<a name="wp930259"> </a>
+     +           DFNT_INT32     = 24,<a name="wp930260"> </a>
+     +           DFNT_CHAR8     =  4)<a name="wp930261"> </a>
+C<a name="wp930262"> </a>
+C     Function declaration<a name="wp930263"> </a>
+C<a name="wp930264"> </a>
+      integer hopen, hclose<a name="wp930265"> </a>
+      integer vfstart, vsffnd, vsfatch, vsfscat, vsfsnat, <a name="wp930266"> </a>
+     +        vsffnas, vsffidx, vsfnats, vsfainf, vsfgcat, vsfgnat,<a name="wp930267"> </a>
+     +        vsfdtch, vfend <a name="wp930268"> </a>
+C<a name="wp930270"> </a>
+C**** Variable declaration *******************************************<a name="wp930271"> </a>
+C<a name="wp930272"> </a>
+      integer   status<a name="wp930273"> </a>
+      integer   file_id, vdata_id, vdata_ref<a name="wp930274"> </a>
+      integer   field_index, n_vdattrs, n_fldattrs<a name="wp930275"> </a>
+      integer   vdata_type, vdata_n_values, vdata_size<a name="wp930276"> </a>
+      integer   field_type, field_n_values, field_size <a name="wp930277"> </a>
+      character vd_attr(VATTR_N_VALUES)<a name="wp930278"> </a>
+      integer   fld_attr(FATTR_N_VALUES)<a name="wp930279"> </a>
+      character vattr_buf(VATTR_N_VALUES)<a name="wp930280"> </a>
+      integer   fattr_buf(FATTR_N_VALUES)<a name="wp930281"> </a>
+      character vattr_name_out(30), fattr_name_out(30)<a name="wp930282"> </a>
+      data vd_attr /&#39;A&#39;, `B&#39;, `C&#39;/<a name="wp930283"> </a>
+      data fld_attr /2, 4, 6, 8/<a name="wp930284"> </a>
+C<a name="wp930285"> </a>
+C**** End of variable declaration ************************************<a name="wp930286"> </a>
+C<a name="wp930287"> </a>
+C<a name="wp930288"> </a>
+C     Open the HDF file for writing.<a name="wp930289"> </a>
+C<a name="wp930290"> </a>
+      file_id = hopen(FILE_NAME, DFACC_WRITE, 0)<a name="wp930291"> </a>
+C<a name="wp930292"> </a>
+C     Initialize the VS interface.<a name="wp930293"> </a>
+C<a name="wp930294"> </a>
+      status = vfstart(file_id) <a name="wp930295"> </a>
+C<a name="wp930296"> </a>
+C     Get the reference number of the vdata named VDATA_NAME.<a name="wp930297"> </a>
+C     <a name="wp930298"> </a>
+      vdata_ref = vsffnd(file_id, VDATA_NAME)<a name="wp930299"> </a>
+C<a name="wp930300"> </a>
+C     Attach to the vdata for writing. <a name="wp930301"> </a>
+C<a name="wp930302"> </a>
+      vdata_id = vsfatch(file_id, vdata_ref, `w&#39;) <a name="wp930303"> </a>
+C<a name="wp930304"> </a>
+C     Attach an attribute to the vdata, as it is indicated by second parameter.<a name="wp930305"> </a>
+C<a name="wp930306"> </a>
+      status = vsfscat(vdata_id, HDF_VDATA, VATTR_NAME, DFNT_CHAR8,<a name="wp930307"> </a>
+     +                  VATTR_N_VALUES, vd_attr)<a name="wp930308"> </a>
+C<a name="wp930309"> </a>
+C     Get the index of the field FIELD_NAME within the vdata.<a name="wp930310"> </a>
+C<a name="wp930311"> </a>
+      status = vsffidx(vdata_id, FIELD_NAME, field_index)<a name="wp930312"> </a>
+C<a name="wp930313"> </a>
+C     Attach an attribute to the field with the index field_index.<a name="wp930314"> </a>
+C<a name="wp930315"> </a>
+      status = vsfsnat(vdata_id, field_index, FATTR_NAME, DFNT_INT32,<a name="wp930316"> </a>
+     +                  FATTR_N_VALUES, fld_attr)<a name="wp930317"> </a>
+      <a name="wp930318"> </a>
+C<a name="wp930319"> </a>
+C     Get the number of attributes attached to the vdata&#39;s first<a name="wp930320"> </a>
+C     field - should be 0.<a name="wp930321"> </a>
+C<a name="wp930322"> </a>
+      n_fldattrs = vsffnas(vdata_id, 0)<a name="wp930323"> </a>
+      write(*,*) `Number of attributes of the first field&#39; <a name="wp930324"> </a>
+      write(*,*) ` of the vdata: `, n_fldattrs<a name="wp930325"> </a>
+C<a name="wp930326"> </a>
+C     Get the number of the attributes attached to the field specified by<a name="wp930327"> </a>
+C     index field_index - should be 1.<a name="wp930328"> </a>
+C<a name="wp930329"> </a>
+      n_fldattrs = vsffnas(vdata_id, field_index)<a name="wp930330"> </a>
+      write(*,*) `Number of attributes of field `, FIELD_NAME,<a name="wp930331"> </a>
+     +           n_fldattrs<a name="wp930332"> </a>
+C<a name="wp930333"> </a>
+C     Get the total number of the field&#39;s and vdata&#39;s attributes - should be 2.<a name="wp930334"> </a>
+C<a name="wp930335"> </a>
+      n_vdattrs = vsfnats(vdata_id)<a name="wp930336"> </a>
+      write(*,*) `Number of attributes of the vdata and its fields: `,<a name="wp930337"> </a>
+     +           n_vdattrs<a name="wp930338"> </a>
+C<a name="wp930339"> </a>
+C     Get information about the vdata&#39;s first attribute, indicated by <a name="wp930340"> </a>
+C     the third parameter, which is the index of the attribute.<a name="wp930341"> </a>
+C<a name="wp930342"> </a>
+      status = vsfainf(vdata_id, HDF_VDATA, 0, vattr_name_out,<a name="wp930343"> </a>
+     +                 vdata_type, vdata_n_values, vdata_size)<a name="wp930344"> </a>
+C<a name="wp930345"> </a>
+C     Get information about the first attribute of the field specified by<a name="wp930346"> </a>
+C     field_index.<a name="wp930347"> </a>
+C<a name="wp930348"> </a>
+      status = vsfainf(vdata_id, field_index, 0, fattr_name_out, <a name="wp930349"> </a>
+     +                 field_type, field_n_values, field_size)<a name="wp930350"> </a>
+C<a name="wp930351"> </a>
+C     Get the vdata&#39;s first attribute.<a name="wp930352"> </a>
+C<a name="wp930353"> </a>
+      status = vsfgcat(vdata_id, HDF_VDATA, 0, vattr_buf)<a name="wp930354"> </a>
+      write(*,*) `Values of vdata attribute  `, vattr_buf<a name="wp930355"> </a>
+C<a name="wp930356"> </a>
+C     Get the first attribute of the field specified by field_index.<a name="wp930357"> </a>
+C<a name="wp930358"> </a>
+      status = vsfgnat(vdata_id, field_index, 0, fattr_buf)<a name="wp930359"> </a>
+      write(*,*)  `Values of the field attribute = `, fattr_buf<a name="wp930360"> </a>
+C       <a name="wp930361"> </a>
+C     Terminate access to the vdata and to the VS interface, and<a name="wp930362"> </a>
+C     close the HDF file.<a name="wp930363"> </a>
+C<a name="wp930364"> </a>
+      status = vsfdtch(vdata_id)<a name="wp930365"> </a>
+      status = vfend(file_id)<a name="wp930366"> </a>
+      status = hclose(file_id)<a name="wp930367"> </a>
+      end<a name="wp930368"> </a>
+</pre></div>
+<a name="wp928518"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+get_vdata_info.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp930378"> </a>
+#define  FILE_NAME      &quot;General_Vdatas.hdf&quot;<a name="wp930384"> </a>
+#define  FIELD_SIZE     80         /* maximum length of all the field names */<a name="wp930385"> </a>
+main( )<a name="wp930387"> </a>
+{<a name="wp930388"> </a>
+   /************************* Variable declaration **************************/<a name="wp930389"> </a>
+   intn  status_n;      /* returned status for functions returning an intn  */<a name="wp930391"> </a>
+   int32 status_32,     /* returned status for functions returning an int32 */<a name="wp930392"> </a>
+         n_records,     /* to retrieve the number of records in the vdata   */<a name="wp930393"> </a>
+         interlace_mode,/* to retrieve the interlace mode of the vdata      */<a name="wp930394"> </a>
+         vdata_size,    /* to retrieve the size of all specified fields     */<a name="wp930395"> </a>
+         file_id, vdata_ref, vdata_id;<a name="wp930396"> </a>
+   char  fieldname_list[FIELD_SIZE], /* buffer to retrieve the vdata data   */<a name="wp930397"> </a>
+         vdata_name[VSNAMELENMAX];   /* buffer to retrieve the vdata name   */<a name="wp930398"> </a>
+   /********************** End of variable declaration **********************/<a name="wp930400"> </a>
+   /*<a name="wp930402"> </a>
+   * Open the HDF file for reading. <a name="wp930403"> </a>
+   */<a name="wp930404"> </a>
+   file_id = Hopen (FILE_NAME, DFACC_READ, 0);<a name="wp930405"> </a>
+   /*<a name="wp930407"> </a>
+   * Initialize the VS interface. <a name="wp930408"> </a>
+   */<a name="wp930409"> </a>
+   status_n = Vstart (file_id);<a name="wp930410"> </a>
+   /*<a name="wp930412"> </a>
+   * Set vdata_ref to -1 to start the search from the beginning of file.<a name="wp930413"> </a>
+   */<a name="wp930414"> </a>
+   vdata_ref = -1;<a name="wp930415"> </a>
+   /*<a name="wp930417"> </a>
+   * Use VSgetid to obtain each vdata by its reference number then attach <a name="wp930418"> </a>
+   * to the vdata and get its information.  The loop terminates when <a name="wp930419"> </a>
+   * the last vdata is reached.<a name="wp930420"> </a>
+   */<a name="wp930421"> </a>
+   while ((vdata_ref = VSgetid (file_id, vdata_ref)) != FAIL)<a name="wp930422"> </a>
+   {<a name="wp930423"> </a>
+      /*<a name="wp930424"> </a>
+      * Attach to the current vdata for reading.<a name="wp930425"> </a>
+      */<a name="wp930426"> </a>
+      vdata_id = VSattach (file_id, vdata_ref, &quot;r&quot;);<a name="wp930427"> </a>
+      /*<a name="wp930429"> </a>
+      * Test whether the current vdata is not a storage of an attribute, then<a name="wp930430"> </a>
+      * obtain and display its information.<a name="wp930431"> </a>
+      */<a name="wp930432"> </a>
+      if( VSisattr (vdata_id) != TRUE )<a name="wp930433"> </a>
+      {<a name="wp930434"> </a>
+         status_n = VSinquire (vdata_id, &amp;n_records, &amp;interlace_mode, <a name="wp930435"> </a>
+                            fieldname_list, &amp;vdata_size, vdata_name);<a name="wp930436"> </a>
+         printf (&quot;Vdata %s: - contains %d records\n\tInterlace mode: %s \<a name="wp930437"> </a>
+                 \n\tFields: %s - %d bytes\n\t\n&quot;, vdata_name, n_records,<a name="wp930438"> </a>
+                 interlace_mode == FULL_INTERLACE ? &quot;FULL&quot; : &quot;NONE&quot;, <a name="wp930439"> </a>
+                 fieldname_list, vdata_size );<a name="wp930440"> </a>
+      }<a name="wp930441"> </a>
+      /*<a name="wp930443"> </a>
+      * Detach from the current vdata.<a name="wp930444"> </a>
+      */<a name="wp930445"> </a>
+      status_32 = VSdetach (vdata_id);<a name="wp930446"> </a>
+   } /* while */<a name="wp930447"> </a>
+   /*<a name="wp930449"> </a>
+   * Terminate access to the VS interface and close the HDF file. <a name="wp930450"> </a>
+   */<a name="wp930451"> </a>
+   status_n = Vend (file_id);<a name="wp930452"> </a>
+   status_32 = Hclose (file_id);<a name="wp930453"> </a>
+}<a name="wp930454"> </a>
+</pre></div>
+<a name="wp928520"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+get_vdata_info.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      program vdata_info <a name="wp930464"> </a>
+      implicit none<a name="wp930469"> </a>
+C<a name="wp930470"> </a>
+C     Parameter declaration<a name="wp930471"> </a>
+C<a name="wp930472"> </a>
+      character*18 FILE_NAME<a name="wp930473"> </a>
+      integer      DFACC_READ, FULL_INTERLACE<a name="wp930474"> </a>
+      integer      FIELD_SIZE<a name="wp930475"> </a>
+C<a name="wp930476"> </a>
+      parameter (FILE_NAME      = `General_Vdatas.hdf&#39;,<a name="wp930477"> </a>
+     +           DFACC_READ     = 1,<a name="wp930478"> </a>
+     +           FULL_INTERLACE = 0,<a name="wp930479"> </a>
+     +           FIELD_SIZE     = 80)<a name="wp930480"> </a>
+      <a name="wp930481"> </a>
+C<a name="wp930482"> </a>
+C     Function declaration<a name="wp930483"> </a>
+C<a name="wp930484"> </a>
+      integer hopen, hclose<a name="wp930485"> </a>
+      integer vfstart, vsfatch, vsfgid, vsfinq,<a name="wp930486"> </a>
+     +        vsfisat, vsfdtch, vfend <a name="wp930487"> </a>
+C<a name="wp930489"> </a>
+C**** Variable declaration *******************************************<a name="wp930490"> </a>
+C<a name="wp930491"> </a>
+      integer      status<a name="wp930492"> </a>
+      integer      file_id, vdata_id, vdata_ref<a name="wp930493"> </a>
+      integer      n_records, interlace_mode, vdata_size<a name="wp930494"> </a>
+      character*64 vdata_name<a name="wp930495"> </a>
+      character*80 fieldname_list <a name="wp930496"> </a>
+C<a name="wp930497"> </a>
+C**** End of variable declaration ************************************<a name="wp930498"> </a>
+C<a name="wp930499"> </a>
+C<a name="wp930500"> </a>
+C     Open the HDF file for reading.<a name="wp930501"> </a>
+C<a name="wp930502"> </a>
+      file_id = hopen(FILE_NAME, DFACC_READ, 0)<a name="wp930503"> </a>
+C<a name="wp930504"> </a>
+C     Initialize the VS interface.<a name="wp930505"> </a>
+C<a name="wp930506"> </a>
+      status = vfstart(file_id) <a name="wp930507"> </a>
+C<a name="wp930508"> </a>
+C     Set the reference number to -1 to start the search from the beginning<a name="wp930509"> </a>
+C     of the file. <a name="wp930510"> </a>
+C     <a name="wp930511"> </a>
+      vdata_ref = -1<a name="wp930512"> </a>
+10    continue<a name="wp930513"> </a>
+C<a name="wp930514"> </a>
+C     Use vsfgid to obtain each vdata by its reference number then<a name="wp930515"> </a>
+C     attach to the vdata and get information. The loop terminates<a name="wp930516"> </a>
+C     when the last vdata is reached.<a name="wp930517"> </a>
+C<a name="wp930518"> </a>
+      vdata_ref = vsfgid(file_id, vdata_ref)<a name="wp930519"> </a>
+      if (vdata_ref .eq. -1) goto 100<a name="wp930520"> </a>
+C<a name="wp930521"> </a>
+C     Attach to the current vdata for reading.<a name="wp930522"> </a>
+C<a name="wp930523"> </a>
+      vdata_id = vsfatch(file_id, vdata_ref, `r&#39;)<a name="wp930524"> </a>
+C<a name="wp930525"> </a>
+C     Test whether the current vdata is not a storage for an attribute,<a name="wp930526"> </a>
+C     then obtain and display its information.<a name="wp930527"> </a>
+      if (vsfisat(vdata_id) .ne. 1) then<a name="wp930528"> </a>
+          status = vsfinq(vdata_id, n_records, interlace_mode,<a name="wp930529"> </a>
+     +                    fieldname_list, vdata_size, vdata_name)<a name="wp930530"> </a>
+          write(*,*) `Vdata: `, vdata_name<a name="wp930531"> </a>
+          write(*,*) `contains `, n_records, ` records&#39;<a name="wp930532"> </a>
+          if (interlace_mode .eq. 0) then<a name="wp930533"> </a>
+              write(*,*) `Interlace mode: FULL&#39;<a name="wp930534"> </a>
+          else	 <a name="wp930535"> </a>
+              write(*,*) `Interlace mode: NONE&#39;<a name="wp930536"> </a>
+          endif<a name="wp930537"> </a>
+          write(*,*) `Fields: `, fieldname_list(1:30)<a name="wp930538"> </a>
+          write(*,*) `Vdata record size in bytes :&#39;, vdata_size<a name="wp930539"> </a>
+          write(*,*)<a name="wp930540"> </a>
+      endif<a name="wp930541"> </a>
+C<a name="wp930542"> </a>
+C     Detach from the current vdata.<a name="wp930543"> </a>
+C<a name="wp930544"> </a>
+      status = vsfdtch(vdata_id)<a name="wp930545"> </a>
+      goto 10 <a name="wp930546"> </a>
+100   continue<a name="wp930547"> </a>
+C<a name="wp930548"> </a>
+C     Terminate access to the vdata and to the VS interface, and<a name="wp930549"> </a>
+C     close the HDF file.<a name="wp930550"> </a>
+C<a name="wp930551"> </a>
+      status = vsfdtch(vdata_id)<a name="wp930552"> </a>
+      status = vfend(file_id)<a name="wp930553"> </a>
+      status = hclose(file_id)<a name="wp930554"> </a>
+      end<a name="wp930555"> </a>
+</pre></div>
+    </blockquote>
+
+    <hr />
+
+    <table id="SummaryNotReq2" border="0" width="850" cellspacing="0" cellpadding="0">
+      <tr>
+        <td align="left">
+        HDF4.2r4 - February 2009<br/>
+        <a href="UG_Copyright.html">Copyright</a>
+        <td align="right">
+          <span style="font-size: 12px; font-weight: bold">
+            The HDF Group<br />
+          </span>
+          <span style="font-size: 12px">
+            <a href="http://www.hdfgroup.org">www.hdfgroup.org</a><br />
+            <img valign="bottom" border="0" src="images/help.jpg" height="12" alt="The HDF Group" valign="top" />
+          </span>
+        </td>
+      </tr>
+    </table>
+
+    <table id="SummaryNotReq3" width="220" border="0" cellpadding="0" cellspacing="0">
+    </table>
+  </body>
+</html>

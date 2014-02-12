@@ -1,0 +1,903 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on May 29, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>psgml: 8. Commands for editing</title>
+
+<meta name="description" content="psgml: 8. Commands for editing">
+<meta name="keywords" content="psgml: 8. Commands for editing">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Edit"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml_7.html#Customizing-DTD" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Insert" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml_7.html#Managing-the-DTD" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_9.html#Display" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Commands-for-editing"></a>
+<h1 class="chapter">8. Commands for editing</h1>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Insert">8.1 Inserting Markup</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#Complete">8.2 Markup completion</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#Information">8.3 Showing information</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#Indent">8.4 Indentation according to structure</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#Move">8.5 Move in the element structure</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#Attributes">8.6 Editing attributes</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#Change-and-delete">8.7 Changing and deleting markup</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="#Translating-characters-and-entities">8.8 Translating between characters and entity references</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">  
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="Insert"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Edit" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Complete" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Edit" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Edit" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_9.html#Display" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Inserting-Markup"></a>
+<h2 class="section">8.1 Inserting Markup</h2>
+
+<p>The commands that insert start-tags works only if the document has an
+associated DTD.
+</p>
+<p>Keyboard commands for inserting:
+</p>
+<dl compact="compact">
+<dd><a name="index-C_002dc-_003c"></a>
+<a name="index-sgml_002dinsert_002dtag"></a>
+</dd>
+<dt> <kbd>C-c &lt;</kbd></dt>
+<dd><p>Will ask, for the tag to insert, in the mini-buffer with completion on the 
+tags that are valid at point (<code>sgml-insert-tag</code>).
+</p>
+<p>If <code>sgml-auto-insert-required-elements</code> is non-nil, tags for elements
+required between the inserted tags will also be inserted.
+</p>
+<p>The list of valid tags, computed for a position in the buffer, will
+contain:
+</p>
+<ol>
+<li>
+The end-tag for the current element, if it can be ended at the position.
+Furthermore it will contain end-tags for enclosing elements if the
+necessary omissible end-tag declarations have been made in the DTD.
+
+</li><li>
+The start-tags of all elements that could occur after point.  If
+<code>sgml-omittag-transparent</code> is nil, the above will be limited to the
+elements that can occur within the current element.
+</li></ol>
+
+
+<a name="index-C_002dc-C_002de"></a>
+<a name="index-sgml_002dinsert_002delement"></a>
+<a name="index-sgml_002dinsert_002dend_002dtag_002don_002dnew_002dline"></a>
+</dd>
+<dt> <kbd>C-c C-e</kbd></dt>
+<dd><p>Insert start and end-tags for an element
+(<code>sgml-insert-element</code>).  The name of the element is read
+from the mini-buffer with completion on valid elements.  If
+<code>sgml-insert-end-tag-on-new-line</code> is non-nil or the
+element has element content, the end-tag will be inserted on a
+new line after the start-tag.
+</p>
+<a name="index-sgml_002domittag_002dtransparent"></a>
+<p>If <code>sgml-omittag-transparent</code> is nil, the list of valid elements
+will only contain the elements that can be in the content of the current
+element.
+</p>
+<a name="index-sgml_002dauto_002dinsert_002drequired_002delements"></a>
+<a name="index-sgml_002dinsert_002dmissing_002delement_002dcomment"></a>
+<p>Required elements in the content will be automatically inserted if the
+option <code>sgml-auto-insert-required-elements</code> is non-nil. 
+When the content model demands an element but there is more
+than one to choose from, a comment can be inserted with the
+available choices if the option
+<code>sgml-insert-missing-element-comment</code> is non-nil.
+</p>
+<a name="index-C_002dc-C_002di"></a>
+<a name="index-sgml_002dadd_002delement_002dto_002delement"></a>
+</dd>
+<dt> <kbd>C-c C-i</kbd></dt>
+<dd><p>Inserts a new element in the current element where it is legal. Prompts
+for element name with completion. The completion list contains all
+elements that could be added to the current element somewhere, without
+making the content invalid. This assumes that the content is valid to
+begin with. Currently this list only has regular elements, not
+inclusions. The new element will be inserted as late as possible in the
+current element (unless prefix argument is given, then as early as
+possible.)
+</p>
+<a name="index-C_002dc-C_002dr"></a>
+<a name="index-sgml_002dtag_002dregion"></a>
+</dd>
+<dt> <kbd>C-c C-r</kbd></dt>
+<dd><p>Makes the region into a new element (<code>sgml-tag-region</code>).  Reads
+element name from mini-buffer with completion as for <kbd>C-c C-e</kbd>.
+</p>
+<a name="index-C_002dc-_002f"></a>
+<a name="index-sgml_002dinsert_002dend_002dtag"></a>
+</dd>
+<dt> <kbd>C-c /</kbd></dt>
+<dd><p>Inserts an end-tag for the current element (<code>sgml-insert-end-tag</code>).
+</p>
+
+
+<a name="index-C_002dc-RET"></a>
+<a name="index-sgml_002dsplit_002delement"></a>
+</dd>
+<dt> <kbd>C-c RET</kbd></dt>
+<dd><p>Split the current element at point.  If repeated, the containing element
+will be split before the beginning of then current element.
+</p>
+<p>Typical use is to start a new paragraph element when inside a paragraph.
+</p>
+<a name="index-C_002dc-_002b"></a>
+<a name="index-sgml_002dinsert_002dattribute"></a>
+</dd>
+<dt> <kbd>C-c +</kbd></dt>
+<dd><p>Read attribute name and value from mini-buffer and insert attribute
+specification (<code>sgml-insert-attribute</code>).  If point is immediately
+after a start-tag, this command operates on that start-tag.  Otherwise
+the command will operate on the element after point.
+</p>
+<p>The attribute name will be read with completion.  If the attribute has a
+token list as declared value the attribute value will also be read with
+completion.  The prompt for attribute value will typically look like:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">Value for <var>attribute</var> (<var>type</var> Default: <var>current value</var>):
+</pre></td></tr></table>
+
+
+<a name="index-C_002dc-C_002du-C_002dm"></a>
+<a name="index-sgml_002dcustom_002dmarkup"></a>
+</dd>
+<dt> <kbd>C-c C-u C-m</kbd></dt>
+<dd><p>Give keyboard access to the customized part of the Markup menu.
+Emacs will prompt for the markup to insert using the menu line as
+selector. (See <var>sgml-custom-markup</var> below.)
+</p>
+</dd>
+</dl>
+
+<p>Menu bar:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>Markup</samp>&rsquo;</dt>
+<dd><p>Selecting from this menu will insert markup.  The menu contains
+sub menus with tags and with entities, some other markup and a user
+defined section.
+</p>
+<p>Sub menus:
+</p>
+</dd>
+<dt> &lsquo;<samp>Insert element</samp>&rsquo;</dt>
+<dd><p>Pops up a menu of valid elements and insert start and end-tags for
+the selected element.  Selections from the menu works like the <kbd>C-c
+C-e</kbd> command.
+</p>
+</dd>
+<dt> &lsquo;<samp>Insert start-tag</samp>&rsquo;</dt>
+<dd><p>Pops up a menu of valid start-tags and insert the selected tag.  The
+menu has the same start-tags as the completion list for <kbd>C-c &lt;</kbd>.
+</p>
+</dd>
+<dt> &lsquo;<samp>Insert end-tag</samp>&rsquo;</dt>
+<dd><p>Pops up a menu of valid end-tags and insert the selected tag. 
+</p>
+</dd>
+<dt> &lsquo;<samp>Tag region</samp>&rsquo;</dt>
+<dd><p>Pops up a menu of valid elements and tag the region with the
+selection.  Selections from the menu works like the <kbd>C-c C-r</kbd>
+command.
+</p>
+</dd>
+<dt> &lsquo;<samp>Insert entity</samp>&rsquo;</dt>
+<dd><p>Menu of all general entities defined in the DTD.
+</p>
+</dd>
+<dt> &lsquo;<samp>Add Element to Element</samp>&rsquo;</dt>
+<dd><p>Pops up a menu of all elements valid somewhere in the current element.
+The menu contains all elements that could be added to the current
+element somewhere, without making the content invalid. The new element
+will be inserted as late as possible in the current element.
+</p>
+</dd>
+<dt> &lsquo;<samp>Insert attribute</samp>&rsquo;</dt>
+<dd><p>Pops up a menu with all the attributes of an element.  The element is
+either the one which start-tag is immediately before point or the
+element after point.  Selecting from this menu edits the attribute
+specification list for the element.
+</p>
+<p>The menu has a sub menu for every attribute which declared value is a
+token list.  The rest of the attributes are collected in one sub menu.
+For the token list attributes, selecting a value will insert that
+attribute-value pair.  Selecting some other attribute reads the
+attribute-value from the mini-buffer and inserts the attribute value
+pair.
+</p></dd>
+</dl>
+
+<a name="index-S_002dmouse_002d3"></a>
+<p>A menu is also available directly with a mouse button click in the
+buffer.  In GNU Emacs it is the first mouse button combined with shift
+(<kbd>S-&lt;mouse-3&gt;</kbd>).  In Lucid Emacs it is bound to the third mouse
+button.  The mouse button click will pop-up a menu of valid tags or a
+menu of attributes if the point is in a start-tag.  The attributes menu
+works as the &ldquo;Insert attribute&rdquo; menu from the menu-bar.  The tags list
+is the list of valid tags described above for command <kbd>C-c &lt;</kbd>.
+Selection from the tags menu works like the <kbd>C-c &lt;</kbd> command, with
+the following exception:
+</p>
+<p>You can tag a region, with start and end-tag.  There are two ways to
+indicate the region to mark:
+</p>
+<ol>
+<li>
+Use the normal mouse commands to mark region.  
+
+<p>For this to work you must either use <em>transient mark mode</em>
+(see <a href="../emacs/Transient-Mark.html#Transient-Mark">(emacs)Transient Mark</a> section &lsquo;Transient Mark Mode&rsquo; in <cite>The Emacs Editor</cite>) or set the option <code>sgml-tag-region-if-active</code> to non-nil
+(don&rsquo;t set this unless you are sure that you want it).
+</p>
+</li><li>
+Alternatively make a secondary selection, this is done by holding down
+the meta key and using the mouse buttons.  
+See <a href="../emacs/Secondary-selection.html#Secondary-selection">(emacs)Secondary selection</a> section &lsquo;Secondary selection&rsquo; in <cite>The Emacs Editor</cite>.
+Some window managers intercept these events, which makes it hard use the
+secondary selection in Emacs.
+</li></ol>
+
+<dl>
+<dt><a name="index-sgml_002dbalanced_002dtag_002dedit"></a><u>User Option:</u> <b>sgml-balanced-tag-edit</b></dt>
+<dd><p>If non-nil, inserting a start-tag using the context menu will also
+insert the corresponding end-tag.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dauto_002dinsert_002drequired_002delements-1"></a><u>User Option:</u> <b>sgml-auto-insert-required-elements</b></dt>
+<dd><p>If non-nil, automatically inserts required elements in the content
+of an inserted element.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002domittag_002dtransparent-1"></a><u>User Option:</u> <b>sgml-omittag-transparent</b></dt>
+<dd><p>If non-nil, will show legal tags inside elements with omissible start-tags
+and legal tags beyond omissible end-tags.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dtag_002dregion_002dif_002dactive"></a><u>User Option:</u> <b>sgml-tag-region-if-active</b></dt>
+<dd><p>If non-nil, the &lsquo;<samp>Insert tags</samp>&rsquo; menu will tag a region if the region
+is considered active by emacs.  If nil, region must be active and
+<code>transient-mark-mode</code> must be on for the region to be tagged.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dcustom_002dmarkup-1"></a><u>User Option:</u> <b>sgml-custom-markup</b></dt>
+<dd><p>Menu entries to be added to the Markup menu.  The value should be a list
+of lists of two strings.  The first string is the menu line and the
+second string is the text inserted when the menu item is selected.  The
+second string can contain a &lsquo;<samp>\r</samp>&rsquo; where the cursor should be left.
+Also, if a selection is made according to the same rules as for the
+<kbd>S-mouse-1</kbd> menu, the selection is replaced with the second string
+and &lsquo;<samp>\r</samp>&rsquo; is replaced with the selection.
+</p>
+<p>Example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">  ((&quot;Version1&quot; &quot;&lt;![%Version1[\r]]&gt;&quot;)
+   (&quot;New page&quot;  &quot;&lt;?NewPage&gt;&quot;))
+</pre></td></tr></table>
+</dd></dl>
+
+
+<dl>
+<dt><a name="index-sgml_002dinsert_002dmissing_002delement_002dcomment-1"></a><u>User Option:</u> <b>sgml-insert-missing-element-comment</b></dt>
+<dd><p>If non-nil, and sgml-auto-insert-required-elements also true,
+<code>sgml-insert-element</code> will insert a comment if there is an
+element required but there is more than one to choose from.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dinsert_002dend_002dtag_002don_002dnew_002dline-1"></a><u>User Option:</u> <b>sgml-insert-end-tag-on-new-line</b></dt>
+<dd><p>If non-nil, <code>sgml-insert-element</code> will put the end-tag on
+a new line after the start-tag.  Useful on slow terminals if you
+find the end-tag after the cursor irritating.
+</p></dd></dl>
+
+
+<hr size="6">
+<a name="Complete"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Insert" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Information" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Edit" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Edit" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_9.html#Display" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Markup-completion"></a>
+<h2 class="section">8.2 Markup completion</h2>
+
+<a name="index-M_002dTAB"></a>
+<a name="index-sgml_002dcomplete"></a>
+<p>If you are typing in markup directly, <kbd>M-TAB</kbd> will help you by
+completing a tag name, an entity name or a markup declaration name.  If
+you type <kbd>M-TAB</kbd> after a plain word, <code>ispell-complete-word</code>
+will be invoked instead.
+</p>
+<p>If you have typed (&lowast; marks the position of point)
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&amp;At&lowast;
+</pre></td></tr></table>
+
+<p>and type <kbd>M-TAB</kbd> (assuming you use the &lsquo;<tt>ISOLat1</tt>&rsquo;
+entity set) you get:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&amp;Atilde&lowast;
+</pre></td></tr></table>
+
+
+<hr size="6">
+<a name="Information"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Complete" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Indent" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Edit" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Edit" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_9.html#Display" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Showing-information"></a>
+<h2 class="section">8.3 Showing information</h2>
+
+<p>Commands for showing information obtained by parsing the buffer.
+</p>
+<dl compact="compact">
+<dd><a name="index-C_002dc-C_002dc"></a>
+<a name="index-sgml_002dshow_002dcontext"></a>
+</dd>
+<dt> <kbd>C-c C-c</kbd></dt>
+<dd><p>Shows in the message area: context at point, if in a tag or in mixed
+content and the open elements (<code>sgml-show-context</code>). The form of
+the string is controled by the user option
+<code>sgml-show-context-function</code>.
+</p>
+<a name="index-C_002dc-C_002dw"></a>
+<a name="index-sgml_002dwhat_002delement"></a>
+</dd>
+<dt> <kbd>C-c C-w</kbd></dt>
+<dd><p>Shows what element the character after point (under the cursor) belongs
+to; also shows context of element (<code>sgml-what-element</code>).
+</p>
+<a name="index-C_002dc-C_002dt"></a>
+<a name="index-sgml_002dshow_002dcurrent_002delement_002dtype"></a>
+</dd>
+<dt> <kbd>C-c C-t</kbd></dt>
+<dd><p>Show information about the current element type and the valid element
+following the point.
+</p>
+<a name="index-C_002dc-C_002ds"></a>
+<a name="index-sgml_002dshow_002dstructure"></a>
+</dd>
+<dt> <kbd>C-c C-s</kbd></dt>
+<dd><p>Show the major element structure in a separate buffer (&lsquo;<samp>*Document
+structure*</samp>&rsquo;). That buffer can be used to navigate the document, like
+an Occur buffer (see <a href="../emacs/Other-Repeating-Search.html#Other-Repeating-Search">(emacs)Other Repeating Search</a> section &lsquo;Other Search-and-Loop Commands&rsquo; in <cite>The Emacs Editor</cite>). The structure
+shows container elements and the text of the first child element (if
+it is not a container). This works best for document types which uses
+containers and title structure (e.g. &lsquo;<samp>&lt;div&gt; &lt;title&gt;Heder&lt;/title&gt;
+..&lt;/div&gt;</samp>&rsquo;). PSGML uses a heuristic rule to identify container
+elements: it should have element content and be non empty. You can
+configure exceptions from this rule using a process instruction in the
+DTD (see section <a href="psgml_7.html#Customizing-DTD">Customizing DTD</a>).
+</p>
+<p>To include an element type <var>el1</var> that would otherwise be excluded:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">&lt;?PSGML element <var>el1</var> structure=t?&gt;
+</pre></td></tr></table>
+
+<p>To exclude an element type <var>el2</var> that would otherwise be included:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">&lt;?PSGML element <var>el2</var> structure=ignore?&gt;
+</pre></td></tr></table>
+
+</dd>
+</dl>
+
+<a name="index-sgml_002dlist_002dvalid_002dtags"></a>
+<p>List contextually valid tags (<code>sgml-list-valid-tags</code>).  Displays
+information about current element, all valid end-tags, valid start-tags
+in current element, and start-tags valid at this point but in other
+elements together with the tags omitted.
+</p>
+
+<dl>
+<dt><a name="index-sgml_002dshow_002dcontext_002dfunction"></a><u>User Option:</u> <b>sgml-show-context-function</b></dt>
+<dd><p>The value shold be a function that generates a string from an element
+and the current markup type (if any). There are two ready made
+functions for this. The function <code>sgml-show-context-standard</code>,
+the default, generates a string like &lsquo;<samp>#PCDATA in para in chapter
+in book</samp>&rsquo;. The function <code>sgml-show-context-backslash</code> generates a
+string like &lsquo;<samp>book\chapter\para</samp>&rsquo;.
+</p></dd></dl>
+
+
+<hr size="6">
+<a name="Indent"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Information" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Move" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Edit" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Edit" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_9.html#Display" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Indentation-according-to-structure"></a>
+<h2 class="section">8.4 Indentation according to structure</h2>
+
+<a name="index-TAB"></a>
+<a name="index-LFD"></a>
+<a name="index-sgml_002dindent_002dor_002dtab"></a>
+<a name="index-newline_002dand_002dindent"></a>
+<p>You can indent a line according to the depth of element nesting at the
+beginning of the line.  To indent the current line use <kbd>&lt;TAB&gt;</kbd>.
+You can also use <kbd>&lt;LFD&gt;</kbd> (<code>newline-and-indent</code>) to start a
+new line with correct indentation.
+</p>
+<dl>
+<dt><a name="index-sgml_002dindent_002dstep"></a><u>User Option:</u> <b>sgml-indent-step</b></dt>
+<dd><p>How much to increment indent for every element level.  If nil, no
+indentation.
+</p>
+<p>If this is nil, <kbd>&lt;TAB&gt;</kbd> will insert a tab instead of indenting.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-sgml_002dindent_002ddata"></a><u>User Option:</u> <b>sgml-indent-data</b></dt>
+<dd><p>If non-nil, indent in data/mixed context also.
+</p></dd></dl>
+
+
+
+<hr size="6">
+<a name="Move"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Indent" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Attributes" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Edit" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Edit" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_9.html#Display" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Move-in-the-element-structure"></a>
+<h2 class="section">8.5 Move in the element structure</h2>
+
+<p>These commands move in the element structure.  The commands uses
+knowledge of SGML syntax, and if available the specific DTD.
+</p>
+<dl compact="compact">
+<dd><a name="index-C_002dM_002da"></a>
+<a name="index-sgml_002dbeginning_002dof_002delement"></a>
+</dd>
+<dt> <kbd>C-M-a</kbd></dt>
+<dd><p>Move to the (content) beginning of the current element
+(<code>sgml-beginning-of-element</code>).
+</p>
+<a name="index-C_002dM_002de"></a>
+<a name="index-sgml_002dend_002dof_002delement"></a>
+</dd>
+<dt> <kbd>C-M-e</kbd></dt>
+<dd><p>Move to the (content) end of the current element (<code>sgml-end-of-element</code>).
+</p>
+<a name="index-C_002dM_002df"></a>
+<a name="index-sgml_002dforward_002delement"></a>
+</dd>
+<dt> <kbd>C-M-f</kbd></dt>
+<dd><p>Move forward by element (<code>sgml-forward-element</code>).
+</p>
+<a name="index-C_002dM_002db"></a>
+<a name="index-sgml_002dbackward_002delement"></a>
+</dd>
+<dt> <kbd>C-M-b</kbd></dt>
+<dd><p>Move backward by element (<code>sgml-backward-element</code>).
+</p>
+<a name="index-C_002dM_002du"></a>
+<a name="index-sgml_002dbackward_002dup_002delement"></a>
+</dd>
+<dt> <kbd>C-M-u</kbd></dt>
+<dd><p>Move up to before current element (<code>sgml-backward-up-element</code>).
+</p>
+<a name="index-C_002dc-C_002dn"></a>
+<a name="index-sgml_002dup_002delement"></a>
+</dd>
+<dt> <kbd>C-c C-n</kbd></dt>
+<dd><p>Move up to after current element (<code>sgml-up-element</code>).
+</p>
+<a name="index-C_002dM_002dd"></a>
+<a name="index-sgml_002ddown_002delement"></a>
+</dd>
+<dt> <kbd>C-M-d</kbd></dt>
+<dd><p>Move down to the (content) beginning of the next element
+(<code>sgml-down-element</code>).
+</p>
+<a name="index-C_002dc-C_002dd"></a>
+<a name="index-sgml_002dnext_002ddata_002dfield"></a>
+</dd>
+<dt> <kbd>C-c C-d</kbd></dt>
+<dd><p>Move to the next place where data is allowed (<code>sgml-next-data-field</code>).
+</p></dd>
+</dl>
+
+<p>You can also move to the next place where there is some structural error
+with <kbd>C-c C-o</kbd> (see section <a href="psgml_5.html#Validate">Running an external SGML parser</a>).
+</p>
+
+<hr size="6">
+<a name="Attributes"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Move" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Change-and-delete" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Edit" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Edit" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_9.html#Display" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Editing-attributes"></a>
+<h2 class="section">8.6 Editing attributes</h2>
+
+<a name="index-sgml_002dedit_002dattributes"></a>
+<a name="index-C_002dc-C_002da"></a>
+<p>If you want to change the attributes of a start-tag you can simply edit
+them directly in the buffer.  Or you can place the cursor at or after
+the start-tag and use the <code>sgml-edit-attributes</code> command, available
+from the &lsquo;<samp>SGML</samp>&rsquo;-menu or on <kbd>C-c C-a</kbd>.  This will create a new
+Emacs window with all possible attributes listed in the form
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><var>attribute name</var> = <var>current value</var>.
+</pre></td></tr></table>
+
+<p>The <var>current value</var> may be shown as &lsquo;<samp>#DEFAULT</samp>&rsquo; if the attribute
+has not been given a value in the start-tag.  The list also contains the
+attributes declaration as a comment.  Note also that the <var>current
+value</var> is show without eventual quotes.
+</p>
+<a name="index-C_002dc-C_002dd-1"></a>
+<a name="index-TAB-1"></a>
+<p>It is now possible to edit the attribute values.  You can move to the
+next attribute with <kbd>&lt;TAB&gt;</kbd>.  If you want to let an attribute
+have its default value use <kbd>C-c C-d</kbd>, this will insert a
+&lsquo;<samp>#DEFAULT</samp>&rsquo; in the value field.
+</p>
+<p>If Emacs is running in an X window, the &lsquo;<samp>#DEFAULT</samp>&rsquo; will be
+underlined to distinguish it from normal values.
+</p>
+<a name="index-C_002dc-C_002dc-1"></a>
+<p>Finish the editing with <kbd>C-c C-c</kbd>; this will replace the attribute
+values in the main buffer with those edited.  Note that values will be
+quoted as needed.
+</p>
+<p>If you want to abort the editing, you can remove the window with
+<kbd>C-x 0</kbd> or if you want it neat, kill the buffer and remove the
+window.
+</p>
+<p>Some other keys are:
+</p><dl compact="compact">
+<dd><a name="index-C_002da"></a>
+<a name="index-sgml_002dedit_002dattrib_002dfield_002dstart"></a>
+</dd>
+<dt> <kbd>C-a</kbd></dt>
+<dd><p>Go to the beginning of the value field
+(<code>sgml-edit-attrib-field-start</code>).
+</p>
+<a name="index-C_002de"></a>
+<a name="index-sgml_002dedit_002dattrib_002dfield_002dend"></a>
+</dd>
+<dt> <kbd>C-e</kbd></dt>
+<dd><p>Go to the end of the value field
+(<code>sgml-edit-attrib-field-end</code>).
+</p>
+<a name="index-C_002dc-C_002dk"></a>
+<a name="index-sgml_002dedit_002dattrib_002dclear"></a>
+</dd>
+<dt> <kbd>C-c C-k</kbd></dt>
+<dd><p>Clear the value field
+(<code>sgml-edit-attrib-clear</code>).
+</p>
+<a name="index-C_002dc-C_002dd-2"></a>
+<a name="index-sgml_002dedit_002dattrib_002ddefault"></a>
+</dd>
+<dt> <kbd>C-c C-d</kbd></dt>
+<dd><p>Set the value field to &lsquo;<samp>#DEFAULT</samp>&rsquo;
+(<code>sgml-edit-attrib-default</code>).  This is a special value that will
+make the attribute be implied.
+</p></dd>
+</dl>
+
+
+<hr size="6">
+<a name="Change-and-delete"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Attributes" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Translating-characters-and-entities" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Edit" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Edit" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_9.html#Display" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Changing-and-deleting-markup"></a>
+<h2 class="section">8.7 Changing and deleting markup</h2>
+
+<dl compact="compact">
+<dd><a name="index-C_002dc-_003d"></a>
+<a name="index-sgml_002dchange_002delement_002dname"></a>
+</dd>
+<dt> <kbd>C-c =</kbd></dt>
+<dd><p>Change the name of the current element (<code>sgml-change-element-name</code>).
+Tries to translate attribute specifications.  An attribute will be
+translated to an attribute with the same name.  If the new element has
+no attribute with the same name, the attribute will be ignored.  If
+there is an attribute with the same name but different declared content,
+a warning is given.
+</p>
+<p>ID attributes are handled specially, an attribute with declared value ID
+will always be translated to the attribute with declared value ID.
+</p>
+<a name="index-C_002dc-C_002dk-1"></a>
+<a name="index-sgml_002dkill_002dmarkup"></a>
+</dd>
+<dt> <kbd>C-c C-k</kbd></dt>
+<dd><p>Kill next tag, markup declaration or process instruction
+(<code>sgml-kill-markup</code>).
+</p>
+<a name="index-C_002dM_002dk"></a>
+<a name="index-sgml_002dkill_002delement"></a>
+</dd>
+<dt> <kbd>C-M-k</kbd></dt>
+<dd><p>Kill the element following the cursor (<code>sgml-kill-element</code>).
+</p>
+<a name="index-C_002dc-_002d"></a>
+<a name="index-sgml_002duntag_002delement"></a>
+</dd>
+<dt> <kbd>C-c -</kbd></dt>
+<dd><p>Remove tags from current element (<code>sgml-untag-element</code>).
+</p>
+<a name="index-C_002dc-_0023"></a>
+<a name="index-sgml_002dmake_002dcharacter_002dreference"></a>
+</dd>
+<dt> <kbd>C-c #</kbd></dt>
+<dd><p>Convert character after point to a character reference
+(<code>sgml-make-character-reference</code>).  If called with a numeric
+argument, convert a character reference back to a normal character.
+</p>
+<a name="index-C_002dc-C_002dq"></a>
+<a name="index-sgml_002dfill_002delement"></a>
+</dd>
+<dt> <kbd>C-c C-q</kbd></dt>
+<dd><p>Fills an element as a paragraph (<code>sgml-fill-element</code>).  This is a
+substitute for the normal <code>fill-paragraph</code>.  The command uses
+heuristics to decide what should be a paragraph.
+</p>
+<ol>
+<li>
+If point is in an element content, recursively fill the sub-elements.
+</li><li>
+Find the biggest element with mixed content containing point.
+</li><li>
+If the above element is mixed but contains elements with pure element
+content then fill what is between the pure elements as paragraphs and
+fill the pure elements recursively.
+</li></ol>
+
+<a name="index-sgml_002dexpand_002dall_002dshortrefs"></a>
+</dd>
+<dt> <kbd>M-x sgml-expand-all-shortrefs</kbd></dt>
+<dd><p>Short references to text entities are expanded to the replacement text
+of the entity other short references are expanded into general entity
+references.  If argument, <var>to-entity</var>, is non-<code>nil</code>, or if
+called interactive with numeric prefix argument, all short references
+are replaced by generally entity references.
+</p>
+<a name="index-sgml_002dnormalize"></a>
+</dd>
+<dt> <kbd>M-x sgml-normalize</kbd></dt>
+<dd><p>Normalize the document in the buffer.  This will
+</p>
+<ol>
+<li>
+expand short references,
+</li><li>
+insert missing tags,
+</li><li>
+replace minimized tags with full tags,
+</li><li>
+fix attribute specification lists according to options set.
+</li></ol>
+
+<p>There is one argument, <var>to-entity</var>, with the same meaning as for
+<code>sgml-expand-all-shortrefs</code>.
+</p>
+<p>There is one option for the normalize command.  With its default value,
+normalize may actually change the data content of some elements.  But
+only by removing some white-space from the end of elements with omitted
+end-tags.
+</p></dd>
+</dl>
+
+<dl>
+<dt><a name="index-sgml_002dnormalize_002dtrims"></a><u>User Option:</u> <b>sgml-normalize-trims</b></dt>
+<dd><p>If non-nil, <code>sgml-normalize</code> will trim off white space from end of
+element when adding end-tag.
+</p>
+<p>Default: <code>t</code>.
+</p></dd></dl>
+
+
+<hr size="6">
+<a name="Translating-characters-and-entities"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Change-and-delete" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_9.html#Display" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Edit" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Edit" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_9.html#Display" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Translating-between-characters-and-entity-references"></a>
+<h2 class="section">8.8 Translating between characters and entity references</h2>
+
+
+<p>Set the variable <code>sgml-display-char-list-filename</code> to a file that
+contains mappings between all characters present in the presentation
+character set, and their &quot;standard replacement text&quot; names, e.g. &quot;å&quot;
+-&gt; &quot;[aring ]&quot;, e.t.c.
+</p>
+<p>The default value for this variable is &lsquo;iso88591.map&rsquo;. 
+</p>
+<p>Then use the functions (also in the Modify menu)
+</p>
+<dl compact="compact">
+<dd><a name="index-sgml_002dcharent_002dto_002ddisplay_002dchar"></a>
+</dd>
+<dt> <code>sgml-charent-to-display-char</code></dt>
+<dd><a name="index-sgml_002ddisplay_002dchar_002dto_002dcharent"></a>
+</dd>
+<dt> <code>sgml-display-char-to-charent</code></dt>
+</dl>
+
+<p>to translate between entities and characters.
+</p>
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Edit" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_9.html#Display" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon user</em> on <em>May 29, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

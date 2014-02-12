@@ -1,0 +1,198 @@
+<html lang="en">
+<head>
+<title>label - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="key.html#key" title="key">
+<link rel="next" href="lmargin.html#lmargin" title="lmargin">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="label"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="lmargin.html#lmargin">lmargin</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="key.html#key">key</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.31 label</h4>
+
+<!-- ?commands set label -->
+<!-- ?commands unset label -->
+<!-- ?commands show label -->
+<!-- ?set label -->
+<!-- ?unset label -->
+<!-- ?show label -->
+<p><a name="index-label-464"></a><a name="index-label-465"></a>
+
+   <p><a name="index-nolabel-466"></a>
+Arbitrary labels can be placed on the plot using the `set label` command.
+
+   <p>Syntax:
+<pre class="example">           set label {&lt;tag&gt;} {"&lt;label text&gt;"} {at &lt;position&gt;}
+                     {left | center | right}
+                     {norotate | rotate {by &lt;degrees&gt;}}
+                     {font "&lt;name&gt;{,&lt;size&gt;}"}
+                     {noenhanced}
+                     {front | back}
+                     {textcolor &lt;colorspec&gt;}
+                     {point &lt;pointstyle&gt; | nopoint}
+                     {offset &lt;offset&gt;}
+           unset label {&lt;tag&gt;}
+           show label
+     
+</pre>
+   <p>The &lt;position&gt; is specified by either x,y or x,y,z, and may be preceded by
+`first`, `second`, `graph`, `screen`, or `character` to select the coordinate
+system.  See `coordinates` for details.
+
+   <p>The tag is an integer that is used to identify the label. If no &lt;tag&gt;
+is given, the lowest unused tag value is assigned automatically.  The
+tag can be used to delete or modify a specific label.  To change any
+attribute of an existing label, use the `set label` command with the
+appropriate tag, and specify the parts of the label to be changed.
+
+   <p>The &lt;label text&gt; can be a string constant, a string variable, or a string-
+valued expression. See `strings`, <a href="sprintf.html#sprintf">sprintf</a>, and <a href="gprintf.html#gprintf">gprintf</a>.
+
+   <p>By default, the text is placed flush left against the point x,y,z.  To adjust
+the way the label is positioned with respect to the point x,y,z, add the
+justification parameter, which may be `left`, `right` or `center`,
+indicating that the point is to be at the left, right or center of the text. 
+Labels outside the plotted boundaries are permitted but may interfere with
+axis labels or other text.
+
+   <p>If `rotate` is given, the label is written vertically (if the terminal can do
+so, of course).  If `rotate by &lt;degrees&gt;` is given, conforming terminals will
+try to write the text at the specified angle; non-conforming terminals will
+treat this as vertical text.
+
+   <p>Font and its size can be chosen explicitly by `font "&lt;name&gt;{,&lt;size&gt;}"` if the
+terminal supports font settings.  Otherwise the default font of the terminal
+will be used.
+
+   <p>Normally the enhanced text mode string interpretation, if enabled for the
+current terminal, is applied to all text strings including label text. 
+The `noenhanced` property can be used to exempt a specific label from the
+enhanced text mode processing.  The can be useful if the label contains
+underscores, for example. See `enhanced text`.
+
+   <p>If `front` is given, the label is written on top of the graphed data. If
+`back` is given (the default), the label is written underneath the graphed
+data.  Using `front` will prevent a label from being obscured by dense data.
+
+   <p>`textcolor &lt;colorspec&gt;` changes the color of the label text. &lt;colorspec&gt; can be
+a linetype, an rgb color, or a palette mapping. See help for <a href="colorspec.html#colorspec">colorspec</a> and
+<a href="palette.html#palette">palette</a>.  `textcolor` may be abbreviated `tc`.
+<pre class="example">        `tc default` resets the text color to its default state.
+        `tc lt &lt;n&gt;` sets the text color to that of line type &lt;n&gt;.
+        `tc ls &lt;n&gt;` sets the text color to that of line style &lt;n&gt;.
+        `tc palette z` selects a palette color corresponding to the label z position.
+        `tc palette cb &lt;val&gt;` selects a color corresponding to &lt;val&gt; on the colorbar.
+        `tc palette fraction &lt;val&gt;`, with 0&lt;=val&lt;=1, selects a color corresponding to
+            the mapping [0:1] to grays/colors of the <a href="palette.html#palette">palette</a>.
+        `tc rgb "#RRGGBB"` selects an arbitrary 24-bit RGB color.
+     
+</pre>
+   <p>If a &lt;pointstyle&gt; is given, using keywords `lt`, `pt` and `ps`, see <a href="style.html#style">style</a>,
+a point with the given style and color of the given line type is plotted at
+the label position and the text of the label is displaced slightly. 
+This option is used by default for placing labels in `mouse` enhanced
+terminals.  Use `nopoint` to turn off the drawing of a point near
+the label (this is the default).
+
+   <p>The displacement defaults to 1,1 in <a href="pointsize.html#pointsize">pointsize</a> units if a &lt;pointstyle&gt; is
+given, 0,0 if no &lt;pointstyle&gt; is given.  The displacement can be controlled
+by the optional `offset &lt;offset&gt;` where &lt;offset&gt; is specified by either x,y
+or x,y,z, and may be preceded by `first`, `second`, `graph`, `screen`, or
+`character` to select the coordinate system.  See `coordinates` for details.
+
+   <p>If one (or more) axis is timeseries, the appropriate coordinate should be
+given as a quoted time string according to the <a href="timefmt.html#timefmt">timefmt</a> format string. 
+See <a href="xdata.html#xdata">xdata</a> and <a href="timefmt.html#timefmt">timefmt</a>.
+
+   <p>The EEPIC, Imagen, LaTeX, and TPIC drivers allow \\ in a string to specify
+a newline.
+
+   <p>Label coordinates and text can also be read from a data file (see <a href="labels.html#labels">labels</a>).
+
+   <p>Examples:
+
+   <p>To set a label at (1,2) to "y=x", use:
+<pre class="example">           set label "y=x" at 1,2
+     
+</pre>
+   <p>To set a Sigma of size 24, from the Symbol font set, at the center of
+the graph, use:
+<pre class="example">           set label "S" at graph 0.5,0.5 center font "Symbol,24"
+     
+</pre>
+   <p>To set a label "y=x^2" with the right of the text at (2,3,4), and tag the
+label as number 3, use:
+<pre class="example">           set label 3 "y=x^2" at 2,3,4 right
+     
+</pre>
+   <p>To change the preceding label to center justification, use:
+<pre class="example">           set label 3 center
+     
+</pre>
+   <p>To delete label number 2, use:
+<pre class="example">           unset label 2
+     
+</pre>
+   <p>To delete all labels, use:
+<pre class="example">           unset label
+     
+</pre>
+   <p>To show all labels (in tag order), use:
+<pre class="example">           show label
+     
+</pre>
+   <p>To set a label on a graph with a timeseries on the x axis, use, for example:
+<pre class="example">           set timefmt "%d/%m/%y,%H:%M"
+           set label "Harvest" at "25/8/93",1
+     
+</pre>
+   <p>To display a freshly fitted parameter on the plot with the data and the
+fitted function, do this after the <a href="fit.html#fit">fit</a>, but before the `plot`:
+<pre class="example">           set label sprintf("a = %3.5g",par_a) at 30,15
+           bfit = gprintf("b = %s*10^%S",par_b)
+           set label bfit at 30,20
+     
+</pre>
+   <p>To display a function definition along with its fitted parameters, use:
+<pre class="example">           f(x)=a+b*x
+           fit f(x) 'datafile' via a,b
+           set label GPFUN_f at graph .05,.95
+           set label sprintf("a = %g", a) at graph .05,.90
+           set label sprintf("b = %g", b) at graph .05,.85
+     
+</pre>
+   <p>To set a label displaced a little bit from a small point:
+<pre class="example">           set label 'origin' at 0,0 point lt 1 pt 2 ps 3 offset 1,-1
+     
+</pre>
+   <p>To set a label whose color matches the z value (in this case 5.5) of some
+point on a 3D splot colored using pm3d:
+<pre class="example">           set label 'text' at 0,0,5.5 tc palette z
+     
+</pre>
+   </body></html>
+

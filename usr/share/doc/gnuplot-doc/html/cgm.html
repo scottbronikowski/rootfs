@@ -1,0 +1,259 @@
+<html lang="en">
+<head>
+<title>cgm - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="cgi.html#cgi" title="cgi">
+<link rel="next" href="corel.html#corel" title="corel">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="cgm"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="corel.html#corel">corel</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="cgi.html#cgi">cgi</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.10 cgm</h5>
+
+<!-- ?commands set terminal cgm -->
+<!-- ?set terminal cgm -->
+<!-- ?set term cgm -->
+<!-- ?terminal cgm -->
+<!-- ?term cgm -->
+<p><a name="index-cgm-739"></a><a name="index-cgm-740"></a>
+
+   <p>The `cgm` terminal generates a Computer Graphics Metafile, Version 1. 
+This file format is a subset of the ANSI X3.122-1986 standard entitled
+"Computer Graphics - Metafile for the Storage and Transfer of Picture
+Description Information".
+
+   <p>Syntax:
+<pre class="example">           set terminal cgm {color | monochrome} {solid | dashed} {{no}rotate}
+                            {&lt;mode&gt;} {width &lt;plot_width&gt;} {linewidth &lt;line_width&gt;}
+                            {font "&lt;fontname&gt;,&lt;fontsize&gt;"}
+                            {&lt;color0&gt; &lt;color1&gt; &lt;color2&gt; ...}
+     
+</pre>
+   <p>`solid` draws all curves with solid lines, overriding any dashed patterns;
+&lt;mode&gt; is `landscape`, `portrait`, or `default`;
+&lt;plot_width&gt; is the assumed width of the plot in points;
+&lt;line_width&gt; is the line width in points (default 1);
+&lt;fontname&gt; is the name of a font (see list of fonts below)
+&lt;fontsize&gt; is the size of the font in points (default 12).
+
+   <p>The first six options can be in any order.  Selecting `default` sets all
+options to their default values.
+
+   <p>Each color must be of the form 'xrrggbb', where x is the literal
+character 'x' and 'rrggbb' are the red, green and blue components in
+hex.  For example, 'x00ff00' is green.  The background color is set
+first, then the plotting colors.
+
+   <p>Examples:
+<pre class="example">           set terminal cgm landscape color rotate dashed width 432 \\
+                          linewidth 1  'Helvetica Bold' 12       # defaults
+           set terminal cgm linewidth 2  14  # wider lines &amp; larger font
+           set terminal cgm portrait "Times Italic" 12
+           set terminal cgm color solid      # no pesky dashes!
+     
+</pre>
+   <p class="noindent">&mdash; CGM FONT &mdash;
+
+<!-- ?commands set terminal cgm font -->
+<!-- ?set terminal cgm font -->
+<!-- ?set term cgm font -->
+<!-- ?cgm font -->
+   <p>The first part of a Computer Graphics Metafile, the metafile description,
+includes a font table.  In the picture body, a font is designated by an
+index into this table.  By default, this terminal generates a table with
+the following 35 fonts, plus six more with `italic` replaced by
+`oblique`, or vice-versa (since at least the Microsoft Office and Corel
+Draw CGM import filters treat `italic` and `oblique` as equivalent):
+
+<pre class="example">           Helvetica
+           Helvetica Bold
+           Helvetica Oblique
+           Helvetica Bold Oblique
+           Times Roman
+           Times Bold
+           Times Italic
+           Times Bold Italic
+           Courier
+           Courier Bold
+           Courier Oblique
+           Courier Bold Oblique
+           Symbol
+           Hershey/Cartographic_Roman
+           Hershey/Cartographic_Greek
+           Hershey/Simplex_Roman
+           Hershey/Simplex_Greek
+           Hershey/Simplex_Script
+           Hershey/Complex_Roman
+           Hershey/Complex_Greek
+           Hershey/Complex_Script
+           Hershey/Complex_Italic
+           Hershey/Complex_Cyrillic
+           Hershey/Duplex_Roman
+           Hershey/Triplex_Roman
+           Hershey/Triplex_Italic
+           Hershey/Gothic_German
+           Hershey/Gothic_English
+           Hershey/Gothic_Italian
+           Hershey/Symbol_Set_1
+           Hershey/Symbol_Set_2
+           Hershey/Symbol_Math
+           ZapfDingbats
+           Script
+           15
+     
+</pre>
+   <p>The first thirteen of these fonts are required for WebCGM.  The
+Microsoft Office CGM import filter implements the 13 standard fonts
+listed above, and also 'ZapfDingbats' and 'Script'.  However, the
+script font may only be accessed under the name '15'.  For more on
+Microsoft import filter font substitutions, check its help file which
+you may find here:
+<pre class="example">       C:\\Program Files\\Microsoft Office\\Office\\Cgmimp32.hlp
+</pre>
+   <p>and/or its configuration file, which you may find here:
+<pre class="example">       C:\\Program Files\\Common Files\\Microsoft Shared\\Grphflt\\Cgmimp32.cfg
+     
+</pre>
+   <p>In the `set term` command, you may specify a font name which does not
+appear in the default font table.  In that case, a new font table is
+constructed with the specified font as its first entry. You must ensure
+that the spelling, capitalization, and spacing of the name are
+appropriate for the application that will read the CGM file.  (Gnuplot
+and any MIL-D-28003A compliant application ignore case in font names.) 
+If you need to add several new fonts, use several `set term` commands.
+
+   <p>Example:
+<pre class="example">           set terminal cgm 'Old English'
+           set terminal cgm 'Tengwar'
+           set terminal cgm 'Arabic'
+           set output 'myfile.cgm'
+           plot ...
+           set output
+     
+</pre>
+   <p>You cannot introduce a new font in a `set label` command.
+
+<p class="noindent">&mdash; CGM FONTSIZE &mdash;
+
+<!-- ?commands set terminal cgm fontsize -->
+<!-- ?set terminal cgm fontsize -->
+<!-- ?set term cgm fontsize -->
+<!-- ?cgm fontsize -->
+   <p>Fonts are scaled assuming the page is 6 inches wide.  If the <a href="size.html#size">size</a>
+command is used to change the aspect ratio of the page or the CGM file
+is converted to a different width, the resulting font sizes will be
+scaled up or down accordingly.  To change the assumed width, use the
+`width` option.
+
+<p class="noindent">&mdash; CGM LINEWIDTH &mdash;
+
+<!-- ?commands set terminal cgm linewidth -->
+<!-- ?set terminal cgm linewidth -->
+<!-- ?set term cgm linewidth -->
+<!-- ?cgm linewidth -->
+   <p>The `linewidth` option sets the width of lines in pt.  The default width
+is 1 pt.  Scaling is affected by the actual width of the page, as
+discussed under the `fontsize` and `width` options.
+
+<p class="noindent">&mdash; CGM ROTATE &mdash;
+
+<!-- ?commands set terminal cgm rotate -->
+<!-- ?set terminal cgm rotate -->
+<!-- ?set term cgm rotate -->
+<!-- ?cgm rotate -->
+   <p>The `norotate` option may be used to disable text rotation.  For
+example, the CGM input filter for Word for Windows 6.0c can accept
+rotated text, but the DRAW editor within Word cannot.  If you edit a
+graph (for example, to label a curve), all rotated text is restored to
+horizontal.  The Y axis label will then extend beyond the clip boundary. 
+With `norotate`, the Y axis label starts in a less attractive location,
+but the page can be edited without damage.  The `rotate` option confirms
+the default behavior.
+
+<p class="noindent">&mdash; CGM SOLID &mdash;
+
+<!-- ?set terminal cgm solid -->
+<!-- ?set term cgm solid -->
+<!-- ?cgm solid -->
+   <p>The `solid` option may be used to disable dashed line styles in the
+plots.  This is useful when color is enabled and the dashing of the
+lines detracts from the appearance of the plot. The `dashed` option
+confirms the default behavior, which gives a different dash pattern to
+each line type.
+
+<p class="noindent">&mdash; CGM SIZE &mdash;
+
+<!-- ?commands set terminal cgm size -->
+<!-- ?set terminal cgm size -->
+<!-- ?set term cgm size -->
+<!-- ?cgm size -->
+   <p>Default size of a CGM plot is 32599 units wide and 23457 units high for
+landscape, or 23457 units wide by 32599 units high for portrait.
+
+<p class="noindent">&mdash; CGM WIDTH &mdash;
+
+<!-- ?commands set terminal cgm width -->
+<!-- ?set terminal cgm width -->
+<!-- ?set term cgm width -->
+<!-- ?cgm width -->
+   <p>All distances in the CGM file are in abstract units.  The application
+that reads the file determines the size of the final plot.  By default,
+the width of the final plot is assumed to be 6 inches (15.24 cm).  This
+distance is used to calculate the correct font size, and may be changed
+with the `width` option.  The keyword should be followed by the width in
+points.  (Here, a point is 1/72 inch, as in PostScript.  This unit is
+known as a "big point" in TeX.)  Gnuplot `expressions` can be used to
+convert from other units.
+
+   <p>Example:
+<pre class="example">           set terminal cgm width 432            # default
+           set terminal cgm width 6*72           # same as above
+           set terminal cgm width 10/2.54*72     # 10 cm wide
+     
+</pre>
+   <p class="noindent">&mdash; CGM NOFONTLIST &mdash;
+
+<!-- ?commands set terminal cgm nofontlist -->
+<!-- ?set terminal cgm nofontlist -->
+<!-- ?set term cgm nofontlist -->
+<!-- ?cgm nofontlist -->
+<!-- ?set terminal cgm winword6 -->
+<!-- ?set term cgm winword6 -->
+<!-- ?cgm winword6 -->
+   <p>The default font table includes the fonts recommended for WebCGM, which
+are compatible with the Computer Graphics Metafile input filter for
+Microsoft Office and Corel Draw.  Another application might use
+different fonts and/or different font names, which may not be
+documented.  The `nofontlist` (synonym `winword6`) option deletes the font
+table from the CGM file.  In this case, the reading application should
+use a default table.  Gnuplot will still use its own default font table
+to select font indices.  Thus, 'Helvetica' will give you an index of 1,
+which should get you the first entry in your application's default font
+table. 'Helvetica Bold' will give you its second entry, etc.
+
+   </body></html>
+

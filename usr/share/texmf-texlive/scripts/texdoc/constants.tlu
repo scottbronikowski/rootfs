@@ -1,0 +1,115 @@
+-- Global "constants" for texdoc.
+--[[ 
+Copyright 2008, 2009 Manuel Pégourié-Gonnard
+Distributed under the terms of the GNU GPL version 3 or later.
+See texdoc.tlu for details.
+--]]
+
+local L = {}
+load_env(L, {
+    'setmetatable', 'next', 'assert', 'error',
+    'arg',
+    'C',
+})
+
+-- progname and version
+fullname    = arg[0]
+progname    = 'texdoc'
+version = '0.61'
+
+-- make sure to update setup_config_from_cl() accordingly
+-- and set a default value in setup_config_from_defaults() if relevant
+usage_msg = [[
+texdoc tries to find appropriate TeX documentation for the specified NAME(s).
+With no NAME, it can print configuration information (-f, --files);
+the usual --help and --version options are also accepted.
+Usage: texdoc [OPTIONS]... [NAME]...
+  -f, --files           Print the name of the config files being used.
+  -w, --view            Use view mode: start a viewer.
+  -m, --mixed           Use mixed mode (view or list).
+  -l, --list            Use list mode: show a list of results.
+  -s, --showall         Use showall mode: show also "bad" results.
+  -r, --regex           Use regex mode. (Deprecated.)
+  -e, --extensions=L    Set ext_list=L. (Deprecated.)
+  -a, --alias           Use the alias table.
+  -A, --noalias         Don't use the alias table.
+  -i, --interact        Use interactive menus.
+  -I, --nointeract      Use plain lists, no interaction required.
+  -v, --verbosity=N     Set verbosity level to N.
+  -d, --debug[=list]    Activate debug for selected items (default all).
+  -M, --machine         Use a more machine-friendly output format.
+Environment: PAGER, BROWSER, PDFVIEWER, PSVIEWER, DVIVIEWER.
+Files: <texmf>/texdoc/texdoc.cnf files, see the -f option.
+Homepage: http://tug.org/texdoc/
+Manual: displayed by `texdoc texdoc'.]]
+
+error_msg = [[
+Try `texdoc --help' for a short help, `texdoc texdoc' for the user manual.]]
+notfound_msg = [[
+Sorry, no documentation found for PKGNAME.
+If you are unsure about the name, try searching CTAN's TeX catalogue at
+http://ctan.org/search.html#byDescription.]]
+notfound_msg_ph = 'PKGNAME'
+
+known_options = {
+    'viewer_.*',
+    'mode',
+    'interact_switch',
+    'machine_switch',
+    'alias_switch',
+    'ext_list',
+    'badext_list',
+    'verbosity_level',
+    'debug_list',
+    'lastfile_switch',
+    'rm_dir',
+    'rm_file',
+    'unzip_.*',
+    'zipext_list',
+}
+
+err_priority = {
+    error   = 1,
+    warning = 2,
+    info    = 3,
+}
+
+known_debugs = {
+    version = {},
+    files   = {},
+    config  = {'files'},
+    view    = {},
+    texdocs = {},
+    filesea = {},
+    lsrsea  = {},
+    kpse    = {'texdocs', 'filesea', 'lsrsea'},
+    score   = {},
+}
+
+place_holder = '%%s' -- used for viewer commands
+
+-- zip/gz support
+--
+-- optionally, texdoc can support compressed documentation, but this is
+-- system-dependant (commands for unzipping, temporary files, etc).
+-- Since TeX Live doesn't ship compressed documentation, and I'm too lazy to
+-- make zip support work reliably on all platforms, I don't turn into an
+-- official option. However, it should work on Unix platforms.
+--
+-- If you enable zip support here, please check the configuration in config.tlu
+-- (look for support_zipped). The zip command should write the unzipped file to
+-- STDOUT. Check carefully that everything works as expected, since it got far
+-- less testing than the rest of texdoc.
+--
+-- See also comments in texdoc.cnf about viewer settings.
+support_zipped = true
+
+-- make C a proxy to the local environment
+assert(next(C) == nil,
+    'Internal error: table of constants should be empty at this point')
+setmetatable(C, {
+    __index = L,
+    __newindew = function ()
+        error('Internal error: attempt to modify a constant.')
+    end
+})

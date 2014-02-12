@@ -1,0 +1,233 @@
+<html lang="en">
+<head>
+<title>be - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="aqua.html#aqua" title="aqua">
+<link rel="next" href="pdfcairo.html#pdfcairo" title="pdfcairo">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="be"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="pdfcairo.html#pdfcairo">pdfcairo</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="aqua.html#aqua">aqua</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.6 be</h5>
+
+<!-- ?commands set terminal be -->
+<!-- ?set terminal be -->
+<!-- ?set term be -->
+<!-- ?terminal be -->
+<!-- ?term be -->
+<p><a name="index-be-731"></a>
+<a name="index-BE-732"></a>
+`gnuplot` provides the `be` terminal type for use with X servers.  This
+terminal type is set automatically at startup if the `DISPLAY` environment
+variable is set, if the `TERM` environment variable is set to `xterm`, or
+if the `-display` command line option is used.
+
+   <p>Syntax:
+<pre class="example">               set terminal be {reset} {&lt;n&gt;}
+     
+</pre>
+   <p>Multiple plot windows are supported: `set terminal be &lt;n&gt;` directs the
+output to plot window number n.  If n&gt;0, the terminal number will be
+appended to the window title and the icon will be labeled `gplt &lt;n&gt;`. 
+The active window may distinguished by a change in cursor (from default
+to crosshair.)
+
+   <p>Plot windows remain open even when the `gnuplot` driver is changed to a
+different device.  A plot window can be closed by pressing the letter q
+while that window has input focus, or by choosing `close` from a window
+manager menu.  All plot windows can be closed by specifying <a href="reset.html#reset">reset</a>, which
+actually terminates the subprocess which maintains the windows (unless
+`-persist` was specified).
+
+   <p>Plot windows will automatically be closed at the end of the session
+unless the `-persist` option was given.
+
+   <p>The size or aspect ratio of a plot may be changed by resizing the `gnuplot`
+window.
+
+   <p>Linewidths and pointsizes may be changed from within `gnuplot` with
+`set linestyle`.
+
+   <p>For terminal type `be`, `gnuplot` accepts (when initialized) the standard
+X Toolkit options and resources such as geometry, font, and name from the
+command line arguments or a configuration file.  See the X(1) man page
+(or its equivalent) for a description of such options.
+
+   <p>A number of other `gnuplot` options are available for the `be` terminal. 
+These may be specified either as command-line options when `gnuplot` is
+invoked or as resources in the configuration file ".Xdefaults".  They are
+set upon initialization and cannot be altered during a `gnuplot` session.
+
+<p class="noindent">&mdash; COMMAND-LINE_OPTIONS &mdash;
+
+<!-- ?commands set terminal be command-line-options -->
+<!-- ?set terminal be command-line-options -->
+<!-- ?set term be command-line-options -->
+<!-- ?be command-line-options -->
+   <p>In addition to the X Toolkit options, the following options may be specified
+on the command line when starting `gnuplot` or as resources in your
+".Xdefaults" file:
+
+<pre class="example">      `-mono`        forces monochrome rendering on color displays.
+      `-gray`        requests grayscale rendering on grayscale or color displays.
+                             (Grayscale displays receive monochrome rendering by default.)
+      `-clear`   requests that the window be cleared momentarily before a
+                             new plot is displayed.
+      `-raise`   raises plot window after each plot
+      `-noraise` does not raise plot window after each plot
+      `-persist` plots windows survive after main gnuplot program exits
+     
+</pre>
+   <p>The options are shown above in their command-line syntax.  When entered as
+resources in ".Xdefaults", they require a different syntax.
+
+   <p>Example:
+<pre class="example">               gnuplot*gray: on
+     
+</pre>
+   <p>`gnuplot` also provides a command line option (`-pointsize &lt;v&gt;`) and a
+resource, `gnuplot*pointsize: &lt;v&gt;`, to control the size of points plotted
+with the `points` plotting style.  The value `v` is a real number (greater
+than 0 and less than or equal to ten) used as a scaling factor for point
+sizes.  For example, `-pointsize 2` uses points twice the default size, and
+`-pointsize 0.5` uses points half the normal size.
+
+<p class="noindent">&mdash; MONOCHROME_OPTIONS &mdash;
+
+<!-- ?commands set terminal be monochrome_options -->
+<!-- ?set terminal be monochrome_options -->
+<!-- ?set term be monochrome_options -->
+<!-- ?be monochrome_options -->
+   <p>For monochrome displays, `gnuplot` does not honor foreground or background
+colors.  The default is black-on-white.  `-rv` or `gnuplot*reverseVideo: on`
+requests white-on-black.
+
+<p class="noindent">&mdash; COLOR_RESOURCES &mdash;
+
+<!-- ?commands set terminal be color_resources -->
+<!-- ?set terminal be color_resources -->
+<!-- ?set term be color_resources -->
+<!-- ?be color_resources -->
+   <p>For color displays, `gnuplot` honors the following resources (shown here
+with their default values) or the greyscale resources.  The values may be
+color names as listed in the BE rgb.txt file on your system, hexadecimal
+RGB color specifications (see BE documentation), or a color name followed
+by a comma and an `intensity` value from 0 to 1.  For example, `blue, 0.5`
+means a half intensity blue.
+
+<pre class="example">      gnuplot*background:  white
+      gnuplot*textColor:   black
+      gnuplot*borderColor: black
+      gnuplot*axisColor:   black
+      gnuplot*line1Color:  red
+      gnuplot*line2Color:  green
+      gnuplot*line3Color:  blue
+      gnuplot*line4Color:  magenta
+      gnuplot*line5Color:  cyan
+      gnuplot*line6Color:  sienna
+      gnuplot*line7Color:  orange
+      gnuplot*line8Color:  coral
+     
+</pre>
+   <p>The command-line syntax for these is, for example,
+
+   <p>Example:
+<pre class="example">               gnuplot -background coral
+     
+</pre>
+   <p class="noindent">&mdash; GRAYSCALE_RESOURCES &mdash;
+
+<!-- ?commands set terminal be grayscale_resources -->
+<!-- ?set terminal be grayscale_resources -->
+<!-- ?set term be grayscale_resources -->
+<!-- ?be grayscale_resources -->
+   <p>When `-gray` is selected, `gnuplot` honors the following resources for
+grayscale or color displays (shown here with their default values).  Note
+that the default background is black.
+
+<pre class="example">      gnuplot*background: black
+      gnuplot*textGray:   white
+      gnuplot*borderGray: gray50
+      gnuplot*axisGray:   gray50
+      gnuplot*line1Gray:  gray100
+      gnuplot*line2Gray:  gray60
+      gnuplot*line3Gray:  gray80
+      gnuplot*line4Gray:  gray40
+      gnuplot*line5Gray:  gray90
+      gnuplot*line6Gray:  gray50
+      gnuplot*line7Gray:  gray70
+      gnuplot*line8Gray:  gray30
+     
+</pre>
+   <p class="noindent">&mdash; LINE_RESOURCES &mdash;
+
+<!-- ?commands set terminal be line_resources -->
+<!-- ?set terminal be line_resources -->
+<!-- ?set term be line_resources -->
+<!-- ?be line_resources -->
+   <p>`gnuplot` honors the following resources for setting the width (in pixels) of
+plot lines (shown here with their default values.)  0 or 1 means a minimal
+width line of 1 pixel width.  A value of 2 or 3 may improve the appearance of
+some plots.
+
+<pre class="example">      gnuplot*borderWidth: 2
+      gnuplot*axisWidth:   0
+      gnuplot*line1Width:  0
+      gnuplot*line2Width:  0
+      gnuplot*line3Width:  0
+      gnuplot*line4Width:  0
+      gnuplot*line5Width:  0
+      gnuplot*line6Width:  0
+      gnuplot*line7Width:  0
+      gnuplot*line8Width:  0
+     
+</pre>
+   <p>`gnuplot` honors the following resources for setting the dash style used for
+plotting lines.  0 means a solid line.  A two-digit number `jk` (`j` and `k`
+are &gt;= 1  and &lt;= 9) means a dashed line with a repeated pattern of `j` pixels
+on followed by `k` pixels off.  For example, '16' is a "dotted" line with one
+pixel on followed by six pixels off.  More elaborate on/off patterns can be
+specified with a four-digit value.  For example, '4441' is four on, four off,
+four on, one off.  The default values shown below are for monochrome displays
+or monochrome rendering on color or grayscale displays.  For color displays,
+the default for each is 0 (solid line) except for `axisDashes` which defaults
+to a '16' dotted line.
+
+<pre class="example">      gnuplot*borderDashes:   0
+      gnuplot*axisDashes:        16
+      gnuplot*line1Dashes:        0
+      gnuplot*line2Dashes:   42
+      gnuplot*line3Dashes:   13
+      gnuplot*line4Dashes:   44
+      gnuplot*line5Dashes:   15
+      gnuplot*line6Dashes: 4441
+      gnuplot*line7Dashes:   42
+      gnuplot*line8Dashes:   13
+     
+</pre>
+   </body></html>
+

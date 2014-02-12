@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+<title>exit - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="evaluate.html#evaluate" title="evaluate">
+<link rel="next" href="fit.html#fit" title="fit">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="exit"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="fit.html#fit">fit</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="evaluate.html#evaluate">evaluate</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.5 exit</h3>
+
+<!-- ?commands exit -->
+<p><a name="index-exit-285"></a><a name="index-exit-286"></a>
+
+   <p>The commands <a href="exit.html#exit">exit</a> and <a href="quit.html#quit">quit</a>, as well as the END-OF-FILE character (usually
+Ctrl-D) terminate input from the current input stream: terminal session, pipe,
+and file input (pipe).
+
+   <p>If input streams are nested (inherited `load` scripts), then reading will
+continue in the parent stream. When the top level stream is closed, the
+program itself will exit.
+
+   <p>The command `exit gnuplot` will immediately and unconditionally cause gnuplot
+to exit even if the input stream is multiply nested.  In this case any open
+output files may not be completed cleanly. Example of use:
+
+<pre class="example">           bind "ctrl-x" "unset output; exit gnuplot"
+     
+</pre>
+   <p>See help for `batch/interactive` for more details.
+
+   </body></html>
+

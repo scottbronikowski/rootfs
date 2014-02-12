@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>multiplot - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="mouse.html#mouse" title="mouse">
+<link rel="next" href="mx2tics.html#mx2tics" title="mx2tics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="multiplot"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="mx2tics.html#mx2tics">mx2tics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="mouse.html#mouse">mouse</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.40 multiplot</h4>
+
+<!-- ?commands set multiplot -->
+<!-- ?commands unset multiplot -->
+<!-- ?set multiplot -->
+<!-- ?unset multiplot -->
+<p><a name="index-multiplot-486"></a><a name="index-multiplot-487"></a>
+
+   <p><a name="index-nomultiplot-488"></a>
+The command <a href="multiplot.html#multiplot">multiplot</a> places `gnuplot` in the multiplot mode, in which
+several plots are placed on the same page, window, or screen.
+
+   <p>Syntax:
+<pre class="example">           set multiplot { layout &lt;rows&gt;,&lt;cols&gt;
+                           {rowsfirst|columnsfirst} {downwards|upwards}
+                           {title &lt;page title&gt;}
+                           {scale &lt;xscale&gt;{,&lt;yscale&gt;}} {offset &lt;xoff&gt;{,&lt;yoff&gt;}}
+                         }
+           unset multiplot
+     
+</pre>
+   <p>For some terminals, no plot is displayed until the command <a href="multiplot.html#multiplot">multiplot</a>
+is given, which causes the entire page to be drawn and then returns gnuplot
+to its normal single-plot mode.  For other terminals, each separate `plot`
+command produces an updated display, either by redrawing all previous ones
+and the newly added plot, or by just adding the new plot to the existing
+display.
+
+   <p>The area to be used by the next plot is not erased before doing the
+new plot.  The <a href="clear.html#clear">clear</a> command can be used to do this if wanted, as is
+typically the case for "inset" plots.
+
+   <p>Any labels or arrows that have been defined will be drawn for each plot
+according to the current size and origin (unless their coordinates are
+defined in the `screen` system).  Just about everything else that can be
+`set` is applied to each plot, too.  If you want something to appear only
+once on the page, for instance a single time stamp, you'll need to put a `set
+time`/`unset time` pair around one of the `plot`, `splot` or <a href="replot.html#replot">replot</a>
+commands within the <a href="multiplot.html#multiplot">multiplot</a>/<a href="multiplot.html#multiplot">multiplot</a> block.
+
+   <p>The multiplot title is separate from the individual plot titles, if any. 
+Space is reserved for it at the top of the page, spanning the full width
+of the canvas.
+
+   <p>The commands <a href="origin.html#origin">origin</a> and <a href="size.html#size">size</a> must be used to correctly position
+each plot if no layout is specified or if fine tuning is desired.  See
+<a href="origin.html#origin">origin</a> and <a href="size.html#size">size</a> for details of their usage.
+
+   <p>Example:
+<pre class="example">           set multiplot
+           set size 0.4,0.4
+           set origin 0.1,0.1
+           plot sin(x)
+           set size 0.2,0.2
+           set origin 0.5,0.5
+           plot cos(x)
+           unset multiplot
+     
+</pre>
+   <p>This displays a plot of cos(x) stacked above a plot of sin(x).
+
+   <p><a href="size.html#size">size</a> and <a href="origin.html#origin">origin</a> refer to the entire plotting area used for each
+plot.  Please also see <a href="size.html#size">size</a>.  If you want to have the axes
+themselves line up, you can guarantee that the margins are the same size with
+the <a href="margin.html#margin">margin</a> commands.  See <a href="margin.html#margin">margin</a> for their use.  Note that the
+margin settings are absolute, in character units, so the appearance of the
+graph in the remaining space will depend on the screen size of the display
+device, e.g., perhaps quite different on a video display and a printer.
+
+   <p>With the `layout` option you can generate simple multiplots without having
+to give the <a href="size.html#size">size</a> and <a href="origin.html#origin">origin</a> commands before each plot:  Those
+are generated automatically, but can be overridden at any time.  With
+`layout` the display will be divided by a grid with &lt;rows&gt; rows and
+&lt;cols&gt; columns.  This grid is filled rows first or columns first depending on
+whether the corresponding option is given in the multiplot command.  The stack
+of plots can grow `downwards` or `upwards`. 
+Default is `rowsfirst` and `downwards`.
+
+   <p>Each plot can be scaled by `scale` and shifted with `offset`; if the y-values
+for scale or offset are omitted, the x-value will be used.  <a href="multiplot.html#multiplot">multiplot</a>
+will turn off the automatic layout and restore the values of <a href="size.html#size">size</a> and
+<a href="origin.html#origin">origin</a> as they were before `set multiplot layout`.
+
+   <p>Example:
+<pre class="example">           set size 1,1
+           set origin 0,0
+           set multiplot layout 3,2 columnsfirst scale 1.1,0.9
+           [ up to 6 plot commands here ]
+           unset multiplot
+     
+</pre>
+   <p>The above example will produce 6 plots in 2 columns filled top to bottom,
+left to right.  Each plot will have a horizontal size of 1.1/2 and a vertical
+size of 0.9/3.
+
+   <p>See also
+<a href="http://gnuplot.sourceforge.net/demo/multiplt.html">multiplot demo (multiplt.dem)</a>
+
+   </body></html>
+

@@ -1,0 +1,121 @@
+Debian SGML/XML Policy (draft)
+==============================
+
+Currently, the policy is spread over several documents:
+
+ - RECOMMENDATIONS.lsb
+ - EXPLANATIONS.lsb
+ - RECOMMENDATIONS.fsh
+ - "SGML Entity Management"
+ - this file
+
+In the near future this will all be integrated into a single official
+document, with the exception of RECOMMENDATIONS.fsh which will be a
+part of FHS v2.2.
+
+Besides the directory structure described in RECOMMENDATIONS.lsb, we
+will also support a non-versioned directory structure as proposed by
+Mark Johnson (excerpt from his message on debian-sgml):
+
+--
+
+Directory Structure Comment:
+---------------------
+On the proposed directory structure -- grouped by classes of dtds rather
+ than file function:
+ 
+-Current dir structure:
+ 
+/usr/[share or lib]/sgml/
+        dtd/
+        stylesheet/
+        entities/
+ 
+-Proposed:
+ 
+/usr/share/sgml/docbook/
+       sgml-dtd-3.1/
+       sgml-dtd-4.0/
+       xml-dtd-4.0/ (the DocBook DTD)
+       dsssl-stylesheets-1.54/
+       xsl-stylesheets-1.12/
+ 
+Wouldn't a hybrid of the two make much more sense? Something like:
+ 
+/usr/share/sgml/docbook/
+        dtd/
+        stylesheet/
+        entities/
+ 
+The proposed structure looks unnecessarily messy, and harder to maintain.
+
+--
+
+
+Package dependencies
+--------------------
+
+All SGML and XML packages that provide a DTD or entity description file
+have to depend on the "sgml-base" package.  This package implements the
+necessary infrastructure as described in the files RECOMMENDATIONS.lsb
+and RECOMMENDATIONS.fsh.
+
+Please don't modify the super catalog and the centralized catalogs
+directly in the postinst/prerm scripts of your package.  Please use
+update-catalog(8) for that purpose.
+
+
+Example
+-------
+
+Here is a simple example: Consider the package "foo" which provides
+the SGML DTD foo.dtd and an entity description file "foo-general".
+The package installs the following files:
+
+    /usr/share/sgml/foo/sgml-dtd-<version>/dtd/foo.dtd
+    /usr/share/sgml/foo/sgml-dtd-<version>/entities/foo-general
+    /usr/share/sgml/foo/sgml-dtd-<version>/catalog
+        
+The catalog file can look like this:
+
+    DOCTYPE foodoc            foo/sgml-dtd-<version>/dtd/foo.dtd
+    ENTITY %foo-general       foo/sgml-dtd-<version>/entities/foo-general
+
+That's the postinst script:
+
+    #!/bin/sh
+    set -e
+    if [ "$1" = configure ]
+    then
+	CENCAT=/etc/sgml/foo-<version>.cat
+	ORDCAT=/usr/share/sgml/foo-<version>/catalog
+	update-catalog --add $CENCAT $ORDCAT
+	update-catalog --add --super $CENCAT
+    fi
+    #DEBHELPER
+    exit 0
+
+and the prerm script:
+
+    #!/bin/sh
+    set -e
+    if [ "$1" = remove ]
+    then
+	CENCAT=/etc/sgml/foo-<version>.cat
+	ORDCAT=/usr/share/sgml/foo-<version>/catalog
+	update-catalog --remove --super $CENCAT
+	update-catalog --remove $CENCAT $ORDCAT
+    fi
+    #DEBHELPER
+    exit 0
+
+Please check the update-catalog(8) manpage for details.
+
+
+Feedback
+--------
+
+Please send me an email for bugs/suggestions/critics on this policy.
+
+February 2001
+Ardo van Rangelrooij <ardo@debian.org>

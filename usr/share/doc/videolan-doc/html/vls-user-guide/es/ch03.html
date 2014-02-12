@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 3. Visión general y conceptos básicos</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, VLS, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB" /><link rel="start" href="index.html" title="Guía de usuario de VLS" /><link rel="up" href="index.html" title="Guía de usuario de VLS" /><link rel="prev" href="ch02.html" title="Chapter 2.  Instalación de VLS" /><link rel="next" href="ch04.html" title="Chapter 4.  Configuración" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. Visión general y conceptos básicos</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="overview"></a>Chapter 3. Visión general y conceptos básicos</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch03.html#id2570591">Estructura de VLS</a></span></dt><dt><span class="sect1"><a href="ch03.html#id2570872">
+Interfaz de administración
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2570591"></a>Estructura de VLS</h2></div></div></div><p>
+Desde el punto de vista de un usuario, VLS puede se dividido
+en cuatro tipos de componentes:
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+
+un <span class="emphasis"><em>gestor</em></span>
+
+,</p></li><li><p>
+<span class="emphasis"><em>
+
+entradas
+
+</em></span>,</p></li><li><p><span class="emphasis"><em>
+
+
+conversores
+
+</em></span>,</p></li><li><p>
+
+
+y <span class="emphasis"><em>salidas</em></span>
+
+.</p></li></ul></div><div class="figure"><a id="id2570684"></a><p class="title"><b>Figure 3.1. 
+Estructura de VLS
+</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/archi-vls.jpg" width="324" alt="Estructura de VLS" /></div></div></div><br class="figure-break" /><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570709"></a>
+Entradas
+</h3></div></div></div><p>
+El papel de una <span class="emphasis"><em>entrada</em></span> es el de
+leer flujos MPEG de una fuente dada (fichero, DVD, tarjetas DVB, dispositivos,
+...), y alimentar a los <span class="emphasis"><em>conversores</em></span> correctos con estos
+flujos. Una entrada puede leer varios flujos, que son llamados
+<span class="emphasis"><em>programas</em></span>. Hay varios tipos de entradas:
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+la entrada <span class="emphasis"><em>local</em></span>, que puede leer
+de ficheros o DVDs,
+</p></li><li><p>
+la entrada <span class="emphasis"><em>video</em></span>, que
+puede leer de tarjetas codificadoras MPEG,
+</p></li><li><p>
+la entrada <span class="emphasis"><em>dvb</em></span>, que
+puede leer de tarjetas DVB,
+</p></li><li><p>
+la entrada <span class="emphasis"><em>v4l</em></span>, que
+puede leer de tarjetas capturadoras soportadas por los drivers
+Video4Linux.
+</p></li></ul></div><p>
+Se pueden usar varias entradas y tener varios programas
+al mismo tiempo.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570777"></a>
+Los conversores
+</h3></div></div></div><p>
+El papel de un <span class="emphasis"><em>conversor</em></span> es el de
+recibir un flujo de una entrada, y convertirlo en formato MPEG-TS.
+VLS es capaz de convertir flujos PS (de DVDs, por ejemplo) a flujos TS
+(conversor ps2ts). Por supuesto, también puede leer flujos TS, y
+repararlos manejando las discontinuidades en el flujo (conversor ts2ts).
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570800"></a>
+Salidas
+</h3></div></div></div><p>
+Una salida recibe un flujo de un conversor,
+y lo manda a un destino dado (red, fichero, ...). Actualmente
+existen dos tipos de salidas soportadas: <span class="emphasis"><em>network</em></span> y
+<span class="emphasis"><em>file</em></span>. Nótese que,
+por el momento, VLS sólo soporta una salida por flujo,
+por lo que no se puede enviar al mismo tiempo a una red y escribir
+a un fichero. La salida de red es bastante configurable:
+se puede elegir qué interfaz de red se quiere utilizar, y especificar
+las direcciones IP de origen y destino.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2570829"></a>
+El gestor
+</h3></div></div></div><p>
+El <span class="emphasis"><em>gestor</em></span> controla
+el modo en el que son enviados los flujos. A través de una <span class="emphasis"><em>interfaz de
+administración</em></span>, se le puede decir al gestor que comience, pare,
+suspenda, o reinicie los diferentes programas. Se puede
+también conseguir la lista de todos los programas disponibles en la Tabla
+de Programas. El gestor consigue esta tabla del fichero de configuración de VLS
+(<code class="filename">vls.cfg</code>), por lo que no puede ser modificado una vez que VLS
+es arrancado. Por el momento, no se puede preguntar al gestor si un flujo está
+siendo enviado, pero devuelve un mensaje de error si se intenta parar
+un flujo que no está siendo transmitido.
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2570872"></a>
+Interfaz de administración
+</h2></div></div></div><p>
+Actualmente existen dos modos de controlar VLS:
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+se puede usar la <span class="emphasis"><em>línea de comandos</em></span> para
+proporcionarle argumentos en el arranque;
+</p></li><li><p>
+o se puede usar la <span class="emphasis"><em>interfaz
+Telnet</em></span> para arrancar/parar/pausar el envío siempre que se
+quiera.
+</p></li></ul></div><p>
+Cuando se usa el interfaz Telnet, hay que
+autenticarse antes de escribir comandos, para prevenir que usuarios
+no deseados sean libres de hacerlo (esto se debe configurar en el
+fichero de configuración <code class="filename">vls.cfg</code>).
+</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. 
+Instalación de VLS
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 4. 
+Configuración
+</td></tr></table></div></body></html>

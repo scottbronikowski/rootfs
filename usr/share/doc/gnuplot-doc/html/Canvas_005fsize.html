@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>Canvas_size - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="New_005ffeatures_005fintroduced_005fin_005fversion_005f4_002e4.html#New_005ffeatures_005fintroduced_005fin_005fversion_005f4_002e4" title="New_features_introduced_in_version_4.4">
+<link rel="prev" href="Volatile_005fData.html#Volatile_005fData" title="Volatile_Data">
+<link rel="next" href="New_005fplot_005felements.html#New_005fplot_005felements" title="New_plot_elements">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Canvas_size"></a>
+<a name="Canvas_005fsize"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="New_005fplot_005felements.html#New_005fplot_005felements">New_plot_elements</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Volatile_005fData.html#Volatile_005fData">Volatile_Data</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="New_005ffeatures_005fintroduced_005fin_005fversion_005f4_002e4.html#New_005ffeatures_005fintroduced_005fin_005fversion_005f4_002e4">New_features_introduced_in_version_4.4</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.4.4 Canvas size</h4>
+
+<!-- ?canvas size -->
+<p><a name="index-canvas-7"></a>
+<!-- ?set term size -->
+
+   <p>In earlier versions of gnuplot, some terminal types used the values from
+<a href="size.html#size">size</a> to control also the size of the output canvas; others did not. 
+The use of 'set size' for this purpose was deprecated in version 4.2. 
+In version 4.4 almost all terminals now behave as follows:
+
+   <p>`set term &lt;terminal_type&gt; size &lt;XX&gt;, &lt;YY&gt;` controls the size of the output
+file, or "canvas". Please see individual terminal documentation for allowed
+values of the size parameters.  By default, the plot will fill this canvas.
+
+   <p>`set size &lt;XX&gt;, &lt;YY&gt;` scales the plot itself relative to the size of the
+canvas.  Scale values less than 1 will cause the plot to not fill the entire
+canvas.  Scale values larger than 1 will cause only a portion of the plot to
+fit on the canvas.  Please be aware that setting scale values larger than 1
+may cause problems on some terminal types.
+
+   <p>The major exception to this convention is the PostScript driver, which
+by default continues to act as it has in earlier versions. Be warned that
+the next version of gnuplot may change the default behaviour of the
+PostScript driver as well.
+
+   <p>Example:
+
+<pre class="example">           set size 0.5, 0.5
+           set term png size 600, 400
+           set output "figure.png"
+           plot "data" with lines
+     
+</pre>
+   <p>These commands will produce an output file "figure.png" that is 600 pixels
+wide and 400 pixels tall. The plot will fill the lower left quarter of this
+canvas.  This is consistent with the way multiplot mode has always worked,
+however it is a change in the way the png driver worked for single plots in
+version 4.0.
+
+   </body></html>
+

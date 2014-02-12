@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>node-list-&#62;string</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="DSSSL Library Reference"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Miscellaneous"
+HREF="r300.htm"><LINK
+REL="PREVIOUS"
+TITLE="normalize"
+HREF="normalize.html"><LINK
+REL="NEXT"
+TITLE="include-file"
+HREF="include-file.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>DSSSL Library Reference: Part of the Modular DocBook Stylesheet distribution</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="normalize.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="include-file.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="NODE-LIST-X3ESTRING"
+></A
+>node-list-&#62;string</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1847"
+></A
+><H2
+>Name</H2
+>node-list-&#62;string&nbsp;--&nbsp;Return a string representation of the node list</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1850"
+></A
+><H2
+>Synopsis</H2
+><PRE
+CLASS="SYNOPSIS"
+>(node-list-&#62;string nodelist)</PRE
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1853"
+></A
+><H2
+>Description</H2
+><P
+>Builds a string representation of the node list and returns it.
+The representation is </P
+><P
+>"gi(firstchildgi()secondchildgi(firstgrandchildgi())) secondgi()..."</P
+><P
+>This is a debugging function, in case that wasn't obvious...</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1858"
+></A
+><H2
+>Author</H2
+><P
+>Norman Walsh, &lt;ndw@nwalsh.com&gt;</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1861"
+></A
+><H2
+>Source Code</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>(define (node-list-&#62;string nodelist)
+  ;; Return a string representation of the node list
+  (let loop ((nl nodelist) (res ""))
+    (if (node-list-empty? nl)
+	res
+	(loop (node-list-rest nl)
+	      (string-append res 
+			     (if (gi (node-list-first nl))
+				 (string-append
+				  (gi (node-list-first nl))
+				  "("
+				  (node-list-&#62;string 
+				   (children (node-list-first nl)))
+				  ")")
+				 ""))))))</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="normalize.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="include-file.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>normalize</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="r300.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>include-file</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

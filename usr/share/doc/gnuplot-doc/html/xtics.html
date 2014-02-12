@@ -1,0 +1,209 @@
+<html lang="en">
+<head>
+<title>xtics - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="xrange.html#xrange" title="xrange">
+<link rel="next" href="xyplane.html#xyplane" title="xyplane">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="xtics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="xyplane.html#xyplane">xyplane</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="xrange.html#xrange">xrange</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.91 xtics</h4>
+
+<!-- ?commands set xtics -->
+<!-- ?commands unset xtics -->
+<!-- ?commands show xtics -->
+<!-- ?set xtics -->
+<!-- ?unset xtics -->
+<!-- ?show xtics -->
+<p><a name="index-xtics-615"></a><a name="index-xtics-616"></a>
+
+   <p><a name="index-noxtics-617"></a>
+Fine control of the major (labelled) tics on the x axis is possible with the
+`set xtics` command.  The tics may be turned off with the `unset xtics`
+command, and may be turned on (the default state) with `set xtics`.  Similar
+commands control the major tics on the y, z, x2 and y2 axes.
+
+   <p>Syntax:
+<pre class="example">           set xtics {axis | border} {{no}mirror}
+                     {in | out} {scale {default | &lt;major&gt; {,&lt;minor&gt;}}}
+                     {{no}rotate {by &lt;ang&gt;}} {offset &lt;offset&gt; | nooffset}
+                     {add}
+                     {  autofreq
+                      | &lt;incr&gt;
+                      | &lt;start&gt;, &lt;incr&gt; {,&lt;end&gt;}
+                      | ({"&lt;label&gt;"} &lt;pos&gt; {&lt;level&gt;} {,{"&lt;label&gt;"}...) }
+                     { format "formatstring" } { font "name{,&lt;size&gt;}" }
+                     { rangelimited }
+                     { textcolor &lt;colorspec&gt; }
+           unset xtics
+           show xtics
+     
+</pre>
+   <p>The same syntax applies to <a href="ytics.html#ytics">ytics</a>, <a href="ztics.html#ztics">ztics</a>, <a href="x2tics.html#x2tics">x2tics</a>, <a href="y2tics.html#y2tics">y2tics</a> and <a href="cbtics.html#cbtics">cbtics</a>.
+
+   <p>`axis` or <a href="border.html#border">border</a> tells `gnuplot` to put the tics (both the tics themselves
+and the accompanying labels) along the axis or the border, respectively.  If
+the axis is very close to the border, the `axis` option will move the
+tic labels to outside the border.  The relevant margin settings will usually
+be sized badly by the automatic layout algorithm in this case.
+
+   <p>`mirror` tells `gnuplot` to put unlabelled tics at the same positions on the
+opposite border.  `nomirror` does what you think it does.
+
+   <p>`in` and `out` change the tic marks to be drawn inwards or outwards.
+
+   <p>With `scale`, the size of the tic marks can be adjusted. If &lt;minor&gt; is not
+specified, it is 0.5*&lt;major&gt;.  The default size 1.0 for major tics and 0.5
+for minor tics is requested by `scale default`.
+
+   <p>`rotate` asks `gnuplot` to rotate the text through 90 degrees, which will be
+done if the terminal driver in use supports text rotation.  `norotate`
+cancels this. `rotate by &lt;ang&gt;` asks for rotation by &lt;ang&gt; degrees, supported
+by some terminal types.
+
+   <p>The defaults are `border mirror norotate` for tics on the x and y axes, and
+`border nomirror norotate` for tics on the x2 and y2 axes.  For the z axis,
+the `{axis | border}` option is not available and the default is
+`nomirror`.  If you do want to mirror the z-axis tics, you might want to
+create a bit more room for them with <a href="border.html#border">border</a>.
+
+   <p>The &lt;offset&gt; is specified by either x,y or x,y,z, and may be preceded by
+`first`, `second`, `graph`, `screen`, or `character` to select the
+coordinate system. &lt;offset&gt; is the offset of the tics texts from their
+default positions, while the default coordinate system is `character`. 
+See `coordinates` for details. `nooffset` switches off the offset.
+
+   <p>Example:
+
+   <p>Move xtics more closely to the plot.
+<pre class="example">           set xtics offset 0,graph 0.05
+     
+</pre>
+   <p>`set xtics` with no options restores the default border or axis if xtics are
+being displayed;  otherwise it has no effect.  Any previously specified tic
+frequency or position {and labels} are retained.
+
+   <p>Positions of the tics are calculated automatically by default or if the
+`autofreq` option is given; otherwise they may be specified in either of
+two forms:
+
+   <p>The implicit &lt;start&gt;, &lt;incr&gt;, &lt;end&gt; form specifies that a series of tics will
+be plotted on the axis between the values &lt;start&gt; and &lt;end&gt; with an increment
+of &lt;incr&gt;.  If &lt;end&gt; is not given, it is assumed to be infinity.  The
+increment may be negative.  If neither &lt;start&gt; nor &lt;end&gt; is given, &lt;start&gt; is
+assumed to be negative infinity, &lt;end&gt; is assumed to be positive infinity,
+and the tics will be drawn at integral multiples of &lt;incr&gt;.  If the axis is
+logarithmic, the increment will be used as a multiplicative factor.
+
+   <p>If you specify to a negative &lt;start&gt; or &lt;incr&gt; after a numerical value
+(e.g., `rotate by &lt;angle&gt;` or `offset &lt;offset&gt;`), the parser fails because
+it subtracts &lt;start&gt; or &lt;incr&gt; from that value.  As a workaround, specify
+`0-&lt;start&gt;` resp. `0-&lt;incr&gt;` in that case.
+
+   <p>Example:
+<pre class="example">           set xtics border offset 0,0.5 -5,1,5
+</pre>
+   <p>Fails with 'invalid expression' at the last comma.
+<pre class="example">           set xtics border offset 0,0.5 0-5,1,5
+</pre>
+   <p>or
+<pre class="example">           set xtics offset 0,0.5 border -5,1,5
+</pre>
+   <p>Sets tics at the border, tics text with an offset of 0,0.5 characters, and
+sets the start, increment, and end to -5, 1, and 5, as requested.
+
+   <p>The `set grid` options 'front', 'back' and 'layerdefault' affect the drawing
+order of the xtics, too.
+
+   <p>Examples:
+
+   <p>Make tics at 0, 0.5, 1, 1.5, ..., 9.5, 10.
+<pre class="example">           set xtics 0,.5,10
+     
+</pre>
+   <p>Make tics at ..., -10, -5, 0, 5, 10, ...
+<pre class="example">           set xtics 5
+     
+</pre>
+   <p>Make tics at 1, 100, 1e4, 1e6, 1e8.
+<pre class="example">           set logscale x; set xtics 1,100,1e8
+     
+</pre>
+   <p>The explicit ("&lt;label&gt;" &lt;pos&gt; &lt;level&gt;, ...) form allows arbitrary tic
+positions or non-numeric tic labels.  In this form, the tics do not
+need to be listed in numerical order.  Each tic has a
+position, optionally with a label.  Note that the label is
+a string enclosed by quotes.  It may be a constant string, such as
+"hello", may contain formatting information for converting the
+position into its label, such as "%3f clients", or may be empty, "". 
+See `set format` for more information.  If no string is given, the
+default label (numerical) is used.
+
+   <p>An explicit tic mark has a third parameter, the "level".  The default
+is level 0, a major tic.  A level of 1 generates a minor tic.  If the
+level is specified, then the label must also be supplied.
+
+   <p>Examples:
+<pre class="example">           set xtics ("low" 0, "medium" 50, "high" 100)
+           set xtics (1,2,4,8,16,32,64,128,256,512,1024)
+           set ytics ("bottom" 0, "" 10, "top" 20)
+           set ytics ("bottom" 0, "" 10 1, "top" 20)
+     
+</pre>
+   <p>In the second example, all tics are labelled.  In the third, only the end
+tics are labelled.  In the fourth, the unlabeled tic is a minor tic.
+
+   <p>Normally if explicit tics are given, they are used instead of auto-generated
+tics. Conversely if you specify `set xtics auto` or the like it will erase
+any previously specified explicit tics. You can mix explicit and auto-
+generated tics by using the keyword `add`, which must appear before
+the tic style being added.
+
+   <p>Example:
+<pre class="example">           set xtics 0,.5,10
+           set xtics add ("Pi" 3.14159)
+     
+</pre>
+   <p>This will automatically generate tic marks every 0.5 along x, but will
+also add an explicit labeled tic mark at pi.
+
+   <p>However they are specified, tics will only be plotted when in range.
+
+   <p>Format (or omission) of the tic labels is controlled by `set format`, unless
+the explicit text of a label is included in the `set xtics ("&lt;label&gt;")` form.
+
+   <p>Minor (unlabelled) tics can be added automatically by the <a href="mxtics.html#mxtics">mxtics</a>
+command, or at explicit positions by the `set xtics ("" &lt;pos&gt; 1, ...)` form.
+
+<ul class="menu">
+<li><a accesskey="1" href="xtics_005ftime_005fdata.html#xtics_005ftime_005fdata">xtics_time_data</a>
+<li><a accesskey="2" href="xtics_005frangelimited.html#xtics_005frangelimited">xtics_rangelimited</a>
+</ul>
+
+   </body></html>
+

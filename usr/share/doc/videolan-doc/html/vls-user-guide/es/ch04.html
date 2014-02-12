@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 4.  Configuración</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, VLS, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB" /><link rel="start" href="index.html" title="Guía de usuario de VLS" /><link rel="up" href="index.html" title="Guía de usuario de VLS" /><link rel="prev" href="ch03.html" title="Chapter 3. Visión general y conceptos básicos" /><link rel="next" href="ch05.html" title="Chapter 5.  Uso de VLS" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. 
+Configuración
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch05.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="config"></a>Chapter 4. 
+Configuración
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch04.html#id2569120">
+Estructura general
+</a></span></dt><dt><span class="sect1"><a href="ch04.html#id2569168">
+Construyendo un <code class="filename">vls.cfg</code>
+</a></span></dt></dl></div><p>
+VLS carga su configuración del fichero de
+configuración <code class="filename">vls.cfg</code>, que se
+supone que se encuentra en el directorio actual o
+en <code class="filename">SYSCONF_DIR/videolan/vls</code> (donde
+<span class="emphasis"><em>SYSCONF_DIR</em></span> es <code class="filename">/usr/local/etc</code>
+si instalastes VLS a mano, o es <code class="filename">/etc</code>
+si lo instalastes como un paquete debian).
+</p><p>
+Para escribir un fichero <code class="filename">vls.cfg</code>, usa como punto
+de partida el proporcionado con VLS
+.</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2569120"></a>
+Estructura general
+</h2></div></div></div><p>
+El fichero de configuración <code class="filename">vls.cfg</code>
+está dividido en secciones, y cada sección puede contener varias
+variables:
+</p><pre class="programlisting">
+
+BEGIN "Seccion1"
+  Variable1 = "valor1"
+  Variable2 = "valor2"
+  [...]
+END
+
+BEGIN "Seccion2"
+  Variable1 = "valor1"
+  Variable3 = "valor3"
+  [...]
+END
+
+[...]
+</pre><p>
+Todos los nombres de sección, nombres de variable y valores
+no son case-sensitive. Puede haber secciones y subsecciones vacías. Los
+comentarios deben comenzar con un carácter <span class="keycap"><strong>#</strong></span>. Algunas variables tienen
+un valor por defecto; por lo que se puede omitir declararlas,
+y tendrán su valor por defecto.
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2569168"></a>
+Construyendo un <code class="filename">vls.cfg</code>
+</h2></div></div></div><p>
+A continuación se explican todas las secciones
+que se pueden encontrar en el fichero <code class="filename">vls.cfg</code>:
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571340"></a>Section "VLS"</h3></div></div></div><p>
+Esta sección contiene los parámetros globales.
+</p><pre class="programlisting">
+LogFile = "name"
+</pre><p>
+Nombre del fichero de logs de VLS. Si se deja vacío "", no
+se crea fichero de logs. Por defecto es "vls.log".
+</p><pre class="programlisting">
+SystemLog = "[disable|enable]"
+</pre><p>
+Generando Logs en el SystemLog. De momento, sólo está implementado
+el SystemLog usando syslogd: compile con la opción <span class="command"><strong>./configure
+--enable-syslog</strong></span>.
+</p><div class="caution" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Caution</h3><p>
+Si VLS es ejecutado como <span class="command"><strong>vlsd</strong></span>, entonces
+la siguiente configuración es obligatoria:
+</p><pre class="programlisting">
+BEGIN "Vls"
+  LogFile   = ""
+  SystemLog = "enabled"
+  ScreenLog = "disabled"
+END
+</pre></div><pre class="programlisting">
+ScreenLog = "[disable|enable]"
+</pre><p>
+Generando mensajes de log en la consola.
+</p><p>
+Ejemplo:
+</p><pre class="programlisting">
+BEGIN "Vls"
+  LogFile   = "vls.log"
+  SystemLog = "disable"
+  ScreenLog = "enable"
+END
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571425"></a>
+Section "Groups"
+</h3></div></div></div><p>
+En esta sección, se pueden definir lo grupos de usuarios,
+y qué comandos son permitidos para estos usuarios. Para
+cada grupo que se quiera definir, se debe añadir una línea en
+el siguiente formato:
+</p><pre class="programlisting">
+groupname = "command1|command2|..."
+</pre><p>
+Esto añade un grupo "groupname", y sus usuarios
+tienen permitido ejecutar el comando1, comando2, y así sucesivamente. Por el momento, los
+comandos disponibles son: help, browse, start, suspend, resume, forward,
+rewind, stop, shutdown, logout.
+</p><p>
+Ejemplo:
+</p><pre class="programlisting">
+BEGIN "Groups"
+  monitor = "help|browse|logout"
+  master  = "help|browse|start|resume|suspend|forward|rewind|stop|shutdown|logout"
+END
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571470"></a>
+Section "Users"
+</h3></div></div></div><p>
+Esta sección contiene una lista de los usuarios con permisos para
+controlar VLS a través de una interfaz de administración. Por cada usuario,
+se debe añadir una línea con el siguiente formato:
+</p><pre class="programlisting">
+username = "password:groupname"
+</pre><p>
+Esto añade un usuario "username", que pertenece al
+grupo "groupname" (definido en la sección "Groups") y que puede
+autenticarse con la contraseña "password".
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+Bajo Unix/Linux, la contraseña debe estar encriptada,
+con una herramienta como <span class="command"><strong>mkpasswd</strong></span>, o con la
+función UNIX "crypt".
+</p></li><li><p>
+Bajo Windows, la contraseña debe estar en limpio.
+</p></li></ul></div><p>
+Ejemplo para Unix/Linux:
+</p><pre class="programlisting">
+BEGIN "Users"
+  monitor = "3BcKWoiQn0vi6:monitor"       # password es 'monitor'
+  admin   = "42BKiCguFAL/c:master"        # password es 'Vir4Gv5S'
+END
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571537"></a>
+Section "Telnet"
+</h3></div></div></div><p>
+En esta sección, se puede configurar la interfaz de
+administración Telnet.
+</p><pre class="programlisting">
+LocalPort = "port"
+</pre><p>
+Define qué puerto será utilizado por el servidor
+Telnet. El puerto por defecto es "9999"
+
+
+.</p><pre class="programlisting">
+Domain = "domain"
+</pre><p>
+Se puede utilizar "inet4" o "inet6" (por defecto "inet4"). Si
+se quiere utilizar direcciones IPv4, utilice "inet4", y si se quiere
+IPv6, utilice "inet6".
+</p><pre class="programlisting">
+LocalAddress = "IP address"
+</pre><p>
+Define en qué dirección IP estará escuchando el servidor Telnet
+para aceptar peticiones. Por defecto es "0.0.0.0" (ó "0::0" con
+IPv6).
+</p><p>
+Ejemplo:
+</p><pre class="programlisting">
+BEGIN "Telnet"
+  LocalPort = "9999"
+END
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571597"></a>
+Section "NativeAdmin"
+</h3></div></div></div><p>
+Usa la misma sintaxis que "Telnet". No se utiliza todavía.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571608"></a>
+Section "Inputs"
+</h3></div></div></div><p>
+En esta sección, se puede definir qué entradas se quieren
+usar. Por cada entrada que se necesite, se debe añadir una línea
+en el siguiente formato:
+</p><pre class="programlisting">
+InputName = "Type"
+</pre><p>
+Esto añade una entrada con el nombre "InputName", del tipo
+"Type". Como se explicó anteriormente, existen varios tipos de
+entradas:
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+"local" para leer de un fichero o un DVD,
+</p></li><li><p>
+"video" para leer de una tarjeta capturadora MPEG,
+</p></li><li><p>
+"dvb" para leer de una tarjeta DVB,
+</p></li><li><p>
+"v4l" para leer de un dispositivo Video4Linux.
+</p></li></ul></div><p>
+Cada entrada debe estar configurada en su propia sección
+(ver el siguiente párrafo).
+</p><p>
+Ejemplo:
+</p><pre class="programlisting">
+BEGIN "Inputs"
+  local1 = "local"
+  pvr    = "video"
+  dvb1   = "dvb"
+  tuner  = "v4l"
+END
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571677"></a>
+Configuración de entradas
+</h3></div></div></div><p>
+Para cada entrada declarada en la sección "Inputs",
+excepto para las entradas "local", se debe añadir una sección con el mismo nombre que
+la entrada correspondiente. Por ejemplo, si se declara una entrada "pvr",
+debe haber también una sección llamada "pvr". La sintaxis de cada sección
+depende del tipo de la entrada correspondiente.
+</p><p>
+Para configurar una entrada local, no se debe hacer
+nada. Excepto cuando otra estrategia trickplay deba ser usada:
+</p><pre class="programlisting">
+BEGIN "Local1"
+  ProgramCount = "1"
+  TrickPlay    = "normal"
+END
+</pre><p>
+"Local1" es el nombre de la entrada local que se quiere
+configurar. "ProgramCount" es el número de programas asignados a esta
+entrada. "TrickPlay" es la estrategia trickplay que se usa en esta entrada
+(por defecto "normal").
+</p><p>
+Para configurar una entrada video, se debe añadir una entrada en el
+siguiente formato:
+</p><pre class="programlisting">
+BEGIN "VideoInputName"
+  Device = "device"
+  Type   = "type"
+END
+</pre><p>
+"VideoInputName" es el nombre de la entrada de vídeo que
+se quiere configurar. "Device" es la ruta de la tarjeta codificadora MPEG
+de la que se quiere leer (por defecto es "/dev/video"). "Type" puede ser "Mpeg2-PS"
+o "Mpeg2-TS", dependiendo de la configuración de la tarjeta (por defecto es
+"Mpeg2-PS").
+</p><p>
+Ejemplo para una tarjeta Hauppauge WinTV-PVR-250:
+</p><pre class="programlisting">
+BEGIN "pvr"
+  Device = "/dev/video0"
+  Type   = "Mpeg2-PS"
+END
+</pre><p>
+Para configurar una entrada dvb, se debe añadir una sección en el
+siguiente formato:
+</p><pre class="programlisting">
+BEGIN "DvbInputName"
+  DeviceNumber = "devicenumber"
+  SendMethod   = "0"
+END
+</pre><p>
+"DvbInputName" es el nombre de la entrada dvb que se
+quiere configurar. Se debe poner "SendMethod" a "0" si se quiere transmitir
+el flujo DVB completo o se debe poner a "1" si sólo se quieren transmitir
+los flujos MPEG de audio y vídeo (por defecto es "0"). "DeviceNumber"
+es el número de la tarjeta DVB de la que se quiere leer (lee
+de <code class="filename">/dev/ost/dvr&lt;devicenumber&gt;</code>,
+por defecto es ""). El fichero de configuración dvb es definido por el
+driver. Se puede encontrar en <code class="filename">$HOME/.dvbrc</code> para
+/dev/dvb/adapter0 ó en <code class="filename">$HOME/.dvbrc.X</code> para
+<code class="filename">/dev/dvb/adapterX</code>.
+</p><p>
+Ejemplo:
+</p><pre class="programlisting">
+BEGIN "dvb1"
+  DeviceNumber = "0"
+  TrickPlay = "normal"
+END
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571826"></a>
+Section "Channels"
+</h3></div></div></div><p>
+En esta sección, se pueden definir las salidas que se
+quieren utilizar. Para cada salida, se debe escribir una línea en el
+siguiente formato:
+</p><pre class="programlisting">
+ChannelName = "Type"
+</pre><p>
+Esto añade una salida llamada "ChannelName", del tipo
+"Type". "Type" debe ser "network" o "file". Como las entradas,
+las salidas deben ser configuradas en su propia sección.
+</p><p>
+Ejemplo:
+</p><pre class="programlisting">
+BEGIN "Channels"
+  localhost  = "network"
+  client1    = "network"
+  client2    = "network"
+  multicast1 = "network"
+  multicast2 = "network"
+  localfile  = "file"
+END
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2571867"></a>
+Configuración de las salidas
+</h3></div></div></div><p>
+Para cada salida declarada en la sección "Channels",
+se debe añadir una sección con el mismo nombre que su salida correspondiente.
+La sintaxis de cada sección depende del tipo de salida.
+</p><p>
+Para configurar una salida de red, se debe añadir una sección en el
+siguiente formato:
+</p><pre class="programlisting">
+BEGIN "NetChannelName"
+  Domain    = "Domain"
+  Type      = "Type"
+  SrcHost   = "SourceHost"
+  SrcPort   = "SourcePort"
+  DstHost   = "DestHost"
+  DstPort   = "DestPort"
+  TTL       = "ttl"
+  Interface = "Interface"
+END
+</pre><div class="itemizedlist"><ul type="disc"><li><p>
+"NetChannelName" es el nombre de la salida de red que
+se quiere configurar.
+</p></li><li><p>
+"Domain" puede ser "inet4" si se usan direcciones IPv4,
+o "inet6" si se usa IPv6 (por defecto es "inet4")
+
+
+.</p></li><li><p>
+"Type" puede ser "unicast", "broadcast" o
+"multicast" (por defecto es "unicast"), dependiendo de lo que se quiera hacer
+(en la dirección "DstHost").
+</p></li><li><p>
+"SourceHost" es la dirección IP (o nombre DNS) desde
+la cual VLS enviará el flujo.
+</p></li><li><p>
+"SourcePort" es el puerto UDP desde el que se enviará
+el flujo.
+</p></li><li><p>
+"DestHost" es la dirección IP (o nombre DNS) a
+la cual se enviará el flujo.
+</p></li><li><p>
+"DestPort" es el puerto UDP al que se enviará el flujo
+(por defecto es "1234").
+</p></li><li><p>
+"TTL" es una opción válida sólamente si "Type" es
+"multicast" (el valor por defecto es "0"). Se puede usar para incremententar el TTL
+de los paquetes multicast si estos tienen que cruzar varios routers.
+</p></li><li><p>
+"Interface" es una opción sólo soportada bajo
+GNU/Linux, para forzar que el flujo sea enviado a través de una interfaz
+de red dada ("eth1" por ejemplo). Para usar esta opción, se deben tener
+permisos de superusuario.
+</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+"SrcHost" y "SrcPort" son opcionales.
+</p></div><p>
+Para configurar una salida a fichero, se debe añadir una sección en el
+siguiente formato:
+</p><pre class="programlisting">
+BEGIN "FileChannelName"
+  FileName = "file"
+  Append   = "append"
+END
+</pre><p>
+"FileChannelName" es el nombre de la salida a fichero que se
+quiere configurar. "file" es el nombre del fichero donde se
+guardará el flujo (por defecto "fileout.ts"). "append" puede se "yes" o
+"no", e indica si VLS tiene que añadir el flujo al final del fichero
+file, o sobreescribirlo.
+</p><p>
+Ejemplo:
+</p><pre class="programlisting">
+BEGIN "localhost"         # El cliente está en la misma máquina que el servidor
+  DstHost = "localhost"
+  DstPort = "1234"
+END
+
+BEGIN "client1"           # unicast hacia client1
+  DstHost = "192.168.1.2"
+  DstPort = "1234"
+END
+
+BEGIN "client2"           # unicast hacia client2 en IPv6
+  Domain  = "inet6"
+  DstHost = "3ffe:ffff::2:12:42"
+  DstPort = "1234"
+END
+
+BEGIN "multicast1"         # multicast streaming
+  Type    = "multicast"
+  DstHost = "239.2.12.42"
+  DstPort = "1234"
+  TTL     = "2"
+END
+
+BEGIN "multicast2"         # multicast streaming en IPv6
+  Domain  = "inet6"
+  Type    = "multicast"
+  DstHost = "ff08::1"
+  DstPort = "1234"
+  TTL     = "12"
+END
+
+BEGIN "localfile"         # volcado a fichero
+  FileName = "stream.ts"
+  Append   = "no"
+END
+</pre><div class="caution" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Caution</h3><p>
+Si se usa, se deberían especificar los campos "SrcHost"
+y "SrcPort". Por ejemplo:
+</p><pre class="programlisting">
+BEGIN "client1"         # El cliente está en la misma máquina que el servidor
+  SrcHost = "192.168.1.1"  # IP de VLS
+  SrcPort = "1242"         # Puerto Origen : el valor no es importante
+  DstHost = "192.168.1.2"  # IP del cliente
+  DstPort = "1234"
+END
+</pre></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572066"></a>
+Configuración de los Programas
+</h3></div></div></div><p>
+Como se ha explicado anteriormente, se deben definir programas.
+Cada uno es un flujo MPEG (un fichero, por ejemplo). Para hacer esto, se debe
+añadir una sección "Input" en el fichero <code class="filename">vls.cfg</code>. Cada sección
+"Input" debe tener la siguiente sintaxis:
+</p><pre class="programlisting">
+BEGIN "Input"
+  FilesPath    = "path"
+  ProgramCount = "count"
+END
+</pre><p>
+"path" es la ruta donde se encuentran los ficheros MPEG
+(por defecto es el directorio actual). "count" es el número de
+programas definidos ("0" por defecto).
+</p><p>
+Para cada programa que se quiera definir, se debe añadir una
+sección con el siguiente formato:
+</p><pre class="programlisting">
+BEGIN "number"
+  Name     = "name"
+  Type     = "type"
+  FileName = "file"
+  Device   = "device"
+END
+</pre><div class="itemizedlist"><ul type="disc"><li><p>
+"number" es el número de programa: el primer programa
+tiene el número 1, el segundo 2, y así sucesivamente.
+
+
+</p></li><li><p>
+"name" es el nombre del programa, por el cual se le dirá
+a VLS que arranque dicho programa (ver el siguiente capítulo "Ejecutando VLS").
+</p></li><li><p>
+"type" puede ser "Mpeg1-PS", "Mpeg2-PS", "Mpeg2-TS",
+o "DVD". Si el flujo es guardado en un fichero MPEG (*.mpeg, *.mpg,
+*.vob, y demás...), es probable que se encuentre en formato Mpeg1-PS o Mpeg2-PS.
+</p></li><li><p>
+si "type" se fija a "Mpeg1-PS", "Mpeg2-PS", o
+"Mpeg2-TS", VLS asumirá que el flujo es guardado en el fichero "file", en
+el directorio "path" (siendo "path" la variable definida en la sección
+"Input").
+</p></li><li><p>
+si "type" es "DVD", la variable "Device" será
+utilizada en lugar de "FileName" (la variable "FilesPath" no se refiere
+al nombre del lector !). La variable "Device" es el lector DVD
+("/dev/hdc" o "/dev/cdrom" por ejemplo). Se puede leer también de un DVD
+copiado en el disco duro: entonces "Device" es el directorio donde se han guardado
+los ficheros .vob ("/mnt/data/VIDEO_TS" por ejemplo).
+</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+VLS puede transmitir ficheros MPEG que sigan dos criterios
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+el fichero debe ser MPEG <span class="emphasis"><em>PS</em></span>
+(Program Stream) o MPEG <span class="emphasis"><em>TS</em></span> (Transport Stream),
+el cual contiene vídeo y audio multiplexado. VLS no puede transmitir MPEG
+<span class="emphasis"><em>ES</em></span> (Elementary Stream), es decir, un fichero sólo
+con audio o con vídeo
+.</p><p>
+Para saber si un fichero MPEG es MPEG
+<span class="emphasis"><em>PS</em></span>, MPEG <span class="emphasis"><em>TS</em></span> o MPEG
+<span class="emphasis"><em>ES</em></span>, hay que leer el fichero con VLC y mirar los mensajes
+(en la ventana de mensajes o usar el comando
+<span class="command"><strong>vlc -vvv</strong></span>)
+.</p><div class="itemizedlist"><ul type="circle"><li><p>
+Si usted ve la siguiente línea 
+:</p><pre class="programlisting">
+[00000107] main module debug: using demux module "ts_dvbpsi"
+</pre><p>
+significa que el fichero es MPEG TS
+.</p></li><li><p>
+Si usted ve la siguiente línea
+:</p><pre class="programlisting">
+[00000109] main module debug: using demux module "ps"
+</pre><p>
+significa que el fichero es MPEG PS
+.</p></li><li><p>
+Si usted ve la siguiente línea
+:</p><pre class="programlisting">
+[00000109] main module debug: using demux module "es"
+</pre><p>
+ significa que el fichero es MPEG ES, y VLS no puede transmitirlo
+.</p></li></ul></div></li><li><p>
+la cabecera de la secuencia de vídeo debe repetirse regularmente
+lo cual es frecuente en el caso de MPEG-2, pero muy raramente en MPEG-1.
+No hay una manera facíl de saber si la cabecera de la secuencia se repite regularmente.
+Los ficheros con extensión <span class="emphasis"><em>.vob</em></span> son normalmente ficheros MPEG-2
+y los ficheros con extensión <span class="emphasis"><em>.mpg</em></span> o <span class="emphasis"><em>.mpeg</em></span> 
+son normalmente ficheros MPEG-1.
+.</p></li></ul></div><p>
+ Puede descargarse este fichero 
+transmitible en MPEG-2 PS para sus pruebas: <a class="ulink" href="ftp://ftp.videolan.org/pub/videolan/streams/presentation/presentation_short.vob" target="_top">presentation_short.vob</a>
+.</p></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Para leer DVDs, se necesita compilar VLS con
+soporte DVD, que usa libdvdread y libdvdcss. Se necesitan permisos
+de lectura <span class="emphasis"><em>y</em></span> escritura en el lector de DVD.
+</p></div><p>
+Ejemplo completo:
+</p><pre class="programlisting">
+BEGIN "Input"
+  FilesPath = "/home/videolan/streams"
+  ProgramCount = "4"
+END
+
+BEGIN "1"     # Flujo MPEG2 guardado en /home/videolan/streams/Dolby.vob
+  Name     = "dolby"
+  FileName = "Dolby.vob"
+  Type     = "Mpeg2-PS"
+END
+
+BEGIN "2"     # otro fichero
+  Name     = "canyon"
+  FileName = "Dolby_Canyon.vob"
+  Type     = "Mpeg2-PS"
+END
+
+BEGIN "3"     # DVD
+  Name     = "dvd"
+  Device   = "/dev/cdrom"
+  Type     = "Dvd"
+END
+
+BEGIN "4"     # DVD guardado en el disco duro
+  Name     = "matrix"
+  Device   = "/mnt/data/matrix/VIDEO_TS"
+  Type     = "Dvd"
+END
+</pre></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 3. Visión general y conceptos básicos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 5. 
+Uso de VLS
+</td></tr></table></div></body></html>

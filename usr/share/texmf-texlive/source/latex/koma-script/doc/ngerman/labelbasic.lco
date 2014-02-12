@@ -1,0 +1,91 @@
+%
+% labelbasic.lco
+%
+% Copyright(c) Markus Kohm <komascript@gmx.de>, 2006
+%
+%-----------------------------------------------------------------------------
+
+
+
+% This must be line 10!!!
+\ProvidesFile{labelbasic.lco}
+             [2006/12/14 v0.1 unsupported LCO-file]
+
+\newcommand*{\printlabel}[4][]{%
+  \begin{letter}{#2}%
+    \KOMAoptions{%
+      addrfield=true,%
+      backaddress=false,%
+      fromlogo=false,%
+      foldmarks=false%
+    }%
+
+    \firsthead{}
+    \firstfoot{}
+
+    \setkomavar{location}{}
+
+    \removereffields
+    \setkomavar{date}{}
+
+    \setkomavar{signature}{}
+
+    #1
+
+    \setlengthtoplength{\@tempdima}{labelsheettopmargin}
+    \addtolengthplength[#3]{\@tempdima}{labelheight}
+    \addtolengthplength[-]{\@tempdima}{labelheight}
+    \addtolengthplength[#3]{\@tempdima}{labelvoffset}
+    \addtolengthplength[-]{\@tempdima}{labelvoffset}
+    \@setplength{toaddrvpos}{\@tempdima}
+
+    \setlengthtoplength{\@tempdima}{labelsheetleftmargin}
+    \addtolengthplength[#4]{\@tempdima}{labelwidth}
+    \addtolengthplength[-]{\@tempdima}{labelwidth}
+    \addtolengthplength[#4]{\@tempdima}{labelhoffset}
+    \addtolengthplength[-]{\@tempdima}{labelhoffset}
+    \@setplength{toaddrhpos}{\@tempdima}
+
+    \@setplength{toaddrindent}{\useplength{labelmargin}}
+    \@setplength{toaddrwidth}{\useplength{labelwidth}}
+    \@addtoplength[-]{toaddrwidth}{\useplength{labelmargin}}
+    \@setplength{toaddrheight}{\useplength{labelheight}}
+
+    \@setplength{refvpos}{0pt}
+    \@setplength{refaftervskip}{-5\baselineskip}
+    \@setplength{sigbeforevskip}{-5\baselineskip}
+
+    \opening{}
+    \closing{}
+
+  \end{letter}%  
+}
+
+\@newplength{labelheight}
+\@newplength{labelhoffset}
+\@newplength{labelmargin}
+\@newplength{labelsheetleftmargin}
+\@newplength{labelsheettopmargin}
+\@newplength{labelvoffset}
+\@newplength{labelwidth}
+
+\newcommand*{\savelabel}[3][]{%
+  \AtEndDocument{\let\@printlabel\printlabel}%
+  \if@filesw
+    \begingroup
+      \let\\\@undefined
+      \DeclareRobustCommand*{\\}{\string\\}%
+      \usekomavar[\edef\toname]{toname}%
+      \usekomavar[\edef\toaddress]{toaddress}%
+      \protected@write\@auxout{%
+        \let\@printlabel\relax
+      }{%
+        \@printlabel[{#1}]{\toname\string\\\toaddress}{#2}{#3}%
+      }%
+    \endgroup
+  \fi
+}
+
+\newcommand*{\@printlabel}[4][]{}
+
+\endinput

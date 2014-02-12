@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+<title>postscript - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="palette.html#palette" title="palette">
+<link rel="prev" href="gamma_005fcorrection.html#gamma_005fcorrection" title="gamma_correction">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="postscript"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="gamma_005fcorrection.html#gamma_005fcorrection">gamma_correction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="palette.html#palette">palette</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.53.6 postscript</h5>
+
+<!-- ?commands set palette postscript -->
+<!-- ?set palette postscript -->
+<p>In order to reduce the size of postscript files, the gray value and not all
+three calculated r,g,b values are written to the file.  Therefore the
+analytical formulae are coded directly in the postscript language as a header
+just before the pm3d drawing, see /g and /cF definitions.  Usually, it makes
+sense to write therein definitions of only the 3 formulae used.  But for
+multiplot or any other reason you may want to manually edit the
+transformations directly in the postscript file.  This is the default option
+`nops_allcF`.  Using the option `ps_allcF` writes postscript definitions of
+all formulae.  This you may find interesting if you want to edit the
+postscript file in order to have different palettes for different surfaces
+in one graph.  Well, you can achieve this functionality by <a href="multiplot.html#multiplot">multiplot</a> with
+fixed <a href="origin.html#origin">origin</a> and <a href="size.html#size">size</a>.
+
+   <p>If pm3d map has been plotted from gridded or almost regular data with an
+output to a postscript file, then it is possible to reduce the size of this
+postscript file up to at about 50% by the enclosed awk script
+`pm3dCompress.awk`.  This you may find  interesting if you intend to keep the
+file for including it into your publication or before downloading a very large
+file into a slow printer. Usage:
+<pre class="example">         awk -f pm3dCompress.awk thefile.ps &gt;smallerfile.ps
+     
+</pre>
+   <p>If pm3d map has been plotted from rectangular gridded data with an output
+to a postscript file, then it is possible to reduce the file size even more
+by the enclosed awk script `pm3dConvertToImage.awk`.  Usage:
+<pre class="example">         awk -f pm3dConvertToImage.awk &lt;thefile.ps &gt;smallerfile.ps
+     
+</pre>
+   <p>You may manually change the postscript output from gray to color and vice
+versa and change the definition of &lt;maxcolors&gt;.
+
+   </body></html>
+

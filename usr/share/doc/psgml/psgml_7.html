@@ -1,0 +1,512 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on May 29, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>psgml: 7. Document Type Declaration</title>
+
+<meta name="description" content="psgml: 7. Document Type Declaration">
+<meta name="keywords" content="psgml: 7. Document Type Declaration">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Managing-the-DTD"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="psgml_6.html#SGML-declaration" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Precompiled-DTD-Subsets" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml_6.html#SGML-declaration" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_8.html#Edit" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Document-Type-Declaration"></a>
+<h1 class="chapter">7. Document Type Declaration</h1>
+<a name="index-DOCTYPE"></a>
+<a name="index-DTD"></a>
+
+<a name="index-sgml_002ddefault_002ddoctype_002dname"></a>
+<p>PSGML needs to know about the DTD you are using for many of its commands.
+If you do not have a &lsquo;<samp>DOCTYPE</samp>&rsquo; declaration in your file, 
+PSGML will try assume that there is one of the form
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;!DOCTYPE <var>name</var> SYSTEM&gt;
+</pre></td></tr></table>
+
+<p>where <var>name</var> is the value of <code>sgml-default-doctype-name</code>, if
+the value is non-<code>nil</code>, else the GI of the first tag will be used.
+</p>
+<a name="index-sgml_002dparse_002dprolog"></a>
+<a name="index-sgml_002dauto_002dactivate_002ddtd"></a>
+<p>PSGML will try to parse the document type declaration the first time
+you do something that needs to parse the document or immediately if the
+variable <code>sgml-auto-activate-dtd</code> is <code>t</code>.  You can also
+initiate the parsing of the document type declaration with the command
+<code>sgml-parse-prolog</code>.  Big DTDs take some time to parse.
+</p>
+<p>When the DTD has been parsed or loaded the name of the document element
+will be displayed in the mode line inside brackets.  If there was an
+error parsing the DTD or there is no DTD, the mode line will display
+&lsquo;<samp>[ANY]</samp>&rsquo; (*** this is not really correct! a DTD will be established
+even if there are missing entities, it may even be empty).
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Precompiled-DTD-Subsets">7.1 Precompiled DTD Subsets</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">     
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Using-a-Split-Document">7.2 Using a Split Document</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">      
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Inserting-a-DOCTYPE">7.3 Inserting a DOCTYPE</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">         
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Information-from-the-DTD">7.4 Information from the DTD</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">    
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Customizing-DTD">7.5 Customizing DTD</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">             
+</td></tr>
+</table>
+
+
+<hr size="6">
+<a name="Precompiled-DTD-Subsets"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using-a-Split-Document" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_8.html#Edit" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Precompiled-DTD-Subsets-1"></a>
+<h2 class="section">7.1 Precompiled DTD Subsets</h2>
+
+<p>If parsing the DTD takes too long time you can arrange to have PSGML
+cache an internal complied version of the DTD.  Caching can be done of
+DTD fragments in favourable situations.  It is possible to have an
+external DTD subset cached but still have an internal DTD subset as long
+as the internal subset does not define parameter entities that affect
+the parsing of the external subset (*** what is the exact conditions?,
+probably you can&rsquo;t use the cached external subset if the internal subset
+defines parameter entities that are also defined in the external subset
+with another value).
+</p>
+<a name="index-sgml_002decat_002dfiles"></a>
+<a name="index-sgml_002dlocal_002decat_002dfiles"></a>
+<p>To enable caching you have to create special catalog files, hereafter
+called ECAT files due to (temporary) lack of imagination.  These catalogs
+have similar syntax to the entity catalogs and there are two variables
+containing lists of catalogs to search: <code>sgml-ecat-files</code> and
+<code>sgml-local-ecat-files</code>.  The ECAT files can contain the following
+types of entries:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>file <var>dtdfile</var> <var>entitydef</var> <var>cfile</var></samp>&rsquo;</dt>
+<dd><p>The <var>dtdfile</var> is the name of a file containing a DTD subset that
+should be cached in <var>cfile</var>.  The <var>entitydef</var> is optional and if
+given have the following syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">[ <var>name1</var> <var>literal1</var> <var>name2</var> <var>literal2</var> &hellip; ]
+</pre></td></tr></table>
+<p>Using <var>entitydef</var> will modify the DTD subset by defining the
+parameter entity with name <var>name1</var> to be <var>literal1</var>, &hellip;.  The
+cached version of the subset will be created with those entity
+definitions, and when PSGML search for a matching cached subset will check
+that the parameter entities in <var>entitydef</var> has been defined with
+those values before trying to use &lsquo;<tt>cfile</tt>&rsquo;. 
+</p>
+</dd>
+<dt> &lsquo;<samp>public <var>pubid</var> <var>entitydef</var> <var>cfile</var></samp>&rsquo;</dt>
+<dd><p>Cache the DTD subset with public identifier <var>pubid</var> in file
+<var>cfile</var>. 
+</p></dd>
+</dl>
+
+
+<dl>
+<dt><a name="index-sgml_002drecompile_002dout_002dof_002ddate_002dcdtd"></a><u>User Option:</u> <b>sgml-recompile-out-of-date-cdtd</b></dt>
+<dd><p>If non-<code>nil</code>, out of date compiled DTDs will be automatically
+recompiled.  If the value is <code>ask</code>, PSGML will ask before
+recompiling.  A <code>nil</code> value will cause PSGML to silently load an out
+of date compiled DTD.  A DTD that refers to undefined external entities
+is always out of date, thus in such case it can be useful to set this
+variable to <code>nil</code>.
+</p></dd></dl>
+
+
+<p>Previous versions of PSGML have had another way of speeding up DTD
+parsing.  This code remains in this version of PSGML, but is not actively
+maintained and may disappear in the future.
+</p>
+<a name="index-sgml_002dsave_002ddtd"></a>
+<a name="index-sgml_002dload_002ddtd"></a>
+<a name="index-sgml_002ddefault_002ddtd_002dfile"></a>
+<p>You can save the parsed DTD in a file using the command <kbd>M-x
+sgml-save-dtd</kbd>.  Next time PSGML can load that file instead of parsing
+the DTD.  For PSGML to find the saved DTD you must either save the DTD
+using the default name or do a <kbd>M-x sgml-save-options</kbd> after saving
+the DTD.  To directly use an already parsed and saved DTD, load the file
+containing the saved DTD with the command <kbd>M-x sgml-load-dtd</kbd>.
+</p>
+<dl>
+<dt><a name="index-sgml_002ddefault_002ddtd_002dfile-1"></a><u>User Option:</u> <b>sgml-default-dtd-file</b></dt>
+<dd><p>This is the default file name for saved DTD.  This is set by
+<code>sgml-mode</code> to the buffer file name less extension plus the
+extension <code>.ced</code>, if that file exists.  Can be changed in the Local
+variables section of the file.
+</p></dd></dl>
+
+
+
+<hr size="6">
+<a name="Using-a-Split-Document"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Precompiled-DTD-Subsets" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Inserting-a-DOCTYPE" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_8.html#Edit" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Using-a-Split-Document-1"></a>
+<h2 class="section">7.2 Using a Split Document</h2>
+
+<a name="index-sgml_002ddoctype"></a>
+<p>You can have the &lsquo;<samp>DOCTYPE</samp>&rsquo; declaration in another file by setting
+<code>sgml-doctype</code> to the other file.
+</p>
+<dl>
+<dt><a name="index-sgml_002dparent_002ddocument"></a><u>User Option:</u> <b>sgml-parent-document</b></dt>
+<dd><p>Used when the current file is part of a bigger document.
+</p>
+<p>The variable describes how the current file&rsquo;s content fit into the element
+hierarchy.  The variable should have the form
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="lisp">(<var>parent-file</var> <var>context-element</var>* <var>top-element</var> (<var>has-seen-element</var>*)?)
+</pre></td></tr></table>
+
+<dl compact="compact">
+<dt> <var>parent-file</var></dt>
+<dd><p>is a string, the name of the file containing the
+document entity.
+</p>
+</dd>
+<dt> <var>context-element</var></dt>
+<dd><p>is a string, that is the name of an element type.
+It can occur 0 or more times and is used to set up
+exceptions and short reference map.  Good candidates
+for these elements are the elements open when the
+entity pointing to the current file is used. 
+</p>
+</dd>
+<dt> <var>top-element</var></dt>
+<dd><p>is a string that is the name of the element type
+of the top level element in the current file.  The file
+should contain one instance of this element, unless
+the last (lisp) element of sgml-parent-document is a
+list.  If it is a list, the top level of the file
+should follow the content model of top-element. 
+</p>
+</dd>
+<dt> <var>has-seen-element</var></dt>
+<dd><p>is a string that is the name of an element type.  This
+element is satisfied in the content model of top-element.
+</p></dd>
+</dl>
+</dd></dl>
+
+
+<hr size="6">
+<a name="Inserting-a-DOCTYPE"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Using-a-Split-Document" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Information-from-the-DTD" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_8.html#Edit" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Inserting-a-DOCTYPE-1"></a>
+<h2 class="section">7.3 Inserting a DOCTYPE</h2>
+
+<a name="index-C_002dc-C_002du-C_002dd"></a>
+<a name="index-sgml_002dcustom_002ddtd"></a>
+<p>*** Describe the DTD menu in general.  Describe customized entries for
+special DTDs.  Mention <kbd>C-c C-u C-d</kbd> for inserting a DOCTYPE from
+keyboard.
+</p>
+<p>If you change the doctype you must execute <code>sgml-parse-prolog</code>,
+changes in the doctype are not automatically recognized.
+</p>
+<dl>
+<dt><a name="index-sgml_002dcustom_002ddtd-1"></a><u>User Option:</u> <b>sgml-custom-dtd</b></dt>
+<dd><p>Menu entries to be added to the DTD menu.  The value should be a list of
+entries to be added to the DTD menu.
+</p>
+<p>Every entry should be a list.  The first element of the entry is a string
+used as the menu entry.  The second element is a string containing a
+doctype declaration (this can be nil if no doctype).  The rest of the
+list should be a list of variables and values.  For backward
+compatibility a single string instead of a variable is assigned to
+<code>sgml-default-dtd-file</code>.  All variables are made buffer local and
+are also added to the buffers local variables list.
+</p>
+<p>When an entry is selected from the DTD menu, the doctype declaration will
+be inserted, the variables will be set to the values in the entry and a
+local variables list will be created in the buffer.
+</p>
+<p>Example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">   ((&quot;HTML&quot; nil
+     sgml-default-dtd-file &quot;~/sgml/html.ced&quot;
+     sgml-omittag nil sgml-shorttag nil)
+    (&quot;HTML+&quot; &quot;&lt;!doctype htmlplus system 'htmlplus.dtd'&gt;&quot;
+     &quot;~/sgml/htmlplus.ced&quot;
+     sgml-omittag t sgml-shorttag nil)
+    (&quot;DOCBOOK&quot; &quot;&lt;!doctype docbook system 'docbook.dtd'&gt;&quot;
+     &quot;~/sgml/docbook.ced&quot;
+     sgml-omittag nil sgml-shorttag t)))
+</pre></td></tr></table>
+</dd></dl>
+
+
+<hr size="6">
+<a name="Information-from-the-DTD"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Inserting-a-DOCTYPE" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Customizing-DTD" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_8.html#Edit" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Information-from-the-DTD-1"></a>
+<h2 class="section">7.4 Information from the DTD</h2>
+<a name="index-DTD-1"></a>
+<a name="index-Element"></a>
+
+<p>PSGML can list various information about the current DTD.  
+The following commands can be used via <kbd>M-x</kbd> and 
+can also be found in the DTD menu.
+</p>
+<dl compact="compact">
+<dd><a name="index-sgml_002ddescribe_002ddtd"></a>
+</dd>
+<dt> <code>sgml-describe-dtd</code></dt>
+<dd><p>Display information about the current DTD.
+</p>
+<a name="index-sgml_002ddescribe_002delement_002dtype"></a>
+</dd>
+<dt> <code>sgml-describe-element-type</code></dt>
+<dd><p>Describe the properties of an element type as declared in the current DTD.
+</p>
+<a name="index-entity"></a>
+<a name="index-sgml_002ddescribe_002dentity"></a>
+</dd>
+<dt> <code>sgml-describe-entity</code></dt>
+<dd><p>Describe the properties of an entity as declared in the current DTD.
+</p>
+<a name="index-sgml_002dlist_002delements"></a>
+</dd>
+<dt> <code>sgml-list-elements</code></dt>
+<dd><p>Will list all elements and the attributes declared for the element.
+</p>
+<a name="index-sgml_002dlist_002dattributes"></a>
+</dd>
+<dt> <code>sgml-list-attributes</code></dt>
+<dd><p>  Will list all attributes declared and the elements that use them.
+</p>
+<a name="index-sgml_002dlist_002dterminals"></a>
+</dd>
+<dt> <code>sgml-list-terminals</code></dt>
+<dd><p>Will list all elements that can contain data.
+</p>
+<a name="index-sgml_002dlist_002doccur_002din_002delements"></a>
+</dd>
+<dt> <code>sgml-list-occur-in-elements</code></dt>
+<dd><p>Will list all element types and where it can occur.
+</p>
+<a name="index-sgml_002dlist_002dcontent_002delements"></a>
+</dd>
+<dt> <code>sgml-list-content-elements</code></dt>
+<dd><p>Will list all element types and the element types that can occur
+in its content.
+</p></dd>
+</dl>
+
+
+<hr size="6">
+<a name="Customizing-DTD"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Information-from-the-DTD" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_8.html#Edit" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_8.html#Edit" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Customizing-DTD-1"></a>
+<h2 class="section">7.5 Customizing DTD</h2>
+
+<p>PSGML can be customized by process instructions starting with &ldquo;PSGML&rdquo;
+in the DTD. Generally this associates some information with element
+types. E.g., if <code>sgml-fill-element</code> should skip the element type
+or if the content should be displayed with a special font.
+</p>
+<p>The general syntax is
+</p><table><tr><td>&nbsp;</td><td><pre class="display">&lsquo;<samp>&lt;?PSGML ELEMENT</samp>&rsquo; <var>gi</var> (<var>prop</var> = <var>value</var>)* &lsquo;<samp>&gt;</samp>&rsquo;
+</pre></td></tr></table>
+
+<p>Note: in XML the ending delimiter is &lsquo;<samp>?&gt;</samp>&rsquo;, in SGML mode a
+trailing &lsquo;<samp>?</samp>&rsquo; will be ignored if preceded by a space.
+</p>
+<p>Where <var>gi</var> is the element type, <var>prop</var> is a propery
+described below, and <var>value</var> is the value for the property. The
+first part from &lsquo;<samp>PSGML</samp>&rsquo; to <var>gi</var> is read with current setting
+for &lsquo;<samp>NAMECASE GENERAL</samp>&rsquo;, i.e., case insensitive for normal SGML
+but case sensitive in XML mode. The <var>prop</var> and <var>value</var> is read
+using Emacs Lisp conventions, i.e. case sensitive and <var>value</var> is a
+lisp expression (not evaluated).
+</p>
+<p>Example
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;?PSGML ELEMENT PRE nofill=t face=fixed-pitch&gt;
+</pre></td></tr></table>
+
+<p>Properties
+</p>
+<dl compact="compact">
+<dt> <code>nofill</code></dt>
+<dd><p>Set to either <code>t</code> or <code>nil</code>. If <code>t</code> the elements of this
+type will be ignored when filling with <code>sgml-fill-element</code>.
+Note that Emacs normal filling functions will not honor this.
+</p>
+</dd>
+<dt> <code>font</code></dt>
+<dd><p>Set to the name of an Emacs face. Should be a face that exists in
+Emacs. E.g. <code>bold</code>, <code>italic</code>, <code>fixed-pitch</code>. The
+content of elements of this type will be displayed in that face.
+</p>
+</dd>
+<dt> <code>attnames</code></dt>
+<dd><p>Set to a list of attribute names. E.g., <code>attnames=(&quot;ID&quot; &quot;CLASS&quot;
+&quot;ONCLICK&quot;)</code>. This controls the attributes included when using the
+<code>sgml-edit-attributes</code> (<kbd>C-c C-a</kbd>) command. Only the
+attributes in the list will be included and in that order. You can
+also end the list with a <code>*</code> to include all attributes, but the
+listed attributes will be on the top. E.g.,
+<code>attnames=(&quot;ID&quot; &quot;CLASS&quot; &quot;ONCLICK&quot; *)</code>.
+Note: that the attribute names need to be written with the correct
+case and in string quotes.
+</p>
+</dd>
+<dt> <code>structure</code></dt>
+<dd><p>Control if element is included in <code>sgml-show-structure</code> (<kbd>C-c
+C-s</kbd>). If set to <code>t</code>, the element is included and if set to
+<code>ignore</code> it will not be included. See section <a href="psgml_8.html#Information">Showing information</a>.
+</p>
+</dd>
+<dt> <code>help-text</code></dt>
+<dd><p>Should be a string. The string will be displayed by
+<code>sgml-show-current-element-type</code> (<kbd>C-c C-t</kbd>).
+</p>
+</dd>
+</dl>
+
+
+<hr size="6">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Managing-the-DTD" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="psgml_8.html#Edit" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="psgml.html#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_12.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="psgml_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated by <em>Build Daemon user</em> on <em>May 29, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

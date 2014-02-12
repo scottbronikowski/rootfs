@@ -1,0 +1,122 @@
+#!/bin/bash
+#				-*- Mode: Sh -*- 
+# emacsen.install --- 
+# Author	   : Manoj Srivastava ( srivasta@tiamat.datasync.com ) 
+# Created On	   : Fri Apr  3 14:39:59 1998
+# Created On Node  : tiamat.datasync.com
+# Last Modified By : Manoj Srivastava
+# Last Modified On : Sat Dec  3 15:15:31 2005
+# Last Machine Used: glaurung.internal.golden-gryphon.com
+# Update Count	   : 48
+# Status	   : Unknown, Use with caution!
+# HISTORY	   : 
+# Description	   : 
+# 
+# arch-tag: 4d6d66e0-840b-46a1-84ba-6f8f48ea548e
+#
+
+set -e
+
+FLAVOUR=$1
+PACKAGE="psgml"
+VERSION="1.3.2-13"
+
+if [ "X$FLAVOUR" = "X" ]; then
+    echo Need argument to determin FLAVOUR of emacs;
+    exit 1
+fi
+
+if [ "X$PACKAGE" = "X" ]; then
+    echo Internal error: need package name;
+    exit 1;
+fi
+
+if [ "X$VERSION" = "X" ]; then
+    echo Internal error: need package version;
+    exit 1;
+fi
+
+ELDIR=/usr/share/emacs/site-lisp/$PACKAGE
+ELCDIR=/usr/share/$FLAVOUR/site-lisp/$PACKAGE
+STARTDIR=/etc/$FLAVOUR/site-start.d
+INFO_FILES="psgml-api.info psgml.info";
+STARTFILE="$PACKAGE-init.el";
+STAMPFILE=psgml-api.elc
+
+# Darn it, this may well change.
+EMACSB="$FLAVOUR -batch -l psgml-maint.el";
+
+case "$FLAVOUR" in
+    emacs | emacs20 | emacs19)
+	echo "install/$PACKAGE: Ignoring $FLAVOUR."
+	;;
+    emacs21 | emacs22 | emacs23 | emacs-snapshot)
+	echo -n "install/$PACKAGE: Byte-compiling for $FLAVOUR..."
+	if [ -d $ELCDIR ]; then
+            if [ -e "${ELCDIR}/${STAMPFILE}" ]; then
+                echo "${PACKAGE} files already compiled in ${ELCDIR}." 
+                exit 0
+            else
+	        rm -f $ELCDIR/install.log;
+	        find $ELCDIR -type f -name \*.elc -exec rm -f {} \; || true
+	        rmdir --ignore-fail-on-non-empty $ELCDIR
+            fi
+	fi
+	if [ ! -d $ELCDIR ]; then
+	    install -m 755 -d $ELCDIR
+	fi
+	LOG=`tempfile`;
+	trap "test -f $LOG && mv -f $LOG  $ELCDIR/install.log > /dev/null 2>&1" exit
+	cd $ELDIR
+	if [ -x /usr/bin/autoconf ]; then
+	    echo rm -f config.status >> $LOG  2>&1;
+	    rm -f config.status
+	    ./configure --prefix=/usr >> $LOG  2>&1;
+	else
+	    cp Makefile-el Makefile
+	fi
+	# if we do not have make, well, we are hosed.
+	if [ -x /usr/bin/make ]; then
+	    make clean                                  >> $LOG;
+	    (make EMACS=$FLAVOUR lispdir=$ELCDIR)      >> $LOG  2>&1;
+	    set X *.elc 
+	    shift
+	    for file
+	    do
+		echo install -m 644 $file $ELCDIR           >> $LOG;
+		install -m 644 $file $ELCDIR;
+	    done
+	    make clean                                >> $LOG;
+	else
+	    echo $EMACSB -f psgml-compile-files       > $LOG;
+	    $EMACSB -f psgml-compile-files
+	    set X *.elc 
+	    shift
+	    for file
+	    do
+		echo install -m 644 $file $ELCDIR         >> $LOG;
+		install -m 644 $file $ELCDIR;
+		echo rm -f $file                          >> $LOG;
+		rm -f $file;
+	    done
+	fi
+	mv -f $LOG       $ELCDIR/install.log;
+	chmod 644        $ELCDIR/install.log;
+	sed -e "s|=F|/usr/share/$FLAVOUR/site-lisp/$PACKAGE|" \
+            $STARTFILE > $ELCDIR/$STARTFILE
+	install -p -d -o root -g root -m 755 $STARTDIR
+	ucf $ELCDIR/$STARTFILE $STARTDIR/50$STARTFILE
+	ucfr $PACKAGE $STARTDIR/50$STARTFILE
+	echo " done."
+	;;
+    *)
+	echo "install/$PACKAGE: Ignoring emacsen flavor $FLAVOUR."
+	;;
+esac
+
+exit 0
+
+
+### Local Variables:
+### mode: shell-script
+### End:

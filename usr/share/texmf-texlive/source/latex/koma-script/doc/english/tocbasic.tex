@@ -1,0 +1,590 @@
+%%
+%% This is file `tocbasic.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% tocbasic.dtx  (with options: `doc')
+%% 
+%% Copyright (c) 2007-2009
+%% Markus Kohm and any individual authors listed elsewhere in this file.
+%% 
+%% This file was generated from file(s) of the KOMA-Script bundle.
+%% ---------------------------------------------------------------
+%% 
+%% This work may be distributed and/or modified under the conditions of
+%% the LaTeX Project Public License, version 1.3c of the license.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3c or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later and of this work.
+%% 
+%% This work has the LPPL maintenance status "author-maintained".
+%% 
+%% The Current Maintainer and author of this work is Markus Kohm.
+%% 
+%% This file may only be distributed together with the files
+%% `scrlogo.dtx' and `tocbasic.dtx'. You may however distribute the files
+%% `scrlogo.dtx' and `tocbasic.dtx' without this file.
+%% See also `tocbasic.dtx' for additional information.
+%% 
+%% If this file is a beta version, you are not allowed to distribute it.
+%% 
+%% Currently there is only a short english manual at `tocbasic.dtx', that
+%% should also be found as `tocbasic.pdf'.
+%% 
+%% The KOMA-Script bundle (but maybe not this file) was based upon the
+%% LaTeX2.09 Script family created by Frank Neukam 1993 and the LaTeX2e
+%% standard classes created by The LaTeX3 Project 1994-1996.
+%% 
+%%% From File: tocbasic.dtx
+\def\tocbasicversion{2009/06/08 v3.03b}
+\ProvidesFile{tocbasic.tex}
+                [\tocbasicversion\space KOMA-Script package
+                    (manual)%
+                ]
+
+\chapter{Package \Package{tocbasic} for Class and Package Authors}
+\labelbase{tocbasic}
+
+\textsc{Note: This is only a short version of the documentation.  The german
+  \KOMAScript{} guide does contain a long version with usefull examples, that
+  should also be translated!}
+
+If a package creates it's list ``list of something''---something like ``list
+of figures'', ``list of tables'', ``list of listings'', ``list of
+algorithms'', etc. also known as \emph{toc-files}---have to do some
+operations, that are equal for all those packages. Also it may be usefull
+for classes and other packages to know about these additional
+toc-files. This packages implements some basic functionality for all those
+packages. Using this package will also improve compatibility with
+\KOMAScript{} and---let us hope---other classes and packages.
+
+\section{Legal Note}
+\label{sec:tocbasic.legalnote}
+
+You are allowed to destribute this part of \KOMAScript{} without the main
+part of \KOMAScript{}. The files ``\File{scrlogo.dtx}'' and
+``\File{tocbasic.dtx}'' may be distributed together under the conditions
+of the \LaTeX{} Project Public License, either version~1.3c of this license
+or (at your option) any later version.
+
+The latest version of this license is in
+\mbox{http://www.latex-project.org/lppl.txt} and version~1.3c or later is
+part of all distributions of \LaTeX{} version~2005/12/01 or later.
+
+
+\section{Using Package \Package{tocbasic}}
+\label{sec:tocbasic.usage}
+
+This package was made to be used by class and package authors.  Because of
+this the package has no options.  If different packages would load it with
+different options a option clash would be the result.  So using options
+would'nt be a good idea.
+
+There are two kind of commands.  The first kind are basic command.  Those
+are used to inform other packages about the extensions used for files that
+represent a list of something.  Classes or packages may use this information
+e.g, for putting something to every of those files.  Packages may also ask,
+if an extension is already in use.  This does even work, if \Macro{nofiles}
+was used. The second kind are commands to create the list of something.
+
+\subsection{Basic Commands}
+\label{sec:tocbasic.basics}
+
+Basic commands are used to handle a list of all extensions known for files
+representing a list of something.  Entries to such files are written using
+\Macro{addtocontents} or \Macro{addcontentsline} typically.  There are also
+commands to do something for all known extensions.  And there are commands to
+set or unset features of an extension or the file represented by the
+extension.  Typically an extension also has an owner.  This owner may be a
+class or package or a term decided by the author of the class or package
+using \Package{tocbasic}, e.g., \KOMAScript{} uses the owner \texttt{float}
+for list of figures ans list of tables and the default owner for the table of
+contents.
+
+\begin{Declaration}
+  \Macro{ifattoclist}\Parameter{extension}\Parameter{true
+    part}\Parameter{false part}
+\end{Declaration}
+\BeginIndex{Cmd}{ifattoclist}%
+This command
+may be used to ask, wether a \PName{extension} is already a known extension or
+not.  If the \PName{extension} is already known the \PName{true part} will be
+used, otherwise the \PName{false part} will be used.
+\begin{Example}
+  Maybe you want to know if the extension ``\File{foo}'' is already in use to
+  report an error, if you can not use it:
+  \begin{lstlisting}
+  \ifattoclist{foo}{%
+    \PackageError{bar}{%
+      extension `foo' already in use%
+    }{%
+      Each extension may be used only
+      once.\MessageBreak
+      The class or another package already
+      uses extension `foo'.\MessageBreak
+      This error is fatal!\MessageBreak
+      You should not continue!}%
+  }{%
+    \PackageInfo{bar}{using extension `foo'}%
+  }
+  \end{lstlisting}
+\end{Example}
+\EndIndex{Cmd}{ifattoclist}%
+
+\begin{Declaration}
+  \Macro{addtotoclist}\OParameter{owner}\Parameter{extension}
+\end{Declaration}
+\BeginIndex{Cmd}{addtotoclist}%
+This command
+adds the \PName{extension} to the list of known extensions.  If the optional
+argument, \OParameter{owner}, was given this \PName{owner} will be stored to
+be the owner of the \PName{extension}.  If you omit the optional argument,
+\Package{tocbasic} tries to find out the filename of the current processed
+class or package and stores this as owner.  This will fail if
+\Macro{addtotoclist} was not used, loading a class or package but using a
+command of a class or package after loading this class or package.  In this
+case the owner will be set to ``\PValue{.}''.  Note that an empty
+\PName{owner} is not the same like omitting the optional argument, but an
+empty owner.
+
+\begin{Example}
+  You want to add the extension ``\File{foo}'' to the list of known extension,
+  while loading your package with file name ``\File{bar.sty}'':
+  \begin{lstlisting}
+  \addtotoclist{foo}
+  \end{lstlisting}%
+  This will add the extension ``\PValue{foo}'' with owner ``\PValue{bar.sty}''
+  to the list of known extensions, if it was not already at the list of known
+  extensions. If the class or another package already added the extension you
+  will get the error:
+  \begin{lstlisting}
+  Package tocbasic Error: file extension `#2' cannot be used twice
+
+  See the tocbasic package documentation for explanation.
+  Type  H <return>  for immediate help.
+  \end{lstlisting}
+  and after typing \texttt{H <return>} you will get the help:
+  \begin{lstlisting}
+  File extension `foo' is already used by a toc-file, while bar.sty
+  tried to use it again for a toc-file.
+  This may be either an incompatibility of packages, an error at a package,
+  or a mistake by the user.
+  \end{lstlisting}
+
+  Maybe you package has a command, that creates list of files dynamically.  In
+  this case you should use the optional argument of \Macro{addtotoclist} to
+  set the owner.
+  \begin{lstlisting}
+  \newcommand*{\createnewlistofsomething}[1]{%
+    \addtotoclist[bar.sty]{#1}%
+    % Do something more to make this list of something available
+  }
+  \end{lstlisting}
+  If the user calls know, e.g.
+  \begin{lstlisting}
+  \createnewlistofsomething{foo}
+  \end{lstlisting}
+  this would add the extension ``\PValue{foo}'' with the owner
+  ``\PValue{bar.sty}'' to the list of known extension or report an error, if the
+  extension is already in use.  You may use any owner you want.  But it should
+  be unique!  So, if you are the author of package \Package{float} you may
+  use for example owner ``\PValue{float}'' instead of owner
+  ``\PValue{float.sty}'', so the \KOMAScript{} options for list of figure and
+  list of table will also handle the lists of this package, that are already
+  added to the known extensions, when the option is used.
+\end{Example}
+\EndIndex{Cmd}{addtotoclist}%
+
+\begin{Declaration}
+  \Macro{AtAddToTocList}\OParameter{owner}\Parameter{commands}
+\end{Declaration}
+\BeginIndex{Cmd}{AtAddToTocList}%
+This command
+adds the \PName{commands} to a internal list of commands, that should be
+processed, if a toc-file with the given \PName{owner} will be added to the
+list of known extensions using \Macro{addtoloclist}.  If you omit the optional
+argument, \Package{tocbasic} tries to find out the filename of the current
+processed class or package and stores this as owner.  This will fail if
+\Macro{AtAddToTocList} was not used, loading a class or package but using a
+command of a class or package after loading this class or package.  In this
+case the owner will be set to ``\PValue{.}''.  Note that an empty
+\PName{owner} is not the same like omitting the optional argument. With an
+empty \PName{owner} you may add \Parameter{commands}, that will be processed
+at every succefull \Macro{addtotoclist}, after processing the commands for the
+indivdual owner.  While processing the \PValue{commands}, \Macro{@currext} wil
+be set to the extension of the currently added extension.
+\begin{Example}
+\Package{tocbasic} itself uses
+\begin{lstlisting}
+  \AtAddToTocList[]{%
+    \expandafter\tocbasic@extend@babel
+    \expandafter{\@currext}%
+  }
+\end{lstlisting}
+to add every extension to the \Package{tocbasic}-internal babel handling of
+toc-files.  The \Macro{expandafter} are needed, because the argument of
+\Macro{tocbasic@extend@babel} has to expanded!  See the description of
+\Macro{tocbasic@extend@babel} at \autoref{sec:tocbasic.internals}%
+, \autopageref{desc:tocbasic.cmd.tocbasic@extend@babel}
+for more information.
+\end{Example}
+\EndIndex{Cmd}{AtAddToTocList}%
+
+\begin{Declaration}
+  \Macro{removefromtoclist}\OParameter{owner}\Parameter{extension}
+\end{Declaration}
+\BeginIndex{Cmd}{removefromtoclist}%
+This command
+removes the \PName{extension} from the list of known extensions.  If the
+optional argument, \OParameter{owner}, was given the \PName{extension} will
+only be removed, if it was added by this \PName{owner}.  If you omit the
+optional argument, \Package{tocbasic} tries to find out the filename of the
+current processed class or package and use this as owner.  This will fail if
+\Macro{removefromtoclist} was not used, loading a class or package but using a
+command of a class or package after loading this class or package.  In this
+case the owner will be set to ``\PValue{.}''.  Note that an empty
+\PName{owner} is not the same like omitting the optional argument, but removes
+the \PName{extension} without any owner test.
+\EndIndex{Cmd}{removefromtoclist}%
+
+\begin{Declaration}
+  \Macro{doforeachtocfile}\OParameter{owner}\Parameter{commands}
+\end{Declaration}
+\BeginIndex{Cmd}{doforeachtocfile}%
+This command
+processes \PName{commands} for every known toc-file of the given
+\PName{owner}.  While processing the \PName{commands} \Macro{@currext} ist the
+extension of the current toc-file for every known toc-file.  If you omit the
+optional argument, \OParameter{owner}, every known toc-file will be used. If
+the optional argument is empty, only toc-files with an empty owner will be
+used.
+\begin{Example}
+  If you want to type out all known extensions, you may simply write:
+  \begin{lstlisting}
+  \doforeachtocfile{\typeout{\@currext}}
+  \end{lstlisting}
+  and if only the extensions of owner ``\PValue{foo}'' should be typed out:
+  \begin{lstlisting}
+  \doforeachtocfile[foo]{\typeout{\@currext}}
+  \end{lstlisting}
+\end{Example}
+\EndIndex{Cmd}{doforeachtocfile}%
+
+\begin{Declaration}
+  \Macro{tocbasicautomode}
+\end{Declaration}
+\BeginIndex{Cmd}{tocbasicautomode}%
+This command
+redefines \LaTeX{} kernel macro \Macro{@starttoc} to add all not yet added
+extensions to the list of known extensions and use \Macro{tocbasic@starttoc}
+instead of \Macro{@starttoc}.
+\EndIndex{Cmd}{tocbasicautomode}%
+
+\subsection{Creating a List of Something}
+\label{sec:tocbasic.more}
+
+At the previous section you've seen commands to handle a list of known
+extensions and to trigger commands while adding a new extension to this
+list. You've also seen a command to do something for all known extensions or
+all known extensions of one owner. In this section you will see commands to
+handle the file corresponding with an extension or the list of known
+extensions.
+
+\begin{Declaration}
+  \Macro{addtoeachtocfile}\OParameter{owner}\Parameter{contents}
+\end{Declaration}
+\BeginIndex{Cmd}{addtoeachtocfile}%
+This command
+writes \PName{contents} to every known toc-file of \PName{owner}. If you omit
+the optional argument, \PName{contents} it written to every known
+toc-file. While writing the contents, \Macro{@currext} is the extension of
+the currently handled toc-file.
+\begin{Example}
+  You may add a vertical space of one text line to all toc-files.
+  \begin{lstlisting}
+    \addtoeachtocfile{%
+      \protect\addvspace{\protect\baselineskip}%
+    }
+  \end{lstlisting}
+  And if you want to do this, only for the toc-files of owner
+  ``\PValue{foo}'':
+  \begin{lstlisting}
+    \addtoeachtocfile[foo]{%
+      \protect\addvspace{\protect\baselineskip}%
+    }
+  \end{lstlisting}
+\end{Example}
+\EndIndex{Cmd}{addtoeachtocfile}%
+
+\begin{Declaration}
+  \Macro{addcontentslinetoeachtocfile}\OParameter{owner}\Parameter{level}%
+  \Parameter{contentsline}
+\end{Declaration}
+\BeginIndex{Cmd}{addcontentslinetoeachtocfile}%
+This command
+is something like \Macro{addcontentsline} not only for one file, but all known
+toc-files or all known toc-files of a given owner.
+\begin{Example}
+  You are a class author and want to write the chapter entry not only to the
+  table of contents toc-file but to all toc-files, while \texttt{\#1} is the
+  title, that should be written to the files.
+  \begin{lstlisting}
+    \addcontentslinetoeachtocfile{chapter}{%
+      \protect\numberline{\thechapter}#1}
+  \end{lstlisting}
+\end{Example}
+\EndIndex{Cmd}{addcontentslinetoeachtocfile}%
+
+\begin{Declaration}
+  \Macro{listoftoc*}\Parameter{extension}
+\\
+  \Macro{listoftoc}\OParameter{list of title}\Parameter{extension}
+\end{Declaration}
+\BeginIndex{Cmd}{listoftoc*}%
+\BeginIndex{Cmd}{listoftoc}%
+This commands
+may be used to set the ``list of'' of a toc-file. The star version
+\Macro{listoftoc*} needs only one argument, the extension of the toc-file. It
+does setup the vertical and horizontal spacing of paragraphs, calls before and
+after hooks and reads the toc-file.  You may use it as direct replacement of
+the \LaTeX{} kernel macro \Macro{@starttoc}.
+
+The version without star, sets the whole toc-file with title, optional table
+of contents entry, and running heads. If the optional argument
+\OParameter{list of title} was given, it will be used as title term, optional
+table of contents entry and running head. Note: If the optional argument is
+empty, this term will be empty, too! If you omit the optional argument, but
+\Macro{listof\PName{extension}name} was defined, that will be used.
+
+\begin{Example}
+  You have a new ``list of algorithms'' with extension \PValue{loa} and want to
+  show it.
+  \begin{lstlisting}
+  \listof[list of algorithm]{loa}
+  \end{lstlisting}
+  Maybe you want, that the ``list of algorithms'' will create an entry at the
+  table of contents. You may set
+  \begin{lstlisting}
+  \setuptoc{loa}{totoc}
+  \end{lstlisting}
+  But maybe the ``list of algorithms'' should not be set with a title. So you
+  may use
+  \begin{lstlisting}
+  \listof*{loa}
+  \end{lstlisting}
+  Note that in this case no entry at the table of contents will be created,
+  even if you'd used the setup command above.
+\end{Example}
+
+The default heading new following features using \Macro{setuptoc}:
+\begin{description}
+\item[\texttt{totoc}] writes the title of the list of to the table of contents
+\item[\texttt{numbered}] uses a numbered headings for the list of
+\item[\texttt{leveldown}] uses not the top level heading (e.g., \Macro{chapter}
+  with book) but the first sub level (e.g., \Macro{section} with book).
+\end{description}
+\EndIndex{Cmd}{listoftoc*}%
+\EndIndex{Cmd}{listoftoc}%
+
+\begin{Declaration}
+  \Macro{BeforeStartingTOC}\OParameter{extension}\Parameter{commands}
+\\
+  \Macro{AfterStartingTOC}\OParameter{extension}\Parameter{commands}
+\end{Declaration}
+\BeginIndex{Cmd}{BeforeStartingTOC}%
+\BeginIndex{Cmd}{AfterStartingTOC}%
+This commands
+may be used to process \PName{commands} before or after loading the toc-file
+with given \PName{extension} using \Macro{listoftoc*} or \Macro{listoftoc}. If
+you omit the optional argument (or set an empty one) the general hooks will be
+set. The general before hook will be called before the individuel one and the
+general after hook will be called after the individuel one. While calling the
+hooks \Macro{@currext} is the extension of the toc-file and should not be
+changed.
+\EndIndex{Cmd}{AfterStartingTOC}%
+\EndIndex{Cmd}{BeforeStartingTOC}%
+
+\begin{Declaration}
+  \Macro{BeforeTOCHead}\OParameter{extension}\Parameter{commands}
+\\
+  \Macro{AfterTOCHead}\OParameter{extension}\Parameter{commands}
+\end{Declaration}
+\BeginIndex{Cmd}{BeforeTOCHead}%
+\BeginIndex{Cmd}{AfterTOCHead}%
+This commands
+may be used to process \PName{commands} before or after setting the title of a
+toc-file with given \PName{extension} using \Macro{listoftoc*} or
+\Macro{listoftoc}. If you omit the optional argument (or set an empty one) the
+general hooks will be set. The general before hook will be called before the
+individuel one and the general after hook will be called after the individuel
+one. While calling the hooks \Macro{@currext} is the extension of the toc-file
+and should not be changed.
+\EndIndex{Cmd}{AfterTOCHead}%
+\EndIndex{Cmd}{BeforeTOCHead}%
+
+\begin{Declaration}
+  \Macro{listofeachtoc}\OParameter{owner}
+\end{Declaration}
+\BeginIndex{Cmd}{listofeachtoc}%
+This command
+sets all toc-files or all toc-files of the given \PName{owner} using
+\Macro{listoftoc}. You should have defined
+\Macro{listof\PName{extension}name} for each toc-file, otherwise you'll get a
+warning.
+\EndIndex{Cmd}{listofeachtoc}%
+
+\begin{Declaration}
+  \Macro{MakeMarkcase}
+\end{Declaration}
+\BeginIndex{Cmd}{MakeMarkcase}%
+This command
+will be used to change the case of the letters at the running
+head. The default is, to use \Macro{@firstofone} for \KOMAScript{} classes and
+\Macro{MakeUppercase} for all other classes. If you are the class author you
+may define \Macro{MakeMarkcase} on your own. If \Package{scrpage2} or another
+package, that defines \Macro{MakeMarkcase} will be used, \Package{tocbasci}
+will not overwrite that Definition.
+\EndIndex{Cmd}{MakeMarkcase}%
+
+\begin{Declaration}
+  \Macro{deftocheading}\Parameter{extension}\Parameter{definition}
+\end{Declaration}
+\BeginIndex{Cmd}{deftocheading}%
+This command
+defines a heading command, that will be used instead of the
+default heading using \Macro{listoftoc}. The heading command has exactly one
+argument. You may reference to that argument using \texttt{\#1} at your
+\PName{defintion}.
+\EndIndex{Cmd}{deftocheading}%
+
+\begin{Declaration}
+  \Macro{setuptoc}\Parameter{extension}\Parameter{featurelist}
+\\
+  \Macro{unsettoc}\Parameter{extension}\Parameter{featurelist}
+\end{Declaration}
+\BeginIndex{Cmd}{setuptoc}%
+\BeginIndex{Cmd}{unsettoc}%
+This commands
+set up and unset features binded to an \PName{extension}. The
+\PName{featurelist} is a comma seperated list of single
+features. \Package{tocbasic} does know following features:
+\begin{description}
+\item[\texttt{totoc}] writes the title of the list of to the table of contents
+\item[\texttt{numbered}] uses a numbered headings for the list of
+\item[\texttt{leveldown}] uses not the top level heading (e.g., \Macro{chapter}
+  with book) but the first sub level (e.g., \Macro{section} with book).
+\item[\texttt{onecolumn}] switch to internal one column mode, if the toc
+  is set in internal two column mode and no \texttt{leveldown} was used.
+\item[\texttt{nobabel}] prevents the extension to be added to the babel
+  handling of toc-files.  To make this work, you have to set the feature
+  before adding the extension to the list of known extension.
+\end{description}
+Classes and packages may know features, too, e.g, the \KOMAScript{} classes
+know following additional features:
+\begin{description}
+\item[\texttt{chapteratlist}] activates special code to be put into the list
+  at start of a new chapter. This code may either be vertical space or the
+  heading of the chapter.
+\end{description}
+\EndIndex{Cmd}{unsettoc}%
+\EndIndex{Cmd}{setuptoc}%
+
+\begin{Declaration}
+  \Macro{iftocfeature}\Parameter{extension}\Parameter{feature}%^^A
+  \Parameter{true-part}\Parameter{false-part}
+\end{Declaration}
+\BeginIndex{Cmd}{iftocfeature}%
+This command
+may be used, to test, if a \PName{feature} was set for \PName{extension}. If
+so the \PName{true-part} will be processed, otherwise the \PName{false-part}
+will be.
+\EndIndex{Cmd}{iftocfeature}%
+
+\subsection{Internal Commands for Class and Package Authors}
+\label{sec:tocbasic.internals}
+
+Commands with prefix \Macro{tocbasic@} are internal but class and package
+authors may use them. But even if you are a class or package author you
+should not change them!
+
+\begin{Declaration}
+  \Macro{tocbasic@extend@babel}\Parameter{extension}
+\end{Declaration}
+\BeginIndex{Cmd}{tocbasic@extend@babel}%
+This command
+extends the babel handling of toc-files. By default babel writes language
+selections only to \PValue{toc}, \PValue{lot} and
+\PValue{lof}. \Package{tocbasic} adds every \PName{extension} added to the
+list of known extensions (see \Macro{addtotoclist}, \autoref{sec:tocbasic.basics}%
+, \autopageref{desc:tocbasic.cmd.addtotoclist}%
+) using \Macro{tocbasic@extend@babel}. Note: This should be called only once
+per \PName{extension}. \Macro{tocbasic@extend@babel} does nothing, if the
+feature \PValue{nobabel} was set for \PName{extension} before using
+\Macro{addtotoclist}.
+\EndIndex{Cmd}{tocbasic@extend@babel}%
+
+\begin{Declaration}
+  \Macro{tocbasic@starttoc}\Parameter{extension}
+\end{Declaration}
+\BeginIndex{Cmd}{tocbasic@starttoc}
+This command is something like the \LaTeX{} kernel macro \Macro{@starttoc},
+but does some additional settings before using \Macro{@starttoc}. It does set
+\Macro{parskip} zu zero, \Macro{parindent} to zero, \Macro{parfillskip} to
+zero plus one fil, \Macro{@currext} to the \PName{extension}, and processes
+hooks before and after reading the toc-file.
+\EndIndex{Cmd}{tocbasic@starttoc}
+
+\begin{Declaration}
+  \Macro{tocbasic@@before@hook}\\
+  \Macro{tocbasic@@after@hook}
+\end{Declaration}
+\BeginIndex{Cmd}{tocbasic@@before@hook}%
+\BeginIndex{Cmd}{tocbasic@@after@hook}%
+This macros
+are processed before and after loading a toc-file. If you don't use
+\Macro{listoftoc} or \Macro{listoftoc*} or \Macro{tocbasic@starttoc} to load
+the toc-file, you should call these, too. But you should not redefine them!
+\EndIndex{Cmd}{tocbasic@@before@hook}%
+\EndIndex{Cmd}{tocbasic@@after@hook}%
+
+\begin{Declaration}
+  \Macro{tocbasic@\PName{extension}@before@hook}\\
+  \Macro{tocbasic@\PName{extension}@after@hook}
+\end{Declaration}
+\BeginIndex{Cmd}{tocbasic@\PName{extension}@before@hook}%
+\BeginIndex{Cmd}{tocbasic@\PName{extension}@after@hook}%
+This macros
+are processed before and after loading a toc-file. If you don't use
+\Macro{listoftoc} or \Macro{listoftoc*} or \Macro{tocbasic@starttoc} to load
+the toc-file, you should call these, too. But you should not redefine them!
+The first macro is processed just before \Macro{tocbasic@@before@hook}, the
+second one just after \Macro{tocbasic@@after@hook}
+\EndIndex{Cmd}{tocbasic@\PName{extension}@after@hook}%
+\EndIndex{Cmd}{tocbasic@\PName{extension}@before@hook}%
+
+\begin{Declaration}
+  \Macro{tocbasic@listhead}\Parameter{title}
+\end{Declaration}
+\BeginIndex{Cmd}{tocbasic@listhead}%
+This command
+is used by \Macro{listoftoc} to set the heading of the list, either the
+default heading or the indiviually defined heading. If you define your own
+list command not using \Macro{listoftoc} you may use
+\Macro{tocbasic@listhead}. In this case you should define \Macro{@currext} to
+be the extension of the toc-file before using \Macro{tocbasic@listhead}.
+\EndIndex{Cmd}{tocbasic@listhead}%
+
+\begin{Declaration}
+  \Macro{tocbasic@listhead@\PName{extension}}\Parameter{title}
+\end{Declaration}
+\BeginIndex{Cmd}{tocbasic@listhead@\PName{extension}}%
+This command
+is used in \Macro{tocbasic@listhead} to set the individual headings, optional
+toc-entry, and running head, if it was defined. If it was not defined it will
+be defined and used in \Macro{tocbasic@listhead}.
+\EndIndex{Cmd}{tocbasic@listhead@\PName{extension}}%
+\endinput
+%%
+%% End of file `tocbasic.tex'.

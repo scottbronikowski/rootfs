@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 6.  Diffusez un flux DVB (satellite ou télévision numérique terrestre)</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch05.html" title="Chapter 5.  Diffusez un DVD" /><link rel="next" href="ch07.html" title="Chapter 7.  Diffusez depuis une carte d'encodage MPEG" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. 
+
+Diffusez un flux DVB (satellite ou télévision
+numérique terrestre)
+
+
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch07.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="dvb"></a>Chapter 6. 
+
+Diffusez un flux DVB (satellite ou télévision
+numérique terrestre)
+
+
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch06.html#id2573955">
+
+Installez les drivers DVB
+
+
+</a></span></dt><dt><span class="sect1"><a href="ch06.html#id2575003">
+
+Diffusez avec VLS
+
+
+</a></span></dt><dt><span class="sect1"><a href="ch06.html#id2575108">
+
+Diffusez avec VLC
+
+
+</a></span></dt></dl></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+Ceci n'est possible que sous GNU/Linux
+
+
+
+.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573955"></a>
+
+Installez les drivers DVB
+
+
+</h2></div></div></div><p>
+
+Pour pouvoir streamer depuis une carte DVB (une carte satélite ou de télévision numérique terrestre), il est nécessire d'installer préalablement les drivers DVB :
+
+
+
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+
+
+si vous utilisez un noyau Linux 2.6.x, il vous suffit de
+compiler les bons modules ;
+
+
+
+
+
+</p></li><li><p>
+
+
+
+si vous utilisez un noyau Linux 2.4.x,
+vous devez télécharger la dernière version des drivers DVB depuis la
+<a class="ulink" href="http://www.linuxtv.org/download/dvb/" target="_top">page de
+téléchargement des drivers DVB</a> du projet <a class="ulink" href="http://www.linuxtv.org/" target="_top">LinuxTV</a>.
+
+
+
+
+
+</p></li></ul></div><p>
+
+Décompressez le fichier et suivez les instructions
+du fichier <code class="filename">INSTALL</code> pour compiler et installer les
+drivers
+
+
+
+.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2575003"></a>
+
+Diffusez avec VLS
+
+
+</h2></div></div></div><p>
+
+Mettez un fichier <code class="filename">.dvbrc</code>
+contenant les chaînes DVB que vous désirez diffuser dans
+votre répertoire utilisateur (certains sont fournis dans
+<span class="emphasis"><em>libdvb</em></span> pour les chaînes satellites)
+
+
+
+.</p><p>
+
+Lancez VLS avec cette ligne de commande
+
+
+
+ :</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vls -vv -d udp:192.168.0.42 dvb:"EUROSPORT" --ttl 12</code></strong>
+</pre><p>
+
+où 
+
+
+:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>"EUROSPORT"</em></span>
+
+est la chaîne que vous désirez diffuser, comme
+décrit dans votre fichier <code class="filename">~/.dvbrc</code>
+
+
+,</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+
+ est soit 
+
+
+:</p><div class="itemizedlist"><ul type="circle"><li><p>
+
+l'adresse IP de la machine vers laquelle vous
+désirez diffuser en unicast
+
+
+;</p></li><li><p>
+
+le nom DNS de la machine vers laquelle vous désirez
+envoyer en unicast
+
+
+;</p></li><li><p>
+
+une adresse IP multicast
+
+
+
+.</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+
+ est la valeur du TTL (Time To Live) de vos paquets
+IP (cela signifie qu'ils pourront traverser 11 routeurs)
+
+
+
+.</p></li></ul></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2575108"></a>
+
+Diffusez avec VLC
+
+
+</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+
+
+</p></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --program 8211 dvb:12597000:0:3:27500000 --sout udp:192.168.0.12 --ttl 12</code></strong>
+</pre><p>
+
+où
+
+
+ :</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+
+
+
+;</p></li><li><p>
+
+
+
+;</p></li><li><p>
+
+
+
+;</p></li><li><p>
+
+
+
+;</p></li><li><p>
+
+
+
+;</p></li><li><p><span class="emphasis"><em>192.168.0.12</em></span>
+
+
+
+:</p><div class="itemizedlist"><ul type="circle"><li><p>
+
+
+
+;</p></li><li><p>
+
+
+
+;</p></li><li><p>
+
+
+
+</p></li></ul></div></li><li><p>
+
+
+
+</p></li></ul></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 5. 
+Diffusez un DVD
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 7. 
+Diffusez depuis une carte d'encodage MPEG
+</td></tr></table></div></body></html>

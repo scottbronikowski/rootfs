@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 3.  Einen Stream empfangen und speichern</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch02.html" title="Chapter 2.  Installation der benötigten Hard- und Software" /><link rel="next" href="ch04.html" title="Chapter 4.  Eine Datei streamen" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. 
+
+
+
+Einen Stream empfangen und speichern
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="receive"></a>Chapter 3. 
+
+
+
+Einen Stream empfangen und speichern
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch03.html#id2572298">
+
+
+
+Einen Stream mit VLC empfangen
+</a></span></dt><dt><span class="sect1"><a href="ch03.html#id2573115">
+
+
+
+Einen Stream mit VLC speichern
+</a></span></dt><dt><span class="sect1"><a href="ch03.html#id2573215">
+
+
+
+Einen Stream mit einer Set-Top-Box empfangen
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2572298"></a>
+
+
+
+Einen Stream mit VLC empfangen
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572303"></a>
+
+
+
+Einen Unicast-Stream empfangen
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv udp:</code></strong>
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572325"></a>
+
+
+
+Einen Multicast-Stream empfangen
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv udp:@239.255.12.42</code></strong>
+</pre><p>
+
+
+
+wobei <span class="emphasis"><em>239.255.12.42</em></span> die
+Multicast-IP-Adresse ist, an der Sie teilnehmen möchten.
+
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2572963"></a>
+
+
+
+Einen HTTP/FTP/MMS-Stream empfangen
+</h3></div></div></div><p>
+
+
+
+Nutzen Sie eine der folgenden Befehlszeilen
+ :</p><div class="itemizedlist"><ul type="disc"><li><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv http://example/stream.xyz</code></strong>
+</pre><p>
+
+
+
+wobei <span class="emphasis"><em>http://example/stream.xyz
+</em></span> die HTTP-Adresse des Streams ist
+ ;</p></li><li><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv ftp://example/stream.xyz</code></strong>
+</pre><p>
+
+
+
+wobei <span class="emphasis"><em>ftp://example/stream.xyz</em></span>
+die FTP-Adresse des Streams ist
+ ;</p></li><li><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv mms://viptvr.yacast.fr/encoderfranceinfo</code></strong>
+</pre><p>
+
+
+
+wobei
+<span class="emphasis"><em>mms://viptvr.yacast.fr/encoderfranceinfo</em></span> die
+MMS-Adresse des Streams ist.
+
+</p></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573059"></a>
+
+
+
+Erhalten eines RTP-Streams, der per RTSP verfügbar ist 
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv rtsp://www.hardradio.com/tonbeme.mov</code></strong>
+</pre><p>
+
+
+
+wobei <span class="emphasis"><em>rtsp://www.hardradio.com/tonbeme.mov</em></span> die Adresse des Streams ist.
+
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573091"></a>
+
+
+
+Erhalten eines per SDP-Datei beschriebenen Streams
+</h3></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv http://server.example.org/stream.sdp</code></strong>
+</pre></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573115"></a>
+
+
+
+Einen Stream mit VLC speichern
+</h2></div></div></div><p>
+
+
+
+VLC kann den Stream auf der Festplatte speichern. Um dies
+zu tun, benutzen Sie die Stream-Ausgabe von VLC: Sie können dies über das
+grafische Interface tun oder der Befehlszeile das folgende Argument 
+hinzufügen
+ :</p><pre class="screen">
+<strong class="userinput"><code>--sout file/muxer:stream.xyz</code></strong>
+</pre><p>
+
+
+
+wobei
+:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>muxer</em></span> 
+
+
+
+ein von VLC's Stream-Ausgabe benutztes Format ist,
+z.B.
+:</p><div class="itemizedlist"><ul type="circle"><li><p><span class="emphasis"><em>avi</em></span>
+ 
+ 
+ 
+  für das AVI-Format
+,</p></li><li><p><span class="emphasis"><em>ogg</em></span>
+ 
+ 
+ 
+  für das OGG-Format
+,</p></li><li><p><span class="emphasis"><em>ps</em></span> 
+ 
+ 
+ 
+  für das MPEG2-PS-Format
+,</p></li><li><p><span class="emphasis"><em>ts</em></span> or
+<span class="emphasis"><em>ts_dvbpsi</em></span> 
+ 
+  
+ 
+   für das MPEG2-PS-Format (der zweite nutzt
+<span class="emphasis"><em>libdvbpsi</em></span>).
+
+</p></li></ul></div></li><li><p>
+
+
+
+und <code class="filename">stream.xyz</code> ist der Name der
+Datei mit dem richtigen Suffix, in der Sie den Stream speichern möchten.
+
+</p></li></ul></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573215"></a>
+
+
+
+Einen Stream mit einer Set-Top-Box empfangen
+</h2></div></div></div><p>
+
+
+
+Einige Set-Top-Boxen mit Ethernet-Karten können
+MPEG2-TS-Streams über UDP empfangen und unterstützen Multicast.
+Dies ist der Fall bei den <a class="ulink" href="http://www.pace.co.uk" target="_top">Pace</a>
+und <a class="ulink" href="http://www.aminocom.com" target="_top">Aminocom</a> - 
+Set-Top-Boxen. Wir haben die <span class="emphasis"><em>AmiNET 100</em></span> 
+Set-Top-Box von Aminocom getestet: sie ist schön und klein und arbeitet
+sehr gut mit VideoLAN.
+
+</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. 
+Installation der benötigten Hard- und Software
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 4. 
+
+
+
+Eine Datei streamen
+</td></tr></table></div></body></html>

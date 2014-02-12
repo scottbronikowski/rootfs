@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>pbm - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="Openstep_005f_0028next_0029.html#Openstep_005f_0028next_0029" title="Openstep_(next)">
+<link rel="next" href="dospc.html#dospc" title="dospc">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="pbm"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="dospc.html#dospc">dospc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Openstep_005f_0028next_0029.html#Openstep_005f_0028next_0029">Openstep_(next)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.50 pbm</h5>
+
+<!-- ?commands set terminal pbm -->
+<!-- ?set terminal pbm -->
+<!-- ?set term pbm -->
+<!-- ?terminal pbm -->
+<!-- ?term pbm -->
+<p><a name="index-pbm-855"></a><a name="index-pbm-856"></a>
+
+   <p>Syntax:
+<pre class="example">           set terminal pbm {&lt;fontsize&gt;} {&lt;mode&gt;} {size &lt;x&gt;,&lt;y&gt;}
+     
+</pre>
+   <p>where &lt;fontsize&gt; is `small`, `medium`, or `large` and &lt;mode&gt; is `monochrome`,
+`gray` or `color`.  The default plot size is 640 pixels wide and 480 pixels
+high. The output size is white-space padded to the nearest multiple of
+8 pixels on both x and y. This empty space may be cropped later if needed.
+
+   <p>The output of the `pbm` driver depends upon &lt;mode&gt;: `monochrome` produces a
+portable bitmap (one bit per pixel), `gray` a portable graymap (three bits
+per pixel) and `color` a portable pixmap (color, four bits per pixel).
+
+   <p>The output of this driver can be used with various image conversion and
+manipulation utilities provided by NETPBM.  Based on Jef Poskanzer's
+PBMPLUS package, NETPBM provides programs to convert the above PBM formats
+to GIF, TIFF, MacPaint, Macintosh PICT, PCX, X11 bitmap and many others. 
+Complete information is available at http://netpbm.sourceforge.net/.
+
+   <p>Examples:
+<pre class="example">           set terminal pbm small monochrome                # defaults
+           set terminal pbm color medium size 800,600
+           set output '| pnmrotate 45 | pnmtopng &gt; tilted.png'  # uses NETPBM"
+     
+</pre>
+   </body></html>
+

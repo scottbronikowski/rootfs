@@ -1,0 +1,71 @@
+xfig for DEBIAN
+===============
+
+For additional information about xfig have a look at the xfig web page at
+ http://www.xfig.org
+ http://www-epb.lbl.gov/xfig/
+
+
+Japanese Support
+================
+
+Simply set the environment variable LANG to ja_JP.ujis and xfig should 
+be hopefully adapted to your needs. I cannot test this out here,
+because I don't understand any Japanese nor am I able to understand
+the fonts, so if the Japanese adaptions don't work as they should,
+please let me know.
+
+
+Korean Support
+==============
+
+Should work in the same way like Japanese support does but with LANG
+set to ko_KR.eucKR.
+
+
+Xaw vs. Xaw3D
+=============
+
+xfig can be compiled with Xaw (2D look) as well as with Xaw3D (3D
+look).  Xaw3D is designed as a plug-in-replacement for Xaw, so every
+program compiled with Xaw should be able to run with Xaw3D.  That's
+the theory, while in reality the compatibility isn't perfect.  That
+means, that xfig (since version 3.2.3) compiled with Xaw does not run
+with Xaw3D ("xfig: Symbol `smeBSBClassRec' has different size in
+shared object, consider re-linking").  So I had to decide between
+generally using 2D look (also for users who have Xaw3D installed) by
+using xaw-wrappers and denying Xaw3D or alternatively to generally use
+Xaw3D (and depend on xaw3dg) as recommended by the upstream author.  I
+choose the latter option, so xfig is now linked against xaw3dg.
+
+
+pstex
+=====
+
+It's not a xfig but a transfig issue, but there are many people
+heaving problems with the pstex driver.  The problem is, that newer
+versions of transfig need \usepackage{color} to work with pstex.  So
+simply add \usepackage{graphicx} and \usepackage{color} to your LaTeX
+file before using pstex and everything should work correct.
+
+
+Cursor theme
+============
+
+You may notice some problems with ugly cursors which don't allow you
+to do precise drawings.  This usually depends on the configured cursor
+theme.  If you don't like the configure cursor font, have a look at
+the output of 
+ update-alternatives --display x-cursor-theme
+This lists all installed cursor theme with their priorities and shows
+which of these alternatives is currently linked.  There were problems
+with the gtk2-engines-industrial theme reported, which replaces the
+cross hair cursor by a big white cross.  To change the cursor theme
+run
+ update-alternatives --config x-cursor-theme
+and select the core.theme.  After this you may have to restart you X
+server.
+
+
+Roland Rosenfeld <roland@debian.org>
+$Id: README.Debian,v 1.13 2006-07-23 09:05:55 roland Exp $

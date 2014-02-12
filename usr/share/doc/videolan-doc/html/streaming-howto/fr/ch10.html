@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 10.  Diffuser depuis une carte d'encodage ou d'autres périphériques d'acquisition</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DivX" /><link rel="start" href="index.html" title="VideoLAN Streaming Howto" /><link rel="up" href="index.html" title="VideoLAN Streaming Howto" /><link rel="prev" href="ch09.html" title="Chapter 9.  Diffuser une chaine DVB (Satellite ou TNT)" /><link rel="next" href="ch11.html" title="Chapter 11.  Diffusion sur IPv6" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 10. 
+Diffuser depuis une carte d'encodage ou d'autres périphériques d'acquisition
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="hardencoding"></a>Chapter 10. 
+Diffuser depuis une carte d'encodage ou d'autres périphériques d'acquisition
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch10.html#id2580234">Cartes d'encodage matériel</a></span></dt><dt><span class="sect1"><a href="ch10.html#id2581211">Cartes et encodage logiciel</a></span></dt><dt><span class="sect1"><a href="ch10.html#id2581616">Diffuser avec Directshow</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2580234"></a>Cartes d'encodage matériel</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Cela est uniquement possible sous GNU/Linux.
+</p></div><p>
+VideoLAN supporte deux type d'encodeur MPEG-2 matériel :
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+Hauppauge WinTV-PVR-250 and WinTV-PVR-350,
+
+</p></li><li><p>Visiontech Kfir.</p></li></ul></div><p>
+Les Hauppauge WinTV-PVR-250/350 fournissent des résultats bien meilleurs que les Visiontech Kfir (en plus d'être moins chères).
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2580265"></a>
+Diffuser à l'aide d'une carte Hauppauge WinTV-PVR-250/350
+</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2580884"></a>
+Installer les pilotes
+</h4></div></div></div><p>
+Vous allez tout d'abord devoir patcher votre noyau (version 2.4) pour supporter l'API v4l2 (Video 4 Linux version 2). Le patch est disponible sur le site de <a class="ulink" href="http://bytesex.org/v4l/" target="_top">Video4Linux HQ</a>. Si vous utilisez un noyau 2.6, vous n'aurez qu'à inclure le support I2C et le module Video For Linux BT848.
+</p><p>
+Une fois que votre noyau est pret, installez la version CK
+(actuellement en développement) des drivers Linux pour les
+Hauppauge WinTV-PVR-250/350. Ils sont hébergés sur <a class="ulink" href="http://67.18.1.101/~ckennedy/ivtv" target="_top">ivtv ck</a>. Vous
+aurrez besoin de patcher votre noyau pour l'utiliser avec un 2.4.
+Vous pouvez aussi utiliser la version CVS disponible ici : <a class="ulink" href="http://ivtv.sourceforge.net/" target="_top">ivtv.sourceforge.net</a> (cette
+version n'est plus développée). Vous devez céer le péripérique et
+charger les modules. Ceci est détailé dans la documentation fournie
+avec les drivers.
+</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2580934"></a>
+Diffuser avec VLC
+</h4></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Vous devez ajouter <span class="command"><strong>--enable-pvr</strong></span> à votre <span class="command"><strong>./configure</strong></span> pour utiliser cette fonctionnalité.
+</p></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --color pvr:/dev/video0:norm=secam:size=720x576:frequency=576250:
+bitrate=3000000:maxbitrate=4000000 --cr-average 1000 --sout udp:192.168.0.42 --ttl 12</code></strong>
+</pre><p>
+où : 
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>/dev/video0</em></span> est le périphérique correspondant a la carte d'encodage,</p></li><li><p><span class="emphasis"><em>norm=secam</em></span> est le nom du standard utilisé par le signal analogique (les valeurs possibles sont pal, secam et ntsc),</p></li><li><p><span class="emphasis"><em>size=720x576</em></span> est la taille de la vidéo que vous voulez diffuser,</p></li><li><p><span class="emphasis"><em>frequency=567250</em></span> est la fréquence en kHz de la chaine que vous voulez diffuser,</p></li><li><p><span class="emphasis"><em>bitrate=3000000</em></span> est le débit moyen du flux,</p></li><li><p><span class="emphasis"><em>maxbitrate=4000000</em></span> est le débit maximum du flux,</p></li><li><p><span class="emphasis"><em>1000</em></span> est une valeur secrète pour contourner un bug de la carte.
+</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span> est soit :
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+l'adresse IP de la machine vers laquelle vous souhaitez diffuser en unicast;</p></li><li><p>
+soit le nom DNS de la machine vers laquelle vous souhaitez diffuser en unicast;</p></li><li><p>
+ou une adresse IP multicast.
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+est la valeur du TTL (Time To Live) de vos paquets IP (ce qui
+signifie que le flux peut traverser 11 routeurs maximum).
+</p></li></ul></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2581082"></a>
+Diffuser avec la carte Visiontech Kfir
+</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2581087"></a>
+Installer les pilotes
+</h4></div></div></div><p>
+Si vous voulez être capable de diffuser depuis une carte Visiontech Kfir, vous devez installer ses pilotes Linux. Téléchargez la dernière version de ces pilotes sur la page <a class="ulink" href="http://www.linuxtv.org/download/mpeg2/" target="_top">drivers download
+page</a> du <a class="ulink" href="http://www.linuxtv.org/" target="_top">site web LinuxTV
+</a>.
+</p><p>
+Decompressez le tarball et suivez les instructions ecrites dans le fichier <code class="filename">INSTALL</code> pour compiler et installer les drivers.
+</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Si vous avez un chipset VIA, vous devez désactiver l'USB dans votre BIOS.
+</p></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2581132"></a>
+
+Diffuser
+</h4></div></div></div><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --color kfir:/dev/video --sout udp:192.168.0.42 --ttl 12</code></strong>
+</pre><p>où : </p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">/dev/video</code>
+est le nom du péripérique correspondanta la carte Kfir</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span> est soit :
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+l'adresse IP de la machine vers laquelle vous souhaitez diffuser en unicast;</p></li><li><p>
+soit le nom DNS de la machine vers laquelle vous souhaitez diffuser en unicast;</p></li><li><p>
+ou une adresse IP multicast.
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+est la valeur du TTL (Time To Live) de vos paquets IP (ce qui
+signifie que le flux peut traverser 11 routeurs maximum).
+</p></li></ul></div></div></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2581211"></a>Cartes et encodage logiciel</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2581217"></a>Sous GNU/Linux</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2581221"></a>
+Installer les drivers Vidéo pour Linux
+</h4></div></div></div><p>
+Si vous voulez diffuser depuis une carte d'acquisition ou une webcam, un driver video4linux est nécessaire. Vous pouvez trouver plus d'explication sur video4linux et les périphériques supportés <a class="ulink" href="http://www.exploits.org/v4l" target="_top">ici</a>.
+</p><p>
+Compilez le bon module pour votre péripérique et chargez le dans votre kernel. Certains modules video4linux sont disponibles dans les kernels 2.4.x et 2.6.x, le patch est disponible sur le site web du <a class="ulink" href="http://bytesex.org/v4l" target="_top">Video4Linux HQ</a>.</p><p>Vous pouvez tester votre péripérique en utilisant un des programmes listé à la section <span class="emphasis"><em>Video: TV and PVR/DVR</em></span> de <a class="ulink" href="http://www.exploits.org/v4l/" target="_top">cette page web</a>.
+</p><p>
+Les modules v4l2 fonctionneront aussi avec VLC.
+</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2581281"></a>
+Diffuser avec VLC
+</h4></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+Vous devez ajouter <span class="command"><strong>--enable-v4l</strong></span> a votre <span class="command"><strong>./configure</strong></span> pour utiliser cette fonctionnalité.
+</p></div><pre class="screen">
+
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv --color v4l:/dev/video:norm=secam:frequency=543250:size=640x480:channel=0:adev=/dev/dsp:audio=0
+--sout '#transcode{vcodec=mp4v,acodec=mpga,vb=3000,ab=256,venc=ffmpeg{keyint=80,hurry-up,vt=800000},deinterlace}:std{access=udp,mux=ts,dst=239.255.12.13}' --ttl 12</code></strong>
+</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>You can find all transcode options on this page : <a class="xref" href="ch03.html" title="Chapter 3.  Utilisation avancée du flux de sortie en ligne de commande">
+Utilisation avancée du flux de sortie en ligne de commande</a> .</p></div><p>où :
+</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">/dev/video</code>
+ est le péripérique correspondant à votre carte d'acquisition ou a votre webcam,
+</p></li><li><p><span class="emphasis"><em>norm=secam</em></span> est le nom du standard utilisé par le signal analogique (les valeurs possibles sont pal, secam et ntsc),</p></li><li><p><span class="emphasis"><em>frequency=543250</em></span> est la fréquence de la chaine en kHz (<span class="emphasis"><em>Attention !</em></span> pour vlc &lt; 0.6.1, Frequency est la fréquence de la chaine en MHz multipliée par 16),
+</p></li><li><p>
+<span class="emphasis"><em>size=640x480</em></span> est la taille de la vidéo que vous souhaitez (vous pouvez aussi mettre une taille standard : <span class="emphasis"><em>subqcif</em></span> (128x96),
+<span class="emphasis"><em>qsif</em></span> (160x120), <span class="emphasis"><em>qcif</em></span>
+(176x144), <span class="emphasis"><em>sif</em></span> (320x240), <span class="emphasis"><em>cif</em></span>
+(352x288) ou <span class="emphasis"><em>vga</em></span> (640x480)),
+</p></li><li><p><span class="emphasis"><em>channel=0</em></span> est le numéro du cannal (généralement 0 est pour le tunner, 1 pour l'entrée composite et 2 pour l'entée svideo),
+
+</p></li><li><p><span class="emphasis"><em>adev=/dev/dsp</em></span> est le péripérique audio,
+</p></li><li><p><span class="emphasis"><em>audio=1</em></span> est le nombre de cannaux audio (généralement 0 est pour mono et 1 pour stéréo),
+</p></li><li><p><span class="emphasis"><em>vcodec=mp4v</em></span> 
+correspond au format video que vous souhaitez utiliser
+(<span class="emphasis"><em>mp4v</em></span> correspond à MPEG-4, <span class="emphasis"><em>mpgv</em></span> correspond à 
+MPEG-1, et il y a aussi
+<span class="emphasis"><em>h263</em></span>, <span class="emphasis"><em>DIV1</em></span>,
+<span class="emphasis"><em>DIV2</em></span>, <span class="emphasis"><em>DIV3</em></span>,
+<span class="emphasis"><em>I420</em></span>, <span class="emphasis"><em>I422</em></span>,
+<span class="emphasis"><em>I444</em></span>, <span class="emphasis"><em>RV24</em></span>,
+<span class="emphasis"><em>YUY2</em></span>),</p></li><li><p><span class="emphasis"><em>acodec=mpga</em></span> correspond au format audio que vous souhaitez utiliser (<span class="emphasis"><em>mpga</em></span> correspond au MPEG audio layer 2,  <span class="emphasis"><em>a52</em></span> corresponf à A52 i.e. son AC3),
+</p></li><li><p><span class="emphasis"><em>vb=3000</em></span> est le débit de la vidéo en Kbit/s
+</p></li><li><p><span class="emphasis"><em>ab=256</em></span> est la débit de l'audio en Kbit/s
+</p></li><li><p><span class="emphasis"><em>venc=ffmpeg</em></span> vous permet de choisir l'encodeur a utiliser avec : </p><div class="itemizedlist"><ul type="circle"><li><p><span class="emphasis"><em>keyint=80</em></span> correspond au nombre maximum d'images entre 2 images clefs</p></li><li><p><span class="emphasis"><em>hurry-up</em></span> permet a l'encodeur de réduire la qualité du flux si le processeur ne parvient pas a tenir le rythme lors de l'encodage</p></li><li><p><span class="emphasis"><em>vt=800000</em></span> est la tolérance en Kbit/s pour le débit de la vidéo en sortie</p></li></ul></div></li><li><p><span class="emphasis"><em>deinterlace</em></span> dit a VLC de désentrelacer à la volée,
+</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+est soit :
+
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+l'adresse IP de la machine vers laquelle vous voulez émettre en
+unicast;
+</p></li><li><p>
+ou le nom DNS de la machine vers laquelle vous vous voulez émettre
+en unicast;
+
+</p></li><li><p>
+ou une adresse IP multicast.</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+est la valeur du TTL (Time To Live) de vos paquets IP (ce qui
+signifie que le flux peut traverser 11 routeurs maximum).</p></li></ul></div></div></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2581616"></a>Diffuser avec Directshow</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>C'est possible uniquement avec Windows</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2581625"></a>Installez les pilotes de votre périphérique</h3></div></div></div><p>Vous devez installer votre périphérique sous Windows avec les pilotes appropriés. Rien d'autre n'est nécessaire.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2581639"></a>Diffuser avec VLC an ligne de commande</h3></div></div></div><pre class="screen"><code class="prompt">% </code><strong class="userinput"><code>C:\Program Files\VideoLAN\VLC\vlc.exe -vvv -I rc --ttl 12 dshow:// vdev="VGA USB Camera" adev="USB Camera" size="640x480" --sout=#std{mux=ts,access=udp,dst=239.255.42.12}</code></strong></pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Vous devez préciser le chemin complet vers VLC ou éxecuter la commande depuis le bon répertoire.</p></div><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>vvv</em></span> permet d'activer l'affichage de tous les messages</p></li><li><p><span class="emphasis"><em>rc</em></span> permet d'activer l'interface de controle à distance (console MS/DOS)</p></li><li><p><span class="emphasis"><em>12</em></span> est la valeur du TTL (Time To Live) de vos paquets IP (ce qui veut dire que le flux pourra traverser 11 routeurs),
+</p></li><li><p><span class="emphasis"><em>vdev="VGA USB Camera"</em></span> est le nom du périphérique que DirectShow utilisera (ceci n'est qu'un exemple),
+</p></li><li><p><span class="emphasis"><em>adev="USB Camera"</em></span> est le nom du périphérique audio,
+</p></li><li><p><span class="emphasis"><em>size=640x480</em></span> est la taille de la vidéo que vous souhaitez (vous pouvez aussi mettre une taille standard : <span class="emphasis"><em>subqcif</em></span> (128x96),
+<span class="emphasis"><em>qsif</em></span> (160x120), <span class="emphasis"><em>qcif</em></span>
+(176x144), <span class="emphasis"><em>sif</em></span> (320x240), <span class="emphasis"><em>cif</em></span>
+(352x288) ou <span class="emphasis"><em>vga</em></span> (640x480)),
+</p></li><li><p><span class="emphasis"><em>239.255.42.12</em></span> est soit :
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+des adresses IP des machines vers lequelles vous voulez difuser en unicast
+</p></li><li><p>
+ou des adresses DNS des machines vers lequelles vous voulez difuser en unicast
+</p></li><li><p>
+ou une adresse IP multicast.</p></li></ul></div></li></ul></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 9. 
+Diffuser une chaine DVB (Satellite ou TNT)
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 11. 
+Diffusion sur IPv6
+</td></tr></table></div></body></html>

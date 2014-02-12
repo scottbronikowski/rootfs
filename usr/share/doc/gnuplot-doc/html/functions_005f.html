@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<title>functions_ - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="palette.html#palette" title="palette">
+<link rel="prev" href="defined_005f.html#defined_005f" title="defined_">
+<link rel="next" href="file.html#file" title="file">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="functions_"></a>
+<a name="functions_005f"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="file.html#file">file</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="defined_005f.html#defined_005f">defined_</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="palette.html#palette">palette</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.53.3 functions</h5>
+
+<!-- ?commands set palette functions -->
+<!-- ?set palette functions -->
+<!-- ?palette functions -->
+<p>Use `set palette functions &lt;Rexpr&gt;, &lt;Gexpr&gt;, &lt;Bexpr&gt;` to define three formulae
+for the R(gray), G(gray) and B(gray) mapping.  The three formulae may depend
+on the variable `gray` which will take values in [0,1] and should also
+produce values in [0,1]. 
+Please note that &lt;Rexpr&gt; might be a formula for the H-value if HSV color
+space has been chosen (same for all other formulae and color spaces).
+
+   <p>Examples:
+
+   <p>To produce a full color palette use:
+<pre class="example">           set palette model HSV functions gray, 1, 1
+     
+</pre>
+   <p>A nice black to gold palette:
+<pre class="example">           set palette model XYZ functions gray**0.35, gray**0.5, gray**0.8
+     
+</pre>
+   <p>A gamma-corrected black and white palette
+<pre class="example">           gamma = 2.2
+           color(gray) = gray**(1./gamma)
+           set palette model RGB functions color(gray), color(gray), color(gray)
+     
+</pre>
+   </body></html>
+

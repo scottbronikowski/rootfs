@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>parametric_ - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="output.html#output" title="output">
+<link rel="next" href="plot_005f.html#plot_005f" title="plot_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="parametric_"></a>
+<a name="parametric_005f"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="plot_005f.html#plot_005f">plot_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="output.html#output">output</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.50 parametric</h4>
+
+<!-- ?commands set parametric -->
+<!-- ?commands unset parametric -->
+<!-- ?commands show parametric -->
+<!-- ?set parametric -->
+<!-- ?unset parametric -->
+<!-- ?show parametric -->
+<p><a name="index-parametric-517"></a><a name="index-parametric-518"></a>
+
+   <p><a name="index-noparametric-519"></a>
+The `set parametric` command changes the meaning of `plot` (`splot`) from
+normal functions to parametric functions.  The command `unset parametric`
+restores the plotting style to normal, single-valued expression plotting.
+
+   <p>Syntax:
+<pre class="example">           set parametric
+           unset parametric
+           show parametric
+     
+</pre>
+   <p>For 2D plotting, a parametric function is determined by a pair of parametric
+functions operating on a parameter.  An example of a 2D parametric function
+would be `plot sin(t),cos(t)`, which draws a circle (if the aspect ratio is
+set correctly&mdash;see <a href="size.html#size">size</a>).  `gnuplot` will display an error message if
+both functions are not provided for a parametric `plot`.
+
+   <p>For 3D plotting, the surface is described as x=f(u,v), y=g(u,v), z=h(u,v). 
+Therefore a triplet of functions is required.  An example of a 3D parametric
+function would be `cos(u)*cos(v),cos(u)*sin(v),sin(u)`, which draws a sphere. 
+`gnuplot` will display an error message if all three functions are not
+provided for a parametric `splot`.
+
+   <p>The total set of possible plots is a superset of the simple f(x) style plots,
+since the two functions can describe the x and y values to be computed
+separately.  In fact, plots of the type t,f(t) are equivalent to those
+produced with f(x) because the x values are computed using the identity
+function.  Similarly, 3D plots of the type u,v,f(u,v) are equivalent to
+f(x,y).
+
+   <p>Note that the order the parametric functions are specified is xfunction,
+yfunction (and zfunction) and that each operates over the common parametric
+domain.
+
+   <p>Also, the `set parametric` function implies a new range of values.  Whereas
+the normal f(x) and f(x,y) style plotting assume an xrange and yrange (and
+zrange), the parametric mode additionally specifies a trange, urange, and
+vrange.  These ranges may be set directly with <a href="trange.html#trange">trange</a>, <a href="urange.html#urange">urange</a>,
+and <a href="vrange.html#vrange">vrange</a>, or by specifying the range on the `plot` or `splot`
+commands.  Currently the default range for these parametric variables is
+[-5:5].  Setting the ranges to something more meaningful is expected.
+
+   </body></html>
+

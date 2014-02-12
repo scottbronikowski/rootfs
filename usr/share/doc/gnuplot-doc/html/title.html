@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>title - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plot.html#plot" title="plot">
+<link rel="prev" href="iteration_005f.html#iteration_005f" title="iteration_">
+<link rel="next" href="with.html#with" title="with">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="title"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="with.html#with">with</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="iteration_005f.html#iteration_005f">iteration_</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plot.html#plot">plot</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.14.8 title</h4>
+
+<!-- ?commands plot title -->
+<!-- ?commands splot title -->
+<!-- ?plot title -->
+<!-- ?splot title -->
+<p><a name="index-columnheader-357"></a>
+A line title for each function and data set appears in the key, accompanied
+by a sample of the line and/or symbol used to represent it.  It can be
+changed by using the <a href="title.html#title">title</a> option.
+
+   <p>Syntax:
+<pre class="example">           title &lt;text&gt; | notitle [&lt;ignored text&gt;]
+           title columnheader | title columnheader(N)
+     
+</pre>
+   <p>where &lt;text&gt; must either be a quoted string or a string variable. 
+The quotes will not be shown in the key.  A special character may be given as
+a backslash followed by its octal value ("\345").  The tab character "\t" is
+understood.  Note that backslash processing occurs only for strings enclosed
+in double quotes&mdash;use single quotes to prevent such processing.  The newline
+character "\n" is not processed in key entries in either type of string.
+
+   <p>There is also an option that will interpret the first entry in a column of
+input data (i.e. the column header) as a text field, and use it as the key
+title.  See `datastrings`.  This can be made the default by speicifying
+`set key autotitle columnhead`.
+
+   <p>The line title and sample can be omitted from the key by using the keyword
+`notitle`.  A null title (`title &rdquo;`) is equivalent to `notitle`.  If only
+the sample is wanted, use one or more blanks (`title ' '`).  If `notitle`
+is followed by a string this string is ignored.
+
+   <p>If `key autotitles` is set (which is the default) and neither <a href="title.html#title">title</a> nor
+`notitle` are specified the line title is the function name or the file name as
+it appears on the `plot` command.  If it is a file name, any datafile modifiers
+specified will be included in the default title.
+
+   <p>The layout of the key itself (position, title justification, etc.) can be
+controlled by `set key`.  Please see `set key` for details.
+
+   <p>Examples:
+
+   <p>This plots y=x with the title 'x':
+<pre class="example">           plot x
+     
+</pre>
+   <p>This plots x squared with title "x^2" and file "data.1" with title
+"measured data":
+<pre class="example">           plot x**2 title "x^2", 'data.1' t "measured data"
+     
+</pre>
+   <p>This puts an untitled circular border around a polar graph:
+<pre class="example">           set polar; plot my_function(t), 1 notitle
+     
+</pre>
+   <p>Plot multiple columns of data, each of which contains its own title in the file
+<pre class="example">           plot for [i=1:4] 'data' using i title columnhead
+     
+</pre>
+   </body></html>
+

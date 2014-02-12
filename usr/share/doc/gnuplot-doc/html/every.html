@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>every - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="data.html#data" title="data">
+<link rel="prev" href="binary_005fgeneral.html#binary_005fgeneral" title="binary_general">
+<link rel="next" href="example_005fdatafile.html#example_005fdatafile" title="example_datafile">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="every"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="example_005fdatafile.html#example_005fdatafile">example_datafile</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="binary_005fgeneral.html#binary_005fgeneral">binary_general</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="data.html#data">data</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.14.2.3 every</h5>
+
+<!-- ?commands plot datafile every -->
+<!-- ?plot datafile every -->
+<!-- ?plot every -->
+<!-- ?data-file every -->
+<!-- ?datafile every -->
+<p><a name="index-every-333"></a>
+The <a href="every.html#every">every</a> keyword allows a periodic sampling of a data set to be plotted.
+
+   <p>In the discussion a "point" is a datum defined by a single record in the
+file; "block" here will mean the same thing as "datablock" (see `glossary`).
+
+   <p>Syntax:
+<pre class="example">           plot 'file' every {&lt;point_incr&gt;}
+                               {:{&lt;block_incr&gt;}
+                                 {:{&lt;start_point&gt;}
+                                   {:{&lt;start_block&gt;}
+                                     {:{&lt;end_point&gt;}
+                                       {:&lt;end_block&gt;}}}}}
+     
+</pre>
+   <p>The data points to be plotted are selected according to a loop from
+&lt;`start_point`&gt; to &lt;`end_point`&gt; with increment &lt;`point_incr`&gt; and the
+blocks according to a loop from &lt;`start_block`&gt; to &lt;`end_block`&gt; with
+increment &lt;`block_incr`&gt;.
+
+   <p>The first datum in each block is numbered '0', as is the first block in the
+file.
+
+   <p>Note that records containing unplottable information are counted.
+
+   <p>Any of the numbers can be omitted; the increments default to unity, the start
+values to the first point or block, and the end values to the last point or
+block.  If <a href="every.html#every">every</a> is not specified, all points in all lines are plotted.
+
+   <p>Examples:
+<pre class="example">           every :::3::3    # selects just the fourth block ('0' is first)
+           every :::::9     # selects the first 10 blocks
+           every 2:2        # selects every other point in every other block
+           every ::5::15    # selects points 5 through 15 in each block
+     
+</pre>
+   <p>See
+<a href="http://www.gnuplot.info/demo/simple.html">simple plot demos (simple.dem)</a>
+,
+<a href="http://www.gnuplot.info/demo/surface1.html">Non-parametric splot demos</a>
+, and
+<a href="http://gnuplot.sourceforge.net/demo/surface2.html">Parametric splot demos</a>
+.
+
+   </body></html>
+

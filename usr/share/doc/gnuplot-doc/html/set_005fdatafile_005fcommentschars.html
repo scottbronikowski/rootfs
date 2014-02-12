@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+<title>set_datafile_commentschars - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="datafile.html#datafile" title="datafile">
+<link rel="prev" href="set_005fdatafile_005fseparator.html#set_005fdatafile_005fseparator" title="set_datafile_separator">
+<link rel="next" href="set_005fdatafile_005fbinary.html#set_005fdatafile_005fbinary" title="set_datafile_binary">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="set_datafile_commentschars"></a>
+<a name="set_005fdatafile_005fcommentschars"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="set_005fdatafile_005fbinary.html#set_005fdatafile_005fbinary">set_datafile_binary</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="set_005fdatafile_005fseparator.html#set_005fdatafile_005fseparator">set_datafile_separator</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="datafile.html#datafile">datafile</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.16.5 set datafile commentschars</h5>
+
+<!-- ?set datafile commentschars -->
+<p><a name="index-commentschars-425"></a>
+The `set datafile commentschars` command allows you to tell `gnuplot` what
+characters are used in a data file to denote comments.  Gnuplot will ignore
+rest of the line behind the specified characters if either of them is the
+first non-blank character on the line.
+
+   <p>Syntax:
+<pre class="example">           set datafile commentschars {"&lt;string&gt;"}
+           show datafile commentschars
+           unset commentschars
+     
+</pre>
+   <p>Default value of the string is "#!" on VMS and "#" otherwise.
+
+   <p>Then, the following line in a data file is completely ignored
+<pre class="example">         # 1 2 3 4
+</pre>
+   <p>but the following
+<pre class="example">         1 # 3 4
+</pre>
+   <p>produces rather unexpected plot unless
+<pre class="example">         set datafile missing '#'
+</pre>
+   <p>is specified as well.
+
+   <p>Example:
+<pre class="example">           set datafile commentschars "#!%"
+     
+</pre>
+   </body></html>
+

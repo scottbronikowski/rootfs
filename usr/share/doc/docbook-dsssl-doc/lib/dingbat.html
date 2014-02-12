@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>dingbat</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="DSSSL Library Reference"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Miscellaneous"
+HREF="r300.htm"><LINK
+REL="PREVIOUS"
+TITLE="measurement-to-length"
+HREF="measurement-to-length.html"><LINK
+REL="NEXT"
+TITLE="nth-node"
+HREF="nth-node.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>DSSSL Library Reference: Part of the Modular DocBook Stylesheet distribution</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="measurement-to-length.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="nth-node.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="DINGBAT"
+></A
+>dingbat</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1578"
+></A
+><H2
+>Name</H2
+>dingbat&nbsp;--&nbsp;Map dingbat names to Unicode characters</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1581"
+></A
+><H2
+>Synopsis</H2
+><PRE
+CLASS="SYNOPSIS"
+>(dingbat usrname)</PRE
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1584"
+></A
+><H2
+>Description</H2
+><P
+>Map a dingbat name to the appropriate Unicode character.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1587"
+></A
+><H2
+>Author</H2
+><P
+>Norman Walsh, &lt;ndw@nwalsh.com&gt;</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1590"
+></A
+><H2
+>Source Code</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>(define (dingbat usrname)
+  ;; Map dingbat names to Unicode characters
+  ;; Print dingbats and other characters selected by name
+  (let ((name (case-fold-down usrname)))
+    (case name
+      ;; For backward compatibility
+      (("box") 			"\white-square;")
+      (("checkbox")		"\white-square;")
+      ;; \check-mark prints the wrong symbol (in Jade 0.8 RTF backend)
+      (("check")		"\heavy-check-mark;") 
+      (("checkedbox")		"\ballot-box-with-check;")
+      (("dash")			"\em-dash;")
+      (("copyright")		"\copyright-sign")
+
+      ;; Straight out of Unicode
+      (("raquo")                "\U-00BB;")
+      (("laquo")                "\U-00AB;")
+      (("rsaquo")               "\U-203A;")
+      (("lsaquo")               "\U-2039;")
+      (("lsquo")		"\U-2018;")
+      (("rsquo")		"\U-2019;")
+      (("ldquo")		"\U-201C;")
+      (("rdquo")		"\U-201D;")
+      (("ldquor")		"\U-201E;")
+      (("rdquor")		"\U-201D;")
+      (("en-dash")		"\en-dash;")
+      (("em-dash")		"\em-dash;")
+      (("en-space")		"\U-2002;")
+      (("em-space")		"\U-2003;")
+      (("bullet")		"\bullet;")
+      (("black-square")		"\black-square;")
+      (("white-square")		"\white-square;")
+      ;; \ballot-box name doesn't work (in Jade 0.8 RTF backend)
+      ;; and \white-square looks better than \U-2610; anyway
+      (("ballot-box")		"\white-square;")
+      (("ballot-box-with-check")	"\ballot-box-with-check;")
+      (("ballot-box-with-x")	"\ballot-box-with-x;")
+      ;; \check-mark prints the wrong symbol (in Jade 0.8 RTF backend)
+      (("check-mark")		"\heavy-check-mark;") 
+      ;; \ballot-x prints out the wrong symbol (in Jade 0.8 RTF backend)
+      (("ballot-x")		"\heavy-check-mark;")
+      (("copyright-sign")	"\copyright-sign;")
+      (("registered-sign")	"\registered-sign;")
+      (else "\bullet;"))))</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="measurement-to-length.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="nth-node.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>measurement-to-length</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="r300.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>nth-node</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

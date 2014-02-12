@@ -1,0 +1,459 @@
+% \CheckSum{278}
+% \iffalse
+% ======================================================================
+% scrtime.dtx 
+% Copyright (c) Markus Kohm, 1995-2009
+%
+% This file is part of the LaTeX2e KOMA-Script bundle.
+%
+% This work may be distributed and/or modified under the conditions of
+% the LaTeX Project Public License, version 1.3c of the license.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX 
+% version 2005/12/01 or later and of this work.
+%
+% This work has the LPPL maintenance status "author-maintained".
+%
+% The Current Maintainer and author of this work is Markus Kohm.
+%
+% This work consists of all files listed in manifest.txt.
+% ----------------------------------------------------------------------
+% scrtime.dtx
+% Copyright (c) Markus Kohm, 1995-2009
+%
+% Dieses Werk darf nach den Bedingungen der LaTeX Project Public Lizenz,
+% Version 1.3c, verteilt und/oder veraendert werden.
+% Die neuste Version dieser Lizenz ist
+%   http://www.latex-project.org/lppl.txt
+% und Version 1.3c ist Teil aller Verteilungen von LaTeX
+% Version 2005/12/01 oder spaeter und dieses Werks.
+%
+% Dieses Werk hat den LPPL-Verwaltungs-Status "author-maintained"
+% (allein durch den Autor verwaltet).
+%
+% Der Aktuelle Verwalter und Autor dieses Werkes ist Markus Kohm.
+% 
+% Dieses Werk besteht aus den in manifest.txt aufgefuehrten Dateien.
+% ======================================================================
+% \fi
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \iffalse
+%%% From File: scrtime.dtx
+%<*dtx>
+\ProvidesFile{scrtime.dtx}
+%</dtx>
+%<scrtime|scrdate>\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+%<driver>\ProvidesFile{scrtime.drv}
+%<scrtime>\ProvidesPackage{scrtime}
+%<scrdate>\ProvidesPackage{scrdate}
+                [2009/01/01 v1.1p LaTeX2e KOMA-Script
+%<scrtime|scrdate>                 package]
+%<*driver>
+                 driver]
+\documentclass{scrdoc}
+\usepackage[german,english]{babel}
+\usepackage[latin1]{inputenc}
+\CodelineIndex
+\RecordChanges
+\GetFileInfo{scrtime.dtx}
+\title{The \textsf{KOMA}-timedate-bundle\thanks{This file has
+    version number \fileversion, last revised \filedate.}}
+\author{Markus Kohm}
+\date{\filedate}
+\begin{document}
+  \maketitle
+  \begin{abstract}
+    This bundle includes a package \texttt{scrtime} defining some macros to
+    handle compilation-time.  It's a very simple implementation similar to
+    \texttt{time.sty}. I've tried to use no additional register.
+
+    The second package \texttt{scrdate} defines some macros to handle the name
+    of the day!
+  \end{abstract}
+  \tableofcontents
+  \DocInput{scrtime.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \tableofcontents
+%
+% \section{Introduction}
+%
+% See the \KOMAScript{} guide for informations abouthow to use the package.
+%
+% \StopEventually{\PrintIndex\PrintChanges}
+%
+% \section{Implementation}
+%
+% \subsection{Time-macros}
+%
+%    \begin{macrocode}
+%<*scrtime>
+%    \end{macrocode}
+%
+% \subsubsection{Options}
+% \changes{v1.1b}{1995/02/15}{Options \texttt{12h} and \texttt{24h} added.}
+% There are two the two Options |24h| and |12h|. We need a switch to
+% distinguish.
+%    \begin{macrocode}
+\newif\if@Hxii
+%    \end{macrocode}
+%
+% So the Options are simple.
+%    \begin{macrocode}
+\DeclareOption{12h}{\@Hxiitrue}
+\DeclareOption{24h}{\@Hxiifalse}
+%    \end{macrocode}
+%
+% Default is 24h-mode.
+%    \begin{macrocode}
+\ExecuteOptions{24h}
+\ProcessOptions
+%    \end{macrocode}
+%
+% \subsubsection{Macros}
+% We use |\@tempcnta| and |\@tempcntb| but we know, that this is not
+% a very good idea.
+%
+%  \begin{macro}{\thistime}
+% \changes{v1.1b}{1995/02/15}{{\cmd\thistime*} added.}
+% \changes{v1.1b}{1995/02/15}{{\cmd\thistime} works.}
+% First we have to decide, is it a star-version ore not.
+%    \begin{macrocode}
+\def\thistime{%
+  \@ifstar
+    {\let\@tempif\iffalse\@thistime}
+    {\let\@tempif\iftrue\@thistime}}
+%    \end{macrocode}
+% Know we have to calculate the hours and minutes. |\@tempcnta| are the
+% hours and |\@tempcntb| are the minutes.
+%    \begin{macrocode}
+\newcommand*{\@thistime}[1][:]{%
+  \begingroup
+    \@tempcnta\time\divide\@tempcnta60\multiply\@tempcnta60
+    \@tempcntb\time\advance\@tempcntb-\@tempcnta
+    \divide\@tempcnta60
+%    \end{macrocode}
+% If we use 12h-mode, we have to cut the houres.
+% \changes{v1.1d}{1996/01/14}{Space added at \cs{@thistime} between -12
+%                             and \cs{fi} (Martin Schroeder).}
+%    \begin{macrocode}
+    \if@Hxii\ifnum\@tempcnta>12 \advance\@tempcnta-12 \fi\fi
+%    \end{macrocode}
+% Know we have to compose the value. If the minutes are less than 10
+% maybe there has to be an additional 0.
+%    \begin{macrocode}
+    \the\@tempcnta{#1}\@tempif\ifnum\@tempcntb<10 0\fi\fi\the\@tempcntb%
+  \endgroup}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\settime}
+% \changes{v1.1b}{1995/02/15}{{\cmd\settime} redefines {\cmd\@thistime}}
+% \changes{v1.1c}{1995/05/24}{missing macrocode-environment inserted}
+% We simply have to set |\thistime|.
+%    \begin{macrocode}
+\newcommand*{\settime}[1]{\renewcommand*{\@thistime}[1][]{#1}}
+%    \end{macrocode}
+%  \end{macro}
+%
+%
+% That's it:
+%    \begin{macrocode}
+%</scrtime>
+%    \end{macrocode}
+%
+%
+% \subsection{Date-macros}
+%
+%    \begin{macrocode}
+%<*scrdate>
+%    \end{macrocode}
+%
+% \changes{v1.1a}{1995/02/12}{Changed simply all but the user-interface.}
+% To handle them, we need counters. We use the same as in \texttt{scrtime}.
+%
+%  \begin{macro}{\todaysname}
+% This is not so easy. First we have to calculate how many days they are
+% from 1st January 1980.
+%    \begin{macrocode}
+\newcommand\todaysname{%
+  \begingroup%
+  \@tempcnta=\year
+  \@tempcntb=1 % 1. Januar 1980 war ein Dienstag
+  \ifnum\@tempcnta<1980 unknown\else%
+    \advance\@tempcnta by-1980%
+    \@whilenum\@tempcnta>3\do%
+    {\advance\@tempcntb by5\advance\@tempcnta by-4}%
+    \ifnum\@tempcnta=0%
+      \ifnum\month>2\advance \@tempcntb by1\fi%
+    \else%
+      \advance\@tempcntb by\@tempcnta%
+      \advance\@tempcntb by1
+    \fi%
+    \ifcase\month\or\or\advance\@tempcntb3%  Jan =  28 + 3
+                    \or\advance\@tempcntb3% +Feb =  56 + 3
+                    \or\advance\@tempcntb6% +Mar =  84 + 6
+                    \or\advance\@tempcntb1% +Apr = 119 + 1
+                    \or\advance\@tempcntb4% +May = 147 + 4
+                    \or\advance\@tempcntb6% +Jun = 175 + 6
+                    \or\advance\@tempcntb2% +Jul = 210 + 2
+                    \or\advance\@tempcntb5% +Aug = 238 + 5
+                    \or%                    +Sep = 273 + 0
+                    \or\advance\@tempcntb3% +Oct = 301 + 3
+                    \or\advance\@tempcntb5% +Nov = 329 + 5
+    \fi%
+    \advance\@tempcntb by\day%
+    \advance\@tempcntb by-1% die Zaehlung beginnt bei 0
+    \@whilenum\@tempcntb>6\do%
+    {\advance\@tempcntb by-7}%
+%    \end{macrocode}
+% Now we can say which day it is.
+%    \begin{macrocode}
+    \@dayname{\@tempcntb}%
+  \fi\endgroup}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\nameday}
+% We simply have to redefine |\todaysname|
+%    \begin{macrocode}
+\newcommand\nameday[1]{\renewcommand\todaysname{#1}}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\newdaylanguage}
+% We write a macro to define the name of the days.
+% \changes{v1.1e}{1996/12/07}{Bernd's expandafter-trick to not define
+%                             a new language.}
+%  \begin{macro}{\scrdate@languagenamewarning}
+% But before this, we have to define a once only warning.
+%    \begin{macrocode}
+\newcommand*\scrdate@languagenamewarning{
+  \PackageWarningNoLine{scrdate}
+    {\string\languagename\space not
+     defined, using \string\language.\MessageBreak
+     This may result in use of wrong language!\MessageBreak
+     You should use a compatible language
+     package\MessageBreak
+     (e.g. `Babel', `german', `french', ...)}
+  \let\scrdate@languagenamewarning\relax}
+%    \end{macrocode}
+%  \end{macro}
+%    \begin{macrocode}
+\newcommand\newdaylanguage[8]{%
+%    \end{macrocode}
+% First we check, if the language is defined at the format, the user uses.
+% If it is not defined, we do not define the name of the days and warn.
+%    \begin{macrocode}
+  \begingroup\expandafter\expandafter\expandafter\endgroup
+  \expandafter\ifx\csname l@#1\endcsname\relax
+    \PackageWarningNoLine{scrdate}{Language #1\space not defined.\MessageBreak
+                                  \protect\dayname@#1\space skipped!}
+%    \end{macrocode}
+% \changes{v1.1c}{1995/05/24}{missing \cs{end\{macrocode\}} added.}
+% If it is defined, we define the name-selection-macro
+% |\dayname@|\emph{language}.
+% First we define the new macro |\dayname@|\emph{language}:
+%    \begin{macrocode}
+  \else
+    \@namedef{dayname@#1}##1{%
+      \begingroup%
+        \@tempcnta ##1%
+        \ifcase\@tempcnta%
+          #2\or #3\or #4\or #5\or #6\or #7\or #8\fi\endgroup%
+    }
+%    \end{macrocode}
+% Then we define, what to do at |\begin{document}|:
+%    \begin{macrocode}
+    \AtBeginDocument{
+%    \end{macrocode}
+% There we first have to test, if |\date|\emph{language} is defined
+% (e.g. using |german.sty|). If not, we have to warn once more.
+% \changes{v1.1e}{1996/12/07}{Bernd's expandafter-trick to not define
+%                             new \cs{date}\emph{language}.}
+%    \begin{macrocode}
+      \begingroup\expandafter\expandafter\expandafter\endgroup
+      \expandafter\ifx\csname date#1\endcsname\relax
+        \PackageWarningNoLine{scrdate}
+                             {\protect\date#1\space not defined.\MessageBreak
+                              \protect\todaysname maybe can't use
+                              \protect\dayname@#1!}
+%    \end{macrocode}
+% But if it is defined, we can use it
+%    \begin{macrocode}
+      \else
+%    \end{macrocode}
+% There we first save |\date|\emph{language} as |\D@date|\emph{language}.
+% This is a bit tricky, but I think, you'll understand it.
+%    \begin{macrocode}
+        \expandafter\let\csname D@date#1\expandafter\endcsname
+                        \csname date#1\endcsname
+%    \end{macrocode}
+% Now we redefine |\date|\emph{language}. It first defines |\@dayname| and
+% then calls saved macro. If you've understand the definition before, you'll
+% understand this tricky one, too.
+%    \begin{macrocode}
+        \@namedef{date#1}{%
+          \expandafter\let\expandafter\@dayname\csname dayname@#1\endcsname
+          \@nameuse{D@date#1}}%
+%    \end{macrocode}
+% Last we have to select this new |\date|\emph{language}.
+% \changes{v1.1j}{2000/01/20}{use of \cs{languagename} if defined}
+%    \begin{macrocode}
+        \@ifundefined{languagename}{
+          \scrdate@languagenamewarning
+          \ifnum\language=\@nameuse{l@#1}
+            \@nameuse{date#1}
+          \fi}{
+          \@ifundefined{date\languagename}
+            {}
+            {\@nameuse{date\languagename}}
+        }
+      \fi
+    }
+  \fi
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\@dayname}
+% This should be named selecting the language. Since I changed the definitions
+% |german.sty| and equal may be loaded before or after |scrdate.sty| or not.
+%
+% First we define the usual languages using |\newdaylanguage|:
+%  \begin{macro}{\dayname@german}
+%    \begin{macrocode}
+\newdaylanguage{german}{Montag}{Dienstag}{Mittwoch}
+               {Donnerstag}{Freitag}{Samstag}{Sonntag}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\dayname@ngerman}
+% \changes{v1.1i}{1999/10/09}{new language ``ngerman''.}
+%    \begin{macrocode}
+\newdaylanguage{ngerman}{Montag}{Dienstag}{Mittwoch}
+               {Donnerstag}{Freitag}{Samstag}{Sonntag}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\dayname@english}
+% \changes{v1.1g}{1997/06/21}{correct name is ``tuesday''.}
+%    \begin{macrocode}
+\newdaylanguage{english}{Monday}{Tuesday}{Wednesday}
+               {Thursday}{Friday}{Saturday}{Sunday}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\dayname@USenglish}
+% \changes{v1.1g}{1997/06/21}{correct name is ``tuesday''.}
+%    \begin{macrocode}
+\newdaylanguage{USenglish}{Monday}{Tuesday}{Wednesday}
+               {Thursday}{Friday}{Saturday}{Sunday}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\dayname@french}
+%    \begin{macrocode}
+\newdaylanguage{french}{Lundi}{Mardi}{Mercredi}
+               {Jeudi}{Vendredi}{Samedi}{Dimanche}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\dayname@italian}
+% \changes{v1.1f}{1997/06/06}{New (thanks to Lorenzo M.\ Catucci)}
+%    \begin{macrocode}
+\newdaylanguage{italian}{Luned\`\i}{Marted\`\i}{Mercoled\`\i}
+               {Gioved\`\i}{Venerd\`\i}{Sabato}{Domenica}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\dayname@spanish}
+% \changes{v1.1h}{1997/07/26}{New (thanks to Ralph J.\ Hangleiter)}
+%    \begin{macrocode}
+\newdaylanguage{spanish}{Lunes}{Martes}{Mi\'ercoles}
+               {Jueves}{Viernes}{S\'abado}{Domingo}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\dayname@croatian}
+% \changes{v1.1l}{2001/10/05}{New (thanks to Branka Lon\v{c}arevi\'{c})}
+%  \begin{macrocode}
+\newdaylanguage{croatian}{Ponedjeljak}{Utorak}{Srijeda}
+               {\v{C}etvrtak}{Petak}{Subota}{Nedjelja}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\dayname@dutch}
+%    \changes{v1.1m}{2002/02/02}{New (thanks to Henk Jongbloets)}
+%    \changes{v1.1p}{2009/01/01}{fixed to upper case}
+%    \begin{macrocode}
+\newdaylanguage{dutch}{Maandag}{Dinsdag}{Woensdag}
+               {Donderdag}{Vrijdag}{Zaterdag}{Zondag}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\dayname@finish}
+%    \changes{v1.1n}{2005/02/07}{New (thanks to Hannu V\"ais\"anen)}
+%    \begin{macrocode}
+\newdaylanguage{finnish}{Maanantai}{Tiistai}{Keskiviikko}
+               {Torstai}{Perjantai}{Lauantai}{Sunnuntai}
+%    \end{macrocode}
+%  \end{macro}
+%
+% \begin{macro}{\dayname@norsk}
+%   \changes{v1.1p}{2009/01/01}{New (thank to Sveinung Heggen)}
+%    \begin{macrocode}
+\newdaylanguage{norsk}{Mandag}{Tirsdag}{Onsdag}
+               {Torsdag}{Fredag}{L\o{}rdag}{S\o{}ndag}
+%    \end{macrocode}
+% \end{macro}
+%
+% If there are no language-definitions, we simply want the US-english names
+% of the days.
+% \changes{v1.1g}{1997/06/21}{correct name is ``tuesday''.}
+%    \begin{macrocode}
+\def\@dayname#1{%
+  \begingroup%
+    \@tempcnta #1%
+    \ifcase\@tempcnta%
+      Monday\or Tuesday\or Wednesday\or Thursday\or
+      Friday\or Saturday\or Sunday\fi\endgroup%
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+% Last but not least file \texttt{scrdate.cfg} has to be included,
+% if it exists.
+%    \begin{macrocode}
+\InputIfFileExists{scrdate.cfg}
+           {\typeout{*************************************^^J%
+                     * Local config file scrdate.cfg used^^J%
+                     *************************************}}
+           {}
+%    \end{macrocode}
+%
+% That's it:
+%    \begin{macrocode}
+%</scrdate>
+%    \end{macrocode}
+%
+% \Finale
+%
+\endinput
+%
+% Ende der Datei `scrtime.dtx'
+%%% Local Variables:
+%%% mode: doctex
+%%% Text-master: t
+%%% End:

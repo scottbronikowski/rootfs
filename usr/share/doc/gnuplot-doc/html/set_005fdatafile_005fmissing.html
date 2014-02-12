@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>set_datafile_missing - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="datafile.html#datafile" title="datafile">
+<link rel="prev" href="set_005fdatafile_005fnofpe_005ftrap.html#set_005fdatafile_005fnofpe_005ftrap" title="set_datafile_nofpe_trap">
+<link rel="next" href="set_005fdatafile_005fseparator.html#set_005fdatafile_005fseparator" title="set_datafile_separator">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="set_datafile_missing"></a>
+<a name="set_005fdatafile_005fmissing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="set_005fdatafile_005fseparator.html#set_005fdatafile_005fseparator">set_datafile_separator</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="set_005fdatafile_005fnofpe_005ftrap.html#set_005fdatafile_005fnofpe_005ftrap">set_datafile_nofpe_trap</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="datafile.html#datafile">datafile</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.16.3 set datafile missing</h5>
+
+<!-- ?set datafile missing -->
+<!-- ?show datafile missing -->
+<!-- ?set missing -->
+<p><a name="index-missing-423"></a>
+The `set datafile missing` command allows you to tell `gnuplot` what character
+string is used in a data file to denote missing data.  Exactly how this missing
+value will be treated depends on the <a href="using.html#using">using</a> specifier of the `plot` or `splot`
+command.
+
+   <p>Syntax:
+<pre class="example">           set datafile missing {"&lt;string&gt;"}
+           show datafile missing
+           unset datafile
+     
+</pre>
+   <p>Example:
+<pre class="example">           # Ignore entries containing IEEE NaN ("Not a Number") code
+           set datafile missing "NaN"
+     
+</pre>
+   <p>Example:
+<pre class="example">           set style data linespoints
+           plot '-'
+              1 10
+              2 20
+              3 ?
+              4 40
+              5 50
+              e
+           set datafile missing "?"
+           plot '-'
+              1 10
+              2 20
+              3 ?
+              4 40
+              5 50
+              e
+           plot '-' using 1:2
+              1 10
+              2 20
+              3 ?
+              4 40
+              5 50
+              e
+           plot '-' using 1:($2)
+              1 10
+              2 20
+              3 ?
+              4 40
+              5 50
+              e
+     
+</pre>
+   <p>The first `plot` will recognize only the first datum in the "3 ?" line.  It
+will use the single-datum-on-a-line convention that the line number is "x"
+and the datum is "y", so the point will be plotted (in this case erroneously)
+at (2,3).
+
+   <p>The second and third `plot` commands will correctly ignore the middle line. 
+The plotted line will connect the points at (2,20) and (4,40).
+
+   <p>The fourth `plot` will also correctly ignore the middle line, but the plotted
+line will not connect the points at (2,20) and (4,40).
+
+   <p>There is no default character for `missing`, but in many cases any
+non-parsible string of characters found where a numerical value is expected
+will be treated as missing data.
+
+   </body></html>
+

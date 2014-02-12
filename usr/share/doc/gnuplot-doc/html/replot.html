@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>replot - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="refresh.html#refresh" title="refresh">
+<link rel="next" href="reread.html#reread" title="reread">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="replot"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="reread.html#reread">reread</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="refresh.html#refresh">refresh</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.20 replot</h3>
+
+<!-- ?commands replot -->
+<p><a name="index-replot-371"></a><a name="index-replot-372"></a>
+
+   <p>The <a href="replot.html#replot">replot</a> command without arguments repeats the last `plot` or `splot`
+command.  This can be useful for viewing a plot with different `set` options,
+or when generating the same plot for several devices.
+
+   <p>Arguments specified after a <a href="replot.html#replot">replot</a> command will be added onto the last
+`plot` or `splot` command (with an implied ',' separator) before it is
+repeated.  <a href="replot.html#replot">replot</a> accepts the same arguments as the `plot` and `splot`
+commands except that ranges cannot be specified.  Thus you can use <a href="replot.html#replot">replot</a>
+to plot a function against the second axes if the previous command was `plot`
+but not if it was `splot`.
+
+   <p>N.B.&mdash;use of
+
+<pre class="example">           plot '-' ; ... ; replot
+     
+</pre>
+   <p>is not recommended, because it will require that you type in the data all
+over again.  In most cases you can use the <a href="refresh.html#refresh">refresh</a> command instead, which
+will redraw the plot using the data previously read in.
+
+   <p>Note that <a href="replot.html#replot">replot</a> does not work in <a href="multiplot.html#multiplot">multiplot</a> mode, since it reproduces
+only the last plot rather than the entire screen.
+
+   <p>See also `command-line-editing` for ways to edit the last `plot` (`splot`)
+command.
+
+   <p>See also `show plot` to show the whole current plotting command, and the
+possibility to copy it into the `history`.
+
+   </body></html>
+

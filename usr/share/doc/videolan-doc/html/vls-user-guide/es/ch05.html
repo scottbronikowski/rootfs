@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 5.  Uso de VLS</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, VLS, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB" /><link rel="start" href="index.html" title="Guía de usuario de VLS" /><link rel="up" href="index.html" title="Guía de usuario de VLS" /><link rel="prev" href="ch04.html" title="Chapter 4.  Configuración" /><link rel="next" href="apa.html" title="Appendix A. GNU General Public License" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. 
+Uso de VLS
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="run"></a>Chapter 5. 
+Uso de VLS
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch05.html#id2573130">Ejecutando VLS</a></span></dt><dt><span class="sect1"><a href="ch05.html#id2573712">
+Uso del interfaz telnet
+</a></span></dt><dt><span class="sect1"><a href="ch05.html#id2573793">
+Comandos de la interfaz
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573130"></a>Ejecutando VLS</h2></div></div></div><p>
+Si se quiere usar el interfaz telnet, ejecutar
+VLS es muy sencillo: simplemente escriba <span class="command"><strong>vls</strong></span> en una consola
+de comandos, y eso es todo. Ejecutando <span class="command"><strong>vlsd</strong></span> hará
+que VLS ejecute como un demonio y será independiente de la consola.
+Recuerda que VLS intentará cargar el fichero de configuración
+(<code class="filename">vls.cfg</code>) desde el directorio actual, y si no hay
+un fichero <code class="filename">vls.cfg</code> en él, intentará cargarlo
+desde <code class="filename">SYSCONF_DIR/etc/videolan</code> (vea la sección <a class="xref" href="ch04.html" title="Chapter 4.  Configuración">
+Configuración
+</a>).
+</p><div class="caution" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Caution</h3><p>
+Si su fichero de logs es <code class="filename">vls.log</code>, como
+en el ejemplo, VLS requerirá permisos de escritura en el directorio actual, o
+verá algo como esto:
+</p><pre class="screen"><code class="computeroutput">
+*** Exception *** in copy constructor (0xbffffc98, copy of 0x80e30a8)
+Unable to open the log file "vls.log": Error: Could not open file 'vls.log':
+Permission denied
+</code></pre><p>
+Recuerde también que debe ser root cuando use la
+opción "Interface" en el fichero <code class="filename">vls.cfg</code>
+<code class="filename">vls.cfg</code>.
+</p></div><p>
+Si todo va bien, verá algo como esto:
+</p><pre class="screen"><code class="computeroutput">
+VideoLAN Server v 0.5.3 (Jun  6 2003) - (c)1999-2003 VideoLAN
+2002-03-09 17:24:51 [INFO/Vls]  Module "channel:file" registered
+2002-03-09 17:24:51 [INFO/Vls]  Module "channel:network" registered
+2002-03-09 17:24:51 [INFO/Vls]  Module "mpegreader:file" registered
+2002-03-09 17:24:51 [INFO/Vls]  Module "mpegconverter:ts2ts" registered
+[...]
+</code></pre><p>
+Lo que se ve en la pantalla (stderr) es exactamente
+lo que se guardará en el fichero de logs <code class="filename">vls.log</code>.
+</p><p>
+Cuando VLS se ha ejecutado correctamente, no recoge
+ningún comando de su entrada estándar, por lo que se puede poner en segundo
+plano (background) (se puede usar la utilidad <span class="emphasis"><em>screen</em></span> para
+ello).
+</p><p>
+Si se desea usar la interfaz en línea de comandos,
+por favor, refiérase a <a class="ulink" href="http://www.videolan.org/doc/" target="_top">VideoLAN HOWTO</a>.
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573712"></a>
+Uso del interfaz telnet
+</h2></div></div></div><p>
+Una vez que VLS se ha ejecutado, abre un servidor
+telnet (en el puerto 9999 por defecto). Se puede conectar a este servidor
+con el siguiente comando:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>telnet localhost 9999</code></strong>
+</pre><p>
+Se debería ver algo como esto:
+</p><pre class="screen"><code class="computeroutput">
+Trying 127.0.0.1...
+Connected to vls.
+Escape character is '^]'.
+
+Videolan Server Administration System
+
+Login:
+</code></pre><p>
+Debe autenticarse con un usario/contraseña
+definidos en el fichero <code class="filename">vls.cfg</code>. Cuando se haya
+autenticado correctamente, debería verse un 'prompt' como este:
+</p><pre class="screen"><code class="computeroutput">
+admin@vls&gt;
+</code>&gt;</pre><p>
+Se puede escribir los comandos, que son explicados
+en el siguiente párrafo. Para salir, escriba <span class="command"><strong>logout</strong></span> después
+del prompt del telnet.
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2573793"></a>
+Comandos de la interfaz
+</h2></div></div></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573798"></a>help</h3></div></div></div><p>
+Uso: help [comando].
+</p><p>
+Sin argumentos, "help" proporciona la lista de
+todos los comandos (disponibles o no). Con un argumentos, proporciona
+detalles acerca de cómo utilizar un comando específico.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573817"></a>browse</h3></div></div></div><p>
+Uso: browse [entrada].
+</p><p>
+Sin argumentos, "browse" proporciona todos los programas
+de todas las entradas. Con un argumento, proporciona los programas de la entrada
+seleccionada. Cada programa se muestra con su estado.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573833"></a>start</h3></div></div></div><p>
+Uso: start &lt;programa&gt; &lt;salida&gt; &lt;entrada&gt; [--loop] [--rtp]
+</p><p>
+"start" ejecuta el programa seleccionado de la
+entrada seleccionada y lo transmite por la salida especificada. La
+opción "--loop" hace que el programa se repita indefinidamente. La
+opción "--rtp" hace que el paquete TS sea enviado por el protocolo RTP,
+como se define en RFC 1889 y RFC 2250.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573856"></a>stop</h3></div></div></div><p>
+Uso: stop &lt;channel&gt;
+</p><p>
+"stop" finaliza el envío del canal especificado.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573870"></a>forward</h3></div></div></div><p>
+Uso: forward &lt;channel&gt; &lt;speed&gt;
+</p><p>
+"forward" produce el avance rápido del vídeo a la velocidad dada.
+No funciona cuando se lee directamente de un dispositivo como una
+tarjeta codificadora MPEG, una tarjeta DVB o una tarjeta capturadora.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573890"></a>rewind</h3></div></div></div><p>
+Uso: rewind &lt;channel&gt; &lt;speed&gt;
+</p><p>
+"rewind" produce el retoriceso rápido del vídeo a la velocidad dada.
+No funciona cuando se lee directamente de un dispositivo como una
+tarjeta codificadora MPEG, una tarjeta DVB o una tarjeta capturadora.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573911"></a>suspend</h3></div></div></div><p>
+Uso: suspend &lt;channel&gt;
+
+</p><p>
+"suspend" detiene la transmisión de la salida especificada.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573926"></a>resume</h3></div></div></div><p>
+Uso: resume &lt;channel&gt;
+</p><p>
+"resume" continua la transmisión de la salida especificada.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573940"></a>logout</h3></div></div></div><p>
+Uso: logout
+
+
+</p><p>
+"logout" cierra la actual sesión de administración y la
+conexión remota.
+</p></div><div class="simplesect" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2573956"></a>shutdown</h3></div></div></div><p>
+Uso: shutdown
+
+
+</p><p>
+"shutdown" detiene todos los programas y termina la ejecución de VLS.
+</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. 
+Configuración
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Appendix A. GNU General Public License</td></tr></table></div></body></html>

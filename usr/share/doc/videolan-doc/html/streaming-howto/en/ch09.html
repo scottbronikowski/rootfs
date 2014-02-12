@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 9.  Stream a DVB channel (satellite or digital terrestial TV)</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DV, DVB, DVD, DivX" /><link rel="start" href="index.html" title="VideoLAN Streaming Howto" /><link rel="up" href="index.html" title="VideoLAN Streaming Howto" /><link rel="prev" href="ch08.html" title="Chapter 8.  Stream a DVD" /><link rel="next" href="ch10.html" title="Chapter 10.  Stream from encoding cards and other capture peripherals" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 9. 
+Stream a DVB channel (satellite or digital
+terrestial TV)
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch08.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch10.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="dvb"></a>Chapter 9. 
+Stream a DVB channel (satellite or digital
+terrestial TV)
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch09.html#id2577910">
+Install the DVB drivers
+</a></span></dt><dt><span class="sect1"><a href="ch09.html#id2578256">
+Stream with VLS
+</a></span></dt><dt><span class="sect1"><a href="ch09.html#id2578975">
+Stream with VLC
+</a></span></dt></dl></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+This is possible under GNU/Linux only.
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2577910"></a>
+Install the DVB drivers
+</h2></div></div></div><p>
+If you want to be able to stream from a DVB card (a
+satellite card or a digital terrestial TV card), you need to install the
+DVB drivers:
+
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+if you use a Linux 2.6.x kernel, you just need to
+select the right modules in your kernel configuration.
+
+</p></li><li><p>
+
+if you are using a Linux 2.4.x
+kernel, you must download the latest release of the DVB drivers from the <a class="ulink" href="http://www.linuxtv.org/download/dvb/" target="_top">DVB drivers download
+page</a> of the <a class="ulink" href="http://www.linuxtv.org/" target="_top">LinuxTV</a>
+Project.
+
+</p></li></ul></div><p>
+The following sections assume that you have a working linux-dvb installation,
+either from stock kernel 2.6 or from kernel 2.4 with DVB patches. If you
+have any problem with the linux-dvb drivers, please report the problem
+to the maintainers of the drivers, not to us. Thanks.
+</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2578256"></a>
+Stream with VLS
+</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+VLS is currently deprecated and hasn't been maintained for years. It is
+strongly advised to use VLC instead, which now supports the same features
+as VLS, and many more. The only advantage of VLS is to support the dvbrc
+file syntax, and it requires a bit less CPU horsepower. However, we do
+not support VLS any longer.
+</p></div><p>
+Put a <code class="filename">.dvbrc</code> file containing
+the DVB channels (satellite or digital terrestial TV channels) you
+want to stream in your home directory (some are provided in the
+<span class="emphasis"><em>libdvb</em></span> tarball for the satellite channels).
+</p><p>
+Run VLS with the following command line
+:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vls -vv -d udp:192.168.0.42 dvb:"EUROSPORT" --ttl 12</code></strong>
+</pre><p>
+where:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>"EUROSPORT"</em></span>
+ is the channel you want to stream as written in
+your <code class="filename">~/.dvbrc</code> file
+,</p></li><li><p><span class="emphasis"><em>192.168.0.42</em></span>
+ is either 
+:</p><div class="itemizedlist"><ul type="circle"><li><p>
+the IP address of the machine you want to unicast
+to;
+</p></li><li><p>
+or the DNS name the machine you want to unicast
+to;
+</p></li><li><p>
+or a multicast IP address.
+</p></li></ul></div></li><li><p><span class="emphasis"><em>12</em></span>
+ is the value of the TTL (Time To
+Live) of your IP packets (which means that the stream will be
+able to cross 11 routers).
+</p></li></ul></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2578975"></a>
+Stream with VLC
+</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+VLC has many more features than VLS. First you can use the
+advanced stream output options such as transcoding and all kinds of
+output supports. Second VLC can take advantage of the Common Interface
+supported by some DVB adapters to descramble one or several services.
+Currently released versions of VLC only support the low-level API so
+some adapters won't work (budget-ci cards work, twinhan doesn't).
+Some CAM modules aren't compatible with some DVB cards, check the
+linux-dvb documentation for more information. So-called "professional"
+CAM modules are able to descramble up to twelve services, whereas
+customer-oriented modules are often limited to one or two services unless
+otherwise specified.
+</p></div><p>
+VLC must be compiled with --enable-dvb and you need the linux-dvb headers
+installed in your system. An example command-line is as follows :
+</p><pre class="screen">
+<code class="prompt">% </code>
+<strong class="userinput"><code>vlc -vvv --color --ttl 12  --ts-es-id-pid --programs=8508,8505 dvb: \
+--dvb-frequency=11739000 --dvb-srate=27500000 --dvb-voltage=13 \
+--sout-standard-access=udp --sout-standard-mux=ts --sout \
+'#duplicate{dst=std{dst=address1},select="program=8508",dst=std{dst=address2},select="program=8505"}'
+</code></strong></pre><p>
+The example above shows the minimum set of options needed to stream out
+two services. Here is a list of frontend options, depending on the
+frontend type:
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>common options</em></span></p><div class="itemizedlist"><ul type="circle"><li><p>
+<span class="emphasis"><em>dvb-adapter</em></span>
+: specifies the adapter to use in case you have several adapters in your
+machine (by default use adapter 0)
+</p></li><li><p>
+<span class="emphasis"><em>dvb-device</em></span>
+: specifies the name of the DVB device to use (should not be needed with
+a standard linux-dvb installation)
+</p></li><li><p>
+<span class="emphasis"><em>dvb-srate</em></span>
+: specifies the symbol rate of the modulated signal, in symbols/s
+</p></li><li><p>
+<span class="emphasis"><em>dvb-inversion</em></span>
+: specifies whether the signal is inverted or not (default is automatic
+detection)
+</p></li><li><p>
+<span class="emphasis"><em>dvb-budget-mode</em></span>
+: enters a special mode where all PIDs are retrieved by the driver; it
+should no longer be necessary as VLC should filter wanted PIDs
+</p></li></ul></div></li><li><p><span class="emphasis"><em>satellite frontend (QPSK)</em></span></p><div class="itemizedlist"><ul type="circle"><li><p>
+<span class="emphasis"><em>dvb-frequency</em></span>
+: specifies the frequency to tune to in kHz; according to the frequency
+range, VLC auto-detects the band to use: S (2.5-2.7 GHz), C-lower (3.4-4.2 GHz),
+C-higher (4.5-4.8 GHz), Ku (10.7-13.25 GHz) or direct BIS frequency (0.95-2.15
+GHz); it is mandatory to supply the <span class="emphasis"><em>dvb-srate</em></span> option
+to satellite frontends
+</p></li><li><p>
+<span class="emphasis"><em>dvb-voltage</em></span>
+: specifies the voltage to apply on the IF; most LNBs behave differently
+when supplied with 13 V or 18 V; universal LNBs select vertical
+polarity with 13 V and horizontal with 18 V; you can also select 0 V if
+your LNB has another power supply (default is 13 V)
+</p></li><li><p>
+<span class="emphasis"><em>dvb-tone</em></span>
+: specifies whether to send a 22 kHz pulse tone to the LNB; universal
+LNBs switch to high-band when this pulse is sent; by default VLC automatically
+adopts the correct behaviour if the frequency supplied is in the Ku
+band (other bands do not need this)
+</p></li><li><p>
+<span class="emphasis"><em>dvb-fec</em></span>
+: specifies the code-rate to use for Forward Error Correction; type in
+the first number of the code-rate, for 2/3 use --dvb-rate=2, etc. (default
+is 9, meaning automatic detection)
+</p></li><li><p>
+<span class="emphasis"><em>dvb-high-voltage</em></span>
+: enables a special mode of the DVB adapter to compensate for the
+voltage loss in very long cables (AFAIK it is present in the API, but
+no DVB adapter actually implements it)
+</p></li><li><p>
+<span class="emphasis"><em>dvb-lnb-lof1, dvb-lnb-lof2, dvb-lnb-slof</em></span>
+: specifies the frequencies of the first and second local oscillators,
+and the frequency at which the 22 kHz pulse should be activated to enable the
+second oscillator; by default VLC uses the values for universal LNBs
+if the frequency supplied is in the Ku band (other bands do not need
+this)
+</p></li></ul></div></li><li><p><span class="emphasis"><em>cable frontend (QAM)</em></span></p><div class="itemizedlist"><ul type="circle"><li><p>
+<span class="emphasis"><em>dvb-frequency</em></span>
+: specifies the frequency to tune to in Hz; it is mandatory to supply the
+<span class="emphasis"><em>dvb-srate</em></span> option to cable frontends
+</p></li><li><p>
+<span class="emphasis"><em>dvb-modulation</em></span>
+: specifies the modulation of the analog signal; valid values are
+-1 (QPSK), 0 (automatic QAM, default), 16 (QAM16), 32 (QAM32), 64 (QAM64)
+128 (QAM128), 256 (QAM256)
+</p></li></ul></div></li><li><p><span class="emphasis"><em>terrestrial frontend (OFDM)</em></span></p><div class="itemizedlist"><ul type="circle"><li><p>
+<span class="emphasis"><em>dvb-frequency</em></span>
+: specifies the frequency to tune to in Hz; it is mandatory to supply the
+<span class="emphasis"><em>dvb-bandwidth</em></span> option, all other parameters are optional
+</p></li><li><p>
+<span class="emphasis"><em>dvb-bandwidth</em></span>
+: specifies the bandwidth of the OFDM channel (6, 7 or 8 MHz depending
+on the country)
+</p></li><li><p>
+<span class="emphasis"><em>dvb-hierarchy</em></span>
+: specifies if the OFDM channel uses hierarchic information; allowed
+values are -1 (no hierarchy), 0 (automatic, default), 1, 2 and 4
+</p></li><li><p>
+<span class="emphasis"><em>dvb-code-rate-hp, dvb-code-rate-lp</em></span>
+: specifies the code-rate to use for higher and lower hierarchies
+respectively (default auto, same syntax as <span class="emphasis"><em>dvb-fec</em></span>)
+</p></li><li><p>
+<span class="emphasis"><em>dvb-guard</em></span>
+: specifies the guard interval; valid values are 0 (automatic, default),
+4 (1/4), 8 (1/8), 16 (1/16) and 32 (1/32)
+</p></li><li><p>
+<span class="emphasis"><em>dvb-transmission</em></span>
+: specifies the transmission mode; valid values are 0 (automatic, default),
+2 (2K) and 8 (8K)
+</p></li></ul></div></li></ul></div><p>
+We also ought to explain the other non-dvb-specific options of the
+example command-line:
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+<span class="emphasis"><em>ts-es-id-pid</em></span>
+: this option is necessary if you use the <span class="emphasis"><em>#duplicate</em></span>
+stream output filter
+to split the multiplex in several outputs; there is no need to use
+<span class="emphasis"><em>#duplicate</em></span> neither <span class="emphasis"><em>ts-es-id-pid</em></span>
+if you have one program only
+</p></li><li><p>
+<span class="emphasis"><em>programs, program, sout-all</em></span>
+: there are several ways of specifying the services to select (and
+optionally descramble):
+
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+<span class="emphasis"><em>programs</em></span>
+: used to specify one or serveral programs to select; VLC selects all
+known elementary streams of these programs; this is the currently
+recommended way
+</p></li><li><p>
+<span class="emphasis"><em>program</em></span>
+: used to specify one program to select; it differs from using
+<span class="emphasis"><em>programs</em></span> with only one program in that this
+option only select the first audio stream, and no subtitle stream; it
+should be used if you plan to switch programs and audio with a GUI
+</p></li><li><p>
+<span class="emphasis"><em>sout-all</em></span>
+: tells VLC to select all programs; this is discouraged because of
+the extra CPU load needed to demultiplex unwanted programs, and
+because it is not compatible with CAM descrambling
+</p></li></ul></div><p>
+
+</p></li><li><p>
+The other options are standard stream output options and are described
+in the other chapters of this documentation.
+</p></li></ul></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch08.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch10.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 8. 
+Stream a DVD
+
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 10. 
+Stream from encoding cards and other capture peripherals
+</td></tr></table></div></body></html>

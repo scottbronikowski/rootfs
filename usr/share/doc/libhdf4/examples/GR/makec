@@ -1,0 +1,52 @@
+# Edit the following variables as needed
+HDF_INSTALL = 
+CC          = cc 
+CFLAGS      = 
+LIB         = -lm
+
+INCLUDE   = -I$(HDF_INSTALL)/include
+LIBSHDF   = -L$(HDF_INSTALL)/lib -lmfhdf -ldf -ljpeg -lz
+
+GR: create_and_write_image \
+	modify_image \
+	read_image \
+	image_info \
+	set_attribute \
+	get_attribute \
+	write_palette \
+	read_palette
+ 
+create_and_write_image: create_and_write_image.c
+	$(CC) $(CFLAGS) -o $@ create_and_write_image.c $(INCLUDE) $(LIBSHDF) $(LIB)
+
+modify_image: modify_image.c
+	$(CC) $(CFLAGS) -o $@ modify_image.c $(INCLUDE) $(LIBSHDF) $(LIB)
+
+read_image: read_image.c
+	$(CC) $(CFLAGS) -o $@ read_image.c $(INCLUDE) $(LIBSHDF) $(LIB)
+
+image_info: image_info.c
+	$(CC) $(CFLAGS) -o $@ image_info.c $(INCLUDE) $(LIBSHDF) $(LIB)
+
+set_attribute: set_attribute.c
+	$(CC) $(CFLAGS) -o $@ set_attribute.c $(INCLUDE) $(LIBSHDF) $(LIB)
+
+get_attribute: get_attribute.c
+	$(CC) $(CFLAGS) -o $@ get_attribute.c $(INCLUDE) $(LIBSHDF) $(LIB)
+ 
+write_palette: write_palette.c
+	$(CC) $(CFLAGS) -o $@ write_palette.c $(INCLUDE) $(LIBSHDF) $(LIB)
+ 
+read_palette: read_palette.c
+	$(CC) $(CFLAGS) -o $@ read_palette.c $(INCLUDE) $(LIBSHDF) $(LIB)
+
+clean:
+	rm -f *.o create_and_write_image \
+	modify_image \
+	read_image \
+	image_info \
+	set_attribute \
+	get_attribute \
+	write_palette \
+	read_palette
+.SUFFIXES:.o.c

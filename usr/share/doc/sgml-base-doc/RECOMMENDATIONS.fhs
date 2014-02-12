@@ -1,0 +1,71 @@
+File system recommendations for SGML and XML layout
+---------------------------------------------------
+
+Introduction
+------------
+
+In a normalisation effort, about thirty people, including packagers
+of some Linux distributions, and developers of SGML related tools such
+as the SGML-Tools and DocBook Tools project, discussed informally and
+agreed on a series of recommendations that will be submitted as a draft
+to the Linux Standard Base project. A reference implementation will also
+be done as part of the DocBook-tools project.
+
+This document addresses the FHS part of the project.
+
+This document makes several references to "catalogs": these files
+represent the dorsal spine of a SGML or XML system. They are mainly used
+to map things (that are called "entities" in SGML or XML terminology)
+into real file names. A catalog can reference other catalogs through
+pointer directives (CATALOG, DELEGATE). For more information, see the
+Open Catalogs standard at <A  HREF="http://www.oasis-open.org">http://www.oasis-open.org</A>.
+
+/etc/sgml/
+----------
+
+In /etc/sgml one can find configuration files that describe the installed
+components of a SGML or XML system.
+
+Files found there include:
+
+	*.conf: generic configuration files
+	*.cat: DTD-specific centralized catalogs
+	catalog: the super catalog
+
+The generic configuration files define high-level parameters of the SGML
+or XML system.
+
+The "centralized catalogs" are catalogs that reference through pointers
+all the other catalogs that are needed to use a given DTD. The referenced
+files include the DTD's catalog, style sheets catalogs, character entities
+sets catalogs, etc. All the files that are referenced reside somewhere
+under /usr/share/sgml.
+
+The "super catalog" references through pointers all the centralized
+catalogs. Unlike the centralized catalogs, it does not guarantee the
+absence of definition conflicts between referenced catalogs.
+
+At least for the present, all XML documents are also SGML documents,
+so it seems unnecessary to create /etc/xml.
+
+/usr/share/sgml/
+----------------
+
+In /usr/share/sgml reside architecture-independent files used by SGML
+or XML applications: ordinary catalogs (not the centralized ones), DTDs,
+entities, style sheets, and other declarative files, if any.
+
+It is organized at top-level into DTD-specific subdirectories, when
+applicable:
+	docbook/
+	tei/
+	html/
+	mathml/
+	...
+
+Other files that are not specific to a given DTD may reside in their own
+directory. When we say "specific to a DTD", it does not mean that those
+files describe a DTD, but only that they are to be used with this DTD.
+
+At least for the present, all XML documents are also SGML documents,
+so it seems unnecessary to create /usr/share/xml.

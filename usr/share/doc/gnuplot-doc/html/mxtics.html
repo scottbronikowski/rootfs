@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>mxtics - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="mx2tics.html#mx2tics" title="mx2tics">
+<link rel="next" href="my2tics.html#my2tics" title="my2tics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="mxtics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="my2tics.html#my2tics">my2tics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="mx2tics.html#mx2tics">mx2tics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.42 mxtics</h4>
+
+<!-- ?commands set mxtics -->
+<!-- ?commands unset mxtics -->
+<!-- ?commands show mxtics -->
+<!-- ?set mxtics -->
+<!-- ?unset mxtics -->
+<!-- ?show mxtics -->
+<p><a name="index-mxtics-492"></a><a name="index-mxtics-493"></a>
+
+   <p><a name="index-nomxtics-494"></a>
+Minor tic marks along the x axis are controlled by <a href="mxtics.html#mxtics">mxtics</a>.  They can be
+turned off with <a href="mxtics.html#mxtics">mxtics</a>.  Similar commands control minor tics along
+the other axes.
+
+   <p>Syntax:
+<pre class="example">           set mxtics {&lt;freq&gt; | default}
+           unset mxtics
+           show mxtics
+     
+</pre>
+   <p>The same syntax applies to <a href="mytics.html#mytics">mytics</a>, <a href="mztics.html#mztics">mztics</a>, <a href="mx2tics.html#mx2tics">mx2tics</a>, <a href="my2tics.html#my2tics">my2tics</a> and
+`mcbtics`.
+
+   <p>&lt;freq&gt; is the number of sub-intervals (NOT the number of minor tics) between
+major tics (the default for a linear axis is either two or five
+depending on the major tics, so there are one or four minor
+tics between major tics). Selecting `default` will return the number of minor
+ticks to its default value.
+
+   <p>If the axis is logarithmic, the number of sub-intervals will be set to a
+reasonable number by default (based upon the length of a decade).  This will
+be overridden if &lt;freq&gt; is given.  However the usual minor tics (2, 3, ...,
+8, 9 between 1 and 10, for example) are obtained by setting &lt;freq&gt; to 10,
+even though there are but nine sub-intervals.
+
+   <p>To set minor tics at arbitrary positions, use the ("&lt;label&gt;" &lt;pos&gt; &lt;level&gt;,
+...) form of `set {x|x2|y|y2|z}tics` with &lt;label&gt; empty and &lt;level&gt; set to 1.
+
+   <p>The `set m{x|x2|y|y2|z}tics` commands work only when there are uniformly
+spaced major tics.  If all major tics were placed explicitly by
+`set {x|x2|y|y2|z}tics`, then minor tic commands are ignored.  Implicit
+major tics and explicit minor tics can be combined using
+`set {x|x2|y|y2|z}tics` and `set {x|x2|y|y2|z}tics add`.
+
+   <p>Examples:
+<pre class="example">           set xtics 0, 5, 10
+           set xtics add (7.5)
+           set mxtics 5
+</pre>
+   <p>Major tics at 0,5,7.5,10, minor tics at 1,2,3,4,6,7,8,9
+<pre class="example">           set logscale y
+           set ytics format ""
+           set ytics 1e-6, 10, 1
+           set ytics add ("1" 1, ".1" 0.1, ".01" 0.01, "10^-3" 0.001, \
+                          "10^-4" 0.0001)
+           set mytics 10
+</pre>
+   <p>Major tics with special formatting, minor tics at log positions
+
+   <p>By default, minor tics are off for linear axes and on for logarithmic axes. 
+They inherit the settings for `axis|border` and `{no}mirror` specified for
+the major tics.  Please see `set xtics` for information about these.
+
+   </body></html>
+

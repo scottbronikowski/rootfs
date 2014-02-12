@@ -1,0 +1,1 @@
+../../../texlive-base/pdftex/manual/makefiles.cmd

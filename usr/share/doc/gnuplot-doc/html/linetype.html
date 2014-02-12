@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>linetype - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="gnuplot.html#gnuplot" title="gnuplot">
+<link rel="prev" href="Glossary.html#Glossary" title="Glossary">
+<link rel="next" href="mouse_005finput.html#mouse_005finput" title="mouse_input">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="linetype"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="mouse_005finput.html#mouse_005finput">mouse_input</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Glossary.html#Glossary">Glossary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="gnuplot.html#gnuplot">gnuplot</a>
+<hr>
+</div>
+
+<h3 class="section">1.16 linetype, colors, and styles</h3>
+
+<p><a name="index-linetype-209"></a>
+<a name="index-colors-210"></a>
+Each gnuplot terminal type provides a set of distinct "linetypes". These may
+differ in color, in thickness, in dot/dash pattern, or in some combination of
+color and dot/dash. The default linetypes for a particular terminal can be
+previewed by issuing the <a href="test.html#test">test</a> command after setting the terminal type. 
+The pre-defined colors and dot/dash patterns are not guaranteed to be
+consistent for all terminal types, but all terminals use the special linetype
+-1 to mean a solid line in the primary foreground color (normally black). 
+By default, successive functions or datafiles plotted by a single command will
+be assigned successive linetypes.  You can override this default by specifying
+a particular linetype for any function, datafile, or plot element.
+
+   <p>Examples:
+
+<pre class="example">          plot "foo", "bar"                 # plot two files using linetypes 1, 2
+          plot sin(x) linetype 4            # terminal-specific linetype color 4
+          plot sin(x) lt -1                 # black
+     
+</pre>
+   <p><a name="index-colors-211"></a>
+For many terminal types it is also possible to assign user-defined colors
+using explicit rgb (red, green, blue) values, named colors, or color values
+that refer to the current PM3D palette.
+
+   <p>Examples:
+
+<pre class="example">          plot sin(x) lt rgb "violet"       # one of gnuplot's named colors
+          plot sin(x) lt rgb "#FF00FF"      # explicit RGB triple in hexadecimal
+          plot sin(x) lt palette cb -45     # whatever color corresponds to -45
+                                            # in the current cbrange of the palette
+          plot sin(x) lt palette frac 0.3   # fractional value along the palette
+     
+</pre>
+   <p>See <a href="colornames.html#colornames">colornames</a>, <a href="palette.html#palette">palette</a>, <a href="cbrange.html#cbrange">cbrange</a>.
+
+   <p>For terminals that support dot/dash patterns, each default linetype has both
+a dot-dash pattern and a default color. However, you can override the default
+color by using the keyword `linecolor`, abbreviated `lc`.  For example, the
+postscript terminal provides a dashed blue line as linetype 3.  The plot
+commands below use this same dash pattern for three plots, one in blue (the
+default), another in red (the default for linetype 1), and a third in gold.
+
+   <p>Example:
+
+<pre class="example">          set term postscript dashed color
+          plot 'foo' lt 3, 'baz' lt 3 linecolor 1, 'bar' lt 3 lc rgb 'gold'
+     
+</pre>
+   <p>Lines can have additional properties such as linewidth.  You can associate
+these various properties, as well as equivalent properties for point symbols,
+into user-defined "line styles" using the command `set style line`.  Once
+you have defined a linestyle, you can use it in a plot command to control
+the appearance of one or more plot elements.
+
+   <p>Examples:
+
+<pre class="example">          # define a new line style with terminal-independent color cyan,
+          # linewidth 3, and associated point type 6 (a circle with a dot in it).
+          set style line 5 lt rgb "cyan" lw 3 pt 6
+          plot sin(x) with linespoints ls 5          # user-defined line style 5
+     
+</pre>
+   <p>See `linestyle`, `set style line`.
+
+<ul class="menu">
+<li><a accesskey="1" href="colorspec.html#colorspec">colorspec</a>
+</ul>
+
+   </body></html>
+

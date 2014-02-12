@@ -1,0 +1,40 @@
+dpkg-www for Debian
+-------------------
+
+Web based Debian package browser.
+
+With this cgi program you can browse Debian packages using a WEB browser.
+You can easily follow package dependencies and browse package documentation
+with a mouse click.
+
+If you have properly configured the package you can also query which packages
+own a non-installed file or have a certain value in a control field.
+
+You can even install or remove packages from your browser if this feature is
+enabled in the site configuration file.
+
+WARNING! 
+Allowing access to /cgi-bin/dpkg from any foreign host could allow a
+malicious external user to know your installed packages and try possible
+security exploits. You should therefore disable access to dpkg-www from
+foreign hosts. With apache you should add a file with the following
+instructions into apache conf.d directory:
+
+    # Disable execution of dpkg from remote hosts
+    <Location /cgi-bin/dpkg>
+        order deny,allow
+        deny from all
+        allow from localhost
+        allow from .your.domain
+    </Location>
+
+The dpkg-www installation script will automatically install a default
+configuration file in /etc/{apache,apache2}/conf.d. If you are using a
+different httpd server you should make the appropriate changes in the
+proper httpd config file.
+
+Enabling the WEB installation feature could potentially introduce
+security holes in your system and your network. Use at yout own risk!
+
+-- 
+Massimo Dal Zotto <dz@debian.org>  Tue Sep 26 14:11:49 CEST 2006

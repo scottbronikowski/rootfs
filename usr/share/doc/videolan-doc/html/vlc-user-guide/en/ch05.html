@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 5.  The HTTP interface</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, vls, vod, vlcs, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DivX" /><link rel="start" href="index.html" title="VLC user guide" /><link rel="up" href="index.html" title="VLC user guide" /><link rel="prev" href="ch04.html" title="Chapter 4.  The command line interface" /><link rel="next" href="ch06.html" title="Chapter 6.  Other interfaces" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. 
+The HTTP interface
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch06.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="http"></a>Chapter 5. 
+The HTTP interface
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch05.html#id2585780">Introduction</a></span></dt><dt><span class="sect1"><a href="ch05.html#id2586698">
+The RPN evaluator
+</a></span></dt><dt><span class="sect1"><a href="ch05.html#id2586813">
+The macros
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2585780"></a>Introduction</h2></div></div></div><p><span class="emphasis"><em>
+This page is incomplete.
+</em></span></p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2585789"></a>Presentation</h3></div></div></div><p>
+VLC ships with a little HTTP server integrated.
+It is used both to stream using HTTP, and for the HTTP remote control
+interface.
+</p><p>
+To start VLC with the HTTP interface, use:
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -I http (--http-src /directory/ --http-host host:port)</code></strong>
+</pre><p>
+The HTTP interface will start listening at host:port
+(localhost:8080 if omitted), and will reproduce the structure of
+/directory at http://host:port/ ( vlc_source_path/share/http if omitted
+).
+</p><p>
+VLC is shipped with a set of files that should be
+enough for generic needs. The rest of this chapter will cover the ways
+to customize these pages.
+</p><p>
+Some files are handled a bit specially
+
+ 
+:</p><div class="itemizedlist"><ul type="disc"><li><p>
+Files beginning with '.' are not exported.
+</p></li><li><p>
+A '.access' file will be opened and the http
+interface will expect to find at the first line a login/password
+(written as login:password). This login/password will be used to
+protect all files in this directory. Be careful that only files in this
+directory will be protected. (sub-directories won't be protected.)
+</p></li><li><p>
+The file &lt;dir&gt;/index.html will be exported ad
+&lt;dir&gt; and &lt;dir&gt;/ and not as index.html.
+</p></li></ul></div><p>
+The MIME type is set by looking at the file
+extension and cannot be specified nor modified for a specifi file.
+Unknown extensions will have "application/octet-stream" as MIME
+type.
+</p><p>
+You should avoid exporting big files. Each file is
+indeed first loaded into the memory before being sent to the client, so
+please be careful.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2586480"></a>
+VLC macros
+</h3></div></div></div><p> Each type a .html/.htm page is requested,
+it is parsed by VLC before being sent. The parser searchs for the VLC
+macros, and executes or substitutes them. Moreover, URL arguments
+received by the GET method can be interpreted
+
+
+
+
+ .</p><p>
+A VLC macro looks like:
+<span class="emphasis"><em>&lt;vlc id="macro-name" param1="macro-parameters1"
+param2="macro-parameters2" /&gt;</em></span>.
+</p><p>
+ "id" is the only mandatory field, param1 and param2
+may or may not be present and depend on the value of "id".
+</p><p>
+ You should take care that you _have to_ respect
+this syntax, VLC won't like invalid syntax. (It could easily leads to
+crashs).
+</p><p>
+Examples
+
+
+:</p><p>
+Correct: <span class="emphasis"><em>&lt;vlc id="value"
+param1="version" /&gt; </em></span>
+
+</p><p>
+Incorrect: <span class="emphasis"><em>&lt;vlc id="value"
+param1="version" &gt; </em></span> (missing tag ending),
+<span class="emphasis"><em>&lt;vlc id=value param1="version" /&gt;</em></span> (missing "" )
+
+</p><p>
+Valid macros are:
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+<span class="emphasis"><em>control</em></span> (1 optional parameter)
+</p></li><li><p>
+<span class="emphasis"><em>get</em></span> (2 parameters)
+</p></li><li><p>
+<span class="emphasis"><em>set</em></span> (2 parameters)
+</p></li><li><p>
+<span class="emphasis"><em>rpn</em></span> (1 parameter)
+</p></li><li><p>
+<span class="emphasis"><em>if</em></span> (1 optional parameter)
+</p></li><li><p>
+<span class="emphasis"><em>else</em></span> (no parameter)
+</p></li><li><p>
+<span class="emphasis"><em>end</em></span> (no parameter)
+</p></li><li><p>
+<span class="emphasis"><em>value</em></span> (1 optional parameter)
+</p></li><li><p>
+<span class="emphasis"><em>foreach</em></span> (2 parameters)
+</p></li></ul></div><p>
+For powerful macros, you may use these tools
+
+
+:</p><div class="itemizedlist"><ul type="disc"><li><p>
+RPN Evaluator (see part 2)
+</p></li><li><p>
+Stacks: The stack is a place where you can push
+numbers and strings, and then pop them backs. It's used with the little
+RPN evaluator.
+</p></li><li><p>
+Local variables: You can dynamically create
+new variables and changes their values. Some local variables are
+predefined:
+
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+<span class="emphasis"><em>url_value</em></span>
+: parameter of the URL
+</p></li><li><p>
+<span class="emphasis"><em>url_param</em></span>
+: 1 if url_value isn't empty else 0
+</p></li><li><p>
+<span class="emphasis"><em>version</em></span>
+: the VLC version
+</p></li><li><p>
+<span class="emphasis"><em>copyright</em></span>
+: the VLC copyright
+</p></li></ul></div><p>
+
+</p></li></ul></div><p>
+Remark: The stacks, and local variables context is
+resetted before the page is executed.
+</p></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2586698"></a>
+The RPN evaluator
+</h2></div></div></div><p>
+RPN means Reverse Polish Notation
+</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2586706"></a>
+Introduction
+</h3></div></div></div><p>
+ RPN could look strange but it's a fast and easy way
+to write expressions. It also avoids the use of ( and ).
+</p><p>
+Instead of writing ( 1 + 2 ) * 5 you just use 1 2 +
+5 *.
+</p><p>
+The idea beyond it is: if we have a number or a
+string (using ''), push it on the stack. If it is an operator (like +),
+pop the arguments from the stack, execute the operators and then push
+the result onto the stack. The result of the RPN sequence is the value
+on the top of the stack.
+</p><p>
+</p><pre class="programlisting">
+ stack:      Word processed
+ empty      1                   1 is pushed on the stack
+ 1          2                   2 same things
+ 1 | 2      +                   +: remove 1 and 2 and write 3 on the stack
+ 3          5                   5 is pushed on the stack
+ 3 | 5      *                   *: remove 3 and 5 and write 15
+ 15                             &lt;- result
+</pre><p>
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2586750"></a>
+Operators
+</h3></div></div></div><p> Notation: ST(1) means the first stack
+element, ST(2) the second one ... and op the operator. 
+</p><p>
+You have access to
+
+
+:</p><div class="itemizedlist"><ul type="disc"><li><p>
+Standard arithmetics operators: +, -, *, /, %:
+these ones push the result of ST(1) op ST(2) to the stack
+</p></li><li><p>
+Binary operators: ! (push !ST(1)); ^, &amp;, |: push
+the result ST(1) op ST(2)
+</p></li><li><p>
+test: =, &lt;, &lt;=, &gt;, &gt;=: execute ST(1) op
+ST(2) and push -1 if true else 0
+</p></li><li><p>
+string: strcat pushes the result of 'ST(1)ST(2)',
+strcmp compares ST(1) and ST(2), pushes -1 if ST(1)&lt;ST(2), 0 if
+equal, 1 else, strlen pushes the length of ST(1).
+</p></li><li><p>
+stack manipulation: dup duplicates ST(1), drop
+removes ST(1), swap exchanges ST(1) and ST(2), and flush empties the
+stack.
+</p></li><li><p>
+variables manipulation: store stores ST(2) in a
+local variable named ST(1), value pushes the value of the local variable
+named ST(1), url_extract pushes the value of the ST(1) part of the url
+parameters.
+</p></li></ul></div></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2586813"></a>
+The macros
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2586818"></a>
+The <span class="emphasis"><em>control</em></span> macro
+</h3></div></div></div><p>
+When asking for a page, you can pass
+arguments to it through the url. (eg using a &lt;form&gt;). Ex:
+http://host:port/page.html?var=value&amp;var2=value2&amp;... The "control" macro
+tells a page to parse these arguments and to execute the ones that are
+allowed. param1 of this macro says which commands are allowed. If empty,
+all commands will be permitted.
+</p><p>
+Some commands require an argument that must be
+passed in the URL too.
+</p><div class="table"><a id="id2586846"></a><p class="title"><b>Table 5.1. 
+URL commands
+</b></p><div class="table-contents"><table summary="&#10;URL commands&#10;" border="1"><colgroup><col /><col /><col /></colgroup><thead><tr><th>Name</th><th>Argument</th><th>
+    Description
+    
+    
+ </th></tr></thead><tbody><tr><td>play</td><td>
+    item (integer)
+    
+    
+ </td><td>
+    Play the specified playlist item
+    
+    
+ </td></tr><tr><td>stop</td><td> </td><td>
+    Stop
+    
+    
+ </td></tr><tr><td>pause</td><td> </td><td>Pause</td></tr><tr><td>next</td><td> </td><td>
+    Go to next playlist item
+    
+    
+ </td></tr><tr><td>previous</td><td> </td><td>
+    Go to previous playlist item
+    
+    
+ </td></tr><tr><td>add</td><td>
+    mrl (string)
+    
+    
+ </td><td>
+    Add a MRL (Media Resource Locator) to the playlist
+    
+    
+ </td></tr><tr><td>delete</td><td>
+    item (integer)
+    
+    
+ </td><td>
+    Delete the specified playlist item or list of playlist items
+    
+    
+ </td></tr><tr><td>empty</td><td> </td><td>
+    Empty the playlist
+    
+    
+ </td></tr><tr><td>close</td><td>
+        id (hexa)
+        
+        
+    </td><td>
+    Close a specific connection
+    
+    
+ </td></tr><tr><td>shutdown</td><td> </td><td>
+    Quit VLC
+    
+    
+ </td></tr></tbody></table></div></div><br class="table-break" /><p>
+For example, you can restrict execution of the
+<span class="command"><strong>shutdown</strong></span> command to protected page (through a
+<span class="emphasis"><em>.access</em></span> file), using the control macro in all
+unprotected pages.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2587025"></a>
+The <span class="emphasis"><em>get</em></span> macro
+</h3></div></div></div><p>
+This macro will be replaced by the value of the
+configuration variable which name is stored in param1 and which type is
+given by param2.
+</p><p>
+param1 must be the name of an existing configuration
+variable. param2 must be the right type of the variable. It can be
+one of <span class="emphasis"><em>int</em></span>, <span class="emphasis"><em>float</em></span>, or
+<span class="emphasis"><em>string</em></span>.
+
+ 
+</p><p>
+Example: &lt;vlc id="get" param1="sout"
+param2="string" /&gt; will be replaced in the output page by the value
+of sout.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2587061"></a>
+The <span class="emphasis"><em>set</em></span> macro
+</h3></div></div></div><p>
+This macro allows to set the value of a
+configuration variable. The name is given by param1 and the type by
+param2 (like for get). The value is retrieved from the url using the
+name given in param1.
+</p><p>
+For example, if player.html contains &lt;vlc
+id="set" param1="sout" param2="string" /&gt;, and if you browse at
+<span class="emphasis"><em> http://host:ip/player.html?sout=sout_value</em></span>, the
+sout variable will be set to "sout_value". If the URL doesn't contain
+sout, nothing will be done.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2587090"></a>
+The <span class="emphasis"><em>rpn</em></span> macro
+</h3></div></div></div><p>
+This macro allows you to interpret RPN commands.
+(See II).
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2587104"></a>
+The <span class="emphasis"><em>if,else,end</em></span> macro
+</h3></div></div></div><p>
+This macro allows you to control the parsing of the
+HTML page.
+</p><p>
+If param1 isn't empty, it is first executed with the
+RPN evaluator. If the first element from the stack is not 0, the test
+value is true, else false..
+</p><p>
+
+</p><pre class="programlisting"> &lt;vlc id="if" param1="1 2 =" /&gt;
+    &lt;!-- Never reached --&gt;
+ &lt;vlc id="else" /&gt;
+    &lt;p&gt; Test succeed: 1 isn't equal to 2 &lt;/p&gt;
+ &lt;vlc id="end" /&gt;
+</pre><p>
+
+</p><p>
+You can also just use "if" and "end".
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2587139"></a>
+The <span class="emphasis"><em>value</em></span> macro
+</h3></div></div></div><p>
+If param1 isn't empty, it is first executed with the
+RPN evaluator. The macro is replaced with the value of the first element
+of the stack.
+</p><p>
+Note: If the element is the name of a local
+variable, its value will be displayed instead of its name.
+</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2587159"></a>
+The <span class="emphasis"><em>foreach,end</em></span> macro
+</h3></div></div></div><p>
+
+param1 is the name of the variable that will be used for the loop. param2 is the name of the set to be built:
+
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+<span class="emphasis"><em>integer</em></span>: take
+the first element from the stack to construct a set of
+integer. The stack element should be a string like:
+<span class="emphasis"><em>first:last[:step][,first2:last2[:step2][,...]</em></span> (Ex:
+1:5:2,6:8:1 will be expanded into 1,3,5,6,7,8)
+</p></li><li><p>
+<span class="emphasis"><em>directory</em></span>: take the first
+element of the stack as the base directory and construct a set
+of filename and directly in it. Each element has the following
+fields:
+</p><div class="itemizedlist"><ul type="circle"><li><p>
+name: file/directory name
+</p></li><li><p>
+type: "directory" or "file" or "unknown"
+</p></li><li><p>
+size: size of the file
+</p></li><li><p>
+date
+</p></li></ul></div></li><li><p>
+playlist: set based on the playlist with fields:
+current is 1 if item is currently selected, 0 else. index is the index
+value, that can be used by the play or delete control command. name is the
+name of the item.
+</p></li><li><p>
+"informations": Create informations for the current
+playing stream. name is the name of the category, value is its value,
+info is a new set that can be parsed with a new foreach (subfields of
+info are name and value).
+</p></li><li><p>
+"hosts": Create the list of host we are listening.
+Contains the "id" (opaque id), host, ip and port fields.
+</p></li><li><p>
+"urls": Create the list of urls currently
+available. Fields are id, stream (1 if we have a stream, 0 else), url,
+mime, protected (1 if protected, 0 else), used (is it currently used
+?).
+</p></li><li><p>
+"connections": Create the list of current
+connections. Fields are: id, an opaque id that can be used in the close
+command, ip, url, and status (HTTP error code).
+</p></li><li><p>
+the name of a foreach variable if it's a set of set
+of value.
+</p><pre class="programlisting">;&lt;vlc id="foreach" param1="cat" param2="informations" /&gt;
+                &lt;p&gt; &lt;vlc id="value" param1="cat.name" /&gt;
+                &lt;ul&gt;
+                &lt;vlc id="foreach" param1="info" param2="cat.info" /&gt;
+                    &lt;li&gt;
+                    &lt;vlc id="value" param1="info.name" /&gt; :
+                            &lt;vlc id="value" param1="info.value" /&gt;
+                    &lt;/li&gt;
+                &lt;vlc id="end" /&gt;
+                &lt;/ul&gt;
+            &lt;vlc id="end" /&gt;
+</pre></li></ul></div><p>For more details, have a look at the share/http
+directory of the VLC source tree...
+</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. 
+The command line interface </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 6. 
+Other interfaces
+
+
+</td></tr></table></div></body></html>

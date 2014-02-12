@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>newhistogram - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="histograms.html#histograms" title="histograms">
+<link rel="prev" href="histograms.html#histograms" title="histograms">
+<link rel="next" href="automated_005fiteration_005fover_005fmultiple_005fcolumns.html#automated_005fiteration_005fover_005fmultiple_005fcolumns" title="automated_iteration_over_multiple_columns">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="newhistogram"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="automated_005fiteration_005fover_005fmultiple_005fcolumns.html#automated_005fiteration_005fover_005fmultiple_005fcolumns">automated_iteration_over_multiple_columns</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="histograms.html#histograms">histograms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="histograms.html#histograms">histograms</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.11.1 newhistogram</h4>
+
+<p><a name="index-newhistogram-253"></a>
+<!-- ?histograms newhistogram -->
+<!-- ?plotting style histograms newhistogram -->
+Syntax:
+
+<pre class="example">          newhistogram {"&lt;title&gt;"} {&lt;linetype&gt;} {&lt;fillstyle&gt;} {at &lt;x-coord&gt;}
+     
+</pre>
+   <p>More than one set of histograms can appear in a single plot. In this case you
+can force a gap between them, and a separate label for each set, by using the
+<a href="newhistogram.html#newhistogram">newhistogram</a> command. 
+For example
+
+<pre class="example">           set style histogram  cluster
+           plot newhistogram "Set A", 'a' using 1, '' using 2, '' using 3, \
+                newhistogram "Set B", 'b' using 1, '' using 2, '' using 3
+     
+</pre>
+   <p>The labels "Set A" and "Set B" will appear beneath the respective sets of
+histograms, under the overall x axis label.
+
+   <p>The newhistogram command can also be used to force histogram coloring to
+begin with a specific color (linetype). By default colors will continue to
+increment successively even across histogram boundaries. Here is an example
+using the same coloring for multiple histograms
+<pre class="example">           plot newhistogram "Set A" lt 4, 'a' using 1, '' using 2, '' using 3, \
+                newhistogram "Set B" lt 4, 'b' using 1, '' using 2, '' using 3
+     
+</pre>
+   <p>Similarly you can force the next histogram to begin with a specified fillstyle. 
+If the fillstyle is set to `pattern`, then the pattern used for filling will
+be incremented automatically.
+
+   <p>The `at &lt;x-coord&gt;` option only applies to column-stacked histograms.
+
+   </body></html>
+

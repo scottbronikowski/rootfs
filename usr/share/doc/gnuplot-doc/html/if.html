@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+<title>if - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="history.html#history" title="history">
+<link rel="next" href="iteration.html#iteration" title="iteration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="if"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="iteration.html#iteration">iteration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="history.html#history">history</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.9 if</h3>
+
+<!-- ?commands if -->
+<p><a name="index-if-304"></a><a name="index-if-305"></a>
+
+   <p>The <a href="if.html#if">if</a> command allows commands to be executed conditionally.
+
+   <p>Syntax:
+<pre class="example">           if (&lt;condition&gt;) &lt;command-line&gt; [; else if (&lt;condition&gt;) ...; else ...]
+     
+</pre>
+   <p>&lt;condition&gt; will be evaluated.  If it is true (non-zero), then the command(s)
+of the &lt;command-line&gt; will be executed.  If &lt;condition&gt; is false (zero), then
+the entire &lt;command-line&gt; is ignored until the next occurrence of `else`. 
+Note that use of `;` to allow multiple commands on the same line will
+_not_ end the conditionalized commands.
+
+   <p>Examples:
+<pre class="example">           pi=3
+           if (pi!=acos(-1)) print "?Fixing pi!"; pi=acos(-1); print pi
+</pre>
+   <p>will display:
+<pre class="example">           ?Fixing pi!
+           3.14159265358979
+</pre>
+   <p>but
+<pre class="example">           if (1==2) print "Never see this"; print "Or this either"
+</pre>
+   <p>will not display anything.
+
+   <p>else:
+<pre class="example">           v=0
+           v=v+1; if (v%2) print "2" ; else if (v%3) print "3"; else print "fred"
+</pre>
+   <p>(repeat the last line repeatedly!)
+
+   <p>See <a href="reread.html#reread">reread</a> for an example of how <a href="if.html#if">if</a> and <a href="reread.html#reread">reread</a> can be used together to
+perform a loop.
+
+   </body></html>
+

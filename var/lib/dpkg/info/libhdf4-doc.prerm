@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+# Doc-base support
+if [ "$1" = "upgrade" -o "$1" = "remove" ]; then
+  if command -v install-docs >/dev/null 2>&1
+  then
+    install-docs -r libhdf4-ref
+    install-docs -r libhdf4-user
+  fi
+fi
+
+

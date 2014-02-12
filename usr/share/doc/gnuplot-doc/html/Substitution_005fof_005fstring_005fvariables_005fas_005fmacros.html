@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<title>Substitution_of_string_variables_as_macros - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Substitution_005fand_005fCommand_005fline_005fmacros.html#Substitution_005fand_005fCommand_005fline_005fmacros" title="Substitution_and_Command_line_macros">
+<link rel="prev" href="Substitution_005fof_005fsystem_005fcommands_005fin_005fbackquotes.html#Substitution_005fof_005fsystem_005fcommands_005fin_005fbackquotes" title="Substitution_of_system_commands_in_backquotes">
+<link rel="next" href="String_005fvariables.html#String_005fvariables" title="String_variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Substitution_of_string_variables_as_macros"></a>
+<a name="Substitution_005fof_005fstring_005fvariables_005fas_005fmacros"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="String_005fvariables.html#String_005fvariables">String_variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Substitution_005fof_005fsystem_005fcommands_005fin_005fbackquotes.html#Substitution_005fof_005fsystem_005fcommands_005fin_005fbackquotes">Substitution_of_system_commands_in_backquotes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Substitution_005fand_005fCommand_005fline_005fmacros.html#Substitution_005fand_005fCommand_005fline_005fmacros">Substitution_and_Command_line_macros</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.21.2 Substitution of string variables as macros</h4>
+
+<!-- ?substitution macros -->
+<p><a name="index-macros-232"></a><a name="index-macros-233"></a>
+
+   <p><a name="index-exists-234"></a><a name="index-exists-235"></a>
+
+   <p>Substitution of command line macros is disabled by default, but may be
+enabled using the <a href="macros.html#macros">macros</a> command.  If macro substitution is enabled,
+the character @ is used to trigger substitution of the current value of a
+string variable into the command line. The text in the string variable may
+contain any number of lexical elements.  This allows string variables to be
+used as command line macros.  Only string constants may be expanded using this
+mechanism, not string-valued expressions. 
+For example:
+
+<pre class="example">           set macros
+           style1 = "lines lt 4 lw 2"
+           style2 = "points lt 3 pt 5 ps 2"
+           range1 = "using 1:3"
+           range2 = "using 1:5"
+           plot "foo" @range1 with @style1, "bar" @range2 with @style2
+     
+</pre>
+   <p>The line containing @ symbols is expanded on input, so that by the time it is
+executed the effect is identical to having typed in full
+
+<pre class="example">           plot "foo" using 1:3 with lines lt 4 lw 2, \
+                "bar" using 1:5 with points lt 3 pt 5 ps 2
+     
+</pre>
+   <p>The function exists() may be useful in connection with macro evaluation. 
+The following example checks that C can safely be expanded as the name of
+a user-defined variable:
+
+<pre class="example">           C = "pi"
+           if (exists(C)) print C," = ", @C
+     
+</pre>
+   <p>Macro expansion does not occur inside either single or double quotes. 
+However macro expansion does occur inside backquotes.
+
+   <p>For execution of complete commands the <a href="evaluate.html#evaluate">evaluate</a> command may also be handy.
+
+   </body></html>
+

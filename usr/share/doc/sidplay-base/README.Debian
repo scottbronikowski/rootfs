@@ -1,0 +1,60 @@
+sidplay for DEBIAN/Linux
+*************************
+
+This package was debianised, packaged and is currently maintained by me,
+Ulf Jaenicke-Roessler <ujr@debian.org>, from the sources that I obtained
+from the SidPlay HomePage at
+ http://www.geocities.com/SiliconValley/Lakes/5147/
+The author can be reached by mailing him to sidplay@geocities.com.
+
+Generally I'm using pristine sources (since version 1.36.11).
+First, there were .tgz's provided by the author. Later on he
+moved to src.rpm's. These were unpacked by
+ rpm -i sidplay-{version}.src.rpm
+and
+ rpm -bp sidplay-{version}.spec (or just rpm -bp sidplay.spec)
+So far, both libsidplay and sidplay were distributed in one package.
+However, recently the upstream archives are split into libsidplay
+and sidplay-base. We will use this layout too.
+Sometimes the author supplies patches for new upstream versions before
+he uploads a complete new version to the location above. These patches
+are also used if appropriate.
+
+Version 1.36.20 (and newer) use GNU autoconf. ./configure is automatically
+run as part of rpm -bp, which agrees perfectly to our policy and
+packaging manual. Unfortunately, it doesn't simplify the package build
+in debian/rules very much, because we need to compile static and shared
+libraries with different compiler flags.
+Besides, the cache file remains in the archive and doesn't get rebuild on
+other architecture (simply because it exists). First, I added a 'distclean'
+target to Makefile.in myself, now it is already included in the upstream
+sources. This means, we can call it in "debian/rules clean" and (re)run
+./configure afterwards during "debian/rules build" to recreate the
+information on every other supported architecture.
+
+The only really remarkable point while adding support for the Debian package
+maintenance scheme was the execution of the upstream Makefiles with CXXFLAGS
+including -fPIC and -D_REENTRANT (according to the policy manual).
+
+The directory `audio' contains special audio drivers for certain
+other hardware (PC speaker, HP, sgi, ...). Please check if you need it
+when you rebuild the package. The current setup uses Linux drivers.
+
+There's neither a man page nor an info file available, simply because the
+upstream sources don't contain it. Because lintian complains about that,
+I'm using the "undocumented" page - maybe, some day I'll find the time and
+inspiration to write a real man page.
+
+Some things you may want to try:
+. sidplay -h	shows a help screen (same as sidplay --help)
+. sid2wav -h	shows another help screen (same as sid2wav --help)
+. sidplay	can get a tune's data from standard input
+. sid2wav	saves a sid tune as .wav file
+And there's 'sidcon' - according to the source 'A dirty sidtune format
+converter hack with almost no security code'. It converts between PSID
+and C64 data files. Actually I've never used it myself, so I can't really
+tell you why you could need it...
+
+Ulf Jaenicke-Roessler <ujr@debian.org>, Fri, 12 May 2000 15:32:48 +0200
+
+ vim:tw=79

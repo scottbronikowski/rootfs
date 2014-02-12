@@ -1,0 +1,44 @@
+#!/bin/sh
+set -e
+
+# From http://wiki.debian.org/DpkgConffileHandling
+# Remove a no-longer used conffile
+rm_conffile() {
+    PKGNAME="$1"
+    CONFFILE="$2"
+    if [ -e "$CONFFILE" ]; then
+        md5sum="`md5sum \"$CONFFILE\" | sed -e \"s/ .*//\"`"
+        old_md5sum="`dpkg-query -W -f='${Conffiles}' $PKGNAME | sed -n -e \"\\\\' $CONFFILE '{s/ obsolete$//;s/.* //p}\"`"
+        if [ "$md5sum" != "$old_md5sum" ]; then
+            echo "Obsolete conffile $CONFFILE has been modified by you."
+            echo "Saving as $CONFFILE.dpkg-bak ..."
+            mv -f "$CONFFILE" "$CONFFILE".dpkg-bak
+        else
+            echo "Removing obsolete conffile $CONFFILE ..."
+            rm -f "$CONFFILE"
+        fi
+    fi
+}
+
+## Transition from the old-style udev setup to the old-style dh_installudev setup
+## Then dh_installudev will take care of the transition to the new dh_installudev setup
+if [ "$1" = install ] || [ "$1" = upgrade ]; then
+    if [ -e "/etc/udev/rules.d/025_libsane-extras.rules" ]; then
+	mv /etc/udev/rules.d/025_libsane-extras.rules /etc/udev/rules.d/z60_libsane-extras.rules
+    fi
+
+    ## Remove obsolete /etc/sane.d/epkowa.conf conffile
+    if dpkg --compare-versions "$2" le "1.0.19.14"; then
+	## iscan not installed
+	if ! dpkg-query -W -f '${Status}\n' iscan > /dev/null 2>&1; then
+	    rm_conffile libsane-extras /etc/sane.d/epkowa.conf
+	fi
+    fi
+
+    ## Remove obsolete /etc/sane.d/hp_rts88xx.conf
+    if dpkg --compare-versions "$2" le "1.0.19.16"; then
+	rm_conffile libsane-extras /etc/sane.d/hp_rts88xx.conf
+    fi
+fi
+
+

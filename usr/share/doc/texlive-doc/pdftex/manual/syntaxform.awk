@@ -1,0 +1,1 @@
+../../../texlive-base/pdftex/manual/syntaxform.awk

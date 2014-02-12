@@ -1,0 +1,206 @@
+<html lang="en">
+<head>
+<title>with - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="plot.html#plot" title="plot">
+<link rel="prev" href="title.html#title" title="title">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="with"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="title.html#title">title</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="plot.html#plot">plot</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.14.9 with</h4>
+
+<!-- ?commands plot with -->
+<!-- ?commands splot with -->
+<!-- ?commands plot style -->
+<!-- ?commands splot style -->
+<!-- ?plot with -->
+<!-- ?plot style -->
+<!-- ?splot with -->
+<!-- ?splot style -->
+<p><a name="index-style-358"></a><a name="index-style-359"></a>
+
+   <p><a name="index-with-360"></a>
+Functions and data may be displayed in one of a large number of styles. 
+The <a href="with.html#with">with</a> keyword provides the means of selection.
+
+   <p>Syntax:
+<pre class="example">           with &lt;style&gt; { {linestyle | ls &lt;line_style&gt;}
+                          | {{linetype  | lt &lt;line_type&gt;}
+                             {linewidth | lw &lt;line_width&gt;}
+                             {linecolor | lc &lt;colorspec&gt;}
+                             {pointtype | pt &lt;point_type&gt;}
+                             {pointsize | ps &lt;point_size&gt;}
+                             {fill | fs &lt;fillstyle&gt;}
+                             {nohidden3d} {nocontours} {nosurface}
+                             {palette}}
+                        }
+     
+</pre>
+   <p>where &lt;style&gt; is one of
+
+<pre class="example">          lines        dots       steps     errorbars     xerrorbar    xyerrorlines
+          points       impulses   fsteps    errorlines    xerrorlines  yerrorbars
+          linespoints  labels     histeps   financebars   xyerrorbars  yerrorlines
+                                            vectors
+</pre>
+   <p>or
+<pre class="example">           boxes            candlesticks   image      circles
+           boxerrorbars     filledcurves   rgbimage
+           boxxyerrorbars   histograms     rgbalpha   pm3d
+     
+</pre>
+   <p>The first group of styles have associated line, point, and text properties. 
+The second group of styles also have fill properties.  See `fillstyle`.  Some
+styles have further sub-styles.  See `plotting styles` for details of each.
+
+   <p>A default style may be chosen by `set style function` and `set style data`.
+
+   <p>By default, each function and data file will use a different line type and
+point type, up to the maximum number of available types.  All terminal
+drivers support at least six different point types, and re-use them, in
+order, if more are required.  To see the complete set of line and point
+types available for the current terminal, type <a href="test.html#test">test</a>.
+
+   <p>If you wish to choose the line or point type for a single plot, &lt;line_type&gt;
+and &lt;point_type&gt; may be specified.  These are positive integer constants (or
+expressions) that specify the line type and point type to be used for the
+plot.  Use <a href="test.html#test">test</a> to display the types available for your terminal.
+
+   <p>You may also scale the line width and point size for a plot by using
+&lt;line_width&gt; and &lt;point_size&gt;, which are specified relative to the default
+values for each terminal.  The pointsize may also be altered
+globally&mdash;see <a href="pointsize.html#pointsize">pointsize</a> for details.  But note that both &lt;point_size&gt;
+as set here and  as set by <a href="pointsize.html#pointsize">pointsize</a> multiply the default point
+size&mdash;their effects are  not cumulative.  That is,
+`set pointsize 2; plot x w p ps 3` will use points three times default size,
+not six.
+
+   <p>It is also possible to specify `pointsize variable` either as part of a
+line style or for an individual plot. In this case one extra column of input
+is required, i.e. 3 columns for a 2D plot and 4 columns for a 3D splot. The
+size of each individual point is determined by multiplying the global
+pointsize by the value read from the data file.
+
+   <p>If you have defined specific line type/width and point type/size combinations
+with `set style line`, one of these may be selected by setting &lt;line_style&gt; to
+the index of the desired style.
+
+   <p>If gnuplot was built with <a href="pm3d.html#pm3d">pm3d</a> support, the special keyword <a href="palette.html#palette">palette</a> is
+allowed for smooth color change of lines, points and dots in `splots`. The
+color is chosen from a smooth palette which was set previously with the
+command <a href="palette.html#palette">palette</a>. The color value corresponds to the z-value of the
+point coordinates or to the color coordinate if specified by the 4th parameter
+in <a href="using.html#using">using</a>. Both 2d and 3d plots (`plot` and `splot` commands) can use palette
+colors as specified by either their fractional value or the corresponding value
+mapped to the colorbox range.  A palette color value can also be read from an
+explicitly specified input column in the <a href="using.html#using">using</a> specifier. 
+See `colors`, <a href="palette.html#palette">palette</a>, `linetype`.
+
+   <p>The keyword `nohidden3d` applies only to plots made with the `splot` command. 
+Normally the global option <a href="hidden3d.html#hidden3d">hidden3d</a> applies to all plots in the graph. 
+You can attach the `nohidden3d` option to any individual plots that you want
+to exclude from the hidden3d processing.  The individual elements other than
+surfaces (i.e. lines, dots, labels, ...) of a plot marked `nohidden3d` will all
+be drawn, even if they would normally be obscured by other plot elements.
+
+   <p>Similarly, the keyword `nocontours` will turn off contouring for an individual
+plot even if the global property <a href="contour.html#contour">contour</a> is active.
+
+   <p>Similarly, the keyword `nosurface` will turn off the 3D surface for an
+individual plot even if the global property <a href="surface.html#surface">surface</a> is active.
+
+   <p>The keywords may be abbreviated as indicated.
+
+   <p>Note that the `linewidth`, <a href="pointsize.html#pointsize">pointsize</a> and <a href="palette.html#palette">palette</a> options are not supported
+by all terminals.
+
+   <p>Examples:
+
+   <p>This plots sin(x) with impulses:
+<pre class="example">           plot sin(x) with impulses
+     
+</pre>
+   <p>This plots x with points, x**2 with the default:
+<pre class="example">           plot x w points, x**2
+     
+</pre>
+   <p>This plots tan(x) with the default function style, file "data.1" with lines:
+<pre class="example">           plot [ ] [-2:5] tan(x), 'data.1' with l
+     
+</pre>
+   <p>This plots "leastsq.dat" with impulses:
+<pre class="example">           plot 'leastsq.dat' w i
+     
+</pre>
+   <p>This plots the data file "population" with boxes:
+<pre class="example">           plot 'population' with boxes
+     
+</pre>
+   <p>This plots "exper.dat" with errorbars and lines connecting the points
+(errorbars require three or four columns):
+<pre class="example">           plot 'exper.dat' w lines, 'exper.dat' notitle w errorbars
+     
+</pre>
+   <p>Another way to plot "exper.dat" with errorlines (errorbars require three
+or four columns):
+<pre class="example">           plot 'exper.dat' w errorlines
+     
+</pre>
+   <p>This plots sin(x) and cos(x) with linespoints, using the same line type but
+different point types:
+<pre class="example">           plot sin(x) with linesp lt 1 pt 3, cos(x) with linesp lt 1 pt 4
+     
+</pre>
+   <p>This plots file "data" with points of type 3 and twice usual size:
+<pre class="example">           plot 'data' with points pointtype 3 pointsize 2
+     
+</pre>
+   <p>This plots file "data" with variable pointsize read from column 4
+<pre class="example">           plot 'data' using 1:2:4 with points pt 5 pointsize variable
+     
+</pre>
+   <p>This plots two data sets with lines differing only by weight:
+<pre class="example">           plot 'd1' t "good" w l lt 2 lw 3, 'd2' t "bad" w l lt 2 lw 1
+     
+</pre>
+   <p>This plots filled curve of x*x and a color stripe:
+<pre class="example">           plot x*x with filledcurve closed, 40 with filledcurve y1=10
+     
+</pre>
+   <p>This plots x*x and a color box:
+<pre class="example">           plot x*x, (x&gt;=-5 &amp;&amp; x&lt;=5 ? 40 : 1/0) with filledcurve y1=10 lt 8
+     
+</pre>
+   <p>This plots a surface with color lines:
+<pre class="example">           splot x*x-y*y with line palette
+     
+</pre>
+   <p>This plots two color surfaces at different altitudes:
+<pre class="example">           splot x*x-y*y with pm3d, x*x+y*y with pm3d at t
+     
+</pre>
+   </body></html>
+

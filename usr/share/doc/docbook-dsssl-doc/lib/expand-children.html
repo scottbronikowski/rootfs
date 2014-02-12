@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>expand-children</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="DSSSL Library Reference"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Miscellaneous"
+HREF="r300.htm"><LINK
+REL="PREVIOUS"
+TITLE="descendant-of?"
+HREF="descendant-of-p.html"><LINK
+REL="NEXT"
+TITLE="directory-depth"
+HREF="directory-depth.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>DSSSL Library Reference: Part of the Modular DocBook Stylesheet distribution</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="descendant-of-p.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="directory-depth.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="EXPAND-CHILDREN"
+></A
+>expand-children</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN968"
+></A
+><H2
+>Name</H2
+>expand-children&nbsp;--&nbsp;Expand selected nodes in a node list</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN971"
+></A
+><H2
+>Synopsis</H2
+><PRE
+CLASS="SYNOPSIS"
+>(expand-children nodelist gilist)</PRE
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN974"
+></A
+><H2
+>Description</H2
+><P
+>Given a node-list, <TT
+CLASS="LITERAL"
+>expand-children</TT
+> replaces all of the members
+of the node-list whose GIs are members of <TT
+CLASS="LITERAL"
+>gilist</TT
+> with 
+<TT
+CLASS="LITERAL"
+>(children)</TT
+>.</P
+><P
+>This function can be used to selectively 
+flatten the hierarchy of a document.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN981"
+></A
+><H2
+>Example</H2
+><P
+>Suppose that the node list is <TT
+CLASS="LITERAL"
+>(BOOKINFO PREFACE PART APPENDIX)</TT
+>.
+<TT
+CLASS="LITERAL"
+>(expand-children nl ("PART"))</TT
+> might return
+<TT
+CLASS="LITERAL"
+>(BOOKINFO PREFACE CHAPTER CHAPTER APPENDIX)</TT
+>.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN987"
+></A
+><H2
+>Author</H2
+><P
+>Norman Walsh, &lt;ndw@nwalsh.com&gt;</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN990"
+></A
+><H2
+>Source Code</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>(define (expand-children nodelist gilist)
+  ;; Expand selected nodes in a node list
+  (let loop ((nl nodelist) (result (empty-node-list)))
+    (if (node-list-empty? nl)
+	result
+	(if (member (gi (node-list-first nl)) gilist)
+	    (loop (node-list-rest nl) 
+		  (node-list result (children (node-list-first nl))))
+	    (loop (node-list-rest nl)
+		  (node-list result (node-list-first nl)))))))</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="descendant-of-p.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="directory-depth.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>descendant-of?</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="r300.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>directory-depth</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

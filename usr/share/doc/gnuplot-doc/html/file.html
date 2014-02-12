@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+<title>file - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="palette.html#palette" title="palette">
+<link rel="prev" href="functions_005f.html#functions_005f" title="functions_">
+<link rel="next" href="gamma_005fcorrection.html#gamma_005fcorrection" title="gamma_correction">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="file"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="gamma_005fcorrection.html#gamma_005fcorrection">gamma_correction</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="functions_005f.html#functions_005f">functions_</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="palette.html#palette">palette</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.24.53.4 file</h5>
+
+<!-- ?commands set palette file -->
+<!-- ?set palette file -->
+<!-- ?palette file -->
+<p><a href="file.html#file">file</a> is basically a `set palette defined (&lt;gradient&gt;)` where
+&lt;gradient&gt; is read from a datafile.  Either 4 columns (gray,R,G,B) or
+just three columns (R,G,B) have to be selected via the <a href="using.html#using">using</a> data file
+modifier.  In the three column case, the line number will be used as gray. 
+The gray range is automatically rescaled to [0,1].  The file is read as a
+normal data file, so all datafile modifiers can be used. 
+Please note, that `R` might actually be e.g. `H` if HSV color space is
+selected.
+
+   <p>As usual &lt;filename&gt; may be `'-'` which means that the data follow the command
+inline and are terminated by a single `e` on a line of its own.
+
+   <p>Use `show palette gradient` to display the gradient.
+
+   <p>Examples:
+
+   <p>Read in a palette of RGB triples each in range [0,255]:
+<pre class="example">           set palette file 'some-palette' using ($1/255):($2/255):($3/255)
+     
+</pre>
+   <p>Equidistant rainbow (blue-green-yellow-red) palette:
+<pre class="example">           set palette model RGB file "-"
+           0 0 1
+           0 1 0
+           1 1 0
+           1 0 0
+           e
+     
+</pre>
+   <p>Binary palette files are supported as well, see `binary general`. Example:
+put 64 triplets of R,G,B doubles into file palette.bin and load it by
+<pre class="example">           set palette file "palette.bin" binary record=64 using 1:2:3
+     
+</pre>
+   </body></html>
+

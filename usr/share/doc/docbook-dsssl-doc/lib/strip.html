@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>strip</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="DSSSL Library Reference"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Miscellaneous"
+HREF="r300.htm"><LINK
+REL="PREVIOUS"
+TITLE="split"
+HREF="split.html"><LINK
+REL="NEXT"
+TITLE="join"
+HREF="join.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>DSSSL Library Reference: Part of the Modular DocBook Stylesheet distribution</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="split.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="join.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="STRIP"
+></A
+>strip</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN372"
+></A
+><H2
+>Name</H2
+>strip&nbsp;--&nbsp;Strip leading and trailing characters off of a string</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN375"
+></A
+><H2
+>Synopsis</H2
+><PRE
+CLASS="SYNOPSIS"
+>(strip str #!optional (stripchars '(#\space #\
+ #\U-0009)))</PRE
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN378"
+></A
+><H2
+>Description</H2
+><P
+>Strips leading and trailing characters in the <TT
+CLASS="LITERAL"
+>stripchars</TT
+> list
+off of a string and returns the stripped string.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><TT
+CLASS="LITERAL"
+>str</TT
+></DT
+><DD
+><P
+>The string to strip</P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>stripchars</TT
+></DT
+><DD
+><P
+>A list of characters that should
+be stripped.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN393"
+></A
+><H2
+>Author</H2
+><P
+>Norman Walsh, &lt;ndw@nwalsh.com&gt;</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN396"
+></A
+><H2
+>Source Code</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>(define (strip str #!optional (stripchars '(#\space #\
+ #\U-0009)))
+  ;; Strip leading and trailing characters off of a string
+  (let* ((startpos (let loop ((count 0))
+		     (if (&#62;= count (string-length str))
+			 (string-length str)
+			 (if (member (string-ref str count) stripchars)
+			     (loop (+ count 1))
+			     count))))
+	 (tailstr  (substring str startpos (string-length str)))
+	 (endpos   (let loop ((count (- (string-length tailstr) 1)))
+		     (if (&#60; count 1)
+			 0
+			 (if (member (string-ref tailstr count) stripchars)
+			     (loop (- count 1))
+			     count)))))
+    (if (or (&#60; endpos 0)
+	    (string=? tailstr ""))
+	""
+	(substring tailstr 0 (+ endpos 1)))))</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="split.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="join.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>split</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="r300.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>join</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

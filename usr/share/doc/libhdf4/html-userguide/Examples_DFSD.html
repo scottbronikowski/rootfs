@@ -1,0 +1,284 @@
+<!?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for FrameMaker 8.0.8.2296" />
+    <meta name="TEMPLATEBASE" content="HDF4 Version 1.0" />
+    <meta name="LASTUPDATED" content="07/16/09 01:40:38" />
+    <title>dfsd_ex1.c</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+<link rel="first" title="First" href="UGTop.html" />
+<link rel="last" title="Last" href="UG_BookIX.html" />
+<link rel="previous" title="Previous" href="Examples_MAN.html" />
+<link rel="next" title="Next" href="Examples_AN.html" />
+
+    <script type="text/javascript" language="JavaScript1.2" src="scripts/expand.js"></script>
+    <script type="text/javascript" language="JavaScript1.2" src="scripts/seealso.js"></script>
+
+    <script type="text/javascript" language="JavaScript1.2">
+     <!--
+      var  WebWorksSeeAlso = new WebWorksSeeAlso_Object();
+     // -->
+    </script>
+  </head>
+
+  <body>
+
+    <p>
+    <table id="SummaryNotReq1" border="0" width="850"cellspacing="0" cellpadding="0">
+      <tr>
+        <td align="left">
+          <a href="http://www.hdfgroup.org"><img id="LongDescNotReq1" border="0" src="images/hdf_logo.jpg" width="90" height="70" alt="The HDF Group" valign="top" /></a>
+        </td>
+        <td valign="middle" align="center">
+          <b><H1>HDF User’s Guide</H1>
+           Version 4.2r4</b><br />
+        </td>
+        <td valign="middle" align="right">
+        <br/>
+<b><a HREF="UGTOP.html">[Top]</a>
+<a accesskey="3" href="Examples_MAN.html"><b>[Prev]</b><a accesskey="4" href="Examples_AN.html"><b>[Next]</b></b>
+        </td>
+      </tr>
+    </table>
+    </p>
+    <hr />
+
+    <blockquote>
+<a name="wp929958"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+<span style="color: #000000; font-family: Arial; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">dfsd_ex1</span>.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp930078"> </a>
+#define LENGTH 3<a name="wp930390"> </a>
+#define HEIGHT 2<a name="wp930391"> </a>
+#define WIDTH 5<a name="wp930392"> </a>
+main( )<a name="wp930394"> </a>
+{<a name="wp930395"> </a>
+	/* Create data array - store dimensions in array &#39;dims&#39; */<a name="wp930397"> </a>
+	static float64 scien_data[LENGTH][HEIGHT][WIDTH] = <a name="wp930398"> </a>
+  		{ 1., 2., 3., 4., 5.,<a name="wp930399"> </a>
+		6., 7., 8., 9.,10.,<a name="wp930400"> </a>
+		11.,12.,13.,14.,15.,<a name="wp930401"> </a>
+		16.,17.,18.,19.,20.,<a name="wp930402"> </a>
+		21.,22.,23.,24.,25.,<a name="wp930403"> </a>
+		26.,27.,28.,29.,30. };<a name="wp930404"> </a>
+	intn status;<a name="wp930406"> </a>
+	int32 dims[3] = {LENGTH, HEIGHT, WIDTH};<a name="wp930408"> </a>
+	/* Set number type to 64-bit float */<a name="wp930410"> </a>
+	status = DFSDsetNT(DFNT_FLOAT64);<a name="wp930411"> </a>
+	/* Write the data to file */<a name="wp930413"> </a>
+	status = DFSDadddata(&quot;Example1.hdf&quot;, 3, dims, scien_data);<a name="wp930414"> </a>
+}<a name="wp930416"> </a>
+</pre></div>
+<a name="wp930080"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+dfsd_ex1.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      PROGRAM WRITE SDS      <a name="wp929948"> </a>
+      integer  dsadata, dssnt, dims(3), status<a name="wp930454"> </a>
+      real*8   sci_data(5,2,3)<a name="wp930455"> </a>
+C     Create array called &#39;sci_data&#39;; store dimensions in array &#39;dims&#39;.<a name="wp930457"> </a>
+      data     sci_data/ 1., 2., 3., 4., 5.,<a name="wp930458"> </a>
+     $                   6., 7., 8., 9.,10.,<a name="wp930459"> </a>
+     $                   11.,12.,13.,14.,15.,<a name="wp930460"> </a>
+     $                   16.,17.,18.,19.,20.,<a name="wp930461"> </a>
+     $                   21.,22.,23.,24.,25.,<a name="wp930462"> </a>
+     $                   26.,27.,28.,29.,30./<a name="wp930463"> </a>
+      data dims /3,2,5/<a name="wp930465"> </a>
+C     Set number type to 64-bit float<a name="wp930467"> </a>
+      status = dssnt(6)<a name="wp930468"> </a>
+C     Write the data to file<a name="wp930470"> </a>
+      status = dsadata(&#39;Example1.hdf&#39;, 3, dims, sci_data)<a name="wp930471"> </a>
+      end<a name="wp930473"> </a>
+</pre></div>
+<a name="wp930234"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+<span style="color: #000000; font-family: Arial; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">dfsd_ex2</span>.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp929641"> </a>
+#define LENGTH 3<a name="wp930487"> </a>
+#define HEIGHT 2<a name="wp930488"> </a>
+#define WIDTH 5<a name="wp930489"> </a>
+main( )<a name="wp930491"> </a>
+{<a name="wp930492"> </a>
+	float64 scien_data[LENGTH][HEIGHT][WIDTH];<a name="wp930494"> </a>
+	int32 number_type;<a name="wp930495"> </a>
+	intn rank, status;<a name="wp930496"> </a>
+	int32 dims[3];<a name="wp930497"> </a>
+	/* Get the dimensions and number type of the array */<a name="wp930499"> </a>
+	status = DFSDgetdims(&quot;Example1.hdf&quot;, &amp;rank, dims, 3);<a name="wp930500"> </a>
+	status = DFSDgetNT(&amp;number_type);<a name="wp930501"> </a>
+	/* Read the array if the dimensions are correct */<a name="wp930503"> </a>
+	if (dims[0] &lt;= LENGTH &amp;&amp; dims[1] &lt;= HEIGHT &amp;&amp; dims[2] &lt;= WIDTH)<a name="wp930504"> </a>
+    		status = DFSDgetdata(&quot;Example1.hdf&quot;, rank, dims, scien_data);<a name="wp930505"> </a>
+}<a name="wp930507"> </a>
+</pre></div>
+<a name="wp930439"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+dfsd_ex2.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      PROGRAM READ SDS      <a name="wp928990"> </a>
+      integer  dsgdata, dsgdims, dsgnt, dims(3), status<a name="wp930519"> </a>
+      integer rank, num_type<a name="wp930520"> </a>
+      real*8   sci_data(5, 2, 3)<a name="wp930521"> </a>
+C     Get the dimensions and number type of the array.<a name="wp930523"> </a>
+      status = dsgdims(&#39;Example1.hdf&#39;, rank, dims, 3)<a name="wp930524"> </a>
+      status = dsgnt(num_type)<a name="wp930525"> </a>
+C     Read the array if the dimensions are correct.<a name="wp930527"> </a>
+      if ((dims(1) .eq. 3) .and. (dims(2) .eq. 2) .and. <a name="wp930528"> </a>
+     +    (dims(3) .eq. 5)) then <a name="wp930529"> </a>
+            status = dsgdata(&#39;Example1.hdf&#39;, rank, dims, sci_data)<a name="wp930530"> </a>
+      endif<a name="wp930531"> </a>
+      end<a name="wp930533"> </a>
+</pre></div>
+<a name="wp929010"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+dfsd_ex3.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp929109"> </a>
+		<a name="wp930545"> </a>
+/*  <a name="wp930546"> </a>
+ *  Write an array of floating point values representing<a name="wp930547"> </a>
+ *  pressure in a 3x2x5 array.<a name="wp930548"> </a>
+ */<a name="wp930549"> </a>
+main( ) <a name="wp930551"> </a>
+{<a name="wp930552"> </a>
+	float32 data[3][2][5];<a name="wp930554"> </a>
+	int32 dimsizes[3];<a name="wp930555"> </a>
+	float32 max, min;<a name="wp930556"> </a>
+	intn status, rank;<a name="wp930557"> </a>
+	int i, j, k; <a name="wp930558"> </a>
+	/* Set the rank and dimension sizes. */<a name="wp930560"> </a>
+	rank = 3;<a name="wp930561"> </a>
+	dimsizes[0] = 3;<a name="wp930562"> </a>
+	dimsizes[1] = 2;<a name="wp930563"> </a>
+	dimsizes[2] = 5;<a name="wp930564"> </a>
+	/* Set the dimensions, to define the beginning of a data set. */<a name="wp930566"> </a>
+	status = DFSDsetdims(rank, dimsizes);<a name="wp930567"> </a>
+	/* Set the maximum string length to 50. */<a name="wp930569"> </a>
+	status = DFSDsetlengths(50, 50, 50, 50);<a name="wp930570"> </a>
+	/* Define the attribute strings and values. */<a name="wp930572"> </a>
+	status = DFSDsetdatastrs(&quot;Pressure Data&quot;, &quot;Millibars&quot;, <a name="wp930573"> </a>
+						&quot;F5.5&quot;, &quot;None&quot;);<a name="wp930574"> </a>
+	max = 1500.0;<a name="wp930575"> </a>
+	min = 0.0;<a name="wp930576"> </a>
+	status = DFSDsetrange(&amp;max, &amp;min);<a name="wp930577"> </a>
+	/* Set the rank to 3. */<a name="wp930579"> </a>
+	rank = 3;<a name="wp930580"> </a>
+	/* Calculate the data values. */<a name="wp930582"> </a>
+	for (i = 0; i &lt; 3; i++)<a name="wp930583"> </a>
+		for (j = 0; j &lt; 2; j++)<a name="wp930584"> </a>
+			for (k = 0; k &lt; 5; k++)<a name="wp930585"> </a>
+				data[i][j][k] = i*100.0 + j*10.0 + k;<a name="wp930586"> </a>
+   <a name="wp930587"> </a>
+	/* Write the data set and its attributes to file. */<a name="wp930588"> </a>
+	status = DFSDadddata(&quot;Example3.hdf&quot;, rank, dimsizes, data);<a name="wp930589"> </a>
+}<a name="wp930591"> </a>
+</pre></div>
+<a name="wp929118"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+dfsd_ex3.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      PROGRAM SET ATTRIBS<a name="wp929361"> </a>
+      real*8 data(5, 2, 3), max, min, i, j, k<a name="wp930602"> </a>
+      integer*4 dimsizes(3)<a name="wp930603"> </a>
+      integer status, rank<a name="wp930604"> </a>
+      integer dsslens, dssdast, dssrang, dsadata<a name="wp930606"> </a>
+      integer dssdims<a name="wp930607"> </a>
+      character*13 label /&quot;Pressure Data&quot;/<a name="wp930609"> </a>
+      character*9 unit /&quot;Millibars&quot;/<a name="wp930610"> </a>
+      character*4 format /&quot;F5.5&quot;/<a name="wp930611"> </a>
+      character*4 coordsys /&quot;None&quot;/<a name="wp930612"> </a>
+C     Set the dimensions, to define the beginning of a data set.<a name="wp930614"> </a>
+      rank = 3<a name="wp930615"> </a>
+      dimsizes(1) = 5<a name="wp930616"> </a>
+      dimsizes(2) = 2<a name="wp930617"> </a>
+      dimsizes(3) = 3<a name="wp930618"> </a>
+      status = dssdims(rank, dimsizes)<a name="wp930619"> </a>
+C     Set the maximum string lengths to 50.<a name="wp930621"> </a>
+      status = dsslens(50, 50, 50, 50)<a name="wp930622"> </a>
+C     Define the attribute strings and values.<a name="wp930624"> </a>
+      status = dssdast(label, unit, format, coordsys)<a name="wp930625"> </a>
+      max = 1500.0<a name="wp930626"> </a>
+      min = 0.0<a name="wp930627"> </a>
+      status = dssrang(max, min)<a name="wp930628"> </a>
+C     Fill the data array with values.<a name="wp930630"> </a>
+      do 30 k = 1, 3<a name="wp930631"> </a>
+       do 20 j = 1, 2<a name="wp930632"> </a>
+        do 10 i = 1, 5<a name="wp930633"> </a>
+          data(i, j, k) = i*100.0 + j*10.0 + k<a name="wp930634"> </a>
+10      continue<a name="wp930635"> </a>
+20     continue<a name="wp930636"> </a>
+30    continue<a name="wp930637"> </a>
+C     Write the data set and its attributes to file.<a name="wp930639"> </a>
+      status = dsadata(&quot;Example3.hdf&quot;, rank, dimsizes, data)<a name="wp930640"> </a>
+      end<a name="wp930642"> </a>
+</pre></div>
+<a name="wp929634"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+dfsd_ex4.c
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+#include &quot;hdf.h&quot;<a name="wp929475"> </a>
+main( )<a name="wp930652"> </a>
+{<a name="wp930653"> </a>
+	intn rank, maxrank, status;<a name="wp930655"> </a>
+	int32 dimsizes[3];<a name="wp930656"> </a>
+	char datalabel[50], dataunit[50], datafmt[50], coordsys[50];<a name="wp930657"> </a>
+	float64 data[3][2][5];<a name="wp930658"> </a>
+	maxrank = 3;<a name="wp930660"> </a>
+	status = DFSDgetdims(&quot;Example3.hdf&quot;, &amp;rank, dimsizes, <a name="wp930661"> </a>
+					maxrank);<a name="wp930662"> </a>
+	status = DFSDgetdatastrs(datalabel, dataunit, datafmt, <a name="wp930663"> </a>
+					coordsys);<a name="wp930664"> </a>
+	status = DFSDgetdata(&quot;Example3.hdf&quot;, rank, dimsizes, data);<a name="wp930665"> </a>
+}<a name="wp930667"> </a>
+</pre></div>
+<a name="wp929635"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 6pt; margin-left: 0pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: underline; text-indent: 0pt; text-transform: none">
+dfsd_ex4.f
+</div>
+<div class="pPreformatted" style="font-family: Arial; font-size: 10pt"><pre class="pPreformatted" style="font-family: Arial; font-size: 10pt">
+      PROGRAM READ SD INFO<a name="wp929603"> </a>
+      integer dsgdata, dsgdast, dsgdims<a name="wp930679"> </a>
+      integer*4 dimsizes(3)<a name="wp930680"> </a>
+      integer status, rank, maxrank<a name="wp930681"> </a>
+      character*50 datalabel, dataunit, datafmt<a name="wp930682"> </a>
+      character*10 coordsys<a name="wp930683"> </a>
+      real*8 data(5, 2, 3)<a name="wp930684"> </a>
+      <a name="wp930685"> </a>
+      maxrank = 3<a name="wp930686"> </a>
+      status = dsgdims(&#39;Example3.hdf&#39;, rank, dimsizes, maxrank)<a name="wp930687"> </a>
+      status = dsgdast(datalabel, dataunit, datafmt, coordsys)<a name="wp930688"> </a>
+      status = dsgdata(&#39;Example3.hdf&#39;, rank, dimsizes, data)<a name="wp930689"> </a>
+      <a name="wp930690"> </a>
+      end<a name="wp930691"> </a>
+</pre></div>
+    </blockquote>
+
+    <hr />
+
+    <table id="SummaryNotReq2" border="0" width="850" cellspacing="0" cellpadding="0">
+      <tr>
+        <td align="left">
+        HDF4.2r4 - February 2009<br/>
+        <a href="UG_Copyright.html">Copyright</a>
+        <td align="right">
+          <span style="font-size: 12px; font-weight: bold">
+            The HDF Group<br />
+          </span>
+          <span style="font-size: 12px">
+            <a href="http://www.hdfgroup.org">www.hdfgroup.org</a><br />
+            <img valign="bottom" border="0" src="images/help.jpg" height="12" alt="The HDF Group" valign="top" />
+          </span>
+        </td>
+      </tr>
+    </table>
+
+    <table id="SummaryNotReq3" width="220" border="0" cellpadding="0" cellspacing="0">
+    </table>
+  </body>
+</html>

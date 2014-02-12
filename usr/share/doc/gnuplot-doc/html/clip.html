@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>clip - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="clabel.html#clabel" title="clabel">
+<link rel="next" href="cntrparam.html#cntrparam" title="cntrparam">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="clip"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="cntrparam.html#cntrparam">cntrparam</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="clabel.html#clabel">clabel</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.10 clip</h4>
+
+<!-- ?commands set clip -->
+<!-- ?commands unset clip -->
+<!-- ?commands show clip -->
+<!-- ?set clip -->
+<!-- ?unset clip -->
+<!-- ?show clip -->
+<p><a name="index-clip-408"></a><a name="index-clip-409"></a>
+
+   <p><a name="index-noclip-410"></a>
+`gnuplot` can clip data points and lines that are near the boundaries of a
+graph.
+
+   <p>Syntax:
+<pre class="example">           set clip &lt;clip-type&gt;
+           unset clip &lt;clip-type&gt;
+           show clip
+     
+</pre>
+   <p>Three clip types for points and lines are supported by `gnuplot`: `points`,
+`one`, and `two`. One, two, or all three clip types may be active for a
+single graph. 
+Note that clipping of color filled quadrangles drawn by <a href="pm3d.html#pm3d">pm3d</a> maps and
+surfaces is not controlled by this command, but by `set pm3d clip1in` and
+`set pm3d clip4in`.
+
+   <p>The `points` clip type forces `gnuplot` to clip (actually, not plot at all)
+data points that fall within but too close to the boundaries.  This is done
+so that large symbols used for points will not extend outside the boundary
+lines.  Without clipping points near the boundaries, the plot may look bad. 
+Adjusting the x and y ranges may give similar results.
+
+   <p>Setting the `one` clip type causes `gnuplot` to draw a line segment which has
+only one of its two endpoints within the graph.  Only the in-range portion of
+the line is drawn.  The alternative is to not draw any portion of the line
+segment.
+
+   <p>Some lines may have both endpoints out of range, but pass through the graph. 
+Setting the `two` clip-type allows the visible portion of these lines to be
+drawn.
+
+   <p>In no case is a line drawn outside the graph.
+
+   <p>The defaults are `noclip points`, `clip one`, and `noclip two`.
+
+   <p>To check the state of all forms of clipping, use
+<pre class="example">           show clip
+     
+</pre>
+   <p>For backward compatibility with older versions, the following forms are also
+permitted:
+<pre class="example">           set clip
+           unset clip
+     
+</pre>
+   <p><a href="clip.html#clip">clip</a> is synonymous with `set clip points`; <a href="clip.html#clip">clip</a> turns off all
+three types of clipping.
+
+   </body></html>
+

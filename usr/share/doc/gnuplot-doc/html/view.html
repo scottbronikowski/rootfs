@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>view - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="version.html#version" title="version">
+<link rel="next" href="vrange.html#vrange" title="vrange">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="view"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="vrange.html#vrange">vrange</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="version.html#version">version</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.77 view</h4>
+
+<!-- ?commands set view -->
+<!-- ?commands show view -->
+<!-- ?set view -->
+<!-- ?set view map -->
+<!-- ?show view -->
+<p><a name="index-view-579"></a><a name="index-view-580"></a>
+
+   <p>The <a href="view.html#view">view</a> command sets the viewing angle for `splot`s.  It controls how
+the 3D coordinates of the plot are mapped into the 2D screen space.  It
+provides controls for both rotation and scaling of the plotted data, but
+supports orthographic projections only.  It supports both 3D projection or
+orthogonal 2D projection into a 2D plot-like map.
+
+   <p>Syntax:
+<pre class="example">           set view &lt;rot_x&gt;{,{&lt;rot_z&gt;}{,{&lt;scale&gt;}{,&lt;scale_z&gt;}}}
+           set view map
+           set view {no}equal {xy|xyz}
+           show view
+     
+</pre>
+   <p>where &lt;rot_x&gt; and &lt;rot_z&gt; control the rotation angles (in degrees) in a
+virtual 3D coordinate system aligned with the screen such that initially
+(that is, before the rotations are performed) the screen horizontal axis is
+x, screen vertical axis is y, and the axis perpendicular to the screen is z. 
+The first rotation applied is &lt;rot_x&gt; around the x axis.  The second rotation
+applied is &lt;rot_z&gt; around the new z axis.
+
+   <p>Command `set view map` is used to represent the drawing as a map. It can be
+used for <a href="contour.html#contour">contour</a> plots, or for color <a href="pm3d.html#pm3d">pm3d</a> maps. In the latter, take care
+that you properly use <a href="zrange.html#zrange">zrange</a> and <a href="cbrange.html#cbrange">cbrange</a> for input data point filtering
+and color range scaling, respectively.
+
+   <p>&lt;rot_x&gt; is bounded to the [0:180] range with a default of 60 degrees, while
+&lt;rot_z&gt; is bounded to the [0:360] range with a default of 30 degrees. 
+&lt;scale&gt; controls the scaling of the entire `splot`, while &lt;scale_z&gt; scales
+the z axis only.  Both scales default to 1.0.
+
+   <p>Examples:
+<pre class="example">           set view 60, 30, 1, 1
+           set view ,,0.5
+     
+</pre>
+   <p>The first sets all the four default values.  The second changes only scale,
+to 0.5.
+
+<ul class="menu">
+<li><a accesskey="1" href="equal_005faxes.html#equal_005faxes">equal_axes</a>
+</ul>
+
+   </body></html>
+

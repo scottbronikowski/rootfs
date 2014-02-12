@@ -1,0 +1,1891 @@
+<!?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for FrameMaker 8.0.8.2296" />
+    <meta name="TEMPLATEBASE" content="HDF4 Version 1.0" />
+    <meta name="LASTUPDATED" content="07/16/09 01:39:38" />
+    <title>Chapter</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+<link rel="first" title="First" href="UGTop.html" />
+<link rel="last" title="Last" href="UG_BookIX.html" />
+<link rel="previous" title="Previous" href="UG_Vgroups.html" />
+<link rel="next" title="Next" href="UG_RIS24s.html" />
+
+    <script type="text/javascript" language="JavaScript1.2" src="scripts/expand.js"></script>
+    <script type="text/javascript" language="JavaScript1.2" src="scripts/seealso.js"></script>
+
+    <script type="text/javascript" language="JavaScript1.2">
+     <!--
+      var  WebWorksSeeAlso = new WebWorksSeeAlso_Object();
+     // -->
+    </script>
+  </head>
+
+  <body>
+
+    <p>
+    <table id="SummaryNotReq1" border="0" width="850"cellspacing="0" cellpadding="0">
+      <tr>
+        <td align="left">
+          <a href="http://www.hdfgroup.org"><img id="LongDescNotReq1" border="0" src="images/hdf_logo.jpg" width="90" height="70" alt="The HDF Group" valign="top" /></a>
+        </td>
+        <td valign="middle" align="center">
+          <b><H1>HDF User’s Guide</H1>
+           Version 4.2r4</b><br />
+        </td>
+        <td valign="middle" align="right">
+        <br/>
+<b><a HREF="UGTOP.html">[Top]</a>
+<a accesskey="3" href="UG_Vgroups.html"><b>[Prev]</b><a accesskey="4" href="UG_RIS24s.html"><b>[Next]</b></b>
+        </td>
+      </tr>
+    </table>
+    </p>
+    <hr />
+
+    <blockquote>
+<a name="wp1803"> </a>
+<h1> <align left=20>
+Chapter
+
+<a name="wp24009"> </a>
+6
+
+--
+<a name="wp1811"> </a>
+8-Bit Raster Images (DFR8 API)
+</h1>
+
+<hr /><a name="wp5969"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 23pt" class="pHeading1">
+	6.1	Chapter Overview
+</h2>
+<a name="wp2870"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+This chapter describes the 8-bit raster image data model and the single-file DFR8 interface routines. The DFR8 interface is a single-file interface that consists of routines for reading and writing raster image sets.
+</p>
+<a name="wp2872"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	6.2	The 8-Bit Raster Data Model
+</h2>
+<a name="wp5987"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The data model for the <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">8-bit raster image</span> set, or <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">RIS8</span>, an acronym for &quot;Raster Image Set, 8-bit&quot;, supports three types of objects; two-dimensional 8-bit raster images, dimensions and palettes. The latter two items occur once per RIS8. The following figure shows the contents of an 8-bit raster image set.
+</p>
+<a name="wp6032"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 95pt; margin-right: 0pt; margin-top: 8pt; text-align: left; text-decoration: none; text-indent: -95pt; text-transform: none">
+FIGURE 6a	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">8-Bit Raster Image Set Contents</span></div>
+<div align="left"><img src="images/hdf4_UG-07-1-1.jpg" height="205" width="520" id="wp5994" border="0" hspace="0" vspace="0"/></div><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 95pt; margin-right: 0pt; margin-top: 8pt; text-align: left; text-decoration: none; text-indent: -95pt; text-transform: none">
+
+</div>
+<a name="wp2926"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.2.1	Required 8-Bit Raster Image Data Set Objects
+</h3>
+<a name="wp2928"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+Every RIS8 object requires an image and dimension object. Required objects are created by the HDF library using information provided at the time the image is written. 
+</p>
+<a name="wp2945"> </a><h4 style="font-family: Times New Roman; font-size: 10pt; margin-top: 10pt" class="pHeading4">
+	6.2.1.1	8-Bit Raster Image Data Representation
+</h4>
+<a name="wp2947"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+An<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault"> 8-bit raster image </span>is a two-dimensional array of 8-bit numbers which represent <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">pixels</span> or &quot;picture elements&quot;.The first row of pixels corresponds to the top row of the image, the second row of pixels to the second row of the image and so forth. Pixel values range from 0 to 255, and indicate to the hardware which colors to use when mapping the corresponding pixels to the screen display. A <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">color lookup table, </span>or <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">palette</span>, provides the means of correlating pixel values to colors.
+</p>
+<a name="wp26752"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+As an example, consider a stream of 8-bit numbers representing a raster image. <a href="UG_RIS8s.html#wp26757">(See Figure 6b.)</a> When the image is displayed, the color associated with the first number in the data stream is placed in the upper left corner of the image. The remainder of the first line is then painted from left-to-right using as many values from the data stream as is necessary to complete the line. The remainder of the rows are similarly painted from left-to-right and top-to-bottom until every value in the data stream appears is represented by one pixel in the image. 
+</p>
+<a name="wp26757"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 95pt; margin-right: 0pt; margin-top: 8pt; text-align: left; text-decoration: none; text-indent: -95pt; text-transform: none">
+FIGURE 6b	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">The Data Representation of an 8-Bit Raster Image</span></div>
+<div align="left"><img src="images/hdf4_UG-07-1-2.jpg" height="404" width="521" id="wp26755" border="0" hspace="0" vspace="0"/></div><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 95pt; margin-right: 0pt; margin-top: 8pt; text-align: left; text-decoration: none; text-indent: -95pt; text-transform: none">
+<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault"></span>
+</div>
+<a name="wp26758"> </a><h4 style="font-family: Times New Roman; font-size: 10pt; margin-top: 10pt" class="pHeading4">
+	6.2.1.2	8-Bit Raster Image Dimension
+</h4>
+<a name="wp2951"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The dimensions of an image are its height and width in pixels.
+</p>
+<a name="wp4389"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.2.2	Optional 8-Bit Raster Image Data Set Objects
+</h3>
+<a name="wp7382"> </a><h4 style="font-family: Times New Roman; font-size: 10pt; margin-top: 10pt" class="pHeading4">
+	6.2.2.1	Palettes
+</h4>
+<a name="wp7383"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+A <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">palette</span> is a lookup table consisting of 256 unique numerical values, each of which map to the 256 possible pixel color values and is stored in a RIS8 object. For more details on HDF palettes refer to Chapter 9, titled <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Palettes</span> <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">(DFP API)</span>. 
+</p>
+<a name="wp4387"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.2.3	Compression Method
+</h3>
+<a name="wp4394"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The compression method indicates if and how the image is compressed. It can be, at the programmer&#39;s option, explicitly set or left as its default setting of no compression. Compression schemes supported by HDF version 4.0 are run-length encoding or RLE, joint photographic expert group compression, or JPEG, and image compression, or IMCOMP . The list of compression methods is presented below. <a href="UG_RIS8s.html#wp2968">(See Table 6A.)</a> The HDF tags <code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_RLE</code>, <code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_IMCOMP</code> and <code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_JPEG</code> are respectively defined as the values 11, 12 and 2 in the &quot;hcomp.h&quot; header file. 
+</p>
+<a name="wp2968"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 6A	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">8-Bit Raster Image Compression Method List</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp9550table9548">
+  <caption></caption>
+  <tr>    <td><a name="wp9550"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Compression Method
+</div>
+</td>
+    <td><a name="wp9552"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Type
+</div>
+</td>
+    <td><a name="wp9554"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Compression Code
+</div>
+</td>
+    <td><a name="wp9556"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Requirements
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp9558"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+None
+</div>
+</td>
+    <td><a name="wp9560"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+N/A
+</div>
+</td>
+    <td><a name="wp9562"> </a><div style="color: #000000; font-family: Courier New; font-size: 9pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+<code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_NONE</code>
+</div>
+</td>
+    <td><a name="wp9564"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Image data only (default setting).
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp9566"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+RLE
+</div>
+</td>
+    <td><a name="wp9568"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Lossless 
+</div>
+</td>
+    <td><a name="wp9570"> </a><div style="color: #000000; font-family: Courier New; font-size: 9pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+<code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_RLE</code>
+</div>
+</td>
+    <td><a name="wp9572"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Image data only.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp9574"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+JPEG
+</div>
+</td>
+    <td><a name="wp9576"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Lossy 
+</div>
+</td>
+    <td><a name="wp9578"> </a><div style="color: #000000; font-family: Courier New; font-size: 9pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+<code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_JPEG</code>
+</div>
+</td>
+    <td><a name="wp9580"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Image data, quality factor and compatibility factor.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp9582"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+IMCOMP
+</div>
+</td>
+    <td><a name="wp9584"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Lossy 
+</div>
+</td>
+    <td><a name="wp9586"> </a><div style="color: #000000; font-family: Courier New; font-size: 9pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+<code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_IMCOMP</code>
+</div>
+</td>
+    <td><a name="wp9588"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Image data and palette.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp2970"> </a><p style="font-family: Times New Roman; font-size: 10pt" class="pBodyRelative">
+RLE Compression 
+</p>
+<a name="wp2972"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">RLE</span> method is a lossless compression method recommended for images where data retention is critical. The RLE algorithm compresses images by condensing strings of identical pixel values into two bytes. The first byte identifies the number of pixels in the string and the second byte records the pixel value for the string.
+</p>
+<a name="wp2974"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The amount of space saved by RLE depends upon how much repetition there is among adjacent pixels. If there is a great deal of repetition, more space is saved and if there is little repetition, the savings can be very small. In the worst case when every pixel is different from the one that precedes it an extra byte is added for every 127 bytes in the image.
+</p>
+<a name="wp2976"> </a><p style="font-family: Times New Roman; font-size: 10pt" class="pBodyRelative">
+JPEG Compression 
+</p>
+<a name="wp2978"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">JPEG</span>, or Joint Photographic Expert Group, compression method is a lossy compression algorithm whose use is recommended for photographic or scanned images. Using JPEG compression to reduce the size of an image changes the values of the pixels and hence may alter the meaning of the corresponding data. Version 5.0 of the JPEG library is available in HDF version 4.0.
+</p>
+<a name="wp4426"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+JPEG compression requires two parameters, the first the level of image quality and the second, compatibility. The <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">quality factor</span> determines how much of the data will be lost and thus directly impacts the size of the compressed image. A quality factor of 1 specifies the lowest quality or maximum image compression. A quality factor of 100 specifies the highest quality or minimum image compression. Note that all images compressed using the JPEG algorithm are stored in a lossy manner, even those stored with a quality factor of 100. Usually, it is best to experiment with the quality factor to find the most acceptable one. 
+</p>
+<a name="wp5036"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The <em class="cVarName">baseline</em> parameter determines whether the contents of the quantization tables used during compression are forced into the range of 0 to 255. The <em class="cVarName">baseline</em> parameter is normally set to the value <span style="color: #000000; font-family: Courier New; font-size: 9pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">1</span> which forces baseline results. You should set the value of the <em class="cVarName">baseline</em> parameter to values other than <span style="color: #000000; font-family: Courier New; font-size: 9pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">1</span> <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">only</span> if you are familiar with the JPEG algorithm. 
+</p>
+<a name="wp4448"> </a><p style="font-family: Times New Roman; font-size: 10pt" class="pBodyRelative">
+IMCOMP Compression 
+</p>
+<a name="wp8322"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">IMCOMP</span> is a lossy compression method available in earlier versions of HDF. IMCOMP compression is generally of inferior quality to JPEG compression and is not recommended unless your images will be viewed on a 16-color monitor. For backward compatibility, IMCOMP compression is supported in the HDF library. For details on IMCOMP refer to Appendix F, titled <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Backward Compatibility Issues</span>.
+</p>
+<a name="wp8324"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	6.3	The 8-Bit Raster Image Interface
+</h2>
+<a name="wp3024"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The HDF library contains routines for reading and writing 8-bit raster image sets. The functions <b class="cFunctionName">DFR8addimage</b>, <b class="cFunctionName">DFR8putimage</b> and <b class="cFunctionName">DFR8getimage</b> are sufficient for most reading and writing operations.
+</p>
+<a name="wp3026"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.3.1	8-Bit Raster Image Library Routines
+</h3>
+<a name="wp3028"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The names of all C functions in the 8-bit raster image interface are prefaced by &quot;DFR8&quot; and the names of the equivalent FORTRAN-77 functions are prefaced by &quot;d8&quot;. These routines are divided into the following categories:
+</p>
+<div class="pSmartList1" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal"><ul class="pSmartList1" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal">
+<div class="pSmartList2" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal"><ul class="pSmartList2" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal">
+<a name="wp3030"> </a><div style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal" class="pSmartList2"><li><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Write routines</span> create raster image sets and store them in new files or append them to existing files. </li></div>
+<a name="wp11084"> </a><div style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal" class="pSmartList2"><li><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Read routines</span> determine the dimensions and palette assignment for an image set, read the actual image data and provide sequential or random read access to any raster image set.</li></div>
+</ul></div>
+</ul></div>
+<a name="wp11088"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The DFR8 function calls are further defined in <a href="UG_RIS8s.html#wp11212">Table 6B</a> and in the <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">HDF Reference Guide</span>.
+</p>
+<a name="wp11212"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 6B	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8 Library Routines</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp11093table11091">
+  <caption></caption>
+  <tr>    <th colspan="1" rowspan="2"><a name="wp11093"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Category
+</div>
+</th>
+    <th colspan="2" rowspan="1"><a name="wp11095"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+</th>
+    <th colspan="1" rowspan="2"><a name="wp11099"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</th>
+</tr>
+  <tr>    <th><a name="wp11103"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C 
+</div>
+</th>
+    <th><a name="wp11105"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</th>
+</tr>
+  <tr>    <td colspan="1" rowspan="6"><a name="wp11109"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Write
+</div>
+</td>
+    <td><a name="wp11111"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8addimage
+</div>
+</td>
+    <td><a name="wp11113"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8aimg
+</div>
+</td>
+    <td><a name="wp11115"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Appends an 8-bit raster image to a file.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11119"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8putimage
+</div>
+</td>
+    <td><a name="wp11121"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8pimg
+</div>
+</td>
+    <td><a name="wp11123"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Writes an 8-bit raster image to an existing file or creates the file.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11127"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8setcompress
+</div>
+</td>
+    <td><a name="wp11129"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8setcomp
+</div>
+</td>
+    <td><a name="wp11131"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Sets the compression type.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11135"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8setpalette
+</div>
+</td>
+    <td><a name="wp11137"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8spal
+</div>
+</td>
+    <td><a name="wp11139"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Sets palette for multiple 8-bit raster images.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11143"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8writeref
+</div>
+</td>
+    <td><a name="wp11145"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8wref
+</div>
+</td>
+    <td><a name="wp11147"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Stores the raster image using the specified reference number.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11151"> </a><div class="pCellBody">
+None
+</div>
+</td>
+    <td><a name="wp11153"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8sjpeg
+</div>
+</td>
+    <td><a name="wp11155"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Passes the quality and compatibility factors needed for the JPEG compression algorithm.
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="7"><a name="wp11157"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Read
+</div>
+</td>
+    <td><a name="wp11159"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8getdims
+</div>
+</td>
+    <td><a name="wp11161"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8gdims
+</div>
+</td>
+    <td><a name="wp11163"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Retrieves dimensions for an 8-bit raster image.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11167"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8getimage
+</div>
+</td>
+    <td><a name="wp11169"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8gimg
+</div>
+</td>
+    <td><a name="wp11171"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Retrieves an 8-bit raster image and its palette.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11175"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8getpalref
+</div>
+</td>
+    <td><a name="wp11177"> </a><div class="pCellBody">
+None
+</div>
+</td>
+    <td><a name="wp11179"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Returns the reference number of the palette associated with the last image accessed.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11183"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8lastref
+</div>
+</td>
+    <td><a name="wp11185"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8lref
+</div>
+</td>
+    <td><a name="wp11187"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Returns reference number of the last element accessed.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11191"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8nimages
+</div>
+</td>
+    <td><a name="wp11193"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8nims
+</div>
+</td>
+    <td><a name="wp11195"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Returns number of raster images in a file.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11199"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8readref
+</div>
+</td>
+    <td><a name="wp11201"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8rref
+</div>
+</td>
+    <td><a name="wp11203"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Gets the next raster image with the specified reference number.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11207"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8restart
+</div>
+</td>
+    <td><a name="wp11209"> </a><div style="color: #000000; font-family: Courier New; font-size: 6pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+d8first
+</div>
+</td>
+    <td><a name="wp11211"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Ignores information about last file accessed and restarts from beginning.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp3049"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	6.4	Writing 8-Bit Raster Images
+</h2>
+<a name="wp3051"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The DFR8 programming model for writing an 8-bit raster image sets is as follows:
+</p>
+<div class="pSmartList1" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal"><ol type="1" class="pSmartList1" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal">
+<a name="wp3053"> </a><div style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal" class="pSmartList1"><li>Set the compression type if the image is to be compressed. (optional)</li></div>
+<a name="wp3055"> </a><div style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal" class="pSmartList1"><li>Identify the palette if one is to be stored with the image. (optional)</li></div>
+<a name="wp3057"> </a><div style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal" class="pSmartList1"><li>Write the raster data to the file. </li></div>
+</ol></div>
+<a name="wp3063"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The two optional steps can be invoked in any order, as long as they are executed before Step 3. By default, images are stored uncompressed with no associated palette.
+</p>
+<a name="wp3072"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.4.1	Storing a Raster Image: DFR8putimage and DFR8addimage
+</h3>
+<a name="wp3074"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+To write a raster image to an HDF file, the calling program must contain the following:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp3076"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFR8putimage(filename, image, width, height, compress);
+</p><a name="wp3078"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = d8pimg(filename, image, width, height, compress)
+</p></ul></div>
+<a name="wp18278"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+		<b style="font-family: Courier New; font-size: 9pt" class="cBold">OR</b>
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp18279"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFR8addimage(filename, image, width, height, compress);
+</p><a name="wp18280"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = d8aimg(filename, image, width, height, compress)
+</p></ul></div>
+<a name="wp3086"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8putimage</b> and <b class="cFunctionName">DFR8addimage</b> write an 8-bit raster image to an HDF file named by the <em class="cVarName">filename</em> parameter. When given a new filename, <b class="cFunctionName">DFR8putimage</b> and <b class="cFunctionName">DFR8addimage</b> create a new file and write the raster image as the first raster image in the file. When given an existing filename, <b class="cFunctionName">DFR8putimage</b> overwrites the file whereas <b class="cFunctionName">DFR8addimage</b> appends data to the end of the file.
+</p>
+<a name="wp3092"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+In the <b class="cFunctionName">DFR8putimage</b> and <b class="cFunctionName">DFR8addimage</b> functions, the raster data is passed in the image parameter and the width and height of the image are passed in the width and height parameters. The compression algorithm used to store the image is passed in the compress parameter. Valid compress values include <code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_NONE</code>, <code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_RLE</code>, <code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_JPEG</code> and <code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_IMCOMP</code>. <code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_NONE</code> represents no compression (storage only), <code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_RLE</code> represents run-length encoding, <code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_JPEG</code> represents JPEG compression and <code style="font-family: Courier New; font-size: 9pt" class="cDefName">COMP_IMCOMP</code> represents IMCOMP encoding.
+</p>
+<a name="wp8148"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+Parameters for <b class="cFunctionName">DFR8putimage</b> and <b class="cFunctionName">DFR8addimage</b> are further described below. <a href="UG_RIS8s.html#wp13125">Table 6C on page 243</a>
+</p>
+<a name="wp13125"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 6C	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8putimage and DFR8addimage Parameter List</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp13047table13045">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp13047"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp13048"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp13049"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp13051"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp13053"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp13057"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp13063"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp13065"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="5"><a name="wp13069"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8putimage
+</div>
+<a name="wp13070"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp13071"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(d8pimg)
+</div>
+<a name="wp13072"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+and
+</div>
+<a name="wp13073"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8addimage
+</div>
+<a name="wp13074"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp13075"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(d8aimg)
+</div>
+</td>
+    <td><a name="wp13078"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp13080"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp13082"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp13084"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of file the raster image will be stored in.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp13088"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+image
+</div>
+</td>
+    <td><a name="wp13090"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+VOIDP
+</div>
+</td>
+    <td><a name="wp13092"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+&lt;valid numeric data type&gt;
+</div>
+</td>
+    <td><a name="wp13094"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Image data array.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp13098"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+width
+</div>
+</td>
+    <td><a name="wp13100"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+int32
+</div>
+</td>
+    <td><a name="wp13102"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp13104"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Number of columns in the raster image.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp13108"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+height
+</div>
+</td>
+    <td><a name="wp13110"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+int32
+</div>
+</td>
+    <td><a name="wp13112"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp13114"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Number of rows in the raster image.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp13118"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+compress
+</div>
+</td>
+    <td><a name="wp13120"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+int16
+</div>
+</td>
+    <td><a name="wp13122"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp13124"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Compression type.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp13127"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 16pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+EXAMPLE 1.	Writing an 8-Bit Raster Image to an HDF File
+</div>
+<a name="wp13128"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+In the following code examples, <b class="cFunctionName">DFR8addimage</b> and <b class="cFunctionName">d8aimg</b> are used to write an 8-bit image to a file named &quot;Example1.hdf&quot;. Note that the order in which the dimensions for the image array are declared differs between C and FORTRAN-77. 
+</p>
+<a name="wp8881"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 108pt; text-transform: none">
+C:	
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+#include &quot;hdf.h&quot;<a name="wp9801"> </a>
+#define WIDTH 5<a name="wp10122"> </a>
+#define HEIGHT 6<a name="wp10123"> </a>
+main( )<a name="wp10125"> </a>
+{<a name="wp10126"> </a>
+	/* Initialize the image array */<a name="wp10128"> </a>
+	static uint8 raster_data[HEIGHT][WIDTH] = <a name="wp10129"> </a>
+		{ 1, 2, 3, 4, 5,<a name="wp10130"> </a>
+		6, 7,	8, 9, 10,<a name="wp10131"> </a>
+		11, 12, 13,	14, 15,<a name="wp10132"> </a>
+		16, 17, 18, 19, 20,	<a name="wp10133"> </a>
+		21, 22, 23,	24, 25,<a name="wp10134"> </a>
+		26, 27, 28,	29, 30 };<a name="wp10135"> </a>
+	intn status;<a name="wp10137"> </a>
+ <a name="wp10139"> </a>
+	/* Write the 8-bit raster image to file */<a name="wp10140"> </a>
+	status = DFR8addimage(&quot;Example1.hdf&quot;, raster_data, <a name="wp10141"> </a>
+					WIDTH, HEIGHT, 0);<a name="wp10142"> </a>
+}<a name="wp10144"> </a>
+</pre></div>
+<a name="wp8883"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 180pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: -85pt; text-transform: none">
+FORTRAN:	
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+	 PROGRAM RASTER8      <a name="wp3147"> </a>
+      character*1 raster_data(5,6)<a name="wp10148"> </a>
+      integer retn, d8aimg<a name="wp10149"> </a>
+      integer*4 WIDTH, HEIGHT<a name="wp10151"> </a>
+      parameter(WIDTH = 5, HEIGHT = 6)<a name="wp10152"> </a>
+C     Initialize the image array<a name="wp10154"> </a>
+      data raster_data /  1,  2,  3,  4,  5,<a name="wp10155"> </a>
+     $                    6,  7,  8,  9, 10,<a name="wp10156"> </a>
+     $                   11, 12, 13, 14, 15,<a name="wp10157"> </a>
+     $                   16, 17, 18, 19, 20,<a name="wp10158"> </a>
+     $                   21, 22, 23, 24, 25,<a name="wp10159"> </a>
+     $                   26, 27, 28, 29, 30 /<a name="wp10160"> </a>
+C     Write the 8-bit raster image to the file<a name="wp10162"> </a>
+      retn = d8aimg(&#39;Example1.hdf&#39;, raster_data, WIDTH, HEIGHT, 0)<a name="wp10163"> </a>
+      end<a name="wp10165"> </a>
+</pre></div>
+<a name="wp5044"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.4.2	Adding a Palette to an RIS8 Object: DFR8setpalette
+</h3>
+<a name="wp5045"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8setpalette</b> identifies the palette to be used for the subsequent write operations. It may be used to assign a palette to a single image or several images. After a palette has been set, it acts as the current palette until it is replaced by another call to <b class="cFunctionName">DFR8setpalette</b>. To create a raster image set containing a palette, the calling program must contain the following:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp5046"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFR8setpalette(palette);
+</p><a name="wp5047"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = DFR8addimage(filename, image, width, height, compress);
+</p><a name="wp5048"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = d8spal(palette)
+</p><a name="wp5049"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = d8aimg(filename, image, width, height, compress)
+</p></ul></div>
+<a name="wp5050"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8setpalette</b> takes <em class="cVarName">palette</em> as its only parameter. To set the default palette to &quot;no palette&quot;, pass <code style="font-family: Courier New; font-size: 9pt" class="cDefName">NULL</code> as the <em class="cVarName">palette</em> parameter. <b class="cFunctionName">DFR8setpalette</b> is further defined in the following table.
+</p>
+<a name="wp5087"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 6D	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8setpalette Parameter List</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp11422table5055">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp11422"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp11423"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp6436"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp6438"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp6442"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp6444"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp6450"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp6452"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp6456"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8setpalette
+</div>
+<a name="wp10610"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp6457"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(d8spal)
+</div>
+</td>
+    <td><a name="wp6459"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+palette
+</div>
+</td>
+    <td><a name="wp6461"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+uint8 *
+</div>
+</td>
+    <td><a name="wp6463"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp6465"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Palette to be assigned.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp5088"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 16pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+EXAMPLE 2.	Writing a Palette and an Image in RIS8 Format 
+</div>
+<a name="wp5089"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+These examples demonstrate how a palette stored in the array colors and the raw image stored in the 20 x 20 array picture is written to a RIS8 object. The image is not compressed and, in these examples, uninitialized. The raster image set is stored as the first image in &quot;Example2.hdf&quot;. Note that because <b class="cFunctionName">DFR8putimage</b> recreates the file, anything previously contained in this file will be erased. 
+</p>
+<a name="wp5090"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 108pt; text-transform: none">
+C:		
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+#include &quot;hdf.h&quot;<a name="wp9853"> </a>
+#define WIDTH 20<a name="wp10174"> </a>
+#define HEIGHT 20<a name="wp10175"> </a>
+main( )<a name="wp10177"> </a>
+{<a name="wp10178"> </a>
+	uint8 colors[256*3], picture[HEIGHT][WIDTH];<a name="wp10179"> </a>
+	uint8 i, j;<a name="wp10180"> </a>
+	int16 status;<a name="wp10181"> </a>
+	/* Initialize image arrays. */<a name="wp10183"> </a>
+	for (j = 0; j &lt; WIDTH; j++) {<a name="wp10184"> </a>
+		for (i = 0; i &lt; HEIGHT; i++) <a name="wp10185"> </a>
+			picture[j][i] = 1;<a name="wp10186"> </a>
+      }<a name="wp10187"> </a>
+	/* Set the current palette. */<a name="wp10189"> </a>
+	status = DFR8setpalette(colors);<a name="wp10190"> </a>
+	/* Write the image data to the file. */<a name="wp10192"> </a>
+	status = DFR8putimage(&quot;Example2.hdf&quot;, picture, WIDTH,<a name="wp10193"> </a>
+					HEIGHT, COMP_NONE);<a name="wp10194"> </a>
+}<a name="wp10196"> </a>
+</pre></div>
+<a name="wp11848"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 180pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: -85pt; text-transform: none">
+FORTRAN:	
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+	 PROGRAM WRITE UNCOMPRESSED RIS8<a name="wp11850"> </a>
+      integer   d8spal, d8pimg, status, i, j<a name="wp10200"> </a>
+      integer   colors(768)<a name="wp10201"> </a>
+      integer*4   WIDTH, HEIGHT, COMP_NONE<a name="wp10202"> </a>
+      parameter (COMP_NONE = 0,<a name="wp10203"> </a>
+     +           WIDTH = 20,<a name="wp10204"> </a>
+     +           HEIGHT = 20)<a name="wp10205"> </a>
+      integer   picture(WIDTH, HEIGHT)<a name="wp10206"> </a>
+C     Initialize the image data.<a name="wp10208"> </a>
+      do 20 j = 1, WIDTH<a name="wp10209"> </a>
+       do 10 i = 1, HEIGHT<a name="wp10210"> </a>
+          picture(j, i) = 1<a name="wp10211"> </a>
+10     continue<a name="wp10212"> </a>
+20    continue<a name="wp10213"> </a>
+C     Set the current palette.<a name="wp10215"> </a>
+      status = d8spal(colors)<a name="wp10216"> </a>
+C     Write the image data to the file.<a name="wp10218"> </a>
+      status = d8pimg(&#39;Example2.hdf&#39;, picture, WIDTH, HEIGHT,<a name="wp10219"> </a>
+     +                COMP_NONE)<a name="wp10220"> </a>
+      end<a name="wp10222"> </a>
+</pre></div>
+<a name="wp3181"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.4.3	Compressing 8-Bit Raster Image Data: DFR8setcompress
+</h3>
+<a name="wp4985"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The compression type is determined by the tag passed as the fifth argument in calls to the <b class="cFunctionName">DFR8putimage</b> and <b class="cFunctionName">DFR8addimage</b> routines. <b class="cFunctionName">DFR8setcompress</b> is currently required only to reset the default JPEG compression options. However, future versions of this routine will support additional compression schemes. 
+</p>
+<a name="wp4998"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+To set non-default compression parameters, the calling program should contain the following sequence of routines:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp3185"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFR8setcompress(type, c_info);
+</p><a name="wp3187"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = DFR8addimage(filename, image, width, height, compress);
+</p><a name="wp3189"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = d8scomp(type)
+</p><a name="wp3191"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		&lt;compression-specific code&gt;
+</p><a name="wp4892"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = d8aimg(filename, image, width, height, compress)
+</p></ul></div>
+<a name="wp4921"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+Notice that the calling sequence for C differs from the calling sequence for FORTRAN-77. Once the compression is set, the parameter <em class="cVarName">type</em> in the <b class="cFunctionName">DFR8setcompress</b> routine, or <b class="cFunctionName">d8scomp</b> in FORTRAN-77, specifies the compression method that will be used when storing the raster images. However, the <em class="cVarName">c_info</em> parameter, which is a pointer to a structure that contains information specific to the compression scheme indicated by the <em class="cVarName">type</em> parameter in <b class="cFunctionName">DFR8setcompress</b>, is missing from <b class="cFunctionName">d8scomp</b>. Because data structures of variable size are not supported in FORTRAN-77, another routine specific to the compression library is required in the FORTRAN-77 calling sequence.
+</p>
+<a name="wp6121"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The <em class="cVarName">c_info</em> union is described in Chapter 3, titled <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Scientific Data Sets (SD API)</span>. The values contained in this union are passed into the <b class="cFunctionName">d8sjpeg</b> FORTRAN-77-specific routine. 
+</p>
+<a name="wp7459"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+Parameters for <b class="cFunctionName">DFR8setcompress</b> and <b class="cFunctionName">d8sjpeg</b> are further described in <a href="UG_RIS8s.html#wp2424"><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Table 6E</span></a> below.
+</p>
+<a name="wp2424"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 6E	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8setcompress Parameter List</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp6603table2362">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp6603"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp10615"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp6604"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp6606"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp6610"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp6612"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp6618"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp6620"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp6624"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8setcompress
+</div>
+<a name="wp10616"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp6625"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(d8scomp)
+</div>
+</td>
+    <td><a name="wp6627"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+type
+</div>
+</td>
+    <td><a name="wp6629"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+int32
+</div>
+</td>
+    <td><a name="wp6631"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp6633"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Compression method.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp6637"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+c_info
+</div>
+</td>
+    <td><a name="wp6639"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+comp_info *
+</div>
+</td>
+    <td><a name="wp6641"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+None
+</div>
+</td>
+    <td><a name="wp6643"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Pointer to JPEG information structure.
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp6645"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(d8sjpeg)
+</div>
+<a name="wp10621"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[integer]
+</div>
+</td>
+    <td><a name="wp6647"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+quality
+</div>
+</td>
+    <td><a name="wp6649"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+none
+</div>
+</td>
+    <td><a name="wp6651"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp6653"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+JPEG quality factor.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp6657"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+baseline
+</div>
+</td>
+    <td><a name="wp6659"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+none
+</div>
+</td>
+    <td><a name="wp6661"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp6663"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+JPEG baseline.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp3224"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 16pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+EXAMPLE 3.	Writing a Set of Compressed 8-Bit Raster Images
+</div>
+<a name="wp3226"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+These examples contain a series of calls in which four 20 x 20 images are written to the same file. The first two use palette <em class="cVarName">paletteA</em> and are compressed using the RLE method; the third and fourth use palette <em class="cVarName">paletteB</em> and are not compressed. 
+</p>
+<a name="wp3228"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 108pt; text-transform: none">
+C:		
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+ #include &quot;hdf.h&quot;<a name="wp9928"> </a>
+#define WIDTH 20<a name="wp10232"> </a>
+#define HEIGHT 20<a name="wp10233"> </a>
+main ( )<a name="wp10235"> </a>
+{<a name="wp10236"> </a>
+	uint8 paletteA[256*3], paletteB[256*3];<a name="wp10237"> </a>
+	uint8 picture1[HEIGHT][WIDTH], picture2[HEIGHT][WIDTH];<a name="wp10238"> </a>
+	uint8 picture3[HEIGHT][WIDTH], picture4[HEIGHT][WIDTH];<a name="wp10239"> </a>
+	uint8 i, j;<a name="wp10240"> </a>
+	int16 status;<a name="wp10241"> </a>
+    <a name="wp10242"> </a>
+	/* Initialize image arrays. */<a name="wp10243"> </a>
+	for (j = 0; j &lt; WIDTH; j++) {<a name="wp10244"> </a>
+		for (i = 0; i &lt; HEIGHT; i++) {<a name="wp10245"> </a>
+			picture1[j][i] = 1;<a name="wp10246"> </a>
+			picture2[j][i] = 1;<a name="wp10247"> </a>
+			picture3[j][i] = 1;<a name="wp10248"> </a>
+			picture4[j][i] = 1;<a name="wp10249"> </a>
+		}<a name="wp10250"> </a>
+	}<a name="wp10251"> </a>
+	/* Set the first palette. */<a name="wp10253"> </a>
+	status = DFR8setpalette(paletteA);<a name="wp10254"> </a>
+    <a name="wp10255"> </a>
+	/* Write the compressed image data to the HDF file. */<a name="wp10256"> </a>
+	status = DFR8putimage(&quot;Example3.hdf&quot;, (VOIDP)picture1, WIDTH, HEIGHT, \<a name="wp10257"> </a>
+					COMP_RLE);<a name="wp10258"> </a>
+	status = DFR8addimage(&quot;Example3.hdf&quot;, (VOIDP)picture2, WIDTH, HEIGHT, \<a name="wp10259"> </a>
+					COMP_RLE);<a name="wp10260"> </a>
+    <a name="wp10261"> </a>
+	/* Set the second palette. */<a name="wp10262"> </a>
+	status = DFR8setpalette(paletteB);<a name="wp10263"> </a>
+    <a name="wp10264"> </a>
+	/* Write the uncompressed image data to the HDF file. */<a name="wp10265"> </a>
+	status = DFR8addimage(&quot;Example3.hdf&quot;, (VOIDP)picture3, WIDTH, HEIGHT, \<a name="wp10266"> </a>
+					COMP_NONE);<a name="wp10267"> </a>
+	status = DFR8addimage(&quot;Example3.hdf&quot;, (VOIDP)picture4, WIDTH, HEIGHT, \<a name="wp10268"> </a>
+					COMP_NONE);<a name="wp10269"> </a>
+}<a name="wp18420"> </a>
+</pre></div>
+<a name="wp3256"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 180pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: -85pt; text-transform: none">
+FORTRAN: 
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+	 PROGRAM WRITE IMAGE SETS<a name="wp2570"> </a>
+      integer d8spal, d8pimg, d8aimg, status<a name="wp10275"> </a>
+      integer*4 COMP_RLE, COMP_NONE, WIDTH, HEIGHT<a name="wp10276"> </a>
+      parameter (COMP_RLE = 11,<a name="wp10277"> </a>
+     +           COMP_NONE = 0,<a name="wp10278"> </a>
+     +           WIDTH = 20,<a name="wp10279"> </a>
+     +           HEIGHT = 20)<a name="wp10280"> </a>
+      integer paletteA(768), paletteB(768)<a name="wp10282"> </a>
+      integer picture1(WIDTH, HEIGHT), picture2(WIDTH, HEIGHT)<a name="wp10283"> </a>
+      integer picture3(WIDTH, HEIGHT), picture4(WIDTH, HEIGHT)<a name="wp10284"> </a>
+C     Initialize the image data.<a name="wp10286"> </a>
+      do 20 j = 1, WIDTH<a name="wp10287"> </a>
+       do 10 i = 1, HEIGHT<a name="wp10288"> </a>
+        picture1(j, i) = 1<a name="wp10289"> </a>
+        picture2(j, i) = 1<a name="wp10290"> </a>
+        picture3(j, i) = 1<a name="wp10291"> </a>
+        picture4(j, i) = 1<a name="wp10292"> </a>
+10     continue<a name="wp10293"> </a>
+20    continue<a name="wp10294"> </a>
+C     Set the first palette.<a name="wp10296"> </a>
+      status = d8spal(paletteA)<a name="wp10297"> </a>
+C     Write the compressed image data to the HDF file.<a name="wp10299"> </a>
+      status = d8pimg(&#39;Example3.hdf&#39;, picture1, WIDTH, HEIGHT, <a name="wp10300"> </a>
+     +               COMP_RLE)<a name="wp10301"> </a>
+      status = d8aimg(&#39;Example3.hdf&#39;, picture2, WIDTH, HEIGHT, <a name="wp10302"> </a>
+     +               COMP_RLE)<a name="wp10303"> </a>
+C     Set the second palette.<a name="wp10305"> </a>
+      status = d8spal(paletteB)<a name="wp10306"> </a>
+C     Write the uncompressed image data to the HDF file.<a name="wp10308"> </a>
+      status = d8aimg(&#39;Example3.hdf&#39;, picture3, WIDTH, HEIGHT, <a name="wp10309"> </a>
+     +               COMP_NONE)<a name="wp10310"> </a>
+      status = d8aimg(&#39;Example3.hdf&#39;, picture4, WIDTH, HEIGHT, <a name="wp10311"> </a>
+     +               COMP_NONE)<a name="wp10312"> </a>
+      end<a name="wp10314"> </a>
+</pre></div>
+<a name="wp8201"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 16pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+EXAMPLE 4.	Compressing and Writing a 8-Bit Raster Image
+</div>
+<a name="wp8202"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+In the following examples, <b class="cFunctionName">DFR8addimage</b> and <b class="cFunctionName">DFR8compress</b> are used to compress an 8-bit image and write it to an HDF file named &quot;Example2.hdf&quot;. Notice that compressing an image in C requires only one function call, whereas compressing an image using FORTRAN-77 requires two. The second FORTRAN-77 call is required because it is not valid to pass a structure as a parameter in FORTRAN-77.
+</p>
+<a name="wp8203"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 108pt; text-transform: none">
+C:		
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+#include &quot;hdf.h&quot;<a name="wp10009"> </a>
+#include &quot;hcomp.h&quot;<a name="wp10322"> </a>
+#define WIDTH 3<a name="wp10324"> </a>
+#define HEIGHT 5<a name="wp10325"> </a>
+#define PIXEL_DEPTH 3<a name="wp10326"> </a>
+main( )<a name="wp10328"> </a>
+{<a name="wp10329"> </a>
+	/* Initialize the image array. */<a name="wp10330"> </a>
+	static uint8 raster_data[HEIGHT][WIDTH][PIXEL_DEPTH] = <a name="wp10331"> </a>
+		{  1, 2, 3,  4, 5, 6,  7, 8, 9,  <a name="wp10332"> </a>
+		  10,11,12, 13,14,15, 16,17,18, <a name="wp10333"> </a>
+		  19,20,21, 22,23,24, 25,26,27,  <a name="wp10334"> </a>
+		  28,29,30, 31,32,33, 34,35,36,  <a name="wp10335"> </a>
+		  37,38,39, 40,41,42, 43,44,45 }; <a name="wp10336"> </a>
+	static comp_info compress_info;<a name="wp10337"> </a>
+	intn status;<a name="wp10338"> </a>
+	/* Initialize JPEG compression structure. */<a name="wp10340"> </a>
+	compress_info.jpeg.quality = 60;<a name="wp10341"> </a>
+	compress_info.jpeg.force_baseline = 1;<a name="wp10342"> </a>
+	/* Set JPEG compression for storing the image. */<a name="wp10344"> </a>
+	status = DFR8setcompress(COMP_JPEG, &amp;compress_info);<a name="wp10345"> </a>
+	/* Write the 8-bit image data to file. */<a name="wp10347"> </a>
+	status = DFR8addimage(&quot;Example2.hdf&quot;, (VOIDP)raster_data, WIDTH, <a name="wp10348"> </a>
+                          HEIGHT, COMP_JPEG);<a name="wp10349"> </a>
+}<a name="wp10351"> </a>
+</pre></div>
+<a name="wp8229"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 180pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: -85pt; text-transform: none">
+FORTRAN:	
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+	 PROGRAM COMPRESS RIS8<a name="wp8650"> </a>
+      integer d8aimg, d8scomp, d8sjpeg, status<a name="wp10355"> </a>
+      integer*4 WIDTH, HEIGHT, PIXEL_DEPTH, COMP_JPEG<a name="wp10356"> </a>
+C     COMP_JPEG is defined in hcomp.h.<a name="wp10358"> </a>
+      parameter(WIDTH = 3,<a name="wp10359"> </a>
+     +          HEIGHT = 5,<a name="wp10360"> </a>
+     +          COMP_JPEG = 1,<a name="wp10361"> </a>
+     +          PIXEL_DEPTH = 3)<a name="wp10362"> </a>
+      character raster_data(PIXEL_DEPTH, WIDTH, HEIGHT) <a name="wp10363"> </a>
+C     Initialize the image array.<a name="wp10365"> </a>
+      data raster_data <a name="wp10366"> </a>
+     + /  1, 2, 3,  4, 5, 6,  7, 8, 9,  <a name="wp10367"> </a>
+     +    10,11,12, 13,14,15, 16,17,18, <a name="wp10368"> </a>
+     +    19,20,21, 22,23,24, 25,26,27,  <a name="wp10369"> </a>
+     +    28,29,30, 31,32,33, 34,35,36,  <a name="wp10370"> </a>
+     +    37,38,39, 40,41,42, 43,44,45  /<a name="wp10371"> </a>
+C     Set compression.<a name="wp10373"> </a>
+      status = d8scomp(COMP_JPEG)<a name="wp10374"> </a>
+C     Set JPEG parameters to quality = 60, and turn compatibility on.<a name="wp10376"> </a>
+      status = d8sjpeg(60, 1)<a name="wp10377"> </a>
+C     Write the 8-bit image data to the HDF file.<a name="wp10379"> </a>
+      status = d8aimg(&#39;Example2.hdf&#39;, raster_data, WIDTH, HEIGHT,<a name="wp10380"> </a>
+     +              COMP_JPEG)<a name="wp10381"> </a>
+      end<a name="wp10383"> </a>
+</pre></div>
+<a name="wp5363"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.4.4	Specifying the Reference Number of an RIS8: DFR8writeref
+</h3>
+<a name="wp5397"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8writeref</b> specifies the reference number of the image to be written when <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8addimage</span> or <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8putimage</span> is called. Use the following calling sequence to invoke <b class="cFunctionName">DFR8writeref</b>:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp5398"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFR8writeref(filename, ref);
+</p><a name="wp5170"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = DFR8addimage(filename, image, width, height, compress);
+</p><a name="wp5171"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = d8wref(filename, ref)
+</p><a name="wp5172"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = d8aimg(filename, image, width, height, compress)
+</p></ul></div>
+<a name="wp5446"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8writeref</b> assigns the reference number passed in the <em class="cVarName">ref</em> parameter to the next image the file specified by the <em class="cVarName">filename</em> parameter. If the value of <em class="cVarName">ref</em> is the same as the reference number of an existing RIS8, the existing raster image data will be overwritten. The parameters for <b class="cFunctionName">DFR8writeref</b> are further described below. <a href="UG_RIS8s.html#wp5222">(See Table 6F.)</a>
+</p>
+<a name="wp5419"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+It is unlikely that you will need this routine, but if you do, use it with caution. It is not safe to assume that a reference number indicates the file position of the corresponding image as there is no guarantee that reference numbers appear in sequence in an HDF file.
+</p>
+<a name="wp5222"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 6F	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8writeref Parameter List</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp9727table9725">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp9727"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Routine Name</span>
+</div>
+<a name="wp10622"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp9728"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp9730"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp9732"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp9736"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp9742"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp9744"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp9748"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8writeref
+</div>
+<a name="wp10623"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp9749"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(d8wref)
+</div>
+</td>
+    <td><a name="wp9751"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp9753"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp9755"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp9757"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of the HDF file containing the raster image.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp9761"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+ref
+</div>
+</td>
+    <td><a name="wp9763"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+uint16
+</div>
+</td>
+    <td><a name="wp9765"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp9769"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Reference number for next call to <span style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8getimage</span>.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp3419"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	6.5	Reading 8-Bit Raster Images
+</h2>
+<a name="wp3421"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The DFR8 programming model for reading an 8-bit raster image set is as follows:
+</p>
+<div class="pSmartList1" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal"><ol type="1" class="pSmartList1" style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal">
+<a name="wp3423"> </a><div style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal" class="pSmartList1"><li>Determine the dimensions of the image if they are not known prior to the read operation.</li></div>
+<a name="wp3425"> </a><div style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal" class="pSmartList1"><li>Read the image from the file. </li></div>
+</ol></div>
+<a name="wp3438"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.5.1	Reading a Raster Image: DFR8getimage
+</h3>
+<a name="wp5462"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+If dimensions of the image are known, <b class="cFunctionName">DFR8getimage</b> is the only function call needed to read a raster image. If a file is being opened for the first time, <b class="cFunctionName">DFR8getimage</b> returns the first image in the file. Additional calls will return successive images in the file, therefore images are read in the order which they were written to the file. <b class="cFunctionName">DFR8getdims</b> is called before <b class="cFunctionName">DFR8getimage</b> so that space allocations for the image and palette can be checked and the dimensions verified. If this information is already known, <b class="cFunctionName">DFR8getdims</b> may be omitted.
+</p>
+<a name="wp3442"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+To read a raster image from an HDF file, the calling program must contain the following:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp3444"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFR8getimage(filename, image, width, height, palette);
+</p><a name="wp3446"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = d8gimg(filename, image, width, height, palette)			
+</p></ul></div>
+<a name="wp3452"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8getimage</b> retrieves the next 8-bit image from the HDF file name specified by the <em class="cVarName">filename </em>parameter. If the image in the file is compressed, <b class="cFunctionName">DFR8getimage</b> first decompresses it then places it in memory at the location pointed to by the <em class="cVarName">image</em> parameter. The dimensions of the array allocated to hold the image are specified by the <em class="cVarName">width</em> and <em class="cVarName">height</em> parameters and may be larger than the actual image.The palette, if present, is stored in memory at the location pointed to by the <em class="cVarName">palette</em> parameter. If it contains a <code style="font-family: Courier New; font-size: 9pt" class="cDefName">NULL</code> value the palette is not loaded, even if there is one stored with the image. The parameters for <b class="cFunctionName">DFR8getimage</b> are defined further in <a href="UG_RIS8s.html#wp1951"><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Table 6G</span></a> below. 
+</p>
+<a name="wp3454"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+Notice that in <a href="UG_RIS8s.html#wp8201">Example 4</a>, as in the case of <b class="cFunctionName">DFR8addimage</b>, the order in which the dimensions for the image array are declared differs between C and FORTRAN-77. FORTRAN-77 declarations require the width before the height while the C declaration requires the height before the width as FORTRAN-77 arrays are stored in column-major order, while C arrays are stored in row-major order. (row-major order implies that the second coordinate varies fastest). When <b class="cFunctionName">d8gimg</b> reads an image from a file, it assumes column-major order.
+</p>
+<a name="wp3456"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.5.2	Querying the Dimensions of an 8-Bit Raster Image: DFR8getdims
+</h3>
+<a name="wp3458"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8getdims</b> opens a named file, finds the next image or the first image if the file is being opened for the first time, retrieves the dimensions of the image and determines if there is a palette associated with the image. If the file is being opened for the first time, <b class="cFunctionName">DFR8getdims</b> returns information about the first image in the file. If an image has already been read, <b class="cFunctionName">DFR8getdims</b> finds the next image. In this way, images are read in the same order in which they were written to the file.
+</p>
+<a name="wp3460"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+To determine the dimensions of an image before attempting to read it, the calling program must include the following routines:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp3462"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFR8getdims(filename, width, height, haspalette);
+</p><a name="wp3464"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = DFR8getimage(filename, image, width, height, palette);
+</p><a name="wp3466"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = d8gdim(filename, width, height, haspalette)
+</p><a name="wp5479"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = d8gimg(filename, image, width, height, palette)			
+</p></ul></div>
+<a name="wp5488"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8getdims</b> retrieves dimension and palette information about the next 8-bit image in the file specified by <em class="cVarName">filename</em>. The returned information is pointed to by the <em class="cVarName">width</em> and <em class="cVarName">height</em> parameters. The <em class="cVarName">haspalette</em> parameter determines the presence of a palette and returns a value of 1 if it exists and 0 otherwise. The parameters for <b class="cFunctionName">DFR8getdims</b> are defined further in the following table.
+</p>
+<a name="wp1951"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 6G	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8getdims and DFR8getimage Parameter List</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp6991table1837">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp6991"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp10624"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp6992"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp6994"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp6998"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp7000"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp7006"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp7008"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="4"><a name="wp7012"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8getdims
+</div>
+<a name="wp10625"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp7013"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(d8gdims)
+</div>
+</td>
+    <td><a name="wp7015"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp7017"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp7019"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp7021"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of the HDF file containing the set of raster images.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp7025"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+width
+</div>
+</td>
+    <td><a name="wp7027"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+int32 *
+</div>
+</td>
+    <td><a name="wp7029"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp7031"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Number of columns in the next raster image.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp7035"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+height
+</div>
+</td>
+    <td><a name="wp7037"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+int32 *
+</div>
+</td>
+    <td><a name="wp7039"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp7041"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Number of rows in the next raster image.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp7045"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+ispalette
+</div>
+</td>
+    <td><a name="wp7047"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+intn *
+</div>
+</td>
+    <td><a name="wp7049"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp7051"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+&quot;1&quot; if a palette exists, otherwise &quot;0&quot;.
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="5"><a name="wp7053"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8getimage
+</div>
+<a name="wp10626"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp7054"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(d8gimg)
+</div>
+</td>
+    <td><a name="wp7056"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp7058"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp7060"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp7062"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of HDF file with the raster image.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp7066"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+image
+</div>
+</td>
+    <td><a name="wp7068"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+uint8 *
+</div>
+</td>
+    <td><a name="wp7070"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp7072"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Buffer for the raster image.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp7076"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+width
+</div>
+</td>
+    <td><a name="wp7078"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+int32
+</div>
+</td>
+    <td><a name="wp7080"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp7082"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Width of the raster image buffer.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp7086"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+height
+</div>
+</td>
+    <td><a name="wp7088"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+int32
+</div>
+</td>
+    <td><a name="wp7090"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp7092"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Height of the raster image buffer.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp7096"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+palette
+</div>
+</td>
+    <td><a name="wp7098"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+uint8 *
+</div>
+</td>
+    <td><a name="wp7100"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp7102"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Palette assigned to the raster image.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp1952"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 16pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+EXAMPLE 5.	Reading an 8-Bit Raster Image
+</div>
+<a name="wp1953"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The following examples search the &quot;Example1.hdf&quot; file created in <a href="UG_RIS8s.html#wp13127">Example 1</a> for the dimensions of an 8-bit image. Although the <b class="cFunctionName">DFR8getdims</b> call is optional, it is included as a demonstration of how to check the dimensions of an image. This example also assumes that the data set does not include a palette, therefore <code style="font-family: Courier New; font-size: 9pt" class="cDefName">NULL</code> is passed as the palette parameter. If the palette argument is <code style="font-family: Courier New; font-size: 9pt" class="cDefName">NULL</code> (or &quot;0&quot; in FORTRAN-77), all palette data is ignored. 
+</p>
+<a name="wp9488"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 108pt; text-transform: none">
+C:		
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+#include &quot;hdf.h&quot;<a name="wp10067"> </a>
+#define WIDTH 5<a name="wp10392"> </a>
+#define HEIGHT 6<a name="wp10393"> </a>
+main( )<a name="wp10395"> </a>
+{<a name="wp10396"> </a>
+	uint8 raster_data[HEIGHT][WIDTH];<a name="wp10397"> </a>
+	int32 width, height;<a name="wp10398"> </a>
+	intn haspal, status;<a name="wp10399"> </a>
+    <a name="wp10400"> </a>
+	/* Get the dimensions of the image */<a name="wp10401"> </a>
+	status = DFR8getdims(&quot;Example1.hdf&quot;, &amp;width, &amp;height, &amp;haspal);<a name="wp10402"> </a>
+    <a name="wp10403"> </a>
+	/* Read the raster data if the dimensions are correct */<a name="wp10404"> </a>
+	if (width &lt;= WIDTH &amp;&amp; height &lt;= HEIGHT)<a name="wp10405"> </a>
+		status = DFR8getimage(&quot;Example1.hdf&quot;, (VOIDP)raster_data, width, <a name="wp10406"> </a>
+						height, NULL);<a name="wp10407"> </a>
+    <a name="wp10408"> </a>
+}<a name="wp10409"> </a>
+</pre></div>
+<a name="wp9490"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 2pt; margin-left: 180pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: -85pt; text-transform: none">
+FORTRAN:	
+</div>
+<div class="pPreformatted" style="font-family: Courier New; font-size: 8pt"><pre class="pPreformatted" style="font-family: Courier New; font-size: 8pt">
+	 PROGRAM RASTER8      <a name="wp3535"> </a>
+      character*1 image(5, 6)<a name="wp10413"> </a>
+      integer status, height, width, d8gimg, d8gdims, haspal<a name="wp10414"> </a>
+      integer*4 width, height<a name="wp10415"> </a>
+C     Get the dimensions of the image.<a name="wp10417"> </a>
+      status = d8gdims(&#39;Example1.hdf&#39;, width, height, haspal)<a name="wp10418"> </a>
+C     Read the raster data if the dimensions are correct.<a name="wp10420"> </a>
+      if (width .le. 5 .and. height .le. 6) then<a name="wp10421"> </a>
+         status = d8gimg(&#39;Example1.hdf&#39;, image, width, height, 0)<a name="wp10422"> </a>
+      endif<a name="wp10423"> </a>
+      end<a name="wp10425"> </a>
+</pre></div>
+<a name="wp3563"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.5.3	Reading an Image with a Given Reference Number: DFR8readref
+</h3>
+<a name="wp3569"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8readref</b> accesses specific images that are stored in files containing multiple raster image sets. It is an optionally used before <b class="cFunctionName">DFR8getimage</b> to set the access pointer to the specified raster image. <b class="cFunctionName">DFR8readref</b> can be used in connection with vgroups, which identify their members by tag/reference number pairs. See Chapter 5, titled Vgroups (V API), for a discussion of vgroups and tag/reference number pairs.
+</p>
+<a name="wp3576"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+To access a specific raster image set, use the following calling sequence:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp3578"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFR8readref(filename, ref);
+</p><a name="wp3580"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = DFR8getimage(filename, image, width, height, palette);
+</p><a name="wp3582"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = d8rref(filename, ref)
+</p><a name="wp3584"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		status = d8gimg(filename, image, width, height, palette)
+</p></ul></div>
+<a name="wp11002"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8readref</b> specifies that the target for the next read operation performed on the HDF file specified by the <em class="cVarName">filename</em> parameter is the object with the reference number named in the <em class="cVarName">ref</em> parameter. The parameters required for <b class="cFunctionName">DFR8readref</b> are defined further in the following table.
+</p>
+<a name="wp11055"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 6H	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8readref Parameter List</span><span style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault"></span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp11011table11009">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp11011"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp11012"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp11013"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp11015"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp11017"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp11021"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11027"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp11029"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp11033"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8readref
+</div>
+<a name="wp11034"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp11035"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(d8rref)
+</div>
+</td>
+    <td><a name="wp11037"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp11039"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp11041"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp11043"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of HDF file containing the raster image.
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp11047"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+ref
+</div>
+</td>
+    <td><a name="wp11049"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+uint16
+</div>
+</td>
+    <td><a name="wp11051"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+integer
+</div>
+</td>
+    <td><a name="wp11054"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Reference number for next call to <span style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8getimage</span>.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+<span style="color: #000000; font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault"></span>
+</div>
+<a name="wp5672"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.5.4	Specifying the Next 8-Bit Raster Image to be Read: DFR8restart
+</h3>
+<a name="wp5673"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8restart</b> causes the next call to <b class="cFunctionName">DFR8getimage</b> or <b class="cFunctionName">DFR8getdims</b> to read the first raster image set in the file. Use the following call to invoke <b class="cFunctionName">DFR8restart</b>:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp5678"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFR8restart( );
+</p><a name="wp5679"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = d8first( )
+</p></ul></div>
+<a name="wp7326"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	6.6	8-Bit Raster Image Information Retrieval Routines
+</h2>
+<a name="wp7327"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.6.1	Querying the Total Number of 8-Bit Raster Images: DFR8nimages
+</h3>
+<a name="wp7328"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8nimages</b> returns the total number of 8-bit raster image sets in a file and has the following syntax:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp5622"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		num_of_images = DFR8nimages(filename);
+</p><a name="wp5626"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	num_of_images = d8nimg(filename)
+</p></ul></div>
+<a name="wp3645"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 6I	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8nimages Parameter List</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp7260table2099">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp7260"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp10630"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+<a name="wp7261"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(FORTRAN-77)
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp7263"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td colspan="2" rowspan="1"><a name="wp7267"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp7269"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp7275"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+    <td><a name="wp7277"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+FORTRAN-77
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp7281"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8nimages
+</div>
+<a name="wp10631"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+<a name="wp7282"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+(d8nims)
+</div>
+</td>
+    <td><a name="wp7284"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+filename
+</div>
+</td>
+    <td><a name="wp7286"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+char *
+</div>
+</td>
+    <td><a name="wp7288"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+character*(*)
+</div>
+</td>
+    <td><a name="wp7290"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Name of the HDF file.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp5344"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.6.2	Determining the Reference Number of the Most-Recently-Accessed <br />		8-Bit Raster Image: DFR8lastref
+</h3>
+<a name="wp5345"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8lastref</b> returns the reference number most recently used in writing or reading an 8-bit raster image. This routine is primarily used for attaching annotations to images and adding images to vgroups. (See Chapters 8, titled Annotations (DFAN API) and Chapter 5, titled Vgroups (V API) for more detailed information on how to use reference numbers in connection with these applications.)
+</p>
+<a name="wp5791"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+The following calling sequence uses <b class="cFunctionName">DFR8lastref</b> to find the reference number of the 8-bit raster image most recently added to an HDF file:
+</p>
+<div class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt"><ul class="pSyntaxLine" style="font-family: Courier New; font-size: 9pt">
+<a name="wp11819"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">C:</b>		status = DFR8addimage(filename, image, width, height, compress);
+</p><a name="wp11820"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		lastref = DFR8lastref( );
+</p><a name="wp11821"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine"><b style="font-family: Courier New; font-size: 9pt" class="cBold">FORTRAN:</b>	status = d8aimg(filename, image, width, height, compress)
+</p><a name="wp5812"> </a><p style="font-family: Courier New; font-size: 9pt" class="pSyntaxLine">		lastref = d8lref( )
+</p></ul></div>
+<a name="wp5813"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8putimage</b> or <b class="cFunctionName">DFR8getimage</b> can be used instead of <b class="cFunctionName">DFR8addimage</b> with similar results.
+</p>
+<a name="wp8568"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.6.3	Determining the Reference Number of the Palette of the <br />		Most-Recently-Accessed 8-Bit Raster Image: DFR8getpalref
+</h3>
+<a name="wp8570"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+<b class="cFunctionName">DFR8getpalref</b> returns the reference number of the palette associated with the most recently used in writing or reading an 8-bit raster image. The <b class="cFunctionName">DFR8getdims</b> routine must be called before <b class="cFunctionName">DFR8getpalref</b>, as <b class="cFunctionName">DFR8getdims</b> initializes internal structures required by <b class="cFunctionName">DFR8getpalref</b>.
+</p>
+<a name="wp8625"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+There is currently no FORTRAN-77 version of the <b class="cFunctionName">DFR8getpalref</b> routine.
+</p>
+<a name="wp8624"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+TABLE 6J	<span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">DFR8nimages Parameter List</span></div>
+<div align="left">
+<table border="1" cellpadding="3" cellspacing="1" id="wp11469table8591">
+  <caption></caption>
+  <tr>    <td colspan="1" rowspan="2"><a name="wp11469"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Routine Name
+</div>
+<a name="wp10471"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[Return Type]
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp10473"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter
+</div>
+</td>
+    <td><a name="wp10475"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Parameter Type
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp10477"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+Description
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp10483"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+C
+</div>
+</td>
+</tr>
+  <tr>    <td><a name="wp10487"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+DFR8getpalref
+</div>
+<a name="wp10633"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+[intn]
+</div>
+</td>
+    <td><a name="wp10489"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+pal_ref
+</div>
+</td>
+    <td><a name="wp10491"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: center; text-decoration: none; text-indent: 0pt; text-transform: none">
+uint16 *
+</div>
+</td>
+    <td><a name="wp10493"> </a><div style="color: #000000; font-family: Times New Roman; font-size: 7pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Pointer to the returned reference number of the palette.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 0pt; margin-left: 135pt; margin-right: 0pt; margin-top: 12pt; text-align: left; text-decoration: none; text-indent: -135pt; text-transform: none">
+
+</div>
+<a name="wp8675"> </a><h2 style="font-family: Times New Roman; font-size: 14pt; margin-top: 14pt" class="pHeading2">
+	6.7	RIS8 Backward Compatibility Issues
+</h2>
+<a name="wp8669"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.7.1	Attribute &quot;long_name&quot; Included in HDF for netCDF Compatibility
+</h3>
+<a name="wp8670"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+In several routines of the RIS8 interface, the value returned by <em class="cVarName">label</em> is the value of the attribute named &quot;long_name&quot; and that the value returned by <em class="cVarName">coordsys</em> is the value of the attribute named &quot;cordsys&quot;.
+</p>
+<a name="wp8671"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+This was done in order to provide HDF with the ability to read netCDF files. While this aspect of HDF functionality will not affect its ability to read HDF data files written by programs compiled with earlier versions of HDF, it is advisable for HDF users to know this to be aware of the significance of the &quot;long_name&quot; and &quot;cordsys&quot; attribute names in a list of attributes.
+</p>
+<a name="wp8672"> </a><h3 style="font-family: Times New Roman; font-size: 12pt; margin-top: 14pt" class="pHeading3">
+	6.7.2	Raster Image Group Implementation with New RIS8 Tags
+</h3>
+<a name="wp8673"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+As HDF has evolved, a variety of structures have been used to store raster image sets. For instance, HDF first began grouping 8-bit raster images together with dimensions and palettes by insuring that their reference numbers fell in a certain pattern. This method of organizing raster images quickly lead to very complicated collections of images, dimension records, and palettes, and eventually was replaced by an specific grouping structure known as a <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">Raster Image Group</span><span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">,</span> or <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: bold; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">RIG</span>, with a completely new set of tags. 
+</p>
+<a name="wp8674"> </a><p style="font-family: Times New Roman; font-size: 10pt; font-style: normal; font-weight: normal; line-height: 12pt; margin-bottom: 0pt; margin-right: 0pt; margin-top: 6pt" class="pBody">
+To maintain backward compatibility with older versions of HDF, the RIS8 interface supported by HDF version 4.1 and later recognizes raster images stored using either set of HDF tags. Details on the different tags and structures used to store raster images can be found in the <span style="color: #000000; font-family: Times New Roman; font-size: 10pt; font-style: italic; font-variant: normal; font-weight: normal; text-decoration: none; text-transform: none; vertical-align: baseline" class="cDefault">HDF Specifications and Developer&#39;s Guide v3.2</span> from the HDF web site at <a href="http://www.hdfgroup.org/"><span class="cWebJump">http://www.hdfgroup.org/</span></a>.
+</p>
+    </blockquote>
+
+    <hr />
+
+    <table id="SummaryNotReq2" border="0" width="850" cellspacing="0" cellpadding="0">
+      <tr>
+        <td align="left">
+        HDF4.2r4 - February 2009<br/>
+        <a href="UG_Copyright.html">Copyright</a>
+        <td align="right">
+          <span style="font-size: 12px; font-weight: bold">
+            The HDF Group<br />
+          </span>
+          <span style="font-size: 12px">
+            <a href="http://www.hdfgroup.org">www.hdfgroup.org</a><br />
+            <img valign="bottom" border="0" src="images/help.jpg" height="12" alt="The HDF Group" valign="top" />
+          </span>
+        </td>
+      </tr>
+    </table>
+
+    <table id="SummaryNotReq3" width="220" border="0" cellpadding="0" cellspacing="0">
+    </table>
+  </body>
+</html>

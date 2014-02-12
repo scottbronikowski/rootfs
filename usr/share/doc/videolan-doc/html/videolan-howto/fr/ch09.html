@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="iso-8859-15" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" /><title>Chapter 9.  Utilisation avancée du stream output de VLC (transcodage, diffusion multiple, ...)</title><link rel="stylesheet" href="screen.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><meta name="keywords" content="VideoLAN, Client, vlc, VLC, vls, VLS, vod, sap, stream, multicast, MPEG-1, MPEG-2, MPEG-4, DVD, DVB, DivX" /><link rel="start" href="index.html" title="VideoLAN HOWTO" /><link rel="up" href="index.html" title="VideoLAN HOWTO" /><link rel="prev" href="ch08.html" title="Chapter 8.  Diffusez depuis une carte d'acquisition ou une webcam" /><link rel="next" href="ch10.html" title="Chapter 10.  Diffusez en IPv6" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 9. 
+
+Utilisation avancée du stream output de VLC
+(transcodage, diffusion multiple, ...)
+
+
+</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch08.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch10.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="usesout"></a>Chapter 9. 
+
+Utilisation avancée du stream output de VLC
+(transcodage, diffusion multiple, ...)
+
+
+</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch09.html#id2576443">
+
+La syntaxe
+
+
+</a></span></dt><dt><span class="sect1"><a href="ch09.html#id2576466">
+
+Exemples
+
+
+</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2576443"></a>
+
+La syntaxe
+
+
+</h2></div></div></div><p>
+
+Merci de vous référer au chapitre <span class="emphasis"><em>Ligne
+de commande</em></span> du guide de l'utilisateur de VLC,
+pour apprendre la syntaxe du stream output du VLC. Vous
+pouvez trouver le guide de l'utilisateur de VLC sur la <a class="ulink" href="http://www.videolan.org/doc/" target="_top">page documentation</a>
+
+
+.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2576466"></a>
+
+Exemples
+
+
+</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2576470"></a>
+
+Transcodage
+
+
+</h3></div></div></div><p>
+
+Transcodez le flux d'entrée et envoyez le vers une
+adresse IP multicast, avec l'annonce SAP associée
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#transcode{vcodec=mp4v,acodec=mpga,vb=800,ab=128,deinterlace}:
+standard{access=udp,mux=ts,url=239.255.12.42,sap,name="TestStream"}'</code></strong>
+</pre><p>
+
+Affichez le flux d'entrée, transcodez le, et envoyez
+le sur une adresse IP multicast, avec l'annonce SAP associée
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#duplicate{dst=display,dst=
+"transcode{vcodec=mp4v,acodec=mpga,vb=800,ab=128,deinterlace}:
+standard{access=udp,mux=ts,url=239.255.12.42,sap,name="TestStream"}"}'</code></strong>
+</pre><p>
+
+Transcodez le flux d'entrée, affichez le flux
+transcodé, et envoyez le sur une adresse IP multicast, avec l'annonce
+SAP associée
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#transcode{vcodec=mp4v,acodec=mpga,vb=800,ab=128,deinterlace}:
+duplicate{dst=display,dst=standard{access=udp,mux=ts,url=239.255.12.42,sap,name="TestStream"}}'</code></strong>
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2577566"></a>
+
+Diffusion multiple
+
+
+</h3></div></div></div><p>
+
+Envoyez un flux sur une adresse IP multicast et une
+adresse IP unicast
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#duplicate{dst=
+standard{access=udp,mux=ts,url=239.255.12.42,sap,name="TestStream"},
+dst=standard{access=udp,mux=ts,url=192.168.1.2}}'</code></strong>
+</pre><p>
+
+Affichez le flux, et envoyez le sur deux adresses IP
+unicast
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#duplicate{dst=display,dst=
+standard{access=udp,mux=ts,url=192.168.1.12},
+dst=standard{access=udp,mux=ts,url=192.168.1.42}}'</code></strong>
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2577617"></a>
+
+
+Transcodage et diffusion multiple
+
+
+</h3></div></div></div><p>
+
+Transcodez le flux d'entrée, affichez le flux
+transcodé, envoyez le sur une adresse IP multicast avec l'annonce SAP
+aossiciée, et sur une adresse IP unicast
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#transcode{vcodec=mp4v,acodec=mpga,vb=800,ab=128,deinterlace}:
+duplicate{dst=display,dst=standard{access=udp,mux=ts,url=239.255.12.42,sap,name="TestStream"},
+dst=standard{access=udp,mux=ts,url=192.168.1.2}}'</code></strong>
+</pre><p>
+
+Affichez le flux d'entrée, transcodez-le, et
+envoyez-le sur deux adresses IP unicast
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#duplicate{dst=display,
+dst="transcode{vcodec=mp4v,acodec=mpga,vb=800,ab=128}:
+duplicate{dst=standard{access=udp,mux=ts,url=192.168.1.2},
+dst=standard{access=udp,mux=ts,url=192.168.1.12}"}'</code></strong>
+</pre><p>
+
+Envoyez le flux d'entrée sur une adresse IP
+multicast et le flux transcodé sur une autre adresse IP multicast, avec
+les annonces SAP associées
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#duplicate{dst=
+standard{access=udp,mux=ts,url=239.255.1.2,sap,name="OriginalStream"},
+dst="transcode{vcodec=mp4v,acodec=mpga,vb=800,ab=128}:
+standard{access=udp,mux=ts,url=239.255.1.3,sap,name="TranscodedStream"}"}'</code></strong>
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2577706"></a>
+
+Diffusion HTTP
+
+
+</h3></div></div></div><p>
+
+Diffusez en HTTP
+
+
+:</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+sur le serveur, lancez
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#standard{access=http,mux=ogg,url=server.example.org:8080}'</code></strong>
+</pre></li><li><p>
+
+sur le(s) client(s), lancez
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc http://server.example.org:8080</code></strong>
+</pre></li></ul></div><p>
+
+Transcodez et envoyez en HTTP
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#transcode{vcodec=mp4v,acodec=mpga,vb=800,ab=128}:
+standard{access=http,mux=ogg,url=server.example.org:8080}'</code></strong>
+</pre><p>
+
+Par exemple, si vous désirez diffuser un CD audio en
+Ogg/Vorbis sur HTTP
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv cdda:/dev/cdrom --sout '#transcode{acodec=vorb,ab=128}:
+standard{access=http,mux=ogg,url=server.example.org:8080}'</code></strong>
+</pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2577809"></a>
+
+Diffusion RTP
+
+
+</h3></div></div></div><p>
+
+Diffusez en RTP/RTSP
+
+
+:</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+sur le serveur, lancez
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#rtp{dst=192.168.0.12,port=1234,sdp=http://server.example.org:8080/test.sdp}'</code></strong>
+</pre><p>ou</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#rtp{dst=192.168.0.12,port=1234,sdp=rtsp://server.example.org:8080/test.sdp}'</code></strong>
+</pre></li><li><p>
+
+sur le(s) client(s), lancez
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc http://server.example.org:8080/test.sdp</code></strong>
+</pre><p>ou</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc rtsp://server.example.org:8080/test.sdp</code></strong>
+</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#rtp{port=1234,sdp=rtsp://server.example.org:8080/test.sdp}'</code></strong>
+</pre><p>
+
+permet au serveur d'envoyer le flux à tout client en faisant la demande
+
+
+.</p></div></li></ul></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2577932"></a>
+
+Utilisation du module <span class="emphasis"><em>es</em></span>
+
+
+</h3></div></div></div><p>
+
+Séparez l'audio et la vidéo en deux fichiers PS
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout
+'#es{access=file,mux=ps,url_audio=audio-%c.%m,url_video=video-%c.%m}'</code></strong>
+</pre><p>
+
+Extrayez la piste audio d'un flux, vers un fichier
+TS
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#es{access_audio=file,mux_audio=ts,url_audio=audio-%c.%m}'</code></strong>
+</pre><p>
+
+Diffusez, en unicast, la piste audio sur un port et
+la piste vidéo sur un autre
+
+
+:</p><div class="itemizedlist"><ul type="disc"><li><p>
+
+Côté serveur
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout
+'#es{access=rtp,mux=ts,url_audio=192.168.1.2:1212,url_video=192.168.1.2:1213}'</code></strong>
+</pre></li><li><p>
+
+côté client: pour recevoir l'audio
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc udp:@:1212</code></strong>
+</pre><p>
+
+pour recevoir la vidéo
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc udp:@:1213</code></strong>
+</pre></li></ul></div><p>
+
+Diffusez la vidéo en multicast et envoyez l'audio
+dans un fichier
+
+
+:</p><pre class="screen">
+<code class="prompt">% </code><strong class="userinput"><code>vlc -vvv input_stream --sout '#es{access_video=udp,mux_video=ts,url_video=239.255.12.42,
+access_audio=file,mux_audio=ps,url_audio=audio-%c.%m}'</code></strong>
+</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+
+Vous pouvez également combiner le module
+<span class="emphasis"><em>es</em></span> avec les autres modules pour élaborer des
+solutions encore plus complexes
+
+
+.</p></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch08.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch10.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 8. 
+
+Diffusez depuis une carte d'acquisition ou 
+une webcam
+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 10. 
+Diffusez en IPv6
+</td></tr></table></div></body></html>

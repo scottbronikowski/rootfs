@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>String_variables - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Substitution_005fand_005fCommand_005fline_005fmacros.html#Substitution_005fand_005fCommand_005fline_005fmacros" title="Substitution_and_Command_line_macros">
+<link rel="prev" href="Substitution_005fof_005fstring_005fvariables_005fas_005fmacros.html#Substitution_005fof_005fstring_005fvariables_005fas_005fmacros" title="Substitution_of_string_variables_as_macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="String_variables"></a>
+<a name="String_005fvariables"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Substitution_005fof_005fstring_005fvariables_005fas_005fmacros.html#Substitution_005fof_005fstring_005fvariables_005fas_005fmacros">Substitution_of_string_variables_as_macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Substitution_005fand_005fCommand_005fline_005fmacros.html#Substitution_005fand_005fCommand_005fline_005fmacros">Substitution_and_Command_line_macros</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.21.3 String variables, macros, and command line substitution</h4>
+
+<p><a name="index-mixing_005fmacros_005fbackquotes-236"></a>
+<!-- ?substitution mixing_macros_backquotes -->
+The interaction of string variables, backquotes and macro substitution is
+somewhat complicated.  Backquotes do not block macro substitution, so
+
+<pre class="example">           filename = "mydata.inp"
+           lines = ` wc --lines @filename | sed "s/ .*//" `
+     
+</pre>
+   <p>results in the number of lines in mydata.inp being stored in the integer
+variable lines. And double quotes do not block backquote substitution, so
+
+<pre class="example">           mycomputer = "`uname -n`"
+     
+</pre>
+   <p>results in the string returned by the system command `uname -n` being stored
+in the string variable mycomputer.
+
+   <p>However, macro substitution is not performed inside double quotes, so you
+cannot define a system command as a macro and then use both macro and backquote
+substitution at the same time.
+
+<pre class="example">            machine_id = "uname -n"
+            mycomputer = "`@machine_id`"  # doesn't work!!
+     
+</pre>
+   <p>This fails because the double quotes prevent @machine_id from being interpreted
+as a macro. To store a system command as a macro and execute it later you must
+instead include the backquotes as part of the macro itself.  This is
+accomplished by defining the macro as shown below.  Notice that the sprintf
+format nests all three types of quotes.
+
+<pre class="example">           machine_id = sprintf('"`uname -n`"')
+           mycomputer = @machine_id
+     
+</pre>
+   </body></html>
+

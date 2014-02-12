@@ -1,0 +1,252 @@
+<html lang="en">
+<head>
+<title>windows - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="VWS.html#VWS" title="VWS">
+<link rel="next" href="wxt.html#wxt" title="wxt">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="windows"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="wxt.html#wxt">wxt</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="VWS.html#VWS">VWS</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.73 windows</h5>
+
+<!-- ?commands set terminal windows -->
+<!-- ?set terminal windows -->
+<!-- ?set term windows -->
+<!-- ?terminal windows -->
+<!-- ?term windows -->
+<p><a name="index-windows-912"></a><a name="index-windows-913"></a>
+
+   <p>Three options may be set in the `windows` terminal driver.
+
+   <p>Syntax:
+<pre class="example">           set terminal windows {color | monochrome}
+                                {enhanced | noenhanced}
+                                {{font} "fontname{,fontsize}" {&lt;fontsize&gt;}}
+                                {title "Plot Window Title"}
+                                {size &lt;width&gt;,&lt;height&gt;}
+                                {position &lt;x&gt;,&lt;y&gt;}
+                                {close}
+     
+</pre>
+   <p>where `color` and `monochrome` select colored or mono output,
+`enhanced` enables enhanced text mode features (subscripts,
+superscripts and mixed fonts). See `enhanced` for more information. 
+`"&lt;fontname&gt;"` is the name of a valid Windows font, and `&lt;fontsize&gt;`
+is the size of the font in points. 
+<a href="size.html#size">size</a> defines the width and height of the window in pixel and `position`
+the origin of the window i.e. the position of the top left corner on the
+screen (again in pixel). Both these options override the default settings
+from the WGNUPLOT.INI file (see below).
+
+   <p>Other options may be set with the graph-menu or the initialization file.
+
+   <p>The Windows version normally terminates immediately as soon as the end of
+any files given as command line arguments is reached (i.e. in non-interactive
+mode), unless you specify `-` as the last command line option. 
+It will also not show the text-window at all, in this mode, only the plot. 
+By giving the optional argument `-persist` (same as for gnuplot under x11;
+former Windows-only options `/noend` or `-noend` are still accepted as well),
+will not close gnuplot. Contrary to gnuplot on other operating systems,
+gnuplot's interactive command line is accessible after the -persist option.
+
+   <p>The plot window remains open even when the gnuplot driver is changed to a
+different device. The plot window can be close with `set term windows close`
+
+<p class="noindent">&mdash; GRAPH-MENU &mdash;
+
+<!-- ?commands set terminal windows graph-menu -->
+<!-- ?set terminal windows graph-menu -->
+<!-- ?set term windows graph-menu -->
+<!-- ?windows graph-menu -->
+   <p><a name="index-graph_002dmenu-914"></a><a name="index-graph_002dmenu-915"></a>
+
+   <p>The `gnuplot graph` window has the following options on a pop-up menu
+accessed by pressing the right mouse button or selecting `Options` from the
+system menu:
+
+   <p>`Bring to Top` when checked brings the graph window to the top after every
+plot.
+
+   <p>`Color` when checked enables color linestyles.  When unchecked it forces
+monochrome linestyles.
+
+   <p>`Copy to Clipboard` copies a bitmap and an enhanced Metafile picture.
+
+   <p>`Save as EMF...` allows the user to save the current graph window as enhanced metafile
+
+   <p>`Background...` sets the window background color.
+
+   <p>`Choose Font...` selects the font used in the graphics window.
+
+   <p>`Line Styles...` allows customization of the line colors and styles.
+
+   <p>`Print...` prints the graphics windows using a Windows printer driver and
+allows selection of the printer and scaling of the output.  The output
+produced by `Print` is not as good as that from `gnuplot`'s own printer
+drivers.
+
+   <p>`Update wgnuplot.ini` saves the current window locations, window sizes, text
+window font, text window font size, graph window font, graph window font
+size, background color and linestyles to the initialization file
+`WGNUPLOT.INI`.
+
+<p class="noindent">&mdash; PRINTING &mdash;
+
+<!-- ?commands set terminal windows printing -->
+<!-- ?set terminal windows printing -->
+<!-- ?set term windows printing -->
+<!-- ?windows printing -->
+   <p><a name="index-printing-916"></a><a name="index-printing-917"></a>
+
+   <p>In order of preference, graphs may be be printed in the following ways.
+
+   <p>`1.` Use the `gnuplot` command <a href="terminal.html#terminal">terminal</a> to select a printer and <a href="output.html#output">output</a> to redirect output to a file.
+
+   <p>`2.` Select the `Print...` command from the `gnuplot graph` window.  An extra
+command `screendump` does this from the text window.
+
+   <p>`3.` If `set output "PRN"` is used, output will go to a temporary file.  When
+you exit from `gnuplot` or when you change the output with another <a href="output.html#output">output</a> command, a dialog box will appear for you to select a printer port. 
+If you choose OK, the output will be printed on the selected port, passing
+unmodified through the print manager.  It is possible to accidentally (or
+deliberately) send printer output meant for one printer to an incompatible
+printer.
+
+<p class="noindent">&mdash; TEXT-MENU &mdash;
+
+<!-- ?commands set terminal windows text-menu -->
+<!-- ?set terminal windows text-menu -->
+<!-- ?set term windows text-menu -->
+<!-- ?windows text-menu -->
+   <p><a name="index-text_002dmenu-918"></a><a name="index-text_002dmenu-919"></a>
+
+   <p>The `gnuplot text` window has the following options on a pop-up menu accessed
+by pressing the right mouse button or selecting `Options` from the system
+menu:
+
+   <p>`Copy to Clipboard` copies marked text to the clipboard.
+
+   <p>`Paste` copies text from the clipboard as if typed by the user.
+
+   <p>`Choose Font...` selects the font used in the text window.
+
+   <p>`System Colors` when selected makes the text window honor the System Colors
+set using the Control Panel.  When unselected, text is black or blue on a
+white background.
+
+   <p>`Update wgnuplot.ini` saves the current text window location, text window
+size, text window font and text window font size to the initialisation file
+`WGNUPLOT.INI`.
+
+   <p>`MENU BAR`
+
+   <p>If the menu file `WGNUPLOT.MNU` is found in the same directory as
+WGNUPLOT.EXE, then the menu specified in `WGNUPLOT.MNU` will be loaded. 
+Menu commands:
+
+   <p>[Menu] starts a new menu with the name on the following line.
+
+   <p>[EndMenu] ends the current menu.
+
+   <p>[&ndash;] inserts a horizontal menu separator.
+
+   <p>[|] inserts a vertical menu separator.
+
+   <p>[Button] puts the next macro on a push button instead of a menu.
+
+   <p>Macros take two lines with the macro name (menu entry) on the first line and
+the macro on the second line.  Leading spaces are ignored.  Macro commands:
+
+   <p>[INPUT] &mdash; Input string with prompt terminated by [EOS] or {ENTER}
+
+   <p>[EOS] &mdash; End Of String terminator.  Generates no output.
+
+   <p>[OPEN] &mdash; Get name of file to open from list box, with title of list box
+terminated by [EOS], followed by default filename terminated by [EOS] or
+{ENTER}.
+
+   <p>[SAVE] &mdash; Get name of file to save.  Similar to [OPEN]
+
+   <p>Macro character substitutions:
+
+   <p>{ENTER} &mdash; Carriage Return '\\r'
+
+   <p>{TAB} &mdash; Tab '\\011'
+
+   <p>{ESC} &mdash; Escape '\\033'
+
+   <p>{^A} &mdash; '\\001'
+
+   <p>...
+
+   <p>{^_} &mdash; '\\031'
+
+   <p>Macros are limited to 256 characters after expansion.
+
+<p class="noindent">&mdash; WGNUPLOT.INI &mdash;
+
+<!-- ?commands set terminal windows wgnuplot.ini -->
+<!-- ?set terminal windows wgnuplot.ini -->
+<!-- ?set term windows wgnuplot.ini -->
+<!-- ?windows wgnuplot.ini -->
+   <p><a name="index-wgnuplot_002eini-920"></a><a name="index-wgnuplot_002eini-921"></a>
+
+   <p>Windows `gnuplot` will read some of its options from the `[WGNUPLOT]` section
+of `WGNUPLOT.INI` in user's %APPDATA% directory.  A sample `WGNUPLOT.INI` file:
+
+<pre class="example">           [WGNUPLOT]
+           TextOrigin=0 0
+           TextSize=640 150
+           TextFont=Terminal,9
+           GraphOrigin=0 150
+           GraphSize=640 330
+           GraphFont=Arial,10
+           GraphColor=1
+           GraphToTop=1
+           GraphBackground=255 255 255
+           Border=0 0 0 0 0
+           Axis=192 192 192 2 2
+           Line1=0 0 255 0 0
+           Line2=0 255 0 0 1
+           Line3=255 0 0 0 2
+           Line4=255 0 255 0 3
+           Line5=0 0 128 0 4
+     
+</pre>
+   <p>The `GraphFont` entry specifies the font name and size in points.  The five
+numbers given in the `Border`, `Axis` and `Line` entries are the `Red`
+intensity (0&ndash;255), `Green` intensity, `Blue` intensity, `Color Linestyle`
+and `Mono Linestyle`.  `Linestyles` are 0=SOLID, 1=DASH, 2=DOT, 3=DASHDOT,
+4=DASHDOTDOT.  In the sample `WGNUPLOT.INI` file above, Line 2 is a green
+solid line in color mode, or a dashed line in monochrome mode.  The default
+line width is 1 pixel.  If `Linestyle` is negative, it specifies the width of
+a SOLID line in pixels.  Line1 and any linestyle used with the `points` style
+must be SOLID with unit width."
+
+   </body></html>
+

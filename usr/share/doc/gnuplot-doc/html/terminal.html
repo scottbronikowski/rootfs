@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>terminal - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="set_002dshow.html#set_002dshow" title="set-show">
+<link rel="prev" href="table.html#table" title="table">
+<link rel="next" href="termoption.html#termoption" title="termoption">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="terminal"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="termoption.html#termoption">termoption</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="table.html#table">table</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="set_002dshow.html#set_002dshow">set-show</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.64 terminal</h4>
+
+<!-- ?commands set terminal -->
+<!-- ?commands show terminal -->
+<!-- ?set terminal -->
+<!-- ?set term -->
+<!-- ?show terminal -->
+<!-- ?show term -->
+<!-- ?set terminal push -->
+<!-- ?set term push -->
+<!-- ?terminal push -->
+<!-- ?term push -->
+<p><a name="index-push-556"></a>
+<!-- ?set terminal pop -->
+<!-- ?set term pop -->
+<!-- ?terminal pop -->
+<!-- ?term pop -->
+<a name="index-pop-557"></a>
+`gnuplot` supports many different graphics devices.  Use <a href="terminal.html#terminal">terminal</a> to
+tell `gnuplot` what kind of output to generate. Use <a href="output.html#output">output</a> to redirect
+that output to a file or device.
+
+   <p>Syntax:
+<pre class="example">           set terminal {&lt;terminal-type&gt; | push | pop}
+           show terminal
+     
+</pre>
+   <p>If &lt;terminal-type&gt; is omitted, `gnuplot` will list the available terminal
+types.  &lt;terminal-type&gt; may be abbreviated.
+
+   <p>If both <a href="terminal.html#terminal">terminal</a> and <a href="output.html#output">output</a> are used together, it is safest to
+give <a href="terminal.html#terminal">terminal</a> first, because some terminals set a flag which is needed
+in some operating systems.
+
+   <p>Several terminals have many additional options.  For example, see `png`,
+or `postscript`. 
+The options used by a previous invocation `set term &lt;term&gt; &lt;options&gt;` of a
+given `&lt;term&gt;` are remembered, thus subsequent `set term &lt;term&gt;` does
+not reset them.  This helps in printing, for instance, when switching
+among different terminals&mdash;previous options don't have to be repeated.
+
+   <p>The command `set term push` remembers the current terminal including its
+settings while `set term pop` restores it. This is equivalent to `save term`
+and `load term`, but without accessing the filesystem. Therefore they can be
+used to achieve platform independent restoring of the terminal after printing,
+for instance. After gnuplot's startup, the default terminal or that from
+`startup` file is pushed automatically. Therefore portable scripts can rely
+that `set term pop` restores the default terminal on a given platform unless
+another terminal has been pushed explicitly.
+
+   <p>For more information, see the `complete list of terminals`.
+
+   </body></html>
+

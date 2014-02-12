@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>tgif - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals" title="complete_list_of_terminals">
+<link rel="prev" href="texdraw.html#texdraw" title="texdraw">
+<link rel="next" href="tgif_005f.html#tgif_005f" title="tgif_">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="tgif"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="tgif_005f.html#tgif_005f">tgif_</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="texdraw.html#texdraw">texdraw</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="complete_005flist_005fof_005fterminals.html#complete_005flist_005fof_005fterminals">complete_list_of_terminals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">4.1.0.64 tgif</h5>
+
+<!-- ?commands set terminal tgif -->
+<!-- ?set terminal tgif -->
+<!-- ?set term tgif -->
+<!-- ?terminal tgif -->
+<!-- ?term tgif -->
+<p><a name="index-tgif-894"></a><a name="index-tgif-895"></a>
+
+   <p>Tgif is an X11-based drawing tool&mdash;it has nothing to do with GIF.
+
+   <p>The `tgif` driver supports different pointsizes (with <a href="pointsize.html#pointsize">pointsize</a>),
+different label fonts and font sizes (e.g. `set label "Hallo" at x,y font
+"Helvetica,34"`) and multiple graphs on the page.  The proportions of the
+axes are not changed.
+
+   <p>Syntax:
+<pre class="example">           set terminal tgif {portrait | landscape | default} {&lt;[x,y]&gt;}
+                             {monochrome | color}
+                             {{linewidth | lw} &lt;LW&gt;}
+                             {solid | dashed}
+                             {font "&lt;fontname&gt;"} {&lt;fontsize&gt;}
+     
+</pre>
+   <p>where &lt;[x,y]&gt; specifies the number of graphs in the x and y directions on the
+page, `color` enables color, `linewidth` scales all linewidths by &lt;LW&gt;,
+"&lt;fontname&gt;" is the name of a valid PostScript font, and &lt;fontsize&gt;
+specifies the size of the PostScript font. 
+`defaults` sets all options to their defaults: `portrait`, `[1,1]`, `color`,
+`linwidth 1.0`, `dashed`, `"Helvetica"`, and `18`.
+
+   <p>The `solid` option is usually prefered if lines are colored, as they often
+are in the editor.  Hardcopy will be black-and-white, so `dashed` should be
+chosen for that.
+
+   <p>Multiplot is implemented in two different ways.
+
+   <p>The first multiplot implementation is the standard gnuplot multiplot feature:
+
+<pre class="example">           set terminal tgif
+           set output "file.obj"
+           set multiplot
+           set origin x01,y01
+           set size  xs,ys
+           plot ...
+                ...
+           set origin x02,y02
+           plot ...
+           unset multiplot
+     
+</pre>
+   <p>See <a href="multiplot.html#multiplot">multiplot</a> for further information.
+
+   <p>The second version is the [x,y] option for the driver itself.  The advantage
+of this implementation is that everything is scaled and placed automatically
+without the need for setting origins and sizes; the graphs keep their natural
+x/y proportions of 3/2 (or whatever is fixed by <a href="size.html#size">size</a>).
+
+   <p>If both multiplot methods are selected, the standard method is chosen and a
+warning message is given.
+
+   <p>Examples of single plots (or standard multiplot):
+<pre class="example">           set terminal tgif                  # defaults
+           set terminal tgif "Times-Roman" 24
+           set terminal tgif landscape
+           set terminal tgif landscape solid
+     
+</pre>
+   <p>Examples using the built-in multiplot mechanism:
+<pre class="example">           set terminal tgif portrait [2,4]  # portrait; 2 plots in the x-
+                                             # and 4 in the y-direction
+           set terminal tgif [1,2]           # portrait; 1 plot in the x-
+                                             # and 2 in the y-direction
+           set terminal tgif landscape [3,3] # landscape; 3 plots in both
+                                             # directions"
+     
+</pre>
+   </body></html>
+

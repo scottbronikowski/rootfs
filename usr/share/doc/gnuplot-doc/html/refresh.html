@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+<title>refresh - Gnuplot: An Interactive Plotting Program</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnuplot: An Interactive Plotting Program">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="raise.html#raise" title="raise">
+<link rel="next" href="replot.html#replot" title="replot">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="refresh"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="replot.html#replot">replot</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="raise.html#raise">raise</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.19 refresh</h3>
+
+<!-- ?commands refresh -->
+<p><a name="index-refresh-369"></a><a name="index-refresh-370"></a>
+
+   <p>The <a href="refresh.html#refresh">refresh</a> command is similar to <a href="replot.html#replot">replot</a>, with two major differences. 
+<a href="refresh.html#refresh">refresh</a> reformats and redraws the current plot using the data already read
+in. This means that you can use <a href="refresh.html#refresh">refresh</a> for plots with in-line data
+(pseudo-device '-') and for plots from datafiles whose contents are volatile. 
+You cannot use the <a href="refresh.html#refresh">refresh</a> command to add new data to an existing plot.
+
+   <p>Mousing operations, in particular zoom and unzoom, will use <a href="refresh.html#refresh">refresh</a> rather
+than <a href="replot.html#replot">replot</a> if appropriate.  Example:
+
+<pre class="example">           plot 'datafile' volatile with lines, '-' with labels
+           100 200 "Special point"
+           e
+           # Various mousing operations go here
+           set title "Zoomed in view"
+           set term post
+           set output 'zoom.ps'
+           refresh
+     
+</pre>
+   </body></html>
+
