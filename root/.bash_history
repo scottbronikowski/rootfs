@@ -1,133 +1,3 @@
-git status
-cd proc
-ls
-ls -al
-cd 10
-ls
-cd ..
-touch .gitignore
-sudo touch .gitignore
-ls -al
-echo "*" >> .gitignore
-cd ..
-ls
-ls -al
-touch .gitignore
-ls -al
-echo "proc" >> .gitignore
-more .gitignore 
-git add *
-git status
-git add .gitignore
-git add usr/*
-git add sys
-git status
-ls
-ls rootfs/
-more .git
-cd .git
-ls
-more config 
-cd ..
-git add run/*
-git add sys/*
-more .gitignore 
-git add *
-git status
-git add .gitignore 
-stop network-manager
-sudo apt-get install openssh-server ssh vim avahi-daemon avahi-autoipd libnss-mdns locate wpasupplicant locate
-reboot
-ls
-ls -al
-cd /root
-ls
-ls -al
-more .xscreensaver 
---More--(98%)
-ls -al
-rsync
-sudo apt-get install rsycn
-sudo apt-get install rsync
-rsync
-mkdir .ssh
-ls -al
-cd .ssh
-ls
-cd ..
-cd .ss
-cd .ssh
-ls -al
-cd ..
-ls -al
-exit
-date
-sudo apt-get install geoip-bin geoip-database
-sudo apt-get install ssh-askpass libpam-ssh keychain monkeysphere openssh-blacklist openssh-blacklist-extra rssh molly-guard ufw ssh-import-id
-s
-sudo apt-get install ssh-askpass keychain monkeysphere openssh-blacklist openssh-blacklist-extra rssh molly-guard ufw ssh-import-id
-sudo apt-get install ssl-cert
-locate .bashrc
-locate
-ls
-locate networks.txt
-locate network
-sudo apt-get remove locate
-locate
-sudo apt-get install locate
-ls
-locate network
-find
-find networks
-find networks.txt
-find sources.list
-find sources.list.d
-cd /etc/apt
-ls
-lla
-ls -al
-cd sources.list.d
-ls
-more hwpack.ubuntu.list 
-sudo apt-get update
-ifdown wlan0
-ifup wlan 0
-ifup wlan0
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install apache2
-cd /etc/init.d
-ls
-lla
-ls -al
-sudo apt-get remove network-manager
-sudo apt-get install gnupg-agent monkeysphere-validation-agent cvs rdist makejail apache2-doc apache2-suexec apache2-suexec-custom
-sudo apt-get install gnupg-agent monkeysphere-validation-agent cvs rdist makejail
-sudo apt-get install apache2-doc apache2-suexec
-sudo apt-get install libpam-ssh
-sudo apt-get install apache2-suexec-custom
-sudo apt-get install autoconf automake
-sudo apt-get install doxygen autoconf2.13 autoconf-archive gnu-standards autoconf-doc libtool gettext
-df -h
-sudo apt-get install autoconf2.13 autoconf-archive gnu-standards autoconf-doc libtool gettext
-sudo apt-get install automake1.4 libltdl-dev
-sudo apt-get install libtool-doc
-sudo apt-get install mksh rcs libio-socket-ssl-perl libnet-ssleay-perl liblwp-protocol-socks-perl
-sudo apt-get install pinentry-doc libjson-xs-perl libclass-method-modifiers-perl libgtk2-perl libanyevent-perl liblinux-inotify2-perl liburi-perl libwww-perl
-sudo apt-get install libasync-interrupt-perl libev-perl libevent-perl libguard-perl libio-async-perl libpoe-perl libtask-weaken-perl perl-tk libfont-freetype-perl libgtk2-perl-doc pinentry-curses pinentry-qt4 libdata-dump-perl libcrypt-ssleay-perl libauthen-ntlm-perl ed
-reboot
-cd ~
-lla
-ssh seykhl
-cd .ssh
-lla
-chmod 644 *
-lla
-ssh seykhl
-chmod 600 id_rsa
-lla
-ssh seykhl
-ssh aql
 cd ~
 dpkg -l 
 dpkg -l | grep avahi
@@ -1998,3 +1868,133 @@ cd ../../bin
 ls
 ./FlyCap2
 reboot
+emacs &
+top
+cd pointgrey/
+ls
+cd flycapture.2.6.3.2_armhf
+cd bin
+ls
+./FlyCap2
+lsusb
+ls
+./MultipleCameraEx 
+ls
+./FlyCapture2Test 
+lsusb
+ls
+feh
+./FlyCap2 
+ls
+lsusb
+ps -ef | grep moni
+lsusb
+dpkg-query -l
+dpkg-query -l 'cups'
+aptitude purge cups
+dpkg-query -l 'lp'
+dpkg-query -l 'lpr'
+aptitude purge lpr
+cd /
+git status
+git add -A
+git commit -m "aptitude purge cups; aptitude purge lpr"
+git push
+reboot
+top
+/etc/init.d/monitor.sh stop
+vi /etc/init.d/monitor.sh 
+reboot
+emacs &
+cd pointgrey/flycapture.2.6.3.2_armhf/bin
+./FlyCap2
+lsusb
+./FlyCap2
+lsusb
+./FlyCap2
+lsusb
+/etc/init.d/ssh-tunnel.sh start
+reboot
+emacs &
+cd pointgrey/flycapture.2.6.3.2_armhf/bin
+./FlyCap2
+lsusb
+./FlyCap2
+lsusb
+/etc/init.d/monitor.sh stop
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+lsusb
+reboot
+pointgrey/flycapture.2.6.3.2_armhf/bin/FlyCap2
+cd pointgrey/flycapture.2.6.3.2_armhf
+cd bin
+ls
+lla
+./FlyCap2
+./FlyCap2 &
+lsusb
+cd pointgrey/flycapture.2.6.3.2_armhf/bin
+./FlyCap2
+lsusb
+ps -ef | grep Fly
+lsusb
+/etc/init.d/monitor.sh stop
+lsusb
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+lsusb
+modprobe
+modprobe g_ether
+lsmod
+lsusb
+reboot
+lsusb
+/etc/init.d/monitor.sh stop
+lsusb
+reboot
+/etc/init.d/monitor.sh stop
+lsusb
+echo 15000 > /dev/pwm10
+halt
+emacs &
+cd pointgrey/flycapture.2.6.3.2_armhf/bin
+./FlyCap2
+./FlyCap2 &
+echo 10000 > /dev/pwm10
+./FlyCap2 &
+lsusb
+/etc/init.d/monitor.sh stop
+emacs &
+cd pointgrey/flycapture.2.6.3.2_armhf/bin
+./FlyCap2
+lsusb
+./FlyCap2
+lsusb
+halt
+top
+date
+reboot
+date
+xit
+date
+/etc/init.d/time-update.sh 
+/etc/init.d/time-update.sh start
+date
+hatl
+halt
+ls /etc/rc2.d/
+cat /etc/rc2.d/S23ntp 
+cd /etc/init.d/
+update-rc.d -f ssh-tunnel.sh remove
+update-rc.d ssh-tunnel.sh defaults 26
+update-rc.d -f time-update.sh remove
+update-rc.d time-update.sh defaults 25
+ls ../rc2.d/
+emacs &

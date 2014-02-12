@@ -12,7 +12,11 @@
 start(){
     ntpdate -s -u us.pool.ntp.org
     echo "Updated time with us.pool.ntp.org"
+    hwclock -w
+    echo "date : "
     date
+    echo "hwclock : "
+    hwclock
 }
 
 stop(){

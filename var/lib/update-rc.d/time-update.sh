@@ -1,1 +1,1 @@
-update-rc.d time-update.sh defaults 24
+update-rc.d time-update.sh defaults 25

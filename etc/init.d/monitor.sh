@@ -10,8 +10,8 @@
 ### END INIT INFO
 
 start(){
+    echo "Starting monitor client"	
     /root/test_code/monitor
-    echo "Started monitor client"
 }
 
 stop(){
