@@ -5416,7 +5416,7 @@ Homepage: http://boost.org/libs/filesystem/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
 
 Package: libdbusmenu-glib4
-Status: install ok installed
+Status: deinstall ok config-files
 Multi-Arch: same
 Priority: optional
 Section: libs
@@ -5425,6 +5425,7 @@ Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Architecture: armhf
 Source: libdbusmenu
 Version: 0.6.1-0ubuntu3
+Config-Version: 0.6.1-0ubuntu3
 Depends: libc6 (>= 2.15-0ubuntu8), libglib2.0-0 (>= 2.31.8)
 Pre-Depends: multiarch-support
 Breaks: gir1.2-indicate-0.5 (<< 0.5.0-0ubuntu4), gir1.2-unity-3.0 (<< 3.8.4-0ubuntu2), indicator-messages (<< 0.3.0), indicator-session (<< 0.2.0), libdbusmenu-glib0
@@ -6636,7 +6637,7 @@ Homepage: http://0pointer.de/lennart/projects/libcanberra/
 Original-Maintainer: Marc-Andre Lureau <marcandre.lureau@gmail.com>
 
 Package: libnm-util2
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: libs
 Installed-Size: 350
@@ -6644,6 +6645,7 @@ Maintainer: Ubuntu Core Dev Team <ubuntu-devel-discuss@lists.ubuntu.com>
 Architecture: armhf
 Source: network-manager
 Version: 0.9.4.0-0ubuntu3
+Config-Version: 0.9.4.0-0ubuntu3
 Depends: libc6 (>= 2.4), libdbus-glib-1-2 (>= 0.78), libglib2.0-0 (>= 2.31.8), libnspr4 (>= 1.8.0.10), libnss3 (>= 3.12.0~1.9b1), libuuid1 (>= 2.16)
 Description: network management framework (shared library)
  NetworkManager is a system network service that manages your network devices
@@ -7055,39 +7057,6 @@ Description: document files of ImageMagick
  suite to create, edit, and compose bitmap images.
 Homepage: http://www.imagemagick.org/
 Original-Maintainer: ImageMagick Packaging Team <pkg-gmagick-im-team@lists.alioth.debian.org>
-
-Package: printer-driver-hpcups
-Status: install ok installed
-Priority: optional
-Section: text
-Installed-Size: 1501
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Source: hplip
-Version: 3.12.2-1ubuntu3
-Replaces: hplip-cups (<< 3.11.10-1ubuntu2)
-Depends: libc6 (>= 2.15), libcups2 (>= 1.4.0), libcupsimage2 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libgcc1 (>= 1:4.4.0), libhpmud0, libjpeg8 (>= 8c), libstdc++6 (>= 4.4.0), ghostscript-cups, cups (>= 1.4.0) | cupsddk, cups
-Suggests: hplip-doc, hplip (= 3.12.2-1ubuntu3)
-Breaks: hplip-cups (<< 3.11.10-1ubuntu2)
-Description: HP Linux Printing and Imaging - CUPS Raster driver (hpcups)
- This package contains a CUPS-Raster-based printer driver which adds support
- for most inkjet printers and some LaserJet printers manufactured by HP. It
- does not provide PPDs for the fax functionality of HP's multi-function
- devices.
- .
- Users of the CUPS printing system are advised to also install the
- hplip package, and use the hp CUPS backend to send data to the printer.
- HPLIP supports USB, networked and parallel-port devices, and enables
- extended hpcups functionality such as border-less printing.
- Selecting any hpcups ppd in CUPS will use hpcups automatically.
- .
- No physical PPDs are shipped with this driver. PPDs are dynamically
- generated via a CUPS DDK .drv file.
- .
- This package can be installed to provide a minimal headless printer
- solution using CUPS.
-Original-Maintainer: Debian HPIJS and HPLIP maintainers <pkg-hpijs-devel@lists.alioth.debian.org>
-Homepage: http://hplipopensource.com/hplip-web/index.html
 
 Package: libcommon-sense-perl
 Status: install ok installed
@@ -8780,23 +8749,6 @@ Description: MIT Kerberos runtime libraries - Crypto Library
  applications and Kerberos clients.
 Original-Maintainer: Sam Hartman <hartmans@debian.org>
 Homepage: http://web.mit.edu/kerberos/
-
-Package: dnsmasq-base
-Status: install ok installed
-Priority: optional
-Section: net
-Installed-Size: 424
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Source: dnsmasq
-Version: 2.59-4
-Depends: libc6 (>= 2.11), libdbus-1-3 (>= 1.1.1), libidn11 (>= 1.13), libnetfilter-conntrack3 (>= 0.9.1)
-Conflicts: dnsmasq (<< 2.41)
-Description: Small caching DNS proxy and DHCP/TFTP server
- This package contains the dnsmasq executable and documentation, but
- not the infrastructure required to run it as a system daemon. For
- that, install the dnsmasq package.
-Original-Maintainer: Simon Kelley <simon@thekelleys.org.uk>
 
 Package: bc
 Status: install ok installed
@@ -17384,32 +17336,6 @@ Description: stylesheets for processing DocBook XML files (PDF documentation)
 Original-Maintainer: Daniel Leidert (dale) <daniel.leidert@wgdd.de>
 Homepage: http://wiki.docbook.org/topic/DocBookXslStylesheetDocs
 
-Package: lpr
-Status: install ok installed
-Priority: optional
-Section: net
-Installed-Size: 302
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Version: 1:2008.05.17+nmu1
-Replaces: logcheck-database
-Depends: libc6 (>= 2.8), netbase
-Suggests: magicfilter | apsfilter, gs
-Conflicts: suidmanager (<< 0.50)
-Conffiles:
- /etc/default/lpd 9b883786cf372c34999ff8e9ac0efd70
- /etc/cron.weekly/lpr 3573da7a7ab9e260c53a79831d80d280
- /etc/init.d/lpd 9691cb1031e389e6b0c0e9a6b94a4c22
- /etc/logcheck/ignore.d.server/lpr 74b2c368d40e723c8bab38d048246131
-Description: BSD lpr/lpd line printer spooling system
- This is the BSD printer spooler and associated utilities.
- You can use this for local and remote printers.
- .
- If you install magicfilter or apsfilter (along with ghostscript),
- lpr will be able to automatically handle special file types
- (such as Postscript and PDF files).
-Original-Maintainer: Adam Majer <adamm@zombino.com>
-
 Package: libpulsedsp
 Status: install ok installed
 Multi-Arch: same
@@ -21328,7 +21254,7 @@ Original-Maintainer: Debian Apache Maintainers <debian-apache@lists.debian.org>
 Homepage: http://apr.apache.org/
 
 Package: libdbusmenu-gtk3-4
-Status: install ok installed
+Status: deinstall ok config-files
 Multi-Arch: same
 Priority: optional
 Section: libs
@@ -21337,6 +21263,7 @@ Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Architecture: armhf
 Source: libdbusmenu
 Version: 0.6.1-0ubuntu3
+Config-Version: 0.6.1-0ubuntu3
 Depends: libatk1.0-0 (>= 1.12.4), libc6 (>= 2.15-0ubuntu8), libdbusmenu-glib4 (>= 0.5.90), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.24.0), libpango1.0-0 (>= 1.14.0)
 Pre-Depends: multiarch-support
 Description: library for passing menus over DBus - GTK+ version
@@ -21819,29 +21746,6 @@ Description: a pattern scanning and text processing language
  Mawk is smaller and much faster than gawk. It has some compile-time
  limits such as NF = 32767 and sprintf buffer = 1020.
 Original-Maintainer: Steve Langasek <vorlon@debian.org>
-
-Package: libnm-gtk-common
-Status: install ok installed
-Priority: optional
-Section: gnome
-Installed-Size: 59
-Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: all
-Source: network-manager-applet
-Version: 0.9.4.1-0ubuntu2
-Replaces: network-manager-gnome (<< 0.9.1.90-0ubuntu2)
-Breaks: network-manager-gnome (<< 0.9.1.90-0ubuntu2)
-Description: network management framework (common files for wifi and mobile)
- NetworkManager is a system network service that manages your network devices
- and connections, attempting to keep active network connectivity when
- available. It manages ethernet, WiFi, mobile broadband (WWAN), and PPPoE
- devices, and provides VPN integration with a variety of different VPN
- services.
- .
- This package contains common files to use for displaying dialogs for wireless
- or mobile connections.
-Homepage: http://www.gnome.org/projects/NetworkManager/
-Original-Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
 
 Package: libopencore-amrnb0
 Status: install ok installed
@@ -22730,7 +22634,7 @@ Description: X.Org X server -- ATI r128 display driver
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
 Package: libindicator3-7
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: libs
 Installed-Size: 99
@@ -22738,6 +22642,7 @@ Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Architecture: armhf
 Source: libindicator
 Version: 0.5.0-0ubuntu1
+Config-Version: 0.5.0-0ubuntu1
 Depends: libc6 (>= 2.4), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.26.0), libgtk-3-0 (>= 3.0.0)
 Description: panel indicator applet - shared library
  This library contains information to build indicators to go into
@@ -23359,7 +23264,7 @@ Original-Maintainer: Debian PhotoTools Maintainers <pkg-phototools-devel@lists.a
 Homepage: http://www.openexr.com
 
 Package: libappindicator3-1
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: libs
 Installed-Size: 98
@@ -23367,6 +23272,7 @@ Maintainer: Ubuntu Desktop Team <ubuntu-desktop@lists.ubuntu.com>
 Architecture: armhf
 Source: libappindicator
 Version: 0.4.92-0ubuntu1
+Config-Version: 0.4.92-0ubuntu1
 Depends: libc6 (>= 2.4), libdbusmenu-glib4 (>= 0.4.2), libdbusmenu-gtk3-4 (>= 0.4.2), libglib2.0-0 (>= 2.26.0), libgtk-3-0 (>= 3.0.0), libindicator3-7
 Recommends: indicator-application (>= 0.2.93)
 Description: Application Indicators
@@ -24925,7 +24831,7 @@ Original-Maintainer: Neil Roeth <neil@debian.org>
 Homepage: http://openjade.sourceforge.net/
 
 Package: libnetfilter-conntrack3
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: extra
 Section: libs
 Installed-Size: 83
@@ -24933,6 +24839,7 @@ Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Architecture: armhf
 Source: libnetfilter-conntrack
 Version: 0.9.1-1ubuntu1
+Config-Version: 0.9.1-1ubuntu1
 Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libnfnetlink0 (>= 1.0.0)
 Description: Netfilter netlink-conntrack library
  libnetfilter_conntrack is a userspace library providing a programming
@@ -27424,7 +27331,7 @@ Description: LightDM GTK+ Greeter
 Homepage: https://launchpad.net/lightdm-gtk-greeter
 
 Package: libnm-gtk0
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: libs
 Installed-Size: 148
@@ -27432,6 +27339,7 @@ Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Architecture: armhf
 Source: network-manager-applet
 Version: 0.9.4.1-0ubuntu2
+Config-Version: 0.9.4.1-0ubuntu2
 Replaces: network-manager-gnome (<< 0.9.1.90-0ubuntu2)
 Depends: libnm-gtk-common (>= 0.9.4.1-0ubuntu2), gconf-service, libc6 (>= 2.4), libgconf-2-4 (>= 2.31.1), libglib2.0-0 (>= 2.16.0), libgnome-keyring0 (>= 3.2.2-2~), libgtk-3-0 (>= 3.0.0), libnm-glib4 (>= 0.8.998), libnm-util2 (>= 0.9.2.0+git201202060518.95b0b72), policykit-1-gnome, dbus-x11
 Recommends: network-manager (>= 0.9.4), mobile-broadband-provider-info
@@ -31599,7 +31507,7 @@ Original-Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org
 Homepage: http://ogdi.sourceforge.net/
 
 Package: libnm-glib4
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: libs
 Installed-Size: 227
@@ -31607,6 +31515,7 @@ Maintainer: Ubuntu Core Dev Team <ubuntu-devel-discuss@lists.ubuntu.com>
 Architecture: armhf
 Source: network-manager
 Version: 0.9.4.0-0ubuntu3
+Config-Version: 0.9.4.0-0ubuntu3
 Depends: libc6 (>= 2.4), libdbus-1-3 (>= 1.0.2), libdbus-glib-1-2 (>= 0.88), libglib2.0-0 (>= 2.31.8), libgudev-1.0-0 (>= 147), libnm-util2 (>= 0.9.3.995+git201203081848.bba834f)
 Description: network management framework (GLib shared library)
  NetworkManager is a system network service that manages your network devices
@@ -35818,7 +35727,7 @@ Gstreamer-Version: 0.10
 Original-Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
 
 Package: libnm-glib-vpn1
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: libs
 Installed-Size: 105
@@ -35826,6 +35735,7 @@ Maintainer: Ubuntu Core Dev Team <ubuntu-devel-discuss@lists.ubuntu.com>
 Architecture: armhf
 Source: network-manager
 Version: 0.9.4.0-0ubuntu3
+Config-Version: 0.9.4.0-0ubuntu3
 Replaces: libnm-glib2
 Depends: libc6 (>= 2.4), libdbus-glib-1-2 (>= 0.88), libglib2.0-0 (>= 2.22), libnm-util2 (>= 0.7.0)
 Breaks: libnm-glib2
@@ -37329,13 +37239,14 @@ Description: MPEG audio decoder library
 Original-Maintainer: Mad Maintainers <pkg-mad-maintainers@lists.alioth.debian.org>
 
 Package: hplip
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: utils
 Installed-Size: 391
 Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Architecture: armhf
 Version: 3.12.2-1ubuntu3
+Config-Version: 3.12.2-1ubuntu3
 Depends: libc6 (>= 2.4), libcups2 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libhpmud0 (= 3.12.2-1ubuntu3), libsane (>= 1.0.11-3), libsane-hpaio (= 3.12.2-1ubuntu3), hplip-data (= 3.12.2-1ubuntu3), printer-driver-hpcups (= 3.12.2-1ubuntu3), python2.7, python (>= 2.7), python (<< 2.8), python-dbus (>= 0.80), python-imaging, python-pexpect, python-reportlab, coreutils (>= 5.1.0), lsb-base (>= 3), adduser (>= 3.34), cups (>= 1.1.20), policykit-1, python-gobject-2, wget
 Recommends: sane-utils, avahi-daemon
 Suggests: hplip-gui, hplip-doc, python-notify, system-config-printer
@@ -37770,25 +37681,6 @@ Description: JavaScript script engine for Plasma
 Homepage: http://www.kde.org/
 Original-Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
 
-Package: iputils-arping
-Status: install ok installed
-Priority: extra
-Section: net
-Installed-Size: 67
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Source: iputils
-Version: 3:20101006-1ubuntu1
-Replaces: netbase (<< 4.00)
-Depends: libc6 (>= 2.4), libsysfs2
-Conflicts: arping, iputils-ping (<< 20001110-6), suidmanager (<< 0.50)
-Description: Tool to send ICMP echo requests to an ARP address
- The arping command acts like the standard ping command except it pings
- a machine by its ARP address instead of its IP address.  It is typically
- used to locate a machine if its hardware address is known but its IP
- address is unknown
-Original-Maintainer: Noah Meyerhans <noahm@debian.org>
-
 Package: libmpfr4
 Status: install ok installed
 Multi-Arch: same
@@ -38187,7 +38079,7 @@ Description: Core documentation for the X.org X Window System
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
 Package: libgnome-bluetooth8
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: libs
 Installed-Size: 258
@@ -38195,6 +38087,7 @@ Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Architecture: armhf
 Source: gnome-bluetooth
 Version: 3.2.2-0ubuntu5
+Config-Version: 3.2.2-0ubuntu5
 Depends: libc6 (>= 2.4), libdbus-glib-1-2 (>= 0.88), libglib2.0-0 (>= 2.26.0), libgtk-3-0 (>= 3.0.0)
 Description: GNOME Bluetooth tools - support library
  This package contains tools for managing and manipulating Bluetooth
@@ -39402,41 +39295,6 @@ Description: Wietse Venema's TCP wrappers library
   - detection of host name spoofing or host address spoofing;
   - booby traps to implement an early-warning system.
 Original-Maintainer: Marco d'Itri <md@linux.it>
-
-Package: cups
-Status: install ok installed
-Priority: optional
-Section: net
-Installed-Size: 3859
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Version: 1.5.2-9ubuntu1
-Replaces: cupsddk-drivers (<< 1.4.0), ghostscript-cups (<< 9.02~)
-Provides: cupsddk-drivers
-Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.15), libcups2 (>= 1.5.0), libcupscgi1 (>= 1.4.2), libcupsimage2 (>= 1.4.0), libcupsmime1 (>= 1.5.0), libcupsppdc1 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libgcc1 (>= 1:4.4.0), libgnutls26 (>= 2.12.6.1-0), libgssapi-krb5-2 (>= 1.8+dfsg), libkrb5-3 (>= 1.6.dfsg.2), libldap-2.4-2 (>= 2.4.7), libpam0g (>= 0.99.7.1), libpaper1, libslp1, libstdc++6 (>= 4.3.0), libusb-1.0-0 (>= 2:1.0.9~rc3), debconf (>= 1.2.9) | debconf-2.0, upstart-job, poppler-utils (>= 0.12), procps, ghostscript (>= 9.02~), lsb-base (>= 3), cups-common (>= 1.5.2), cups-client (>= 1.5.2-9ubuntu1), ssl-cert (>= 1.0.11), adduser, bc, cups-ppdc, cups-filters
-Pre-Depends: dpkg (>= 1.15.7.2)
-Recommends: avahi-daemon, colord, foomatic-filters (>= 4.0), printer-driver-gutenprint, ghostscript-cups (>= 9.02~)
-Suggests: cups-bsd, foomatic-db-compressed-ppds | foomatic-db, printer-driver-hpcups, hplip, cups-pdf, udev, smbclient
-Breaks: cupsddk-drivers (<< 1.4.0), foomatic-filters (<< 4.0), ghostscript-cups (<< 9.02~)
-Conffiles:
- /etc/cups/cupsd.conf.default 03cc7d46e085b96b9dea5f78cb80d116
- /etc/cups/cupsd.conf bd2b7cffb7cc23734ccee179d2584419
- /etc/cups/snmp.conf 55baa060a50f48f9dbb99c6eb60dc04c
- /etc/ufw/applications.d/cups 29e98a6d850da251e180c3d68dec2bd3
- /etc/init/cups.conf 43d2d4234cff969f03c48484e985deed
- /etc/default/cups 2b436fbb1a32b82b6aba45a76a1d7e40
- /etc/logrotate.d/cups 5bb41fa9900f0d1c565954405a2bd7c4
- /etc/apparmor.d/usr.sbin.cupsd 5cc210d5438fc12e5f0a4aa50ac9e3df
- /etc/pam.d/cups ff2488324854f7b1e892bb0df062d5f0
-Description: Common UNIX Printing System(tm) - server
- The Common UNIX Printing System (or CUPS(tm)) is a printing system and
- general replacement for lpd and the like.  It supports the Internet
- Printing Protocol (IPP), and has its own filtering driver model for
- handling various document types.
- .
- This package provides the CUPS scheduler/daemon and related files.
-Homepage: http://www.cups.org
-Original-Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
 
 Package: libkjsembed4
 Status: install ok installed

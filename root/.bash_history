@@ -1,78 +1,3 @@
-emacs ntp.conf &
-date -R
-date
-ntpdate ntp.ubuntu.com
-ntpdate
-ntptrace $servername
-ntptrace
-ping ntp.ubuntu.com
-service stop ntpd
-service ntpd stop
-service ntp stop
-ntpdate ntp.ubuntu.com
-ntpq
-ntpdate pool.ntp.org
-ntpdate -p ntp.ubuntu.com
-ntpdate -d ntp.ubuntu.com
-date
-ls nt*
-ifdown wlan0
-ifup wlan0
-date
-service ntp start
-date
-ntpd -p
-ntpq -p
-ping 129.70.130.70
-init.d/ntp reload
-ntpq -p
-/etc/init.d/ntp reload
-ntpq -p
-service ntp restart
-ntpq -p
-dpkg -;
-dpkg -l
-dpgk -l 
-dpkg -l | grep ntp
-dpkg -i
-apt-get install ntp-bin
-cd init.d
-ls
-ntpdate
-ntpdate start
-ntpdate -s -u us.pool.ntp.org
-date
-ntpq -d
-ntpq -p
-service ntp restart
-date
-ntpq -p
-cd ..
-ls time
-ls ti*
-more timezone 
-dpkg-reconfigure tzdate
-dpkg-reconfigure tzdata
-reboot
-date
-cd /
-ls
-ls -al
-sudo network-manager
-more /etc/hostname 
-emacs /etc/hostname &
-sudo networkmanager
-cd /
-git commit -m "set root pw; edit /etc/network/interfaces, /etc/hostname, /etc/hosts; install emacs, ntp"
-git push origin master
-git add *
-sudo git add *
-reboot
-date
-cd ..
-sudo git add *
-git status
-git add var/*
 git status
 cd proc
 ls
@@ -1997,4 +1922,79 @@ cd /etc/default
 ls
 more saned 
 vi saned
+reboot
+vi /etc/init.d/keepalive-ping.sh 
+ls /etc/rc*
+ls
+apt-get install dlocate upower virtuoso-minimal kubuntu-debug-installer icoutils libcanberra-pulse libcanberra-gstreamer libvisual-0.4-plugins
+it-java libdom4j-java-doc ttf-dustin libjaxme-java-doc libjaxp1.3-java-gcj libjdom1-java-doc liblog4j1.2-java-doc libgnumail-java libmx4j-java libscalar-number-perl libsaxon-java-doc libsaxonb-java-doc sidplay-base xsidplay libxalan2-java-doc libxsltc-java libxerces2-java-doc libxerces2-java-gcj libxml-commons-resolver1.1-java-doc libxom-java-doc manpages-dev w3m-img menu w3m-el migemo texlive-fonts-recommended pdf2djvu debian-faq rhino libcanberra-gtk-module libpackage-stash-xs-perl libxml-sax-expat-perl texlive-luatex lmodern
+n
+apt-get install dlocate upower virtuoso-minimal kubuntu-debug-installer icoutils libcanberra-pulse libcanberra-gstreamer libvisual-0.4-plugins gstreamer0.10-plugins-good gnome-user-guide videolan-doc libmtp-runtime vlc-plugin-notify vlc-plugin-pulse dh-make fastjar gcj-4.6-jdk libgcj12-awt gcj-jdk libgcj12-dbg libmail-box-perl x-ttcidfont-conf gcj-4.6-jre-lib libmail-sendmail-perl lpr gnuplot-doc weblint-perl texlive-base xhtml2ps libgd-tools geotiff-bin gdal-bin libgeotiff-epsg gphoto2 gtkam libhdf4-doc libhdf4-dev hdf4-tools proj-bin hpoj hplip libsane-extras libgnomeprintui2.2-0 radiance-doc unpaper tclreadline xfig ufraw groff ttf-liberation libgphoto2-l10n radiance-materials gv ps-viewer libbonobo2-bin desktop-base python-imaging-doc python-imaging-dbg python-lxml-dbg python-egenix-mxtexttools python-reportlab-doc python-uniconvertor-dbg gsfonts-x11 gvfs python-reportlab-accel python-renderpm djvulibre-desktop psgml jadetex docbook-dsssl-doc dlocate grep-dctrl tasksel fop-doc libservlet2.5-java gvfs-backends libavalon-framework-java-doc libbackport-util-concurrent-java-doc bsh libcommons-io-java-doc libcommons-logging-java-doc libexcalibur-logkit-java libdom4j-java-doc ttf-dustin libjaxme-java-doc libjaxp1.3-java-gcj libjdom1-java-doc liblog4j1.2-java-doc libgnumail-java libmx4j-java libscalar-number-perl libsaxon-java-doc libsaxonb-java-doc sidplay-base xsidplay libxalan2-java-doc libxsltc-java libxerces2-java-doc libxerces2-java-gcj libxml-commons-resolver1.1-java-doc libxom-java-doc manpages-dev w3m-img menu w3m-el migemo texlive-fonts-recommended pdf2djvu debian-faq rhino libcanberra-gtk-module libpackage-stash-xs-perl libxml-sax-expat-perl texlive-luatex lmodern
+apt-get install dlocate upower virtuoso-minimal kubuntu-debug-installer icoutils libcanberra-pulse libcanberra-gstreamer libvisual-0.4-plugins gstreamer0.10-plugins-good gnome-user-guide videolan-doc libmtp-runtime vlc-plugin-notify vlc-plugin-pulse dh-make fastjar gcj-4.6-jdk libgcj12-awt gcj-jdk libgcj12-dbg libmail-box-perl x-ttcidfont-conf gcj-4.6-jre-lib libmail-sendmail-perl lpr gnuplot-doc weblint-perl texlive-base xhtml2ps libgd-tools geotiff-bin gdal-bin libgeotiff-epsg gphoto2 gtkam libhdf4-doc libhdf4-dev hdf4-tools proj-bin hplip libsane-extras libgnomeprintui2.2-0 radiance-doc unpaper tclreadline xfig ufraw groff ttf-liberation libgphoto2-l10n radiance-materials gv libbonobo2-bin desktop-base python-imaging-doc python-imaging-dbg python-lxml-dbg python-egenix-mxtexttools python-reportlab-doc python-uniconvertor-dbg gsfonts-x11 gvfs python-reportlab-accel python-renderpm djvulibre-desktop psgml jadetex docbook-dsssl-doc dlocate grep-dctrl tasksel fop-doc libservlet2.5-java gvfs-backends libavalon-framework-java-doc libbackport-util-concurrent-java-doc bsh libcommons-io-java-doc libcommons-logging-java-doc libexcalibur-logkit-java libdom4j-java-doc ttf-dustin libjaxme-java-doc libjaxp1.3-java-gcj libjdom1-java-doc liblog4j1.2-java-doc libgnumail-java libmx4j-java libscalar-number-perl libsaxon-java-doc libsaxonb-java-doc sidplay-base xsidplay libxalan2-java-doc libxsltc-java libxerces2-java-doc libxerces2-java-gcj libxml-commons-resolver1.1-java-doc libxom-java-doc manpages-dev w3m-img menu w3m-el migemo texlive-fonts-recommended pdf2djvu debian-faq rhino libcanberra-gtk-module libpackage-stash-xs-perl libxml-sax-expat-perl texlive-luatex lmodern
+git status
+git add -A
+git commit -m " apt-get install dlocate upower virtuoso-minimal kubuntu-debug-installer icoutils libcanberra-pulse libcanberra-gstreamer libvisual-0.4-plugins gstreamer0.10-plugins-good gnome-user-guide videolan-doc libmtp-runtime vlc-plugin-notify vlc-plugin-pulse dh-make fastjar gcj-4.6-jdk libgcj12-awt gcj-jdk libgcj12-dbg libmail-box-perl x-ttcidfont-conf gcj-4.6-jre-lib libmail-sendmail-perl lpr gnuplot-doc weblint-perl texlive-base xhtml2ps libgd-tools geotiff-bin gdal-bin libgeotiff-epsg gphoto2 gtkam libhdf4-doc libhdf4-dev hdf4-tools proj-bin hplip libsane-extras libgnomeprintui2.2-0 radiance-doc unpaper tclreadline xfig ufraw groff ttf-liberation libgphoto2-l10n radiance-materials gv libbonobo2-bin desktop-base python-imaging-doc python-imaging-dbg python-lxml-dbg python-egenix-mxtexttools python-reportlab-doc python-uniconvertor-dbg gsfonts-x11 gvfs python-reportlab-accel python-renderpm djvulibre-desktop psgml jadetex docbook-dsssl-doc dlocate grep-dctrl tasksel fop-doc libservlet2.5-java gvfs-backends libavalon-framework-java-doc libbackport-util-concurrent-java-doc bsh libcommons-io-java-doc libcommons-logging-java-doc libexcalibur-logkit-java libdom4j-java-doc ttf-dustin libjaxme-java-doc libjaxp1.3-java-gcj libjdom1-java-doc liblog4j1.2-java-doc libgnumail-java libmx4j-java libscalar-number-perl libsaxon-java-doc libsaxonb-java-doc sidplay-base xsidplay libxalan2-java-doc libxsltc-java libxerces2-java-doc libxerces2-java-gcj libxml-commons-resolver1.1-java-doc libxom-java-doc manpages-dev w3m-img menu w3m-el migemo texlive-fonts-recommended pdf2djvu debian-faq rhino libcanberra-gtk-module libpackage-stash-xs-perl libxml-sax-expat-perl texlive-luatex lmodern
+"
+git status
+cd /
+git add -A
+git commit -m "Second attempt at commit: apt-get install dlocate upower virtuoso-minimal kubuntu-debug-installer icoutils libcanberra-pulse libcanberra-gstreamer libvisual-0.4-plugins gstreamer0.10-plugins-good gnome-user-guide videolan-doc libmtp-runtime vlc-plugin-notify vlc-plugin-pulse dh-make fastjar gcj-4.6-jdk libgcj12-awt gcj-jdk libgcj12-dbg libmail-box-perl x-ttcidfont-conf gcj-4.6-jre-lib libmail-sendmail-perl lpr gnuplot-doc weblint-perl texlive-base xhtml2ps libgd-tools geotiff-bin gdal-bin libgeotiff-epsg gphoto2 gtkam libhdf4-doc libhdf4-dev hdf4-tools proj-bin hplip libsane-extras libgnomeprintui2.2-0 radiance-doc unpaper tclreadline xfig ufraw groff ttf-liberation libgphoto2-l10n radiance-materials gv libbonobo2-bin desktop-base python-imaging-doc python-imaging-dbg python-lxml-dbg python-egenix-mxtexttools python-reportlab-doc python-uniconvertor-dbg gsfonts-x11 gvfs python-reportlab-accel python-renderpm djvulibre-desktop psgml jadetex docbook-dsssl-doc dlocate grep-dctrl tasksel fop-doc libservlet2.5-java gvfs-backends libavalon-framework-java-doc libbackport-util-concurrent-java-doc bsh libcommons-io-java-doc libcommons-logging-java-doc libexcalibur-logkit-java libdom4j-java-doc ttf-dustin libjaxme-java-doc libjaxp1.3-java-gcj libjdom1-java-doc liblog4j1.2-java-doc libgnumail-java libmx4j-java libscalar-number-perl libsaxon-java-doc libsaxonb-java-doc sidplay-base xsidplay libxalan2-java-doc libxsltc-java libxerces2-java-doc libxerces2-java-gcj libxml-commons-resolver1.1-java-doc libxom-java-doc manpages-dev w3m-img menu w3m-el migemo texlive-fonts-recommended pdf2djvu debian-faq rhino libcanberra-gtk-module libpackage-stash-xs-perl libxml-sax-expat-perl texlive-luatex lmodern
+"
+git push
+emacs &
+vi pointgrey/flycapture.2.5.3.5_armhf/include/C/FlyCapture2_C.h
+cat FlyCapture2_C.h
+cat pointgrey/flycapture.2.5.3.5_armhf/include/C/FlyCapture2_C.h 
+vi pointgrey/flycapture.2.5.3.5_armhf/include/C/FlyCapture2_C.h
+ls
+cd pointgrey/
+ls
+rm -rf flycapture.2.6.3.2_armhf/
+ls
+tar xvfz flycapture.2.6.3.2_armhf.tar.gz 
+cd flycapture.2.6.3.2_armhf/lib
+cp libflycapture* /usr/lib
+ls /usr/lib/libflycap*
+lla /usr/lib/libflycap*
+rm /usr/lib/libflycapture*
+lla /usr/lib/libflycap*
+cp libflycapture* /usr/lib
+lla /usr/lib/libflycap*
+lla
+rm /usr/lib/libflycapture*
+cp -av libflycapture* /usr/lib
+lla
+lla /usr/lib/libflycap*
+cd ~/pointgrey/flycapture.2.6.3.2_armhf
+ls
+./flycap2-conf 
+cd src/FlyCapture2Test
+ls
+make
+cd ..
+ls
+cd ../bin
+./FlyCapture2Test 
+lsusb
+top
+/etc/init.d/monitor.sh stop
+top
+htop
+dpkg -s top
+top
+ls
+rm *.pgm
+./MultipleCameraEx 
+cd ../src
+ls
+cd FlyCap2_ARM/
+ls
+cd ..
+ls * Makefile
+cd FlyCap2_ARM/
+cat Makefile 
+make
+cd ../../bin
+ls
+./FlyCap2
 reboot
