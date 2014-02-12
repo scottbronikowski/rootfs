@@ -1,8 +1,3 @@
-dpkg-reconfigure ntp
-ntpq -p
-date
-date -R
-ntpdate
 emacs ntp.conf &
 date -R
 date
@@ -1997,4 +1992,9 @@ cd /
 git add -A
 git commit -m "moved monitor.sh to #99"
 git push
+reboot
+cd /etc/default
+ls
+more saned 
+vi saned
 reboot
