@@ -2,8 +2,8 @@
 //Author: Scott Bronikowski
 //Date: 28 January 2014
 
-#ifndef BUMP_SWITCH_H
-#define BUMP_SWITCH_H
+#ifndef MONITOR_H
+#define MONITOR_H
 
 
 #define REAR_BUMP  184   //GPIO184

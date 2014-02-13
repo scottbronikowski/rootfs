@@ -41,6 +41,8 @@ int main(void)
     read_ret = read(file_desc,readbuffer,read_size);
     if (read_ret < 0) {
       //printf("Looping on read error.");
+      usleep(10000); /*sleep for 0.01s--should probably change this to polling
+		     or asynchronous IO*/
       continue;
     } else {
        //now we have a string in readbuffer, must parse it

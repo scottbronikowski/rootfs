@@ -1,26 +1,3 @@
-cd ~
-dpkg -l 
-dpkg -l | grep avahi
-dpkg -l | grep geoip
-dpkg -l | grep ssh
-dpkg -l | grep ssl
-dpkg -l | grep libnss
-locate sources.list.d
-locate hwpack*
-locate grep
-locate .bashrc
-cd /etc/apt/sources.list.d
-ls
-lla
-emacs &
-locate ssh
-find ssh
-find ssh-tunnel.sh
-updatedb
-exit
-emacs &
-top
-clear
 ls
 date -r
 date -R
@@ -1998,3 +1975,26 @@ update-rc.d -f time-update.sh remove
 update-rc.d time-update.sh defaults 25
 ls ../rc2.d/
 emacs &
+cd /
+git status
+git add -A
+/etc/init.d/monitor.sh stop
+git commit -m "added hwclock -w call to time-update.sh, tweaked init order"
+gs
+gs -h
+git push
+git status
+git att -A
+git add -A
+git commit -m "aptitude purge ghostscript"
+git push
+ls
+lla tmp
+mkdir /tmp/images
+lla tmp
+ls 
+ls /tmp/images/
+feh /tmp/images/*
+lla /tmp/images
+git status
+git add -A
