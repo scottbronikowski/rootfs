@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include "FlyCapture2.h"
 #include "RoverCamDefs.h"
+#include <sys/stat.h>
 
 using namespace FlyCapture2;
 
@@ -15,6 +16,7 @@ void PrintBuildInfo();
 void PrintCameraInfo(CameraInfo* pCamInfo);
 void PrintError(Error error);
 int RunSingleCamera(PGRGuid guid, int k_numImages);
+int RunAllCameras(PGRGuid guid[], int k_numImages, int numCameras);
 
 int main(int argc, char** argv)
 {  
@@ -22,9 +24,26 @@ int main(int argc, char** argv)
 
   Error error;
 
-  // Since this application saves images in the current folder
-  // we must ensure that we have permission to write to this folder.
-  // If we do not have permission, fail right away.
+  
+  // Since this application saves images in the OUTPUT_DIR folder
+  // we must ensure that the folder exists and we have permission 
+  //to write to this folder. If we do not have permission, fail right away.
+  struct stat sb;
+
+  if (!(stat(OUTPUT_DIR, &sb) == 0 && S_ISDIR(sb.st_mode)))
+  {
+    //printf("Directory %s NOT found\n",OUTPUT_DIR);
+    if (mkdir(OUTPUT_DIR, S_IRWXU | S_IRGRP | S_IROTH | S_IXGRP | S_IXOTH) != 0)
+    {
+      printf("Error creating directory %s\n",OUTPUT_DIR);
+      return -1;
+    }
+  }
+  // else
+  // {
+  //   printf("Directory %s NOT FOUND\n",OUTPUT_DIR);
+  //}
+
   char tempFileName[512];
   sprintf(tempFileName, "%stest.txt",OUTPUT_DIR);
   FILE* tempFile = fopen(tempFileName, "w+");
@@ -35,6 +54,8 @@ int main(int argc, char** argv)
   }
   fclose(tempFile);
   remove(tempFileName);
+
+  //if we get here, we know the directory exists and we can write to it
 
   int numPics = default_num_pics;
   if (argc < 2)
@@ -59,19 +80,24 @@ int main(int argc, char** argv)
   
   printf( "Number of cameras detected: %u\n", numCameras );
   
+  //PGRGuid guid;
+  PGRGuid guid[numCameras];
+  
   for (unsigned int i=0; i < numCameras; i++)
   {
-    PGRGuid guid;
-    error = busMgr.GetCameraFromIndex(i, &guid);
+    error = busMgr.GetCameraFromIndex(i, &guid[i]);
     if (error != PGRERROR_OK)
     {
       PrintError( error );
       return -1;
     }
     
+  }  //new end of loop
     //RunSingleCamera( guid );
-    RunSingleCamera(guid, numPics);
+   
+    //RunSingleCamera(guid, numPics);
     
+  RunAllCameras(guid, numPics, numCameras);
     // //connect to a camera	
     // Camera cam;
     // error = cam.Connect(&guid);
@@ -106,7 +132,7 @@ int main(int argc, char** argv)
     //   printf("Serial Number not recognized.\n");
     // }
     
-  }
+    //}
   
   printf( "Done! Press Enter to exit...\n" );
   getchar();
@@ -154,6 +180,7 @@ void PrintError( Error error )
 {
   error.PrintErrorTrace();
 }
+
 int RunSingleCamera( PGRGuid guid, int k_numImages)
 {
   //const int k_numImages = 10;
@@ -177,28 +204,25 @@ int RunSingleCamera( PGRGuid guid, int k_numImages)
         PrintError( error );
         return -1;
     }
-
+  
     PrintCameraInfo(&camInfo);        
-
+  
     //now compare serial number 
-    char fileroot[6];
+    //char fileroot[6];
     if (camInfo.serialNumber == front_cam_serial)
     {
       printf("This is the front camera.\n");
-      //fileroot = "front";
-      sprintf(fileroot, "front");
+      //sprintf(fileroot, "front");
     } 
     else if (camInfo.serialNumber == pano_cam_serial)
     {
       printf("This is the panoramic camera.\n");
-      //fileroot = "panor";
-      sprintf(fileroot, "panor");
+      //sprintf(fileroot, "panor");
     }
     else
     {
       printf("Serial Number not recognized.\n");
-      //fileroot = "error";
-      sprintf(fileroot,"error");
+      //sprintf(fileroot,"error");
     }
     
     // Start capturing images
@@ -226,26 +250,49 @@ int RunSingleCamera( PGRGuid guid, int k_numImages)
         Image convertedImage;
 
         // Convert the raw image
-        error = rawImage.Convert( PIXEL_FORMAT_MONO16, &convertedImage );
+	//error = rawImage.Convert( PIXEL_FORMAT_MONO16, &convertedImage ); /*seemed to cause crash*/
+	//error = rawImage.Convert( PIXEL_FORMAT_MONO8, &convertedImage ); //original
+	error = rawImage.Convert( PIXEL_FORMAT_RGB, &convertedImage );
         if (error != PGRERROR_OK)
         {
             PrintError( error );
             return -1;
         }  
+	printf("Converted image size: %u\n",convertedImage.GetDataSize());
 
-        // Create a unique filename
-        char filename[512];
-	sprintf(filename, "%s%s%d.ppm",OUTPUT_DIR,fileroot,imageCnt);
-        //sprintf( filename, "FlyCapture2Test-%u-%d.pgm", camInfo.serialNumber, imageCnt );
+	struct point_grey_image *send_image;
+	send_image = (point_grey_image*) malloc(sizeof(struct point_grey_image));
+	send_image->rows = convertedImage.GetRows();
+	send_image->cols = convertedImage.GetCols();
+	send_image->data = convertedImage.GetData();
+	printf("Rows %u, Cols %u\n",send_image->rows, send_image->cols);
+	printf("Converted image in pointer to send_image struct, ready to send\n");
+	// unsigned int cImageRows = convertedImage.GetRows();
+	// unsigned int cImageCols = convertedImage.GetCols();
+	// unsigned char* cImageData = convertedImage.GetData();
+	// printf("Rows %u, Cols %u\n",cImageRows, cImageCols);
+	// printf("Data %s\n",cImageData);
 
-        // Save the image. If a file format is not passed in, then the file
-        // extension is parsed to attempt to determine the file format.
-        error = convertedImage.Save( filename );
-        if (error != PGRERROR_OK)
-        {
-            PrintError( error );
-            return -1;
-        }  
+
+	//commenting this out to increase speed
+        // // Create a unique filename
+        // char filename[512];
+	// //PNGOption *pOptions = new PNGOption;
+	// ImageFileFormat fileFormat = PNG;
+	// sprintf(filename, "%s%s%d.png",OUTPUT_DIR,fileroot,imageCnt);
+        // //sprintf( filename, "FlyCapture2Test-%u-%d.pgm", camInfo.serialNumber, imageCnt );
+
+        // // Save the image. If a file format is not passed in, then the file
+        // // extension is parsed to attempt to determine the file format.
+	// //pOptions->compresionLevel = 0;
+	// //****this save seems to be slowing things down--send directly over 
+	// // socket instead?????
+        // error = convertedImage.Save(filename, fileFormat);
+        // if (error != PGRERROR_OK)
+        // {
+        //     PrintError( error );
+        //     return -1;
+        // }  
     }            
 
     // Stop capturing images
@@ -264,5 +311,184 @@ int RunSingleCamera( PGRGuid guid, int k_numImages)
         return -1;
     }
 
+    return 0;
+}
+
+
+int RunAllCameras( PGRGuid guid[], int k_numImages, int numCameras)
+{
+ 
+    Error error;
+    Camera cam[numCameras];
+    char cam_string[numCameras][512];
+
+    // Connect to all cameras
+    for (int i = 0; i < numCameras; i++)
+    {
+      error = cam[i].Connect(&guid[i]);
+      if (error != PGRERROR_OK)
+      {
+        PrintError( error );
+        return -1;
+      }
+
+      // Get the camera information
+      CameraInfo camInfo;
+      error = cam[i].GetCameraInfo(&camInfo);
+      if (error != PGRERROR_OK)
+      {
+        PrintError( error );
+        return -1;
+      }
+     
+      PrintCameraInfo(&camInfo);        
+     
+      //now compare serial number 
+      //char fileroot[6];
+      if (camInfo.serialNumber == front_cam_serial)
+      {
+	printf("This is the front camera.\n");
+	sprintf(cam_string[i], "Front camera: ");
+	//sprintf(fileroot, "front");
+      } 
+      else if (camInfo.serialNumber == pano_cam_serial)
+      {
+	printf("This is the panoramic camera.\n");
+	sprintf(cam_string[i], "Panoramic camera: ");
+	//sprintf(fileroot, "panor");
+      }
+      else
+      {
+	printf("Serial Number not recognized.\n");
+	//sprintf(fileroot,"error");
+	return -1;
+      }
+    
+      // // Start capturing images **SHOULD WORK HERE BUT HANGS
+      // error = cam[i].StartCapture();
+      // if (error != PGRERROR_OK)
+      // {
+      //   PrintError( error );
+      //   return -1;
+      // }
+      // else
+      // {
+      // 	printf("capture started\n");
+      // }
+    }
+    printf("Camera initialization complete, moving to capture\n");
+    
+    Image rawImage;    
+    Image convertedImage;
+    struct point_grey_image *send_image;
+    send_image = (point_grey_image*) malloc(sizeof(struct point_grey_image));
+    //main capture loop--get time here to check speed
+
+    for ( int imageCnt=0; imageCnt < k_numImages; imageCnt++ )
+    {
+      for (int i = 0; i < numCameras; i++)
+      {
+	// Start capturing images ***WORKS HERE BUT SLOW
+	error = cam[i].StartCapture();
+	if (error != PGRERROR_OK)
+	{
+	  PrintError( error );
+	  return -1;
+	}
+	// else
+	// {
+	//   printf("capture started\n");
+	//}
+
+        // Retrieve an image
+        error = cam[i].RetrieveBuffer( &rawImage );
+        if (error != PGRERROR_OK)
+        {
+	  PrintError( error );
+	  continue;
+        }
+
+        printf( "%s Grabbed image %d\n", cam_string[i], imageCnt );
+
+        // Create a converted image
+
+
+        // Convert the raw image
+	//error = rawImage.Convert( PIXEL_FORMAT_MONO16, &convertedImage ); /*seemed to cause crash*/
+	//error = rawImage.Convert( PIXEL_FORMAT_MONO8, &convertedImage ); //original
+	error = rawImage.Convert( PIXEL_FORMAT_RGB, &convertedImage );
+        if (error != PGRERROR_OK)
+        {
+            PrintError( error );
+            return -1;
+        }  
+	//printf("Converted image size: %u\n",convertedImage.GetDataSize());
+
+	
+	send_image->rows = convertedImage.GetRows();
+	send_image->cols = convertedImage.GetCols();
+	send_image->data = convertedImage.GetData();
+	//printf("Rows %u, Cols %u\n",send_image->rows, send_image->cols);
+	printf("Converted image in pointer to send_image struct, ready to send\n");
+
+	//***SEND DATA HERE BEFORE END OF INNER LOOP***//////
+
+
+	//commenting this out to increase speed
+        // // Create a unique filename
+        // char filename[512];
+	// //PNGOption *pOptions = new PNGOption;
+	// ImageFileFormat fileFormat = PNG;
+	// sprintf(filename, "%s%s%d.png",OUTPUT_DIR,fileroot,imageCnt);
+        // //sprintf( filename, "FlyCapture2Test-%u-%d.pgm", camInfo.serialNumber, imageCnt );
+
+        // // Save the image. If a file format is not passed in, then the file
+        // // extension is parsed to attempt to determine the file format.
+	// //pOptions->compresionLevel = 0;
+	// //****this save seems to be slowing things down--send directly over 
+	// // socket instead?????
+        // error = convertedImage.Save(filename, fileFormat);
+        // if (error != PGRERROR_OK)
+        // {
+        //     PrintError( error );
+        //     return -1;
+        // }  
+	
+	// Stop capturing images ****NOT SURE WHY THIS WORKS HERE and not in other loop
+	error = cam[i].StopCapture();
+	if (error != PGRERROR_OK)
+	{
+	  PrintError( error );
+	  return -1;
+	}      
+	
+      } //numCameras loop         
+    }  //numImages loop
+
+    //do some math to show how many images over time
+
+
+    //don't need send_image anymore, so free it
+    free(send_image);
+
+    //loop through cameras one more time to stop & disconnect
+    for (int i = 0; i < numCameras; i++)
+    {
+      // // Stop capturing images **SHOULD WORK HERE
+      // error = cam[i].StopCapture();
+      // if (error != PGRERROR_OK)
+      // {
+      //   PrintError( error );
+      //   return -1;
+      // }      
+      
+      // Disconnect the camera
+      error = cam[i].Disconnect();
+      if (error != PGRERROR_OK)
+      {
+        PrintError( error );
+        return -1;
+      }
+    }
     return 0;
 }

@@ -1627,7 +1627,7 @@ namespace FlyCapture2
         PNGOption()
         {
             interlaced = false;
-            compressionLevel = 6;
+            compressionLevel = 0; // 6;
             memset(reserved, 0, sizeof (reserved));
         }
     };

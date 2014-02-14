@@ -13,4 +13,10 @@ const unsigned int pano_cam_serial  = 13282227;
 
 const int default_num_pics = 10;
 
+struct point_grey_image {
+  unsigned int rows;
+  unsigned int cols;
+  unsigned char* data;
+};
+
 #endif
