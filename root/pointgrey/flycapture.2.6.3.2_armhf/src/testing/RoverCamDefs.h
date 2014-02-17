@@ -19,4 +19,9 @@ struct point_grey_image {
   unsigned char* data;
 };
 
+#define VID_MODE     VIDEOMODE_640x480Y8
+#define VID_MODE_STR "VIDEOMODE_640x480Y8"
+#define F_RATE       FRAMERATE_30
+#define F_RATE_STR   "FRAMERATE_30"
+
 #endif
