@@ -8,7 +8,6 @@
 #include "FlyCapture2.h"
 #include "RoverCamDefs.h"
 #include <sys/stat.h>
-#include <sys/time.h>
 
 using namespace FlyCapture2;
 
@@ -18,9 +17,6 @@ void PrintCameraInfo(CameraInfo* pCamInfo);
 void PrintError(Error error);
 int RunSingleCamera(PGRGuid guid, int k_numImages);
 int RunAllCameras(PGRGuid guid[], int k_numImages, int numCameras);
-
-int RunMultipleCameras(int k_numImages, int numCameras);
-long long int GetTimeInUsec(void);
 
 int main(int argc, char** argv)
 {  
@@ -100,13 +96,8 @@ int main(int argc, char** argv)
     //RunSingleCamera( guid );
    
     //RunSingleCamera(guid, numPics);
-  
-  printf("\nAttempting old method\n");
-  RunAllCameras(guid, numPics, numCameras);  
-  
-  printf("\nAttempting new method\n");
-  RunMultipleCameras(numPics, numCameras);
-  
+    
+  RunAllCameras(guid, numPics, numCameras);
     // //connect to a camera	
     // Camera cam;
     // error = cam.Connect(&guid);
@@ -391,11 +382,8 @@ int RunAllCameras( PGRGuid guid[], int k_numImages, int numCameras)
     Image convertedImage;
     struct point_grey_image *send_image;
     send_image = (point_grey_image*) malloc(sizeof(struct point_grey_image));
-    //struct timeval start_time, stop_time;
-    long long int start_time, stop_time;
     //main capture loop--get time here to check speed
-    //gettimeofday(&start_time, NULL);
-    start_time = GetTimeInUsec();
+
     for ( int imageCnt=0; imageCnt < k_numImages; imageCnt++ )
     {
       for (int i = 0; i < numCameras; i++)
@@ -476,12 +464,9 @@ int RunAllCameras( PGRGuid guid[], int k_numImages, int numCameras)
 	
       } //numCameras loop         
     }  //numImages loop
-    stop_time = GetTimeInUsec();
+
     //do some math to show how many images over time
-    long long int elapsed = stop_time - start_time;
-    float images_per_sec = (float)k_numImages / ((float)elapsed / 1000000);
-    printf("Summary: %i images per camera  taken in %lli microseconds (%f images/sec/cam)\n",
-	   k_numImages, elapsed, images_per_sec );
+
 
     //don't need send_image anymore, so free it
     free(send_image);
@@ -506,72 +491,4 @@ int RunAllCameras( PGRGuid guid[], int k_numImages, int numCameras)
       }
     }
     return 0;
-}
-
-int RunMultipleCameras(int k_numImages, int numCameras)
-{
-  Error error;
-  BusManager busMgr;
-  Camera** ppCameras = new Camera*[numCameras];
-  // Connect to all detected cameras and attempt to set them to
-  // a common video mode and frame rate
-  for ( unsigned int i = 0; i < numCameras; i++)
-  {
-    ppCameras[i] = new Camera();
-    
-    PGRGuid guid;
-    error = busMgr.GetCameraFromIndex( i, &guid );
-    if (error != PGRERROR_OK)
-    {
-      PrintError( error );
-      return -1;
-    }
-    
-    // Connect to a camera
-    error = ppCameras[i]->Connect( &guid );
-    if (error != PGRERROR_OK)
-    {
-      PrintError( error );
-      return -1;
-    }
-    
-    // Get the camera information
-    CameraInfo camInfo;
-    error = ppCameras[i]->GetCameraInfo( &camInfo );
-    if (error != PGRERROR_OK)
-    {
-      PrintError( error );
-      return -1;
-    }
-    
-    PrintCameraInfo(&camInfo); 
-    
-    // Set all cameras to a specific mode and frame rate so they
-    // can be synchronized
-    error = ppCameras[i]->SetVideoModeAndFrameRate( 
-						   VIDEOMODE_640x480Y8, 
-						   FRAMERATE_30 );
-    if (error != PGRERROR_OK)
-    {
-      PrintError( error );
-      printf( "Error starting cameras. \n"
-	      "This example requires cameras to be able to set to 640x480 Y8 at 30fps. \n"
-	      "If your camera does not support this mode, please edit the source code and recompile the application. \n"
-	      "Press Enter to exit. \n");
-      getchar();
-      return -1;
-    }
-  }
-  
-  return 0;
-}
-
-
-long long int GetTimeInUsec(void)
-{
-  struct timeval tv;
-  gettimeofday(&tv,NULL);
-  long long int ret = tv.tv_usec;
-  ret += (tv.tv_sec * 1000 * 1000);
-  return ret;
 }
