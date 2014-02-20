@@ -2,7 +2,9 @@
 # To compile the debug verison need to overwrite CXXFLAGS variable to include -ggdb (??????)
 
 CC = gcc
-OUTPUTNAME = test-capture
+C++C = g++
+OUTPUTNAME1 = c-test-capture
+OUTPUTNAME2 = cpp-test-capture
 INCLUDE = -I../../include -I/usr/include/flycapture
 LIBS = -L../../lib -lflycapture${D} -L../../lib/C -lflycapture-c${D} -pthread `imlib2-config --cflags --libs` /usr/lib/libflycapture*
 CFLAGS = -Wall -g
@@ -11,27 +13,34 @@ STD = -std=gnu99
 
 #OUTDIR = ../../bin
 
-OBJS = point-grey-cpp.o point-grey.o test-capture-c.o
+OBJS1 = point-grey-cpp.o point-grey.o test-capture-c.o
+OBJS2 = point-grey-cpp.o point-grey.o test-capture-cpp.o
 
-all: 	$(OUTPUTNAME)
-	@echo "test-capture has been compiled"
+all: 	$(OUTPUTNAME1) $(OUTPUTNAME2)
+	@echo "{c-,cpp-}test-capture have been compiled"
 
-${OUTPUTNAME}: ${OBJS}
-	${CC} ${CFLAGS} ${INCLUDE} -o ${OUTPUTNAME} ${OBJS} ${LIBS} ${COMMON_LIBS} 
+${OUTPUTNAME1}: ${OBJS1}
+	${CC} ${CFLAGS} ${INCLUDE} -o ${OUTPUTNAME1} ${OBJS1} ${LIBS} ${COMMON_LIBS} 
 #	mv ${OUTPUTNAME} ${OUTDIR}
 
+${OUTPUTNAME2}: ${OBJS2}
+	${C++C} ${CFLAGS} ${INCLUDE} -o ${OUTPUTNAME2} ${OBJS2} ${LIBS} ${COMMON_LIBS}
+
+test-capture-cpp.o: test-capture-cpp.cpp point-grey.o point-grey-cpp.o point-grey.h
+	${C++C} ${CFLAGS} ${NOLINK} ${INCLUDE} test-capture-cpp.cpp #point-grey.o point-grey-cpp.o ${LIBS}
+
 test-capture-c.o: test-capture-c.c point-grey.o point-grey-cpp.o point-grey.h
-	${CC} ${CFLAGS} ${NOLINK} ${INCLUDE} ${STD} test-capture-c.c point-grey.o point-grey-cpp.o ${LIBS}
+	${CC} ${CFLAGS} ${NOLINK} ${INCLUDE} ${STD} test-capture-c.c #point-grey.o point-grey-cpp.o ${LIBS}
 
 point-grey.o: point-grey.c point-grey-cpp.o point-grey.h
-	${CC} ${CFLAGS} ${NOLINK} ${INCLUDE} ${STD} point-grey.c point-grey-cpp.o ${LIBS}
+	${CC} ${CFLAGS} ${NOLINK} ${INCLUDE} ${STD} point-grey.c #point-grey-cpp.o ${LIBS}
 
 point-grey-cpp.o: point-grey-cpp.cpp point-grey.h
-	g++ ${CFLAGS} ${NOLINK} ${INCLUDE} point-grey-cpp.cpp ${LIBS}
+	${C++C} ${CFLAGS} ${NOLINK} ${INCLUDE} point-grey-cpp.cpp #${LIBS}
 
 clean_obj:
-	rm -f ${OBJS}	@echo "all cleaned up!"
+	rm -f ${OBJS1} ${OBJS2}	@echo "objects all cleaned up!"
 
 clean:
 #	rm -f ${OUTDIR}/${OUTPUTNAME} ${OBJS}	@echo "all cleaned up!"
-	rm -f ${OUTPUTNAME} ${OBJS}	@echo "all cleaned up!"
+	rm -f ${OUTPUTNAME1} ${OBJS1} ${OUTPUTNAME2} ${OBJS2}	@echo "all cleaned up!"

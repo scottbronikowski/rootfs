@@ -62,13 +62,14 @@ struct point_grey *point_grey_setup(int num) {
      see fc2ColorProcessingAlgorithm for different algorithms,
      compromise between speed and quality */
   check_point_grey(fc2SetDefaultColorProcessing(FC2_IPP));
+						//FC2_NEAREST_NEIGHBOR_FAST));
   //printf("completed fc2SetDefaultColorProcessing\n");
   /* hardwired
      FC2_VIDEOMODE_640x480Y8 or FC2_VIDEOMODE_1280x960Y8 */
   /* FC2_FRAMERATE_15 or FC2_FRAMERATE_30 */
   check_point_grey(fc2SetVideoModeAndFrameRate(point_grey->context,
-					       FC2_VIDEOMODE_1280x960Y8,
-					       FC2_FRAMERATE_15));
+					       FC2_VIDEOMODE_640x480Y8,
+					       FC2_FRAMERATE_30));
   //printf("completed fc2SetVideoModeAndFrameRate\n");
   check_point_grey(fc2CreateImage(&point_grey->raw_image));
   check_point_grey(fc2CreateImage(&point_grey->converted_image));
@@ -76,10 +77,10 @@ struct point_grey *point_grey_setup(int num) {
 }
 
 void point_grey_start(struct point_grey *point_grey) {
-  printf("in point_grey_start\n");
+  //printf("in point_grey_start\n");
   for (unsigned int retries = 0; retries<100; retries++) {
     int result = fc2StartCapture(point_grey->context);
-    printf("result = %d\n",result);
+    //printf("result = %d\n",result);
     switch (result) {
     case 0:
       if (retries!=0)

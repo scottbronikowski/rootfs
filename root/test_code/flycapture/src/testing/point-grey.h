@@ -87,7 +87,7 @@ extern unsigned int threads;
 /* cpp */
 
 #ifdef __cplusplus
-extern "C"
+extern "C" {
 #endif
 void point_grey_set_white_balance(int red, int blue);
 
@@ -114,3 +114,7 @@ Imlib_Image point_grey_fetch_frame(struct point_grey *point_grey);
 // void *client_camera_task(void *args);
 
 void *server_camera_task(void *args);
+
+#ifdef __cplusplus
+}
+#endif
