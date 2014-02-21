@@ -26,10 +26,10 @@ ${OUTPUTNAME1}: ${OBJS1}
 ${OUTPUTNAME2}: ${OBJS2}
 	${C++C} ${CFLAGS} ${INCLUDE} -o ${OUTPUTNAME2} ${OBJS2} ${LIBS} ${COMMON_LIBS}
 
-test-capture-cpp.o: test-capture-cpp.cpp point-grey.o point-grey-cpp.o point-grey.h
+test-capture-cpp.o: test-capture-cpp.cpp point-grey.o point-grey-cpp.o point-grey.h RoverCamDefs.h
 	${C++C} ${CFLAGS} ${NOLINK} ${INCLUDE} test-capture-cpp.cpp #point-grey.o point-grey-cpp.o ${LIBS}
 
-test-capture-c.o: test-capture-c.c point-grey.o point-grey-cpp.o point-grey.h
+test-capture-c.o: test-capture-c.c point-grey.o point-grey-cpp.o point-grey.h RoverCamDefs.h
 	${CC} ${CFLAGS} ${NOLINK} ${INCLUDE} ${STD} test-capture-c.c #point-grey.o point-grey-cpp.o ${LIBS}
 
 point-grey.o: point-grey.c point-grey-cpp.o point-grey.h

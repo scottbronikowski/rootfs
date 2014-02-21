@@ -12,6 +12,8 @@
 #include <sys/time.h>
 #include "C/FlyCapture2_C.h"
 
+#include "RoverCamDefs.h"
+
 #ifndef TRUE
 #define TRUE (0==0)
 #endif

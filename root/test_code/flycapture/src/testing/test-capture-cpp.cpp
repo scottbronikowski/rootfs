@@ -516,7 +516,7 @@ int RunAllCameras(int k_numImages, int numCameras, bool write_flag)
       //***SEND DATA HERE BEFORE END OF INNER LOOP***//////
       //  send temp_image????
 
-      printf("%simage%d\n",cam_string[i],imageCnt);
+      //printf("%simage%d\n",cam_string[i],imageCnt);
 
       //commenting this out to increase speed
       // // Create a unique filename

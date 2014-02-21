@@ -6,10 +6,10 @@
 
 #include <stdio.h>
 #include "C/FlyCapture2_C.h"
-#include "RoverCamDefs.h"
 #include <sys/stat.h>
 #include "point-grey.h"
 #include <Imlib2.h>
+#include "RoverCamDefs.h" /*included in point-grey.h*/
 
 //prototypes
 //void PrintBuildInfo();
@@ -127,7 +127,9 @@ int main(int argc, char** argv){
     point_grey_start(point_grey[i]);
     //printf("point_grey_start returned\n");
   }
-  printf("finished loop\n");
+  //printf("finished loop\n");
+  printf("Camera initialization complete, moving to capture with %s at %s\n",
+	 FC_VID_MODE_STR, FC_F_RATE_STR);
   
   //do some stuff
 

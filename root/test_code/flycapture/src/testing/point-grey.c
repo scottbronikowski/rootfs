@@ -1,6 +1,7 @@
 // darpa-wrap gcc -Wall -I${HOME}/darpa-collaboration/include/`architecture-path`/flycapture -o point-grey -std=gnu99 point-grey.c point-grey-cpp.o `imlib2-config --cflags --libs` -pthread ~/darpa-collaboration/lib/`architecture-path`/libflycapture*
 
 #include "point-grey.h"
+//#include "RoverCamDefs.h"
 
 /* global variables */
 
@@ -68,8 +69,11 @@ struct point_grey *point_grey_setup(int num) {
      FC2_VIDEOMODE_640x480Y8 or FC2_VIDEOMODE_1280x960Y8 */
   /* FC2_FRAMERATE_15 or FC2_FRAMERATE_30 */
   check_point_grey(fc2SetVideoModeAndFrameRate(point_grey->context,
-					       FC2_VIDEOMODE_640x480Y8,
-					       FC2_FRAMERATE_30));
+					       FC_VID_MODE,
+					       FC_F_RATE));
+					       //FC2_VIDEOMODE_640x480Y8,
+					       //FC2_FRAMERATE_30));
+  /*FC_VID_MODE and FC_F_RATE defined in RoverCamDefs.h*/
   //printf("completed fc2SetVideoModeAndFrameRate\n");
   check_point_grey(fc2CreateImage(&point_grey->raw_image));
   check_point_grey(fc2CreateImage(&point_grey->converted_image));
