@@ -24,6 +24,8 @@ int RunAllCameras(int k_numImages, int numCameras, bool write_flag);
 
 int RunMultipleCameras(int k_numImages, int numCameras);
 long long int GetTimeInUsec(void);
+void ForcePGRY16Mode(Camera cam);
+
 
 int main(int argc, char** argv)
 {  
@@ -273,7 +275,7 @@ int RunSingleCamera( PGRGuid guid, int k_numImages)
         // Convert the raw image
 	//error = rawImage.Convert( PIXEL_FORMAT_MONO16, &convertedImage ); /*seemed to cause crash*/
 	//error = rawImage.Convert( PIXEL_FORMAT_MONO8, &convertedImage ); //original
-	error = rawImage.Convert( PIXEL_FORMAT_RGB, &convertedImage );
+	error = rawImage.Convert( PIXEL_FORMAT_RGBU, &convertedImage );
         if (error != PGRERROR_OK)
         {
             PrintError( error );
@@ -346,6 +348,9 @@ int RunAllCameras(int k_numImages, int numCameras, bool write_flag)
   Error error;
   Camera cam[numCameras];
   char cam_string[numCameras][512];
+
+  const unsigned int k_imageDataFmtReg = 0x1048;
+  unsigned int value = 0;
   
   // Connect to all cameras
   for (int i = 0; i < numCameras; i++)
@@ -363,7 +368,23 @@ int RunAllCameras(int k_numImages, int numCameras, bool write_flag)
       PrintError( error );
       return -1;
     }
+
+    //found this in FlycapWindow::Start
+    //    ForcePGRY16Mode(cam[i]);
+    error = cam[i].ReadRegister( k_imageDataFmtReg, &value );
+    if ( error != PGRERROR_OK )
+    {
+      // Error
+    }
     
+    value &= ~(0x1 << 0);
+    
+    error = cam[i].WriteRegister( k_imageDataFmtReg, value );
+    if ( error != PGRERROR_OK )
+    {
+      // Error
+    }
+
     // Get the camera information
     CameraInfo camInfo;
     error = cam[i].GetCameraInfo(&camInfo);
@@ -458,6 +479,10 @@ int RunAllCameras(int k_numImages, int numCameras, bool write_flag)
   //main capture loop--get time here to check speed
   //gettimeofday(&start_time, NULL);
   //start_time = GetTimeInUsec();
+
+  PixelFormat pixelFormat, pixelFormat2;
+  
+
   double start = current_time();
   for ( int imageCnt=0; imageCnt < k_numImages; imageCnt++ )
   {
@@ -491,7 +516,7 @@ int RunAllCameras(int k_numImages, int numCameras, bool write_flag)
       // Convert the raw image
       //error = rawImage.Convert( PIXEL_FORMAT_MONO16, &convertedImage ); /*seemed to cause crash*/
       //error = rawImage.Convert( PIXEL_FORMAT_MONO8, &convertedImage ); //original
-      error = rawImage.Convert( PIXEL_FORMAT_BGRU, &convertedImage );
+      error = rawImage.Convert( PIXEL_FORMAT_RGBU, &convertedImage );
       if (error != PGRERROR_OK)
       {
 	PrintError( error );
@@ -529,7 +554,7 @@ int RunAllCameras(int k_numImages, int numCameras, bool write_flag)
       //save final image
       if ((imageCnt == (k_numImages - 1)) && write_flag)
       {
-	sprintf(filename,"%s%sfinal.ppm",OUTPUT_DIR,cam_string[i]);
+	sprintf(filename,"%scpp-%sfinal.ppm",OUTPUT_DIR,cam_string[i]);
 	imlib_save_image(filename);
 	printf("Saved %s\n",filename);
       }
@@ -724,4 +749,25 @@ long long int GetTimeInUsec(void)
   long long int ret = tv.tv_usec;
   ret += (tv.tv_sec * 1000 * 1000);
   return ret;
+}
+
+
+void ForcePGRY16Mode(Camera cam)
+{
+  Error error;
+  const unsigned int k_imageDataFmtReg = 0x1048;
+  unsigned int value = 0;
+  error = cam.ReadRegister( k_imageDataFmtReg, &value );
+  if ( error != PGRERROR_OK )
+  {
+    // Error
+  }
+  
+  value &= ~(0x1 << 0);
+  
+  error = cam.WriteRegister( k_imageDataFmtReg, value );
+  if ( error != PGRERROR_OK )
+  {
+    // Error
+  }
 }

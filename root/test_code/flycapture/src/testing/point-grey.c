@@ -62,8 +62,8 @@ struct point_grey *point_grey_setup(int num) {
   /* hardwired
      see fc2ColorProcessingAlgorithm for different algorithms,
      compromise between speed and quality */
-  check_point_grey(fc2SetDefaultColorProcessing(FC2_IPP));
-						//FC2_NEAREST_NEIGHBOR_FAST));
+  check_point_grey(fc2SetDefaultColorProcessing(//FC2_IPP));
+						FC2_EDGE_SENSING));
   //printf("completed fc2SetDefaultColorProcessing\n");
   /* hardwired
      FC2_VIDEOMODE_640x480Y8 or FC2_VIDEOMODE_1280x960Y8 */

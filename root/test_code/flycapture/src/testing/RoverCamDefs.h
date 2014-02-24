@@ -23,16 +23,16 @@ struct point_grey_image {
 };
 
 //cam settings for C++ API
-#define VID_MODE     VIDEOMODE_1280x960Y8
-#define VID_MODE_STR "VIDEOMODE_1280x960Y8"
-#define F_RATE       FRAMERATE_15
-#define F_RATE_STR   "FRAMERATE_15"
+#define VID_MODE     VIDEOMODE_640x480Y8
+#define VID_MODE_STR "VIDEOMODE_640x480Y8"
+#define F_RATE       FRAMERATE_30
+#define F_RATE_STR   "FRAMERATE_30"
 
 //cam settings for C API
-#define FC_VID_MODE     FC2_VIDEOMODE_1280x960Y8
-#define FC_VID_MODE_STR "FC2_VIDEOMODE_1280x960Y8"
-#define FC_F_RATE       FC2_FRAMERATE_15
-#define FC_F_RATE_STR   "FC2_FRAMERATE_15"
+#define FC_VID_MODE     FC2_VIDEOMODE_640x480Y8
+#define FC_VID_MODE_STR "FC2_VIDEOMODE_640x480Y8"
+#define FC_F_RATE       FC2_FRAMERATE_30
+#define FC_F_RATE_STR   "FC2_FRAMERATE_30"
 
 
 #endif
