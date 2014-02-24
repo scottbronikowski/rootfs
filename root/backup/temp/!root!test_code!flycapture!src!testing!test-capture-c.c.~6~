@@ -163,7 +163,7 @@ int main(int argc, char** argv){
       //printf("%simage%d\n",cam_string[i],j);
       if ((j == (numPics - 1)) && (write_flag))
 	{//save final image from each camera
-	  sprintf(filename,"%s%sfinal.ppm",OUTPUT_DIR,cam_string[i]);
+	  sprintf(filename,"%sc-%sfinal.ppm",OUTPUT_DIR,cam_string[i]);
 	  //temp_image->save(filename); /*PERL api, not C*/
 	  imlib_save_image(filename);
 	  printf("Saved %s\n",filename);

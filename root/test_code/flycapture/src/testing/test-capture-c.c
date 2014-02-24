@@ -12,14 +12,10 @@
 #include "RoverCamDefs.h" /*included in point-grey.h*/
 
 //prototypes
-//void PrintBuildInfo();
 void PrintCameraInfo(fc2Context context);
-//void SetTimeStamping(fc2Context context, BOOL enableTimeStamp);
-//void GrabImages(fc2Context context, int numImagesToGrab);
-
+int CheckSaving(void);
 
 int main(int argc, char** argv){
-
   int numPics = default_num_pics;
   int write_flag = FALSE;
   if (argc < 2)
@@ -32,40 +28,11 @@ int main(int argc, char** argv){
     printf("Taking %i pictures per camera.\n",numPics);
     if ((argc == 3) && (strcmp(argv[2], "write") == 0))
     { //save the final image from each camera
-      
-      // Since this application saves images in the OUTPUT_DIR folder
-      // we must ensure that the folder exists and we have permission 
-      //to write to this folder. If we do not have permission, fail right away.
-      struct stat sb;
-      
-      if (!(stat(OUTPUT_DIR, &sb) == 0 && S_ISDIR(sb.st_mode)))
+      if (CheckSaving() == 0)
       {
-	//printf("Directory %s NOT found\n",OUTPUT_DIR);
-	if (mkdir(OUTPUT_DIR, S_IRWXU | S_IRGRP | S_IROTH | S_IXGRP | S_IXOTH) != 0)
-	{
-	  printf("Error creating directory %s\n",OUTPUT_DIR);
-	  return -1;
-	}
+	write_flag = TRUE;
+	printf("Saving final image.\n");
       }
-      // else
-      // {
-      //   printf("Directory %s NOT FOUND\n",OUTPUT_DIR);
-      //}
-      
-      char tempFileName[512];
-      sprintf(tempFileName, "%stest.txt",OUTPUT_DIR);
-      FILE* tempFile = fopen(tempFileName, "w+");
-      if (tempFile == NULL)
-      {
-	printf("Failed to create file in current folder.  Please check permissions.\n");
-	return -1;
-      }
-      fclose(tempFile);
-      remove(tempFileName);
-      
-      //if we get here, we know the directory exists and we can write to it
-      write_flag = TRUE;
-      printf("Saving final image.\n");
     }
     else
     {
@@ -74,20 +41,20 @@ int main(int argc, char** argv){
   }
 
   //set up cameras, allocate memory, ID cameras, start cameras
-  //printf("Starting main\n");
+  printf("Starting main\n");
   fc2Error error;
   unsigned int numCameras = point_grey_init();
   char cam_string[numCameras][512];
   fc2CameraInfo camInfo;
   struct point_grey *point_grey[numCameras];
-  //printf("numCameras = %d\n",numCameras);
+  printf("numCameras = %d\n",numCameras);
   //fc2Context *contexts[numCameras];
   Imlib_Image temp_image;
   char filename[512];
 
-  //printf("Starting loop\n");
+  printf("Starting loop\n");
   for (int i = 0; i < numCameras; i++) {
-    //printf("iteration %d\n",i);
+    printf("iteration %d\n",i);
     point_grey[i] = point_grey_setup(i);
     //printf("context = %p\n",point_grey[i]->context);
     /* if (i > 0) */
@@ -124,10 +91,12 @@ int main(int argc, char** argv){
       printf("Serial number not recognized.\n");
       sprintf(cam_string[i], "ERROR!!!");
     }
-    point_grey_start(point_grey[i]);
+    //point_grey_start(point_grey[i]);
     //printf("point_grey_start returned\n");
+    check_point_grey(fc2StartCapture(point_grey[i]->context));
+    printf("check_point_grey(fc2StartCapture(point_grey[i]->context)); returned\n");
   }
-  //printf("finished loop\n");
+  printf("finished loop\n");
   printf("Camera initialization complete, moving to capture with %s at %s\n",
 	 FC_VID_MODE_STR, FC_F_RATE_STR);
   
@@ -168,6 +137,7 @@ int main(int argc, char** argv){
 	  imlib_save_image(filename);
 	  printf("Saved %s\n",filename);
 	}
+      usleep(1000000);
       imlib_free_image_and_decache();
     } //numCameras loop
   } //numPics loop
@@ -213,4 +183,34 @@ void PrintCameraInfo( fc2Context context )
         camInfo.sensorResolution,
         camInfo.firmwareVersion,
         camInfo.firmwareBuildTime );
+}
+
+int CheckSaving(void)
+{
+  // Since this application saves images in the OUTPUT_DIR folder
+  // we must ensure that the folder exists and we have permission 
+  //to write to this folder. If we do not have permission, fail right away.
+  struct stat sb;
+  
+  if (!(stat(OUTPUT_DIR, &sb) == 0 && S_ISDIR(sb.st_mode)))
+  {
+    if (mkdir(OUTPUT_DIR, S_IRWXU | S_IRGRP | S_IROTH | S_IXGRP | S_IXOTH) != 0)
+    {
+      printf("Error creating directory %s\n",OUTPUT_DIR);
+      return -1;
+    }
+  }
+  char tempFileName[512];
+  sprintf(tempFileName, "%stest.txt",OUTPUT_DIR);
+  FILE* tempFile = fopen(tempFileName, "w+");
+  if (tempFile == NULL)
+  {
+    printf("Failed to create file in current folder.  Please check permissions.\n");
+    return -1;
+  }
+  fclose(tempFile);
+  remove(tempFileName);
+  
+  //if we get here, we know the directory exists and we can write to it
+  return 0;
 }

@@ -41,6 +41,9 @@ point-grey-cpp.o: point-grey-cpp.cpp point-grey.h
 clean_obj:
 	rm -f ${OBJS1} ${OBJS2}	@echo "objects all cleaned up!"
 
+test: test.c
+	gcc -Wall -g -I../../include -I/usr/include/flycapture -o test test.c -L../../lib/C -lflycapture-c -L/usr/lib -lflycapture-c `imlib2-config --cflags --libs`
+
 clean:
 #	rm -f ${OUTDIR}/${OUTPUTNAME} ${OBJS}	@echo "all cleaned up!"
 	rm -f ${OUTPUTNAME1} ${OBJS1} ${OUTPUTNAME2} ${OBJS2}	@echo "all cleaned up!"

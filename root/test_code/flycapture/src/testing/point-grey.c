@@ -42,13 +42,14 @@ unsigned int point_grey_init(void) {
   check_point_grey(fc2CreateContext(&context));
   unsigned int nr_of_cameras;
   check_point_grey(fc2GetNumOfCameras(context, &nr_of_cameras));
+  //check_point_grey(fc2DestroyContext(&context));
   if (!nr_of_cameras) point_grey_error("No Point Grey cameras");
+  printf("completed point_grey_init\n");
   return nr_of_cameras;
-
 }
 
 struct point_grey *point_grey_setup(int num) {
-  //printf("in point_grey_setup\n");
+  printf("in point_grey_setup\n");
   struct point_grey *point_grey =
     (struct point_grey *)point_grey_malloc(sizeof(struct point_grey));
   //printf("completed point_grey_malloc\n");
@@ -56,23 +57,27 @@ struct point_grey *point_grey_setup(int num) {
   check_point_grey(fc2GetCameraFromIndex(point_grey->context,
 					 num,
 					 &point_grey->guid));
-  //printf("completed fc2GetCameraFromIndex\n");
+  printf("completed fc2GetCameraFromIndex\n");
   check_point_grey(fc2Connect(point_grey->context, &point_grey->guid));
-  //printf("completed fc2Connect\n");
+  printf("completed fc2Connect\n");
   /* hardwired
      see fc2ColorProcessingAlgorithm for different algorithms,
      compromise between speed and quality */
   check_point_grey(fc2SetDefaultColorProcessing(//FC2_IPP));
-						FC2_EDGE_SENSING));
-  //printf("completed fc2SetDefaultColorProcessing\n");
+						FC2_NEAREST_NEIGHBOR_FAST));
+  printf("completed fc2SetDefaultColorProcessing\n");
   /* hardwired
      FC2_VIDEOMODE_640x480Y8 or FC2_VIDEOMODE_1280x960Y8 */
   /* FC2_FRAMERATE_15 or FC2_FRAMERATE_30 */
+  
+
   check_point_grey(fc2SetVideoModeAndFrameRate(point_grey->context,
-					       FC_VID_MODE,
-					       FC_F_RATE));
-					       //FC2_VIDEOMODE_640x480Y8,
-					       //FC2_FRAMERATE_30));
+  					       FC_VID_MODE,
+  					       FC_F_RATE));
+  					       //FC2_VIDEOMODE_640x480Y8,
+  					       //FC2_FRAMERATE_30));
+
+
   /*FC_VID_MODE and FC_F_RATE defined in RoverCamDefs.h*/
   //printf("completed fc2SetVideoModeAndFrameRate\n");
   check_point_grey(fc2CreateImage(&point_grey->raw_image));
