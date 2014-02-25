@@ -7,102 +7,92 @@
 #include "test2.h"
 
 int main(int argc, char** argv){
-  if (CheckSaving(OUTPUT_DIR) != 0)
+  int numPics = default_num_pics;
+  int write_flag = FALSE;
+  if (argc < 2)
   {
-    printf("ERROR!\n");
-    return -1;
+    printf("Defaulting to %i pictures per camera, no saving.\n",numPics);
   }
+  else
+  {
+    numPics = atoi(argv[1]);
+    printf("Taking %i pictures per camera.\n",numPics);
+    if ((argc == 3) && (strcmp(argv[2], "write") == 0))
+    { //save the final image from each camera
+      if (CheckSaving(OUTPUT_DIR) == 0)
+      {
+	write_flag = TRUE;
+	printf("Saving final image.\n");
+      }
+    }
+    else
+    {
+      printf("NO saving.\n");
+    }
+  }
+
   //now set up, start, and grab image from camera
-  fc2Context tempContext;
-  check_point_grey(fc2CreateContext(&tempContext));
-  //check number of cameras
-  unsigned int numCams;
-  check_point_grey(fc2GetNumOfCameras(tempContext, &numCams));
-  check_point_grey(fc2DestroyContext(tempContext));
+  unsigned int numCams = point_grey_init();
   if (numCams == 0)
   { //no cameras
     printf("No cameras found, exiting.\n");
     return -1;
   } 
-  else //multiple cameras
+  //if we get here, we know we have at least 1 camera
+  
+  printf("Found %d cameras\n", numCams);
+  struct point_grey *pg_ptr[numCams];
+  for (int i = 0; i < numCams; i++) //initialization loop
   {
-    printf("Found %d cameras\n", numCams);
-    //struct point_grey *pg_ptr[numCams];
-    fc2Context contexts[numCams];
-    fc2PGRGuid guid;
-    fc2Image raw_image, converted_image;
-    char camName[numCams][512];
-    for (int i = 0; i < numCams; i++) //initialization loop
-    {
-      check_point_grey(fc2CreateContext(&contexts[i]));
-      check_point_grey(fc2GetCameraFromIndex(contexts[i], i, &guid));
-      check_point_grey(fc2Connect(contexts[i], &guid));
-      check_point_grey(fc2SetDefaultColorProcessing(C_COLOR_PROC));
-      check_point_grey(fc2SetVideoModeAndFrameRate(contexts[i],
-						   C_VID_MODE,
-						   C_F_RATE));
-      PrintCameraInfo(contexts[i]);
-      AssignName(contexts[i], camName[i]);
-      
-      /* pg_ptr[i] = point_grey_setup(i); */
-
-      /* printf("completed point_grey_setup(%d)\n",i); */
-
-      /* check_point_grey(fc2StartCapture(pg_ptr[i]->context)); */
-      
-      //NOT WORKING HERE BUT SHOULD
-      //check_point_grey(fc2StartCapture(contexts[i]));
-
-      printf("completed initialization loop iteration %d, %s\n",i,camName[i]);
-    } // initialization loop
-    check_point_grey(fc2CreateImage(&raw_image));
-    check_point_grey(fc2CreateImage(&converted_image));
-    Imlib_Image temp_image;
-    printf("created images\n");
-
-    //DOESN'T WORK
-    /* fc2Context *pContexts = contexts; */
-    /* fc2Error error = fc2StartSyncCapture(numCams, pContexts); */
-    /* printf("startsynccapture returned\n"); */
-      
+    pg_ptr[i] = point_grey_setup(i);
+    //PrintCameraInfo(pg_ptr[i]->context);
+    
+    //NOT WORKING HERE BUT SHOULD
+    //check_point_grey(fc2StartCapture(contexts[i]));
+    
+    printf("completed initialization loop iteration %d, %s\n",i,pg_ptr[i]->name);
+  } // initialization loop
+  
+  Imlib_Image temp_image;
+  
+  //DOESN'T WORK
+  /* fc2Context *pContexts = contexts; */
+  /* fc2Error error = fc2StartSyncCapture(numCams, pContexts); */
+  /* printf("startsynccapture returned\n"); */
+  double start = current_time();
+  for (int j = 0; j < numPics; j++) //loop through numPics
+  {
     for (int i = 0; i < numCams; i++) //picture taking loop
     {
-      check_point_grey(fc2StartCapture(contexts[i]));
-      check_point_grey(fc2RetrieveBuffer(contexts[i],&raw_image));
-      check_point_grey(fc2ConvertImageTo(FC2_PIXEL_FORMAT_BGRU,&raw_image,
-					 &converted_image));
-      temp_image = imlib_create_image_using_copied_data(converted_image.cols,
-							converted_image.rows,
-							(unsigned int *)
-							converted_image.pData);
-      imlib_context_set_image(temp_image);
-      char filename[512];
-      sprintf(filename,"%s%stest.jpg",OUTPUT_DIR,camName[i]);
-      imlib_save_image(filename);
-      printf("Saved %s\n",filename);
-      //image saved, now clean up
-      imlib_free_image_and_decache();
-      check_point_grey(fc2StopCapture(contexts[i]));
-      //remove(filename);
-      
+      temp_image = point_grey_get_frame_with_start_stop(pg_ptr[i]); 
+      printf("%s image #%d\n",pg_ptr[i]->name,j);
+      if ((j == (numPics - 1)) && write_flag)
+      {//save the final image from each camera
+	SaveImlibImage(temp_image, pg_ptr[i]->name);
+      }
+      else
+      {
+	imlib_context_set_image(temp_image);
+	//this is where we would send the image
+	imlib_free_image_and_decache();
+      }
     } //picture taking loop
-    check_point_grey(fc2DestroyImage(&raw_image));
-    check_point_grey(fc2DestroyImage(&converted_image));
-    for (int i = 0; i < numCams; i++) //cleanup loop
-    {
-      //HAD TO MOVE INTO PICTURE TAKING LOOP
-      //check_point_grey(fc2StopCapture(contexts[i]));
+  }    
+  double stop = current_time();
+  //check elapsed time
+  double elapsed = stop - start;
+  double images_per_sec = (double)numPics / elapsed;
+  printf("%d images per camera taken in %f seconds (%f images/sec/cam)\n",
+	 numPics, elapsed, images_per_sec);
 
-      check_point_grey(fc2DestroyContext(contexts[i]));
-      printf("completed cleanup loop iteration %d\n",i);
-      /* point_grey_stop_and_cleanup(pg_ptr[i]); */
-      
-      /* printf("completed point_grey_stop_and_cleanup(pg_ptr[%d])\n",i); */
-    } //cleanup loop
-      
-  }
-
-
+  for (int i = 0; i < numCams; i++) //cleanup loop
+  {
+    //HAD TO MOVE INTO PICTURE TAKING LOOP
+    //check_point_grey(fc2StopCapture(contexts[i]));
+    
+    point_grey_cleanup(pg_ptr[i]);
+    //printf("completed cleanup loop iteration %d\n",i);
+  } //cleanup loop  
   return 0; 
 }
 
@@ -159,6 +149,16 @@ int CheckSaving(char *dir)
   return 0;
 }
 
+unsigned int point_grey_init(void)
+{
+  fc2Context tempContext;
+  check_point_grey(fc2CreateContext(&tempContext));
+  unsigned int numCams;
+  check_point_grey(fc2GetNumOfCameras(tempContext, &numCams));
+  check_point_grey(fc2DestroyContext(tempContext));
+  return numCams;
+}
+
 struct point_grey *point_grey_setup(int num)
 {
   struct point_grey *pg =
@@ -170,7 +170,7 @@ struct point_grey *point_grey_setup(int num)
   check_point_grey(fc2SetVideoModeAndFrameRate(pg->context,
   					       C_VID_MODE,
   					       C_F_RATE));
-  PrintCameraInfo(pg->context);
+  AssignName(pg->context, pg->name);
   check_point_grey(fc2CreateImage(&pg->raw_image));
   check_point_grey(fc2CreateImage(&pg->converted_image));
   return pg;
@@ -182,10 +182,13 @@ void *point_grey_malloc(size_t size) {
   if (p==NULL) point_grey_error("Out of memory");
   return p;
 }
-
-void point_grey_stop_and_cleanup(struct point_grey *pg) 
+void point_grey_stop(struct point_grey *pg)
 {
   check_point_grey(fc2StopCapture(pg->context));
+}
+
+void point_grey_cleanup(struct point_grey *pg) 
+{
   check_point_grey(fc2DestroyContext(pg->context));
   check_point_grey(fc2DestroyImage(&pg->raw_image));
   check_point_grey(fc2DestroyImage(&pg->converted_image));
@@ -199,17 +202,68 @@ void AssignName(fc2Context context, char *name)
   check_point_grey(fc2GetCameraInfo(context, &camInfo));
   if (camInfo.serialNumber == front_cam_serial)
   {
-    printf("Front camera identified.\n");
+    printf("\nFront camera identified.\n");
     sprintf(name, "Front_camera_");
   }
   else if (camInfo.serialNumber == pano_cam_serial)
   {
-    printf("Panoramic camera identified.\n");
+    printf("\nPanoramic camera identified.\n");
     sprintf(name, "Panoramic_camera_");
   }
   else
   {
-    printf("Serial number not recognized.\n");
+    printf("\nSerial number not recognized.\n");
     sprintf(name, "ERROR!!!");
   }
+}
+
+
+Imlib_Image point_grey_get_frame(struct point_grey *pg)
+{
+  check_point_grey(fc2RetrieveBuffer(pg->context,&pg->raw_image));
+  check_point_grey(fc2ConvertImageTo(FC2_PIXEL_FORMAT_BGRU,
+				     &pg->raw_image,
+				     &pg->converted_image));
+  
+  return imlib_create_image_using_copied_data(pg->converted_image.cols,
+					      pg->converted_image.rows,
+					      (unsigned int *)
+					      pg->converted_image.pData);
+}
+
+Imlib_Image point_grey_get_frame_with_start_stop(struct point_grey *pg)
+{
+  point_grey_start(pg);
+  check_point_grey(fc2RetrieveBuffer(pg->context,&pg->raw_image));
+  check_point_grey(fc2ConvertImageTo(FC2_PIXEL_FORMAT_BGRU,
+				     &pg->raw_image,
+				     &pg->converted_image));
+  point_grey_stop(pg);
+  return imlib_create_image_using_copied_data(pg->converted_image.cols,
+					      pg->converted_image.rows,
+					      (unsigned int *)
+					      pg->converted_image.pData);
+}
+
+void point_grey_start(struct point_grey *pg)
+{
+ check_point_grey(fc2StartCapture(pg->context));
+}
+
+void SaveImlibImage(Imlib_Image temp_image, char *name)
+{
+  imlib_context_set_image(temp_image);
+  char filename[512];
+  sprintf(filename,"%s%stest.jpg",OUTPUT_DIR,name);
+  imlib_save_image(filename);
+  printf("Saved %s\n",filename);
+  //image saved, now clean up
+  imlib_free_image_and_decache();
+}
+
+double current_time(void) {
+  struct timeval time;
+  if (gettimeofday(&time, NULL)!=0) point_grey_error("gettimeofday failed");
+  /* needs work: Will it convert division into multiplication? */
+  return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
 }

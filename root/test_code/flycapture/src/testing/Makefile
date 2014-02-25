@@ -49,4 +49,4 @@ test2: test2.c test2.h RoverCamDefs.h
 
 clean:
 #	rm -f ${OUTDIR}/${OUTPUTNAME} ${OBJS}	@echo "all cleaned up!"
-	rm -f ${OUTPUTNAME1} ${OBJS1} ${OUTPUTNAME2} ${OBJS2}	@echo "all cleaned up!"
+	rm -f ${OUTPUTNAME1} ${OBJS1} ${OUTPUTNAME2} ${OBJS2} test test2	@echo "all cleaned up!"
