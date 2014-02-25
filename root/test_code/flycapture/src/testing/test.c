@@ -69,7 +69,7 @@ int main(int argc, char** argv){
 						    converted_image.pData);  
   imlib_context_set_image(temp_image);
   char filename[512];
-  sprintf(filename,"%stest.ppm",OUTPUT_DIR);
+  sprintf(filename,"%stest.jpg",OUTPUT_DIR);
   imlib_save_image(filename);
   printf("Saved %s\n",filename);
   //image saved, now clean up

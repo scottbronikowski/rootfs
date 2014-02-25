@@ -16,8 +16,8 @@ STD = -std=gnu99
 OBJS1 = point-grey-cpp.o point-grey.o test-capture-c.o
 OBJS2 = point-grey-cpp.o point-grey.o test-capture-cpp.o
 
-all: 	$(OUTPUTNAME1) $(OUTPUTNAME2)
-	@echo "{c-,cpp-}test-capture have been compiled"
+all: 	$(OUTPUTNAME1) $(OUTPUTNAME2) test test2
+	@echo "{c-,cpp-}test-capture, test test2 have been compiled"
 
 ${OUTPUTNAME1}: ${OBJS1}
 	${CC} ${CFLAGS} ${INCLUDE} -o ${OUTPUTNAME1} ${OBJS1} ${LIBS} ${COMMON_LIBS} 
@@ -42,7 +42,10 @@ clean_obj:
 	rm -f ${OBJS1} ${OBJS2}	@echo "objects all cleaned up!"
 
 test: test.c
-	gcc -Wall -g -I../../include -I/usr/include/flycapture -o test test.c -L../../lib/C -lflycapture-c -L/usr/lib -lflycapture-c `imlib2-config --cflags --libs`
+	gcc -Wall -g -I../../include -I/usr/include/flycapture ${STD} -o test test.c -L../../lib/C -lflycapture-c -L/usr/lib -lflycapture-c `imlib2-config --cflags --libs`
+
+test2: test2.c test2.h RoverCamDefs.h
+	gcc -Wall -g -I../../include -I/usr/include/flycapture ${STD} -o test2 test2.c -L../../lib/C -lflycapture-c -L/usr/lib -lflycapture-c `imlib2-config --cflags --libs`
 
 clean:
 #	rm -f ${OUTDIR}/${OUTPUTNAME} ${OBJS}	@echo "all cleaned up!"
