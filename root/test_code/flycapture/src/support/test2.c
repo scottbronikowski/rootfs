@@ -51,7 +51,7 @@ int main(int argc, char** argv){
     PrintCameraInfo(pg_ptr[i]->context);
     
     //****************CALLING THIS HERE WORKS ABOUT 50% OF THE TIME (HANGS OTHER 50%)**********************
-    //point_grey_start(pg_ptr[i]);
+    point_grey_start(pg_ptr[i]);
     
     printf("completed initialization loop iteration %d, %s\n",i,pg_ptr[i]->name);
   } // initialization loop
@@ -63,9 +63,9 @@ int main(int argc, char** argv){
   {
     for (int i = 0; i < numCams; i++) //picture taking loop
     {
-      point_grey_start(pg_ptr[i]);
+      //      point_grey_start(pg_ptr[i]);
       temp_image = point_grey_get_frame(pg_ptr[i]);
-      point_grey_stop(pg_ptr[i]);
+      //      point_grey_stop(pg_ptr[i]);
       printf("%simage_%d\n",pg_ptr[i]->name,j);
       if ((j == (numPics - 1)) && write_flag)
       {//save the final image from each camera
@@ -90,7 +90,7 @@ int main(int argc, char** argv){
   for (int i = 0; i < numCams; i++) //cleanup loop
   {
     //****************CALLING THIS HERE WORKS ABOUT 50% OF THE TIME (HANGS OTHER 50%)**********************
-    //point_grey_stop(pg_ptr[i]);  
+    point_grey_stop(pg_ptr[i]);  
     point_grey_cleanup(pg_ptr[i]);
     //printf("completed cleanup loop iteration %d\n",i);
   } //cleanup loop  

@@ -9,7 +9,9 @@
 int main(int argc, char** argv){
   int numPics = default_num_pics;
   int write_flag = FALSE;
+
   PrintBuildInfo();
+
   if (argc < 2)
   {
     printf("Defaulting to %i pictures per camera, no saving.\n",numPics);
@@ -65,7 +67,15 @@ int main(int argc, char** argv){
   {
     for (int i = 0; i < numCams; i++) //picture taking loop
     {
-      temp_image = point_grey_get_frame_with_start_stop(pg_ptr[i]); 
+      if (j == 0)
+      {
+	point_grey_start(pg_ptr[i]);
+      }
+      temp_image = point_grey_get_frame(pg_ptr[i]); 
+      if (j == (numPics - 1))
+      {
+      	point_grey_stop(pg_ptr[i]);
+      }
       printf("%s image #%d\n",pg_ptr[i]->name,j);
       if ((j == (numPics - 1)) && write_flag)
       {//save the final image from each camera
@@ -89,11 +99,11 @@ int main(int argc, char** argv){
   for (int i = 0; i < numCams; i++) //cleanup loop
   {
     //HAD TO MOVE INTO PICTURE TAKING LOOP
-    //check_point_grey(fc2StopCapture(contexts[i]));
-    
+    //point_grey_stop(pg_ptr[i]);   
     point_grey_cleanup(pg_ptr[i]);
     //printf("completed cleanup loop iteration %d\n",i);
   } //cleanup loop  
+  printf("cleanup complete\n");
   return 0; 
 }
 
@@ -275,7 +285,7 @@ void SaveImlibImage(Imlib_Image temp_image, char *name)
 {
   imlib_context_set_image(temp_image);
   char filename[512];
-  sprintf(filename,"%s%stest.jpg",OUTPUT_DIR,name);
+  sprintf(filename,"%s%s_%stest.jpg",OUTPUT_DIR,"test2",name);
   imlib_save_image(filename);
   printf("Saved %s\n",filename);
   //image saved, now clean up

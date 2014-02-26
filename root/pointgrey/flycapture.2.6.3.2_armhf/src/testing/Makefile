@@ -10,11 +10,11 @@ OUTDIR = ../../bin
 
 OBJS = testcapture.o
 
-${OUTPUTNAME}: ${OBJS}
+${OUTPUTNAME}: ${OBJS} 
 	${CC} -o ${OUTPUTNAME} ${OBJS} ${LIBS} ${COMMON_LIBS} 
 	mv ${OUTPUTNAME} ${OUTDIR}
 
-%.o: %.cc
+%.o: %.cc RoverCamDefs.h point-grey.c point-grey.h
 	${CC} ${CFLAGS} ${INCLUDE} -c $*.cc
 
 clean_obj:

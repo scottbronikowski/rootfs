@@ -16,11 +16,9 @@ using namespace FlyCapture2;
 void PrintBuildInfo();
 void PrintCameraInfo(CameraInfo* pCamInfo);
 void PrintError(Error error);
-int RunSingleCamera(PGRGuid guid, int k_numImages);
-//int RunAllCameras(PGRGuid guid[], int k_numImages, int numCameras);
+
 int RunAllCameras(int k_numImages, int numCameras);
 
-int RunMultipleCameras(int k_numImages, int numCameras);
 long long int GetTimeInUsec(void);
 
 int main(int argc, char** argv)
@@ -28,7 +26,6 @@ int main(int argc, char** argv)
   //PrintBuildInfo();
 
   Error error;
-
   
   // Since this application saves images in the OUTPUT_DIR folder
   // we must ensure that the folder exists and we have permission 
@@ -37,18 +34,12 @@ int main(int argc, char** argv)
 
   if (!(stat(OUTPUT_DIR, &sb) == 0 && S_ISDIR(sb.st_mode)))
   {
-    //printf("Directory %s NOT found\n",OUTPUT_DIR);
     if (mkdir(OUTPUT_DIR, S_IRWXU | S_IRGRP | S_IROTH | S_IXGRP | S_IXOTH) != 0)
     {
       printf("Error creating directory %s\n",OUTPUT_DIR);
       return -1;
     }
   }
-  // else
-  // {
-  //   printf("Directory %s NOT FOUND\n",OUTPUT_DIR);
-  //}
-
   char tempFileName[512];
   sprintf(tempFileName, "%stest.txt",OUTPUT_DIR);
   FILE* tempFile = fopen(tempFileName, "w+");
@@ -85,65 +76,9 @@ int main(int argc, char** argv)
   
   printf( "Number of cameras detected: %u\n", numCameras );
   
-  // //PGRGuid guid;
-  // PGRGuid guid[numCameras];
-  
-  // for (unsigned int i=0; i < numCameras; i++)
-  // {
-  //   error = busMgr.GetCameraFromIndex(i, &guid[i]);
-  //   if (error != PGRERROR_OK)
-  //   {
-  //     PrintError( error );
-  //     return -1;
-  //   }
-    
-  // }  //new end of loop
-    //RunSingleCamera( guid );
-   
-    //RunSingleCamera(guid, numPics);
-  
   printf("\nAttempting old method\n");
-  //RunAllCameras(guid, numPics, numCameras);  
   RunAllCameras(numPics, numCameras);  
 
-  //printf("\nAttempting new method\n");
-  //RunMultipleCameras(numPics, numCameras);
-  
-    // //connect to a camera	
-    // Camera cam;
-    // error = cam.Connect(&guid);
-    // if (error != PGRERROR_OK)
-    // {
-    //   PrintError(error);
-    //   return -1;
-    // }
-    
-    // //get camera info
-    // CameraInfo camInfo;
-    // error = cam.GetCameraInfo(&camInfo);
-    // if (error != PGRERROR_OK)
-    // {
-    //   PrintError(error);
-    //   return -1;
-    // }
-    
-    // PrintCameraInfo(&camInfo);
-    
-    // //now compare serial number 
-    // if (camInfo.serialNumber == front_cam_serial)
-    // {
-    //   printf("This is the front camera.\n");
-    // } 
-    // else if (camInfo.serialNumber == pano_cam_serial)
-    // {
-    //   printf("This is the panoramic camera.\n");
-    // }
-    // else
-    // {
-    //   printf("Serial Number not recognized.\n");
-    // }
-    
-    //}
   
   printf( "Done! Press Enter to exit...\n" );
   getchar();
@@ -151,182 +86,6 @@ int main(int argc, char** argv)
   return 0;
 }
 
-void PrintBuildInfo()
-{
-  FC2Version fc2Version;
-  Utilities::GetLibraryVersion( &fc2Version );
-  char version[128];
-  sprintf(version, 
-	  "FlyCapture2 library version: %d.%d.%d.%d\n", 
-	  fc2Version.major, fc2Version.minor, fc2Version.type, fc2Version.build );
-  
-  printf( version );
-  
-  char timeStamp[512];
-  sprintf( timeStamp, "Application build date: %s %s\n\n", __DATE__, __TIME__ );
-  
-  printf( timeStamp );
-}
-
-void PrintCameraInfo( CameraInfo* pCamInfo )
-{
-  printf("\n*** CAMERA INFORMATION ***\n"
-	 "Serial number - %u\n"
-	 "Camera model - %s\n"
-	 "Camera vendor - %s\n"
-	 "Sensor - %s\n"
-	 "Resolution - %s\n"
-	 "Firmware version - %s\n"
-	 "Firmware build time - %s\n\n",
-	 pCamInfo->serialNumber,
-	 pCamInfo->modelName,
-	 pCamInfo->vendorName,
-	 pCamInfo->sensorInfo,
-	 pCamInfo->sensorResolution,
-	 pCamInfo->firmwareVersion,
-	 pCamInfo->firmwareBuildTime );
-}
-
-void PrintError( Error error )
-{
-  error.PrintErrorTrace();
-}
-
-int RunSingleCamera( PGRGuid guid, int k_numImages)
-{
-  //const int k_numImages = 10;
-
-    Error error;
-    Camera cam;
-
-    // Connect to a camera
-    error = cam.Connect(&guid);
-    if (error != PGRERROR_OK)
-    {
-        PrintError( error );
-        return -1;
-    }
-
-    // Get the camera information
-    CameraInfo camInfo;
-    error = cam.GetCameraInfo(&camInfo);
-    if (error != PGRERROR_OK)
-    {
-        PrintError( error );
-        return -1;
-    }
-  
-    PrintCameraInfo(&camInfo);        
-  
-    //now compare serial number 
-    //char fileroot[6];
-    if (camInfo.serialNumber == front_cam_serial)
-    {
-      printf("This is the front camera.\n");
-      //sprintf(fileroot, "front");
-    } 
-    else if (camInfo.serialNumber == pano_cam_serial)
-    {
-      printf("This is the panoramic camera.\n");
-      //sprintf(fileroot, "panor");
-    }
-    else
-    {
-      printf("Serial Number not recognized.\n");
-      //sprintf(fileroot,"error");
-    }
-    
-    // Start capturing images
-    error = cam.StartCapture();
-    if (error != PGRERROR_OK)
-    {
-        PrintError( error );
-        return -1;
-    }
-
-    Image rawImage;    
-    for ( int imageCnt=0; imageCnt < k_numImages; imageCnt++ )
-    {                
-        // Retrieve an image
-        error = cam.RetrieveBuffer( &rawImage );
-        if (error != PGRERROR_OK)
-        {
-            PrintError( error );
-            continue;
-        }
-
-        printf( "Grabbed image %d\n", imageCnt );
-
-        // Create a converted image
-        Image convertedImage;
-
-        // Convert the raw image
-	//error = rawImage.Convert( PIXEL_FORMAT_MONO16, &convertedImage ); /*seemed to cause crash*/
-	//error = rawImage.Convert( PIXEL_FORMAT_MONO8, &convertedImage ); //original
-	error = rawImage.Convert( PIXEL_FORMAT_RGB, &convertedImage );
-        if (error != PGRERROR_OK)
-        {
-            PrintError( error );
-            return -1;
-        }  
-	printf("Converted image size: %u\n",convertedImage.GetDataSize());
-
-	struct point_grey_image *send_image;
-	send_image = (point_grey_image*) malloc(sizeof(struct point_grey_image));
-	send_image->rows = convertedImage.GetRows();
-	send_image->cols = convertedImage.GetCols();
-	send_image->data = convertedImage.GetData();
-	printf("Rows %u, Cols %u\n",send_image->rows, send_image->cols);
-	printf("Converted image in pointer to send_image struct, ready to send\n");
-	// unsigned int cImageRows = convertedImage.GetRows();
-	// unsigned int cImageCols = convertedImage.GetCols();
-	// unsigned char* cImageData = convertedImage.GetData();
-	// printf("Rows %u, Cols %u\n",cImageRows, cImageCols);
-	// printf("Data %s\n",cImageData);
-
-
-	//commenting this out to increase speed
-        // // Create a unique filename
-        // char filename[512];
-	// //PNGOption *pOptions = new PNGOption;
-	// ImageFileFormat fileFormat = PNG;
-	// sprintf(filename, "%s%s%d.png",OUTPUT_DIR,fileroot,imageCnt);
-        // //sprintf( filename, "FlyCapture2Test-%u-%d.pgm", camInfo.serialNumber, imageCnt );
-
-        // // Save the image. If a file format is not passed in, then the file
-        // // extension is parsed to attempt to determine the file format.
-	// //pOptions->compresionLevel = 0;
-	// //****this save seems to be slowing things down--send directly over 
-	// // socket instead?????
-        // error = convertedImage.Save(filename, fileFormat);
-        // if (error != PGRERROR_OK)
-        // {
-        //     PrintError( error );
-        //     return -1;
-        // }  
-    }            
-
-    // Stop capturing images
-    error = cam.StopCapture();
-    if (error != PGRERROR_OK)
-    {
-        PrintError( error );
-        return -1;
-    }      
-
-    // Disconnect the camera
-    error = cam.Disconnect();
-    if (error != PGRERROR_OK)
-    {
-        PrintError( error );
-        return -1;
-    }
-
-    return 0;
-}
-
-
-//int RunAllCameras( PGRGuid guid[], int k_numImages, int numCameras)
 int RunAllCameras(int k_numImages, int numCameras)
 {
   
@@ -366,24 +125,20 @@ int RunAllCameras(int k_numImages, int numCameras)
     PrintCameraInfo(&camInfo);        
     
     //now compare serial number 
-    //char fileroot[6];
     if (camInfo.serialNumber == front_cam_serial)
     {
       printf("This is the front camera.\n");
-      sprintf(cam_string[i], "Front camera: ");
-      //sprintf(fileroot, "front");
+      sprintf(cam_string[i], "Front_camera_");
     } 
     else if (camInfo.serialNumber == pano_cam_serial)
     {
       printf("This is the panoramic camera.\n");
-      sprintf(cam_string[i], "Panoramic camera: ");
-      //sprintf(fileroot, "panor");
-      }
+      sprintf(cam_string[i], "Panoramic_camera_");
+    }
     else
     {
       printf("Serial Number not recognized.\n");
-      //sprintf(fileroot,"error");
-      return -1;
+      sprintf(cam_string[i], "unknown_camera_%d_",camInfo.serialNumber);
     }
     
     error = cam[i].SetVideoModeAndFrameRate(VID_MODE,F_RATE);
@@ -413,15 +168,6 @@ int RunAllCameras(int k_numImages, int numCameras)
     // }
   }
   
-  // error = Camera::StartSyncCapture(numCameras, cam);
-  // if (error != PGRERROR_OK)
-  // {
-  //     PrintError( error );
-  //     printf("Error calling StartSyncCapture. \n"
-  // 	       "Press Enter to exit. \n");
-  //     getchar();
-  //     return -1;
-  // }
   printf("Camera initialization complete, moving to capture with %s at %s\n",
 	 VID_MODE_STR, F_RATE_STR);
   
@@ -466,7 +212,7 @@ int RunAllCameras(int k_numImages, int numCameras)
       // Convert the raw image
       //error = rawImage.Convert( PIXEL_FORMAT_MONO16, &convertedImage ); /*seemed to cause crash*/
       //error = rawImage.Convert( PIXEL_FORMAT_MONO8, &convertedImage ); //original
-      error = rawImage.Convert( PIXEL_FORMAT_RGB, &convertedImage );
+      error = rawImage.Convert( PIXEL_FORMAT_RGBU, &convertedImage );
       if (error != PGRERROR_OK)
       {
 	PrintError( error );
@@ -484,26 +230,31 @@ int RunAllCameras(int k_numImages, int numCameras)
       //***SEND DATA HERE BEFORE END OF INNER LOOP***//////
       
       
-      //commenting this out to increase speed
-      // // Create a unique filename
-      // char filename[512];
-      // //PNGOption *pOptions = new PNGOption;
-      // ImageFileFormat fileFormat = PNG;
-      // sprintf(filename, "%s%s%d.png",OUTPUT_DIR,fileroot,imageCnt);
-      // //sprintf( filename, "FlyCapture2Test-%u-%d.pgm", camInfo.serialNumber, imageCnt );
-      
-      // // Save the image. If a file format is not passed in, then the file
-      // // extension is parsed to attempt to determine the file format.
-      // //pOptions->compresionLevel = 0;
-      // //****this save seems to be slowing things down--send directly over 
-      // // socket instead?????
-      // error = convertedImage.Save(filename, fileFormat);
-      // if (error != PGRERROR_OK)
-      // {
-      //     PrintError( error );
-      //     return -1;
-      // }  
-      
+      //save the final image
+      if (imageCnt == (k_numImages - 1))
+      {
+      	// Create a unique filename
+      	char filename[512];
+      	sprintf(filename, "%sOLD_TEST_converted_%sfinal.ppm",OUTPUT_DIR,cam_string[i]);
+	char filename2[512];
+      	sprintf(filename2, "%sOLD_TEST_raw_%sfinal.ppm",OUTPUT_DIR,cam_string[i]);
+      	// Save the image. If a file format is not passed in, then the file
+      	// extension is parsed to attempt to determine the file format.
+      	error = convertedImage.Save(filename);
+      	if (error != PGRERROR_OK)
+      	{
+          PrintError( error );
+          return -1;
+      	}  
+	printf("Saved image %s\n",filename);
+	// error = rawImage.Save(filename2);
+      	// if (error != PGRERROR_OK)
+      	// {
+        //   PrintError( error );
+        //   return -1;
+      	// }  
+      	// printf("Saved image %s\n", filename2);
+      }
       // // Stop capturing images ****NOT SURE WHY THIS WORKS HERE and not in other loop
       // error = cam[i].StopCapture();
       // if (error != PGRERROR_OK)
@@ -546,128 +297,53 @@ int RunAllCameras(int k_numImages, int numCameras)
   return 0;
 }
 
-int RunMultipleCameras(int k_numImages, int numCameras)
+
+
+void PrintBuildInfo()
 {
-  Error error;
-  BusManager busMgr;
-  Camera** ppCameras = new Camera*[numCameras];
-
-  // Connect to all detected cameras and attempt to set them to
-  // a common video mode and frame rate
-  for ( unsigned int i = 0; i < numCameras; i++)
-  {
-    ppCameras[i] = new Camera();
-    
-    PGRGuid guid;
-    error = busMgr.GetCameraFromIndex( i, &guid );
-    if (error != PGRERROR_OK)
-    {
-      PrintError( error );
-      return -1;
-    }
-    
-    // Connect to a camera
-    error = ppCameras[i]->Connect( &guid );
-    if (error != PGRERROR_OK)
-    {
-      PrintError( error );
-      return -1;
-    }
-    
-    // Get the camera information
-    CameraInfo camInfo;
-    error = ppCameras[i]->GetCameraInfo( &camInfo );
-    if (error != PGRERROR_OK)
-    {
-      PrintError( error );
-      return -1;
-    }
-    
-    PrintCameraInfo(&camInfo); 
-    
-    // Set all cameras to a specific mode and frame rate so they
-    // can be synchronized
-    error = ppCameras[i]->SetVideoModeAndFrameRate(VID_MODE, F_RATE);
-    if (error != PGRERROR_OK)
-    {
-      PrintError( error );
-      printf("Error setting video mode and frame rate. \n"
-	     "This example requires cameras to be able to set to %s at %s. \n", 
-	     VID_MODE_STR,F_RATE_STR);
-      printf("If your camera does not support this mode, please edit the source code and recompile the application. \n"
-	     "Press Enter to exit. \n");
-      getchar();
-      return -1;
-    }
-  }
-
-  error = Camera::StartSyncCapture( numCameras, (const Camera**)ppCameras );
-  if (error != PGRERROR_OK)
-  {
-    PrintError( error );
-    printf("Error calling StartSyncCapture. \n"
-	   "Press Enter to exit. \n");
-    getchar();
-    return -1;
-  }
-  printf("Camera initialization complete, moving to capture with %s at %s\n",
-	 VID_MODE_STR, F_RATE_STR);
+  FC2Version fc2Version;
+  Utilities::GetLibraryVersion( &fc2Version );
+  char version[128];
+  sprintf(version, 
+	  "FlyCapture2 library version: %d.%d.%d.%d\n", 
+	  fc2Version.major, fc2Version.minor, fc2Version.type, fc2Version.build );
   
-  Image rawImage;    
-  Image convertedImage;
-  struct point_grey_image *send_image;
-  send_image = (point_grey_image*) malloc(sizeof(struct point_grey_image));
-
-  long long int start_time, stop_time;
-  //main capture loop--get time here to check speed
-  start_time = GetTimeInUsec();
+  printf("%s", version );
   
-  for ( int j = 0; j < k_numImages; j++ )
-  {
-    // Display the timestamps for all cameras to show that the image
-    // capture is synchronized for each image
-    for ( unsigned int i = 0; i < numCameras; i++ )
-    {
-      Image image;
-      error = ppCameras[i]->RetrieveBuffer( &image );
-      if (error != PGRERROR_OK)
-      {
-	PrintError( error );
-	return -1;
-      }
-      
-      TimeStamp timestamp = image.GetTimeStamp();
-      printf( 
-	     "Cam %d - Frame %d - TimeStamp [%d %d]\n", 
-	     i, 
-	     j, 
-	     timestamp.cycleSeconds, 
-	     timestamp.cycleCount);
-    }
-  }
+  char timeStamp[512];
+  sprintf( timeStamp, "Application build date: %s %s\n\n", __DATE__, __TIME__ );
   
-  stop_time = GetTimeInUsec();
-  //do some math to show how many images over time
-  long long int elapsed = stop_time - start_time;
-  float images_per_sec = (float)k_numImages / ((float)elapsed / 1000000);
-  printf("Summary: %i images per camera  taken in %lli microseconds (%f images/sec/cam)\n",
-	 k_numImages, elapsed, images_per_sec );
-  
-  //don't need send_image anymore, so free it
-  free(send_image);
-  
-  //loop through cameras one more time to stop & disconnect
-  for ( unsigned int i = 0; i < numCameras; i++ )
-  {
-    ppCameras[i]->StopCapture();
-    ppCameras[i]->Disconnect();
-    delete ppCameras[i];
-  }
-  
-  delete [] ppCameras;
-  
-  return 0;
+  printf("%s", timeStamp );
 }
+
+void PrintCameraInfo( CameraInfo* pCamInfo )
+{
+  printf("\n*** CAMERA INFORMATION ***\n"
+	 "Serial number - %u\n"
+	 "Camera model - %s\n"
+	 "Camera vendor - %s\n"
+	 "Sensor - %s\n"
+	 "Resolution - %s\n"
+	 "Firmware version - %s\n"
+	 "Firmware build time - %s\n\n",
+	 pCamInfo->serialNumber,
+	 pCamInfo->modelName,
+	 pCamInfo->vendorName,
+	 pCamInfo->sensorInfo,
+	 pCamInfo->sensorResolution,
+	 pCamInfo->firmwareVersion,
+	 pCamInfo->firmwareBuildTime );
+}
+
+void PrintError( Error error )
+{
+  error.PrintErrorTrace();
+}
+
+
+
+
+
 
 
 long long int GetTimeInUsec(void)
