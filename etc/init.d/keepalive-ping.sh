@@ -6,12 +6,12 @@
 # Required-Stop:   $network $local_fs $syslog
 # Default-Start:   2 3 4 5
 # Default-Stop:    0 1 6
-# Short-Description: Pings purdue.edu every 5 seconds
+# Short-Description: Pings www.purdue.edu every 5 seconds
 ### END INIT INFO
 
 start(){
     echo "Starting keep alive ping to purdue.edu"
-    ping -i 5 purdue.edu > /dev/null &
+    ping -i 5 www.purdue.edu > /dev/null &
 }
 
 stop(){

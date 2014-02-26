@@ -9,6 +9,7 @@
 int main(int argc, char** argv){
   int numPics = default_num_pics;
   int write_flag = FALSE;
+  PrintBuildInfo();
   if (argc < 2)
   {
     printf("Defaulting to %i pictures per camera, no saving.\n",numPics);
@@ -94,6 +95,26 @@ int main(int argc, char** argv){
     //printf("completed cleanup loop iteration %d\n",i);
   } //cleanup loop  
   return 0; 
+}
+
+void PrintBuildInfo()
+{
+    fc2Version version;
+    char versionStr[512];
+    char timeStamp[512];
+
+    fc2GetLibraryVersion( &version );
+
+    sprintf( 
+        versionStr, 
+        "FlyCapture2 library version: %d.%d.%d.%d\n", 
+        version.major, version.minor, version.type, version.build );
+
+    printf( "%s", versionStr );
+
+    sprintf( timeStamp, "Application build date: %s %s\n\n", __DATE__, __TIME__ );
+
+    printf( "%s", timeStamp );
 }
 
 void PrintCameraInfo( fc2Context context )
@@ -213,7 +234,7 @@ void AssignName(fc2Context context, char *name)
   else
   {
     printf("\nSerial number not recognized.\n");
-    sprintf(name, "ERROR!!!");
+    sprintf(name, "Unknown_camera_%d_", camInfo.serialNumber);
   }
 }
 
