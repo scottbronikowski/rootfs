@@ -6,18 +6,26 @@
 # Required-Stop:   $network $local_fs $syslog
 # Default-Start:   2 3 4 5
 # Default-Stop:    0 1 6
-# Short-Description: Updates time on startup
+# Short-Description: Updates hwclock time on startup (after ntpd updates date)
 ### END INIT INFO
 
 start(){
-    ntpdate -s -u us.pool.ntp.org
-    echo "Updated time with us.pool.ntp.org"
+#    echo "before:"
+#    echo " date: "
+#    date
+#    echo " hwclock: "
+#    hwclock
+#    ntpdate -uvb ntp.ubuntu.com us.pool.ntp.org
+#    echo "Updated time"
+    sleep 20
+#    echo "date : " 
+#    date
     hwclock -w
-    echo "date : "
-    date
-    echo "hwclock : "
-    hwclock
-}
+#    echo "hwclock : "
+#    hwclock
+#    echo "date again: "
+#    date
+   }
 
 stop(){
     echo "No exit conditions for time-update.sh"

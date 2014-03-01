@@ -11,7 +11,7 @@
 
 start(){
     echo "Starting monitor client"	
-    /root/test_code/monitor
+    /root/test_code/monitor &
 }
 
 stop(){
