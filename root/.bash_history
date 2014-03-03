@@ -1,53 +1,3 @@
-/etc/init.d/keepalive-ping.sh start
-ps -ef | grep ping
-reboot
-cd /etc/init
-cd ../init.d
-ls ../rc*
-update-rc.d -f keepalive-ping.sh remove
-update-rc.d -f debian.noip2.sh remove
-update-rc.d -f time-update.sh remove
-update-rc.d time-update.sh defaults 25
-update-rc.d keepalive-ping.sh defaults 23
-update-rc.d debian.noip2.sh defaults 23
-nano keepalive-ping.sh 
-exit
-ps -ef | grep ping
-date
-ps -ef | grep no
-reboot
-ps -ef | grep ssh
-/etc/init.d/servo-control.sh start
-echo 1000 > /dev/pwm10
-echo 10000 > /dev/pwm10
-echo 15000 > /dev/pwm10
-/etc/init.d/monitor.sh start
-ls /etc/rc*
-update-rc.d
-cd /
-git reset --hard
-git pull
-ls /etc/rc*
-rm -f /etc/rc0.d/K0*
-ls /etc/rc0.d/
-rm -f /etc/rc0.d/S0*
-ls /etc/rc1.d/
-rm -f /etc/rc1.d/S0*
-rm -f /etc/rc1.d/K0*
-ls /etc/rc2.d/
-rm -f /etc/rc2.d/S0*
-ls /etc/rc3.d/
-rm -f /etc/rc3.d/S0*
-ls /etc/rc3.d/
-ls /etc/rc4.d/
-rm -f /etc/rc4.d/S0*
-ls /etc/rc4.d/
-ls /etc/rc5.d/
-rm -f /etc/rc5.d/S0*
-ls /etc/rc5.d/
-ls /etc/rc6.d/
-rm -f /etc/rc5.d/K0*
-rm -f /etc/rc5.d/S0*
 ls /etc/rc6.d/
 rm -f /etc/rc6.d/S0*
 rm -f /etc/rc6.d/K0*
@@ -1997,4 +1947,54 @@ cd test_code/flycapture/bin
 lsusb
 reboot
 cd test_code/flycapture/src/CustomImageEx/
+emacs &
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+cd test_code/flycapture/bin
+./CustomImageEx 
+emacs &
+./CustomImageEx 
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+./CustomImageEx 
+ls ../
+cd ../include/
+ls
+cd test_code/flycapture/src/support/
+ls
+make
+./test2 
+lsusb
+cat Makefile 
+less simpletest.c 
+cat simpletest.c 
+~gcc -Wall -g -I/usr/include/flycapture -std=gnu99 -o simpletest simpletest.c -L/usr/lib -lflycapture-c `imlib2-config --cflags --libs`
+gcc -Wall -g -I/usr/include/flycapture -std=gnu99 -o simpletest simpletest.c -L/usr/lib -lflycapture-c `imlib2-config --cflags --libs`
+gcc -Wall -g -I/../../include/ -std=gnu99 -o simpletest simpletest.c -L/../../lib -lflycapture-c `imlib2-config --cflags --libs`
+gcc -Wall -g -I../../include/ -std=gnu99 -o simpletest simpletest.c -L../../lib -lflycapture-c `imlib2-config --cflags --libs`
+./simpletest 
+./simpletest 1
+reboot
+cd test_code/flycapture/bin/
+ls
+./CustomImageEx 
+emacs &
+ls
+rm *.ppm
+./CustomImageEx 
+lsusb
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+reboot
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+cd test_code/flycapture/bin
+./CustomImageEx 
+reboot
 emacs &

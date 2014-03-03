@@ -1,1 +1,0 @@
-../../../../share/pyshared/devscripts/control.py

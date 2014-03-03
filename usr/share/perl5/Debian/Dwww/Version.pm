@@ -1,7 +1,0 @@
-#
-# $Id: Version.pm.in,v 1.2 2003-03-08 16:24:37 robert Exp $
-#
-package Debian::Dwww::Version;
-$version='1.11.7';
-
-1;

@@ -52,10 +52,6 @@ audio/mpeg4; vlc '%s'; description="MPEG-4 Audio"; test=test -n "$DISPLAY"
 application/mpeg4-iod; vlc '%s'; description="MPEG-4 Video"; test=test -n "$DISPLAY"
 application/mpeg4-muxcodetable; vlc '%s'; description="MPEG-4 Video"; test=test -n "$DISPLAY"
 text/html; /usr/bin/sensible-browser '%s'; description=HTML Text; nametemplate=%s.html
-application/wordperfect; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; nametemplate=%s.wpd ; description="Corel WordPerfect Document"
-application/vnd.wordperfect; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; nametemplate=%s.wpd ; description="Corel WordPerfect Document"
-application/x-dia-diagram; dia '%s'; description="DIA diagram"; test=test -n "$DISPLAY"; nametemplate=%s.dia
-application/x-dia-diagram; dia '%s'; description="DIA diagram"; test=test -n "$DISPLAY"; nametemplate=%s.dia
 audio/x-musepack; /usr/bin/gnome-mplayer '%s'; description="Musepack Audio"
 application/x-musepack; /usr/bin/gnome-mplayer '%s'; description="Musepack Audio"
 audio/mpc; /usr/bin/gnome-mplayer '%s'; description="Musepack Audio"
@@ -190,7 +186,6 @@ video/x-ms-wmx; mplayer '%s'; description="Windows Media Video"
 video/x-ms-wvx; mplayer '%s'; description="Windows Media Video"
 application/x-tar; /bin/tar tvf -; print=/bin/tar tvf - | print text/plain:-; copiousoutput
 application/x-gtar; /bin/tar tvzf -; print=/bin/tar tvzf - | print text/plain:-; copiousoutput
-application/x-dvi; /usr/bin/xdvi '%s'; description=TeX DVI; test=test -n "$DISPLAY"; nametemplate=%s.dvi
 application/zip; unzip -l '%s'; nametemplate=%s.zip; copiousoutput
 text/plain; more '%s'; needsterminal
 application/x-xfig; xfig '%s'; test=test -n "$DISPLAY"
@@ -227,27 +222,6 @@ video/ogg; vlc -I rc -V caca '%s'; needsterminal; description="Ogg Video"
 application/x-ms-asf-plugin; vlc -I rc -V caca '%s'; needsterminal; description="Windows Media Video"
 application/x-mplayer2; vlc -I rc -V caca '%s'; needsterminal; description="Windows Media"
 text/html; /usr/bin/w3m -dump -T text/html '%s'; copiousoutput; description=HTML Text; nametemplate=%s.html
-application/docbook+xml; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="DocBook XML Document"
-application/msword; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Microsoft Word Document"
-application/rtf; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Rich Text document"
-application/vnd.oasis.opendocument.text; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="OASIS Open Document"
-application/vnd.palm; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Palm Database"
-application/vnd.plain; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Plain text"
-application/vnd.stardivision.writer;  abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="StarOffice Writer document"
-application/vnd.sun.xml.writer;   abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="OpenOffice.org Text document"
-application/vnd.ms-word; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; nametemplate=%s.doc ; description="Microsoft Word Document"
-application/wordperfect5.1; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Corel WordPerfect Document"
-application/wordperfect6; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Corel WordPerfect Document"
-application/x-abiword; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="AbiWord Document"
-application/x-abicollab; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="AbiWord Collaborative Document"
-application/x-applix-word; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Applix Word Document"
-application/x-palm-database; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Palm Database"
-text/abiword; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="AbiWord Document"
-text/plain; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Text file"
-text/richtext; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Rich Text document"
-text/rtf; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Rich Text document"
-text/vnd.wap.wml; abiword '%s' ; edit=abiword '%s' ; test=test "$DISPLAY" != "" ; description="Wireless Application Protocol WML file"
-application/dpkg-www-installer; /usr/sbin/dpkg-www-installer '%s'; needsterminal; description=dpkg-www-installer request
 text/html; /usr/bin/html2text '%s'; copiousoutput; description=HTML Text
 image/avs; display 'avs:'%s''; test=test -n "$DISPLAY"
 image/bie; display 'jbig:'%s''; test=test -n "$DISPLAY"
@@ -296,5 +270,4 @@ text/*; less '%s'; needsterminal
 text/*; view '%s'; edit=vim '%s'; compose=vim '%s'; test=test -x /usr/bin/vim; needsterminal
 text/*; more '%s'; needsterminal
 text/*; view '%s'; edit=vi '%s'; compose=vi '%s'; needsterminal
-application/msword; /usr/bin/antiword '%s'; copiousoutput; description="Microsoft Word Text"; nametemplate=%s.doc
 application/x-debian-package; /usr/lib/mime/debian-view '%s'; needsterminal; description=Debian GNU/Linux Package; nametemplate=%s.deb

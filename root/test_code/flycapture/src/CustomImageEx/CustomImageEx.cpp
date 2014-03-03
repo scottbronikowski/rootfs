@@ -24,6 +24,7 @@
 #include "FlyCapture2.h"
 
 #include <sys/time.h>
+#include <stdlib.h>
 
 using namespace FlyCapture2;
 
@@ -37,6 +38,7 @@ void PrintCameraInfo( CameraInfo* pCamInfo );
 void PrintFormat7Capabilities( Format7Info fmt7Info );
 void PrintError( Error error );
 double current_time(void);
+void CheckPGR(Error error);
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -62,15 +64,9 @@ int main(int /*argc*/, char** /*argv*/)
 
     BusManager busMgr;
     unsigned int numCameras;
-    error = busMgr.GetNumOfCameras(&numCameras);
-    if (error != PGRERROR_OK)
-    {
-        PrintError( error );
-        return -1;
-    }
-
+    CheckPGR(busMgr.GetNumOfCameras(&numCameras));
+ 
     printf( "Number of cameras detected: %u\n", numCameras );
-
     if ( numCameras < 1 )
     {
         printf( "Insufficient number of cameras... exiting\n" );
@@ -82,28 +78,31 @@ int main(int /*argc*/, char** /*argv*/)
     CameraInfo camInfo[numCameras];
     for (unsigned int i = 0; i < numCameras; i++) //setup/init loop
     {
-      error = busMgr.GetCameraFromIndex(i, &guid[i]);
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(busMgr.GetCameraFromIndex(i, &guid[i]));
+      // error = busMgr.GetCameraFromIndex(i, &guid[i]);
+      // if (error != PGRERROR_OK)
+      // {
+      //   PrintError( error );
+      //   return -1;
+      // }
       
       // Connect to a camera
-      error = cam[i].Connect(&guid[i]);
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].Connect(&guid[i]));
+      // error = cam[i].Connect(&guid[i]);
+      // if (error != PGRERROR_OK)
+      // {
+      //   PrintError( error );
+      //   return -1;
+      // }
 
       // Get the camera information
-      error = cam[i].GetCameraInfo(&camInfo[i]);
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].GetCameraInfo(&camInfo[i]));
+      // error = cam[i].GetCameraInfo(&camInfo[i]);
+      // if (error != PGRERROR_OK)
+      // {
+      //   PrintError( error );
+      //   return -1;
+      // }
       
       PrintCameraInfo(&camInfo[i]);        
 
@@ -111,12 +110,13 @@ int main(int /*argc*/, char** /*argv*/)
       Format7Info fmt7Info;
       bool supported;
       fmt7Info.mode = k_fmt7Mode;
-      error = cam[i].GetFormat7Info( &fmt7Info, &supported );
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].GetFormat7Info( &fmt7Info, &supported ));
+      // error = cam[i].GetFormat7Info( &fmt7Info, &supported );
+      // if (error != PGRERROR_OK)
+      // {
+      //   PrintError( error );
+      //   return -1;
+      // }
       
       PrintFormat7Capabilities( fmt7Info );
 
@@ -156,48 +156,54 @@ int main(int /*argc*/, char** /*argv*/)
       Format7PacketInfo fmt7PacketInfo;
 
       // Validate the settings to make sure that they are valid
-      error = cam[i].ValidateFormat7Settings( &fmt7ImageSettings,
+      CheckPGR(cam[i].ValidateFormat7Settings( &fmt7ImageSettings,
 					      &valid,
-					      &fmt7PacketInfo );
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+					       &fmt7PacketInfo ));
+      // error = cam[i].ValidateFormat7Settings( &fmt7ImageSettings,
+      // 					      &valid,
+      // 					      &fmt7PacketInfo );
+      // if (error != PGRERROR_OK)
+      // {
+      //   PrintError( error );
+      //   return -1;
+      // }
       
       if ( !valid )
-      {
-        // Settings are not valid
+      { // Settings are not valid
 	printf("Format7 settings are not valid\n");
         return -1;
       }
       
       // Set the settings to the camera
-      error = cam[i].SetFormat7Configuration( &fmt7ImageSettings,
-					   fmt7PacketInfo.recommendedBytesPerPacket );
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].SetFormat7Configuration( &fmt7ImageSettings,
+					       fmt7PacketInfo.recommendedBytesPerPacket ));
+      // error = cam[i].SetFormat7Configuration( &fmt7ImageSettings,
+      // 					   fmt7PacketInfo.recommendedBytesPerPacket );
+      // if (error != PGRERROR_OK)
+      // {
+      //   PrintError( error );
+      //   return -1;
+      // }
 
       // Start capturing images
-      error = cam[i].StartCapture();
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].StartCapture());
+      // error = cam[i].StartCapture();
+      // if (error != PGRERROR_OK)
+      // {
+      //   PrintError( error );
+      //   return -1;
+      // }
 
       // Retrieve frame rate property
       Property frmRate;
       frmRate.type = FRAME_RATE;
-      error = cam[i].GetProperty( &frmRate );
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].GetProperty( &frmRate ));
+      // error = cam[i].GetProperty( &frmRate );
+      // if (error != PGRERROR_OK)
+      // {
+      //   PrintError( error );
+      //   return -1;
+      // }
 
       printf( "Frame rate is %3.2f fps\n", frmRate.absValue );
     }
@@ -395,3 +401,16 @@ double current_time(void)
   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
 }
 
+void CheckPGR(Error error)
+{
+  if (error != PGRERROR_OK)
+  {
+    PrintError( error );
+    abort();
+    //return -1;
+  }
+  // else
+  // {
+  //   return 0;
+  // }
+}

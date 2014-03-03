@@ -1,1 +1,0 @@
-../../../../texlive-doc-base/texlive/texlive-en/archive/tex-live.bst

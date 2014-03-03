@@ -1,1 +1,0 @@
-kubuntu-debug-installer
