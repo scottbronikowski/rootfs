@@ -1,1 +1,0 @@
-../../../../../../share/pyshared/hgext/inotify/linux/__init__.py

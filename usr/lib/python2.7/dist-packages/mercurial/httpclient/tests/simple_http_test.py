@@ -1,1 +1,0 @@
-../../../../../../share/pyshared/mercurial/httpclient/tests/simple_http_test.py

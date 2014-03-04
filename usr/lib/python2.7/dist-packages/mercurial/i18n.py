@@ -1,1 +1,0 @@
-../../../../share/pyshared/mercurial/i18n.py

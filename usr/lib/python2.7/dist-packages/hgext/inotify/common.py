@@ -1,1 +1,0 @@
-../../../../../share/pyshared/hgext/inotify/common.py

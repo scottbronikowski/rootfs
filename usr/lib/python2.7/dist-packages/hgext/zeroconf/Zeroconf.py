@@ -1,1 +1,0 @@
-../../../../../share/pyshared/hgext/zeroconf/Zeroconf.py

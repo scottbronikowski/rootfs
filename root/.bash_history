@@ -1,9 +1,3 @@
-touch S05keymap.sh
-chmod a+x S05keymap.sh 
-vi S05keymap.sh 
-reboot
-ls /etc/rc5.d
-ps -ef | grep ssh
 date
 ps -ef | grep moni
 ps -ef | grep noi
@@ -1997,4 +1991,10 @@ cd test_code/flycapture/bin
 reboot
 cd test_code/flycapture/bin/
 ./CustomImageEx 
+exit
+emacs &
+ps -ef | grep emacs
+kill -9 1210
+emacs &
+top
 exit
