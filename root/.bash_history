@@ -1,19 +1,3 @@
-ls /etc/rc6.d/
-rm -f /etc/rc6.d/S0*
-rm -f /etc/rc6.d/K0*
-ls /etc/rc6.d/
-git status
-rm -f /etc/rcS.d/S0*
-rm -f /etc/init.d/.depend.*
-ls /etc/rc*
-cd /etc/init.d
-update-rc.d -f keepalive-ping.sh remove
-cd /
-git status
-git add -A
-git commit -m "removed keepalive-ping.sh from startup"
-git push
-cd /etc/rcS.d/
 touch S05keymap.sh
 chmod a+x S05keymap.sh 
 vi S05keymap.sh 
@@ -1998,3 +1982,19 @@ cd test_code/flycapture/bin
 ./CustomImageEx 
 reboot
 emacs &
+date
+hwclock
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+cd ~
+vi notes3march.txt 
+emacs notes3march.txt &
+top
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+reboot
+cd test_code/flycapture/bin/
+./CustomImageEx 
+exit
