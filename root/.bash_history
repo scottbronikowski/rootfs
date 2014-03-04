@@ -1,183 +1,3 @@
-date
-ps -ef | grep moni
-ps -ef | grep noi
-cd /etc/init.d/
-update-rc.d keepalive-ping.sh defaults
-reboot
-cd /etc/init.d/
-update-rc.d -f keepalive-ping.sh remove
-/etc/init.d/keepalive-ping.sh start
-vi /etc/init.d/keepalive-ping.sh 
-ls ke*
-lla ../rcS.d/
-cd ../rcS.d/
-rm S05keymap.sh 
-ln -s ../init.d/keymap.sh S05keymap.sh
-lla
-reboot
-/etc/init.d/keepalive-ping.sh 
-/etc/init.d/keepalive-ping.sh start
-ps -ef | grep ping
-cd /
-git status
-git add -A
-git commit -m 
-git commit -m "commit before demo--keepalive-ping.sh NOT in startup"
-git push
-ps -ef | grep ssh
-ps -ef | grep ping
-reboot
-]
-hald
-halt
-daTE
-date
-emacs &
-date
-/etc/init.d/time-update.sh start
-emacs &
-exit
-date
-ps -ef | grep ssh
-/etc/init.d/keepalive-ping.sh start
-ping google.com
-ps -ef | grep ssh
-kill -9 919
-ps -ef | grep ssh
-/etc/init.d/ssh-tunnel.sh start
-date
-ls /etc/rc*
-ps -ef | grep noi
-update-rc.d /etc/init.d/time-update.sh defaults 26
-update-rc.d time-update.sh defaults 26
-update-rc.d -f time-update.sh remove
-update-rc.d time-update.sh defaults 26
-ls /etc/rc*
-git status
-git add -A
-git commit -m "moved time-update.sh to 26 vice 25 -- may still need to add 'set -e' to scripts"
-git push
-ping google.com
-ifdown wlan0
-ifup wlan0
-ping google.com
-ps -ef | grep moni
-/root/test_code/monitor 
-/etc/init.d/ssh-tunnel.sh start
-ps -ef | grep ssh
-kill 2469
-/etc/init.d/ssh-tunnel.sh
-/etc/init.d/ssh-tunnel.sh start
-ps -ef | grep ssh
-halt
-emacs &
-ls
-halt
-date
-emacs &
-ls /etc/rc*
-ps -ef | grep noi
-ps -ef | grep ntp
-ls
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-ps -ef | grep ping
-ps -ef | grep ntp
-reboot
-date
-/etc/init.d/time-update.sh 
-/etc/init.d/time-update.sh start
-emacs &
-cd /etc/init.d
-update-rc.d -f ssh-tunnel.sh remove
-update-rc.d ssh-tunnel.sh defaults 28
-lsusb
-cd ~/pointgrey/
-ls
-cd flycapture.2.5.3.5_armhf
-ls
-cd src
-ls
-lla
-cd MultipleCameraEx/
-ls
-more ReadMe.txt 
-ls
-more Makefile 
-cd ../../bin
-ls
-lla
-cd C
-ls
-cd ..
-ls
-cd ../src
-ls
-cd FlyCap2_ARM/
-ls
-less FlyCap2.rc
-more Makefile 
-ls
-dpkg -s libdc1394
-dpkg -s libusb
-cd ../../bin
-ls
-./FlyCap2
-lsusb
-ls
-cd /
-git status
-git add -A
-git commit -m "added keepalive-ping.sh to startup as #27 (does not appear to work); moved ssh-tunnel.sh to #28 (vice #24); apt-get install libgtkmm-2.4 libglademm-2.4 libusb-1.0-0 vlc imagej imagemagick inkscape feh; apt-get install dhelp dwww doc-central yelp khelpcenter4 rarian-compat gtkmm-documentation libglibmm-2.4-doc"
-git push
-apt-get install java-virtual-machine default-jre equivs icedtea-plugin sun-java6-fonts fonts-ipafont-gothic fonts-ipafont-mincho ttf-wqy-microhei ttf-wqy-zenhei ttf-indic-fonts-core ttf-telugu-fonts ttf-oriya-fonts ttf-kannada-fonts ttf-bengali-fonts ttf-dejavu-extra icedtea-netx icedtea-6-jre-cacao icedtea-6-jre-jamvm
-apt-get install default-jre equivs icedtea-plugin sun-java6-fonts fonts-ipafont-gothic fonts-ipafont-mincho ttf-wqy-microhei ttf-wqy-zenhei ttf-indic-fonts-core ttf-telugu-fonts ttf-oriya-fonts ttf-kannada-fonts ttf-bengali-fonts ttf-dejavu-extra icedtea-netx icedtea-6-jre-cacao icedtea-6-jre-jamvm
-apt-get install java-virtual-machine default-jre equivs icedtea-plugin fonts-ipafont-gothic fonts-ipafont-mincho ttf-wqy-microhei ttf-wqy-zenhei ttf-indic-fonts-core ttf-telugu-fonts ttf-oriya-fonts ttf-kannada-fonts ttf-bengali-fonts ttf-dejavu-extra icedtea-netx icedtea-6-jre-cacao icedtea-6-jre-jamvm
-git add -A
-git commit -m "apt-get install java-virtual-machine default-jre equivs icedtea-plugin fonts-ipafont-gothic fonts-ipafont-mincho ttf-wqy-microhei ttf-wqy-zenhei ttf-indic-fonts-core ttf-telugu-fonts ttf-oriya-fonts ttf-kannada-fonts ttf-bengali-fonts ttf-dejavu-extra icedtea-netx icedtea-6-jre-cacao icedtea-6-jre-jamvm"
-git push
-apt-get install libdc1394
-apt-get install imagemagick-doc autotrace cups-bsd lpr lprng enscript ffmpeg gnuplot grads hp2xx html2ps libwmf-bin povray radiance sane-utils texlive-base-bin transfig ufraw-batch libmagickcore4-extra netpbm
-apt-get install imagemagick-doc autotrace cups-bsd lpr lprng enscript ffmpeg gnuplot grads hp2xx html2ps libwmf-bin radiance sane-utils texlive-base-bin transfig ufraw-batch libmagickcore4-extra netpbm
-apt-get install imagemagick-doc autotrace lpr lprng enscript ffmpeg gnuplot grads hp2xx html2ps libwmf-bin radiance sane-utils texlive-base-bin transfig ufraw-batch libmagickcore4-extra netpbm
-apt-get install imagemagick-doc autotrace enscript ffmpeg gnuplot grads hp2xx html2ps libwmf-bin radiance sane-utils texlive-base-bin transfig ufraw-batch libmagickcore4-extra netpbm
-git add -A
-git commit -m "apt-get install imagemagick-doc autotrace enscript ffmpeg gnuplot grads hp2xx html2ps libwmf-bin radiance sane-utils texlive-base-bin transfig ufraw-batch libmagickcore4-extra netpbm"
-git push
-apt-get install  dia dia-gnome libsvg-perl libxml-xql-perl pstoedit transfig libgnomevfs2-bin gamin fam gnome-mime-data gsl-ref-psdoc gsl-doc-pdf gsl-doc-info gsl-ref-html libwmf-bin python-lxml python-uniconvertor libgnomevfs2-extra perlmagick libjpeg-progs
-apt-get install  dia dia-gnome libsvg-perl libxml-xql-perl pstoedit transfig libgnomevfs2-bin fam gamin gnome-mime-data gsl-ref-psdoc gsl-doc-pdf gsl-doc-info gsl-ref-html libwmf-bin python-lxml python-uniconvertor libgnomevfs2-extra perlmagick libjpeg-progs
-apt-get install  dia dia-gnome libsvg-perl libxml-xql-perl pstoedit transfig libgnomevfs2-bin fam gnome-mime-data gsl-ref-psdoc gsl-doc-pdf gsl-doc-info gsl-ref-html libwmf-bin python-lxml python-uniconvertor libgnomevfs2-extra perlmagick libjpeg-progs
-git add -A
-git commit -m "apt-get install  dia dia-gnome libsvg-perl libxml-xql-perl pstoedit transfig libgnomevfs2-bin fam gnome-mime-data gsl-ref-psdoc gsl-doc-pdf gsl-doc-info gsl-ref-html libwmf-bin python-lxml python-uniconvertor libgnomevfs2-extra perlmagick libjpeg-progs"
-git push
-ps
-ps -ef
-ps -ef | grep ssh
-date
-ps -ef | grep moni
-ls /etc/rc*
-ps -ef | grep ping
-echo 20000 > /dev/pwm9
-echo 15000 > /dev/pwm9
-ls /etc/rc5.d/
-cat /etc/rc5.d/S21fam 
-ls /etc/rc5.d/
-cd /etc/init.d
-update-rc.d -f gpio-monitor.sh remove
-update-rc.d gpio-monitor.sh defaults 21
-ls /etc/rc5.d/
-update-rc.d -f monitor.sh remove
-update-rc.d monitor.sh defaults 22
-ls /etc/init.d/
-ls /etc/rc5.d/
-ps -ef | grep noi
-update-rc.d -f time-update.sh remove
-update-rc.d time-update.sh defaults 24
-ls /etc/rc5.d/
-update-rc.d -f keepalive-ping.sh remove
-update-rc.d keepalive-ping.sh defaults 24
-update-rc.d -f ssh-tunnel.sh remove
-update-rc.d ssh-tunnel.sh defaults 25
 ls /etc/rc5.d/
 cd /
 git status
@@ -1998,3 +1818,183 @@ kill -9 1210
 emacs &
 top
 exit
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+reboot
+ls
+rm notes3march.txt 
+emacs &
+dpkg-query -l
+dpkg-query -l > query.txt
+ls
+ps -ef | grep gvfs
+lsof
+aptitude why gvfs
+aptitude why gvfs-backends
+aptitude
+cd test_code/flycapture/bin/
+./CustomImageEx
+ls
+feh 12262775-final.ppm 
+feh *.ppm
+rfkill list
+rfkill help
+cd test_code/flycapture/bin
+./CustomImageEx 
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+reboot
+cd test_code/flycapture/src/CustomImageEx/
+emacs &
+cd test_code/flycapture/bin
+./CustomImageEx 
+ls
+rm *.ppm
+./CustomImageEx 
+reboot
+cd test_code/flycapture/src/CustomImageEx/
+emacs &
+ls
+make
+Dmake
+make
+cd test_code/flycapture/bin
+./CustomImageEx 
+reboot
+cd test_code/flycapture/src/CustomImageEx/
+emacs &
+date
+ntpq -p
+date
+hwclock 
+service ntpd restart
+service ntp restart
+date
+ntpq -p
+date
+vi /etc/ntp.conf
+cat /var/lib/ntp/ntp.drift 
+/etc/init.d/ntp stop
+/etc/init.d/ntp start
+date
+ntpq -p
+date
+vi /etc/init.d/ntp
+date
+ntpd -q
+date
+ntpq -p
+ntpdate -s -u pool.ntp.org
+date
+hwclock
+/etc/init.d/time-update.sh start
+hwclock
+ntpd -g
+date
+ntpq -p
+/etc/init.d/ntp stop
+/etc/init.d/ntp start
+/etc/init.d/ntp stop
+ntpd -gq
+ntpd -g
+/etc/init.d/ntp start
+date
+exit
+emacs &
+exit
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+halt
+date
+ntpq -p
+nptd -gq
+ntpd -gq
+date
+vi /etc/init.d/ntp
+halt
+date
+ntpd 
+date
+n
+ping www.purdue.edu
+date
+ntpd -gq
+date
+ntpq -d
+ntpq -p
+date
+ntpd -gq
+date
+reboot
+emacs &
+date
+ntpdate -uvb ntp.ubuntu.com us.pool.ntp.org
+date
+hwclock
+hwclock -w
+hwclock
+ntpdate -uvb ntp.ubuntu.com us.pool.ntp.org
+exit
+cd /etc/init.d/
+ls ../rc2.d/
+locate ntpdate
+exit
+date
+ntpd -gq
+date
+ntpd -v
+man ntpd
+ntpd -help
+date
+ntpd -gq
+ntpd -g
+date
+/etc/init.d/ntp stop
+date
+ntpd -gq
+date
+ntpd -q
+date
+ntpd -gq
+date
+hwclock
+date
+halt
+emacs /etc/init.d/time-update.sh &
+exit
+exit
+date
+hwclock
+halt
+date
+ifdown wlan0
+ifup wlan0
+ping www.purdue.edu
+date
+reboot
+date
+ping www.google.com
+date
+hwclock
+vi /etc/init.d/time-update.sh 
+reboot
+date
+hwclock
+date
+hwclock -w
+date
+hwclock
+halt
+date
+hwclock
+date
+hwclock
+hwclock -w
+hwclock
+hwclock --debug
+vi /etc/init.d/time-update.sh 
+halt

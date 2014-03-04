@@ -18,19 +18,35 @@
 // $Id: CustomImageEx.cpp,v 1.20 2010-02-26 23:24:47 soowei Exp $
 //=============================================================================
 
-#include "stdafx.h"
-#include "stdio.h"
+//#include "stdafx.h"
+//#include "stdio.h"
 
 #include "FlyCapture2.h"
 
+#include <stdio.h>
 #include <sys/time.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <string.h>
 
 using namespace FlyCapture2;
+
+//defines
+//#define OUTPUT_DIR  "/tmp/images/"
+#ifndef TRUE
+#define TRUE (0==0)
+#endif
+#ifndef FALSE
+#define FALSE (0!=0)
+#endif
+
 
 //globals
 const unsigned int front_cam_serial = 12262775;
 const unsigned int pano_cam_serial  = 13282227;
+const Mode k_fmt7Mode = MODE_0;
+const PixelFormat k_fmt7PixFmt = PIXEL_FORMAT_RAW8;
+char OUTPUT_DIR[] = "/tmp/images/";
 
 //prototypes
 void PrintBuildInfo();
@@ -39,13 +55,13 @@ void PrintFormat7Capabilities( Format7Info fmt7Info );
 void PrintError( Error error );
 double current_time(void);
 void CheckPGR(Error error);
+int CheckSaving(char *dir);
+
 
 int main(int /*argc*/, char** /*argv*/)
 {
     PrintBuildInfo();
 
-    const Mode k_fmt7Mode = MODE_0;
-    const PixelFormat k_fmt7PixFmt = PIXEL_FORMAT_RAW8;
     const int k_numImages = 100;
 
     Error error;
@@ -53,14 +69,19 @@ int main(int /*argc*/, char** /*argv*/)
     // Since this application saves images in the current folder
     // we must ensure that we have permission to write to this folder.
     // If we do not have permission, fail right away.
-	FILE* tempFile = fopen("test.txt", "w+");
-	if (tempFile == NULL)
-	{
-		printf("Failed to create file in current folder.  Please check permissions.\n");
-		return -1;
-	}
-	fclose(tempFile);
-	remove("test.txt");
+    if (CheckSaving(OUTPUT_DIR) != 0)
+    {
+      printf("Cannot save to %s, please check permissions\n",OUTPUT_DIR);
+      return -1;
+    }
+	// FILE* tempFile = fopen("test.txt", "w+");
+	// if (tempFile == NULL)
+	// {
+	// 	printf("Failed to create file in current folder.  Please check permissions.\n");
+	// 	return -1;
+	// }
+	// fclose(tempFile);
+	// remove("test.txt");
 
     BusManager busMgr;
     unsigned int numCameras;
@@ -413,4 +434,29 @@ void CheckPGR(Error error)
   // {
   //   return 0;
   // }
+}
+
+int CheckSaving(char *dir)
+{
+  struct stat sb;
+  if (!(stat(dir, &sb) == 0 && S_ISDIR(sb.st_mode)))
+  {
+    if (mkdir(dir, S_IRWXU | S_IRGRP | S_IROTH | S_IXGRP | S_IXOTH) != 0)
+    {
+      printf("Error creating directory %s\n",dir);
+      return -1;
+    }
+  }
+  char tempFileName[512];
+  sprintf(tempFileName, "%stest.txt",dir);
+  FILE* tempFile = fopen(tempFileName, "w+");
+  if (tempFile == NULL)
+  {
+    printf("Failed to create file in %s.  Please check permissions.\n", dir);
+    return -1;
+  }
+  fclose(tempFile);
+  remove(tempFileName);
+  //if we get here, we know the directory exists and we can write to it
+  return 0;
 }

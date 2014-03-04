@@ -17,18 +17,18 @@ start(){
 #    hwclock
 #    ntpdate -uvb ntp.ubuntu.com us.pool.ntp.org
 #    echo "Updated time"
-    sleep 20
+     sleep 15
 #    echo "date : " 
 #    date
-    hwclock -w
-#    echo "hwclock : "
-#    hwclock
+     hwclock -w
+     echo "hwclock : "
+     hwclock
 #    echo "date again: "
 #    date
    }
 
 stop(){
-    echo "No exit conditions for time-update.sh"
+    echo "time-update.sh exited"
 }
 
 case $1 in
