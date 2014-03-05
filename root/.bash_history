@@ -1,119 +1,3 @@
-ls /etc/rc5.d/
-cd /
-git status
-git add -A
-git commit -m "changed startup order: root@vader-rover:/etc/init.d# ls /etc/rc5.d/
-README              S21servo-control.sh  S24keepalive-ping.sh  S50saned
-S20pinmux.sh        S22monitor.sh        S24time-update.sh     S75sudo
-S21fam              S23debian.noip2.sh   S25ssh-tunnel.sh      S99ondemand
-S21gpio-monitor.sh  S23ntp               S50rsync              S99rc.local"
-git push
-reboot
-echo 20000 > /dev/pwm10
-echo 15000 > /dev/pwm10
-ps -ef
-date
-ls /etc/rc5.d/
-ps -ef | grep noi
-ps -ef | grep ntp
-ps -ef | grep ssh
-cd /var/log
-ls
-cat boot.log
-ls /etc/rc*
-cat /etc/rc5.d/S22monitor.sh 
-runlevel
-ls /etc/rc2.d/
-ls /etc/rc*
-/etc/init.d/ssh-tunnel.sh start
-ifdown wlan0
-ifup wlan0
-/etc/init.d/ssh-tunnel.sh start
-emacs &
-ps -ef | grep noi
-cd /etc/init.d/
-update-rc.d -f monitor.sh remove
-update-rc.d monitor.sh defaults
-update-rc.d -f monitor.sh remove
-update-rc.d monitor.sh defaults 99
-cd /
-git add -A
-git commit -m "moved monitor.sh to #99"
-git push
-reboot
-cd /etc/default
-ls
-more saned 
-vi saned
-reboot
-vi /etc/init.d/keepalive-ping.sh 
-ls /etc/rc*
-ls
-apt-get install dlocate upower virtuoso-minimal kubuntu-debug-installer icoutils libcanberra-pulse libcanberra-gstreamer libvisual-0.4-plugins
-it-java libdom4j-java-doc ttf-dustin libjaxme-java-doc libjaxp1.3-java-gcj libjdom1-java-doc liblog4j1.2-java-doc libgnumail-java libmx4j-java libscalar-number-perl libsaxon-java-doc libsaxonb-java-doc sidplay-base xsidplay libxalan2-java-doc libxsltc-java libxerces2-java-doc libxerces2-java-gcj libxml-commons-resolver1.1-java-doc libxom-java-doc manpages-dev w3m-img menu w3m-el migemo texlive-fonts-recommended pdf2djvu debian-faq rhino libcanberra-gtk-module libpackage-stash-xs-perl libxml-sax-expat-perl texlive-luatex lmodern
-n
-apt-get install dlocate upower virtuoso-minimal kubuntu-debug-installer icoutils libcanberra-pulse libcanberra-gstreamer libvisual-0.4-plugins gstreamer0.10-plugins-good gnome-user-guide videolan-doc libmtp-runtime vlc-plugin-notify vlc-plugin-pulse dh-make fastjar gcj-4.6-jdk libgcj12-awt gcj-jdk libgcj12-dbg libmail-box-perl x-ttcidfont-conf gcj-4.6-jre-lib libmail-sendmail-perl lpr gnuplot-doc weblint-perl texlive-base xhtml2ps libgd-tools geotiff-bin gdal-bin libgeotiff-epsg gphoto2 gtkam libhdf4-doc libhdf4-dev hdf4-tools proj-bin hpoj hplip libsane-extras libgnomeprintui2.2-0 radiance-doc unpaper tclreadline xfig ufraw groff ttf-liberation libgphoto2-l10n radiance-materials gv ps-viewer libbonobo2-bin desktop-base python-imaging-doc python-imaging-dbg python-lxml-dbg python-egenix-mxtexttools python-reportlab-doc python-uniconvertor-dbg gsfonts-x11 gvfs python-reportlab-accel python-renderpm djvulibre-desktop psgml jadetex docbook-dsssl-doc dlocate grep-dctrl tasksel fop-doc libservlet2.5-java gvfs-backends libavalon-framework-java-doc libbackport-util-concurrent-java-doc bsh libcommons-io-java-doc libcommons-logging-java-doc libexcalibur-logkit-java libdom4j-java-doc ttf-dustin libjaxme-java-doc libjaxp1.3-java-gcj libjdom1-java-doc liblog4j1.2-java-doc libgnumail-java libmx4j-java libscalar-number-perl libsaxon-java-doc libsaxonb-java-doc sidplay-base xsidplay libxalan2-java-doc libxsltc-java libxerces2-java-doc libxerces2-java-gcj libxml-commons-resolver1.1-java-doc libxom-java-doc manpages-dev w3m-img menu w3m-el migemo texlive-fonts-recommended pdf2djvu debian-faq rhino libcanberra-gtk-module libpackage-stash-xs-perl libxml-sax-expat-perl texlive-luatex lmodern
-apt-get install dlocate upower virtuoso-minimal kubuntu-debug-installer icoutils libcanberra-pulse libcanberra-gstreamer libvisual-0.4-plugins gstreamer0.10-plugins-good gnome-user-guide videolan-doc libmtp-runtime vlc-plugin-notify vlc-plugin-pulse dh-make fastjar gcj-4.6-jdk libgcj12-awt gcj-jdk libgcj12-dbg libmail-box-perl x-ttcidfont-conf gcj-4.6-jre-lib libmail-sendmail-perl lpr gnuplot-doc weblint-perl texlive-base xhtml2ps libgd-tools geotiff-bin gdal-bin libgeotiff-epsg gphoto2 gtkam libhdf4-doc libhdf4-dev hdf4-tools proj-bin hplip libsane-extras libgnomeprintui2.2-0 radiance-doc unpaper tclreadline xfig ufraw groff ttf-liberation libgphoto2-l10n radiance-materials gv libbonobo2-bin desktop-base python-imaging-doc python-imaging-dbg python-lxml-dbg python-egenix-mxtexttools python-reportlab-doc python-uniconvertor-dbg gsfonts-x11 gvfs python-reportlab-accel python-renderpm djvulibre-desktop psgml jadetex docbook-dsssl-doc dlocate grep-dctrl tasksel fop-doc libservlet2.5-java gvfs-backends libavalon-framework-java-doc libbackport-util-concurrent-java-doc bsh libcommons-io-java-doc libcommons-logging-java-doc libexcalibur-logkit-java libdom4j-java-doc ttf-dustin libjaxme-java-doc libjaxp1.3-java-gcj libjdom1-java-doc liblog4j1.2-java-doc libgnumail-java libmx4j-java libscalar-number-perl libsaxon-java-doc libsaxonb-java-doc sidplay-base xsidplay libxalan2-java-doc libxsltc-java libxerces2-java-doc libxerces2-java-gcj libxml-commons-resolver1.1-java-doc libxom-java-doc manpages-dev w3m-img menu w3m-el migemo texlive-fonts-recommended pdf2djvu debian-faq rhino libcanberra-gtk-module libpackage-stash-xs-perl libxml-sax-expat-perl texlive-luatex lmodern
-git status
-git add -A
-git commit -m " apt-get install dlocate upower virtuoso-minimal kubuntu-debug-installer icoutils libcanberra-pulse libcanberra-gstreamer libvisual-0.4-plugins gstreamer0.10-plugins-good gnome-user-guide videolan-doc libmtp-runtime vlc-plugin-notify vlc-plugin-pulse dh-make fastjar gcj-4.6-jdk libgcj12-awt gcj-jdk libgcj12-dbg libmail-box-perl x-ttcidfont-conf gcj-4.6-jre-lib libmail-sendmail-perl lpr gnuplot-doc weblint-perl texlive-base xhtml2ps libgd-tools geotiff-bin gdal-bin libgeotiff-epsg gphoto2 gtkam libhdf4-doc libhdf4-dev hdf4-tools proj-bin hplip libsane-extras libgnomeprintui2.2-0 radiance-doc unpaper tclreadline xfig ufraw groff ttf-liberation libgphoto2-l10n radiance-materials gv libbonobo2-bin desktop-base python-imaging-doc python-imaging-dbg python-lxml-dbg python-egenix-mxtexttools python-reportlab-doc python-uniconvertor-dbg gsfonts-x11 gvfs python-reportlab-accel python-renderpm djvulibre-desktop psgml jadetex docbook-dsssl-doc dlocate grep-dctrl tasksel fop-doc libservlet2.5-java gvfs-backends libavalon-framework-java-doc libbackport-util-concurrent-java-doc bsh libcommons-io-java-doc libcommons-logging-java-doc libexcalibur-logkit-java libdom4j-java-doc ttf-dustin libjaxme-java-doc libjaxp1.3-java-gcj libjdom1-java-doc liblog4j1.2-java-doc libgnumail-java libmx4j-java libscalar-number-perl libsaxon-java-doc libsaxonb-java-doc sidplay-base xsidplay libxalan2-java-doc libxsltc-java libxerces2-java-doc libxerces2-java-gcj libxml-commons-resolver1.1-java-doc libxom-java-doc manpages-dev w3m-img menu w3m-el migemo texlive-fonts-recommended pdf2djvu debian-faq rhino libcanberra-gtk-module libpackage-stash-xs-perl libxml-sax-expat-perl texlive-luatex lmodern
-"
-git status
-cd /
-git add -A
-git commit -m "Second attempt at commit: apt-get install dlocate upower virtuoso-minimal kubuntu-debug-installer icoutils libcanberra-pulse libcanberra-gstreamer libvisual-0.4-plugins gstreamer0.10-plugins-good gnome-user-guide videolan-doc libmtp-runtime vlc-plugin-notify vlc-plugin-pulse dh-make fastjar gcj-4.6-jdk libgcj12-awt gcj-jdk libgcj12-dbg libmail-box-perl x-ttcidfont-conf gcj-4.6-jre-lib libmail-sendmail-perl lpr gnuplot-doc weblint-perl texlive-base xhtml2ps libgd-tools geotiff-bin gdal-bin libgeotiff-epsg gphoto2 gtkam libhdf4-doc libhdf4-dev hdf4-tools proj-bin hplip libsane-extras libgnomeprintui2.2-0 radiance-doc unpaper tclreadline xfig ufraw groff ttf-liberation libgphoto2-l10n radiance-materials gv libbonobo2-bin desktop-base python-imaging-doc python-imaging-dbg python-lxml-dbg python-egenix-mxtexttools python-reportlab-doc python-uniconvertor-dbg gsfonts-x11 gvfs python-reportlab-accel python-renderpm djvulibre-desktop psgml jadetex docbook-dsssl-doc dlocate grep-dctrl tasksel fop-doc libservlet2.5-java gvfs-backends libavalon-framework-java-doc libbackport-util-concurrent-java-doc bsh libcommons-io-java-doc libcommons-logging-java-doc libexcalibur-logkit-java libdom4j-java-doc ttf-dustin libjaxme-java-doc libjaxp1.3-java-gcj libjdom1-java-doc liblog4j1.2-java-doc libgnumail-java libmx4j-java libscalar-number-perl libsaxon-java-doc libsaxonb-java-doc sidplay-base xsidplay libxalan2-java-doc libxsltc-java libxerces2-java-doc libxerces2-java-gcj libxml-commons-resolver1.1-java-doc libxom-java-doc manpages-dev w3m-img menu w3m-el migemo texlive-fonts-recommended pdf2djvu debian-faq rhino libcanberra-gtk-module libpackage-stash-xs-perl libxml-sax-expat-perl texlive-luatex lmodern
-"
-git push
-emacs &
-vi pointgrey/flycapture.2.5.3.5_armhf/include/C/FlyCapture2_C.h
-cat FlyCapture2_C.h
-cat pointgrey/flycapture.2.5.3.5_armhf/include/C/FlyCapture2_C.h 
-vi pointgrey/flycapture.2.5.3.5_armhf/include/C/FlyCapture2_C.h
-ls
-cd pointgrey/
-ls
-rm -rf flycapture.2.6.3.2_armhf/
-ls
-tar xvfz flycapture.2.6.3.2_armhf.tar.gz 
-cd flycapture.2.6.3.2_armhf/lib
-cp libflycapture* /usr/lib
-ls /usr/lib/libflycap*
-lla /usr/lib/libflycap*
-rm /usr/lib/libflycapture*
-lla /usr/lib/libflycap*
-cp libflycapture* /usr/lib
-lla /usr/lib/libflycap*
-lla
-rm /usr/lib/libflycapture*
-cp -av libflycapture* /usr/lib
-lla
-lla /usr/lib/libflycap*
-cd ~/pointgrey/flycapture.2.6.3.2_armhf
-ls
-./flycap2-conf 
-cd src/FlyCapture2Test
-ls
-make
-cd ..
-ls
-cd ../bin
-./FlyCapture2Test 
-lsusb
-top
-/etc/init.d/monitor.sh stop
-top
-htop
-dpkg -s top
-top
-ls
-rm *.pgm
-./MultipleCameraEx 
-cd ../src
-ls
-cd FlyCap2_ARM/
-ls
-cd ..
-ls * Makefile
 cd FlyCap2_ARM/
 cat Makefile 
 make
@@ -1998,3 +1882,119 @@ hwclock
 hwclock --debug
 vi /etc/init.d/time-update.sh 
 halt
+exit
+top
+cd test_code/flycapture/bin
+./CustomImageEx 
+ls /tmp/images
+lla
+date
+hwclock
+date
+hwclock
+date
+cd /
+git add -A
+git commit -m "tweaks to bootup time sync in /etc/init.d/ntp and time-update.sh--looks like it should update 'date' and 'hwclock' correctly now"
+git push
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ifdown wlan0
+ifup wlan0
+ps -ef | grep ping
+/etc/init.d/keepalive-ping.sh stop
+/etc/init.d/keepalive-ping.sh start
+ps -ef | grep ping
+kill -9 911
+ps -ef | grep ping
+/etc/init.d/ssh-tunnel.sh start
+cd test_code/flycapture/src/CustomImageEx/
+emacs &
+cd test_code/flycapture/bin
+./CustomImageEx 
+reboot
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+cd test_code/flycapture/src/CustomImageEx/
+emacs &
+cd
+reboot
+cd test_code/flycapture/bin
+./Cus
+./CustomImageEx 
+reboot
+date
+cd test_code/flycapture/src/CustomImageEx/
+cd test_code/flycapture/bin
+./CustomImageEx 
+emacs CustomImageEx.cpp &
+reboot
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+make
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+cd test_code/flycapture/bin
+./CustomImageEx 
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+reboot
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+make
+cd test_code/flycapture/bin
+./CustomImageEx 
+reboot
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+make
+ls
+chmod a+x bigtest.sh 
+ls
+./bigtest
+./bigtest.sh 
+make
+./bigtest.sh 
+make
+./bigtest.sh 
+make
+./bigtest.sh 
+make
+./bigtest.sh 
+make
+./bigtest.sh 
+make
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+make
+./bigtest.sh 
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+reboot
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+reboot
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+lsusb
+reboot
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+reboot
+exit
