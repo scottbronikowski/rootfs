@@ -18,18 +18,44 @@
 // $Id: CustomImageEx.cpp,v 1.20 2010-02-26 23:24:47 soowei Exp $
 //=============================================================================
 
-#include "stdafx.h"
-#include "stdio.h"
+//#include "stdafx.h"
+//#include "stdio.h"
 
 #include "FlyCapture2.h"
 
+#include <stdio.h>
 #include <sys/time.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <string.h>
 
 using namespace FlyCapture2;
 
+//defines
+#ifndef TRUE
+#define TRUE (0==0)
+#endif
+#ifndef FALSE
+#define FALSE (0!=0)
+#endif
+
+
 //globals
-const unsigned int front_cam_serial = 12262775;
-const unsigned int pano_cam_serial  = 13282227;
+const unsigned int k_FrontCamSerial = 12262775;
+const unsigned int k_PanoCamSerial = 13282227;
+const Mode k_fmt7Mode = MODE_0;
+const PixelFormat k_fmt7PixFmt = PIXEL_FORMAT_RAW8;
+const char k_OutputDir[] = "/tmp/images/";
+const float k_FrameRate = 8.5;
+const unsigned int k_FrontCamWidth = 640;//800;//1200;//fmt7Info.maxWidth;
+//const unsigned int k_FrontCamWidth = 960;//1248;//1072;//fmt7Info.maxWidth;
+const unsigned int k_FrontCamHeight = 480;//600;//720;//820;//fmt7Info.maxHeight;
+const unsigned int k_PanoCamWidth = 1240;//fmt7Info.maxWidth;
+const unsigned int k_PanoCamHeight = 934;//fmt7Info.maxHeight;
+const unsigned int k_PanoCamOffsetX = 34;
+const unsigned int k_PanoCamOffsetY = 14;
+
+
 
 //prototypes
 void PrintBuildInfo();
@@ -37,40 +63,22 @@ void PrintCameraInfo( CameraInfo* pCamInfo );
 void PrintFormat7Capabilities( Format7Info fmt7Info );
 void PrintError( Error error );
 double current_time(void);
+void CheckPGR(Error error);
+int CheckSaving(const char *dir);
+
 
 int main(int /*argc*/, char** /*argv*/)
 {
     PrintBuildInfo();
 
-    const Mode k_fmt7Mode = MODE_0;
-    const PixelFormat k_fmt7PixFmt = PIXEL_FORMAT_RAW8;
     const int k_numImages = 100;
 
-    Error error;
-
-    // Since this application saves images in the current folder
-    // we must ensure that we have permission to write to this folder.
-    // If we do not have permission, fail right away.
-	FILE* tempFile = fopen("test.txt", "w+");
-	if (tempFile == NULL)
-	{
-		printf("Failed to create file in current folder.  Please check permissions.\n");
-		return -1;
-	}
-	fclose(tempFile);
-	remove("test.txt");
-
+    Error error; 
     BusManager busMgr;
     unsigned int numCameras;
-    error = busMgr.GetNumOfCameras(&numCameras);
-    if (error != PGRERROR_OK)
-    {
-        PrintError( error );
-        return -1;
-    }
-
+    CheckPGR(busMgr.GetNumOfCameras(&numCameras));
+ 
     printf( "Number of cameras detected: %u\n", numCameras );
-
     if ( numCameras < 1 )
     {
         printf( "Insufficient number of cameras... exiting\n" );
@@ -82,41 +90,21 @@ int main(int /*argc*/, char** /*argv*/)
     CameraInfo camInfo[numCameras];
     for (unsigned int i = 0; i < numCameras; i++) //setup/init loop
     {
-      error = busMgr.GetCameraFromIndex(i, &guid[i]);
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
-      
+      CheckPGR(busMgr.GetCameraFromIndex(i, &guid[i]));
+     
       // Connect to a camera
-      error = cam[i].Connect(&guid[i]);
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].Connect(&guid[i]));
 
       // Get the camera information
-      error = cam[i].GetCameraInfo(&camInfo[i]);
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].GetCameraInfo(&camInfo[i]));
       
-      PrintCameraInfo(&camInfo[i]);        
+      //PrintCameraInfo(&camInfo[i]);        
 
       // Query for available Format 7 modes
       Format7Info fmt7Info;
       bool supported;
       fmt7Info.mode = k_fmt7Mode;
-      error = cam[i].GetFormat7Info( &fmt7Info, &supported );
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].GetFormat7Info( &fmt7Info, &supported ));
       
       PrintFormat7Capabilities( fmt7Info );
 
@@ -130,19 +118,19 @@ int main(int /*argc*/, char** /*argv*/)
       Format7ImageSettings fmt7ImageSettings;
       fmt7ImageSettings.mode = k_fmt7Mode;
       fmt7ImageSettings.pixelFormat = k_fmt7PixFmt;
-      if (camInfo[i].serialNumber == front_cam_serial)
+      if (camInfo[i].serialNumber == k_FrontCamSerial)
       {
-	fmt7ImageSettings.offsetX = 0;
-	fmt7ImageSettings.offsetY = 0;
-	fmt7ImageSettings.width = 1000;//1200;//fmt7Info.maxWidth;
-	fmt7ImageSettings.height = 750;//820;//fmt7Info.maxHeight;
+	fmt7ImageSettings.width = k_FrontCamWidth;
+	fmt7ImageSettings.height = k_FrontCamHeight;
+	fmt7ImageSettings.offsetX = (fmt7Info.maxWidth - fmt7ImageSettings.width) / 2;
+	fmt7ImageSettings.offsetY = (fmt7Info.maxHeight - fmt7ImageSettings.height) / 2;
       }
-      else if (camInfo[i].serialNumber == pano_cam_serial)
+      else if (camInfo[i].serialNumber == k_PanoCamSerial)
       {
-	fmt7ImageSettings.offsetX = 34;
-	fmt7ImageSettings.offsetY = 14;
-	fmt7ImageSettings.width = 1240;//fmt7Info.maxWidth;
-	fmt7ImageSettings.height = 934;//fmt7Info.maxHeight;
+	fmt7ImageSettings.width = k_PanoCamWidth;
+	fmt7ImageSettings.height = k_PanoCamHeight;
+	fmt7ImageSettings.offsetX = k_PanoCamOffsetX;
+	fmt7ImageSettings.offsetY = k_PanoCamOffsetY;
       }
       else
       {
@@ -156,53 +144,60 @@ int main(int /*argc*/, char** /*argv*/)
       Format7PacketInfo fmt7PacketInfo;
 
       // Validate the settings to make sure that they are valid
-      error = cam[i].ValidateFormat7Settings( &fmt7ImageSettings,
-					      &valid,
-					      &fmt7PacketInfo );
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].ValidateFormat7Settings( &fmt7ImageSettings,
+					       &valid,
+					       &fmt7PacketInfo ));
       
       if ( !valid )
-      {
-        // Settings are not valid
+      { // Settings are not valid
 	printf("Format7 settings are not valid\n");
         return -1;
       }
       
       // Set the settings to the camera
-      error = cam[i].SetFormat7Configuration( &fmt7ImageSettings,
-					   fmt7PacketInfo.recommendedBytesPerPacket );
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].SetFormat7Configuration( &fmt7ImageSettings,
+					       fmt7PacketInfo.recommendedBytesPerPacket ));
+      
+
+      // Retrieve frame rate property
+      Property frmRate2;
+      frmRate2.type = FRAME_RATE;
+      CheckPGR(cam[i].GetProperty( &frmRate2 ));
+      //printf( "Frame rate FIRST is %3.2f fps\n", frmRate2.absValue );
+
+      //set frame rate to global constant k_FrameRate
+      frmRate2.autoManualMode = false;
+      frmRate2.absControl = true;
+      frmRate2.absValue = k_FrameRate;
+      //printf("frmRate2.absValue = %3.2f\n",frmRate2.absValue);
+      CheckPGR(cam[i].SetProperty( &frmRate2));
+
+      //check frame rate after setting
+      // CheckPGR(cam[i].GetProperty( &frmRate2 ));
+      // printf( "Frame rate SECOND is %3.2f fps\n", frmRate2.absValue );
+      
 
       // Start capturing images
-      error = cam[i].StartCapture();
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
-
+      CheckPGR(cam[i].StartCapture());
+  
       // Retrieve frame rate property
       Property frmRate;
       frmRate.type = FRAME_RATE;
-      error = cam[i].GetProperty( &frmRate );
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
 
-      printf( "Frame rate is %3.2f fps\n", frmRate.absValue );
+      // //set frame rate to automatic mode
+      // frmRate.autoManualMode = true;
+      // frmRate.absControl = false;
+      // CheckPGR(cam[i].SetProperty(&frmRate));
+
+      CheckPGR(cam[i].GetProperty( &frmRate ));
+      printf("Frame rate for Camera %u is %3.2f fps\n", 
+	     camInfo[i].serialNumber,
+	     frmRate.absValue);
+
     }
 
     printf( "Grabbing %d images\n", k_numImages );
+
 
     Image rawImage;    
     PixelFormat pixFormat;
@@ -215,43 +210,17 @@ int main(int /*argc*/, char** /*argv*/)
       for (unsigned int i = 0; i < numCameras; i++)
       {
         // Retrieve an image
-        error = cam[i].RetrieveBuffer( &rawImage );
-        if (error != PGRERROR_OK)
-        {
-	  PrintError( error );
-	  continue;
-        }
-        //printf( "." );
+    	CheckPGR(cam[i].RetrieveBuffer( &rawImage ));
 
         // Get the raw image dimensions
         rawImage.GetDimensions( &rows, &cols, &stride, &pixFormat );
 
         // Convert the raw image
-        error = rawImage.Convert( PIXEL_FORMAT_BGRU, &convertedImage );
-        if (error != PGRERROR_OK)
-        {
-            PrintError( error );
-            return -1;
-        }
+    	CheckPGR(rawImage.Convert( PIXEL_FORMAT_BGRU, &convertedImage ));
 
-	printf("Captured %u-%d\n",camInfo[i].serialNumber, imageCount);
+    	if (imageCount % 10 == 0)
+    	  printf("Captured %u-%d\n",camInfo[i].serialNumber, imageCount);
 
-	// if (imageCount == (k_numImages - 1))
-	// {
-	//   // Create a unique filename
-	//   char filename[512];
-	//   sprintf( filename, "%u-%d.ppm", camInfo[i].serialNumber, imageCount );
-
-	//   // Save the image. If a file format is not passed in, then the file
-	//   // extension is parsed to attempt to determine the file format.
-	//   error = convertedImage.Save( filename );
-	//   if (error != PGRERROR_OK)
-	//   {
-        //     PrintError( error );
-        //     return -1;
-	//   }
-	//   printf("Saved %s\n",filename);
-	// }
       }
 
     }
@@ -261,44 +230,37 @@ int main(int /*argc*/, char** /*argv*/)
     double images_per_sec = (double)k_numImages / elapsed;
     printf( "\nFinished grabbing images\n" );
     printf("%d images per camera taken in %f seconds (%f images/sec/cam)\n",
-	   k_numImages, elapsed, images_per_sec);
+    	   k_numImages, elapsed, images_per_sec);
 
     
     //grab and save one last image from each camera, after time has been measured
+    // Since this section of code saves images in the k_OutputDir folder,
+    // must ensure that this folder exists and we have permissions to write to it
+   
+    if (CheckSaving(k_OutputDir) != 0)
+    {
+      printf("Cannot save to %s, please check permissions\n",k_OutputDir);
+      return -1;
+    }
+
     for (unsigned int i = 0; i < numCameras; i++)
     {
       // Retrieve an image
-      error = cam[i].RetrieveBuffer( &rawImage );
-      if (error != PGRERROR_OK)
-      {
-	PrintError( error );
-	continue;
-      }
-      //printf( "." );
+      CheckPGR(cam[i].RetrieveBuffer( &rawImage ));
       
       // Get the raw image dimensions
       rawImage.GetDimensions( &rows, &cols, &stride, &pixFormat );
       
       // Convert the raw image
-      error = rawImage.Convert( PIXEL_FORMAT_BGRU, &convertedImage );
-      if (error != PGRERROR_OK)
-      {
-	PrintError( error );
-	return -1;
-      }
+      CheckPGR(rawImage.Convert( PIXEL_FORMAT_BGRU, &convertedImage ));
       
       // Create a unique filename
       char filename[512];
-      sprintf( filename, "%u-final.ppm", camInfo[i].serialNumber);
+      sprintf( filename, "%s%u-final.ppm", k_OutputDir, camInfo[i].serialNumber);
       
       // Save the image. If a file format is not passed in, then the file
       // extension is parsed to attempt to determine the file format.
-      error = convertedImage.Save( filename );
-      if (error != PGRERROR_OK)
-      {
-	PrintError( error );
-	return -1;
-      }
+      CheckPGR(convertedImage.Save( filename ));
       printf("Saved %s\n",filename);
     }
       
@@ -306,20 +268,10 @@ int main(int /*argc*/, char** /*argv*/)
     for (unsigned int i = 0; i < numCameras; i++)
     {
       // Stop capturing images
-      error = cam[i].StopCapture();
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }      
+      CheckPGR(cam[i].StopCapture());
 
       // Disconnect the camera
-      error = cam[i].Disconnect();
-      if (error != PGRERROR_OK)
-      {
-        PrintError( error );
-        return -1;
-      }
+      CheckPGR(cam[i].Disconnect());
     }
       
     printf( "Done!\n" );
@@ -381,6 +333,14 @@ void PrintFormat7Capabilities( Format7Info fmt7Info )
         fmt7Info.offsetHStepSize,
         fmt7Info.offsetVStepSize,
         fmt7Info.pixelFormatBitField );
+    printf("Mode: %d\n"
+	   "Packet Size: %u\n"
+	   "Min Packet Size: %u\n"
+	   "Max Packet Size: %u\n",
+	   fmt7Info.mode,
+	   fmt7Info.packetSize,
+	   fmt7Info.minPacketSize,
+	   fmt7Info.maxPacketSize);
 }
 
 void PrintError( Error error )
@@ -395,3 +355,41 @@ double current_time(void)
   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
 }
 
+void CheckPGR(Error error)
+{
+  if (error != PGRERROR_OK)
+  {
+    PrintError( error );
+    abort();
+    //return -1;
+  }
+  // else
+  // {
+  //   return 0;
+  // }
+}
+
+int CheckSaving(const char *dir)
+{
+  struct stat sb;
+  if (!(stat(dir, &sb) == 0 && S_ISDIR(sb.st_mode)))
+  {
+    if (mkdir(dir, S_IRWXU | S_IRGRP | S_IROTH | S_IXGRP | S_IXOTH) != 0)
+    {
+      printf("Error creating directory %s\n",dir);
+      return -1;
+    }
+  }
+  char tempFileName[512];
+  sprintf(tempFileName, "%stest.txt",dir);
+  FILE* tempFile = fopen(tempFileName, "w+");
+  if (tempFile == NULL)
+  {
+    printf("Failed to create file in %s.  Please check permissions.\n", dir);
+    return -1;
+  }
+  fclose(tempFile);
+  remove(tempFileName);
+  //if we get here, we know the directory exists and we can write to it
+  return 0;
+}

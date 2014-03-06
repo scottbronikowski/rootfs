@@ -1,66 +1,3 @@
-cd FlyCap2_ARM/
-cat Makefile 
-make
-cd ../../bin
-ls
-./FlyCap2
-reboot
-emacs &
-top
-cd pointgrey/
-ls
-cd flycapture.2.6.3.2_armhf
-cd bin
-ls
-./FlyCap2
-lsusb
-ls
-./MultipleCameraEx 
-ls
-./FlyCapture2Test 
-lsusb
-ls
-feh
-./FlyCap2 
-ls
-lsusb
-ps -ef | grep moni
-lsusb
-dpkg-query -l
-dpkg-query -l 'cups'
-aptitude purge cups
-dpkg-query -l 'lp'
-dpkg-query -l 'lpr'
-aptitude purge lpr
-cd /
-git status
-git add -A
-git commit -m "aptitude purge cups; aptitude purge lpr"
-git push
-reboot
-top
-/etc/init.d/monitor.sh stop
-vi /etc/init.d/monitor.sh 
-reboot
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-./FlyCap2
-lsusb
-./FlyCap2
-lsusb
-./FlyCap2
-lsusb
-/etc/init.d/ssh-tunnel.sh start
-reboot
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-./FlyCap2
-lsusb
-./FlyCap2
-lsusb
-/etc/init.d/monitor.sh stop
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
 /etc/init.d/ssh-tunnel.sh stop
 /etc/init.d/ssh-tunnel.sh start
 lsusb
@@ -1998,3 +1935,66 @@ cd test_code/flycapture/src/CustomImageEx/
 ./bigtest.sh 
 reboot
 exit
+cd /
+git status
+git add -A
+git commit -m "more work on CustomImageEx.cpp--set cameras to synchronized frame rate--still having problem of cameras dying after a random number of captures"
+git push
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ifdown wlan0
+ifup wlan0
+ps -ef | grep ntp
+ps -ef | grep ping
+/etc/init.d/keepalive-ping.sh start
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ps -ef | grep ping
+/etc/init.d/keepalive-ping.sh stop
+ps -ef | grep ping
+kill -9 1102
+ps -ef | grep ping
+ps -ef | grep ssh
+ifdown wlan0
+ifup wlan0
+/etc/init.d/keepalive-ping.sh start
+ps -ef | grep ping
+/etc/init.d/ssh-tunnel.sh start
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+make
+./bigtest.sh 
+make
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+top
+reboot
+halt
+exit
+date
+hwclock
+hwclock -w
+hwclock
+halt
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+cd test_code/flycapture/bin
+./CustomImageEx 
+exit
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+make
+./bigtest.sh 
+lsusub
+lsusb
+exit
+halt
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+make
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
