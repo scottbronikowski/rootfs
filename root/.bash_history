@@ -1,109 +1,3 @@
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-lsusb
-reboot
-pointgrey/flycapture.2.6.3.2_armhf/bin/FlyCap2
-cd pointgrey/flycapture.2.6.3.2_armhf
-cd bin
-ls
-lla
-./FlyCap2
-./FlyCap2 &
-lsusb
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-./FlyCap2
-lsusb
-ps -ef | grep Fly
-lsusb
-/etc/init.d/monitor.sh stop
-lsusb
-ps -ef | grep ssh
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-ps -ef | grep ssh
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-lsusb
-modprobe
-modprobe g_ether
-lsmod
-lsusb
-reboot
-lsusb
-/etc/init.d/monitor.sh stop
-lsusb
-reboot
-/etc/init.d/monitor.sh stop
-lsusb
-echo 15000 > /dev/pwm10
-halt
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-./FlyCap2
-./FlyCap2 &
-echo 10000 > /dev/pwm10
-./FlyCap2 &
-lsusb
-/etc/init.d/monitor.sh stop
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-./FlyCap2
-lsusb
-./FlyCap2
-lsusb
-halt
-top
-date
-reboot
-date
-xit
-date
-/etc/init.d/time-update.sh 
-/etc/init.d/time-update.sh start
-date
-hatl
-halt
-ls /etc/rc2.d/
-cat /etc/rc2.d/S23ntp 
-cd /etc/init.d/
-update-rc.d -f ssh-tunnel.sh remove
-update-rc.d ssh-tunnel.sh defaults 26
-update-rc.d -f time-update.sh remove
-update-rc.d time-update.sh defaults 25
-ls ../rc2.d/
-emacs &
-cd /
-git status
-git add -A
-/etc/init.d/monitor.sh stop
-git commit -m "added hwclock -w call to time-update.sh, tweaked init order"
-gs
-gs -h
-git push
-git status
-git att -A
-git add -A
-git commit -m "aptitude purge ghostscript"
-git push
-ls
-lla tmp
-mkdir /tmp/images
-lla tmp
-ls 
-ls /tmp/images/
-feh /tmp/images/*
-lla /tmp/images
-git status
-git add -A
-date
-ntpd -gq
-date
-cat /etc/init.d/time-update.sh 
-ntpdate -s -u us.pool.ntp.org
-date
-sys2hw
-hwclock
-hwclock -w
 hwclock
 date
 /etc/init.d/ssh-tunnel.sh stop
@@ -1998,3 +1892,109 @@ reboot
 cd test_code/flycapture/bin
 ./CustomImageEx 
 lsusb
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+make
+top
+exit
+cd test_code/flycapture/bin
+./CustomImageEx 
+top
+./CustomImageEx 
+top
+exit
+date
+ifdown wlan0
+ifup wlan0
+/
+/etc/init.d/ntp
+/etc/init.d/ntp start
+date
+/etc/init.d/keepalive-ping.sh start
+/etc/init.d/ssh-tunnel.sh start
+reboot
+[]
+top
+hwclock
+halt
+cd test_code/flycapture/bin
+./CustomImageEx 
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+top
+emacs CustomImageEx.cpp &
+top
+reboot
+exitexit
+exit
+ATZ
+AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
+ls
+top
+ls
+top
+/etc/init.d/monitor.sh stop
+top
+reboot
+/etc/init.d/monitor.sh stop
+top
+ps -ef | grep ssh
+to
+top
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+cd test_code/flycapture/bin
+top
+apt-get install htop
+apt-get autoremove
+htop
+reboot
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+ls
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+cd test_code/flycapture/bin
+./CustomImageEx 
+rm /tmp/images/*
+./CustomImageEx 
+lsusb
+htop
+reboot
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+cd test_code/flycapture/src/testing
+ls
+cd ..
+cd support/
+ls
+htop
+reboot
+cd test_code/flycapture/src/bin
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+htop
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+cd test_code/flycapture/src/CustomImageEx/
+emacs openfiles.txt &
+htop
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+make
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+ls
+emacs openfiles.txt &
+kill -9 1157
+exit

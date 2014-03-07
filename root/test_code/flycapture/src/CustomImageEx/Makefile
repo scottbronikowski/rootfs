@@ -3,7 +3,7 @@
 CC = g++
 OUTPUTNAME = CustomImageEx${D}
 INCLUDE = -I../../include -I/usr/include/flycapture
-LIBS = -L../../lib -lflycapture${D}
+LIBS = -L../../lib -lflycapture${D} `imlib2-config --cflags --libs`
 
 OUTDIR = ../../bin
 

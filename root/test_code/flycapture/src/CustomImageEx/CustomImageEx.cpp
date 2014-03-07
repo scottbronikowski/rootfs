@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <Imlib2.h>
 
 using namespace FlyCapture2;
 
@@ -54,6 +55,8 @@ const unsigned int k_PanoCamWidth = 1240;//fmt7Info.maxWidth;
 const unsigned int k_PanoCamHeight = 934;//fmt7Info.maxHeight;
 const unsigned int k_PanoCamOffsetX = 34;
 const unsigned int k_PanoCamOffsetY = 14;
+const int k_RedBalance = 500;
+const int k_BlueBalance = 800;
 
 //structures
 struct PointGrey_t {
@@ -65,7 +68,7 @@ struct PointGrey_t {
   Image rawImage, convertedImage;  
   PixelFormat pixFormat;
   unsigned int rows, cols, stride;
-  
+  Imlib_Image finalImage;
 };
 
 
@@ -78,192 +81,49 @@ double current_time(void);
 void CheckPGR(Error error);
 int CheckSaving(const char *dir);
 void SetFrameRate(Camera* cam);
-
+void SetWhiteBalance(Camera* cam);
+void PGR_StopAndCleanup(PointGrey_t* PG, unsigned int numCameras);
+unsigned int PGR_Init(BusManager* busMgr);
+int PGR_SetCamera(PointGrey_t* PG);
+int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCameras);
+void PGR_GetFrame(PointGrey_t* PG);
+void PGR_SaveImage(PointGrey_t* PG);
+void Imlib_GetFrame(PointGrey_t* PG);
+void Imlib_SaveImage(PointGrey_t* PG);
 
 int main(int /*argc*/, char** /*argv*/)
 {
     PrintBuildInfo();
-
     const int k_numImages = 100;
-    PointGrey_t test;
-
-    Error error; 
     BusManager busMgr;
-    unsigned int numCameras;
-    CheckPGR(busMgr.GetNumOfCameras(&numCameras));
- 
+    unsigned int numCameras = PGR_Init(&busMgr);
     printf( "Number of cameras detected: %u\n", numCameras );
     if ( numCameras < 1 )
     {
         printf( "Insufficient number of cameras... exiting\n" );
         return -1;
     }
-
     PointGrey_t* PG = new PointGrey_t[numCameras];
-
-    PGRGuid tmpGuid;
-    // Camera cam[numCameras];
-    // CameraInfo camInfo[numCameras];
-    for (unsigned int i = 0; i < numCameras; i++) //setup/init loop
+    if (PGR_StartCameras(&busMgr, PG, numCameras) != 0)
     {
-      // Connect to a camera
-      CheckPGR(busMgr.GetCameraFromIndex(i, &tmpGuid));
-      //CheckPGR(cam[i].Connect(&tmpGuid));
-      CheckPGR(PG[i].camera.Connect(&tmpGuid));
-
-      // Get the camera information
-      //CheckPGR(cam[i].GetCameraInfo(&camInfo[i]));
-      CheckPGR(PG[i].camera.GetCameraInfo(&PG[i].cameraInfo));
-      
-      //PrintCameraInfo(&camInfo[i]);     
-      PrintCameraInfo(&PG[i].cameraInfo);
-
-      // Query for available Format 7 modes
-      //Format7Info fmt7Info;
-      bool supported;
-      //fmt7Info.mode = k_fmt7Mode;
-      //CheckPGR(cam[i].GetFormat7Info( &fmt7Info, &supported ));
-      PG[i].format7Info.mode = k_fmt7Mode;
-      CheckPGR(PG[i].camera.GetFormat7Info(&PG[i].format7Info, &supported));
-      
-      //PrintFormat7Capabilities( fmt7Info );
-      PrintFormat7Capabilities(PG[i].format7Info);
-
-      if ( (k_fmt7PixFmt & PG[i].format7Info.pixelFormatBitField) == 0 )
-      {
-        // Pixel format not supported!
-	printf("Pixel format is not supported\n");
-        return -1;
-      }
-    
-      //Format7ImageSettings fmt7ImageSettings;
-      //fmt7ImageSettings.mode = k_fmt7Mode;
-      PG[i].imageSettings.mode = k_fmt7Mode;
-      //fmt7ImageSettings.pixelFormat = k_fmt7PixFmt;
-      PG[i].imageSettings.pixelFormat = k_fmt7PixFmt;
-      // if (camInfo[i].serialNumber == k_FrontCamSerial)
-      // {
-      // 	fmt7ImageSettings.width = k_FrontCamWidth;
-      // 	fmt7ImageSettings.height = k_FrontCamHeight;
-      // 	fmt7ImageSettings.offsetX = (fmt7Info.maxWidth - fmt7ImageSettings.width) / 2;
-      // 	fmt7ImageSettings.offsetY = (fmt7Info.maxHeight - fmt7ImageSettings.height) / 2;
-      // }
-      // else if (camInfo[i].serialNumber == k_PanoCamSerial)
-      // {
-      // 	fmt7ImageSettings.width = k_PanoCamWidth;
-      // 	fmt7ImageSettings.height = k_PanoCamHeight;
-      // 	fmt7ImageSettings.offsetX = k_PanoCamOffsetX;
-      // 	fmt7ImageSettings.offsetY = k_PanoCamOffsetY;
-      // }
-      // else
-      // {
-      // 	printf("ERROR! Camera serial number not recognized!");
-      // 	return -1;
-      // }
-
-      if (PG[i].cameraInfo.serialNumber == k_FrontCamSerial)
-      {
-	PG[i].imageSettings.width = k_FrontCamWidth;
-	PG[i].imageSettings.height = k_FrontCamHeight;
-	PG[i].imageSettings.offsetX = (PG[i].format7Info.maxWidth - 
-				       PG[i].imageSettings.width) / 2;
-	PG[i].imageSettings.offsetY = (PG[i].format7Info.maxHeight - 
-				       PG[i].imageSettings.height) / 2;
-      }
-      else if (PG[i].cameraInfo.serialNumber == k_PanoCamSerial)
-      {
-	PG[i].imageSettings.width = k_PanoCamWidth;
-	PG[i].imageSettings.height = k_PanoCamHeight;
-	PG[i].imageSettings.offsetX = k_PanoCamOffsetX;
-	PG[i].imageSettings.offsetY = k_PanoCamOffsetY;
-      }
-      else
-      {
-	printf("ERROR! Camera serial number not recognized!");
-	return -1;
-      }
-      
-      printf("Image size: %d x %d\n", PG[i].imageSettings.width, PG[i].imageSettings.height);
-
-      bool valid;
-      //Format7PacketInfo fmt7PacketInfo;
-
-      // Validate the settings to make sure that they are valid
-      // CheckPGR(cam[i].ValidateFormat7Settings( &fmt7ImageSettings,
-      // 					       &valid,
-      // 					       &fmt7PacketInfo ));
-      CheckPGR(PG[i].camera.ValidateFormat7Settings(&PG[i].imageSettings,
-					       &valid,
-					       &PG[i].packetInfo ));
-      
-      if ( !valid )
-      { // Settings are not valid
-	printf("Format7 settings are not valid\n");
-        return -1;
-      }
-      
-      // Set the settings to the camera
-      // CheckPGR(cam[i].SetFormat7Configuration( &fmt7ImageSettings,
-      // 					       fmt7PacketInfo.recommendedBytesPerPacket ));
-
-      CheckPGR(PG[i].camera.SetFormat7Configuration(&PG[i].imageSettings,
-					       PG[i].packetInfo.recommendedBytesPerPacket ));
-      //SetFrameRate(&cam[i]);
-      SetFrameRate(&PG[i].camera);
-
-
-      // Start capturing images
-      //CheckPGR(cam[i].StartCapture());
-      CheckPGR(PG[i].camera.StartCapture());
-  
-      // Retrieve frame rate property
-      Property frmRate;
-      frmRate.type = FRAME_RATE;
-
-      // //set frame rate to automatic mode
-      // frmRate.autoManualMode = true;
-      // frmRate.absControl = false;
-      // CheckPGR(cam[i].SetProperty(&frmRate));
-
-      //CheckPGR(cam[i].GetProperty( &frmRate ));
-      CheckPGR(PG[i].camera.GetProperty( &frmRate ));
-      printf("Frame rate for Camera %u is %3.2f fps\n", 
-	     PG[i].cameraInfo.serialNumber,
-	     frmRate.absValue);
-
+      printf("Error starting cameras\n");
+      PGR_StopAndCleanup(PG, numCameras);
+      return -1;
     }
-
-    printf( "Grabbing %d images\n", k_numImages );
-
-
-    // Image rawImage;    
-    // PixelFormat pixFormat;
-    // unsigned int rows, cols, stride;
-    // Image convertedImage;
+    printf( "Grabbing %d images\n", k_numImages ); //setup completed
 
     double start = current_time();
-    for ( int imageCount=0; imageCount < k_numImages; imageCount++ )
+    for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
     {
       for (unsigned int i = 0; i < numCameras; i++)
       {
-        // Retrieve an image
-    	//CheckPGR(cam[i].RetrieveBuffer( &rawImage ));
-	CheckPGR(PG[i].camera.RetrieveBuffer(&PG[i].rawImage));
-	
-        // Get the raw image dimensions
-        //rawImage.GetDimensions( &rows, &cols, &stride, &pixFormat );
-	PG[i].rawImage.GetDimensions(&PG[i].rows, &PG[i].cols, 
-				     &PG[i].stride, &PG[i].pixFormat );
-
-        // Convert the raw image
-    	//CheckPGR(rawImage.Convert( PIXEL_FORMAT_BGRU, &convertedImage ));
-	CheckPGR(PG[i].rawImage.Convert(PIXEL_FORMAT_BGRU, 
-					&PG[i].convertedImage));
+	Imlib_GetFrame(&PG[i]);
+	imlib_context_set_image(PG[i].finalImage);
+	//do something with the image here
+	imlib_free_image_and_decache();
     	if (imageCount % 10 == 0)
     	  printf("Captured %u-%d\n",PG[i].cameraInfo.serialNumber, imageCount);
-
       }
-
     }
     double stop = current_time();
     //check elapsed time
@@ -272,63 +132,23 @@ int main(int /*argc*/, char** /*argv*/)
     printf( "\nFinished grabbing images\n" );
     printf("%d images per camera taken in %f seconds (%f images/sec/cam)\n",
     	   k_numImages, elapsed, images_per_sec);
-
     
     //grab and save one last image from each camera, after time has been measured
     // Since this section of code saves images in the k_OutputDir folder,
     // must ensure that this folder exists and we have permissions to write to it
-   
     if (CheckSaving(k_OutputDir) != 0)
     {
       printf("Cannot save to %s, please check permissions\n",k_OutputDir);
       return -1;
     }
-
     for (unsigned int i = 0; i < numCameras; i++)
     {
-      // Retrieve an image
-      //CheckPGR(cam[i].RetrieveBuffer( &rawImage ));
-      CheckPGR(PG[i].camera.RetrieveBuffer(&PG[i].rawImage));
-      
-      // Get the raw image dimensions
-      //rawImage.GetDimensions( &rows, &cols, &stride, &pixFormat );
-      PG[i].rawImage.GetDimensions(&PG[i].rows, &PG[i].cols, 
-				   &PG[i].stride, &PG[i].pixFormat );
-
-      // Convert the raw image
-      //CheckPGR(rawImage.Convert( PIXEL_FORMAT_BGRU, &convertedImage ));
-      CheckPGR(PG[i].rawImage.Convert(PIXEL_FORMAT_BGRU, 
-				      &PG[i].convertedImage));
-   
-     
-      // Create a unique filename
-      char filename[512];
-      //sprintf( filename, "%s%u-final.ppm", k_OutputDir, camInfo[i].serialNumber);
-      sprintf(filename, "%s%u-final.ppm", k_OutputDir, 
-	       PG[i].cameraInfo.serialNumber);
-
-      // Save the image. If a file format is not passed in, then the file
-      // extension is parsed to attempt to determine the file format.
-      //CheckPGR(convertedImage.Save( filename ));
-      CheckPGR(PG[i].convertedImage.Save(filename));
-      printf("Saved %s\n",filename);
+      Imlib_GetFrame(&PG[i]);
+      Imlib_SaveImage(&PG[i]);
     }
-      
 
-    for (unsigned int i = 0; i < numCameras; i++)
-    {
-      // Stop capturing images
-      //CheckPGR(cam[i].StopCapture());
-      CheckPGR(PG[i].camera.StopCapture());
-
-      // Disconnect the camera
-      //CheckPGR(cam[i].Disconnect());
-      CheckPGR(PG[i].camera.Disconnect());
-    }
-      
+    PGR_StopAndCleanup(PG, numCameras);
     printf( "Done!\n" );
- 
-    delete[] PG;
     return 0;
 }
 
@@ -461,7 +281,187 @@ void SetFrameRate(Camera* cam)
   //printf("frameRate.absValue = %3.2f\n",frameRate.absValue);
   CheckPGR(cam->SetProperty(&frameRate));
   
+  // //set frame rate to automatic mode
+  // frmRate.autoManualMode = true;
+  // frmRate.absControl = false;
+  // CheckPGR(cam->SetProperty(&frmRate));
+  
   //check frame rate after setting
-  // CheckPGR(cam[i].GetProperty(&frameRate));
+  // CheckPGR(cam->GetProperty(&frameRate));
   // printf( "Frame rate SECOND is %3.2f fps\n", frameRate.absValue );
+}
+
+void SetWhiteBalance(Camera* cam)
+{
+  Property p;
+  p.type = WHITE_BALANCE;
+  CheckPGR(cam->GetProperty(&p));
+  p.valueA = k_RedBalance;
+  p.valueB = k_BlueBalance;
+  p.onOff = true;
+  CheckPGR(cam->SetProperty(&p));
+}
+
+
+void PGR_StopAndCleanup(PointGrey_t* PG, unsigned int numCameras)
+{
+  for (unsigned int i = 0; i < numCameras; i++)
+  {
+    // Stop capturing images
+    CheckPGR(PG[i].camera.StopCapture()); 
+    // Disconnect the camera
+    CheckPGR(PG[i].camera.Disconnect());
+  }
+  delete[] PG;
+}     
+
+unsigned int PGR_Init(BusManager* busMgr)
+{
+  unsigned int numCameras;
+  CheckPGR(busMgr->GetNumOfCameras(&numCameras));
+  return numCameras;
+}
+
+int PGR_SetCamera(PointGrey_t* PG)
+{
+  // Get the camera information
+  CheckPGR(PG->camera.GetCameraInfo(&PG->cameraInfo));
+  
+  // Query for available Format 7 modes
+  bool supported;
+  PG->format7Info.mode = k_fmt7Mode;
+  CheckPGR(PG->camera.GetFormat7Info(&PG->format7Info, &supported));
+    
+  if (((k_fmt7PixFmt & PG->format7Info.pixelFormatBitField) == 0) || !supported)
+  {
+    // Pixel format not supported!
+    printf("Pixel format is not supported\n");
+    return -1;
+  }
+  PG->imageSettings.mode = k_fmt7Mode;
+  PG->imageSettings.pixelFormat = k_fmt7PixFmt;
+  if (PG->cameraInfo.serialNumber == k_FrontCamSerial)
+  {
+    PG->imageSettings.width = k_FrontCamWidth;
+    PG->imageSettings.height = k_FrontCamHeight;
+    PG->imageSettings.offsetX = (PG->format7Info.maxWidth - 
+				   PG->imageSettings.width) / 2;
+    PG->imageSettings.offsetY = (PG->format7Info.maxHeight - 
+				   PG->imageSettings.height) / 2;
+  }
+  else if (PG->cameraInfo.serialNumber == k_PanoCamSerial)
+  {
+    PG->imageSettings.width = k_PanoCamWidth;
+    PG->imageSettings.height = k_PanoCamHeight;
+    PG->imageSettings.offsetX = k_PanoCamOffsetX;
+    PG->imageSettings.offsetY = k_PanoCamOffsetY;
+  }
+  else
+  {
+    printf("ERROR! Camera serial number not recognized!");
+    return -1;
+  }
+    
+  bool valid;
+  // Validate the settings to make sure that they are valid
+  CheckPGR(PG->camera.ValidateFormat7Settings(&PG->imageSettings,
+					      &valid,
+					      &PG->packetInfo ));
+  
+  if ( !valid )
+  { // Settings are not valid
+    printf("Format7 settings are not valid\n");
+    return -1;
+  }  
+  // Send the settings to the camera
+  CheckPGR(PG->camera.SetFormat7Configuration(&PG->imageSettings,
+					      PG->packetInfo.recommendedBytesPerPacket ));
+  SetFrameRate(&PG->camera);
+  SetWhiteBalance(&PG->camera);
+  return 0;
+}
+
+int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCameras)
+{
+  PGRGuid tmpGuid;
+  for (unsigned int i = 0; i < numCameras; i++) //setup/init loop
+  {
+    // Connect to a camera
+    CheckPGR(busMgr->GetCameraFromIndex(i, &tmpGuid));
+    CheckPGR(PG[i].camera.Connect(&tmpGuid));
+    if (PGR_SetCamera(&PG[i]) != 0)
+    {
+      printf("Error in setting camera\n");
+      return -1;
+    }
+    // PrintCameraInfo(&PG->cameraInfo);
+    // PrintFormat7Capabilities(PG[i].format7Info);
+    // printf("Image size: %d x %d\n", PG[i].imageSettings.width, 
+    // 	     PG[i].imageSettings.height);
+    
+    // Start capturing images
+    CheckPGR(PG[i].camera.StartCapture());
+    
+    // // Check frame rate property
+    // Property frmRate;
+    // frmRate.type = FRAME_RATE;
+    // CheckPGR(PG[i].camera.GetProperty( &frmRate ));
+    // printf("Frame rate for Camera %u is %3.2f fps\n", 
+    // 	     PG[i].cameraInfo.serialNumber,
+    // 	     frmRate.absValue);  
+  }
+  return 0;
+}
+
+void PGR_GetFrame(PointGrey_t* PG)
+{
+  // Retrieve an image
+  CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
+  // Get the raw image dimensions
+  PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
+			     &PG->stride, &PG->pixFormat );
+  // Convert the raw image
+  CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
+				&PG->convertedImage));
+}
+
+void PGR_SaveImage(PointGrey_t* PG)
+{
+  // Create a unique filename
+  char filename[512];
+  sprintf(filename, "%s%u-PGR-final.ppm", k_OutputDir, 
+	  PG->cameraInfo.serialNumber);
+    // Save the image. If a file format is not passed in, then the file
+  // extension is parsed to attempt to determine the file format.
+  CheckPGR(PG->convertedImage.Save(filename));
+  printf("Saved %s\n",filename);
+}
+
+void Imlib_GetFrame(PointGrey_t* PG)
+{
+  // Retrieve an image
+  CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
+  // Get the raw image dimensions
+  PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
+			     &PG->stride, &PG->pixFormat );
+  // Convert the raw image
+  CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
+				&PG->convertedImage));
+  PG->finalImage = 
+    imlib_create_image_using_copied_data(PG->cols,
+					 PG->rows,
+					 (unsigned int*)
+					 PG->convertedImage.GetData());
+}
+
+void Imlib_SaveImage(PointGrey_t* PG)
+{
+  imlib_context_set_image(PG->finalImage);
+  // Create a unique filename
+  char filename[512];
+  sprintf(filename, "%s%u-Imlib-final.ppm", k_OutputDir, 
+	  PG->cameraInfo.serialNumber);
+  imlib_save_image(filename);
+  imlib_free_image_and_decache();
+  printf("Saved %s\n",filename);
 }
