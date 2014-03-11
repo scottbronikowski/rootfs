@@ -90,6 +90,28 @@ Description: Linux kernel source with Ubuntu patches
  This package will always depend on the latest Linux kernel source code
  available. The Ubuntu patches have been applied.
 
+Package: libavformat-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 1659
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libav
+Version: 4:0.8.1-0ubuntu1
+Depends: libavcodec-dev (= 4:0.8.1-0ubuntu1), libavformat53 (<= 4:0.8.1-99) | libavformat-extra-53 (<= 4:0.8.1.99), libavformat53 (>= 4:0.8.1-0ubuntu1) | libavformat-extra-53 (>= 4:0.8.1), libavutil-dev (= 4:0.8.1-0ubuntu1)
+Description: Development files for libavformat
+ Libav is a complete, cross-platform solution to decode, encode, record,
+ convert and stream audio and video.
+ .
+ This is the demuxer library from Libav. It supports most
+ existing file formats (AVI, MPEG, OGG, Matroska, ASF...).
+ .
+ This package contains the header files and static libraries needed to
+ compile applications or shared objects that use libavformat.
+Homepage: http://libav.org/
+Original-Maintainer: Debian multimedia packages maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+
 Package: libtext-wrapi18n-perl
 Status: install ok installed
 Priority: required
@@ -987,6 +1009,26 @@ Description: Operating system (e.g. diagnostics support) library (default versio
  Boost version (currently 1.46).
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
 Homepage: http://www.boost.org/libs/system/
+
+Package: libtheora-dev
+Status: install ok installed
+Multi-Arch: same
+Priority: optional
+Section: libdevel
+Installed-Size: 720
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libtheora
+Version: 1.1.1+dfsg.1-3ubuntu2
+Depends: libtheora0 (= 1.1.1+dfsg.1-3ubuntu2), libogg-dev
+Description: The Theora Video Compression Codec (development files)
+ Theora is a fully open, non-proprietary, patent-and-royalty-free,
+ general-purpose compressed video format.
+ .
+ This package contains the header files needed to develop applications
+ with libtheora.
+Homepage: http://www.theora.org/
+Original-Maintainer: Debian Xiph.org Maintainers <pkg-xiph-maint@lists.alioth.debian.org>
 
 Package: phonon-backend-vlc
 Status: install ok installed
@@ -2070,6 +2112,26 @@ Description: The Vorbis General Audio Compression Codec (High Level API)
  and basic manipulation of all Vorbis I audio streams.
 Original-Maintainer: Debian Xiph.org Maintainers <pkg-xiph-maint@lists.alioth.debian.org>
 
+Package: libvorbis-dev
+Status: install ok installed
+Multi-Arch: same
+Priority: optional
+Section: libdevel
+Installed-Size: 2344
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libvorbis
+Version: 1.3.2-1ubuntu3
+Depends: libogg-dev, libvorbis0a (= 1.3.2-1ubuntu3), libvorbisenc2 (= 1.3.2-1ubuntu3), libvorbisfile3 (= 1.3.2-1ubuntu3)
+Description: The Vorbis General Audio Compression Codec (development files)
+ Ogg Vorbis is a fully open, non-proprietary, patent-and-royalty-free,
+ general-purpose compressed audio format for audio and music at fixed
+ and variable bitrates from 16 to 128 kbps/channel.
+ .
+ This package contains the header files and documentation needed to develop
+ applications with libvorbis.
+Original-Maintainer: Debian Xiph.org Maintainers <pkg-xiph-maint@lists.alioth.debian.org>
+
 Package: libruby
 Status: install ok installed
 Priority: optional
@@ -2199,6 +2261,33 @@ Description: Foreign Function Interface library runtime
  allows code written in one language to call code written in another
  language.
 Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+
+Package: man-db
+Status: install ok installed
+Multi-Arch: foreign
+Priority: important
+Section: doc
+Installed-Size: 1560
+Maintainer: Colin Watson <cjwatson@debian.org>
+Architecture: armhf
+Version: 2.6.1-2
+Replaces: man, manpages-de (<< 0.5-4), nlsutils
+Provides: man, man-browser
+Depends: groff-base (>= 1.18.1.1-15), bsdmainutils, debconf (>= 1.2.0) | debconf-2.0, dpkg (>= 1.9.0), libc6 (>= 2.8), libgcc1 (>= 1:4.4.0), libgdbm3 (>= 1.8.3), libpipeline1 (>= 1.1.0), zlib1g (>= 1:1.1.4)
+Suggests: groff, less, www-browser
+Conflicts: man, suidmanager (<< 0.50)
+Conffiles:
+ /etc/cron.daily/man-db 18745b8d583be7a4b7a00e9ffc98ac99
+ /etc/cron.weekly/man-db 643340ce3fb3994ef2ae7b88a2cf3230
+ /etc/manpath.config 167675fd93075fb5f6ce1aa5f56a8a22
+Description: on-line manual pager
+ This package provides the man command, the primary way of examining the
+ on-line help files (manual pages). Other utilities provided include the
+ whatis and apropos commands for searching the manual page database, the
+ manpath utility for determining the manual page search path, and the
+ maintenance utilities mandb, catman and zsoelim. man-db uses the groff
+ suite of programs to format and display the manual pages.
+Homepage: http://man-db.nongnu.org/
 
 Package: sound-theme-freedesktop
 Status: install ok installed
@@ -2437,6 +2526,22 @@ Description: LGPL Crypto library - runtime library
  Whirlpool, DSA, DSA2, ElGamal, RSA, ECC.
 Original-Maintainer: Debian GnuTLS Maintainers <pkg-gnutls-maint@lists.alioth.debian.org>
 Homepage: http://directory.fsf.org/project/libgcrypt/
+
+Package: libogg-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 287
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libogg
+Version: 1.2.2~dfsg-1ubuntu1
+Depends: libogg0 (= 1.2.2~dfsg-1ubuntu1)
+Description: Ogg bitstream library development files
+ The libogg-dev package contains the header files and documentation
+ needed to develop applications with libogg.
+Homepage: http://xiph.org/ogg/
+Original-Maintainer: Ron Lee <ron@debian.org>
 
 Package: python-dbus
 Status: install ok installed
@@ -2851,6 +2956,32 @@ Description: Saxon XSLT Processor's documentation and javadoc
 Original-Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
 Homepage: http://saxon.sourceforge.net/
 
+Package: libopencv-flann2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 289
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libopencv-core2.3 (= 2.3.1-7), libstdc++6 (>= 4.4.0)
+Description: computer vision Clustering and Search in Multi-Dimensional spaces library
+ This package contains the OpenCV (Open Computer Vision) clustering and
+ search in Multi-Dimensional spaces runtime libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: dlocate
 Status: install ok installed
 Priority: optional
@@ -3198,6 +3329,35 @@ Description: portable C++ multi-threading
 Homepage: http://www.boost.org/libs/thread/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
 
+Package: python-opencv
+Status: install ok installed
+Priority: optional
+Section: python
+Installed-Size: 729
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Replaces: python2.3-opencv (<= 0.9.7-3)
+Provides: python2.7-opencv
+Depends: python (<< 2.8), python (>= 2.7), python-support (>= 0.90.0), libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libopencv-calib3d2.3, libopencv-core2.3, libopencv-features2d2.3, libopencv-flann2.3, libopencv-highgui2.3, libopencv-imgproc2.3, libopencv-legacy2.3, libopencv-ml2.3, libopencv-objdetect2.3, libopencv-video2.3, libpython2.7 (>= 2.7), libstdc++6 (>= 4.4.0)
+Conflicts: python2.3-opencv (<= 0.9.7-3)
+Description: Python bindings for the computer vision library
+ This package contains Python bindings for the OpenCV (Open Computer Vision)
+ library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: user-setup
 Status: install ok installed
 Priority: extra
@@ -3404,6 +3564,55 @@ Description: GNOME configuration database system (shared libraries)
 Homepage: http://projects.gnome.org/gconf/
 Original-Maintainer: Josselin Mouette <joss@debian.org>
 
+Package: libopencv-objdetect-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 522
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-calib3d-dev (= 2.3.1-7), libopencv-objdetect2.3 (= 2.3.1-7), pkg-config
+Description: development files for libopencv-objdetect
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) Object Detection library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
+Package: libavcodec-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 7236
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libav
+Version: 4:0.8.1-0ubuntu1
+Depends: libavcodec53 (<= 4:0.8.1-99) | libavcodec-extra-53 (<= 4:0.8.1.99), libavcodec53 (>= 4:0.8.1-0ubuntu1) | libavcodec-extra-53 (>= 4:0.8.1), libavutil-dev (= 4:0.8.1-0ubuntu1)
+Suggests: libfaad-dev, libgsm1-dev, libogg-dev, libschroedinger-dev, libspeex-dev, libtheora-dev (>> 0.0.0.alpha4), libvorbis-dev, libx11-dev, libxext-dev, zlib1g-dev, libraw1394-dev, libdc1394-22-dev
+Description: Development files for libavcodec
+ Libav is a complete, cross-platform solution to decode, encode, record,
+ convert and stream audio and video.
+ .
+ This is the codec library from Libav. It supports most existing
+ encoding formats (MPEG, DivX, MPEG4, AC3, DV...).
+ .
+ This package contains the header files and static libraries needed to
+ compile applications or shared objects that use libavcodec.
+Homepage: http://libav.org/
+Original-Maintainer: Debian multimedia packages maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+
 Package: libgtkimageview0
 Status: install ok installed
 Priority: optional
@@ -3534,6 +3743,32 @@ Description: Qt 4 GUI module
  The QtGui module extends QtCore with GUI functionality.
 Homepage: http://qt.nokia.com/
 Original-Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
+
+Package: libopencv-ml2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 335
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libopencv-core2.3 (= 2.3.1-7), libstdc++6 (>= 4.4.0)
+Description: computer vision Machine Learning library
+ This package contains the OpenCV (Open Computer Vision) Machine Learning
+ runtime libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: libgssapi-krb5-2
 Status: install ok installed
@@ -4491,6 +4726,31 @@ Description: Search engine library
  collections containing hundreds of millions of documents.
 Original-Maintainer: Olly Betts <olly@survex.com>
 Homepage: http://xapian.org/
+
+Package: libdc1394-22-dev
+Status: install ok installed
+Multi-Arch: same
+Priority: extra
+Section: libdevel
+Installed-Size: 437
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libdc1394-22
+Version: 2.2.0-2
+Depends: libdc1394-22 (= 2.2.0-2), libraw1394-dev, libc6-dev
+Conflicts: libdc1394-20-dev
+Description: high level programming interface for IEEE1394 digital camera - development
+ libdc1394 is a library that is intended to provide a high level
+ programming interface for application developers who wish to control
+ IEEE 1394 based cameras that conform to the 1394-based Digital Camera
+ Specification (found at http://www.1394ta.org/).
+ .
+ This version of libdc1394 supports both the old and new (juju) FireWire stack.
+ It automatically detects which one to use at runtime.
+ .
+ This package contains development files.
+Original-Maintainer: Guus Sliepen <guus@debian.org>
+Homepage: http://damien.douxchamps.net/ieee1394/libdc1394/
 
 Package: hicolor-icon-theme
 Status: install ok installed
@@ -7291,6 +7551,32 @@ Description: interactive high-level object-oriented language (default version)
 Homepage: http://www.python.org/
 Original-Maintainer: Matthias Klose <doko@debian.org>
 
+Package: libopencv-video-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 339
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-imgproc-dev (= 2.3.1-7), libopencv-video2.3 (= 2.3.1-7), pkg-config
+Description: development files for libopencv-video
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) Video analysis library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: libxrandr-dev
 Status: install ok installed
 Priority: optional
@@ -7772,6 +8058,32 @@ Description: X.Org X server -- AMD/ATI Radeon display driver
  .
  This package is built from the X.org xf86-video-ati driver module.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: libopencv-ml-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 761
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-core-dev (= 2.3.1-7), libopencv-ml2.3 (= 2.3.1-7), pkg-config
+Description: development files for libopencv-ml
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) Machine Learning library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: libfm-gtk1
 Status: install ok installed
@@ -8384,6 +8696,25 @@ Description: File comparison utilities
  update, or "patch", a copy of the file.
 Homepage: http://www.gnu.org/software/diffutils/
 Original-Maintainer: Santiago Vila <sanvila@debian.org>
+
+Package: libschroedinger-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 894
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: schroedinger
+Version: 1.0.11-1
+Depends: libschroedinger-1.0-0 (= 1.0.11-1), liborc-0.4-dev (>= 1:0.4.16), pkg-config
+Description: library for encoding/decoding of Dirac video streams (development files)
+ The Schroedinger project will implement portable libraries for the high quality
+ Dirac video codec created by BBC Research and Development. Dirac is a free and
+ open source codec producing very high image quality video.
+ .
+ This package contains the header files, static libraries
+ and symbolic links that developers using libschroedinger will need.
+Original-Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
 
 Package: libanyevent-perl
 Status: install ok installed
@@ -10039,6 +10370,32 @@ Description: Shared libraries used by Subversion
 Homepage: http://subversion.apache.org/
 Original-Maintainer: Peter Samuelson <peter@p12n.org>
 
+Package: libopencv-objdetect2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 262
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libopencv-calib3d2.3 (= 2.3.1-7), libopencv-core2.3, libopencv-features2d2.3, libopencv-highgui2.3, libopencv-imgproc2.3, libstdc++6 (>= 4.4.0)
+Description: computer vision Object Detection library
+ This package contains the OpenCV (Open Computer Vision) Object Detection
+ runtime libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: libotf0
 Status: install ok installed
 Priority: optional
@@ -11482,6 +11839,35 @@ Description: ALSA library additional plugins
 Homepage: http://www.alsa-project.org/
 Original-Maintainer: Debian ALSA Maintainers <pkg-alsa-devel@lists.alioth.debian.org>
 
+Package: libhighgui-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 46
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: pkg-config, libopencv-highgui-dev
+Description: Translation package for libhighgui-dev
+ This package provide files for translation from libhighgui-dev to
+ subdivided packages.
+ .
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision).
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: libopencore-amrwb0
 Status: install ok installed
 Priority: optional
@@ -11714,6 +12100,33 @@ Description: Common UNIX Printing System(tm) - Core library
 Homepage: http://www.cups.org
 Original-Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
 
+Package: libopencv-highgui-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 578
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-imgproc-dev (= 2.3.1-7), libopencv-highgui2.3 (= 2.3.1-7), libavcodec-dev (>= 0.svn20080206), libavformat-dev, libswscale-dev, libgtk2.0-dev, libjasper-dev (>= 1.900.1), libjpeg-dev, libpng12-dev, libtiff4-dev (>= 3.9.4), libopenexr-dev (>= 1.4.0), libraw1394-dev, libdc1394-22-dev, pkg-config
+Description: development files for libopencv-highgui
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) High-level GUI and
+ Media I/O library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: automake1.4
 Status: install ok installed
 Priority: optional
@@ -11842,6 +12255,32 @@ Description: Synaptics TouchPad driver for X.Org server
   * It also provides a daemon to disable touchpad while typing at the keyboard
     and thus avoid unwanted mouse movements (see syndaemon(1)).
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: libopencv-contrib-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 579
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-calib3d-dev (= 2.3.1-7), libopencv-contrib2.3 (= 2.3.1-7), pkg-config
+Description: development files for libopencv-contrib
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) crotrib library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: xserver-xorg-video-vesa
 Status: install ok installed
@@ -12164,6 +12603,32 @@ Description: fast, versatile, remote (and local) file-copying tool
  daemon functionality.
 Homepage: http://rsync.samba.org/
 Original-Maintainer: Paul Slootman <paul@debian.org>
+
+Package: libopencv-gpu2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 193
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libopencv-core2.3 (= 2.3.1-7), libstdc++6 (>= 4.4.0)
+Description: computer vision GPU Processing library
+ This package contains the OpenCV (Open Computer Vision) GPU Processing
+ runtime libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: libxcb-dri2-0
 Status: install ok installed
@@ -13027,6 +13492,32 @@ Description: debug build of the Python Interpreter (version 2.7)
 Homepage: http://www.python.org/
 Original-Maintainer: Matthias Klose <doko@debian.org>
 
+Package: libopencv-calib3d-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 713
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-features2d-dev (= 2.3.1-7), libopencv-calib3d2.3 (= 2.3.1-7), pkg-config
+Description: development files for libopencv-calib3d
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) Camera Calibration library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: patch
 Status: install ok installed
 Multi-Arch: foreign
@@ -13345,6 +13836,32 @@ Description: C++ wrappers for Cairo (shared libraries)
  This package contains the shared libraries.
 Homepage: http://cairographics.org/cairomm/
 Original-Maintainer: Dave Beckett <dajobe@debian.org>
+
+Package: libopencv-highgui2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 211
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libavcodec53 (>= 4:0.8-1~) | libavcodec-extra-53 (>= 4:0.8-1~), libavformat53 (>= 4:0.8-1~) | libavformat-extra-53 (>= 4:0.8-1~), libavutil51 (>= 4:0.8-1~) | libavutil-extra-51 (>= 4:0.8-1~), libc6 (>= 2.15), libdc1394-22, libgcc1 (>= 1:4.4.0), libglib2.0-0 (>= 2.31.2), libgtk2.0-0 (>= 2.8.0), libilmbase6 (>= 1.0.1), libjasper1, libjpeg8 (>= 8c), libopencv-core2.3, libopencv-imgproc2.3 (= 2.3.1-7), libopenexr6 (>= 1.6.1), libpng12-0 (>= 1.2.13-4), libstdc++6 (>= 4.4.0), libswscale2 (>= 4:0.8-1~) | libswscale-extra-2 (>= 4:0.8-1~), libtiff4, libv4l-0 (>= 0.5.0)
+Description: computer vision High-level GUI and Media I/O library
+ This package contains the OpenCV (Open Computer Vision) High-level GUI
+ and Media I/O runtime libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: usbutils
 Status: install ok installed
@@ -13949,6 +14466,32 @@ Description: Documentation and examples for the Xalan-Java XSLT processor
 Original-Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
 Homepage: http://xml.apache.org/xalan-j/
 
+Package: libopencv-video2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 197
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libopencv-core2.3, libopencv-imgproc2.3 (= 2.3.1-7), libstdc++6 (>= 4.3.0)
+Description: computer vision Video analysis library
+ This package contains the OpenCV (Open Computer Vision) Video analysis
+ runtime libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: libidn11
 Status: install ok installed
 Multi-Arch: same
@@ -14430,6 +14973,58 @@ Description: X C Binding, glx extension
 Original-Maintainer: XCB Developers <xcb@lists.freedesktop.org>
 Homepage: http://xcb.freedesktop.org
 
+Package: opencv-doc
+Status: install ok installed
+Priority: optional
+Section: doc
+Installed-Size: 13590
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: opencv
+Version: 2.3.1-7
+Replaces: libopencv-doc
+Conflicts: libopencv-doc
+Description: OpenCV documentation and examples
+ This package contains the OpenCV documentation and example programs.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
+Package: libcvaux-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 49
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: pkg-config, libopencv-core-dev, libopencv-imgproc-dev, libopencv-features2d-dev, libopencv-calib3d-dev, libopencv-objdetect-dev, libopencv-legacy-dev, libopencv-video-dev, libopencv-contrib-dev
+Description: Translation package for libcvaux-dev
+ This package provide files for translation from libcvaux-dev to
+ subdivided packages.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: python-nose
 Status: install ok installed
 Priority: optional
@@ -14693,6 +15288,31 @@ Description: filesystem operations (portable paths, iteration over directories, 
  facilitate portable script-like operations from within C++ programs.
 Homepage: http://boost.org/libs/filesystem/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
+
+Package: libcv2.3
+Status: install ok installed
+Priority: optional
+Section: devel
+Installed-Size: 43
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-core2.3, libopencv-imgproc2.3, libopencv-flann2.3, libopencv-features2d2.3, libopencv-calib3d2.3, libopencv-objdetect2.3, libopencv-legacy2.3, libopencv-video2.3, libopencv-ml2.3
+Description: computer vision library - libcv* translation package
+ This package provide files for translation from libcv2.1 to libcv2.3.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: libboost1.46-dev
 Status: install ok installed
@@ -15840,6 +16460,35 @@ Description: Perl interface to the 2.x series of the Gimp Toolkit library
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Homepage: http://gtk2-perl.sourceforge.net/
 
+Package: groff-base
+Status: install ok installed
+Multi-Arch: foreign
+Priority: important
+Section: text
+Installed-Size: 2278
+Maintainer: Colin Watson <cjwatson@debian.org>
+Architecture: armhf
+Source: groff
+Version: 1.21-7
+Replaces: groff (<< 1.20.1-6), jgroff (<< 1.17-1)
+Depends: libc6 (>= 2.7), libgcc1 (>= 1:4.4.0), libstdc++6 (>= 4.4.0)
+Suggests: groff
+Breaks: groff (<< 1.17-1), jgroff (<< 1.17-1), pmake (<< 1.45-7), troffcvt (<< 1.04-14)
+Conffiles:
+ /etc/groff/mdoc.local ff5789529422421c5e5128f22c248e0c
+ /etc/groff/man.local f2c6e1f0ab35c26505d35e3abbda7606
+Description: GNU troff text-formatting system (base system components)
+ This package contains the traditional UN*X text formatting tools
+ troff, nroff, tbl, eqn, and pic. These utilities, together with the
+ man-db package, are essential for displaying the on-line manual pages.
+ .
+ groff-base is a stripped-down package containing the necessary components
+ to read manual pages in ASCII, Latin-1, and UTF-8, plus the PostScript
+ device (groff's default). Users who want a full groff installation, with
+ the standard set of devices, fonts, macros, and documentation, should
+ install the groff package.
+Homepage: http://groff.ffii.org/
+
 Package: ntp
 Status: install ok installed
 Priority: optional
@@ -15930,6 +16579,52 @@ Description: the GeoTIFF library -- run-time files
  This package contains the shared library only.
 Original-Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
 Homepage: http://geotiff.osgeo.org/
+
+Package: libjasper-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 858
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: jasper
+Version: 1.900.1-13
+Replaces: libjasper-1.700-2-dev
+Depends: libjasper1 (= 1.900.1-13)
+Conflicts: libjasper-1.700-2-dev
+Description: Development files for the JasPer JPEG-2000 library
+ JasPer is a collection of software (i.e., a library and application programs)
+ for the coding and manipulation of images.  This software can handle image
+ data in a variety of formats.  One such format supported by JasPer is the
+ JPEG-2000 format defined in ISO/IEC 15444-1:2000.
+ .
+ This package contains the static library and headers.
+Original-Maintainer: Roland Stigge <stigge@antcom.de>
+
+Package: libcvaux2.3
+Status: install ok installed
+Priority: optional
+Section: devel
+Installed-Size: 43
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-core2.3, libopencv-imgproc2.3, libopencv-features2d2.3, libopencv-calib3d2.3, libopencv-objdetect2.3, libopencv-legacy2.3, libopencv-video2.3
+Description: computer vision library - libcvaux translation package
+ This package provide files for translation from libcvaux2.1 to libcvaux2.3.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: libnewt0.52
 Status: install ok installed
@@ -16572,6 +17267,32 @@ Description: GNU grep, egrep and fgrep
  will run more slowly, however.)
 Original-Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
 Homepage: http://www.gnu.org/software/grep/
+
+Package: libopencv-imgproc-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 2256
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-core-dev (= 2.3.1-7), libopencv-imgproc2.3 (= 2.3.1-7), pkg-config
+Description: development files for libopencv-imgproc
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) Image Processing library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: python-paramiko
 Status: install ok installed
@@ -18594,6 +19315,36 @@ Description: module for loading modules by name
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Homepage: http://search.cpan.org/dist/Class-Load/
 
+Package: libcv-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 61
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: pkg-config, libopencv-core-dev, libopencv-imgproc-dev, libopencv-flann-dev, libopencv-features2d-dev, libopencv-calib3d-dev, libopencv-objdetect-dev, libopencv-legacy-dev, libopencv-video-dev, libopencv-ml-dev
+Conflicts: libcvaux-dev (<= 2.1.0-7), libhighgui-dev (<= 2.1.0-7)
+Description: Translation package for libcv-dev
+ This package provide files for translation from libcv-dev to
+ subdivided packages.
+ .
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision).
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: libblkid1
 Status: install ok installed
 Multi-Arch: same
@@ -19060,6 +19811,32 @@ Description: GNOME Virtual File System (extra modules)
   * the smb module, to browse Windows shares.
 Original-Maintainer: Josselin Mouette <joss@debian.org>
 
+Package: libopencv-gpu-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 658
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-core-dev (= 2.3.1-7), libopencv-gpu2.3 (= 2.3.1-7), pkg-config
+Description: development files for libopencv-gpu
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) GPU Processing library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: xserver-xorg-video-nouveau
 Status: install ok installed
 Priority: optional
@@ -19327,6 +20104,32 @@ Description: JasPer JPEG-2000 runtime library
  This package contains the shared library.
 Original-Maintainer: Roland Stigge <stigge@antcom.de>
 
+Package: libopencv-contrib2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 246
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libopencv-calib3d2.3 (= 2.3.1-7), libopencv-core2.3, libopencv-highgui2.3, libopencv-imgproc2.3, libstdc++6 (>= 4.4.0)
+Description: computer vision contrib library
+ This package contains the OpenCV (Open Computer Vision) contrib
+ runtime libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: libcanberra0
 Status: install ok installed
 Multi-Arch: same
@@ -19350,6 +20153,28 @@ Description: simple abstract interface for playing event sounds
  specification.
 Homepage: http://0pointer.de/lennart/projects/libcanberra/
 Original-Maintainer: Marc-Andre Lureau <marcandre.lureau@gmail.com>
+
+Package: libspeex-dev
+Status: install ok installed
+Multi-Arch: same
+Priority: optional
+Section: libdevel
+Installed-Size: 195
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: speex
+Version: 1.2~rc1-3ubuntu2
+Depends: libspeex1 (= 1.2~rc1-3ubuntu2)
+Suggests: pkg-config
+Description: The Speex codec library development files
+ Speex is an audio codec especially designed for compressing voice at low
+ bit-rates for applications such as voice over IP (VoIP). In some senses,
+ it is meant to be complementary to the Vorbis codec which places a greater
+ emphasis on high-quality music reproduction.
+ .
+ This package provides the speex library headers and development files.
+Homepage: http://www.speex.org/
+Original-Maintainer: Ron Lee <ron@debian.org>
 
 Package: libqt4-help
 Status: install ok installed
@@ -19910,6 +20735,39 @@ Description: Vera font family derivate with additional characters
  computer screens) but can be used in printing as well.
 Homepage: http://dejavu-fonts.org/
 Original-Maintainer: Debian Fonts Task Force <pkg-fonts-devel@lists.alioth.debian.org>
+
+Package: libopenexr-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 1665
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: openexr
+Version: 1.6.1-4.1
+Depends: libopenexr6 (= 1.6.1-4.1), libilmbase-dev
+Description: development files for the OpenEXR image library
+ OpenEXR is a high dynamic-range (HDR) image file format developed by
+ Industrial Light & Magic for use in computer imaging applications.
+ .
+ OpenEXR's features include:
+    * Higher dynamic range and colour precision than existing 8- and
+      10-bit image file formats.
+    * Support for the "half" 16-bit floating-point pixel format.
+    * Multiple lossless image compression algorithms. Some of the
+      included codecs can achieve 2:1 lossless compression ratios on
+      images with film grain.
+    * Extensibility. New compression codecs and image types can easily
+      be added by extending the C++ classes included in the OpenEXR
+      software distribution. New image attributes (strings, vectors,
+      integers, etc.) can be added to OpenEXR image headers without
+      affecting backward compatibility with existing OpenEXR
+      applications.
+ .
+ This package contains the header files required if you wish to
+ compile/develop applications that use OpenEXR libraries.
+Original-Maintainer: Debian PhotoTools Maintainers <pkg-phototools-devel@lists.alioth.debian.org>
+Homepage: http://www.openexr.com
 
 Package: tmux
 Status: install ok installed
@@ -20865,6 +21723,31 @@ Description: ISO language, territory, currency, script codes and their translati
 Original-Maintainer: Tobias Quathamer <toddy@debian.org>
 Homepage: http://pkg-isocodes.alioth.debian.org/
 
+Package: libhighgui2.3
+Status: install ok installed
+Priority: optional
+Section: devel
+Installed-Size: 43
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-highgui2.3
+Description: computer vision library - libhighgui translation package
+ This package provide files for translation from libhighgui2.1 to libhighgui2.3.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: libtool-doc
 Status: install ok installed
 Priority: optional
@@ -21056,6 +21939,32 @@ Description: Perl extension providing localization support for DateTime
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Homepage: http://datetime.perl.org/
 
+Package: libopencv-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 35
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-core-dev (= 2.3.1-7), libopencv-ml-dev (= 2.3.1-7), libopencv-imgproc-dev (= 2.3.1-7), libopencv-video-dev (= 2.3.1-7), libopencv-objdetect-dev (= 2.3.1-7), libopencv-gpu-dev (= 2.3.1-7), libopencv-highgui-dev (= 2.3.1-7), libopencv-calib3d-dev (= 2.3.1-7), libopencv-flann-dev (= 2.3.1-7), libopencv-features2d-dev (= 2.3.1-7), libopencv-legacy-dev (= 2.3.1-7), libopencv-contrib-dev (= 2.3.1-7), pkg-config
+Description: development files for opencv
+ This is a meta package providing development package necessary for
+ development of OpenCV (Open Computer Vision).
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: libncursesw5
 Status: install ok installed
 Multi-Arch: same
@@ -21136,6 +22045,53 @@ Recommends: gpgv
 Description: GnuPG keys of the Ubuntu archive
  The Ubuntu project digitally signs its Release files. This package
  contains the archive keys used for that.
+
+Package: libopencv-calib3d2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 385
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libopencv-core2.3, libopencv-features2d2.3 (= 2.3.1-7), libopencv-flann2.3, libopencv-imgproc2.3, libstdc++6 (>= 4.6)
+Description: computer vision Camera Calibration library
+ This package contains the OpenCV (Open Computer Vision) Camera Calibration
+ runtime libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
+Package: libfaad-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 331
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: faad2
+Version: 2.7-7
+Replaces: libfaad2-dev
+Depends: libfaad2 (= 2.7-7)
+Conflicts: libfaad2-dev
+Description: freeware Advanced Audio Decoder - development files
+ FAAD2 is the fastest ISO AAC audio decoder available. FAAD2 correctly
+ decodes all MPEG-4 and MPEG-2 MAIN, LOW, LTP, LD and ER object type AAC
+ files.
+ .
+ This package contains development files.
+Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Homepage: http://www.audiocoding.com/
 
 Package: libtemplate-perl-doc
 Status: install ok installed
@@ -21370,6 +22326,32 @@ Description: cron-like program that doesn't go by time
  24 hours a day to make sure the maintenance jobs of other Debian packages
  are executed each day.
 Original-Maintainer: Peter Eisentraut <petere@debian.org>
+
+Package: libopencv-legacy2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 467
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libopencv-calib3d2.3 (= 2.3.1-7), libopencv-core2.3, libopencv-highgui2.3, libopencv-imgproc2.3, libopencv-video2.3 (= 2.3.1-7), libstdc++6 (>= 4.4.0)
+Description: computer vision legacy library
+ This package contains the OpenCV (Open Computer Vision) legacy runtime
+ libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: python-numpy
 Status: install ok installed
@@ -21721,6 +22703,30 @@ Description: SSL development libraries, header files and documentation
  .
  It is part of the OpenSSL implementation of SSL.
 Original-Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
+
+Package: liborc-0.4-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 830
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: orc
+Version: 1:0.4.16-1ubuntu2
+Provides: liborc-dev
+Depends: liborc-0.4-0 (= 1:0.4.16-1ubuntu2), libc6 (>= 2.7)
+Suggests: liborc-0.4-doc
+Description: Library of Optimized Inner Loops Runtime Compiler (development headers)
+ Orc is a library and set of tools for compiling and executing
+ very simple programs that operate on arrays of data.  The "language"
+ is a generic assembly language that represents many of the features
+ available in SIMD architectures, including saturated addition and
+ subtraction, and many arithmetic operations.
+ .
+ This package contains the development headers and libraries, and should
+ be installed to compile software that uses orc.
+Homepage: http://code.entropywave.com/projects/orc/
+Original-Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
 
 Package: libmtdev1
 Status: install ok installed
@@ -22420,6 +23426,32 @@ Description: Userspace interface to kernel DRM buffer management
  This library implements a unified userspace interface to the different buffer
  management interfaces of the kernel DRM hardware drivers.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: libopencv-features2d2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 602
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libopencv-core2.3, libopencv-flann2.3 (= 2.3.1-7), libopencv-highgui2.3 (= 2.3.1-7), libopencv-imgproc2.3, libstdc++6 (>= 4.4.0)
+Description: computer vision Feature Detection and Descriptor Extraction library
+ This package contains the OpenCV (Open Computer Vision) Feature Detection
+ and Descriptor Extraction runtime libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: libasn1-8-heimdal
 Status: install ok installed
@@ -25252,6 +26284,33 @@ Description: multilingual text processing library - contributed database
 Original-Maintainer: Harshula Jayasuriya <harshula@gmail.com>
 Homepage: http://www.m17n.org/
 
+Package: libopencv-features2d-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 1492
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-flann-dev (= 2.3.1-7), libopencv-highgui-dev (= 2.3.1-7), libopencv-features2d2.3 (= 2.3.1-7), pkg-config
+Description: development files for libopencv-features2d
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) Feature Detection and
+ Descriptor Extraction library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: libkrb5-dev
 Status: install ok installed
 Priority: extra
@@ -25401,6 +26460,32 @@ Description: low level cryptographic library (symmetric and one-way cryptos)
 Original-Maintainer: Magnus Holmgren <holmgren@debian.org>
 Homepage: http://www.lysator.liu.se/~nisse/nettle/
 
+Package: libopencv-imgproc2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 1142
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libopencv-core2.3 (= 2.3.1-7), libstdc++6 (>= 4.4.0)
+Description: computer vision Image Processing library
+ This package contains the OpenCV (Open Computer Vision) Image Processing
+ runtime libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: emacs
 Status: install ok installed
 Priority: optional
@@ -25439,6 +26524,32 @@ Description: X11 client-side library
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libX11
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: libopencv-legacy-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 1306
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-video-dev (= 2.3.1-7), libopencv-calib3d-dev (= 2.3.1-7), libopencv-legacy2.3 (= 2.3.1-7), pkg-config
+Description: development files for libopencv-legacy
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) legacy library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: libselinux1
 Status: install ok installed
@@ -25873,6 +26984,27 @@ Description: Qt 4 test module
  libraries.
 Homepage: http://qt.nokia.com/
 Original-Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
+
+Package: libswscale-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 303
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libav
+Version: 4:0.8.1-0ubuntu1
+Depends: libavutil-dev (= 4:0.8.1-0ubuntu1), libswscale2 (<= 4:0.8.1-99) | libswscale-extra-2 (<= 4:0.8.1.99), libswscale2 (>= 4:0.8.1-0ubuntu1) | libswscale-extra-2 (>= 4:0.8.1)
+Description: Development files for libswscale
+ Libav is a complete, cross-platform solution to decode, encode, record,
+ convert and stream audio and video.
+ .
+ This is the video scaling library from Libav.
+ .
+ This package contains the header files and static libraries needed to
+ compile applications or shared objects that use libswscale.
+Homepage: http://libav.org/
+Original-Maintainer: Debian multimedia packages maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 
 Package: cmake-data
 Status: install ok installed
@@ -27002,6 +28134,34 @@ Description: X cursor management library
  the core X protocol CreateCursor request.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
+Package: libopencv-core-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 22854
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Replaces: libcv-dev (<< 2.3.1-1)
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libopencv-calib3d2.3, libopencv-core2.3 (= 2.3.1-7), libopencv-features2d2.3, libopencv-flann2.3, libopencv-gpu2.3, libopencv-highgui2.3, libopencv-imgproc2.3, libopencv-ml2.3, libopencv-objdetect2.3, libstdc++6 (>= 4.6), zlib1g-dev, pkg-config
+Breaks: libcv-dev (<< 2.3.1-1)
+Description: development files for libopencv-core
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) core.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
+
 Package: libdvbpsi7
 Status: install ok installed
 Priority: optional
@@ -27209,6 +28369,60 @@ Description: object-oriented interface to select() for Perl
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Homepage: http://search.cpan.org/dist/IO-Multiplex/
 
+Package: libavutil-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 405
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libav
+Version: 4:0.8.1-0ubuntu1
+Depends: libavutil51 (<= 4:0.8.1-99) | libavutil-extra-51 (<= 4:0.8.1.99), libavutil51 (>= 4:0.8.1-0ubuntu1) | libavutil-extra-51 (>= 4:0.8.1)
+Description: Development files for libavutil
+ Libav is a complete, cross-platform solution to decode, encode, record,
+ convert and stream audio and video.
+ .
+ This is the common utility library from Libav.
+ .
+ This package contains the header files and static libraries needed to
+ compile applications or shared objects that use libavutil.
+Homepage: http://libav.org/
+Original-Maintainer: Debian multimedia packages maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+
+Package: libgsm1-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 110
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libgsm
+Version: 1.0.13-3
+Replaces: libgsm-dev
+Depends: libgsm1 (= 1.0.13-3)
+Conflicts: libgsm-dev, libgsm1 (<= 1.0.10-2)
+Description: Development libraries for a GSM speech compressor
+ This package contains header files and development libraries for
+ libgsm, an implementation of the European GSM 06.10 provisional
+ standard for full-rate speech transcoding, prI-ETS 300 036, which
+ uses RPE/LTP (residual pulse excitation/long term prediction) coding
+ at 13 kbit/s.
+ .
+ GSM 06.10 compresses frames of 160 13-bit samples (8 kHz sampling
+ rate, i.e. a frame rate of 50 Hz) into 260 bits; for compatibility
+ with typical UNIX applications, our implementation turns frames of 160
+ 16-bit linear samples into 33-byte frames (1650 Bytes/s).
+ The quality of the algorithm is good enough for reliable speaker
+ recognition; even music often survives transcoding in recognizable
+ form (given the bandwidth limitations of 8 kHz sampling rate).
+ .
+ The interfaces offered are a front end modelled after compress(1), and
+ a library API.  Compression and decompression run faster than realtime
+ on most SPARCstations.  The implementation has been verified against the
+ ETSI standard test patterns.
+Original-Maintainer: Jochen Friedrich <jochen@scram.de>
+
 Package: libjson-perl
 Status: install ok installed
 Priority: optional
@@ -27274,6 +28488,31 @@ Description: MPEG audio decoder library
    - completely new implementation based on the ISO/IEC 11172-3 standard
    - distributed under the terms of the GNU General Public License (GPL)
 Original-Maintainer: Mad Maintainers <pkg-mad-maintainers@lists.alioth.debian.org>
+
+Package: libopencv-core2.3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 1231
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libstdc++6 (>= 4.4.0), zlib1g (>= 1:1.1.4)
+Description: computer vision core library
+ This package contains the OpenCV (Open Computer Vision) core runtime libraries.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: libfontenc1
 Status: install ok installed
@@ -27617,6 +28856,33 @@ Description: Autoconf Macro Archive
  Macro Archive as found at http://www.gnu.org/software/autoconf-archive/.
 Original-Maintainer: Bastien ROUCARIÈS <roucaries.bastien+debian@gmail.com>
 Homepage: http://www.gnu.org/software/autoconf-archive/
+
+Package: libopencv-flann-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 1176
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: opencv
+Version: 2.3.1-7
+Depends: libopencv-core-dev (= 2.3.1-7), libopencv-flann2.3 (= 2.3.1-7), pkg-config
+Description: development files for libopencv-flann
+ This package contains the header files and static library needed to compile
+ applications that use OpenCV (Open Computer Vision) Clustering and Search
+ in Multi-Dimensional spaces library.
+ .
+ The Open Computer Vision Library is a collection of algorithms and sample
+ code for various computer vision problems. The library is compatible with
+ IPL (Intel's Image Processing Library) and, if available, can use IPP
+ (Intel's Integrated Performance Primitives) for better performance.
+ .
+ OpenCV provides low level portable data types and operators, and a set
+ of high level functionalities for video acquisition, image processing and
+ analysis, structural analysis, motion analysis and object tracking, object
+ recognition, camera calibration and 3D reconstruction.
+Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Homepage: http://opencvlibrary.sourceforge.net/
 
 Package: isc-dhcp-client
 Status: install ok installed
@@ -28186,28 +29452,6 @@ Description: simple configuration storage system - D-Bus service
 Homepage: http://live.gnome.org/dconf
 Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 
-Package: libfreetype6-dev
-Status: install ok installed
-Priority: optional
-Section: libdevel
-Installed-Size: 2979
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Source: freetype
-Version: 2.4.8-1ubuntu2
-Depends: libfreetype6 (= 2.4.8-1ubuntu2), libc6-dev | libc-dev, zlib1g-dev | libz-dev
-Description: FreeType 2 font engine, development files
- The FreeType project is a team of volunteers who develop free,
- portable and high-quality software solutions for digital typography.
- They specifically target embedded systems and focus on bringing small,
- efficient and ubiquitous products.
- .
- This package contains all supplementary files (static library, headers
- and documentation) you need to develop your own programs using the
- FreeType 2 library.
-Homepage: http://www.freetype.org
-Original-Maintainer: Steve Langasek <vorlon@debian.org>
-
 Package: less
 Status: install ok installed
 Priority: standard
@@ -28230,6 +29474,28 @@ Description: pager program similar to more
  types of input, such as .doc or .txt.gz files.
 Homepage: http://www.greenwoodsoftware.com/less/
 Original-Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
+
+Package: libfreetype6-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 2979
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: freetype
+Version: 2.4.8-1ubuntu2
+Depends: libfreetype6 (= 2.4.8-1ubuntu2), libc6-dev | libc-dev, zlib1g-dev | libz-dev
+Description: FreeType 2 font engine, development files
+ The FreeType project is a team of volunteers who develop free,
+ portable and high-quality software solutions for digital typography.
+ They specifically target embedded systems and focus on bringing small,
+ efficient and ubiquitous products.
+ .
+ This package contains all supplementary files (static library, headers
+ and documentation) you need to develop your own programs using the
+ FreeType 2 library.
+Homepage: http://www.freetype.org
+Original-Maintainer: Steve Langasek <vorlon@debian.org>
 
 Package: libgphoto2-port0
 Status: deinstall ok config-files
@@ -28631,6 +29897,26 @@ Description: managed signals and slots library for C++
  "emitted."
 Homepage: http://www.boost.org/libs/signals/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
+
+Package: libilmbase-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 1040
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: ilmbase
+Version: 1.0.1-3build2
+Replaces: libopenexr-dev (<< 1.6)
+Depends: libilmbase6 (= 1.0.1-3build2)
+Conflicts: libopenexr-dev (<< 1.6)
+Description: development files for IlmBase
+ This package provides the development files for IlmBase, a set of
+ utility libraries relesaed by ILM and used by OpenEXR. Install this
+ package if you want to compile a program that makes use of these
+ libraries.
+Original-Maintainer: Debian PhotoTools Maintainers <pkg-phototools-devel@lists.alioth.debian.org>
+Homepage: http://www.openexr.com
 
 Package: libid3tag0
 Status: install ok installed

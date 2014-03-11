@@ -29,6 +29,13 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <Imlib2.h>
+/*network includes*/
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 
 using namespace FlyCapture2;
 
@@ -42,6 +49,7 @@ using namespace FlyCapture2;
 
 
 //globals
+/*cam stuff*/
 const unsigned int k_FrontCamSerial = 12262775;
 const unsigned int k_PanoCamSerial = 13282227;
 const Mode k_fmt7Mode = MODE_0;
@@ -57,6 +65,12 @@ const unsigned int k_PanoCamOffsetX = 34;
 const unsigned int k_PanoCamOffsetY = 14;
 const int k_RedBalance = 500;
 const int k_BlueBalance = 800;
+const unsigned int k_ImageHeight = 480;
+const unsigned int k_ImageWidth = 640;
+/*network stuff */
+const char* k_Server = "seykhl.ecn.purdue.edu";
+const char* k_FrontCamPort = "3601";
+const char* k_PanoCamPort = "3602";
 
 //structures
 struct PointGrey_t {
@@ -68,7 +82,8 @@ struct PointGrey_t {
   Image rawImage, convertedImage;  
   PixelFormat pixFormat;
   unsigned int rows, cols, stride;
-  Imlib_Image finalImage;
+  Imlib_Image firstImage, finalImage;
+  int sockfd;
 };
 
 
@@ -90,6 +105,8 @@ void PGR_GetFrame(PointGrey_t* PG);
 void PGR_SaveImage(PointGrey_t* PG);
 void Imlib_GetFrame(PointGrey_t* PG);
 void Imlib_SaveImage(PointGrey_t* PG);
+void *get_in_addr(struct sockaddr *sa);
+int ClientConnect(const char* server, const char* port);
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -117,10 +134,16 @@ int main(int /*argc*/, char** /*argv*/)
     {
       for (unsigned int i = 0; i < numCameras; i++)
       {
+	/* PGR functions only */
+	//PGR_GetFrame(&PG[i]);
+
+	/* now with Imlib functions */
 	Imlib_GetFrame(&PG[i]);
 	imlib_context_set_image(PG[i].finalImage);
 	//do something with the image here
 	imlib_free_image_and_decache();
+
+	/* use OpenCV functions here*/
     	if (imageCount % 10 == 0)
     	  printf("Captured %u-%d\n",PG[i].cameraInfo.serialNumber, imageCount);
       }
@@ -143,8 +166,15 @@ int main(int /*argc*/, char** /*argv*/)
     }
     for (unsigned int i = 0; i < numCameras; i++)
     {
+      /* PGR functions only*/
+      //PGR_GetFrame(&PG[i]);
+      //PGR_SaveImage(&PG[i]);
+
+      /* now with Imlib functions */
       Imlib_GetFrame(&PG[i]);
       Imlib_SaveImage(&PG[i]);
+
+      /* use OpenCV functions here */
     }
 
     PGR_StopAndCleanup(PG, numCameras);
@@ -394,6 +424,31 @@ int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCamera
       printf("Error in setting camera\n");
       return -1;
     }
+
+    /*** network stuff ***/
+    // if (PG[i].cameraInfo.serialNumber == k_FrontCamSerial)
+    // {
+    //   if ((PG[i].sockfd = ClientConnect(k_Server, k_FrontCamPort)) < 0)
+    //   {
+    // 	printf("Error in ClientConnect\n");
+    // 	return -1;
+    //   }
+    // }
+    // else if (PG[i].cameraInfo.serialNumber == k_PanoCamSerial)
+    // {
+    //   if ((PG[i].sockfd = ClientConnect(k_Server, k_PanoCamPort)) < 0)
+    //   {
+    // 	printf("Error in ClientConnect\n");
+    // 	return -1;
+    //   }
+    // }
+    // else
+    // {
+    //   printf("ERROR! Camera serial number not recognized!");
+    //   return -1;
+    // }
+    /*** end network stuff ***/
+
     // PrintCameraInfo(&PG->cameraInfo);
     // PrintFormat7Capabilities(PG[i].format7Info);
     // printf("Image size: %d x %d\n", PG[i].imageSettings.width, 
@@ -447,11 +502,50 @@ void Imlib_GetFrame(PointGrey_t* PG)
   // Convert the raw image
   CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
 				&PG->convertedImage));
-  PG->finalImage = 
-    imlib_create_image_using_copied_data(PG->cols,
-					 PG->rows,
-					 (unsigned int*)
-					 PG->convertedImage.GetData());
+
+  /* original code */
+  // PG->finalImage = 
+  //   imlib_create_image_using_copied_data(PG->cols,
+  // 					 PG->rows,
+  // 					 (unsigned int*)
+  // 					 PG->convertedImage.GetData());
+
+  /* updated with resizing */
+    PG->firstImage = 
+      imlib_create_image_using_copied_data(PG->cols,
+					   PG->rows,
+					   (unsigned int*)
+					   PG->convertedImage.GetData());
+    
+
+    //not sure if using this selection here is any faster
+  if ((PG->cols == k_ImageWidth) && (PG->rows = k_ImageHeight))
+  { //no resize needed
+    //printf("Image from camera %u not resized\n", PG->cameraInfo.serialNumber);
+    // PG->finalImage = 
+    //   imlib_create_image_using_copied_data(PG->cols,
+    // 					   PG->rows,
+    // 					   (unsigned int*)
+    // 					   PG->convertedImage.GetData());
+    PG->finalImage = PG->firstImage;
+  }
+  else
+  {
+    //resize needed
+    //printf("Image from camera %u WILL BE resized\n", PG->cameraInfo.serialNumber);
+    // PG->firstImage = 
+    //   imlib_create_image_using_copied_data(PG->cols,
+    // 					   PG->rows,
+    // 					   (unsigned int*)
+    // 					   PG->convertedImage.GetData());
+    imlib_context_set_image(PG->firstImage);
+    PG->finalImage = 
+      imlib_create_cropped_scaled_image(0, 0,
+					imlib_image_get_width(),
+					imlib_image_get_height(),
+					k_ImageWidth, k_ImageHeight);
+    imlib_free_image_and_decache();
+  }
 }
 
 void Imlib_SaveImage(PointGrey_t* PG)
@@ -464,4 +558,65 @@ void Imlib_SaveImage(PointGrey_t* PG)
   imlib_save_image(filename);
   imlib_free_image_and_decache();
   printf("Saved %s\n",filename);
+}
+
+// get sockaddr, IPv4 or IPv6:
+void *get_in_addr(struct sockaddr *sa)
+{
+  if (sa->sa_family == AF_INET) 
+  {
+    return &(((struct sockaddr_in*)sa)->sin_addr);
+  }
+  return &(((struct sockaddr_in6*)sa)->sin6_addr);
+}
+
+int ClientConnect(const char* server, const char* port)
+{
+  int sockfd;  
+  struct addrinfo hints, *servinfo, *p;
+  int rv;
+  char s[INET6_ADDRSTRLEN];
+
+  memset(&hints, 0, sizeof hints);
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  
+  if ((rv = getaddrinfo(server, port, &hints, &servinfo)) != 0) {
+    fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+    return -1;
+  }
+
+  // loop through all the results and connect to the first we can
+  for(p = servinfo; p != NULL; p = p->ai_next) 
+  {
+    if ((sockfd = socket(p->ai_family, p->ai_socktype,
+			 p->ai_protocol)) == -1)
+    {
+      perror("client: socket");
+      continue;
+    }
+    if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) 
+    {
+      close(sockfd);
+      perror("client: connect");
+      continue;
+    }
+    //if we get here, we have connected successfully
+    printf("Connection established\n");
+    break;
+  }
+  
+  if (p == NULL) 
+  {
+    //looped off the end of the list with no connection
+    fprintf(stderr, "client: failed to connect\n");
+    return -1;
+  }
+  inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
+	    s, sizeof s);
+  printf("client: connecting to %s\n", s);
+  
+  freeaddrinfo(servinfo); // all done with this structure
+  
+  return sockfd;
 }

@@ -1,0 +1,15 @@
+No support for the juju Firewire stack
+--------------------------------------
+
+Please note that the new "juju" Firewire stack in recent Linux 2.6 kernels is
+not supported by the libdc1394-22 packages. The juju stack is not complete yet
+and IIDC cameras cannot yet be read out correctly.
+
+If your kernel does not provide the modules for the old (but working) Firewire
+stack (ohci1394, raw1394, video1394), then you have to compile a kernel
+yourself that enables the old stack.
+
+If you have a kernel that provides modules for both the old and the new stack,
+it may be that the modules for the new stack are loaded in favour of those for
+the old stack. In that case, you have to rmmod firewire-ohci, firewire-sbp2 and
+firewire-core, and modprobe ohci1394, raw1394 and video1394.
