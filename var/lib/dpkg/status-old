@@ -4121,7 +4121,7 @@ Original-Maintainer: Craig Small <csmall@debian.org>
 Homepage: http://invisible-island.net/ncurses/
 
 Package: wamerican
-Status: install ok unpacked
+Status: install ok installed
 Priority: standard
 Section: text
 Installed-Size: 990
@@ -4749,6 +4749,31 @@ Description: Search engine library
 Original-Maintainer: Olly Betts <olly@survex.com>
 Homepage: http://xapian.org/
 
+Package: python-mako
+Status: install ok installed
+Priority: optional
+Section: python
+Installed-Size: 335
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: mako
+Version: 0.5.0-1
+Depends: python2.7, python (>= 2.7.1-0ubuntu2), python (<< 2.8), python-markupsafe
+Suggests: python-beaker (>= 1.1), python-mako-doc
+Enhances: python-pygments, python-pylons, python-turbogears
+Description: fast and lightweight templating for the Python platform
+ Mako is a template library written in Python. It provides a familiar, non-XML
+ syntax which compiles into Python modules for maximum performance. Mako's
+ syntax and API borrows from the best ideas of many others, including Django
+ templates, Cheetah, Myghty, and Genshi. Conceptually, Mako is an embedded
+ Python (i.e. Python Server Page) language, which refines the familiar ideas of
+ componentized layout and inheritance to produce one of the most
+ straightforward and flexible models available, while also maintaining close
+ ties to Python calling and scoping semantics.
+Original-Maintainer: Piotr Ożarowski <piotr@debian.org>
+Homepage: http://www.makotemplates.org/
+Python-Version: 2.7
+
 Package: libdc1394-22-dev
 Status: install ok installed
 Multi-Arch: same
@@ -4833,6 +4858,39 @@ Description: Samba winbind client library
  via the winbind pipe protocol with a Samba winbind server.
 Homepage: http://www.samba.org
 Original-Maintainer: Debian Samba Maintainers <pkg-samba-maint@lists.alioth.debian.org>
+
+Package: conky-std
+Status: install ok unpacked
+Priority: optional
+Section: utils
+Installed-Size: 952
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: conky
+Version: 1.8.1-6
+Replaces: conky-all, conky-cli
+Depends: libaudclient2 (>= 2.3), libc6 (>= 2.8), libcairo2 (>= 1.8.0), libcurl3-gnutls (>= 7.16.2-1), libdbus-glib-1-2 (>= 0.78), libgcc1 (>= 1:4.4.0), libglib2.0-0 (>= 2.12.0), libimlib2, libiw30 (>= 30~pre1), liblua5.1-0, libncurses5 (>= 5.5-5~), libtinfo5, libx11-6, libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxft2 (>> 2.1.1), libxml2 (>= 2.7.4), libxmmsclient6 (>= 0.7DrNo)
+Suggests: apcupsd, moc, mpd, audacious, xmms2
+Conflicts: conky-all, conky-cli
+Conffiles:
+ /etc/conky/conky_no_x11.conf newconffile
+ /etc/conky/conky.conf newconffile
+Description: highly configurable system monitor (default version)
+ Conky is a system monitor that can display just about anything,
+ either on your root desktop or in its own window.
+ Conky has many built-in objects, as well as the ability to execute
+ external programs or scripts (either external or through built-in
+ lua support).
+ .
+ This package should be a good compromise for most users that do not
+ need special features.
+ It includes the following support:
+ .
+ X11, XDamage, XDBE, Xft, MPD, MOC, math, hddtemp, portmon, RSS,
+ Weather, wireless, Imlib2, ALSA mixer, apcupsd, I/O stats, argb, Lua
+ and the cairo and imlib2 lua bindings, Audacious, and XMMS2.
+Original-Maintainer: Vincent Cheng <Vincentc1208@gmail.com>
+Homepage: http://conky.sourceforge.net/
 
 Package: libsigc++-2.0-dev
 Status: install ok installed
@@ -8742,7 +8800,7 @@ Homepage: http://www.gnu.org/software/diffutils/
 Original-Maintainer: Santiago Vila <sanvila@debian.org>
 
 Package: aspell-en
-Status: install ok unpacked
+Status: install ok installed
 Priority: optional
 Section: text
 Installed-Size: 548
@@ -10395,6 +10453,27 @@ Description: deb package format runtime library
  file content.
 Original-Maintainer: APT Development Team <deity@lists.debian.org>
 
+Package: libdbi1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 84
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libdbi
+Version: 0.8.4-5.1
+Depends: libc6 (>= 2.4)
+Breaks: libapache2-mod-log-sql-dbi (<= 1.100-11), libdbd-mysql (<< 0.8.2-1), libdbd-pgsql (<< 0.8.2-1), libdbd-sqlite (<< 0.8.2-1)
+Description: DB Independent Abstraction Layer for C -- shared library
+ libdbi implements a database-independent abstraction layer in C, similar to
+ the DBI/DBD layer in Perl. Writing one generic set of code, programmers can
+ leverage the power of multiple databases and multiple simultaneous database
+ connections by using this framework.
+ .
+ This package is the shared library.
+Original-Maintainer: Thomas Goirand <zigo@debian.org>
+Homepage: http://libdbi.sourceforge.net/
+
 Package: gsfonts
 Status: install ok installed
 Priority: optional
@@ -10692,6 +10771,24 @@ Description: X.Org X server -- output driver metapackage
  (Xorg).  It does not provide any drivers itself, and may be removed if you wish
  to only have certain drivers installed.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: iptraf
+Status: install ok installed
+Priority: optional
+Section: net
+Installed-Size: 571
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 3.0.0-8
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libncurses5 (>= 5.5-5~), libtinfo5
+Conffiles:
+ /etc/logrotate.d/iptraf 6627fbb377f40ec46f7b8fddebd18be2
+Description: Interactive Colorful IP LAN Monitor
+ IPTraf is an ncurses-based IP LAN monitor that generates
+ various network statistics including TCP info, UDP counts,
+ ICMP and OSPF information, Ethernet load info, node stats,
+ IP checksum errors, and others.
+Original-Maintainer: Frederic Peters <fpeters@debian.org>
 
 Package: libboost-graph-parallel-dev
 Status: install ok installed
@@ -12739,6 +12836,27 @@ Description: Heimdal Kerberos - stringprep implementation
 Original-Maintainer: Brian May <bam@debian.org>
 Homepage: http://www.h5l.org/
 
+Package: conky
+Status: install ok unpacked
+Priority: extra
+Section: utils
+Installed-Size: 59
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 1.8.1-6
+Depends: conky-std | conky-cli | conky-all
+Description: highly configurable system monitor (transitional package)
+ Conky is a system monitor that can display just about anything,
+ either on your root desktop or in its own window.
+ Conky has many built-in objects, as well as the ability to execute
+ external programs or scripts (either external or through built-in
+ lua support).
+ .
+ This is a dummy package to ease transition to the new packaging scheme.
+ It may be safely removed after upgrade/installation.
+Original-Maintainer: Vincent Cheng <Vincentc1208@gmail.com>
+Homepage: http://conky.sourceforge.net/
+
 Package: lockfile-progs
 Status: install ok installed
 Priority: optional
@@ -12884,7 +13002,7 @@ Homepage: http://www.mozilla.org/projects/nspr/
 Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
 
 Package: spell
-Status: install ok unpacked
+Status: install ok installed
 Priority: optional
 Section: text
 Installed-Size: 61
@@ -14411,6 +14529,32 @@ Description: multiple precision complex floating-point library
  It builds upon the GNU MP and the MPFR libraries.
 Original-Maintainer: Laurent Fousse <lfousse@debian.org>
 Homepage: http://www.multiprecision.org/mpc/
+
+Package: libpcap0.8
+Status: install ok installed
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 222
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libpcap
+Version: 1.1.1-10
+Replaces: libpcap0.8-dev (<< 1.0.0-2)
+Depends: libc6 (>= 2.11), libgcc1 (>= 1:4.4.0)
+Pre-Depends: multiarch-support
+Description: system interface for user-level packet capture
+ libpcap (Packet CAPture) provides a portable framework for low-level
+ network monitoring.  Applications include network statistics collection,
+ security monitoring, network debugging, etc.
+ .
+ Since almost every system vendor provides a different interface for
+ packet capture, and since there are several tools that require this
+ functionality, the libpcap authors created this system-independent API
+ to ease in porting and to alleviate the need for several
+ system-dependent packet capture modules in each application.
+Original-Maintainer: Romain Francoise <rfrancoise@debian.org>
+Homepage: http://www.tcpdump.org/
 
 Package: libhtml-tree-perl
 Status: install ok installed
@@ -19496,7 +19640,7 @@ Original-Maintainer: Theppitak Karoonboonyanan <thep@debian.org>
 Homepage: http://linux.thai.net/projects/libthai
 
 Package: ienglish-common
-Status: install ok unpacked
+Status: install ok installed
 Priority: optional
 Section: text
 Installed-Size: 92
@@ -19587,30 +19731,8 @@ Description: Practical and portable Scheme system - compiler
 Original-Maintainer: Davide Puricelli (evo) <evo@debian.org>
 Homepage: http://www.call-cc.org
 
-Package: libss2
-Status: install ok installed
-Multi-Arch: same
-Priority: required
-Section: libs
-Installed-Size: 100
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Source: e2fsprogs
-Version: 1.42-1ubuntu2
-Replaces: e2fsprogs (<< 1.34-1)
-Depends: libcomerr2, libc6 (>= 2.11)
-Pre-Depends: multiarch-support
-Description: command-line interface parsing library
- libss provides a simple command-line interface parser which will
- accept input from the user, parse the command into an argv argument
- vector, and then dispatch it to a handler function.
- .
- It was originally inspired by the Multics SubSystem library.
-Homepage: http://e2fsprogs.sourceforge.net
-Original-Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
-
 Package: iamerican
-Status: install ok unpacked
+Status: install ok installed
 Priority: optional
 Section: text
 Installed-Size: 268
@@ -19634,6 +19756,28 @@ Description: American English dictionary for ispell (standard version)
  needs a word list.
 Original-Maintainer: Robert Luberda <robert@debian.org>
 Homepage: http://www.lasr.cs.ucla.edu/geoff/ispell.html
+
+Package: libss2
+Status: install ok installed
+Multi-Arch: same
+Priority: required
+Section: libs
+Installed-Size: 100
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: e2fsprogs
+Version: 1.42-1ubuntu2
+Replaces: e2fsprogs (<< 1.34-1)
+Depends: libcomerr2, libc6 (>= 2.11)
+Pre-Depends: multiarch-support
+Description: command-line interface parsing library
+ libss provides a simple command-line interface parser which will
+ accept input from the user, parse the command into an argv argument
+ vector, and then dispatch it to a handler function.
+ .
+ It was originally inspired by the Multics SubSystem library.
+Homepage: http://e2fsprogs.sourceforge.net
+Original-Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
 
 Package: liblwp-protocol-https-perl
 Status: install ok installed
@@ -19806,7 +19950,7 @@ Homepage: http://savannah.gnu.org/projects/findutils/
 Original-Maintainer: Andreas Metzler <ametzler@debian.org>
 
 Package: spellutils
-Status: install ok unpacked
+Status: install ok installed
 Priority: optional
 Section: text
 Installed-Size: 91
@@ -19924,6 +20068,29 @@ Depends: libjpeg-turbo-progs (>= 1.1.90+svn722-1ubuntu6)
 Description: Programs for manipulating JPEG files (dependency package)
  libjpeg-progs dependency package, depending on libjpeg-turbo-progs.
 
+Package: librrd4
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 463
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: rrdtool
+Version: 1.4.7-1
+Depends: libc6 (>= 2.8), libcairo2 (>= 1.2.4), libdbi1 (>= 0.8.4), libglib2.0-0 (>= 2.12.0), libpango1.0-0 (>= 1.14.0), libpng12-0 (>= 1.2.13-4), libxml2 (>= 2.7.4)
+Recommends: ttf-dejavu | ttf-bitstream-vera
+Description: time-series data storage and display system (runtime library)
+ The Round Robin Database Tool (RRDtool) is a system to store and display
+ time-series data (e.g. network bandwidth, machine-room temperature,
+ server load average). It stores the data in Round Robin Databases (RRDs),
+ a very compact way that will not expand over time. RRDtool processes the
+ extracted data to enforce a certain data density, allowing for useful
+ graphical representation of data values.
+ .
+ This package contains shared libraries used to access and manipulate RRDs.
+Original-Maintainer: Debian RRDtool Team <rrdtool@ml.snow-crash.org>
+Homepage: http://oss.oetiker.ch/rrdtool/
+
 Package: xz-utils
 Status: install ok installed
 Multi-Arch: foreign
@@ -19958,6 +20125,40 @@ Description: XZ-format compression utilities
   * support for flushing the encoder.
 Original-Maintainer: Jonathan Nieder <jrnieder@gmail.com>
 Homepage: http://tukaani.org/xz/
+
+Package: libaudclient2
+Status: install ok unpacked
+Multi-Arch: same
+Priority: optional
+Section: sound
+Installed-Size: 75
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: audacious
+Version: 3.2.1-2
+Depends: libc6 (>= 2.4), libdbus-glib-1-2 (>= 0.78), libglib2.0-0 (>= 2.12.0)
+Pre-Depends: multiarch-support
+Description: audacious dbus remote control library
+ Audacious is a fork of beep-media-player which supports winamp skins
+ and many codecs.
+ .
+ In the default install, the following codecs are supported:
+ .
+  * MP3
+  * Ogg Vorbis / Theora
+  * AAC and AAC+
+  * FLAC
+  * ALAC
+  * Windows Media (WMA)
+  * WAVE
+ .
+ Additionally, Audacious is extendable through plugins, and contains
+ other useful features like LIRC support. Support for many more codecs
+ can also be added through plugins.
+ .
+ This package contains a library used to remote control audacious.
+Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Homepage: http://www.audacious-media-player.org/
 
 Package: libgnomevfs2-extra
 Status: install ok installed
@@ -20610,7 +20811,7 @@ Homepage: http://lxde.org
 Original-Maintainer: Debian LXDE Packaging Team <pkg-lxde-maintainers@lists.alioth.debian.org>
 
 Package: aspell-doc
-Status: install ok unpacked
+Status: install ok installed
 Priority: optional
 Section: doc
 Installed-Size: 865
@@ -20627,6 +20828,39 @@ Description: Documentation for GNU Aspell spell-checker
  and workings of Aspell.
 Original-Maintainer: Brian Nelson <pyro@debian.org>
 Homepage: http://aspell.net/
+
+Package: ntop-data
+Status: install ok installed
+Priority: optional
+Section: net
+Installed-Size: 3340
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: ntop
+Version: 3:4.1.0+dfsg1-1
+Replaces: ntop (<< 3:4.0)
+Depends: libjs-mochikit
+Recommends: ntop (>= 3:4.1.0+dfsg1-1)
+Suggests: geoip-database-contrib
+Breaks: ntop (<< 3:4.0)
+Description: display network usage in a web browser (data files)
+ ntop users can use a web browser to navigate through ntop (that acts as a
+ web server) traffic information and get a dump of the network status. In the
+ latter case, ntop can be seen as a simple RMON-like agent with an embedded web
+ interface.
+ The use of:
+  * a web interface
+  * limited configuration and administration via the web interface
+  * reduced CPU and memory usage (they vary according to network size
+  and traffic)
+ make ntop easy to use and suitable for monitoring various kind of networks.
+ .
+ ntop displays a summary of network usage by machines on your network in a web
+ mode, which allows the display to be browsed with a web browser.
+ .
+ This package contains 3rd party data.
+Original-Maintainer: Jordan Metzmeier <jordan@linuxgen.com>
+Homepage: http://www.ntop.org/
 
 Package: libjack-jackd2-0
 Status: install ok installed
@@ -23913,6 +24147,29 @@ Description: Tool for generating GNU Standards-compliant Makefiles
 Homepage: http://www.gnu.org/software/automake/
 Original-Maintainer: Eric Dorland <eric@debian.org>
 
+Package: libxmmsclient6
+Status: install ok unpacked
+Priority: optional
+Section: libs
+Installed-Size: 177
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: xmms2
+Version: 0.8+dfsg-2
+Replaces: libxmmsclient2, libxmmsclient3, libxmmsclient4, libxmmsclient5
+Depends: libc6 (>= 2.4)
+Breaks: xmms2-core (<< 0.6DrMattDestruction)
+Conflicts: libxmmsclient2, libxmmsclient3, libxmmsclient4, libxmmsclient5
+Description: XMMS2 - client library
+ XMMS2 is a redesign of the XMMS music player. It features a client-server
+ model, allowing multiple (even simultaneous!) user interfaces, both textual
+ and graphical. All common audio formats are supported using plug-ins. On top of
+ this, there is a flexible media library to organize your music.
+ .
+ This package contains a client library written in c.
+Original-Maintainer: Benjamin Drung <bdrung@debian.org>
+Homepage: http://xmms2.org/
+
 Package: monkeysphere
 Status: install ok installed
 Priority: extra
@@ -24419,6 +24676,39 @@ Description: shared low-level terminfo library for terminal handling
  This package contains the shared low-level terminfo library.
 Original-Maintainer: Craig Small <csmall@debian.org>
 Homepage: http://invisible-island.net/ncurses/
+
+Package: python-markupsafe
+Status: install ok installed
+Priority: optional
+Section: python
+Installed-Size: 96
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: markupsafe
+Version: 0.15-1
+Provides: python2.7-markupsafe
+Depends: python2.7, python (>= 2.7.1-0ubuntu2), python (<< 2.8), libc6 (>= 2.4)
+Description: XML/HTML/XHTML Markup safe string for Python
+ MarkupSafe implements a unicode subclass that supports HTML strings:
+ .
+  >>> from markupsafe import Markup, escape
+  >>> escape("<script>alert(document.cookie);</script>")
+  Markup(u'&lt;script&gt;alert(document.cookie);&lt;/script&gt;')
+  >>> tmpl = Markup("<em>%s</em>")
+  >>> tmpl % "Peter > Lustig"
+  Markup(u'<em>Peter &gt; Lustig</em>')
+ .
+ If you want to make an object unicode that is not yet unicode
+ but don't want to lose the taint information, you can use the
+ `soft_unicode` function:
+ .
+  >>> from markupsafe import soft_unicode
+  >>> soft_unicode(42)
+  u'42'
+  >>> soft_unicode(Markup('foo'))
+  Markup(u'foo')
+Original-Maintainer: Piotr Ożarowski <piotr@debian.org>
+Homepage: http://pypi.python.org/pypi/MarkupSafe
 
 Package: libsaxon-java
 Status: install ok installed
@@ -30208,6 +30498,23 @@ Description: A command-line driven interactive plotting program
  supporting the X11-output.
 Homepage: http://gnuplot.sourceforge.net/
 Original-Maintainer: Bradley Smith <bradsmith@debian.org>
+
+Package: libjs-mochikit
+Status: install ok installed
+Priority: optional
+Section: web
+Installed-Size: 1760
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: mochikit
+Version: 1.4.2-3fakesync1
+Recommends: javascript-common
+Description: JavaScript library inspired by Python
+ MochiKit is a highly documented and well tested suite of JavaScript libraries
+ that will help you get things done, fast. It takes ideas from Python and
+ Objective-C and adapts them to the world of JavaScript.
+Homepage: http://www.mochikit.com/
+Original-Maintainer: Debian Javascript Maintainers <pkg-javascript-devel@lists.alioth.debian.org>
 
 Package: libxerces2-java-doc
 Status: install ok installed

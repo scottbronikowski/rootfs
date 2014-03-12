@@ -1,16 +1,3 @@
-make
-lla /tmp/images/
-feh /tmp/images/*
-make
-lla /tmp/images/
-feh /tmp/images/*
-make
-lla /tmp/images/
-emacs &
-ls
-cd ..
-mkdir test_c
-cp testing/RoverCamDefs.h test_c/RoverCamDefs.h
 ls
 cd test_c/
 ls
@@ -1998,3 +1985,16 @@ apt-get install dictionaries-common ispell aspell spell iamerican wamerican aspe
 created separate Network_StartCameras(), Imlib_GetFrameWithResize() functions in CustomImageEx.cpp;
 "
 git push
+echo 20000 > /dev/pwm10
+echo 10000 > /dev/pwm10
+echo 15000 > /dev/pwm10
+emacs today.text &
+cd test_code/flycapture/src/CustomImageEx/
+make
+cd test_code/flycapture/bin
+./CustomImageEx 
+~~~~~~~~~~~~~~~~~~~~~~~~~
+./CustomImageEx 
+lsusb
+htop
+reboot

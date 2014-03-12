@@ -141,7 +141,7 @@ int main(int /*argc*/, char** /*argv*/)
 
     printf( "Grabbing %d images\n", k_numImages ); //setup completed
 
-    // char tempbuf[512];
+    // unsigned char tempbuf[512];
     // int len;
 
     int img_size;
@@ -188,7 +188,7 @@ int main(int /*argc*/, char** /*argv*/)
 	//context set above -- need to move?
 	unsigned char *frame = 
 	  (unsigned char *)imlib_image_get_data_for_reading_only();
-	if (sendall(PG[i].sockfd, frame, &img_size) <= 0)
+	if (sendall(PG[i].sockfd, frame, &img_size) != 0)
 	{
 	  printf("Error in sendall\n");
 	}
