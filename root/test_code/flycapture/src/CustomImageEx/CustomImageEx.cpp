@@ -104,9 +104,13 @@ int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCamera
 void PGR_GetFrame(PointGrey_t* PG);
 void PGR_SaveImage(PointGrey_t* PG);
 void Imlib_GetFrame(PointGrey_t* PG);
+void Imlib_GetFrameWithResize(PointGrey_t* PG);
 void Imlib_SaveImage(PointGrey_t* PG);
+/* network prototypes*/
 void *get_in_addr(struct sockaddr *sa);
 int ClientConnect(const char* server, const char* port);
+int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras);
+int sendall(int s, char *buf, int *len);
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -127,7 +131,17 @@ int main(int /*argc*/, char** /*argv*/)
       PGR_StopAndCleanup(PG, numCameras);
       return -1;
     }
+
+    if (Network_StartCameras(PG, numCameras) != 0)
+    {
+      printf("Error starting network\n");
+      //return -1;
+    }
+
     printf( "Grabbing %d images\n", k_numImages ); //setup completed
+
+    char tempbuf[512];
+    int len;
 
     double start = current_time();
     for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
@@ -139,8 +153,26 @@ int main(int /*argc*/, char** /*argv*/)
 
 	/* now with Imlib functions */
 	Imlib_GetFrame(&PG[i]);
+	//Imlib_GetFrameWithResize(&PG[i]);
 	imlib_context_set_image(PG[i].finalImage);
-	//do something with the image here
+	
+	//SEND IMAGE HERE
+	memset(&tempbuf, 0, sizeof(tempbuf));
+	sprintf(tempbuf, "sending image %u-%u\n", PG[i].cameraInfo.serialNumber,
+		imageCount);
+	len = strlen(tempbuf);
+	printf("tempbuf = %s, len = %d\n", tempbuf, len);
+	//first send size
+	if (send(PG[i].sockfd, &len, sizeof(len), 0) <= 0)
+	{
+	  printf("Error sending len\n");
+	}
+	//then send data
+	if (sendall(PG[i].sockfd, tempbuf, &len) != 0)
+	{
+	  printf("Error in sendall\n");
+	}
+	
 	imlib_free_image_and_decache();
 
 	/* use OpenCV functions here*/
@@ -425,30 +457,6 @@ int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCamera
       return -1;
     }
 
-    /*** network stuff ***/
-    // if (PG[i].cameraInfo.serialNumber == k_FrontCamSerial)
-    // {
-    //   if ((PG[i].sockfd = ClientConnect(k_Server, k_FrontCamPort)) < 0)
-    //   {
-    // 	printf("Error in ClientConnect\n");
-    // 	return -1;
-    //   }
-    // }
-    // else if (PG[i].cameraInfo.serialNumber == k_PanoCamSerial)
-    // {
-    //   if ((PG[i].sockfd = ClientConnect(k_Server, k_PanoCamPort)) < 0)
-    //   {
-    // 	printf("Error in ClientConnect\n");
-    // 	return -1;
-    //   }
-    // }
-    // else
-    // {
-    //   printf("ERROR! Camera serial number not recognized!");
-    //   return -1;
-    // }
-    /*** end network stuff ***/
-
     // PrintCameraInfo(&PG->cameraInfo);
     // PrintFormat7Capabilities(PG[i].format7Info);
     // printf("Image size: %d x %d\n", PG[i].imageSettings.width, 
@@ -492,6 +500,43 @@ void PGR_SaveImage(PointGrey_t* PG)
   printf("Saved %s\n",filename);
 }
 
+void Imlib_GetFrameWithResize(PointGrey_t* PG)
+{
+  // Retrieve an image
+  CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
+  // Get the raw image dimensions
+  PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
+			     &PG->stride, &PG->pixFormat );
+  // Convert the raw image
+  CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
+				&PG->convertedImage));
+  PG->firstImage = 
+    imlib_create_image_using_copied_data(PG->cols,
+					 PG->rows,
+					 (unsigned int*)
+					 PG->convertedImage.GetData());
+    
+
+    //not sure if using this selection here is any faster
+  if ((PG->cols == k_ImageWidth) && (PG->rows = k_ImageHeight))
+  { //no resize needed
+    //printf("Image from camera %u not resized\n", PG->cameraInfo.serialNumber);
+    PG->finalImage = PG->firstImage;
+  }
+  else
+  {
+    //resize needed
+    //printf("Image from camera %u WILL BE resized\n", PG->cameraInfo.serialNumber);
+    imlib_context_set_image(PG->firstImage);
+    PG->finalImage = 
+      imlib_create_cropped_scaled_image(0, 0,
+					imlib_image_get_width(),
+					imlib_image_get_height(),
+					k_ImageWidth, k_ImageHeight);
+    imlib_free_image_and_decache();
+  }
+}
+
 void Imlib_GetFrame(PointGrey_t* PG)
 {
   // Retrieve an image
@@ -504,48 +549,12 @@ void Imlib_GetFrame(PointGrey_t* PG)
 				&PG->convertedImage));
 
   /* original code */
-  // PG->finalImage = 
-  //   imlib_create_image_using_copied_data(PG->cols,
-  // 					 PG->rows,
-  // 					 (unsigned int*)
-  // 					 PG->convertedImage.GetData());
-
-  /* updated with resizing */
-    PG->firstImage = 
-      imlib_create_image_using_copied_data(PG->cols,
-					   PG->rows,
-					   (unsigned int*)
-					   PG->convertedImage.GetData());
-    
-
-    //not sure if using this selection here is any faster
-  if ((PG->cols == k_ImageWidth) && (PG->rows = k_ImageHeight))
-  { //no resize needed
-    //printf("Image from camera %u not resized\n", PG->cameraInfo.serialNumber);
-    // PG->finalImage = 
-    //   imlib_create_image_using_copied_data(PG->cols,
-    // 					   PG->rows,
-    // 					   (unsigned int*)
-    // 					   PG->convertedImage.GetData());
-    PG->finalImage = PG->firstImage;
-  }
-  else
-  {
-    //resize needed
-    //printf("Image from camera %u WILL BE resized\n", PG->cameraInfo.serialNumber);
-    // PG->firstImage = 
-    //   imlib_create_image_using_copied_data(PG->cols,
-    // 					   PG->rows,
-    // 					   (unsigned int*)
-    // 					   PG->convertedImage.GetData());
-    imlib_context_set_image(PG->firstImage);
-    PG->finalImage = 
-      imlib_create_cropped_scaled_image(0, 0,
-					imlib_image_get_width(),
-					imlib_image_get_height(),
-					k_ImageWidth, k_ImageHeight);
-    imlib_free_image_and_decache();
-  }
+  PG->finalImage = 
+    imlib_create_image_using_copied_data(PG->cols,
+  					 PG->rows,
+  					 (unsigned int*)
+  					 PG->convertedImage.GetData());
+  
 }
 
 void Imlib_SaveImage(PointGrey_t* PG)
@@ -620,3 +629,52 @@ int ClientConnect(const char* server, const char* port)
   
   return sockfd;
 }
+
+int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras)
+{
+ 
+  for (unsigned int i = 0; i < numCameras; i++) //setup/init loop
+  {
+    if (PG[i].cameraInfo.serialNumber == k_FrontCamSerial)
+    {
+      if ((PG[i].sockfd = ClientConnect(k_Server, k_FrontCamPort)) < 0)
+      {
+    	printf("Error in ClientConnect\n");
+    	return -1;
+      }
+    }
+    else if (PG[i].cameraInfo.serialNumber == k_PanoCamSerial)
+    {
+      if ((PG[i].sockfd = ClientConnect(k_Server, k_PanoCamPort)) < 0)
+      {
+    	printf("Error in ClientConnect\n");
+    	return -1;
+      }
+    }
+    else
+    {
+      printf("ERROR! Camera serial number not recognized in Network_StartCameras!");
+      return -1;
+    }
+    printf("Camera %u connected to %s\n", PG[i].cameraInfo.serialNumber, k_Server);
+  }
+  return 0;
+}
+
+int sendall(int s, char *buf, int *len)
+{
+  int total = 0;        // how many bytes we've sent
+  int bytesleft = *len; // how many we have left to send
+  int n;
+  
+  while(total < *len) {
+    n = send(s, buf+total, bytesleft, 0);
+    if (n == -1) { break; }
+    total += n;
+    bytesleft -= n;
+  }
+  
+  *len = total; // return number actually sent here
+  printf("sent %d\n", *len);
+  return n==-1?-1:0; // return -1 on failure, 0 on success
+} 

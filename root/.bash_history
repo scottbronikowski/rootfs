@@ -1,76 +1,3 @@
-hwclock
-date
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
-ls
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-reboot
-ls .bas*
-cat .bash_history
-cd test_code/
-ls
-g++ -o monitor monitor.cc motor_control_functions.cc 
-ls
-lla
-./monitor 
-cd ../pointgrey/flycapture.2.6.3.2_armhf/src/testing/
-ls
-ulimit -a
-ulimit -c unlimited
-ulimit -a
-vi ~/.bashrc 
-ls /etc/lim*
-ls /etc/security/l*
-more /etc/security/limits.conf
-vi ~/.bashrc 
-top
-cd /
-git add -A
-git status
-git commit -m "added usleep(10000) to monitor.cc; first draft of testcapture.cc--still having errors causing USB bus shutdown"
-git push
-exit
-reboot
-emacs &
-locate CameraInternal.cpp
-find CameraInternal.cpp
-cd pointgrey/flycapture.2.6.3.2_armhf
-grep -r "Generation count" *
-cat lib/libflycapture.so
-62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c
-top
-cd /tmp/
-ls 
-feh
-cd ~/pointgrey/flycapture.2.6.3.2_armhf/bin
-ls
-./testcapture 
-mkdir /tmp/images
-./testcapture 
-lsusb
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/src/testing/
-make
-feh /tmp/images/*
-inkscape /tmp/images/*
-make
-ls /tmp/images
-rm /tmp/images/*
-ls /tmp/images
-feh /tmp/images/*
-lla /tmp/images
-make
-lla /tmp/images
-feh /tmp/images/panor*
-lla /tmp/images
-feh /tmp/images/panor{1,2}.png
-rm /tmp/images/*
-feh /tmp/images/panor0.png 
-rm -rf /tmp/images
-ls /tmp
-maek
 make
 lla /tmp
 mkdir /tmp/images
@@ -1998,3 +1925,76 @@ ls
 emacs openfiles.txt &
 kill -9 1157
 exit
+cd test_code/flycapture/bin
+./CustomImageEx 
+ls
+apt-get install opencv
+apt-cache search opencv
+lsusb
+dpkg --get-selections | grep libdc
+dpkg --get-selections | grep ff
+ssh -T git@github.com
+apt-get install libcv-dev libcv2.3 libcvaux-dev libcvaux2.3 libhighgui-dev libhighgui2.3 libopencv-calib3d-dev libopencv-calib3d2.3 libopencv-contrib-dev libopencv-contrib2.3 libopencv-core-dev libopencv-core2.3 libopencv-dev libopencv-features2d-dev libopencv-features2d2.3 libopencv-flann-dev libopencv-flann2.3 libopencv-gpu-dev libopencv-gpu2.3 libopencv-highgui-dev libopencv-highgui2.3 libopencv-imgproc-dev libopencv-imgproc2.3 libopencv-legacy-dev libopencv-legacy2.3 libopencv-ml-dev libopencv-ml2.3 libopencv-objdetect-dev libopencv-objdetect2.3 libopencv-video-dev libopencv-video2.3 opencv-doc python-opencv libfaad-dev libgsm1-dev libogg-dev libschroedinger-dev libspeex-dev libtheora-dev libvorbis-dev
+cd test_code/flycapture/src/CustomImageEx/
+emacs CustomImageEx.cpp &
+date
+emacs &
+htop
+halt
+cd test_code/flycapture/bin
+apt-get --reinstall dictionaries-common
+apt-get install dictionaries-common
+ispell
+aspell
+apt-get install ispell
+apt-get install aspell
+apt-get install spell iamerican ispell-dictionary wamerican wordlist aspell-doc spellutils aspell-en aspell-dictionary aspell6a-dictionary
+apt-get install spell iamerican wamerican aspell-doc spellutils aspell-en
+./CustomImageEx 
+ps -ef | grep Cus
+./CustomImageEx 
+lsusb
+date
+lsusb
+echo 20000 > /dev/pwm10
+echo 20000 > /dev/pwm9
+echo 15000 > /dev/pwm9
+echo 15000 > /dev/pwm10
+reboot
+cd test_code/flycapture/src/CustomImageEx/
+ls
+vi bigtest.sh 
+./bigtest.sh 
+reboot
+emacs today.text &
+exit
+halt
+reboot
+halt
+/e
+ls /etc/init.d
+ls /etc/rc2.d/
+/etc/init.d/servo-control.sh stop
+/etc/init.d/servo-control.sh start
+echo 17000 > /dev/pwm10
+echo 15000 > /dev/pwm10
+emacs today.text &
+cd test_code/flycapture/src/CustomImageEx/
+ls
+cd test_code/flycapture/bin
+./CustomImageEx 
+htop
+reboot
+emacs today.text &
+exit
+exit
+exit
+emacs today.text &
+cd test_code/fl
+cd test_code/flycapture/src/CustomImageEx/
+ls
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+htop
+reboot
