@@ -1,19 +1,4 @@
 make
-lla /tmp
-mkdir /tmp/images
-lla
-lla /tmp
-rmdir /tmp/images
-lla /tmp
-make
-lla /tmp
-make
-ls
-cd ..
-ls
-cd testing/
-emacs &
-make
 lla /tmp/images/
 feh /tmp/images/*
 make
@@ -1998,3 +1983,18 @@ cd test_code/flycapture/bin
 lsusb
 htop
 reboot
+emacs today.text &
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+htop
+reboot
+cd /
+git status
+git add -A
+git commit -m "***CustomImageEx.cpp now sends dummy data across network (first length len, then string data of length len).  Should be able to modify to send image dimensions followed by image data***
+removed ntpdate call from /etc/init.d/ntp--seems to be ok now with backup battery;
+apt-get install dictionaries-common ispell aspell spell iamerican wamerican aspell-doc spellutils aspell-en;
+created separate Network_StartCameras(), Imlib_GetFrameWithResize() functions in CustomImageEx.cpp;
+"
+git push

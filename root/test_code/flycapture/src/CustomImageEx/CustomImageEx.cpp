@@ -71,6 +71,7 @@ const unsigned int k_ImageWidth = 640;
 const char* k_Server = "seykhl.ecn.purdue.edu";
 const char* k_FrontCamPort = "3601";
 const char* k_PanoCamPort = "3602";
+const unsigned int k_BytesPerPixel = 4;
 
 //structures
 struct PointGrey_t {
@@ -110,7 +111,7 @@ void Imlib_SaveImage(PointGrey_t* PG);
 void *get_in_addr(struct sockaddr *sa);
 int ClientConnect(const char* server, const char* port);
 int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras);
-int sendall(int s, char *buf, int *len);
+int sendall(int s, unsigned char *buf, int *len);
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -140,8 +141,10 @@ int main(int /*argc*/, char** /*argv*/)
 
     printf( "Grabbing %d images\n", k_numImages ); //setup completed
 
-    char tempbuf[512];
-    int len;
+    // char tempbuf[512];
+    // int len;
+
+    int img_size;
 
     double start = current_time();
     for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
@@ -154,28 +157,66 @@ int main(int /*argc*/, char** /*argv*/)
 	/* now with Imlib functions */
 	Imlib_GetFrame(&PG[i]);
 	//Imlib_GetFrameWithResize(&PG[i]);
-	imlib_context_set_image(PG[i].finalImage);
+	imlib_context_set_image(PG[i].finalImage); //move this closer to imlib calls?
 	
+	/* LOOK TO FUNCTIONALIZE THIS SECTION */
 	//SEND IMAGE HERE
-	memset(&tempbuf, 0, sizeof(tempbuf));
-	sprintf(tempbuf, "sending image %u-%u\n", PG[i].cameraInfo.serialNumber,
-		imageCount);
-	len = strlen(tempbuf);
-	printf("tempbuf = %s, len = %d\n", tempbuf, len);
-	//first send size
-	if (send(PG[i].sockfd, &len, sizeof(len), 0) <= 0)
+
+	//first send image dimensions
+	// printf("rows = %u, cols = %u, stride = %u\n", PG[i].rows,
+	//        PG[i].cols, PG[i].stride);
+	// printf("sizeof(rows) = %d, sizeof(convertedImage) = %d, sizeof(finalImage) = %d\n",
+	//        sizeof(PG[i].rows), sizeof(&PG[i].convertedImage), sizeof(PG[i].finalImage));
+	
+	//first send size, (w, h, d)
+	if (send(PG[i].sockfd, &PG[i].cols, sizeof(PG[i].cols), 0) <= 0)
 	{
-	  printf("Error sending len\n");
+	  printf("Error sending width");
 	}
+	if (send(PG[i].sockfd, &PG[i].rows, sizeof(PG[i].rows), 0) <= 0)
+	{
+	  printf("Error sending height");
+	}	
+	if (send(PG[i].sockfd, &k_BytesPerPixel, sizeof(k_BytesPerPixel), 0) <= 0)
+	{
+	  printf("Error sending depth");
+	}
+	printf("Sent w x h x d = %u x %u x %u\n", PG[i].cols, PG[i].rows, k_BytesPerPixel);
+
 	//then send data
-	if (sendall(PG[i].sockfd, tempbuf, &len) != 0)
+	img_size = (int)(PG[i].cols * PG[i].rows * k_BytesPerPixel);
+	//context set above -- need to move?
+	unsigned char *frame = 
+	  (unsigned char *)imlib_image_get_data_for_reading_only();
+	if (sendall(PG[i].sockfd, frame, &img_size) <= 0)
 	{
 	  printf("Error in sendall\n");
 	}
+
+	// /* first draft -- using strings with length sent before string */
+	// memset(&tempbuf, 0, sizeof(tempbuf));
+	// sprintf(tempbuf, "sending image %u-%u", PG[i].cameraInfo.serialNumber,
+	// 	imageCount);
+	// len = strlen(tempbuf);
+	// printf("tempbuf = %s, len = %d\n", tempbuf, len);
+	// //first send size
+	// if (send(PG[i].sockfd, &len, sizeof(len), 0) <= 0)
+	// {
+	//   printf("Error sending len\n");
+	// }
+	// //then send data
+	// if (sendall(PG[i].sockfd, tempbuf, &len) != 0)
+	// {
+	//   printf("Error in sendall\n");
+	// }
+	// /* end first draft */
 	
-	imlib_free_image_and_decache();
+	/* FUNCTIONALIZE */
+	
+	imlib_free_image_and_decache(); //do this closer to imlib call?
 
 	/* use OpenCV functions here*/
+	/* OpenCV */
     	if (imageCount % 10 == 0)
     	  printf("Captured %u-%d\n",PG[i].cameraInfo.serialNumber, imageCount);
       }
@@ -661,7 +702,7 @@ int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras)
   return 0;
 }
 
-int sendall(int s, char *buf, int *len)
+int sendall(int s, unsigned char *buf, int *len)
 {
   int total = 0;        // how many bytes we've sent
   int bytesleft = *len; // how many we have left to send
