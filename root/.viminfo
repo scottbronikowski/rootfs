@@ -17,8 +17,9 @@
 $
 
 # Command Line History (newest to oldest):
-:wq
+:q!
 :q
+:wq
 :WQ
 :%s///g
 :set fileformat=unix
@@ -30,7 +31,6 @@ $
 :qa
 :diffge LO
 :Wq
-:q!
 
 # Search String History (newest to oldest):
 ? \<hwclock\>
@@ -47,24 +47,30 @@ $
 # Registers:
 "0	LINE	0
 	OsDetect.register_default(OS_UBUNTU, LsbDetect("Ubuntu"))
+""1	CHAR	0
+	ssh -f -N -Y -R 22222:localhost:22 seykhl
+	    echo "Started reverse SSH tunnel to seykhl.ecn.purdue.edu"
 "i	CHAR	0
 	€kr
-""-	CHAR	0
+"-	CHAR	0
 	f
 
 # File marks:
-'0  2  13  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
-'1  20  12  /etc/init.d/time-update.sh
-'2  55  55  /etc/init.d/ntp
-'3  22  0  /etc/init.d/ntp
-'4  59  0  /etc/ntp.conf
-'5  1  0  ~/notes3march.txt
-'6  9  77  /etc/init.d/time-update.sh
-'7  14  28  /etc/init.d/monitor.sh
-'8  26  3  /etc/init.d/time-update.sh
-'9  1  0  /etc/init.d/time-update.sh
+'0  18  0  /etc/init.d/ssh-tunnel.sh
+'1  1  0  /tmp/post_response.txt
+'2  2  13  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
+'3  20  12  /etc/init.d/time-update.sh
+'4  55  55  /etc/init.d/ntp
+'5  22  0  /etc/init.d/ntp
+'6  59  0  /etc/ntp.conf
+'7  1  0  ~/notes3march.txt
+'8  9  77  /etc/init.d/time-update.sh
+'9  14  28  /etc/init.d/monitor.sh
 
 # Jumplist (newest first):
+-'  18  0  /etc/init.d/ssh-tunnel.sh
+-'  1  0  /etc/init.d/ssh-tunnel.sh
+-'  1  0  /tmp/post_response.txt
 -'  2  13  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
 -'  1  0  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
 -'  20  12  /etc/init.d/time-update.sh
@@ -161,11 +167,17 @@ $
 -'  2  0  /run/udev/data/c81:13
 -'  1  0  /run/udev/data/c81:13
 -'  2  0  /run/udev/data/c81:12
--'  1  0  /run/udev/data/c81:12
--'  2  0  /run/udev/data/c81:11
--'  1  0  /run/udev/data/c81:11
 
 # History of marks within files (newest to oldest):
+
+> /etc/init.d/ssh-tunnel.sh
+	"	18	0
+	^	18	1
+	.	18	0
+	+	18	0
+
+> /tmp/post_response.txt
+	"	1	0
 
 > ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
 	"	2	13
@@ -616,9 +628,3 @@ $
 
 > /var/lib/dhcp/dhclient.wlan0.leases.LOCAL.1573.leases
 	"	11	0
-
-> /var/lib/dhcp/dhclient.wlan0.leases.BASE.1573.leases
-	"	11	0
-
-> /var/lib/dhcp/dhclient.wlan0.leases.REMOTE.1573.leases
-	"	25	0

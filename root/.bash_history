@@ -1,164 +1,3 @@
-ls
-cd test_c/
-ls
-cd ../FlyCapture2Test_C/
-ls
-cp Makefile ../test_c/
-cp FlyCapture2Test_C.c ../test_c/
-cd ../test_c
-ls
-cd ..
-cd FlyCapture2Test_C/
-ls
-make
-cd ../test_c/
-touch test.c
-lla /tmp/images/
-cd ../testing
-make
-lsusb
-lla /tmp/images/
-feh /tmp/images/panor0.png 
-top
-cd pointgrey/flycapture.2.6.3.2_armhf
-grep -r PIXEL_FORMAT *
-grep -r fc2CreateContext *
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-./testcapture 
-mkdir /tmp/images
-./testcapture 
-feh /tmp/images
-feh /tmp/images/*
-ps -ef | grep ink
-./testcapture 
-./testcapture 2
-./testcapture 1
-ls
-rm *.pgm
-ls
-./testcapture 
-./testcapture 1
-ls
-cd C
-ls
-./FlyCapture2Test_C 
-ls
-feh fc2TestImage.png 
-cd ..
-./testcapture 1
-;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c62;9;c
-./testcapture 1
-reboot
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-ls
-./testcapture 1
-./testcapture 100
-lsusb
-reboot
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/src/testing/
-ls
-make
-pointgrey/flycapture.2.6.3.2_armhf/bin
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-./testcapture 5
-./testcapture 15
-./testcapture 1\
-./testcapture 10
-./testcapture 50
-./testcapture 10
-./testcapture 1
-./testcapture 10
-./testcapture 100
-./testcapture 10
-./testcapture 100
-fdisk -l
-ls /etc/f*
-cat /etc/fstab
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/src/testing/
-ls
-cd ..
-ls
-cd ..
-grep -r "SetVideoModeAndFrameRate" *
-grep -r "VideoMode" *
-cd src/testing
-make
-emacs &
-cd ~
-ls open*
-mv open-files-17feb.txt open-files-17-feb.txt
-ls open*
-reboot
-cd /
-ls
-cd boot/
-ls
-lla
-cd ~
-cd pointgrey/flycapture.2.6.3.2_armhf/bin/
-ls
-./testcapture 
-cat /var/log/upstart/network-interface-eth0.log
-ls /var/log/upstart/network-interface-*
-cat /var/log/upstart/network-interface-wlan0.log.orig 
-./testcapture 
-./testcapture 50
-./testcapture 
-./testcapture 50
-lsusb
-./testcapture 50
-./testcapture 
-./testcapture 100
-./testcapture 1000
-./testcapture 
-./testcapture 100
-lsusb
-ls
-cd /
-git status
-git add -A
-git commit -m "commit prior to surgery on testcapture.cc"
-git push
-git add -A
-git commit -m "commit before tweaking image capture loop--getting ~4.1 images/sec/cam"
-git status
-git push
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/src/testing
-ls
-make
-D
-make
-grep video *
-grep Video *
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-ls
-./testcapture 
-./testcapture 100
-./testcapture 10
-./testcapture
-./MultipleCameraEx 
-lsusb
-./testcapture
-./testcapture 100
-./testcapture 10
-./testcapture 100
-./testcapture 1000
-./testcapture 10
-./testcapture 100
-cd /
-git status
-git add -A
-git commit -m "commit before trying card swap--got testcapture.cc old method working at 30fps by setting video mode and frame rate; new method errors on StartSyncCapture"
-git push
-did
-ls
-lsusb
-ls
 halt
 cd /
 git status
@@ -1998,3 +1837,164 @@ cd test_code/flycapture/bin
 lsusb
 htop
 reboot
+emacs today.text &
+conky
+conky -bdo
+ps -ef | grep conky
+kill 3017
+cd /
+git status
+git add -A
+git commit -m "sending image data over network works (still need to get image on server end), but takes ~20x too long to be workable (getting 0.3 img/sec/cam)--possibly compression of data (miniz??) or faster wifi could help;
+apt-get install iptraf;
+apt-get install conky (need to configure to monitor network);"
+git push
+ip addr
+ip link set dev eth0 down
+dhclient eth0
+cd test_code/flycapture/bin
+./CustomImageEx 
+htop
+iptraf
+apt-get install iptraf
+iptraf
+ntop
+apt-get install ntop
+ntop
+apt-get purge ntop
+ip addr
+ls /sys/class/net
+lsusb
+ls /sys/class/net
+ip addr
+lsusb
+ls /sys/class/net
+ip addr
+if eth0 up;  exit; '
+;
+ifup eth0
+ip addr
+apt-get install ntop
+ntop
+apt-get purge ntop
+apt-get install conky
+htop
+exit
+ls
+google-chrome &
+chromium-browser &
+chromium-browser --user-data-dir . &
+exit
+lsusb
+top
+ip addr
+ls
+ip addr
+ifdown wlan0
+ping google.com
+ifconfig
+wget
+wget -T 30 -q 192.168.32.2 -O /tmp/post_response.txt
+cat /tmp/post_response.txt 
+rm /tmp/post_response.txt 
+wget -T 30 http://192.168.32.2/condata -O /tmp/post_response.txt
+vi /tmp/post_response.txt 
+clear
+wget -T 30 http://192.168.32.2/condata 
+wget -T 30 http://192.168.32.2/condata?action=connect -O /tmp/post_response.txt
+ping google.com
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/ssh-tunnel.sh stop
+ifup wlan0
+/etc/init.d/ssh-tunnel.sh start
+lsusb
+chromium-browser --user-data-dir /root &
+emacs today.text &
+lsusb
+ip addr
+ifconfig
+ls /sys/class/net
+lspci
+lsusb
+reboot
+htop
+iptraf
+ATZ
+AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
+lsusb
+ip addr
+ping google.com
+reboot
+emacs today.text &
+ndiswrapper
+apt-get install ndiswrapper
+apt-cache search ndiswrapper
+apt-get install ndiswrapper-*
+apt-get install ndisgtk
+apt-cache search ndis
+ndiswrapper
+man ndiswrapper
+ls
+mkdir marvell
+cd marvell/
+'
+
+ls
+lla
+ndiswrapper -i netmw24c.inf 
+rm *
+ls
+cd ..
+rmdir marvell/
+apt-get purge debhelper dh-apparmor dkms gettext gettext-base html2text intltool-debian
+lsusb
+ip addr
+lsmod
+ls /sys/class/net
+ip addr
+lsusb
+ip addr
+iface wlan2 inet dhcp
+ifup wlan2
+dhclient wlan2
+iwlist wlan2 scan
+iwlist wlan2 scan | grep ESSID
+iwconfig wlan2 essid qobi-office
+ip addr
+iwspy
+ip addr
+ifconfig
+lshw -C network
+iwconfig
+dhclient wlan2
+ps -ef
+ip addr
+htop
+chromium-browser --user-data-dir .
+cd test_code/flycapture/bin
+./CustomImageEx 
+iwconfig
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb -v
+ip link
+dmesg | grep firmware
+lspci
+lsusb -k
+lsmod
+dmesg | grep rt2800
+iw
+iwconfig wlan2
+iwconfig wlan2 mode managed
+ping google.com
+iwconfig wlan0 power off
+iw dev
+iw dev wlan2 link
+iw dev wlan0 link
+ip link set wlan2 up
+iw dev wlan0 scan | less
+dhcpd wlan2
+dhclient wlan2
+htop
+iptraf

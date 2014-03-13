@@ -1,18 +1,19 @@
-sending image data over network works (still need to get image on server end), but takes ~20x too long to be workable (getting 0.3 img/sec/cam)--possibly compression of data (miniz??) or faster wifi could help;
-apt-get install iptraf;
-apt-get install conky (need to configure to monitor network);
-
+Discovered that 1. Raw PGR images are 1/4 the size of BGRU-converted PGR (and Imlib) images, 2. Raw PGR images can be converted to BGR (vice BGRU) for a 25% reduction in size);
+Looking into sending raw PGR images across network, but first need to have flycapture libraries installed on seykhl in order to reconstruct the PGR image and convert it to color (specifically need PGR Image class, along with PixelFormat and BayerTileFormat data types);
+Got 4g dongle working--comes up as eth0 automatically, then must call 'dhclient eth0' to get local IP, should be set to connect to internet automatically now, but if not, use 'wget -T 30 http://192.168.32.2/condata?action=connect';
+try UDP sockets instead of TCP for less overhead??
 
 
 Buffers
 ----------------------------------------
-.   CustomImageEx.cpp    19340  C++/l		  ~/test_code/flycapture/src/CustomImageEx/CustomImageEx.cpp
+.   CustomImageEx.cpp    20906  C++/l		  ~/test_code/flycapture/src/CustomImageEx/CustomImageEx.cpp
+  * today.text            1502  Text		  ~/today.text
+    FlyCapture2Defs.h    60497  C++/l		  ~/test_code/flycapture/include/FlyCapture2Defs.h
     monitor.cc            3657  C++/l		  ~/test_code/monitor.cc
+    Image.h              20398  C++/l		  ~/test_code/flycapture/include/Image.h
     monitor.h              592  C++/l		  ~/test_code/monitor.h
     test-capture-cpp.cp: 21345  C++/l		  ~/test_code/flycapture/src/testing/test-capture-cpp.cpp
-    test2.c               8096  C/l		  ~/test_code/flycapture/src/support/test2.c
     test2.h               2022  C++/l		  ~/test_code/flycapture/src/support/test2.h
+    test2.c               8096  C/l		  ~/test_code/flycapture/src/support/test2.c
     simpletest.c          9215  C/l		  ~/test_code/flycapture/src/support/simpletest.c
-    FlyCapture2Defs.h    60497  C++/l		  ~/test_code/flycapture/include/FlyCapture2Defs.h
-    today.text            1063  Text		  ~/today.text
 

@@ -1,0 +1,1607 @@
+#!/usr/bin/perl
+#
+#                              -*- Mode: Perl -*-
+# make-kpkg ---
+# Author           : Eduard Bloch <blade@debian.org>
+# Status           : Useable, new features planed
+#
+# Script to assist users with building of the kernel modules
+# First purpose: automate as much as possible for Joe User
+# Second purpose: have a database about the source of module packages
+# (and all steps needed to get it)
+# Third purpose: provide general debian/rules include snippets
+#
+# TARGETs:
+#   see usage
+
+require 5.002;
+#use strict;
+#use diagnostics;
+
+use Text::WrapI18N qw(wrap $columns);
+
+BEGIN {
+  eval 'use Locale::gettext';
+  if ($@) {
+    eval q{ sub gettext { return shift; } };
+  } else {
+    textdomain('module-assistant');
+  }
+}
+
+# not so nice, but sufficient. See #396299 for details.
+delete $ENV{'VERSION'};
+chomp($rows=`tput lines`);
+chomp($columns=`tput cols`);
+$rows=25 if !$rows;
+$columns=80 if !$columns;
+
+$columns--;
+# fallback, don't confuse wrap
+$columns=40 if ($columns < 10);
+
+my $ret=0;
+
+use Getopt::Long qw(:config no_ignore_case bundling pass_through);
+use File::Basename;
+use Cwd;
+
+$res = exists $ENV{"MA_DIR"} ? $ENV{"MA_DIR"} : "/usr/share/modass";
+$var= exists $ENV{"MA_VARDIR"} ? $ENV{"MA_VARDIR"} : "/var/cache/modass";
+
+my $aptcmd = exists $ENV{"MA_APTCMD"} ? $ENV{"MA_APTCMD"} : "apt-get";
+
+$main::Author      = "Eduard Bloch";
+$main::AuthorMail  = "blade\@debian.org";
+$main::Version     = ' $Id:  $ ';
+
+$helpmsg="\n" .
+wrap('', '', gettext("USAGE:
+
+  module-assistant update
+  module-assistant [options] COMMAND [ packages ]
+
+module-assistant is the tool to get debianized source of kernel modules,
+build module package from it and install them. The most frequently used
+command may be auto-install followed by the 'alli' argument.
+
+Commands:
+
+  update - refresh internal information about the packages
+  unpack - unpacks the tarballs of specified packages (or similar action)
+  get - download/install the source (package) and unpack if needed
+  build - build the specified package(s)
+  list - print information about installed/available/compiled packages
+  install - install the generated binary modules DEB package with dpkg
+  auto-install - the whole process, get & build & install (abbreviated: a-i)
+  prepare - install headers for the current kernel and set the linux symlink
+  clean - quick clean of the source (eg. wiping the build directory)
+  purge - removes cached data and existing modules packages
+  la (alias for \"list all\"), li (= \"list all installed\"), search (= \"list -s\")
+
+Package arguments:
+
+  Source package name(s). If -src or -source is omitted, name
+  completion will try to guess the package name. If the first argument
+  is 'all', the list will be expanded to all packages. 'alli' will be
+  expanded to \"all installed\".
+
+Options:
+ -h, --help        Print this help screen
+ -v, --verbose     Be verbose, show full paths, etc.
+ -q, --quiet       The opposite of verbose
+ -n, --no-rebuild  Don't rebuild when any usable modules package for 
+                   this kernel exists (even an old one)
+ -i, --non-inter   Don't stop on build failures, auto-install deps when needed
+ -o, --unpack-once Unpack the source only once after source upgrade or clean
+ -O, --not-unpack  Don't unpack the source at all
+ -s, --apt-search  Search for installation candidates in the Debian archive
+ -S, --sudo-cmd    An alternative command for sudo
+ -f, --force       Force duplicated work: source package reinstallation,
+                   rebuild though existing packages are found, etc.
+ -t, --text-mode   Text mode, no dialog boxes
+ -u, --userdir     Specifies a (writeable) replacement directory for /var&/usr
+ -k, --kernel-dir  List of kernel headers/source directories, comma separated
+ -l, --kvers-list  List of kernel versions to work on (default: current version)
+Lists in options are strings separated by commas, spaces or newlines.
+
+Example:
+  m-a update ; m-a a-i nvidia-kernel ; echo Enjoy!")) . "\n";
+
+$reqsrcmsg="\n" .
+gettext("Warning: the selected module source is known to require a complete
+kernel source structure in order to be built correctly. However, only
+a reduced version of the source (linux-headers) has been found, so
+the build process will probably fail.
+
+In order to get a full kernel source, you have the following options:
+
+ - fake the source directory - create one that may look very similar
+   to the one that has been used to build your kernel (based on its
+   configuration and fresh source archive). The results are uncertain,
+   but it should work in most cases.
+   Call \"module-assistant fakesource\" to automate this.
+ - use a custom kernel built from scratch (custom configuration,
+   custom source, custom kernel package installed). Please read the
+   Kernel HOWTO and/or make-kpkg documentation for the further steps."). "\n";
+
+chomp($my_kvers=`uname -r`);
+
+my $distrib_id = get_distrib_id();
+
+my $usrc="/usr/src";
+
+my $opt_help;
+my @opt_kerneldirs;
+my @opt_kverslist;
+my $opt_verbose;
+my $opt_force;
+my $opt_norebuild;
+my $opt_quiet;
+my $opt_debug;
+my $opt_search;
+my $opt_nogui;
+my $opt_userdir;
+my $opt_noninter;
+my $opt_unponce;
+my $opt_notunp;
+my $sudo;
+
+%options = (
+   "q|quiet"                => \$opt_quiet,
+   "d|debug"                => \$opt_debug,
+   "h|help"                => \$opt_help,
+   "f|force"               => \$opt_force,
+   "o|unpack-once"               => \$opt_unponce,
+   "O|not-unpack"               => \$opt_notunp,
+   "n|no-rebuild"                => \$opt_norebuild,
+   "i|non-inter"                => \$opt_noninter,
+   "k|kernel-dir=s"             => \@opt_kerneldirs,
+   "l|kvers-list=s"             => \@opt_kverslist,
+   "v|verbose"              => \$opt_verbose,
+   "t|text-mode"          => \$opt_nogui,
+   "u|userdir|user-dir=s"          => \$opt_userdir,
+   "s|apt-search"          => \$opt_search,
+   "S|sudo-cmd=s"          => \$sudo
+);
+&help unless ( GetOptions(%options));
+&help if ($opt_help);
+$ENV{"VERBOSE"}=1 if($opt_verbose);
+$ENV{"REINSTALL"} .= " -y --force-yes ";
+#$ENV{"APT_LISTCHANGES_FRONTEND"} = "mail" if $opt_noninter; # STFU
+
+my $buildNumber = time();
+
+$opt_nogui=1 if $opt_noninter;
+
+my $command=shift(@ARGV);
+@targets=@ARGV;
+@opt_kverslist = split(/,|\ |\r|\n/,join(',',@opt_kverslist));
+@opt_kerneldirs = split(/,|\ |\r|\n/,join(',',@opt_kerneldirs));
+map { $_=Cwd::abs_path($_) if(!/^\//); } @opt_kerneldirs;
+
+# add current kernel to the kvers list, check validity later
+push(@opt_kverslist, $my_kvers) if ($#opt_kverslist < 0 && $#opt_kerneldirs < 0);
+
+push(@opt_kerneldirs, split(/,|\ |\r|\n/,$ENV{"KERNELDIRS"})) if (defined $ENV{"KERNELDIRS"});
+
+$modloc=$ENV{"MODULE_LOC"} ? $ENV{"MODULE_LOC"}:"$usrc/modules";
+
+if(open(complist, "$res/compliant.list")) {
+   for(<complist>) {
+      chomp;
+      next if !$_;
+      print "Known compliant: $_\n" if $opt_debug;
+      #$packs{$_}="MA_SOURCE_PKG=$_ $res/packages/default.sh";
+      $packs{$_}="$res/packages/default.sh";
+      $compliant{$_}=1;
+   }
+}
+
+opendir($resdir, $res."/packages");
+foreach(readdir($resdir)) {
+   print "Known with extensions/workarounds: $_\n" if $opt_debug;
+   $packs{$_}=$res."/packages/".$_ if(-e $res."/packages/".$_ && !/^\.|.sh$|~$/);
+}
+
+sub scan_overrides {
+   opendir($overdir, $res."/overrides");
+   foreach(readdir($overdir)) {
+      print "Known overrides: $_\n" if $opt_debug;
+      $packs{$_}=$res."/overrides/".$_ if(-e $res."/overrides/".$_ && !/^\.|.sh$|~$/);
+   }
+}
+
+&scan_overrides;
+
+if($command eq "comp") {
+   map {print "$_\n"} grep(/^$targets[0]/, ("all", "alli", "allu", keys %packs));
+   exit 0;
+}
+
+if($command eq "compi") {
+   map {print "$_\n" if($_ eq "alli" || ! pexec($_, "installed")) } grep(/^$targets[0]/, ("alli", keys %packs));
+   exit 0;
+}
+
+if($command eq "compv") {
+   &initksrc;
+   print grep(/^$targets[0]/, @seenkvers);
+   exit 0;
+}
+
+if(!$opt_nogui) {
+   $dialog=$ENV{"DIALOG"};
+   if(!$dialog) {
+      if($ENV{"TERM"} ne "dumb" && `infocmp 2>/dev/null` ne '') {
+         @expaths=split(/:/,$ENV{"PATH"});
+         for $dia ("dialog", "whiptail") {
+            for(@expaths) {
+               last if($dialog);
+               $dialog="$_/$dia" if(-x "$_/$dia");
+            }
+         }
+      }
+   }
+   $opt_nogui = !$dialog;
+   $wtmode=1 if($dialog=~/whiptail$/);
+}
+
+sub lsd {
+   my @list;
+   $path=shift;
+   opendir($dir, $path);
+   foreach(readdir($dir)) {
+      if ($_ ne "." && $_ ne ".." && -d "$path/$_") {
+         my $name=complete_name($_, 1);
+         push(@list, $name) if($name);
+      }
+   }
+   return @list;
+}
+
+sub help() {
+   print $helpmsg;
+   exit 1;
+};
+
+sub ende {
+   if($ret >= 250 && $ret < 256) {
+      exit $ret;
+   }
+   else {
+      exit (($ret%250)+($ret>0));
+   }
+}
+
+sub withecho {
+    # weed undefs out
+    for($i=0; $i<=$#_; $i++) {
+        splice(@_, $i, 1) if(!defined($_[$i]));
+    }
+    print STDERR join(' ',@_, "\n") if($opt_verbose);
+    my $myret=system(@_);
+    $ret += $myret;
+    #%env=%envbackup;
+    return $myret;
+}
+
+sub pread {
+    my $p=shift;
+    $ENV{MA_SOURCE_PKG}=$p;
+    return "" if(! exists $packs{$p});
+    print STDERR 'Reading output from "'.$packs{$p}." ".join(" ", @_)."\"\n" if($opt_debug);
+    open(my $fh, "-|", $packs{$p}, @_);
+    my $retval=join("", <$fh>);
+    close($fh);
+    return $retval;
+}
+
+sub pexec {
+    my $p=shift;
+    $ENV{MA_SOURCE_PKG}=$p;
+    for($i=0; $i<=$#_; $i++) {
+        splice(@_, $i, 1) if(!defined($_[$i]));
+    }
+    if($_[0] eq "VERB") {
+        shift;
+        print STDERR join(' ',@_, "\n") if($opt_verbose);
+    }
+    return system($packs{$p}, @_);
+}
+
+sub countList { return scalar @_; }
+
+my $catchprint;
+
+sub printwrap {
+   if($catchprint) {
+      $printbuf .= join('', @_);
+   }
+   else { 
+      print @_; 
+   }
+}
+$smso=`tput smso`;
+$rmso=`tput rmso`;
+
+sub printmsg {
+   my $orgcolumns=$columns;
+   if(!$opt_nogui) {
+      $columns=65;
+      chomp($tmpname = `mktemp`);
+      open($tmpfile, ">$tmpname");
+      print $tmpfile wrap('','',@_);
+      close($tmpfile);
+      if($wtmode) {
+         system($dialog, "--scrolltext", "--title", gettext("module-assistant, error message"), "--textbox", $tmpname, 18, 70);
+      }
+      else {
+         system($dialog, "--aspect", 12, "--title", gettext("module-assistant, error message"), "--textbox", $tmpname, 0, 0);
+      }
+      unlink $tmpname;
+   }
+   else {
+      $columns=$ENV{"COLUMNS"} -2 if( $ENV{"COLUMNS"} > 10);
+      print STDERR $smso;
+      print STDERR wrap('','',@_);
+      print STDERR $rmso;
+      print "\n";
+   }
+}
+
+sub printconfirm {
+   printmsg(@_);
+   if($opt_nogui) {
+      print "\n" . gettext("Press Return to continue... (ctrl-c to abort)") . "\n";
+      ($opt_noninter || <STDIN>);
+   }
+}
+   
+restart:
+
+# User-trimmed paths
+if($opt_userdir) {
+   die sprintf(gettext("%s is not a directory!"), $opt_userdir) . "\n"  if(! -d "$opt_userdir/.");
+   die sprintf(gettext("%s is not writeable!"), $opt_userdir) . "\n"  if(! -w "$opt_userdir/.");
+   $opt_userdir=Cwd::abs_path($opt_userdir);
+   $var="$opt_userdir/var_cache_modass";
+   $ENV{"MA_VARDIR"}=$var;
+   mkdir $var;
+   die sprintf(gettext("%s is not writeable!"), $opt_userdir) . "\n"  if(! (-d $var && -w $var));
+   $ENV{"MOD_TOPDIR"}="$opt_userdir/usr_src";
+   mkdir "$opt_userdir/usr_src";
+   $ENV{"MODULE_LOC"}="$opt_userdir/usr_src/modules";
+   $ENV{"KPKG_DEST_DIR"}=$opt_userdir if(! defined($ENV{"KPKG_DEST_DIR"}));
+   if (! defined($sudo)) {
+       if(-x "/usr/bin/sudo") {
+           print wrap('','',gettext("Found sudo, will use it for $aptcmd and dpkg commands.") . "\n") if $opt_verbose;
+           $sudo="/usr/bin/sudo";
+       }
+       else {
+           print wrap('','',gettext("Warning: sudo not found. Automatic package installations not possible!") . "\n") if !$opt_quiet;
+       }
+   }
+}
+
+sub setvars {
+   $ENV{"KDREV"} = $KDREV if defined($KDREV);
+   $ENV{"KVERS"} = $KVERS;
+   $ENV{"KSRC"} =  $kerneldirs{$KVERS};
+   $ENV{"KPKG_DEST_DIR"}=Cwd::abs_path($kerneldirs{$KVERS}."/..") if(! defined($ENV{"KPKG_DEST_DIR"}));
+   $ENV{"MA_DEBUG"}=1 if $opt_debug;
+   $ENV{"MA_NOTUNP"}=1 if $opt_notunp;
+   print "Setting environment:
+   KDREV: $ENV{KDREV}
+   KVERS: $ENV{KVERS}
+   KSRC:  $ENV{KSRC}
+   KPKG_DEST_DIR: $ENV{KPKG_DEST_DIR}
+" if($opt_debug);
+}
+
+sub have_source_or_break {
+   # if user specified no source, extra_vers[0] is our $my_kvers. If
+   # user specified something but without useable source, then
+   # extra_vers[0] is at least this one value. If there are more, don't
+   # complaing about them, though
+
+   my $kvers=$extra_kvers[0];
+   my $kheadpkg = get_kpackage($kvers)."-headers-$kvers";
+   if(!(keys %kerneldirs)) {
+      printmsg "\n\n" .
+wrap('','',gettext("Bad luck, the kernel headers for the target kernel version could not be found and you did not specify other valid kernel headers to use.")) . "
+      " if !$kernelwarned;
+
+      if (length(`apt-cache show $kheadpkg 2>/dev/null`) ) {
+         printmsg "\n" .sprintf(
+gettext(
+"However, you can install the header files for your kernel which are provided by the %s package. For most modules packages, these files are perfectly sufficient without having the original kernel source.
+
+To install the package, run"
+), $kheadpkg).($opt_nogui ? "" : gettext(
+" the PREPARE command from the main menu, or on the command line")).sprintf(gettext(
+":
+
+module-assistant prepare
+
+or
+
+$aptcmd install %s")
+, $kheadpkg) . "\n\n" ;
+         exit 255 if($opt_nogui);
+         $ret++;
+         return 0;
+      }
+      else {
+         printmsg "\n" . sprintf(
+            gettext(
+               "If the running kernel has been shipped with the Debian distribution, please install the package %s. If your kernel source tree (or headers) is located in some non-usual location, please set the KERNELDIRS environment variable to the path of this directory, or (alternatively) specify the source directory we build for with the --kernel-dir option in module-assistant calls."
+            ), $kheadpkg)
+            . "\n" if !$kernelwarned;
+
+            exit 255  if($opt_nogui);
+            $ret++;
+            return 0;
+         }
+   }
+   return 1;
+}
+
+sub up {
+   my $pkg;
+   my $out;
+   my @packnames;
+   if(@_) {
+       # direct call, needs completion
+       for(@_) { push(@packnames, complete_name($_));}
+   }
+   else {
+      @packnames=sort(keys %packs);
+   }
+   # we provide apt-policy data, polling it with one call for
+   # performance reasons
+   print "Reading APT data: LANG=C apt-cache policy ".join(' ', @packnames)."\n" if $opt_debug;
+   open($apt, "LANG=C apt-cache policy ".join(' ', @packnames)." 2>/dev/null |");
+   while(<$apt>) 
+   { 
+      if (/^(\w\S+):/) {
+         $pkg=$1;
+         close($out);
+         if(! exists $compliant{$pkg}) { # for "others"
+            print "Opening $var/$pkg.apt_policy\n" if $opt_debug;
+            open($out, ">$var/$pkg.apt_policy") or die "Unable to write to $var/$pkg.apt_policy";
+         }
+      }
+      else {
+          if(! exists $compliant{$pkg}) { # copy for "others"
+              print $out $_;
+          }
+          $instvers{$pkg} = $1 if (/Installed: (.*)\n/ && $1 ne "(none)");
+          $candvers{$pkg} = $1 if (/Candidate: (.*)\n/ && $1 ne "(none)");
+      }
+   }
+   close($out);
+   my $i;
+   if(!$opt_nogui) {
+      open($dpipe, "| $dialog --title \"" . gettext("Updating cached package data") . "\" --gauge \"" . gettext("Reading apt-cache output...") . "\" 7 75 0");
+      select($dpipe);
+      $|=1;
+      select(*STDOUT);
+   }
+
+   foreach(@packnames) {
+      $i++;
+      if($opt_nogui) {
+         if($opt_verbose) {
+            print sprintf(gettext("Updating info about %s"), $_) . "\n";
+         }
+         elsif(!$opt_quiet) {syswrite(STDERR,'.');}
+      }
+      else {
+         $pr=sprintf("%.0f", $i * 100 / ($#packnames+1));
+         print $dpipe "$pr\nXXX\n$_\nXXX\n";
+      }
+      my $oldret;
+         print "W: instvers from $_? $instvers{$_}\n" if $opt_debug;
+      if($instvers{$_}) {
+         print "W: $var/$_.cur_version\n" if $opt_debug;
+         open(cv, ">", "$var/$_.cur_version") || $ret++;
+         print cv $instvers{$_};
+         close cv;
+      }
+      else { unlink "$var/$_.cur_version"};
+      if($candvers{$_}) {
+         print "W: $var/$_.avail_version" if $opt_debug;
+         open(cv, ">$var/$_.avail_version") || $ret++;
+         print cv $candvers{$_};
+         close cv;
+      }
+      else { unlink "$var/$_.avail_version"};
+         
+      if($oldret != $ret) {
+         $ret += pexec($_, "update");
+      }
+   }
+   close($dpipe);
+   print "\n" . ($i ? sprintf(gettext("Updated infos about %s packages"), $i) : sprintf(gettext("Updated infos about %s package"), $i))."\n" if !$opt_quiet;
+   #unlink (<$var/*.apt_policy>);
+}
+
+
+# get distrib_id from /etc/lsb-release; default to Debian
+sub get_distrib_id
+{
+   my $LSB;
+   my $distrib_id = "Debian";
+  
+   if (open($LSB, "/etc/lsb-release")) {
+      while (defined(my $lsb = <$LSB>)) {
+         return "Ubuntu"  if ($lsb =~ /DISTRIB_ID.*Ubuntu/i);
+         return "Debian"  if ($lsb =~ /DISTRIB_ID.*Debian/i);
+      }
+      close($LSB);
+   }
+   return "Debian";   
+}
+
+
+# get kernel package prefix depending on distribution and kernel version
+sub get_kpackage
+{
+    return "linux" if ($distrib_id eq "Ubuntu"); # Ubuntu uses "linux"
+
+    # Debian started using "linux" with 2.6.12
+    my @versar = split(/\D/, $_[0]);
+    return "linux" if( $versar[0] > 2 || ($versar[1] >= 6 && $versar[2] >= 12));
+    # default to "kernel"
+    return "kernel";
+}
+
+
+sub prep {
+   print "chdir $usrc\n" if $opt_debug;
+   %envbackup=%ENV;
+   $ENV{ROOT_CMD}=$sudo if ($sudo && !$ENV{ROOT_CMD});
+   for $todo ($opt_kverslist[0]) {
+      my $kheaders = get_kpackage($todo)."-headers";
+      $source=$kerneldirs{$todo};
+      die "Bad kernel version specification" if ! $todo;
+      print STDERR gettext("Getting source for kernel version:")." $todo\n";
+      print STDERR sprintf(gettext("%s."), $source) . "\n" if $opt_debug;
+      print STDERR values(%kerneldirs),"\n\n" if $opt_debug;
+      my $symfrom;
+      if(defined($source)) {
+         print STDERR sprintf(gettext("Kernel headers available in %s"), $source) . "\n";
+         $opt_verbose=1;
+         # if source was resolved to linux before, it is okay. If not,
+         # make the symlink. If linux exists but points to sth. wrong for
+         # us, move it away by renaming
+         if($source ne "$usrc/linux") {
+            $symfrom = (dirname($source) eq "$usrc") ? basename($source) :  Cwd::abs_path($source);
+         }
+      }
+      else {
+         $opt_verbose=1;
+         withecho($sudo, $aptcmd, ($opt_noninter?"-y":undef), "install", "$kheaders-$todo");
+         if($my_kvers eq $todo) {
+            $symfrom="$kheaders-$todo";
+         }
+      }
+      if(-l "$usrc/linux" && readlink("$usrc/linux") eq $symfrom  ) { 
+          #great, nothing to do anymore
+      }
+      else {
+          print STDERR gettext("Creating symlink...") . "\n";
+          rename("$usrc/linux","$usrc/linux-OLDVERSION.".time) if(-e "$usrc/linux" || -l "$usrc/linux");
+          symlink($symfrom,"$usrc/linux") || print STDERR sprintf(gettext("Couldn't create the %s/linux symlink!"), $usrc). "\n";
+      }
+   }
+#   if(`apt-cache policy build-essential` =~ /Installed:..none/) {
+      print STDERR gettext("Installing packages needed for the build environment...") . "\n" if (!opt_quiet);
+      withecho($sudo, $aptcmd, ($opt_noninter?"-y":undef), "install", "build-essential");
+#   }
+   print STDERR "\n". gettext("Done!") . "\n";
+   %ENV=%envbackup;
+}
+
+sub complete_name {
+   my ($target) = @_;
+   $target=~s/^\s+//;
+   my $pkg;
+   my @posnames=($target);
+   my $d;
+
+   if(defined($packs{$target})) {
+      return $target;
+   }
+
+   # no luck, begin with probing
+   #
+   for $sufMult ("", "s") {
+      for $sufType ("", "-driver", "-kernel", "-module") {
+         for $sufSrc ("-source", "-src") {
+            push(@posnames, $target.$sufType.$sufMult.$sufSrc);
+         }
+      }
+   }
+   PROBE: for (@posnames) {
+      print STDERR gettext("PROBE:") . " $_\n" if $opt_debug;
+      if(defined($packs{$_})) 
+      {
+         print STDERR gettext("GOT NAME:") . " $_\n" if $opt_debug;
+         return $_;
+      }
+   }
+
+   for $getName (keys %packs) {
+      if(!defined($pkg)) {
+          
+         $prefix=pread($pkg, prefix);
+         chomp($prefix);
+         return $prefix if($prefix eq $getName);
+      }
+   }
+
+   # ugly, ugly, ugly, looking for an available package with similar
+   # name and constructing a call for it
+   open($d, "apt-cache policy ".join(" ", @posnames)." 2>/dev/null |");
+   print "\n\n\nhm,  apt-cache policy ".join(" ", @posnames)."\n\n\nend" if $opt_debug;
+
+   pol: while(<$d>) {
+      if(/^(\S+):/) {
+         $pkg=$1;
+         print "Forced compliant: $pkg\n" if $opt_debug;
+         $packs{$pkg}="$res/packages/default.sh";
+         $compliant{$pkg}=1;
+         return $pkg;
+      }
+   }
+   close($d);
+
+   return "0" if(defined($_[1])); # some cosmetical workaround
+   die sprintf(gettext("%s, what is %s?"), $target, $target) . "\n";
+}
+
+sub unpackone {
+   my ($pkg) = @_;
+   if(!$opt_unponce) {
+      return pexec($pkg, "VERB", "unpack");
+   }
+
+   # continue with unpack-once operation
+   chomp(my $pkgvers=pread($pkg, "cur_version"));
+   my $flagfile="$var/$pkg.unpackflag.$pkgvers";
+   #print "Looking for unpacked flag: $flagfile\n";
+   return 0 if (-e $flagfile && !$opt_force);
+
+   #remove old flags
+   unlink(<$var/$pkg.unpackflag.*>);
+
+   if(! pexec($pkg, "VERB", "unpack")) {
+      open (tmp,">$flagfile");
+      close tmp;
+   }
+}
+
+sub get {
+   my $newstuff=0;
+   my $faillog="";
+   %envbackup=%ENV;
+   $ENV{ROOT_CMD}=$sudo if ($sudo && !$ENV{ROOT_CMD});
+   SKIP: foreach $target (@_) {
+      my $pkg;
+      my $reti=0;
+      $pkg=complete_name($target);
+      next SKIP if( $installed_only && pexec($pkg, "installed"));
+      # war is peace! zero is success! non-zero is failure!
+
+
+      if($opt_force) {
+         $ENV{"REINSTALL"} .= " --reinstall " unless ($ENV{"REINSTALL"}=~/--reinstall/);
+
+         $reti=pexec($pkg, "VERB", "download");
+         $newstuff++;
+      }
+      else {
+         if(pexec($pkg, "installed")) {
+            $reti=pexec($pkg, "VERB", "download");
+            $newstuff++;
+         }
+         else {
+            my $curpkgvers=pread($pkg, "cur_version"); chomp($curpkgvers);
+            my $avpkgvers =pread($pkg, "avail_version"); chomp($avpkgvers);
+            if($curpkgvers ne $avpkgvers) {
+                # workaround for correct sudo command passing
+                # NOTE: env set from pread above!
+               $reti=withecho($sudo, $packs{$pkg}, "download");
+               $newstuff++;
+            }
+         }
+      }
+
+      print "D: download, ret: $reti\n" if $opt_debug;
+
+      my @tounpack;
+
+      # and don't unpack if download failed
+      if (!$reti) {
+         push(@tounpack, $pkg);
+##         if($opt_ondemand) {
+##            if(`$packs{$pkg} cur_version` ne $before) {
+##               withecho("$packs{$pkg} unpack");
+##            }
+##         }
+##         else {
+#            withecho("$packs{$pkg} unpack");
+##         }
+      }
+      else
+      {
+         my $msg=sprintf(gettext("Installation of the %s source failed."), $pkg) . "\n";
+#         $msg.=gettext("Ignoring this package. Maybe you need to add something to sources.list, maybe the contrib and non-free archives.") . "\n";
+         $blacklist{$pkg}=1;
+
+         $faillog .= ($faillog ? $msg : $msg."\n".gettext("Ignoring this package. Maybe you need to add something to sources.list, maybe the contrib and non-free archives.")."\n\n");
+
+         sleep(2);
+
+         #printmsg $msg;
+      }
+   }
+   printmsg $faillog if $faillog;
+
+   # done with critical stuff, restore env
+   %ENV=%envbackup;
+
+   if($newstuff) {
+      &up(@_);
+      &scan_overrides();
+   }
+   unpackone($_) for @tounpack;
+}
+
+sub unp {
+   SKIP: foreach $target (@_) {
+      my $pkg;
+      $pkg=complete_name($target);
+      next SKIP if( $installed_only && pexec($pkg, "installed"));
+      unpackone($pkg);
+#      $opt_ondemand || withecho("$packs{$pkg} unpack");
+   }
+}
+
+sub getkdrev {
+   if(open($chlog, $kerneldirs{$KVERS}."/debian/changelog")) {
+      if (<$chlog> =~ /^(\S+)\s*\((.+)\)/) {  $KDREV=$2; }
+      close($chlog);
+   }
+   # fallback to -headers oder -image version, may be incorrect but better than nothing
+   my $kheaders = get_kpackage($KVERS)."-headers";
+   my $kimage = get_kpackage($KVERS)."-image";
+   FROMAPT: for $pb ($kheaders, $kimage) {
+      last FROMAPT if(defined($KDREV));
+      if(open($aptpipe,"LANG=C apt-cache policy $pb-$KVERS 2>/dev/null |")) {
+         while(<$aptpipe>) { 
+            if(/Installed:\s*(.+)\n/ && ($1 ne "(none)")) { $KDREV=$1; }
+         }
+         close $aptpipe;
+      }
+   }
+}
+
+sub build {
+   # lart the user if there is no source (only @extra_kvers)
+   # exit in non-dialog mode
+
+   # if have_source_or_break terminates the program, okay. If
+   # have_source_or_break returns 0, then build should not continue;
+   # otherwise, go ahead
+   return if (!have_source_or_break());
+   foreach(values %kerneldirs) {
+      if( (! $ENV{"KPKG_DEST_DIR"}) && (! -w Cwd::abs_path("$_/..")) ) {
+         printconfirm gettext("\$KPKG_DEST_DIR is not set and the target directory") . "\n".
+         sprintf(gettext("%s is not writeable for you!\nYour build will probably fail!"), Cwd::abs_path("$_/..")) . "\n";
+         #sleep(5) if($opt_nogui);
+      }
+   }
+   my $pkg;
+   my $res;
+   SKIP: foreach $target (@_) {
+      $pkg=complete_name($target);
+      next SKIP if( $installed_only && pexec($pkg, "installed"));
+      next SKIP if($blacklist{$pkg});
+
+      labKVERS: foreach $KVERS ((values %kernelvers)) {
+         undef $newdeb;
+         undef $lastdeb;
+         undef $KDREV;
+         &getkdrev($KVERS);
+         &setvars;
+
+         unpackone($pkg);
+         $lastdeb=pread($pkg, "lastpkg");
+         $newdeb=pread($pkg, "echodebfile");
+         chomp($lastdeb); chomp($newdeb);
+
+         # An incomplete hack to track versions by creating fingerprint files
+         # that refer to KDREV, KVERS, package version. IMO not needed since
+         # most package use module-assistant now
+         if($lastdeb && !$newdeb) {
+            # that's crap. this package does not use m-a includes and so it
+            # does not show its target deb. Assume that the new deb will be the
+            # same if kdrev, kvers, and package version do match
+            $fprfile = $lastdeb;
+            $fprfile =~ s#/#_#g;
+            $fprfile = "$var/$fprfile.txt";
+            if(open(fingerprint, $fprfile)) {
+               my ($pver, $pkvers, $pkdrev) = <fingerprint>;
+               close(fingerprint);
+               my $curpkgvers=pread($pkg, "cur_version"); chomp($curpkgvers);
+               $newdeb = $lastdeb if($pver eq "$curpkgvers\n" && $pkvers eq "$KVERS\n" && $pkdrev eq "$KDREV\n");
+            }
+         }
+            
+         if (length($lastdeb) && -e $lastdeb && !$opt_force) {
+            $lastdeb=Cwd::abs_path($lastdeb);
+            $newdeb =Cwd::abs_path($newdeb);
+            # there is a candidate
+            if($opt_norebuild) {
+               # and do _not_ rebuild choosen
+               print wrap('','',sprintf(gettext("Recently built package %s found, not rebuilding %s"), $lastdeb, $pkg)) , "\n";
+               next labKVERS;
+            }
+            if ($lastdeb eq $newdeb) {
+               # target file is absolutely the same
+               print STDERR wrap('','',sprintf(gettext("Target package file %s already exists, not rebuilding!"), $newdeb)) . "\n";
+               print STDERR wrap('','', "(however, you could use the -f switch to ignore it)\n");
+               next labKVERS;
+            }
+         }
+         # implicit else
+         # keeping as is :(, environment set above
+         # that sucks, need to supress make's bitching and so use a subshell call
+         if(  !system("\"$packs{$pkg}\" reqsrc 2>/dev/null") && !isfullsrc($kerneldirs{$KVERS}) ) {
+            # crap, wants full source but does not get it
+            printconfirm $reqsrcmsg;
+         }
+         $cmd ="\"$packs{$pkg}\" build KVERS=$KVERS KSRC=".
+         $kerneldirs{$KVERS}.
+         ( (defined($KDREV)) ? " KDREV=$KDREV" : "").
+         ( (defined($ENV{"KPKG_DEST_DIR"})) ? "" : 
+         "KPKG_DEST_DIR=".Cwd::abs_path($kerneldirs{$KVERS}."/..") ).
+         ( ($ENV{"SIGNCHANGES"}) ? " kdist" : " kdist_image" )
+         ;
+         print STDERR "$cmd\n" if($opt_verbose);
+         if(!$opt_nogui) {
+            # guess how verbose the build will be...
+            $pkg=~/^([^-]+)/;
+            map { $lnumber++ } `find $modloc/$1*`;
+            $lnumber = 250 if($lnumber<100);
+            
+            open($bpipe, "$cmd 2>&1 |");
+            $step=1;
+            open($dpipe, "| $dialog --title \"" . sprintf(gettext("Building %s, step %d, please wait..."), $pkg, $step) . "\" --gauge \"" . gettext("Build starting...") . "\" 15 75 0");
+            select($dpipe);
+            $|=1;
+            select(*STDOUT);
+            my $linebuf;
+            my $anz=1;
+            PARSEOUTPUT: while($anz) {
+               my $input;
+               $anz=sysread($bpipe, $input, 8);
+               $linebuf.=$input;
+               if(!$anz) {
+                  # last iteration, line may be incomplete
+                  $line=$linebuf;
+               }
+               elsif($linebuf=~/([^\n]+)\n(.*)/) {
+                  $line=$1;
+                  $linebuf=$2;
+               }
+               else {
+                  next PARSEOUTPUT;
+               }
+               $pr=sprintf("%.0f", $lfdzeile++ * 100 / $lnumber);
+               if($pr> 100) {
+                  # eeeeks, overflow, restart dialog
+                  $step++;
+                  close($dpipe);
+                  open($dpipe, "| $dialog --title \"". sprintf(gettext("Building %s, step %d, please wait..."), $pkg, $step) . "\" --gauge \"". gettext("Build continues...") . "\" 15 75 0");
+                  select($dpipe);
+                  $|=1;
+                  select(*STDOUT);
+                  $lfdzeile=0;
+                  $pr=0;
+               }
+               # detox before printing
+               #$line=~s/'|"|`//g;
+               syswrite($dpipe,"$pr\nXXX\n$line\nXXX\n");
+            }
+            close($bpipe);
+            $res = ($? >> 8);
+            $ret += $res;
+            if(!$?) {
+               $deb=pread($pkg, "lastpkg");
+               chomp($deb);
+               
+               print $dpipe "100\nXXX\n" . sprintf(gettext("Done! Run\nm-a install %s\nto install."), $pkg) . "\nXXX\n";
+#               $build_ok{$pkg}
+            }
+            else {
+               # hack. Dirty hack. But if this fails, what is reliable
+               # then?
+               chomp($file=`ls -tr $var/$pkg.buildlog.$KVERS.* | tail -n1`);
+               if(!$opt_noninter) {
+                  $gui_loop=1;
+                  $defsel="VIEW";
+                  sleep 1;
+                  RES: while($gui_loop) {
+                     open($intro, "$dialog --default-item $defsel --clear --title ".'"' . gettext("module-assistant, interactive mode") .'" --menu "' . sprintf(gettext("Build of the package %s failed! How do you wish to proceed?"), $pkg) . '\n\n" 14 65 5 VIEW "' . gettext("Examine the build log file") . '" CONTINUE "' . gettext("Skip and continue with the next operation") . '" STOP "' . gettext("Stop processing the build commands") . '" 2>&1 >/dev/tty |');
+                     @out = <$intro>;
+                     close($intro);
+                     $dialog_ret= ($? >> 8);
+                     last RES if($dialog_ret);
+                     die gettext("Dialog command not working correctly!") . "\n" if($#out != 0);
+                     $defsel=$out[0];
+                     if($defsel eq "VIEW") {
+                        system($dialog, ($wtmode ? "--scrolltext" : "--clear" ), "--title", gettext("module-assistant, log file viewer"), "--textbox", $file, 21, 78);
+                     }
+                     elsif($defsel eq "CONTINUE") {
+                        $gui_loop=0;
+                     }
+                     elsif($defsel eq "STOP") {
+                        close $dpipe;
+                        return;
+                     }
+                  }
+               }
+               else { print $dpipe "100\nXXX\n" . sprintf(gettext("Build failed! See %s for details!"), $file) . "\nXXX\n"; }
+            }
+            close $dpipe;
+            print STDERR sprintf(gettext("Done with %s ."), $deb) . "\n" if $deb;
+         }
+         else {
+            $res = system $cmd;
+            if( (!$opt_noninter) && $res) {
+               print gettext("Build failed. Press Return to continue...") . "\n";
+               ($opt_noninter || <STDIN>);
+            }
+            $ret += $res;
+         }
+
+         $blacklist{$pkg}=1 if $res;
+
+         if(! pread($pkg, "echodebfile") && !$res) {
+            # keep a fingerprint from "old" packages
+            $fprfile = pread($pkg,"lastpkg");
+            chomp($fprfile);
+            $fprfile =~ s#/#_#g;
+            $fprfile = "$var/$fprfile.txt";
+            open(fpr, ">$fprfile");
+            my $curpkgvers=pread($pkg, "cur_version"); chomp($curpkgvers);
+            print fpr "$curpkgvers\n$KVERS\n$KDREV\n";
+            close(fpr);
+         }
+      }
+   }
+}
+
+sub install {
+   my $pkg;
+   SKIP: foreach $target (@_) {
+      $pkg=complete_name($target);
+      next SKIP if($blacklist{$pkg});
+      &setvars;
+      #print "D: ", keys %kernelvers, "\n";
+      foreach $KVERS ((values %kernelvers), @extra_kvers) {
+         &setvars;
+         $deb=pread($pkg, "lastpkg");
+         chomp($deb);
+         if (length($deb) && -e $deb) {
+            print "TODO: ".Cwd::abs_path($deb)."\n" if $opt_debug;
+            push(@debs, Cwd::abs_path($deb));
+         }
+         else {
+            my $pattern="$var/$pkg*buildlog*";
+            printmsg sprintf(gettext("Package %s was not built successfully, see %s for details!"), $pkg, $pattern) . "\n";
+            if ($command ne "auto-install" && $opt_nogui) {
+               print gettext("You maybe want to run \"auto-install\" instead of install.") . "\n";
+            }
+         }
+      }
+   }
+   $ret_save = $ret;
+   withecho ($sudo, "dpkg", ($opt_force? "-i" : "-Ei"), @debs) if($#debs >= 0);
+   if($ret > $ret_save) {
+      $ret--;
+      print STDERR "\nI: " . gettext("Direct installation failed, trying to post-install the dependencies") . "\n\n";
+      $ret += withecho($sudo, $aptcmd, $opt_noninter?"-fy":"-f","install");
+   }
+}
+
+sub clean {
+   my $pkg;
+   SKIP: foreach $target (@_) {
+      $pkg=complete_name($target);
+      next SKIP if( $installed_only && pexec($pkg, "installed"));
+      $ret += pexec($pkg, "VERB", "clean");
+   }
+}
+
+sub purge {
+   my $pkg;
+   SKIP: foreach $target (@_) {
+      $pkg=complete_name($target);
+      next SKIP if( $installed_only && pexec($pkg, "installed"));
+      $ret += pexec($pkg, "VERB", "purge");
+   }
+}
+
+sub list {
+    print gettext("Warning, the cache is empty. You maybe wish to run the command \"module-assistant update\" first!") . "\n" if ("" eq <$var/*>);
+   my $i;
+   $retcode=1;
+   my $tellsearch;
+   PKG: foreach (sort @_) {
+      $requested=$_;
+      #syswrite(STDERR,'.') if(!$opt_quiet);
+      $pkg=complete_name($_);
+      
+      # is i(nstall)ed or not?
+      # 
+      print "is it installed?\n" if $opt_debug;
+      if(!pexec($pkg, "installed") ) {
+         my $curpkgvers=pread($pkg, "cur_version"); chomp($curpkgvers);
+         my $avpkgvers= pread($pkg, "avail_version"); chomp($avpkgvers);
+         #printwrap "$pkg (source package installed";
+         if($curpkgvers ne $avpkgvers) {
+            printwrap sprintf(gettext("%s (source) available (not up-to-date, V: %s vs. %s)"), $pkg, $curpkgvers, $avpkgvers) . "\n";
+         }
+         else {
+            printwrap sprintf(gettext("%s (source) installed (V: %s):"), $pkg, $curpkgvers) . "\n";
+         }
+      }
+      elsif($installed_only) { # nichts damit machen
+         next PKG;
+      }
+      else { # not installed but try the bins though
+         printwrap sprintf(gettext("%s (source package not installed):"), $pkg) . "\n";
+      }
+      $retcode=0;
+
+      my $binstring;
+      foreach $KVERS ((values %kernelvers), @extra_kvers) {
+          &setvars;
+         $lastbin=pread($pkg, "lastpkg"); chomp($lastbin);
+         $binstring .= 
+         "   + ($KVERS): ";
+
+         if(length($lastbin) >0 ) {
+            $binstring .= ( $opt_verbose ? Cwd::abs_path($lastbin) : basename($lastbin))."\n";
+         }
+         elsif($opt_search) {
+            my $packname = ((split(/-/, $pkg))[0]);
+            if(@precomp=`apt-cache pkgnames $packname- | grep -- -$KVERS\$`)
+            {
+               # preset but try others if needed
+               my $binpackage=$precomp[0];
+
+               if($#precomp > 0) {
+                  $shortname=$pkg;
+                  $shortname=~s/-(source|src)$//;
+                  # stupid similar looking names
+                  for(@precomp) {
+                     if(/$shortname-$KVERS/) {
+                        $binpackage=$_;
+                        last;
+                     }
+                  }
+               }
+               if(`apt-cache show $binpackage`=~/Filename:/) {
+                  $binstring .= gettext("not found, possible candidate(s) installable with $aptcmd:") . "\n\t";
+               }
+               else {
+                  printwrap gettext("package not found, but following is already installed:") . "\n\t";
+               }
+               $binstring .= join("\n\t", @precomp);
+            }
+         }
+         else {
+            $binstring .= gettext("not found") . "\n";
+            $tellsearch++;
+         }
+      }
+      if(length($binstring)) {
+         printwrap "  " . gettext("-- Binary package(s) for kernel(s):") . "\n$binstring";
+         #printwrap (($tellsearch>1 ? "Some packages were not found" : "One package could not be found").". Use the \"search\" command to look in the pool.\n") if($tellsearch && !$opt_quiet);
+      }
+#      else
+#      {
+#         
+#         printwrap "  -- No binary packages found" . (!$opt_search && 
+#         " (use the \"search\" command to look in the pool)")."\n" if(!$opt_quiet);
+#      }
+      
+      $i++;
+      #printwrap "\n";
+   }
+   if($tellsearch) {
+      my($orgcolumns) = $columns;
+      $columns -= 4;
+      printwrap wrap('', '', gettext("Some packages could not be found. The \"search\" command can search in the package pool for precompiled packages.")) . "\n";
+      $columns = $orgcolumns;
+   }
+   if(!$i) {
+      printwrap gettext("No data? You maybe want to run \"module-assistant update\" first.") . "\n" ;
+      $ret++;
+   }
+   return $retcode;
+}
+
+sub argv_expand {
+#   @ARGV= grep { !system "$packs{$_} installed" } keys %packs ;
+   @ARGV=split(/,|\ /,join(',',@ARGV));
+   if ($ARGV[0] eq "all") {
+      @ARGV=sort(keys %packs);
+   } 
+   elsif ($ARGV[0] eq "alli") {
+      @ARGV=sort(keys %packs);
+      $installed_only=1;
+   }
+   elsif ($ARGV[0] eq "allu") {
+      @ARGV=lsd($modloc);
+   }
+}
+
+sub init_packs_desc {
+   # allow control scripts to preset descriptions
+   open($descfile, "<$var/descriptions");
+   while(<$descfile>) {
+      if(/([^:]+):\ ?(.*)/) {
+         $packsdesc{$1}=$2;
+         last;
+      }
+   }
+   close($descfile);
+   for $source (keys %packs) {
+      $shortname=$source;
+      $shortname=~s/-(source|src)$//;
+      if(!defined($packsdesc{$shortname})) {
+         # accidentaly named after -source package
+         if(defined($packsdesc{$source})) {
+            $namefound = $packsdesc{$source};
+            delete $packsdesc{$source};
+         }
+         else {
+            # precache once with cummulative apt-get run
+            if(!(keys %descache)) {
+               open($getdesc, "apt-cache show ".join(' ',keys %packs)." 2>/dev/null |");
+               while(<$getdesc>) { 
+                  $pkg=$1 if(/^Package: (.*)\n/);
+                  if(/^Description: (.*)\n/) {
+                     $descache{$pkg}=$1;
+                  }
+               }
+               close($getdesc);
+            }
+            $namefound=$descache{$source};
+         }
+         $namefound=~s/\(source.*\)//i;
+         $namefound=~s/(source)?\.?$//i;
+         $namefound=~s/^(driver|module)?.?sources? (code )?(for|of)? (the )?//i;
+         # and if there still nothing, it will be an empty description
+         $packsdesc{$shortname} = $namefound;
+      }
+   }
+   open($descfile, ">$var/descriptions");
+   for(keys %packsdesc) {
+      print $descfile $_.": ".$packsdesc{$_}."\n";
+   }
+   close($descfile);
+   delete $packsdesc{""}; # wherever it comes from
+}
+
+sub isfullsrc {
+   $src=$_[0];
+   return ( (!-l "$src/arch") && (countList(<$src/arch/*>) > 1) );
+}
+
+sub fakesrc {
+   my $kvers=$_[0];
+   my $kpkg = get_kpackage($kvers)."-image-".$kvers;
+   my $knmbr=$kvers;
+   $knmbr=~s/^([\d\.]+)(.*)/$1/;
+   my $extra=$2;
+   my $writedir=(-d $opt_userdir)?$opt_userdir."/usr_src":$usrc;
+   my $confile="/boot/config-$kvers";
+   my $kheaders=get_kpackage($kvers)."-headers";
+   my $ksource=get_kpackage($kvers)."-source";
+   my $symverfile="$usrc/$kheaders-$kvers/Module.symvers";
+   my $compileh="$usrc/$kheaders-$kvers/include/linux/compile.h";
+   print gettext("Experimental kernel source recreating method...\nGetting source...") . "\n";
+   return 0 if withecho($sudo, $aptcmd, ($opt_noninter?"-y":undef), "install", "$ksource-$knmbr");
+   if(! -f $confile) {
+      print gettext("Config not found, getting headers to extract the config...") . "\n";
+      return 0 if withecho($sudo, $aptcmd, ($opt_noninter?"-y":undef), "install", "$kheaders-$kvers");
+      $confile="$usrc/$kheaders-$kvers/.config";
+   }
+   $tmpdir="$writedir/tmp-".rand;
+   mkdir $tmpdir;
+   # show the user what's going on
+   print gettext("Extracting pristine kernel source, please wait...") . "\n";
+   return 0 if withecho("tar", "jxf", "$writedir/$ksource-$knmbr.tar.bz2", "-C", $tmpdir);
+   print gettext("Installing to final location and configuring, please wait...") . "\n";
+   withecho "mv", "$tmpdir/$ksource-$knmbr", "$writedir/$ksource-$kvers";
+   withecho "cp", $confile, "$writedir/$ksource-$kvers/.config";
+   if (-f $symverfile) {
+      withecho "cp", $symverfile, "$writedir/$ksource-$kvers/Module.symvers";
+   }
+   if (-f $compileh) {
+      withecho "cp", $compileh, "$writedir/$ksource-$kvers/include/linux/compile.h";
+   }
+   rmdir $tmpdir;
+   if($extra) {
+      open(mk,"<$writedir/$ksource-$kvers/Makefile");
+      while(<mk>) {
+         if($extra && s/^EXTRAVERSION.*/EXTRAVERSION=$extra\n/)
+         {
+            undef($extra);
+         }
+         push(@mkcont,$_);
+      }
+      close(mk);
+      open(mk,">$usrc/$ksource-$kvers/Makefile");
+      print mk @mkcont;
+      close(mk);
+   }
+
+   if(0 != withecho("make", "-C", "$usrc/$ksource-$kvers" , "prepare", "modules_prepare")) {
+       withecho("make", "-C", "$usrc/$ksource-$kvers" , "oldconfig", "dep");
+   }
+
+   print "\n" . wrap('', '', sprintf(gettext("Faked kernel source for the Kernel %s.\nWarning: the configuration may not match the running kernel."), $kvers)) . "\n\n";
+   &initksrc;
+}
+#die "FIXME, hier oben";
+
+#$maxlen=0;
+#foreach $key (keys %packs) {
+#   $maxlen = length($key) if (length($key) > $maxlen);
+#}
+#print @output;
+
+# things that belong together:
+# Kernel version of some directory
+# $kernelvers{"directory"}= VERSION-NUMBER
+# Directory to some kernel version
+# $kerneldirs{VERSION-NUMBER} = "directory"
+sub initksrc {
+   # so initialise them
+   undef %kernelvers;
+   undef %kerneldirs;
+   undef @extra_kvers;
+   
+   foreach(@opt_kerneldirs) {
+      if(-d $_) {
+          print "PROBEKDIR: $_\n" if $opt_debug;
+         open($versionh, "<$_/include/generated/utsrelease.h")||
+         open($versionh, "<$_/include/linux/utsrelease.h")||
+         open($versionh, "<$_/include/linux/version.h");
+         <$versionh> =~ /"(.+)"/;
+         if(close($versionh)) {
+            $kernelvers{$_}=$1;
+            $kerneldirs{$1}=$_;
+         }
+         elsif(-r "$_/Makefile") {
+            printmsg sprintf(gettext("Warning, %s seems to contain unconfigured kernel source (see manpage for details)!"), $_) if !$opt_quiet;
+            $kernelwarned=1;
+         }
+         elsif(!-r $_ || !-x $_) {
+            printmsg sprintf(gettext("Warning, could not access the %s directory!"), $_) . "\n" if !$opt_quiet;
+            $kernelwarned=1;
+         }
+         else {
+            printmsg sprintf(gettext("Warning, %s does not contain a valid kernel source tree, skipping!"), $_) . "\n" if !$opt_quiet;
+            $kernelwarned=1;
+         }
+      }
+   }
+   # now go trough the user-specified kverslist  (skipping kvers for
+   # user-specified directories) and look for for the appropriate kernel
+   # headers for the rest
+
+   HAVEIT: foreach $kvers (@opt_kverslist) {
+      next HAVEIT if(defined($kerneldirs{$kvers}));
+      my $kheaders=get_kpackage($kvers)."-headers";
+      LOOKUP: foreach $poskdir ("/lib/modules/$kvers/build", "/lib/modules/$kvers/source", <$opt_userdir/usr_src/*>, "$usrc/linux", "$usrc/$kheaders-$kvers", <$usrc/*>, </usr/local/src/*>) {
+         if(defined($poskdir) && -d $poskdir) {
+            if(!-x $poskdir) {
+               if(!$opt_quiet) {
+                  my $msg=sprintf(gettext("Warning, could not access the %s directory!"), $poskdir);
+                  if($opt_userdir) { printmsg $msg if !$ksrcstfu; $ksrcstfu=1 } else { print $msg if $opt_verbose; }
+               }
+            }
+            else {
+               if(-e "$poskdir/include/linux/version.h") {
+                  open($versionh, "<$poskdir/include/generated/utsrelease.h") ||
+                  open($versionh, "<$poskdir/include/linux/utsrelease.h") ||
+                  open($versionh, "<$poskdir/include/linux/version.h");
+                  <$versionh> =~ /"(.+)"/;
+                  push(@seenkvers, "$1\n");
+                  if($1 eq $kvers) {
+                     if($kerneldirs{$kvers}) {
+                        if(isfullsrc($poskdir)) {
+                           # we have a dupe and the new one looks like better source
+                           # 
+                           # drop the previous one
+                           print "D: $kvers dupe, prefer the one from $poskdir\n" if $opt_debug;
+                           delete $kernelvers{$kerneldirs{$kvers}};
+                           $kernelvers{$poskdir}=$kvers;
+                           $kerneldirs{$kvers}=$poskdir;
+                           last LOOKUP;
+                        }
+                        # just ignore otherwise
+                     }
+                     else {
+                        $kernelvers{$poskdir}=$kvers;
+                        $kerneldirs{$kvers}=$poskdir;
+                     }
+                  }
+               }
+#               elsif(-r "$poskdir/include/linux" && -r "$poskdir/Makefile") {
+#                  printmsg sprintf(gettext("Warning, %s seems to contain unconfigured kernel source!"), $poskdir) if !$opt_quiet;
+#               }
+            }
+         }
+      }
+   }
+   # finaly, go trough @opt_kverslist and push versions with no source to
+   # @extra_kvers
+   for(@opt_kverslist) {
+      if(!defined($kerneldirs{$_})) {
+         push(@extra_kvers, $_);
+      }
+   }
+  #print "valid: ", (keys %kerneldirs), " extra: ", @extra_kvers if($opt_debug);
+}
+
+&initksrc;
+&argv_expand;
+
+### MAIN part ###
+sub do_stuff {
+
+   my $cmd=$_[0];
+   if($cmd eq "list" || $cmd eq "list-available" || $cmd eq "la") {
+      if($#ARGV<0) { $ARGV[0]="all" ; &argv_expand}
+      &list(@ARGV);
+   }
+   elsif($cmd eq "search") {
+      if($#ARGV<0) { $ARGV[0]="all" ; &argv_expand}
+      $opt_search=1;
+      &list(@ARGV);
+   }
+   elsif($cmd eq "list-installed" || $cmd eq "l-i" || $cmd eq "li") {
+      if($#ARGV<0) { $ARGV[0]="alli" ; &argv_expand}
+      &list(@ARGV);
+   }
+   elsif($cmd eq "get") {
+      &help if($#ARGV<0);
+      die gettext("No package specified. STOP.") . "\n" if($#ARGV<0);
+      &get(@ARGV);
+   }
+   elsif($cmd eq "unpack") {
+      &help if($#ARGV<0);
+      die gettext("No package specified. STOP.") . "\n" if($#ARGV<0);
+      &unp(@ARGV);
+   }
+   elsif($cmd eq "build") {
+      $opt_nogui = 0 if $wtmode; # whiptail's gauge sucks
+      die gettext("No package specified. STOP.") . "\n" if($#ARGV<0);
+      &build(@ARGV);
+   }
+   elsif($cmd eq "update") {
+      if($#ARGV<0) { $ARGV[0]="all" ; &argv_expand}
+      &up(@ARGV);
+   }
+   elsif($cmd eq "prepare") {
+       &prep();
+       initksrc();
+   }
+   elsif($cmd eq "auto-install" || $cmd eq "ai" || $cmd eq "a-i") {
+      &help if($#ARGV<0);
+      die gettext("No package specified. STOP.") . "\n" if($#ARGV<0);
+      if($#ARGV<0) { $ARGV[0]="all" ; &argv_expand}
+      @tmp=@ARGV; # workaround for a funny bug, up() alters the data somehow
+      &up(@tmp);
+      &prep();
+      &initksrc();
+      &get(@ARGV);
+      &build(@ARGV);
+      &install(@ARGV);
+   }
+   elsif($cmd eq "auto-build" || $cmd eq "ab" || $cmd eq "a-b") {
+      die gettext("No package specified. STOP.") . "\n" if($#ARGV<0);
+      &get(@ARGV);
+      &build(@ARGV);
+   }
+   elsif($cmd eq "build-install" || $cmd eq "b-i") {
+      die gettext("No package specified. STOP.") . "\n" if($#ARGV<0);
+      &build(@ARGV);
+      &install(@ARGV);
+   }
+   elsif($cmd eq "install") {
+      die gettext("No package specified. STOP.") . "\n" if($#ARGV<0);
+      &install(@ARGV);
+   }
+   elsif($cmd eq "clean") {
+      die gettext("No package specified. STOP.") . "\n" if($#ARGV<0);
+      &clean(@ARGV);
+   }
+   elsif($cmd eq "purge") {
+      die gettext("Do you really wish to remove all binary packages?\nIf so, use the --force option.") . "\n" if(!$opt_force);
+      die gettext("No package specified. STOP.") . "\n" if($#ARGV<0);
+      &purge(@ARGV);
+   }
+   elsif($cmd eq "fakesource" || $cmd eq "fakersrc" || $cmd eq "fakersource") {
+      #$ARGV[0]=$my_kvers if($#ARGV < 0);
+      &fakesrc($_) for(@opt_kverslist);
+   }
+   elsif(!$gui_done) {
+      $gui_done=1;
+
+      # bounce with error message if there is no gui, otherwise work with dialog
+      &help() if ($opt_nogui || !$dialog);
+
+      print STDERR gettext("Starting the Dialog UI...") . "\n";
+      chomp($tmpname=`mktemp`);
+      $gui_loop=1;
+      $defsel="OVERVIEW";
+      GUI: while($gui_loop) {
+         my($orgcolumns) = $columns;
+         $columns = 65;
+         open($intro, "$dialog --default-item $defsel --clear --title ".'"' . gettext("module-assistant, interactive mode") . '" '.($wtmode?"":" --aspect 5 ").' --menu "' . wrap('', '', gettext("Welcome to the dialog frontend of module-assistant. This user interface provides access to the few commands of this program.")) . '\n\n' . wrap('', '', gettext("If you wish to learn more, choose the OVERVIEW option.")) . '\n\n' . wrap('', '', gettext("You should better run UPDATE once before you proceed.") . " " . gettext("If you wish to look for existing module packages for your needs or wish to compile a new one from source, choose them in the SELECT dialog and continue with possible commands.")) . '\n\n" 22 '.$columns.' 5 OVERVIEW "' . gettext("Show all possible command line commands") . '" UPDATE "' . gettext("Update the cached package information") . '" PREPARE "' . gettext("Configure the system to compile modules") . '" "SELECT" "' . gettext("Select the module/source packages to work on") . '" "EXIT" "' . gettext("Exit the program") . '" 2>&1 >/dev/tty |');
+         $columns = $orgcolumns;
+         @out = <$intro>;
+         close($intro);
+         $dialog_ret= ($? >> 8);
+         last GUI if($dialog_ret);
+         die gettext("Dialog command not working correctly!") . "\n" if($#out != 0);
+         $defsel=$out[0];
+         if($defsel eq "OVERVIEW") {
+            open($tmpfile, ">$tmpname");
+            print $tmpfile $helpmsg;
+            close($tmpfile);
+            system($dialog, ($wtmode ? "--scrolltext" : "--clear" ), "--title", gettext("module-assistant, command overview"), "--textbox", $tmpname, $rows-2, $columns-1);
+            unlink $tmpname;
+         }
+         elsif($defsel eq "UPDATE") {
+            up();
+         }
+         elsif($defsel eq "PREPARE") {
+            prep();
+            print STDERR "\n\n" . gettext("Press Return to continue...");
+            ($opt_noninter || <STDIN>);
+            initksrc();
+            #goto restart;
+         }
+         elsif($defsel eq "SELECT") {
+            &init_packs_desc();
+            %packsel = %packsdesc;
+            for(keys %packsel) { $packsel{$_}="off"};
+
+            SELECTION: while(1) {
+               my $tmpstring = $dialog.' --clear --title "' . gettext("module-assistant, package selection") . '" --checklist "\n' . wrap('', '', gettext("Please select the interesting module (source) packages.")) . '\n' . wrap('', '', gettext("Use Cursor keys to browse, Space to select and Return to continue.")) . '\n' . wrap('', '', gettext("Cancel to return to the main menu.")) . '" '. ($rows - 4) . ' 70 ' . ($rows-15);
+               for(sort(keys %packsel)) {
+                  $tmpstring .= " $_ \"".$packsdesc{$_}.'" '.$packsel{$_};
+               }
+               $tmpstring .= ' 2>&1 >/dev/tty |';
+               #die "jo, $tmpstring";
+               open($select, $tmpstring);
+               @out = <$select>;
+               close $select;
+               last SELECTION if($? >> 8);
+#            die gettext("Dialog command not working correctly!") . "\n" if($#out != 0);
+               $selection=$out[0];
+               $selection=~s/\"//g;
+               @selected=split(/\ /,$selection);
+               for(@selected) { $packsel{$_}="on"};
+               next SELECTION if($#selected < 0);
+
+               ACTION: while(1) {
+                  $tmpstring = $dialog.' --clear --title "' . gettext("module-assistant, interactive mode") . '" --menu "' . gettext("You have selected the following packages:") . '\n\n'
+                  .join(', ', @selected)
+                  .'\n\n' . gettext("Choose one of the following commands to proceed or Cancel to return to the selection menu.") . '\n\n" 18 65 6 LIST "' . gettext("List installed (binary) packages") . '" SEARCH "' . gettext("List and search with apt-cache") . '" GET "' . gettext("Get or update the source package") . '" "BUILD" "' . gettext("Compiles module packages for the current kernel") . '" INSTALL "' . gettext("Installs the packages for the current kernel") . '" BACK "' . gettext("Returns to the module selection") . '" 2>&1 >/dev/tty |';
+                  open($select, $tmpstring);
+                  @out = <$select>;
+                  close $select;
+                  last SELECTION if($? >> 8);
+                  $selection=$out[0];
+                  if($selection eq "LIST" | $selection eq "SEARCH") {
+                     $opt_search=1 if($selection eq "SEARCH");
+                     undef $printbuf;
+                     $catchprint=1;
+                     list(@selected);
+                     undef $catchprint;
+                     open($tmpfile, ">$tmpname");
+                     print $tmpfile $printbuf;
+                     close($tmpfile);
+                     system($dialog, "--title", gettext("module-assistant, present packages"), "--textbox", $tmpname, 21, 78);
+                     unlink $tmpname;
+
+                     undef $opt_search;
+                  }
+                  elsif($selection eq "GET") {
+                     get(@selected);
+                  }
+                  elsif($selection eq "BUILD") {
+                     my $instatus;
+                     for(@selected) {$instatus += pexec(complete_name($_), "installed") };
+                     my($orgcolumns) = $columns;
+                     $columns = 56;
+                     if($instatus && !system($dialog, "--title", gettext("module-assistant, source installation"), "--yesno", wrap('', '', gettext("The source package may not to be installed. Would you like to install or upgrade selected source packages now?")), 10, 60)) {
+                        get(@selected);
+                     }
+                     $columns = $orgcolumns;
+                     my $retold=$ret;
+                     build(@selected);
+                     #if($ret > $retold) {
+                        #   printmsg "The build was not successful! See /var/cache/modass/*buildlog* for more details.";
+                        #}
+                     if($retold == $ret && !system($dialog, "--title", gettext("module-assistant, package installation"), "--yesno", gettext("Would you like to install the created module package(s) now?"), 7, 60)) {
+                        install(@selected);
+                     }
+
+
+                  }
+                  elsif($selection eq "INSTALL") {
+                     install(@selected);
+                  }
+                  else {
+                     next SELECTION;
+                  }
+               }
+            }
+         }
+         else {
+            exit;
+         }
+      }
+   }
+}
+
+if( !(`id -u`=~/^0/) && !$opt_userdir ) {
+   if(`groups`=~/(^| )src(\ |$)/) {
+      $opt_userdir="$usrc/modass";
+      my($orgcolumns) = $columns;
+      $columns -= 4;
+      printmsg sprintf(gettext("NOTE: You are not root but member of the src group. Mapping the base working directory to \"%s\"."), $opt_userdir) if !$opt_quiet;
+      $columns = $orgcolumns;
+      if(!-w $opt_userdir) {
+         mkdir $opt_userdir;
+      }
+      if(!-w $opt_userdir) {
+         my($orgcolumns) = $columns;
+         $columns -= 4;
+         printmsg sprintf(gettext("You are member of the src group but the replacement directory %s could not be created or is not writeable."), $opt_userdir) if !$opt_quiet;
+         $columns = $orgcolumns;
+         exit 254;
+      }
+      goto restart;
+   }
+   else {
+      my($orgcolumns) = $columns;
+      $columns -= 4;
+      printmsg gettext("You are not root and no replacement directory (the -u option) is specified. Unable to continue.") if !$opt_quiet;
+      $columns = $orgcolumns;
+      exit 254;
+   }
+}
+
+$command="somethinginvalid" if !$command;
+
+for(split(/,/, $command)) { do_stuff($_) }
+
+ende();
+
+__END__

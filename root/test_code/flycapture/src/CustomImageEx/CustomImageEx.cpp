@@ -1,25 +1,12 @@
-//=============================================================================
-// Copyright © 2008 Point Grey Research, Inc. All Rights Reserved.
-//
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
-// accordance with the terms of the license agreement you entered into
-// with PGR.
-//
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
-// SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
-// SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
-// THIS SOFTWARE OR ITS DERIVATIVES.
-//=============================================================================
-//=============================================================================
-// $Id: CustomImageEx.cpp,v 1.20 2010-02-26 23:24:47 soowei Exp $
-//=============================================================================
+/*
+Implementation of image capture and sending across network
 
-//#include "stdafx.h"
-//#include "stdio.h"
+Adapted from CustomImageEx.cpp in FlyCapture2 API
+
+Author: Scott Bronikowski
+Date: 28 February 2014
+
+*/
 
 #include "FlyCapture2.h"
 
@@ -82,7 +69,9 @@ struct PointGrey_t {
   Format7PacketInfo packetInfo;
   Image rawImage, convertedImage;  
   PixelFormat pixFormat;
-  unsigned int rows, cols, stride;
+  BayerTileFormat bayerFormat;
+  unsigned char* pData;
+  unsigned int rows, cols, stride, dataSize;
   Imlib_Image firstImage, finalImage;
   int sockfd;
 };
@@ -103,6 +92,7 @@ unsigned int PGR_Init(BusManager* busMgr);
 int PGR_SetCamera(PointGrey_t* PG);
 int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCameras);
 void PGR_GetFrame(PointGrey_t* PG);
+void PGR_GetFrameRaw(PointGrey_t* PG);
 void PGR_SaveImage(PointGrey_t* PG);
 void Imlib_GetFrame(PointGrey_t* PG);
 void Imlib_GetFrameWithResize(PointGrey_t* PG);
@@ -144,7 +134,7 @@ int main(int /*argc*/, char** /*argv*/)
     // unsigned char tempbuf[512];
     // int len;
 
-    int img_size;
+    //int img_size;
 
     double start = current_time();
     for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
@@ -152,68 +142,70 @@ int main(int /*argc*/, char** /*argv*/)
       for (unsigned int i = 0; i < numCameras; i++)
       {
 	/* PGR functions only */
-	//PGR_GetFrame(&PG[i]);
+	PGR_GetFrame(&PG[i]);
 
 	/* now with Imlib functions */
-	Imlib_GetFrame(&PG[i]);
-	//Imlib_GetFrameWithResize(&PG[i]);
-	imlib_context_set_image(PG[i].finalImage); //move this closer to imlib calls?
+	// Imlib_GetFrame(&PG[i]);
+	// //Imlib_GetFrameWithResize(&PG[i]);
+	// imlib_context_set_image(PG[i].finalImage); //move this closer to imlib calls?
 	
-	/* LOOK TO FUNCTIONALIZE THIS SECTION */
-	//SEND IMAGE HERE
+	// // /* LOOK TO FUNCTIONALIZE THIS SECTION */
+	// // //SEND IMAGE HERE
+	
+	// /* second draft -- works with converted Imlib images*/
+	// // //first send image dimensions
+	// // // printf("rows = %u, cols = %u, stride = %u\n", PG[i].rows,
+	// // //        PG[i].cols, PG[i].stride);
+	// // // printf("sizeof(rows) = %d, sizeof(convertedImage) = %d, sizeof(finalImage) = %d\n",
+	// // //        sizeof(PG[i].rows), sizeof(&PG[i].convertedImage), sizeof(PG[i].finalImage));
+	
+	// // //first send size, (w, h, d)
+	// // if (send(PG[i].sockfd, &PG[i].cols, sizeof(PG[i].cols), 0) <= 0)
+	// // {
+	// //   printf("Error sending width");
+	// // }
+	// // if (send(PG[i].sockfd, &PG[i].rows, sizeof(PG[i].rows), 0) <= 0)
+	// // {
+	// //   printf("Error sending height");
+	// // }	
+	// // if (send(PG[i].sockfd, &k_BytesPerPixel, sizeof(k_BytesPerPixel), 0) <= 0)
+	// // {
+	// //   printf("Error sending depth");
+	// // }
+	// // printf("Sent w x h x d = %u x %u x %u\n", PG[i].cols, PG[i].rows, k_BytesPerPixel);
 
-	//first send image dimensions
-	// printf("rows = %u, cols = %u, stride = %u\n", PG[i].rows,
-	//        PG[i].cols, PG[i].stride);
-	// printf("sizeof(rows) = %d, sizeof(convertedImage) = %d, sizeof(finalImage) = %d\n",
-	//        sizeof(PG[i].rows), sizeof(&PG[i].convertedImage), sizeof(PG[i].finalImage));
-	
-	//first send size, (w, h, d)
-	if (send(PG[i].sockfd, &PG[i].cols, sizeof(PG[i].cols), 0) <= 0)
-	{
-	  printf("Error sending width");
-	}
-	if (send(PG[i].sockfd, &PG[i].rows, sizeof(PG[i].rows), 0) <= 0)
-	{
-	  printf("Error sending height");
-	}	
-	if (send(PG[i].sockfd, &k_BytesPerPixel, sizeof(k_BytesPerPixel), 0) <= 0)
-	{
-	  printf("Error sending depth");
-	}
-	printf("Sent w x h x d = %u x %u x %u\n", PG[i].cols, PG[i].rows, k_BytesPerPixel);
+	// // //then send data
+	// // img_size = (int)(PG[i].cols * PG[i].rows * k_BytesPerPixel);
+	// // //context set above -- need to move?
+	// // unsigned char *frame = 
+	// //   (unsigned char *)imlib_image_get_data_for_reading_only();
+	// // if (sendall(PG[i].sockfd, frame, &img_size) != 0)
+	// // {
+	// //   printf("Error in sendall\n");
+	// // }
+	// /* end second draft */
 
-	//then send data
-	img_size = (int)(PG[i].cols * PG[i].rows * k_BytesPerPixel);
-	//context set above -- need to move?
-	unsigned char *frame = 
-	  (unsigned char *)imlib_image_get_data_for_reading_only();
-	if (sendall(PG[i].sockfd, frame, &img_size) != 0)
-	{
-	  printf("Error in sendall\n");
-	}
-
-	// /* first draft -- using strings with length sent before string */
-	// memset(&tempbuf, 0, sizeof(tempbuf));
-	// sprintf(tempbuf, "sending image %u-%u", PG[i].cameraInfo.serialNumber,
-	// 	imageCount);
-	// len = strlen(tempbuf);
-	// printf("tempbuf = %s, len = %d\n", tempbuf, len);
-	// //first send size
-	// if (send(PG[i].sockfd, &len, sizeof(len), 0) <= 0)
-	// {
-	//   printf("Error sending len\n");
-	// }
-	// //then send data
-	// if (sendall(PG[i].sockfd, tempbuf, &len) != 0)
-	// {
-	//   printf("Error in sendall\n");
-	// }
-	// /* end first draft */
+	// // /* first draft -- using strings with length sent before string */
+	// // memset(&tempbuf, 0, sizeof(tempbuf));
+	// // sprintf(tempbuf, "sending image %u-%u", PG[i].cameraInfo.serialNumber,
+	// // 	imageCount);
+	// // len = strlen(tempbuf);
+	// // printf("tempbuf = %s, len = %d\n", tempbuf, len);
+	// // //first send size
+	// // if (send(PG[i].sockfd, &len, sizeof(len), 0) <= 0)
+	// // {
+	// //   printf("Error sending len\n");
+	// // }
+	// // //then send data
+	// // if (sendall(PG[i].sockfd, tempbuf, &len) != 0)
+	// // {
+	// //   printf("Error in sendall\n");
+	// // }
+	// // /* end first draft */
 	
-	/* FUNCTIONALIZE */
+	// /* FUNCTIONALIZE */
 	
-	imlib_free_image_and_decache(); //do this closer to imlib call?
+	// imlib_free_image_and_decache(); //do this closer to imlib call?
 
 	/* use OpenCV functions here*/
 	/* OpenCV */
@@ -240,12 +232,12 @@ int main(int /*argc*/, char** /*argv*/)
     for (unsigned int i = 0; i < numCameras; i++)
     {
       /* PGR functions only*/
-      //PGR_GetFrame(&PG[i]);
-      //PGR_SaveImage(&PG[i]);
+      PGR_GetFrame(&PG[i]);
+      PGR_SaveImage(&PG[i]);
 
       /* now with Imlib functions */
-      Imlib_GetFrame(&PG[i]);
-      Imlib_SaveImage(&PG[i]);
+      //Imlib_GetFrame(&PG[i]);
+      //Imlib_SaveImage(&PG[i]);
 
       /* use OpenCV functions here */
     }
@@ -521,12 +513,16 @@ void PGR_GetFrame(PointGrey_t* PG)
 {
   // Retrieve an image
   CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
+  printf("rawImage.GetDataSize() = %u\n", PG->rawImage.GetDataSize());
   // Get the raw image dimensions
   PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
 			     &PG->stride, &PG->pixFormat );
   // Convert the raw image
-  CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
+  // CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
+  // 				&PG->convertedImage));
+  CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGR, 
 				&PG->convertedImage));
+  printf("convertedImage.GetDataSize() = %u\n", PG->convertedImage.GetDataSize());
 }
 
 void PGR_SaveImage(PointGrey_t* PG)
@@ -582,21 +578,32 @@ void Imlib_GetFrame(PointGrey_t* PG)
 {
   // Retrieve an image
   CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
+  printf("rawImage.GetDataSize() = %u\n", PG->rawImage.GetDataSize());
   // Get the raw image dimensions
   PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
 			     &PG->stride, &PG->pixFormat );
   // Convert the raw image
   CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
 				&PG->convertedImage));
-
+  printf("convertedImage.GetDataSize() = %u\n", PG->convertedImage.GetDataSize());
   /* original code */
   PG->finalImage = 
     imlib_create_image_using_copied_data(PG->cols,
   					 PG->rows,
   					 (unsigned int*)
   					 PG->convertedImage.GetData());
-  
 }
+
+void PGR_GetFrameRaw(PointGrey_t* PG)
+{
+  // Retrieve an image
+  CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
+  //printf("rawImage.GetDataSize() = %u\n", PG->rawImage.GetDataSize());
+  // Get the raw image dimensions
+  PG->rawImage.GetDimensions(&PG->rows, &PG->cols, &PG->stride, 
+			     &PG->pixFormat, &PG->bayerFormat);
+}
+
 
 void Imlib_SaveImage(PointGrey_t* PG)
 {

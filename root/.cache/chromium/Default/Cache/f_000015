@@ -1,0 +1,1611 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-us" xml:lang="en-us">
+<head>
+	<title>Verizon Mobile Broadband Manager</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link href="./styles/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
+ 	<link href="./styles/layout.css" rel="stylesheet" type="text/css" />
+    <link href="./styles/bubblestyle.css" rel="stylesheet" type="text/css" />
+	<!--[if IE]>
+	<link rel="stylesheet" type="text/css" href="styles/layout_ie.css" />
+	<![endif]-->
+	<!--[if lt IE 9]>
+	<script src="./js/ie7-js.googlecode.com.IE9.js">IE7_PNG_SUFFIX=".png";</script>
+	<![endif]--> 
+	
+	<!-- <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js">IE7_PNG_SUFFIX=".png";</script> -->
+	
+	<script type="text/javascript" src="./js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="scripts/custom.js"></script>
+	<script src="./js/jquery.url.min.js"></script>
+    <script src="./js/md5-min.js"></script>
+	<script src="./js/libs/jquery-postmessage.js"></script>
+    <script src="./js/libs/jquery.qtip.min.js"></script>    
+	<script src="./js/libs/jquery.flot.min.js"></script>
+	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="./js/excanvas.min.js"></script><![endif]-->
+	<!--	DEBUGGING USE ONLY -->
+
+	 <!--
+        <script type="text/javascript" src="./js_src/vzw.js"></script>
+		<script type="text/javascript" src="./js_src/picaso_scope.js"></script>
+		<script type="text/javascript" src="./js_src/picaso_sim.js"></script>
+		<script type="text/javascript" src="./js_src/picaso_network.js"></script>
+		<script type="text/javascript" src="./js_src/picaso_usage.js"></script>
+        <script type="text/javascript" src="./js_src/picaso_device.js"></script>
+        <script type="text/javascript" src="./js_src/picaso_gps.js"></script>
+        <script type="text/javascript" src="./js_src/picaso_sms.js"></script>
+        <script type="text/javascript" src="./js_src/picaso_notification.js"></script>
+        <script type="text/javascript" src="./js_src/picaso_mgmt.js"></script>
+        <script type="text/javascript" src="./js_src/picaso_rxtx.js"></script>
+        <script type="text/javascript" src="./js_src/landing.js"></script>
+		<script type="text/javascript" src="./js_src/simpin.js"></script>
+		<script type="text/javascript" src="./js_src/vzam_usage.js"></script>
+		<script type="text/javascript" src="./js_src/ui_handler.js"></script> 
+        -->
+        
+
+         <script type="text/javascript" src="./js/picaso.js"></script>
+        
+        <script >
+        <!--
+        //Just in case any of the images don't get served up correctly.  Let's
+        //just automatically re-request them (up to 10 times).
+        function onImgError(img)
+        {
+            window.setTimeout(function()
+                            {
+                                var osrc = img.getAttribute('osrc'),
+                                    ncount = img.getAttribute('ncount');
+                                    
+                                if (!osrc)
+                                {
+                                    osrc = img.getAttribute('src');
+                                    img.setAttribute('osrc', osrc);
+                                }   
+                                
+                                if (!ncount)
+                                    ncount = '1';
+                                    
+                                img.setAttribute('ncount', ++ncount);
+                                
+                                if (ncount <= 10)
+                                {
+                                    var d = new Date();
+                                    img.src = osrc + '?c=' + d.valueOf();
+                                }
+                            }, 
+                            1000);
+        }
+        
+        -->
+        </script>
+        
+</head>
+<body class="pl">
+
+	<div class="mbm" id="vzw_window">
+
+		<div class="mbm-header pad">
+
+			<div class="col2 mbm-header-logo">
+
+			<h1 class="logo">Verizon</h1>
+
+			Mobile Broadband Manager
+
+			</div>
+
+			<!--IF COUNTER, ADD "COUNTER" CLASS TO BELOW DIV, IF NO MESSAGE AND NO COUNTER ADD "TOP-EMPTY"-->
+
+			<div class="col4 header-border status-bar"  id="ConHdr">
+
+			<span id="connection-timer" title="Connected to Verizon Wireless Sent Received">00:00:00</span>
+
+			<span id="state-description" style="display:none;"></span><br/>
+
+			<!--00:00:00<br/>  UNCOMMENT COUNTER IF USING-->
+
+			<!--ONE RED BUTTON BELOW, REMOVE SPAN & CHANGE CLASS TO "SHADOW-BUTTON" FOR ONE GREY -->
+
+			
+
+			<!--TWO BUTTONS BELOW, REMOVE SPAN & CHANGE LINK CLASS TO SHADOW-BUTTON-ALT FOR GREY-->
+
+			<!--<a href="javascript:void(0);" class="button largefloat"><span class="red">Disconnect</span></a><a href="javascript:void(0);" class="button largefloat"><span class="red">Launch VPN</span></a>-->
+
+				<!--
+				<div id="browserinfo"></div>
+				
+				<script>
+					
+					txt = "<p>Browser CodeName: " + navigator.appCodeName + "</p>";
+					txt+= "<p>Browser Name: " + navigator.appName + "</p>";
+					txt+= "<p>Browser Version: " + navigator.appVersion + "</p>";
+					txt+= "<p>Cookies Enabled: " + navigator.cookieEnabled + "</p>";
+					txt+= "<p>Platform: " + navigator.platform + "</p>";
+					txt+= "<p>User-agent header: " + navigator.userAgent + "</p>";
+					
+					document.getElementById("browserinfo").innerHTML=txt;
+					
+					</script>
+				 -->
+
+			<!-- <a id="aConnect" href="javascript:void(0);" class="button large" title="Click to connect"><span id="btnConnect" class="gray">Connect</span></a>-->
+			<div id="ConnectVPN" style="margin-top:11px;">
+			<a id="aConnect" href="javascript:void(0);" class="button" style="margin-left: 82px;"  title="Click to connect"><span id="btnConnect" class="gray">Connect</span></a>
+			<a id="launchVPN" onclick="OnLaunchVPN();" href="javascript:void(0);" class="button" ><span id="vpnButton" class="red">Launch VPN</span></a>
+			</div>
+			
+			</div>
+			
+			<div class="col4 header-border status-bar" id="no-device" style="display: none;">
+				<div id="no-device-state-description" class="label-center">Spoon.</div>
+				<img src="i/icons/USB-animation1.gif" alt="" onerror="onImgError(this);"/>
+			</div>
+
+			<div class="col4 header-border status-bar" id="enter-sim-pin" style="display: none;">
+				<!-- enter-sim-pin starts its life off hidden -->
+				<div id="simpinAttempts" class="label-center">Incorrect PIN. You have 2 attempts remaining.</div>
+				<div id="enter-sim-pin-table">
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									<div id="enter-puk-box" class="label-left">
+										<span>Enter PUK</span><br>
+										<input type="password" id="enter-puk" name="enter-puk" class="pinentry enterPukInput" value="" title="You will need to use a PUK code to unlock the device, if you do not know your PUK code please call customer service at 1-800-922-0204 and provide the ICCID information from under Help -> About -> ICCID" onkeyup="simpin_checkUnlockButtonState_input();">
+									</div>
+								</td>
+								<td style="width:10px"></td>
+								<td>
+									<div id="enter-pin-box" class="label-left">
+										<span>Enter SIM PIN</span><br>
+										<input type="password" id="enter-pin" name="enter-pin" class="pinentry" value="" onkeyup="simpin_checkUnlockButtonState_input();">
+									</div>
+								</td>
+								<td>
+									<div class="unlock-button">
+										<a class="button" id="simlock-unlock-button" href="#"><span class="gray">Unlock</span></a>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="col3 header-border">
+
+			<div class="header-icons">
+
+				<!--ADD "HIDE" CLASS TO ANY DIV TO HIDE/TURN OFF THAT ICON-->
+
+				<!--FOR NETWORK ICONS, ADD CLASS "FOURG" OR "THREEG" TO INDICATE NETWORK TYPE AND "UP" "DOWN" OR "BOTH" TO INDICATE ARROW HIGHLIGHTING AND ADD "ROAM" IF ROAM ICON SHOULD DISPLAY-->
+
+				<div class="signal-strength" id="signal_strength" title="Network Signal"><a class="strength-4" href="#" style="cursor:default;">Signal Strength</a></div>
+
+				<div class="network" id="network_tp" title="Verizon Wireless"  totRx="0" totTx="0"><a class="band fourg roam globe" id="network_type" href="#"  style="cursor:default;">band</a>
+
+				<a class="dla" href="#" style="cursor:default;">Download Activity</a></div>
+
+				<div class="signal" id="extendednw"  title="Network Extender"><a id="signal_state" href="#" style="cursor:default;">Signal</a></div>
+
+				<div class="location"><a id="gps_state" href="#" style="cursor:default;" title="GPS State">Location</a></div> 
+
+				<div class="messages"><a id="messages" class="message-icon" href="#" onclick="OnSMSIcon();"  title="Messages Unread: 
+Total:">Messages</a><div id="sms-icon-count"><div class="msg-icon-no"></div></div><div id="sound" style="width:0px; height:0px;"></div></div>
+				<div class="sim"><a id="sim" href="#" style="display:none;cursor:default">SIM</a></div>
+				<div class="update"><a id="updateIcon" class="update" href="#" style="display:none;cursor:default">Update</a></div>
+				<div style="clear:both;"></div>
+			</div>
+
+            <div id="mbmusertools">			
+
+			    <a id="header-view-usage" class="button" rel="modal" href="#mainnetwork_usage" onclick="onUsage('mainnetworkUsage', 1);"  title="Click to view current usage data"><span id="view_usage_item" class="red">View Usage</span></a>
+			    <a id="header-menu" href="#" class="button" onclick="OnMenu();" title="Click to access the following; Networks, Messages, My Verizon, Settings, Help"><span class="red">Menu</span></a>
+			    <a class="help" href="#" onclick="OnHelpIcon();" title="Click to get help">Help</a>
+			    </div>
+			    
+            </div>
+            
+			<div class="col1 last header-border"  id="CloseHdr">
+			    <a id="btnClose" class="close" href="#" onclick="onCloseMenu();" title="If you are currently connected to the network, closing the application will not terminate this connection">Close</a><br/>
+			    <a id="toggle">Toggle</a>
+			</div>
+		</div>
+
+		<div class="mbm-content" style="display:none;">
+			<!--ADD LI CLASS "MENU-ACTIVE" TO ACTIVE MENU ITEM. KEEP "MESSAGES" LI CLASS FOR EXTRA PADDING FOR DISPLAY COUNT-->
+			<ul id="menu_list" class="mbm-nav">
+            <li class="menu-active" onclick="launchNetworks();" id="netwk-menu"><a id="network_link" href="#">Networks</a></li>
+			<li onclick="launchSms();" class="messages" id="sms-menu"><a id="sms_messages" href="#" >Messages</a><span id="smscount"></span></li>
+			<li onclick="launchMyverizon(); return false;"><a href="#">My Verizon</a></li>
+			<li onclick="launchSettings();" id='settings-menu'><a id="setting_link" href="#">Settings</a></li>
+			<li onclick="launchHelp();" id="help-menu"><a href="#">Help</a></li>
+			</ul>
+
+
+            <div id="tofieldmt" class="errorPopup" style="display:none; position:absolute; z-index:10;">
+                <p class="triangle-border before top">You must include a recipient before this message can be sent!</p>
+            </div>
+   			    
+            <div id="msgfieldmt" class="errorPopup" style="display:none; position:absolute; z-index:10;">
+                <p class="triangle-border after bottom">You must include text content before this message can be sent!</p>
+            </div>
+   	 						        
+   			
+			<div class="messages-content" id="message_list" style="display:none;">
+				<div class="messages-left">
+				<a onclick="onNewMessage();" class="button"><span class="red">New Conversation</span></a>
+				<!--ADD LI CLASS "DISPLAY-COUNT" AND DIV CLASS "MSG-NUMBER" TO ANY NUMBER WHERE COUNT SHOULD BE DISPLAYED. ADD LI CLASS "URGENT" TO ANY NUMBER WHERE AN URGENT NOTIFICATION SHOULD SHOW-->
+				    <div id="smslist" class="scroll message-numbers" currbkt='' style="position:relative;">
+				        <ul class="message-numbers" >
+                                <br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+				        </ul>
+   					    <div class="ie_fix"></div>
+				    </div>
+				</div>
+				
+				<div class="messages-right" id="message_details">
+				
+   			    <h2 id="con_h2" style="display:none;">Conversation with <span id="smsotherparty"></span></h2>
+			
+ 									
+					<div id="message-display" class="scroll" style="display:none;position:relative;">
+                            <br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                            <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                            <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                            <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                            <br /><br />
+							<!-- ADD CLASS "INCOMING" FOR INCOMING MESSAGES AKA RED TAB STYLING, ADD CLASS "OUTGOING" FOR OUTGOING MESSAGES AKA BLUE TAB STYLING, ADD CLASS "URGENT-MESSAGE" FOR URGENT MESSAGE STYLING-->
+   							
+   							<div class="ie_fix"></div>
+   							   							
+   						</div>
+   						<!--END MESSAGE DISPLAY-->
+   						
+   						<!--START MESSAGE INPUT-->
+   						<div id="new_message" class="messages-right">
+   						    <form>   						    
+   						        <div id="outgoing-number-field" >
+   						            To: <input type="text" id="outgoing-number" maxlength="512"><a class="trash-msg" onclick="onCleanNewMessage();" href="javascript:void(0);">Trash</a>
+   						        </div>
+   						        <p></p>
+					    
+					            <div id="newmessage-display" class="scroll" style="">
+                                <br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                                <br /><br />
+            					<div class="ie_fix"></div>
+					            </div>
+ 							   							
+   						        <div class="message-input-post">
+           	   						<div id="message-input-message" style="padding:2px 0 0 1px;margin:6px 0px -8px 0px;"></div>
+   						            <textarea id="message-input"></textarea>
+           							
+   							        <div class="message-input-urgent">
+   								        <input type="checkbox" name="urgent" id="urgent" class="default-checkbox" /><label for="urgent">Urgent</label>
+   							        </div>
+           						
+   						            <div class="message-input-charcount" id="charsRemaining">0/160</div>
+           						
+   						            <!--<input type="submit" class="send-button" value="Send" />-->
+		                            <a class="button" id="btnSendNewMessage" onclick="sendNewMessage(); return false;" href="#" style="float:right;"><span class='send-button'>Send</span></a>
+        					
+   						        </div>
+   					        
+   						    </form>
+					    </div>
+					    <!--END MESSAGE INPUT-->
+ 					    
+				</div>
+				<!--END MESSAGE RIGHT-->
+										
+			</div>
+			<!--END MESSAGE CONTENT-->
+            <div id="mainnetwork_usage" class="modal">
+                <div class="title_bar">
+            	    <h1>Usage Estimate</h1>
+            	    <a href="javascript:void(0)" class="close png">Close</a>
+                </div>
+                <div class="modal_content">
+            	    <div class="pad">
+            	        <div class="modal-scroll" id="mainnetworkUsage">
+				        </div>
+					    <p>Please visit <a href="#" class="ping_intx" title="You need data connection to view this page" onclick="invokeURL_Verizon('http://www.verizonwireless.com/b2c/index.html?tab=myaccount&lid=//global//my+account'); return false;">My Verizon</a> for actual usage and detailed plan information.</p>
+    				    <a href="#" class="close closebtn">Close</a>
+				    </div>
+			    </div>
+            </div> 
+            
+            <div id="gps_disclaimer" class="modal">
+                <div class="title_bar">
+            	    <h1></h1>
+            	    <a id="disclmr_close" href="javascript:void(0)" class="close png">Close</a>
+                </div>
+                <div class="modal_content">
+            	    <div class="pad">
+            	        <div class="modal-scroll"><h3 class="black">
+            	            <p>By turning on GPS Tracking, the location of the device connected  to your Verizon 4G LTE USB Modem UML295 can be made available to others. Also, if you use the &quot;Always On&quot; setting, the location of any compatible laptop, notebook or tablet connected to the USB Mobile Broadband modem will be made available to others if the GPS Tracking setting is enabled.</p><p>In order to disable &quot;Always On&quot; GPS Tracking, open the Mobile Broadband Manager app, select Menu, Settings, GPS, and set the GPS Tracking option  to &quot;OFF&quot;.  Verizon Wireless encourages you to periodically check all laptops, notebooks and tablets used with the USB Mobile Broadband Modem to determine whether GPS Tracking is turned &quot;ON&quot;.</p><p>Verizon Wireless makes no representation, warranty or guarantee of accuracy, completeness or timeliness of any location data, product or service.</p>
+            	            <!-- <p>By changing the setting on the device to 'Enable LBS (Location Based Services)', you are enabling third party access to GPS location information through software you chose to install or download using peripheral components you choose to attach to your laptop, or through web access or other means. Verizon Wireless encourages you to check your laptop or notebook computer periodically as  enabling this functionality could pose certain risks to users of this device. Verizon Wireless makes no representation, warranty or guarantee of accuracy, completeness or timeliness of any location data, product or service.</p> -->
+            	            <p>Do you want to proceed?</p></h3>
+            	        </div>
+            	        
+    				    <div class="aligned-checkboxes" style="display:inline">
+    				    	<input type="checkbox" name="gps_donotshowagain" id="gps_donotshowagain" class="checkbox" onclick="gps_donotshow_clicked(this);"/><label for="gps_donotshowagain"><span>Do not show this message again<br />(applies only when choosing 'Yes')<br />&nbsp;</span></label>
+				    </div>
+			            <div class="gps-disbuttons">	
+    				    	<a href="#" onclick="gps_donotshow_update(); gpsAction('start');$('disclmr_close').fireEvent('click');" class="button"><span class="red">Yes</span></a>
+    				    	<a href="#" onclick="gps_donotshow_uncheck(); $('disclmr_close').fireEvent('click');" class="button"><span class="gray">No</span></a>
+    				    </div>
+    				    <br />
+    				    <br />
+    				    <br />
+				    </div>
+			    </div>
+            </div>
+            
+             <div id="nmea_popup" class="modal">
+                <div class="title_bar">
+            	    <h1>NMEA</h1>
+            	    <a id="popup_close" href="javascript:void(0)" class="close png">Close</a>
+                </div>
+                <div class="modal_content">
+            	    <div class="pad">
+            	        <p><font size="2">
+                        Using GPS Tracking requires installing a software component.
+                        </font></p>
+            	        <p><font size="2">
+			            Do you want to proceed?
+			            </font></p>
+			            <div class="gps-disbuttons">	
+    				    <a href="#" onclick="$('popup_close').fireEvent('click');" class="button"><span class="red">YES</span></a>
+    				    <a href="#" onclick="$('popup_close').fireEvent('click');" class="button"><span class="gray">NO</span></a>
+    				    </div>
+    				    <br />
+				    </div>
+			    </div>
+            </div> 		
+            			
+			<div class="panel-content" id="networks_list">
+			<!--END COMMON HEADER-->
+			
+				<h2 class="network-select">Select a Network&#8230;</h2>
+				<h2 class="network-signal">Network/Signal</h2>
+				<div id="network-list">
+					<div id="first-network-row" class="network-row selected">
+						<div class="network-label" id="network-name-label"><a href="">Verizon Wireless 4G LTE</a></div>
+						<div class="connection-action" id="network-main-button">
+							<a class="tied2connect button disconnect" href="#" onclick="onNetworkConnect();"><span class="red">Disconnect</span></a>
+							<span class="network-message">Disconnecting&#8230;</span>
+						</div>
+						<div class="network-strength" id="network-signal-label"><a class="strength-4" href="">WIFI</a></div>
+						<div class="network-lock" id="network-type-label"><a class="fourg" href="">4G</a></div>
+					</div>
+					<div class="ie_fix"></div>
+				</div>
+			    <div class="net-row" style="width:750px;">
+				    <div class="connection-lower-buttons">
+				    <a id="btnconnstats" class="button" rel="modal" href="#connection-statistics"><span class="gray">Connection Statistics</span></a> 
+				    <a class="button" rel="modal" href="#network-usage" onclick="onUsage('networkusage', 2);"><span class="gray">View Usage</span></a>
+				    </div>
+				</div>
+                <br /> <br />
+                <div id="net-enhanced-install" class="net-row" style="width:565px;">
+                    <div id="net-enhanced-install-div" style="float:left;">
+                        <br />
+                        <p>
+                        <font size="3">
+                         Get the Enhanced App to manage connections, VPN, and more.
+                         <br />
+                         <a href="javascript:void(0); return false;" onclick="HideInstallGroup();"><span><font size="2">Hide This Message</font></span></a>
+                        </font>
+                        </p>
+			        </div>	
+			         <br />
+			        <div class="connection-lower-buttons">
+                    <a style="float:right;" href="#" class="button" title="You need data connection to download" onclick="onInstallNow();"><span id="Span2" class="gray">Install Now</span></a>					
+			        </div>
+			    </div>			
+		
+                <br />
+                <br />
+				<div id="device-phone-row" class="device-phone-row">
+                    <h2 class="device-phone-number">Device Phone Number</h2>
+                    <h2 class="device-phone-ip">IP Address</h2>
+                    <div class="network-row device-phone-holder">
+                    	<p class="device-phone-number-text" id="device-phone-number-text1">---</p>
+                        <p class="device-phone-ip-text" id="device-phone-ip-text1">IPv4 Address </p>
+                        <div class="clear"></div>
+                    </div>
+			    </div>		
+		
+				
+				
+				<div id="connection-statistics" class="modal">
+                    <div class="title_bar">
+                    	<h1>Connection Statistics</h1>
+                    	<a href="javascript:void(0)" class="close png">Close</a>
+                    </div>
+                    <div class="modal_content">
+                    	<div class="pad">
+                    		<div class="above-chart">
+                    			<div class="transmit-label label">Transmit</div>
+                    			<div class="receive-label label">Receive</div>
+                    			<div class="duration-label label" id="stats-connection-timer-label">Duration</div>
+                    			<div class="connection-counter" id="stats-connection-timer">00:00:00</div>
+                    			<a class="connection-reset" href="javascript:void(0);" onClick="javascript:window.onResetUsage();">Reset</a>
+                    		</div>
+                    		<div style="height:200px; border:none 0px black;width:560px;">
+								<div id="usage_chart" style="margin: 4px 0 0 0; padding: 0 0 0 0; height:200px; width:560px;"></div>
+                    		</div>
+                    		<div class="below-chart">
+                    			<div class="row1">
+                    				<div class="tx-rate">TX Rate: <span id="txrate">--</span></div>
+                    				<div class="max-tx-rate">Max TX Rate: <span id="maxtxrate">--</span></div>
+                    				<div class="total-tx">Total TX: <span id="totaltx">--</span></div>
+                    			</div>
+                    			<div class="row2">
+                    				<div class="rx-rate">RX Rate: <span id="rxrate">--</span></div>
+                    				<div class="max-rx-rate">Max RX Rate: <span id="maxrxrate">--</span></div>
+                    				<div class="total-rx">Total RX: <span id="totalrx">--</span></div>
+                    			</div>
+                    			<div class="ip-row">
+                    			<span class="ip-label">IPv4 Address: </span><span id="stats-ipv4">10.16.218.75</span>
+                    			<span class="ip-label">IPv6 Address: </span><span id="stats-ipv6">3ffe:1900:4545:3:200:f8ff:fe54:67cf</span>
+                    			</div>
+                    			<a class="important-notice" rel="modal" href="#important-notice">Important Notice</a>
+                    			<a href="javascript:void(0)" class="close closebtn">Close</a>
+                    		</div>
+                    	</div>
+                    </div>
+                </div> 
+                
+                <div id="network-usage" class="modal">
+                    <div class="title_bar">
+                    	<h1>Usage Estimate</h1>
+                    	<a href="javascript:void(0)" class="close png">Close</a>
+                    </div>
+                    <div class="modal_content">
+                    	<div class="pad">
+                    	<div class="modal-scroll" id="networkusage">
+						</div>
+						<p>Please visit <a href="#" class="ping_intx" title="You need data connection to view this page" onclick="return invokeURL_Verizon('http://www.verizonwireless.com/b2c/index.html?tab=myaccount&lid=//global//my+account');">My Verizon</a> for actual usage and detailed plan information.</p>
+						<a href="#" class="close closebtn">Close</a>
+						</div>
+					</div>
+                </div> 
+                
+                <div id="important-notice" class="modal">
+                	<div class="title_bar">
+                	<h1>Important Notice</h1>
+                	<a href="javascript:void(0)" class="close png">Close</a>
+                	</div>
+                	<div class="modal_content">
+                		<div class="pad">
+                		<div class="modal-scroll">
+                		<p>The Connection Statistics should not be used to estimate or monitor data usage during your billing cycle. Please use the View Usage button to view estimated data usage for your current billing cycle.</p>
+
+						<p>The Connection Statistics displays "Bytes Sent" and "Bytes Received" from the Mobile Broadband device or your computer's operating system and will differ from the information displayed from the "View Usage" button. The bytes depicted on the "Connection Statistics" are not representative of actual billable data usage when data is transmitted and received on the Verizon Wireless Network</p>
+						
+						</div>
+						<!--PS5 Settings close to nbsp -->
+						<a href="#connection-statistics" rel="modal" class="closebtn" style="color:transparent;">&nbsp&nbsp&nbsp</a>
+						</div>
+                	</div>
+                </div>           
+                
+                <!--START COMMON FOOTER-->
+               	<div style="clear:both;"></div>
+			</div>
+			<!--END PANEL CONTENT-->
+
+			
+			<div class="panel-content" id="help_scrn" style="display:none;">
+			<!--END COMMON HEADER-->
+			
+				<div class="panel-left-help">
+				<h2>Help</h2>
+				<div id="helpfaq">
+                <h3>Contact Information</h3>
+                <ul style="margin-left: 10px;">
+				<li><a href="#" help_topic='helpsupport'>Get Support</a></li>
+                </ul>
+                <p></p>
+                <h3>Help Topics</h3>
+                <ul style="margin-left: 10px;">
+                <li><a href="#" help_topic='help0'>Getting Started</a></li>
+				<li><a href="#" help_topic='help1'>What operating systems and browsers does the Verizon Mobile Broadband Manager application support?</a></li>
+                <li><a href="#" help_topic='help2'>If I am connected using my VPN, why is the Basic App UI/device unresponsive?</a></li>
+				<li><a href="#" help_topic='help3'>Do I need to install the Verizon Mobile Broadband Manager application?</a></li>
+				<li><a href="#" help_topic='help4'>How can I view the Verizon Mobile Broadband Manager user interface?</a></li>
+				<li><a href="#" help_topic='help5'>How does the mobile broadband device work on a laptop?</a></li>
+				<li><a href="#" help_topic='help6'>How are updates handled?</a></li>
+                <li><a href="#" help_topic='help7'>Do I have to turn anything else on when using the mobile broadband device on my laptop?</a></li>
+				<li><a href="#" help_topic='help8'>My device won't connect. What should I do?</a></li>
+				<li><a href="#" help_topic='help9'>How would having a Verizon Mobile Broadband Manager device benefit me?</a></li>
+                <li><a href="#" help_topic='help10'>Internet Explorer 7 is not running the Verizon Mobile Broadband Manager correctly.  What is the workaround?</a></li>
+				</ul>
+				</div>
+				</div> 
+				
+				<div class="panel-right" id="helpsupport">
+				<h1>Get Support</h1>
+				<h3 class="black">Customer Service</h3>
+					<div class="info-block">
+						<div class="number-label">US &amp; Canada:</div>
+						<div class="number-digits">1-800-922-0204</div>
+					</div>
+					<div class="info-block">
+						<div class="number-label">Outside US &amp; Canada:</div>
+						<div class="number-digits">1-803-400-4455</div>
+					</div>
+				
+					<div class="info-block margin-top-15">
+						<div class="number-label">Verizon has changed its process for providing assistance.  You can tweet <br />us at @vzwsupport, or chat <br />with us online.</div> 
+						<div class="number-digits"><a href="http://www.verizonwireless.com/b2c/contact/index.jsp" target="_blank" id="chat_online">Chat Online</a></div>
+					</div>
+					<div class="info-block margin-top-15">
+						<div class="number-label">Support Page:</div> 
+						<div class="number-digits" ><a href="http://www.vzmbb.net" target="_blank" id="mbb_net">www.vzmbb.net</a></div>
+					</div>
+					<div class="info-block">
+						<div class="number-label">User Guide:</div> 
+						<div class="number-digits"><a id="user-guide-url" href="javascript:void(0);" target="_blank">View User Guide</a></div>
+					</div>
+					<div class="info-block margin-top-15">
+						<div class="number-label">Support Tools:</div> 
+					</div>
+					<div class="info-block">
+						<div class="contact-info"><a href="#" onclick="return invokeServiceURL('GetComponentLog');"  id="diaglog" >View Diagnostic Log</a></div> 
+					</div>
+					<div class="info-block">
+						<div class="contact-info"><a id="sessionhistory" href="#" onclick="invokeServiceURL('GetSessionHistory'); return false;" title="Click here to access previous connection information">View Connection Log</a></div> 
+					</div>
+                    
+				    <div class="help-buttons">	
+				        <a class="button" href="#" onclick="gotoCheckForUpdate();"><span class="red">Check for Updates</span></a>
+				        <a class="button" rel="modal" href="#about-panel" onclick="launchAbout();"><span class="gray">About</span></a>
+                    </div>
+				</div>
+                
+                <div class="panel-right help_topic" id="help0" style="display:none;">
+                <h1>Getting Started</h1>
+                <p>Connect to the Verizon Wireless 4G LTE network with your Verizon Wireless 4G LTE USB device.</p> 
+                <p>Simply Plug and Play - insert into a USB port, power on and surf!</p>
+                
+                </div>
+                
+                <div class="panel-right help_topic" id="help1" style="display:none;">
+			    <h1>What operating systems and browsers does the Verizon Mobile Broadband Manager application support?</h1>
+			    <ul style="margin-left: 15px;">
+                    <li>Windows&reg; 8 32-bit </li>
+                    <li>Windows 8 64-bit </li>
+                    <li>Windows 7 32-bit </li>
+                    <li>Windows 7 64-bit </li>
+                    <li>Windows Vista&reg; SP2 32-bit </li>
+                    <li>Windows Vista SP2 64-bit </li>
+                    <li>Windows XP 32-bit with Service Pack 3 </li>
+                    <li>Mac OS&reg; X 10.8 "Mountain Lion" </li>
+                    <li>Mac OSX 10.7 "Lion" </li>
+                    <li>Mac OS X 10.6 "Snow Leopard" </li>
+                    <li>Mac OS X 10.5 "Leopard" </li>
+                    <p></p>
+                    <li>Microsoft Internet Explorer versions 7 and higher </li>
+                    <li>Mozilla Firefox versions 5 and higher </li>
+                    <li>Google Chrome versions 12 and higher </li>
+                    <li>Apple Safari versions 5 and higher </li>
+                    <li>Opera versions 12 and higher </li>
+                </ul>
+			    </div>
+                
+                
+                <div class="panel-right help_topic" id="help2" style="display:none;">
+			    <h1>If I am connected using my VPN, why is the Basic App UI/device unresponsive?</h1>
+                <p>The basic web client will not be able to communicate with your Mobile Broadband USB modem when you are connected to a VPN, as this blocks local LAN access.  You will need to disconnect from your VPN to return to the basic web app UI.</p>
+                </div>
+                
+                
+                <div class="panel-right help_topic" id="help3" style="display:none;">
+			    <h1>Do I need to install the Verizon Mobile Broadband Manager application?</h1>
+			    <p> Generally, basic connectivity does not require installation. This includes: </p>
+                <ul style="margin-left: 15px;">
+                <li> Connecting to the network </li>
+                <li> Disconnecting from the network </li>
+                <li> Device activation and configuration </li>
+                </ul>
+                <p> </p>
+                <p> You will need to install the Verizon Mobile Broadband Manager for additional features. These include: </p>
+                <ul style="margin-left: 15px;">
+                <li> Easy access to Verizon Mobile Broadband Manager through a desktop shortcut </li>
+                <li> Status Notifications </li>
+                <li> VPN Capability </li>
+                </ul>
+			    
+			    </div>
+                
+				<div class="panel-right help_topic" id="help4" style="display:none;">
+			    <h1>How can I view the Verizon Mobile Broadband Manager user interface?</h1>
+			    <p>If the web browser is not open, click on the Verizon Mobile Broadband Manager icon (Windows: My Computer -> Network, Mac: Finder -> Networks) to view the Verizon Mobile Broadband Manager user interface. </p>
+			    
+			    </div>
+                
+                <div class="panel-right help_topic" id="help5" style="display:none;">
+			    <h1>How does a Mobile Broadband device work on a laptop?</h1>
+			    <p>When a device is inserted into a laptop and powered on it will automatically connect (if the auto connect feature is enabled) to the Mobile Broadband network with no user interaction. You are online and browsing the Internet in no time.</p>
+			    
+			    </div>
+                
+                <div class="panel-right help_topic" id="help6" style="display:none;">
+			    <h1>How are updates handled?</h1>
+			    <p>If updates are available, they can be found in the Settings tab-->Updates-->Check for Updates. </p>
+			    
+			    </div>
+                
+                <div class="panel-right help_topic"id="help7" style="display:none;">
+			    <h1>Do I have to turn anything else on when using the Mobile Broadband device on my laptop?</h1>
+			    <p>When the device is embedded on the laptop you may need to make sure that the device power switch (if any) is on. </p>
+			    
+			    </div>
+                
+                <div class="panel-right help_topic"id="help8" style="display:none;">
+			    <h1>My device won't connect. What should I do?</h1>
+                <ul style="margin-left: 15px;">
+			    <li>Make sure the Mobile Broadband device is plugged in properly. If it's an embedded device make sure the power switch (if any) is on.  </li>
+                <li>Reboot the laptop. </li>
+                <li>If your device is still not able to connect, please contact Verizon Wireless Support. </li>
+                </ul>
+			    
+			    </div>
+                
+                <div class="panel-right help_topic" id="help9" style="display:none;">
+			    <h1>How would having a Verizon Mobile Broadband Manager device benefit me?</h1>
+                <ul style="margin-left: 15px;">
+			    <li>Plug and play with zero install for basic connectivity of Verizon Wireless devices. </li>
+                <li>Instant connection to available networks after device insertion. </li>
+                <li>Simplified user interface. </li>
+                </ul>
+                
+                </div>
+                
+                <div class="panel-right help_topic" id="help10" style="display:none;">
+                <h1>Internet Explorer 7 is not running the Verizon Mobile Broadband Manager correctly.  What is the workaround?</h1>
+                <p>There are some Internet Explorer 7 security options that may prevent the Verizon Mobile Broadband Manager from accessing the device.  You may experience &quot;access denied&quot; messages, and the Verizon Mobile Broadband Manager may display &quot;Searching for USB Modem&quot;.  To correct this, you will need to modify two of the options on the &quot;Internet Options | Security | Trusted sites&quot; settings dialog:</p>
+                <ul style="margin-left: 15px;">
+                <li> Add the address of Verizon Mobile Broadband Manager (http://127.0.0.1) to the list of trusted sites. </li>
+                <li> On the &quot;Custom level&quot; dialog, you need to &quot;Enable&quot; the &quot;Access data sources across domains&quot; option. </li>
+                </ul>
+			    
+			    </div>
+					
+								
+    			<!--START COMMON FOOTER-->
+			    <div style="clear:both;"></div>         
+
+			</div>
+			<!--END PANEL CONTENT-->
+			
+			<div class="panel-content" id="settings_scrn" style="display:none;">
+			<!--END COMMON HEADER-->
+			
+				<div class="panel-left">
+				<h2>Settings</h2>
+				
+				<h3><strong>Connectivity</strong></h3>
+				<ul style="margin-left: 1.75em; padding-left: 0;">
+				<li id="lte_setting" onclick="launchLTESettings();"></li>
+				<li id="sim_setting" onclick="launchSIMSettings();"></li>
+				<li id="gps_setting" onclick="launchGPSSettings();"></li>
+				<li id="vpn_setting" onclick="launchVPNSettings();"></li>
+				</ul>
+				<h3><strong>Updates</strong></h3>
+				<ul style="margin-left: 1.75em; padding-left: 0;"> 
+				<li onclick="launchChkForUpdate();"><a rel="modal" href="#">Check For Update</a></li>
+				<li id="enh_setting" onclick="launchInstEnhApp();"></li>
+				</ul>
+				</div> 
+				
+				<div class="panel-right" id="lte_settings_scrn" style="display:none;">
+				<section id="settings-device" class="secondary" style="height: 224px;">
+			    <!-- This iframe can't use: class="inner" because jQuery has an IE8 bug in it!  -->
+				<iframe id="ifsettings" height="500px" width="500px" frameborder="0" border="0" scrolling="no" style="overflow:auto; padding:0px 0px 0px 0px;"></iframe>
+
+			    </section>
+			    </div> 
+			    				
+				<div class="panel-right" id="sim_settings_scrn" style="display:none;">
+				<section id="sim-device" class="secondary" style="height: 224px;">
+			    <!-- This iframe can't use: class="inner" because jQuery has an IE8 bug in it!  -->
+
+			    	<h1>SIM PIN</h1>
+
+					<div class="label-left">
+						
+						<div class="aligned-checkboxes">
+							<input type="checkbox" name="simlockenable" id="simlockenable" class="checkbox" onclick="simpin_enableclick(this);"/><label for="simlockenable"><span>Enable SIM Lock</span></label>
+						</div>
+						<br>
+						<br>
+
+						<div style="margin-left:21px">
+							<span class="red-text" id="simpin-settings-state-info"></span><br>
+						</div>
+
+						<br><br>
+						
+						<div style="height:267px;">
+						
+							<div class="aligned-checkboxes" id="simlocklock-div">
+								<input type="checkbox" name="simlocklock" id="simlocklock" class="checkbox" onclick="simpin_enableclick(this);"/><label for="simlocklock"><span>Lock SIM</span></label>
+							<br><br>
+							</div>
+
+							<div class="aligned-checkboxes" id="simlockchange-div">
+								<input type="checkbox" name="simlockchange" id="simlockchange" class="checkbox" onclick="simpin_enableclick(this);"/><label for="simlockchange"><span>Change PIN</span></label>
+							<br><br>
+							</div>
+
+							<div id="newpin-input-box">
+								<span>Enter New PIN</span><br>
+								<input type="password" id="newpin-input" name="newpin-input" size="12" value="" onkeyup="simpin_checkui_input();">
+								<br>
+								<br>
+							</div>
+							
+							<div id="confirmpin-input-box">
+								<span>Confirm New PIN</span><br>
+								<input type="password" id="confirmpin-input" name="confirmpin-input" size="12" value="" onkeyup="simpin_checkui_input();">
+								<br>
+								<br>
+								<br>
+							</div>
+
+							<div id="enter-current-pin" class="Enter Current PIN">
+								<span id="enter-old-pin">Enter XX PIN</span><br>
+								<input type="password" id="oldpin-input" name="oldpin-input" size="12" value="" onkeyup="simpin_checkui_input();">
+								<br>
+							</div>
+
+							<div>
+								<span id="simpin-settings-error-message"style="display:none;">None</span><br>
+								<br>
+							</div>
+							
+						</div>
+
+						<table style="margin-left: 15.50em; padding-left: 0;" border="0" width="320">
+								<tbody><tr>
+									<td align="right" width="240">
+									</td>
+							  		<td align="right">
+										<div class="Apply SIM PIN Changes">
+											<a class="button" id="simlockapplychanges" href="javascript:void(0);return false;"><span class="red">Apply</span></a>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+
+			    </section>
+			    </div>
+			    
+			    <div class="panel-right" id="gps_settings_scrn" style="display:none;">
+			    <section id="gps-device" class="secondary">
+
+				<form>
+					<h1>GPS</h1>
+					
+					<table style="display:none; height:100px; width:50%;">
+						<tbody>
+							<tr>
+			            <td style="height:10px;">
+			              <font size="2">Signal Status: </font>
+			            </td>
+								<td id='gpssig' align="right" style="margin-left: 1.0em; padding-left: 0; height:15px;">
+								    <div id="gps_signal_id4" class="header-icons">
+			                <div class="signal-strength">
+			                  <a class="strength-0" href="#"></a>
+			                </div>
+								    </div>
+								</td>
+							</tr>
+							<tr>
+			            <td style="height:10px;">
+			              <font size="2">GPS Session Status: </font>
+			            </td>
+								<td id='gpsstatus' align="right" style="margin-left: 1.0em; padding-left: 0; height:15px;">
+								<div id="gps_status_id" class="header-icons">
+			                <div class="location">
+			                  <a id="gps_status" href="#"></a>
+			                </div>
+								</div>
+								<div id="gps_no_status_id" class="header-icons">
+			                <div class="nolocation">
+			                  <a id="no_gps_status" href="#"></a>
+			                </div>
+								</div>
+								</td>
+							</tr>
+							<tr>
+							    <br />
+			            <td style="height:10px;">
+			              <font size="2">Device Status: </font>
+			            </td>
+								<td id='gpsdevicestatus' style="margin-left: 1.0em; padding-left: 0; height:15px;"></td>
+							</tr>
+						</tbody>
+					</table>
+					
+					<fieldset>
+					    <!-- <br /> -->
+			        <label style="margin-left: 0.1em;" for="gpsdevices">
+			          <font size="2">Connected Devices</font>
+			        </label>
+						<br />
+						<select id="gpsdevices" name="gpsdevices" style="margin-left: 0.1em;"></select>
+					</fieldset>
+                    <br />
+                    <br />
+
+                        
+					<fieldset>
+                        <label for="nmealocation">COM Port:</label>
+			        <input type="text" id="nmealocation" name="nmealocation" value="n/a" readonly="" style="padding-left:4px;border:0px;"/>
+					</fieldset>
+					<br />
+                    <br />
+					<fieldset>
+						<div id="nmea_area">
+                        <div id="nmeadevicetracking">
+					        <!-- <label style="margin-left: 0.1em;" for="gpsdevicetracking"><font size="2">GPS Tracking<a href="#" oldtitle="By changing the setting on the device to &quot;Enable LBS (Location Based Services)&quot;, you are enabling third party access to GPS location information through software you chose to install or download using peripheral components you choose to attach to your laptop, or, through web access or other means. Verizon Wireless encourages you to check your laptop or notebook computer periodically as enabling this functionality could pose certain risks to users of this device. Verizon Wireless makes no representation, warranty or guarantee of accuracy, completeness or timeliness of any location data, product or service." aria-describedby="ui-tooltip-4"></a></font></label> -->
+			            <label style="margin-left: 0.1em;" for="gpsdevicetracking">
+			              <font size="2">
+			                GPS Tracking<a href="#" oldtitle="By turning on GPS Tracking, the location of the device connected  to your Verizon 4G LTE USB Modem UML295 can be made available to others. Also, if you use the &quot;Always On&quot; setting, the location of any compatible laptop, notebook or tablet connected to the USB Mobile Broadband modem will be made available to others if the GPS Tracking setting is enabled.  In order to disable &quot;Always On&quot; GPS Tracking, open the Mobile Broadband Manager app, select Menu, Settings, GPS, and set the GPS Tracking option  to &quot;OFF&quot;.  Verizon Wireless encourages you to periodically check all laptops, notebooks and tablets used with the USB Mobile Broadband Modem to determine whether GPS Tracking is turned &quot;O&quot;.  Verizon Wireless makes no representation, warranty or guarantee of accuracy, completeness or timeliness of any location data, product or service." aria-describedby="ui-tooltip-4"></a>
+			              </font>
+			            </label>
+			            <br />
+			            <br />
+                            <!-- 
+                            <a id="nmeastart" onclick="gpsAction('nmeastart');" class="button"><span class="red">On</span></a>
+                    	    <a id="nmeastop" href="#" onclick="gpsAction('nmeastop');" class="button"><span class="gray">Off</span></a>
+                    	    -->
+                    	    <div id="gpstrackswitch">
+                            <!-- <label style="margin-left: 0.1em;" for="gpstrackswitch"><font size="2">GPS<a href="#" oldtitle="By changing the setting on the device to &quot;Enable LBS (Location Based Services)&quot;, you are enabling third party access to GPS location information through software you chose to install or download using peripheral components you choose to attach to your laptop, or, through web access or other means. Verizon Wireless encourages you to check your laptop or notebook computer periodically as enabling this functionality could pose certain risks to users of this device. Verizon Wireless makes no representation, warranty or guarantee of accuracy, completeness or timeliness of any location data, product or service." aria-describedby="ui-tooltip-4"></a></font></label> -->
+			              <!-- <label style="margin-left: 0.1em;" for="gpstrackswitch"><font size="2">GPS<a href="#" oldtitle="By turning on GPS Tracking, the location of the device connected  to your Verizon 4G LTE USB Modem UML295 can be made available to others. Also, if you use the &quot;Always On&quot; setting, the location of any compatible laptop, notebook or tablet connected to the USB Mobile Broadband modem will be made available to others if the GPS Tracking setting is enabled.  In order to disable &quot;Always On&quot; GPS Tracking, open the Mobile Broadband Manager app, select Menu, Settings, GPS, and set the GPS Tracking option  to &quot;OFF&quot;.  Verizon Wireless encourages you to periodically check all laptops, notebooks and tablets used with the USB Mobile Broadband Modem to determine whether GPS Tracking is turned &quot;ON&quot;.  Verizon Wireless makes no representation, warranty or guarantee of accuracy, completeness or timeliness of any location data, product or service." aria-describedby="ui-tooltip-4"></a></font></label>
+                            <br /> <br /> -->
+                            <div>
+			                <a id="gpsstart" rel="modal" href="#" onclick="" class="button">
+			                  <span class="red">On</span>
+			                </a>
+			                <a id="gpsstop" href="#" onclick="" class="button">
+			                  <span class="gray">Off</span>
+			                </a>
+                        	
+                        </div>
+                        </div>
+                        </div>
+                                                
+					    </div>
+					</fieldset>
+			
+					<div>
+                            <br />
+			        <br />
+                            
+                            <fieldset>
+                            <font size="2">
+			            <input class="radio" type="radio" name="gpsauto" id="gps-off" value="off" checked="checked"/>
+                            <label for="gps-off" title="Turn off on device power down or removal of Mobile Broadband Device">Turn off on Power Down</label>
+                            </font>
+                            </fieldset>
+                            <fieldset>
+                            <font size="2">
+			            <input class="radio" type="radio" name="gpsauto" id="gps-on" value="on"/>
+                            <label for="gps-on">Always on</label>
+                            </font>
+                            </fieldset>
+			        <br />
+			        <br />
+                            
+                        </div>
+					
+			      <div id="nmea_install_link" style="display:none;">
+			        <br />
+			        <br />
+			        <p>
+			          <font size="2">
+			            The Pantech UML295 supports NMEA. Please install the NMEA drivers to enable<br />
+			            NMEA capabilities. Downloading the NMEA drivers requires a network connection<br />
+			            and data usage incurred for Mobile Broadband updates will be deducted from your<br />
+			            data allowance.<br />
+			          </font>
+			        </p>
+			        <div class="connection-lower-buttons">
+			          <a style="margin-right: 2.0em;" id="nmeainstall" class="button ping_int" title="You need data connection to download" >
+			            <span id="install_nmea_color" class="red">Install&nbsp;NMEA</span>
+			          </a>
+			        </div>
+			      </div>
+				</form>
+			    </section>			
+			    </div>
+			    
+			    <div class="panel-right" id="vpn_settings_scrn" style="display:none;">
+				<section id="settings-vpn" class="secondary" style="height: 224px;">
+			    <!-- This iframe can't use: class="inner" because jQuery has an IE8 bug in it!  -->
+				<iframe id="ifvpn" height="500px" width="500px" frameborder="0" border="0" scrolling="no" style="overflow:auto; overflow-y:none; padding:0px 0px 0px 0px;"></iframe>
+			    </section>
+			    </div>
+			                   
+			    <div class="panel-right" id="check_update_scrn" style="display:none;">
+				<section id="check_update" class="secondary" style="height: 224px;">
+			    <!-- This iframe can't use: class="inner" because jQuery has an IE8 bug in it!  -->
+			    <h1>Check For Update</h1>
+			    
+			    <!--MGMT TABLE -->
+
+	            <div class="panel-content" id="mgmt_table">
+	            <div id="update_type">
+	                <p>The Verizon Mobile Broadband Connection is required to check for mobile broadband updates. Data usage incurred for Mobile Broadband updates will be deduct from your data allowance</p>
+			        <br />
+			    </div>
+			    
+                <div class="mgmt-row-no-border" id="Div_update_status">
+                    <div style="float:left;" id="update_status_text">
+                        <p><font size="2"><b>Firmware update status</b></font></p>
+                    </div>
+				    <div style="float:right;" id="update_status_wait_icon">
+					    <img src="i/misc/waitcursor.gif" alt=""  onerror="onImgError(this);"/>
+				    </div>	
+				</div>	    							
+                
+                <div class="mgmt-row-no-border" id="update_status_notice">
+                    <p><font size="2">Firmware update in progress. Device LED may blink. 
+                                      Please, do not remove your device or power down your computer during the firmware update process.
+                        </font></p>
+                </div>
+                <div id="updt_progressbar">
+                    <div id="updt_indicator"></div>
+                </div>
+                <div id="updt_progressnum">0% Complete</div>			    
+			    <br />
+	            <h3 class="mgmt-select">Firmware Information</h3>	
+		        <h3 class="mgmt-status">Status</h3>
+		        <div id="mgmt-list">
+			        <div class="mgmt-row">
+				        <div class="mgmt-label" id="Div3"><a href="javascript:void(0);">Source</a></div>
+				        <div class="mgmt-id" id="mgmt_src"><a href="javascript:void(0);">Verizon Wireless</a></div>
+			        </div>
+			        <div class="mgmt-row">
+			            <div class="mgmt-label" id="Div2"><a href="javascript:void(0);">Name</a></div>
+				        <div class="mgmt-id" id="mgmt_name"><a href="javascript:void(0);">Status 2 here</a></div>
+				    </div>
+				    <div class="mgmt-row">
+			            <div class="mgmt-label" id="Div5"><a href="javascript:void(0);">Status</a></div>
+				        <div class="mgmt-id" id="mgmt_status"><a href="javascript:void(0);">Status 3 here</a></div>
+				    </div>
+				    <div class="mgmt-row">
+			            <div class="mgmt-label" id="Div7"><a href="javascript:void(0);">Date</a></div>
+				        <div class="mgmt-id" id="mgmt_date"><a href="javascript:void(0);">Status 4 here</a></div>
+				    </div>
+				    <div class="mgmt-row">
+			            <div class="mgmt-label" id="Div9"><a href="javascript:void(0);">Time</a></div>
+				        <div class="mgmt-id" id="mgmt_time"><a href="javascript:void(0);">Status 5 here</a></div>
+				    </div>
+				    <div class="mgmt-row">
+			            <div class="mgmt-label" id="Div11"><a href="javascript:void(0);">Description</a></div>
+				        <div class="mgmt-id" id="mgmt_desc"><a href="javascript:void(0);">Status 5 here</a></div>
+				    </div>
+                    <br />			    
+                    <div class="mgmt-row-no-border" id="update_defer_notice">
+                        <p><font size="2"><b>Firmware update status</b></font></p>
+                    </div>	
+                    <br />			    
+		            <!--MGMT TABLE END -->
+		            <div class="connection-lower-buttons">
+			           <a style="margin-right: 2.0em;" onclick="onCheckForUpdate();" class="button"><span id="update_continue" class="red">Continue</span></a>
+			        </div>  				    
+    				    
+			            <div class="ie_fix"></div>
+		            </div>
+
+                <!--START COMMON FOOTER-->
+       	        <div style="clear:both;"></div>
+		        </div>
+			        
+
+			    </section>
+			    </div> 
+			    
+			    <div class="panel-right" id="enh_app_scrn" style="display:none;">
+    				<div class="panel-content" id="enh_app" class="secondary" style="height: 224px;">
+			            <h1>Install Enhanced App</h1>
+                        <br /><br />
+			            <p>A connection is required to download the Verizon Mobile Broadband Enhanced App. If you are using the Verizon Mobile Broadband network, data usage incurred for Verizon downloading the Mobile Broadband Connection Manager Enhanced App will apply against your data allowance.</p>
+			            <br /><br /><br /><br /><br /><br /><br /><br />
+			            <div class="connection-lower-buttons">
+			                 <a id='enh-app-install' style="margin-right: 2.0em;" onclick="onInstallEnhApp();" class="button ping_int" title='Click to download Enhanced App'><span id="ins_enh_color" class="red">Install Enhanced App</span></a>
+                        </div>
+                        
+			        </div>
+			    </div>
+				
+			    <!--START COMMON FOOTER-->
+				<div style="clear:both;"></div>         
+			</div>
+			<!--END PANEL CONTENT-->
+			
+			<div class="panel-content" id="myverizon" style="display:none;">
+			<!--END COMMON HEADER-->
+			
+				<div class="myverizon-left">
+					<h2>My Verizon. At Your Service.</h2>
+				
+					<p>The fastest, easiest way to manage your wireless service online.</p>
+ 
+					<p>Note:<br/> 
+Data usage charges may apply for accessing this link, according to your Mobile Broadband plan. You may also go to www.verizonwireless.com "Manage your Account" from your browser.</p>
+
+					<div class="myverizon-buttons">
+					<!--PS5 PLM ISSUE disable button-->
+						<a class="button ping_int disabled" title="A data connection is required to launch My Verizon." href="#"><span class="gray">Access My Verizon</span></a>
+					</div>
+					
+				</div>
+			
+				<div class="myverizon-right">
+					<img src="i/content/png/PantechUml295.png" alt=""  onerror="onImgError(this);"/>
+				</div>								
+			    <!--START COMMON FOOTER-->
+				<div style="clear:both;"></div>         
+            </div>			
+            
+		<!--END PANEL CONTENT-->
+
+		</div>
+	    <div class="panel-content" id="landings_panels" style="display:none;" >
+		<!--END COMMON HEADER-->
+        <script type="text/javascript">
+             function ContinueMO(){
+                var elem = document.getElementById("connection");
+                if( elem.selectedIndex  &&  document.getElementById("enhanced-app").checked===true )
+                        document.getElementById("landingContinue").title = "You will be connected for this session only";//alert("You will be connected for this session only");                
+                else
+                {
+                  
+                if(  elem.selectedIndex === 1 )
+                    document.getElementById("landingContinue").title = "You will be connected for every session";//alert("You will be connected for every session");
+              
+                }
+            }
+            
+            function EnhInstallSel(){ 
+            
+               document.getElementById("si1a").style.visibility="visible";
+               document.getElementById("si1a").style.color="Red";
+               document.getElementById("si1b").style.visibility="hidden";
+                document.getElementById("basic-app").title="";
+            } 
+            function BasicInsSel(){ 
+               document.getElementById("si1b").style.visibility="visible";
+               document.getElementById("si1b").style.color="Red";        
+               document.getElementById("si1a").style.visibility="hidden";
+                    
+            } 
+            function  OnContinue() {
+                if (window && window.landingUI && window.landingUI.state)
+                {
+                    window.landingUI.state.onContinue();
+                    
+                    //window.landingUI.state = 
+                }
+            }
+            var timer_on = false;
+            var time = 30;
+           function timedCount() {
+                  if( timer_on===false )
+                  {
+                   timer_on = true;
+                        document.getElementById("SAVEDTimer").innerHTML = time;
+                        setTimeout("timedCount()",1000); 
+                  }       
+                  else
+                  {
+                  elem =  document.getElementById("SAVEDTimer");
+                    document.getElementById("SAVEDTimer").innerHTML = time;
+                    time=time-1;
+                    if( time>= 0 )
+                        setTimeout("timedCount()",1000); 
+                    else
+                        OnCloseSettingsSaved();  
+                  
+                  }      
+            }
+            function  OnCloseSettingsSaved() {
+                         //$("#landingSAVED").hide();
+                         //$('.mainwindow').show();
+                if (window && window.landingUI && window.landingUI.state)
+                {
+                    window.landingUI.state.onClose();
+                }
+            }
+            function  OnCloseDeviceRemoved() {
+                if (window && window.landingUI && window.landingUI.state)
+                {
+                    window.landingUI.state.onClose();
+                }
+            }
+            
+            function OnDownloadEnhancedInstall() {
+             if (window && window.landingUI && window.landingUI.state)
+                {
+                    window.landingUI.state.onContinue();
+                }
+            
+                
+            }
+            
+            function OnLandMTLM( elem )
+            {
+               document.getElementById("LandMTLM").style.visibility="visible";
+               document.getElementById("LandMTLM").style.top="185px";
+               document.getElementById("LandMTLM").style.left="405px";
+               document.getElementById("LandMTLM").show();
+                         window.setTimeout(function(){
+                          document.getElementById("LandMTLM").style.visibility="hidden";
+                        }, 10000);
+                                                          
+            }
+            
+            function OnAutoConLM()
+            {
+               document.getElementById("AutoConLM").style.visibility="visible";
+               document.getElementById("AutoConLM").style.top="337px";
+               document.getElementById("AutoConLM").style.left="22px";
+               document.getElementById("AutoConLM").show();
+                         window.setTimeout(function(){
+                          document.getElementById("AutoConLM").style.visibility="hidden";
+                        }, 10000);
+            
+            }
+
+            function AutoconnectSel() 
+            {
+                var elem = document.getElementById("connection");
+                if (elem.selectedIndex) 
+                {
+                    var msg = "When auto connect is enabled you will be automatically connected and remain connected when a Verizon network is available.\r\rVerizon Mobile Broadband Manager is not required to connect to the Verizon network, and the connection will continue if the Verizon Mobile Broadband Manager is closed.\r\rClick \"Ok\" to accept or \"Cancel\" to reject.";
+                    if( elem.selectedIndex==1 )
+                        msg = "When auto connect is enabled you will be automatically connected and remain connected when a Verizon network is available.\r\rVerizon Mobile Broadband Manager is not required to connect to the Verizon network, and the connection will continue if the Verizon Mobile Broadband Manager is closed.\r\rThe charge for data transmitted and received while roaming can be as high as $20.48 per MB. Please check your price plan for the applicable charges in the location where you plan to access the service. To check your usage, please go to the &quot;My Verizon&quot; button on the Verizon Mobile Broadband Manager. Data usage charges will apply for accessing this link in accordance with your price plan.\r\rClick \"Ok\" to accept or \"Cancel\" to reject.";                      
+                    
+                      var choice = confirm(msg);
+
+                      if (!choice)
+                          elem.selectedIndex = 0;
+                }
+                
+                if (elem.selectedIndex)
+                {
+                    document.getElementById("autoconmsg").style.visibility="visible";
+                    document.getElementById("autoconmsg").style.top="-10px";
+                    document.getElementById("autoconmsg").style.left="40px";
+                }
+                else
+                {
+                    document.getElementById("autoconmsg").style.visibility="hidden";
+                }
+     
+            }
+               
+            function EULAAccepted()
+            {
+                if(   window && window.landing && window.landingUI )
+                {
+                     if ( window.landingUI.state)
+                        window.landingUI.state.onContinue();
+                }
+            }
+            
+            function OnMouseOverBasicInstall()
+            {
+                var elem = document.getElementById("basic-app");
+                if (elem.checked) 
+                {
+                 document.getElementById("si1blabel").title="You will not see an option to disconnect in the Basic App client UI unless you disconnect your VPN first.";    
+                }    
+                else    
+                document.getElementById("si1blabel").title=""; 
+            }
+            
+            function IPPassThruInstallSel()
+            {
+            }
+            
+            function onSaveBookmarkPrompt()
+            {
+                if (jQuery.browser.msie) {
+                             
+                                    alert("Right-click on a blank portion of the page and click Add to Favorites.\n\nor\n 1.Move to the page you wish to add to your Favorites.\n 2.At the top of the browser window click Favorites.\n 3.Click Add to Favorites.\n");
+                            }
+                            else if (jQuery.browser.safari) {
+                                    alert("Click the + icon in the address bar, or press Ctrl + D, then click Add");
+                     
+                            }
+                            else if (jQuery.browser.chrome || jQuery.browser.webkit) {
+                                    alert("Click the star icon in the address bar, or press Ctrl + D, then click Done");
+                            }
+                            else if (jQuery.browser.mozilla) {
+                                        alert("Right-click on a blank portion of the page you wish to bookmark and click Bookmark This Page or press Ctrl + D.\n\nor\n1.Move to the page you wish to bookmark.\n2.At the top of the browser window click Bookmarks\n3.Click Bookmark This Page");
+                            }
+                            else if (jQuery.browser.opera) {
+                                       alert("Right-click on a blank portion of the page you wish to bookmark and click Bookmark This Page or press Ctrl + T.\n\nor\n1.Move to the page you wish to bookmark.\n2.At the top of the browser window click Bookmarks\n3.Click Bookmark Page");
+                            }
+            }
+                        
+        </script>
+ 			
+			<div class="welcome-screen"  >
+			<h2>Welcome to the Verizon Mobile Broadband Manager.</h2>
+			
+
+	        <div id="eulapage" style="display:none;">
+                <a >License Agreement.</a><br />
+             <a>Please take a moment to read the license agreement.  If you accept the terms below, click "I Agree".</a> <br /><br />
+  			<div id="msgdiv" style="height:550px;width:725px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;" >
+                  <textarea style="visibility:hidden; type:text/html;"  id="Textarea1" name="text" rows="200" cols="700">loaded text here</textarea>       
+            </div>
+  		    </div>
+				
+			<div id="selmgmnttxt">
+			<p>Please Select how you would like to manage your Mobile Broadband connectivity. <a  id="wellm" onclick="OnLandMTLM(this);" href="#">(Learn More)</a></p>
+			</div>
+			<div id="savesettings" class="panel-content" style="display:none">
+                  <a >Your settings have been saved!</a><br /><br />
+                        <p><a>This window will automatically close after</a> <span id="SAVEDTimer" onclick="timedCount();">30</span><a> seconds. <br />Select "Close" to close the window immediately.</a><br /></p>
+                        <p><br /><br /></p>
+                        <!-- <p><pref><a>You can access the Verizon Mobile Broadband at<br /> anytime by going to: <a  style="font-style:normal">http://mbb.vzw.com</a><a>&nbsp&nbsp&nbsp</a><a href="#" onclick="" style="font-style:normal;font-size:small">(Click here to save this link)</a></a></pref></p> -->
+                        
+ 			</div>
+			 			
+			<div id="enhdownloadchrome" class="panel-content" style="display:none">
+                  <a >Your settings have been saved!</a><br /><br />
+                        <p><a>Please select the application download in the lower bar of the Google Chrome Web Browser to install the Verizon Mobile Broadband Manager Enhanced Application</a> <br /></p>
+                        <p><br /><img border="0" src="i\content\png\ChromeDownloadExample.png" width="300" height="70"  onerror="onImgError(this);"/><br /></p>
+                        
+ 			</div>
+			<div id="enhdownloadIE" class="panel-content" style="display:none">
+                  <a >Your settings have been saved!</a><br /><br />
+                        <p><a>Please select the application download in the lower bar of the Microsoft Internet Explorer Browser to install the Verizon Mobile Broadband Manager Enhanced Application</a> <br /></p>
+                        <p><br /><img border="0" src="i\content\png\WindowsIEDownloadExample.png" width="610" height="80"  onerror="onImgError(this);"/><br /></p>
+                        
+ 			</div>
+			<div id="enhdownloadSafari" class="panel-content" style="display:none">
+                  <a >Your settings have been saved!</a><br /><br />
+                        <p><a>Please select the application download in the upper right corner of the Safari Browser to install the Verizon Mobile Broadband Manager Enhanced Application</a> <br /></p>
+                        <p><br /><img border="0" src="i\content\png\SafariDownloadExample.png" width="410" height="220"  onerror="onImgError(this);"/><br /></p>
+                        
+ 			</div>
+			<div id="enhdownloadMozilla" class="panel-content" style="display:none">
+                  <a >Your settings have been saved!</a><br /><br />
+                        <p><a>Please select the application download from the prompt dialog you receive in the Mozilla Browser window to install the Verizon Mobile Broadband Manager Enhanced Application</a> <br /></p>
+                        <p><br /><img border="0" src="i\content\png\MozillaDownloadExample.png" width="450" height="205"  onerror="onImgError(this);"/><br /></p>
+                        
+ 			</div>
+			<div id="enhdownloadOpera" class="panel-content" style="display:none">
+                  <a >Your settings have been saved!</a><br /><br />
+                        <p><a>Please select the application download from the prompt dialog you receive in the Opera Browser window to install the Verizon Mobile Broadband Manager Enhanced Application</a> <br /></p>
+                        <p><br /><img border="0" src="i\content\png\MozillaDownloadExample.png" width="450" height="205"  onerror="onImgError(this);"/><br /></p>
+                        
+ 			</div>
+ 			
+ 		<div id="ippassthruChromeDownload" class="panel-content" style="display:none">
+                  <a >Your settings have been saved!</a><br /><br />
+                        <p><a>Please select the application download in the lower bar of the Google Chrome Web Browser to install  the IP Pass Through Utility Application</a> <br /></p>
+                        <p><br /><img border="0" src="i\content\png\ChromeDownloadExample.png" width="300" height="70"  onerror="onImgError(this);"/><br /></p>
+                        
+ 			</div>
+			<div id="ippassthruIEDownload" class="panel-content" style="display:none">
+                  <a >Your settings have been saved!</a><br /><br />
+                        <p><a>Please select the application download in the lower bar of the Microsoft Internet Explorer Browser to install the IP Pass Through Utility Application</a> <br /></p>
+                        <p><br /><img border="0" src="i\content\png\WindowsIEDownloadExample.png" width="610" height="80"  onerror="onImgError(this);"/><br /></p>
+                        
+ 			</div>
+			<div id="ippassthruSafariDownload" class="panel-content" style="display:none">
+                  <a >Your settings have been saved!</a><br /><br />
+                        <p><a>Please select the application download in the upper right corner of the Safari Browser to install the IP Pass Through Utility Application</a> <br /></p>
+                        <p><br /><img border="0" src="i\content\png\SafariDownloadExample.png" width="410" height="220"  onerror="onImgError(this);"/><br /></p>
+                        
+ 			</div>
+			<div id="ippassthruMozillaDownload" class="panel-content" style="display:none">
+                  <a >Your settings have been saved!</a><br /><br />
+                        <p><a>Please select the application download from the prompt dialog you receive in the Mozilla Browser window to install the IP Pass Through Utility Application</a> <br /></p>
+                        <p><br /><img border="0" src="i\content\png\MozillaDownloadExample.png" width="450" height="205"  onerror="onImgError(this);"/><br /></p>
+                        
+ 			</div>
+			
+ 			<div id="ippassthruOperaDownload" class="panel-content" style="display:none">
+                  <a >Your settings have been saved!</a><br /><br />
+                        <p><a>Please select the application download from the prompt dialog you receive in the Opera Browser window to install the IP Pass Through Utility Application</a> <br /></p>
+                        <p><br /><img border="0" src="i\content\png\MozillaDownloadExample.png" width="450" height="205"  onerror="onImgError(this);"/><br /></p>
+                        
+ 			</div>
+ 			
+			<div id="deviceRemoveIdle" class="panel-content" style="display:none">
+                <p><a>You have removed your Verizon Mobile Broadband Device.  Please reinsert your device to continue or close this webpage using the Close button below</a></p>
+                <p><br /><br /></p>
+ 			</div>
+			<div id="deviceRemoveSave" class="panel-content" style="display:none">
+                <p><a><span  style="color:Red" >You have removed your Verizon Mobile Broadband Device while saving your settings!  Your settings will not be saved by this device.</span></a></p>
+                <p><br />Please reinsert your device to continue or close this webpage using the Close button below.<br /></p>
+ 			</div>
+			
+			
+			<div class="install-options rc" id="instoption">
+			<div>
+			<input type="radio" name="appsel" class="radio" id="enhanced-app" checked="checked"  onclick="EnhInstallSel();"/><label for="enhanced-app">Install Enhanced App (Recommended)</label><br/>
+			<a class="" style="visibility:visible; color:Red; position:absolute; margin-left:30px; margin-top:-5px;" id="si1a" onmouseover="this.style.textDecoration='none';" onmouseout="this.style.textDecoration='none';" >To download the Enhanced App you will be automatically connected this one time!</a><br />
+			<input type="radio" name="appsel" class="radio" style=""  id="basic-app" onclick="BasicInsSel();"/> <label for="basic-app"  id="si1blabel" onmouseover="OnMouseOverBasicInstall();">Use Basic Web App (No installation required)</label><br />
+			<a class="" style="visibility:hidden; color:Red; position:absolute; margin-left:30px; margin-top:-5px;" id="si1b" onmouseover="this.style.textDecoration='none';" onmouseout="this.style.textDecoration='none';" >This option is not preferred for VPN users.  Please select the Enhanced App option for use with a VPN client/solution.</a><br />
+			</div>
+			</div>
+			
+			
+			<div id="autoconprompt">
+			<a style="text-decoration:none;  color:#000;" onmouseover="this.style.textDecoration='none';" onmouseout="this.style.textDecoration='none';">You can also turn on the Auto-connect feature. When selected, Mobile Broadband Manager will automatically connect to an available network.</a><a  id="autoconLM"  onclick="OnAutoConLM();" href="#">(Learn More)</a>
+			</div>
+			
+			<div class="panel-left" id="conoptdd">
+			<select id="connection" class="dropdownMenu" style="z-index:10;" onchange="AutoconnectSel();">
+				<option value="1">Manually Connect</option>
+				<option value="2">Allow Auto-Connect</option>
+				<option value="3">Allow Auto-connect except when roaming</option> 
+			</select>
+			</div >
+			
+            <p><br /><br /><a class="" style="visibility:hidden; color:Red; position:relative; z-index:1; margin-left:30px; margin-top:-5px;" id="autoconmsg" onmouseover="this.style.textDecoration='none';" onmouseout="this.style.textDecoration='none';">You will be automatically connected everytime you insert the device!</a></p>
+		
+	        <div class=""   id="installbusin" style="visibility:visible;">
+			     <a>Business Customers Only</a>
+			    <div class="install-options" >
+			        <input type="checkbox" name="ippasssel" class="default-checkbox" id="ippassradio"  onclick="IPPassThruInstallSel();"/><label>IP Pass Through Driver and Utility (Windows Only)</label><br/>
+			          <!-- <input type="checkbox" name="urgent" id="Checkbox1" class="default-checkbox" /><label for="urgent">Urgent</label> -->
+			        <p><a class="net-row-message" style=" color:Red; position:absolute; margin-top:-5px;" id="ippasstext" onmouseover="this.style.textDecoration='none';" onmouseout="this.style.textDecoration='none';" >Users that need IP Pass Through should download and install this driver and Utility.  Once you install this driver, and you set the device to IPPT Mode, the MBB Connection Manager will be unavailable.  You can use the Utility to set the device back to Standard Mode for access the MBB Connection Manager. </a></p>
+			    </div>
+			    <p></p>
+			</div>
+				
+            <p id="closingprompt"><br /><br /><a class="" style="text-align:left; text-decoration:none;  color:#000;" onmouseover="this.style.textDecoration='none';" onmouseout="this.style.textDecoration='none';">You can access the Verizon Mobile Broadband at anytime by going to:</a><a  href="http://mbb.vzw.com" style="font-style:normal"> <span >http://mbb.vzw.com</span></a><a>&nbsp&nbsp&nbsp</a><a href="#" onclick="onSaveBookmarkPrompt();" style="font-style:normal;font-size:small">(How to save this link)</a></a></p>
+		
+			<p></p>
+			<a class="button megalarge" style="display:inline" id="landingContinue"  onmouseover="ContinueMO();" onclick="OnContinue();"><span class="red">Continue</span></a>
+			<a class="button megalarge" style="display:none" id="lanSAVED" onmouseover="ContinueMO();" onclick="OnCloseSettingsSaved();"><span class="red">Close</span></a>
+			<a class="button megalarge" style="display:none" id="devRemClose" onmouseover="ContinueMO();" onclick="OnCloseDeviceRemoved();"><span class="red">Close</span></a>
+			<a class="button megalarge"  onclick="EULAAccepted();" style="display:none; margin-top:-70px; margin-left:-200px; z-index:10;" id="eulaagree"><span class="red">I Agree</span></a>
+
+                  <div id="LandMTLM" class="" style="display:none; position:absolute">
+                            <p class="triangle-border top after">
+                                We recommend you install the Verizon Mobile Broadband  Manager enhanced app. This adds a convenient desktop icon and installs software with advanced capabilities for a better connectivity experience. You may install the enhanced app at a later time by accessing "Menu > Settings >Install Enhanced App".
+                            </p>
+                    </div>
+
+                <div id="AutoConLM" class="" style="display:none; position:absolute">
+                            <p class="triangle-border top after">
+                                LAN Adapter - Auto-connect is an 'Always On' connection, you stay connected even when Verizon Mobile Broadband Manager is not running.  When the device is inserted a new connection is automatically attempted.
+                            </p>
+                    </div>
+
+                  <div id="autoconsel" class="" style="display:none; position:absolute">
+                            <p class="triangle-border top left after">
+                                "Auto-connect is an 'Always On' connection, you can stay connected even when Verizon Mobile Broadband Manager is closed.
+                            </p>
+                    </div>
+ 
+                         </div>
+  					
+  					
+		<!--START COMMON FOOTER-->
+			<div style="clear:both;"></div>         
+		</div>
+		<!-- END LANDING Panels -->
+		<div class="panel-right">
+            <div id="about-panel" class="modal">
+                <div class="title_bar">
+                    <h1>About</h1><br />
+	                    <a href="javascript:void(0)" class="close png">Close</a>
+                </div>
+                <div class="modal_content">
+                <div class="pad">
+                <div class="modal-scroll">
+                        <h3 class="black">
+                            <p>
+                            <span id="fullnameandversion">XXXXXXXX</span><br />
+                            &copy; 2011-12, Synchronoss Technologies, Inc.<br />
+                            All Rights Reserved.
+                            </p>
+                        </h3>	
+                       
+                <div class="info-block">
+                    <div class="number-label-large">Device Phone Number:</div>
+                    <div class="number-digits" id='aboutPhoneNo'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">Device Make/Model:</div>
+                    <div class="number-digits" id='aboutMakeModel'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">Device MEID:</div>
+                    <div class="number-digits" id='aboutMeid'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">Device MIN:</div>
+                    <div class="number-digits" id='aboutMin'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">Device IMEI:</div>
+                    <div class="number-digits" id='aboutIMEI'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">MCC:</div>
+                    <div class="number-digits" id='aboutMCC'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">Network:</div>
+                    <div class="number-digits" id='aboutNetwork'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">Network Type:</div> 
+                    <div class="contact-info" id='aboutNetworkType'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">Home SID:</div> 
+                    <div class="contact-info" id='aboutHomesid'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">Current Serving Network Name and ID:</div> 
+                    <div class="contact-info" id='aboutCurrentNetwork'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">Hardware Revision Number:</div> 
+                    <div class="contact-info" id='aboutHardware'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">Firmware Version Number:</div> 
+                    <div class="contact-info" id='aboutFirmware'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">Roaming Status:</div> 
+                    <div class="contact-info" id='aboutRoaming'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">PRL Version:</div> 
+                    <div class="contact-info" id='aboutPRLVersion'></div>
+                </div>				
+                <div class="info-block">
+                    <div class="number-label-large">ERI Version:</div> 
+                    <div class="contact-info" id='aboutERIVersion'></div>
+                </div>				
+                <div class="info-block">
+                    <div class="number-label-large">Capabilities:</div> 
+                    <div class="contact-info" id='aboutCap'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">RSSI(4G LTE):</div> 
+                    <div class="contact-info" id='aboutRssi'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">LTE SINR:</div> 
+                    <div class="contact-info" id='aboutSINR'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">SIM:</div> 
+                    <div class="contact-info" id='aboutSIM'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">UICC IMSI:</div> 
+                    <div class="contact-info" id='aboutImsi'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large">ICCID:</div> 
+                    <div class="contact-info" id='aboutIccId'></div>
+                </div>
+                <div class="info-block">
+                    <div class="number-label-large" ondblclick="show_requests();">&nbsp;</div>
+                    <div class="contact-info" id='request_queue' style="display:none;"></div>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="close closebtn">Close</a>
+            </div>
+            </div>
+            
+            </div>
+		</div>
+
+	</div>
+
+	<div class="panel-content" id="notification-spot" style="display:none">
+		<div class="panel-right">
+		        <a class="button" rel="modal" href="#notif-panel" id="show_notif" style="display:none"><span class="gray">Notification</span></a>
+                <div id="notif-panel" class="modal">
+                    <div class="title_bar">
+            	        <h1>Notification</h1><br />
+                	        <a href="javascript:void(0)" class="close png" id="notif_action">Close</a>
+                    </div>
+                    <div class="modal_content">
+                        <div class="pad">
+                            <div class="modal-scroll-notf" id="notif_text">
+	                            <h3 class="black">
+		                            <span id="span_notif">Verizon Mobile Broadband Manager Version 0.0.x</span>
+	                            </h3>
+		                    </div>
+		                    <div class="divpopupbtn" id='divnotifbtn'>
+		                        <a class="button notifbtn" href="#" onclick="$NOTI.execute();"><span class="red">Accept</span></a>
+		                        <a class="button notifbtn" href="#" onclick="$NOTI.execute();"><span class="red">Accept</span></a>
+		                    </div>
+		                    <a href="javascript:void(0)" id="notifclose" class="close closebtn">Close</a>
+		                </div> 
+                    </div>				
+                </div>
+	            <!--START COMMON FOOTER-->
+		        <div style="clear:both;"></div>         
+		 </div>
+	</div>
+	<div class="panel-content" id="alert-popup" style="display:none">
+		<div class="panel-right">
+		        <a class="button" rel="modal" href="#alert-panel" id="alert-msg" style="display:none;"><span class="gray">Message</span></a>
+                <div id="alert-panel" class="modal">
+                    <div class="title_bar">
+            	        <h1>Message</h1><br />
+                	        <a href="javascript:void(0);" class="close png" id="alert_close" onclick="oncloseconfirm(); return false;">Close</a>
+                    </div>
+                    <div class="modal_content">
+                        <div class="pad">
+                            <div class="modal-scroll">
+	                            <h3 class="black">
+		                            <span id="span-alert">Verizon Mobile Broadband Manager Version 0.0.x</span>
+	                            </h3>
+		                    </div>
+		                    <div class="divpopupbtn" id='divalertbtn'>
+		                        <a class="button notifbtn" href="#" onclick="oncloseconfirm(); return false;" id="confirmCancel"><span class="gray">Cancel</span></a>
+		                        <a class="button notifbtn" href="#" onclick="oncloseconfirm(); return false;" id="confirmOK"><span class="red">OK</span></a>
+		                    </div>
+		                </div> 
+                    </div>				
+                </div>
+	            <!--START COMMON FOOTER-->
+		        <div style="clear:both;"></div>         
+		 </div>
+	</div>
+	<!--END PANEL CONTENT-->
+	
+	<!--ABOUT BOX-->
+	<div class="panel-content" id="divAbout" style="display:none">
+	</div>
+    <!--END MBM-->
+<div style="display: none"
+<div id="CT_TIP_DIV"><strong></strong>Connected to Verizon Wireless Sent Received</strong></div>	
+</div>
+<script type="text/javascript" src="scripts/mootools.js"></script>
+<script type="text/javascript" src="scripts/mootools-more.js"></script>
+<script type="text/javascript" src="scripts/lib/scrollbar/scroller.js"></script>
+<script type="text/javascript" src="scripts/lib/modal/modal.js"></script> 
+<script type="text/javascript">
+ window.addEvent('domready', function() {
+
+        //window.scrollBox2 = new MooScroll({selector:'#smslist'});
+
+
+    });		
+</script>
+<script type="text/javascript" src="scripts/lib/form_elements/radiocheck/cb.js"></script>  
+<script type="text/javascript" src="scripts/lib/form_elements/dropdowns/dropdown.js"></script> 
+<script type="text/javascript" src="scripts/lib/form_elements/clear-textField.js"></script>  
+
+</body>
+</html>

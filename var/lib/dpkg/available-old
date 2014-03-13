@@ -5362,6 +5362,36 @@ Description: Samba winbind client library
 Homepage: http://www.samba.org
 Original-Maintainer: Debian Samba Maintainers <pkg-samba-maint@lists.alioth.debian.org>
 
+Package: conky-std
+Priority: optional
+Section: utils
+Installed-Size: 952
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: conky
+Version: 1.8.1-6
+Replaces: conky-all, conky-cli
+Depends: libaudclient2 (>= 2.3), libc6 (>= 2.8), libcairo2 (>= 1.8.0), libcurl3-gnutls (>= 7.16.2-1), libdbus-glib-1-2 (>= 0.78), libgcc1 (>= 1:4.4.0), libglib2.0-0 (>= 2.12.0), libimlib2, libiw30 (>= 30~pre1), liblua5.1-0, libncurses5 (>= 5.5-5~), libtinfo5, libx11-6, libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxft2 (>> 2.1.1), libxml2 (>= 2.7.4), libxmmsclient6 (>= 0.7DrNo)
+Suggests: apcupsd, moc, mpd, audacious, xmms2
+Conflicts: conky-all, conky-cli
+Size: 353258
+Description: highly configurable system monitor (default version)
+ Conky is a system monitor that can display just about anything,
+ either on your root desktop or in its own window.
+ Conky has many built-in objects, as well as the ability to execute
+ external programs or scripts (either external or through built-in
+ lua support).
+ .
+ This package should be a good compromise for most users that do not
+ need special features.
+ It includes the following support:
+ .
+ X11, XDamage, XDBE, Xft, MPD, MOC, math, hddtemp, portmon, RSS,
+ Weather, wireless, Imlib2, ALSA mixer, apcupsd, I/O stats, argb, Lua
+ and the cairo and imlib2 lua bindings, Audacious, and XMMS2.
+Original-Maintainer: Vincent Cheng <Vincentc1208@gmail.com>
+Homepage: http://conky.sourceforge.net/
+
 Package: libsigc++-2.0-dev
 Multi-Arch: same
 Priority: optional
@@ -15593,6 +15623,27 @@ Description: OpenLDAP development libraries
 Homepage: http://www.openldap.org/
 Original-Maintainer: Debian OpenLDAP Maintainers <pkg-openldap-devel@lists.alioth.debian.org>
 
+Package: conky
+Priority: extra
+Section: utils
+Installed-Size: 59
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 1.8.1-6
+Depends: conky-std | conky-cli | conky-all
+Size: 3356
+Description: highly configurable system monitor (transitional package)
+ Conky is a system monitor that can display just about anything,
+ either on your root desktop or in its own window.
+ Conky has many built-in objects, as well as the ability to execute
+ external programs or scripts (either external or through built-in
+ lua support).
+ .
+ This is a dummy package to ease transition to the new packaging scheme.
+ It may be safely removed after upgrade/installation.
+Original-Maintainer: Vincent Cheng <Vincentc1208@gmail.com>
+Homepage: http://conky.sourceforge.net/
+
 Package: lockfile-progs
 Priority: optional
 Section: misc
@@ -25026,6 +25077,40 @@ Description: powerful object-oriented display engine - common files
  This package contains internationalization files.
 Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 
+Package: libaudclient2
+Multi-Arch: same
+Priority: optional
+Section: sound
+Installed-Size: 75
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: audacious
+Version: 3.2.1-2
+Depends: libc6 (>= 2.4), libdbus-glib-1-2 (>= 0.78), libglib2.0-0 (>= 2.12.0)
+Pre-Depends: multiarch-support
+Size: 21686
+Description: audacious dbus remote control library
+ Audacious is a fork of beep-media-player which supports winamp skins
+ and many codecs.
+ .
+ In the default install, the following codecs are supported:
+ .
+  * MP3
+  * Ogg Vorbis / Theora
+  * AAC and AAC+
+  * FLAC
+  * ALAC
+  * Windows Media (WMA)
+  * WAVE
+ .
+ Additionally, Audacious is extendable through plugins, and contains
+ other useful features like LIRC support. Support for many more codecs
+ can also be added through plugins.
+ .
+ This package contains a library used to remote control audacious.
+Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Homepage: http://www.audacious-media-player.org/
+
 Package: libkhtml5
 Priority: optional
 Section: libs
@@ -29776,6 +29861,29 @@ Description: Tool for generating GNU Standards-compliant Makefiles
  previous version can continue to be made available.
 Homepage: http://www.gnu.org/software/automake/
 Original-Maintainer: Eric Dorland <eric@debian.org>
+
+Package: libxmmsclient6
+Priority: optional
+Section: libs
+Installed-Size: 177
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: xmms2
+Version: 0.8+dfsg-2
+Replaces: libxmmsclient2, libxmmsclient3, libxmmsclient4, libxmmsclient5
+Depends: libc6 (>= 2.4)
+Breaks: xmms2-core (<< 0.6DrMattDestruction)
+Conflicts: libxmmsclient2, libxmmsclient3, libxmmsclient4, libxmmsclient5
+Size: 57386
+Description: XMMS2 - client library
+ XMMS2 is a redesign of the XMMS music player. It features a client-server
+ model, allowing multiple (even simultaneous!) user interfaces, both textual
+ and graphical. All common audio formats are supported using plug-ins. On top of
+ this, there is a flexible media library to organize your music.
+ .
+ This package contains a client library written in c.
+Original-Maintainer: Benjamin Drung <bdrung@debian.org>
+Homepage: http://xmms2.org/
 
 Package: libevince3-3
 Priority: optional

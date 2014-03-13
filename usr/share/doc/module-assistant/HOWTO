@@ -1,0 +1,56 @@
+Here are the few commands you need to know in order to work with
+module-assistant.
+
+Updating the cached data
+========================
+
+Do this every time after running "apt-get update", "dselect update", etc.
+Run:
+
+  module-assistant update
+
+Listing available packages
+==========================
+
+For example, we look for available packages of ALSA. Run:
+
+  module-assistant list alsa
+
+To extend the list to module packages precompiled by Debian maintainers,
+replace "list" with "search".
+
+To list all packages, just say "module-assistant list" (or
+"module-assistant search"). If you wish to limit the list to the
+packages of which you have the source installed, use "li" instead of
+"list".
+
+Preparing to compile the own packages
+=====================================
+
+Run:
+
+  module-assistant prepare
+
+Building and installing packages for the own kernel
+===================================================
+
+Assuming that there is no precompiled ALSA package available for your
+kernel.  Run:
+
+  module-assistant auto-install alsa
+
+And be patient...
+
+For more commands and options, see the manpage of module-assistant.
+
+How to build and sign whole series of modules:
+==============================================
+
+export SIGNCHANGES=1
+export KPKG_DEST_DIR=/my/package/repository
+export GNUPGHOME=~username/.gnupg
+module-assistant get cdfs
+module-assistant build cdfs -k "`ls -d /usr/src/linux-headers*`" -vt
+
+alternatively, you can specify DEBSIGNCOMMAND and write your own script
+to sign the changes files.

@@ -1,0 +1,1625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <xsl:template match="/">
+    <xsl:choose>
+      <xsl:when test="picaso_notification">
+        <xsl:apply-templates select="picaso_notification" />
+      </xsl:when>
+
+      <xsl:when test="picaso_config">
+        <xsl:apply-templates select="picaso_config" />
+      </xsl:when>
+
+      <xsl:otherwise>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="picaso_notification">
+    <html>
+      <head>
+        <link rel="stylesheet" type="text/css" href="/styles/notification_style.css" />
+      </head>
+      <body style="background-color:#F3F1EF;">
+        <section class="primary">
+          <xsl:choose>
+            <xsl:when test="notification/displaytype ='gen.notification'">
+              <xsl:choose>
+                <xsl:when test="/picaso_notification/notification/data[@divid='icon']">
+                  <xsl:variable name='iconpath'>
+                    <xsl:value-of select="/picaso_notification/notification/data[@divid='icon']" />
+                  </xsl:variable>
+                  <!-- <img src="<xsl:value-of select='$iconpath' />" /> -->
+                </xsl:when>
+              </xsl:choose>
+              <form class="inner" action="http://localhost:4330/cgi-bin/handler.pl" method="get">
+                <h1>
+                  <xsl:value-of select="/picaso_notification/notification/data[@divid='title']" />
+                </h1>
+                <p>
+                  <xsl:value-of select="/picaso_notification/notification/data[@divid='body']" />
+                </p>
+                <div align="left">
+                  <table border="0">
+                    <tr>
+                      <xsl:choose>
+                        <xsl:when test="/picaso_notification/notification/data[@divid='url']">
+                          <td style="width:12%;">
+                            <xsl:variable name='linkLabel'>
+                              <xsl:value-of select="/picaso_notification/notification/data[@divid='urllabel']" />
+                            </xsl:variable>
+                            <xsl:variable name='linkURL'>
+                              <xsl:value-of select="/picaso_notification/notification/data[@divid='url']" />
+                            </xsl:variable>
+                            <xsl:element name="a">
+                              <xsl:attribute name="href">
+                                <xsl:value-of select='$linkURL' />
+                              </xsl:attribute>
+                              <xsl:attribute name="target">_blank</xsl:attribute>
+                              <xsl:value-of select='$linkLabel' />
+                            </xsl:element>
+                          </td>
+                          <td style="width:12%;">
+                          </td>
+                        </xsl:when>
+                      </xsl:choose>
+                      <xsl:choose>
+                        <xsl:when test="/picaso_notification/notification/data[@divid='button1text']">
+                          <td style="width:12%;">
+                            <xsl:variable name='button1text'>
+                              <xsl:value-of select="/picaso_notification/notification/data[@divid='button1text']" />
+                            </xsl:variable>
+                            <xsl:variable name='button1link'>
+                              <xsl:value-of select="/picaso_notification/notification/data[@divid='button1action']" />
+                            </xsl:variable>
+                            <fieldset style="cursor:default;">
+                              <xsl:element name="button">
+                                <xsl:attribute name="id">button1</xsl:attribute>
+                                <xsl:attribute name="onClick">
+                                  <xsl:value-of select="$button1link" />
+                                </xsl:attribute>
+                                <xsl:attribute name="style">cursor:default;</xsl:attribute>
+                                <span>
+                                  <xsl:value-of select='$button1text' />
+                                </span>
+                              </xsl:element>
+                            </fieldset>
+                          </td>
+                          <xsl:choose>
+                            <xsl:when test="/picaso_notification/notification/data[@divid='button2text']">
+                              <td style="width:12%;">
+                                <xsl:variable name='button2text'>
+                                  <xsl:value-of select="/picaso_notification/notification/data[@divid='button2text']" />
+                                </xsl:variable>
+                                <xsl:variable name='button2link'>
+                                  <xsl:value-of select="/picaso_notification/notification/data[@divid='button2action']" />
+                                </xsl:variable>
+                                <fieldset style="cursor:default;">
+                                  <xsl:element name="button">
+                                    <xsl:attribute name="id">button2</xsl:attribute>
+                                    <xsl:attribute name="onClick">
+                                      <xsl:value-of select="$button2link" />
+                                    </xsl:attribute>
+                                    <xsl:attribute name="style">cursor:default;</xsl:attribute>
+                                    <span>
+                                      <xsl:value-of select='$button2text' />
+                                    </span>
+                                  </xsl:element>
+                                </fieldset>
+                              </td>
+                              <xsl:choose>
+                                <xsl:when test="/picaso_notification/notification/data[@divid='button3text']">
+                                  <td style="width:12%;">
+                                    <xsl:variable name='button3text'>
+                                      <xsl:value-of select="/picaso_notification/notification/data[@divid='button3text']" />
+                                    </xsl:variable>
+                                    <xsl:variable name='button3link'>
+                                      <xsl:value-of select="/picaso_notification/notification/data[@divid='button3action']" />
+                                    </xsl:variable>
+                                    <fieldset style="cursor:default;">
+                                      <xsl:element name="button">
+                                        <xsl:attribute name="id">button3</xsl:attribute>
+                                        <xsl:attribute name="onClick">
+                                          <xsl:value-of select="$button3link" />'
+                                        </xsl:attribute>
+                                        <xsl:attribute name="style">cursor:default;</xsl:attribute>
+                                        <span>
+                                          <xsl:value-of select='$button3text' />
+                                        </span>
+                                      </xsl:element>
+                                    </fieldset>
+                                  </td>
+                                </xsl:when>
+                              </xsl:choose>
+                            </xsl:when>
+                          </xsl:choose>
+                        </xsl:when>
+                      </xsl:choose>
+                      <td style="width:12%;">
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </form>
+            </xsl:when>
+
+
+            <xsl:when test="notification/displaytype ='gen.prompt'">
+              <xsl:choose>
+                <xsl:when test="/picaso_notification/notification/data[@divid='icon']">
+                  <xsl:variable name='iconpath'>
+                    <xsl:value-of select="/picaso_notification/notification/data[@divid='icon']" />
+                  </xsl:variable>
+                  <!-- <img src="<xsl:value-of select='$iconpath' />" /> -->
+                </xsl:when>
+              </xsl:choose>
+              <form class="inner" action="http://localhost:4330/cgi-bin/handler.pl" method="get">
+                <h1>
+                  <xsl:value-of select="/picaso_notification/notification/data[@divid='title']" />
+                </h1>
+                <p>
+                  <xsl:value-of select="/picaso_notification/notification/data[@divid='body']" />
+                </p>
+                <div align="left">
+                  <table border="0">
+                    <tr>
+                      <xsl:choose>
+                        <xsl:when test="/picaso_notification/notification/data[@divid='url']">
+                          <td style="width:12%;">
+                            <xsl:variable name='linkLabel'>
+                              <xsl:value-of select="/picaso_notification/notification/data[@divid='urllabel']" />
+                            </xsl:variable>
+                            <xsl:variable name='linkURL'>
+                              <xsl:value-of select="/picaso_notification/notification/data[@divid='url']" />
+                            </xsl:variable>
+                            <xsl:element name="a">
+                              <xsl:attribute name="href">
+                                <xsl:value-of select='$linkURL' />
+                              </xsl:attribute>
+                              <xsl:attribute name="target">_blank</xsl:attribute>
+                              <xsl:value-of select='$linkLabel' />
+                            </xsl:element>
+                          </td>
+                          <td style="width:12%;">
+                          </td>
+                        </xsl:when>
+                      </xsl:choose>
+                      <xsl:choose>
+                        <xsl:when test="/picaso_notification/notification/data[@divid='button1text']">
+                          <td style="width:12%;">
+                            <xsl:variable name='button1text'>
+                              <xsl:value-of select="/picaso_notification/notification/data[@divid='button1text']" />
+                            </xsl:variable>
+                            <xsl:variable name='button1link'>
+                              <xsl:value-of select="/picaso_notification/notification/data[@divid='button1action']" />
+                            </xsl:variable>
+                            <fieldset style="cursor:default;">
+                              <xsl:element name="button">
+                                <xsl:attribute name="id">button1</xsl:attribute>
+                                <xsl:attribute name="onClick">
+                                  <xsl:value-of select="$button1link" />
+                                </xsl:attribute>
+                                <xsl:attribute name="style">cursor:default;</xsl:attribute>
+                                <span>
+                                  <xsl:value-of select='$button1text' />
+                                </span>
+                              </xsl:element>
+                            </fieldset>
+                          </td>
+                          <xsl:choose>
+                            <xsl:when test="/picaso_notification/notification/data[@divid='button2text']">
+                              <td style="width:12%;">
+                                <xsl:variable name='button2text'>
+                                  <xsl:value-of select="/picaso_notification/notification/data[@divid='button2text']" />
+                                </xsl:variable>
+                                <xsl:variable name='button2link'>
+                                  <xsl:value-of select="/picaso_notification/notification/data[@divid='button2action']" />
+                                </xsl:variable>
+                                <fieldset style="cursor:default;">
+                                  <xsl:element name="button">
+                                    <xsl:attribute name="id">button2</xsl:attribute>
+                                    <xsl:attribute name="onClick">
+                                      <xsl:value-of select="$button2link" />
+                                    </xsl:attribute>
+                                    <span>
+                                      <xsl:value-of select='$button2text' />
+                                    </span>
+                                  </xsl:element>
+                                </fieldset>
+                              </td>
+                              <xsl:choose>
+                                <xsl:when test="/picaso_notification/notification/data[@divid='button3text']">
+                                  <td style="width:12%;">
+                                    <xsl:variable name='button3text'>
+                                      <xsl:value-of select="/picaso_notification/notification/data[@divid='button3text']" />
+                                    </xsl:variable>
+                                    <xsl:variable name='button3link'>
+                                      <xsl:value-of select="/picaso_notification/notification/data[@divid='button3action']" />
+                                    </xsl:variable>
+                                    <fieldset style="cursor:default;">
+                                      <xsl:element name="button">
+                                        <xsl:attribute name="id">button3</xsl:attribute>
+                                        <xsl:attribute name="onClick">
+                                          <xsl:value-of select="$button3link" />
+                                        </xsl:attribute>
+                                        <xsl:attribute name="style">cursor:default;</xsl:attribute>
+                                        <span>
+                                          <xsl:value-of select='$button3text' />
+                                        </span>
+                                      </xsl:element>
+                                    </fieldset>
+                                  </td>
+                                </xsl:when>
+                              </xsl:choose>
+                            </xsl:when>
+                          </xsl:choose>
+                        </xsl:when>
+                      </xsl:choose>
+                      <td style="width:12%;">
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </form>
+            </xsl:when>
+
+            <xsl:when test="notification/displaytype ='uri.notification'">
+              <xsl:choose>
+                <xsl:when test="/picaso_notification/notification/data[@divid='title']">
+                  <h1>
+                    <xsl:value-of select="/picaso_notification/notification/data[@divid='title']" />
+                  </h1>
+                </xsl:when>
+              </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="/picaso_notification/notification/data[@divid='uri']">
+                  <td>
+                    <xsl:variable name='imgURI'>
+                      <xsl:value-of select="/picaso_notification/notification/data[@divid='uri']" />
+                    </xsl:variable>
+                    <xsl:element name="img">
+                      <xsl:attribute name="src">
+                        <xsl:value-of select='$imgURI' />
+                      </xsl:attribute>
+                    </xsl:element>
+                  </td>
+                </xsl:when>
+                <xsl:when test="/picaso_notification/notification/data[@divid='url']">
+                  <td>
+                    <xsl:variable name='imgURL'>
+                      <xsl:value-of select="/picaso_notification/notification/data[@divid='url']" />
+                    </xsl:variable>
+                    <xsl:element name="img">
+                      <xsl:attribute name="src">
+                        <xsl:value-of select='$imgURL' />
+                      </xsl:attribute>
+                    </xsl:element>
+                  </td>
+                </xsl:when>
+              </xsl:choose>
+            </xsl:when>
+
+            <xsl:when test="notification/displaytype ='gen.credentialrequest'">
+              <p>Credential request is not yet implemented.</p>
+            </xsl:when>
+
+            <xsl:otherwise>
+              <p>
+                <xsl:value-of select="notification/displaytype" /> is not a recognized notification type.
+              </p>
+            </xsl:otherwise>
+          </xsl:choose>
+        </section>
+      </body>
+    </html>
+  </xsl:template>
+  <xsl:template match="picaso_config">
+    <xsl:param name="role" select="'user'" />
+    <html>
+      <head>
+        <!-- Use this path if using with release --> 
+        <link href="/styles/layout.css" rel="stylesheet" type="text/css" />
+        <script src="/js/jquery-1.7.2.min.js"></script>
+        <script src="/js/libs/jquery.qtip.min.js"></script>
+
+        <!--
+        <link href="./../test/styles/layout.css" rel="stylesheet" type="text/css" />
+        <script src="./../test/js/jquery-1.7.2.min.js"></script>
+        <script src="./../test/js/libs/jquery.qtip.min.js"></script>
+        -->
+        
+        <script language="JavaScript">
+          (function($){var g,d,j=1,a,b=this,f=!1,h="postMessage",e="addEventListener",c,i=b[h]&amp;&amp;!$.browser.opera;$[h]=function(k,l,m){if(!l){return}k=typeof k==="string"?k:$.param(k);m=m||parent;if(i){m[h](k,l.replace(/([^:]+:\/\/[^\/]+).*/,"$1"))}else{if(l){m.location=l.replace(/#.*$/,"")+"#"+(+new Date)+(j++)+"&amp;"+k}}};$.receiveMessage=c=function(l,m,k){if(i){if(l){a&amp;&amp;c();a=function(n){if((typeof m==="string"&amp;&amp;n.origin!==m)||($.isFunction(m)&amp;&amp;m(n.origin)===f)){return f}l(n)}}if(b[e]){b[l?e:"removeEventListener"]("message",a,f)}else{b[l?"attachEvent":"detachEvent"]("onmessage",a)}}else{g&amp;&amp;clearInterval(g);g=null;if(l){k=typeof m==="number"?m:typeof k==="number"?k:100;g=setInterval(function(){var o=document.location.hash,n=/^#?\d+&amp;/;if(o!==d&amp;&amp;n.test(o)){d=o;l({data:o.replace(n,"")})}},k)}}}})(jQuery);
+          (function(a){if(window.DOMParser==undefined&amp;&amp;window.ActiveXObject){DOMParser=function(){};DOMParser.prototype.parseFromString=function(c){var b=new ActiveXObject("Microsoft.XMLDOM");b.async="false";b.loadXML(c);return b}}a.xmlDOM=function(b,h){try{var d=(new DOMParser()).parseFromString(b,"text/xml");if(a.isXMLDoc(d)){var c=a("parsererror",d);if(c.length==1){throw ("Error: "+a(d).text())}}else{throw ("Unable to parse XML")}}catch(f){var g=(f.name==undefined?f:f.name+": "+f.message);if(a.isFunction(h)){h(g)}else{a(document).trigger("xmlParseError",[g])}return a([])}return a(d)}})(jQuery);
+
+          function getParameterByName(name)
+          {
+          name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+          var regexS = "[\\?&amp;]" + name + "=([^&amp;#]*)";
+          var regex = new RegExp(regexS);
+          var results = regex.exec(window.location.href);
+          if(results == null)
+          return "";
+          else
+          return decodeURIComponent(results[1].replace(/\+/g, " "));
+          }
+
+          function closeSettings()
+          {
+          var elem = document.getElementById("ConfigControlForm");
+          elem.setAttribute('action', window.location.href);
+          if (window.parent)
+          {
+          var purl = getParameterByName('parenturl');
+          if (purl)
+          {
+          if (purl.length &gt; 4)
+          {
+          $.postMessage("closeSettings", getParameterByName('parenturl'), window.parent);
+          }
+          }
+          }
+          }
+
+          var gfnContinue = null;
+          
+          function connectionCheckAndDisconnect(fnContinue)
+          {
+          if ($.browser.opera)
+          {
+          var b = !confirm("The current connection, if any, may be disconnected before the new settings may be saved.  Click 'OK' to confirm.");
+          if (!b)
+            $.postMessage("disconnectHACK", getParameterByName('parenturl'), window.parent);
+          return b;
+          }
+          else
+          {
+
+          var elem = document.getElementById("ConfigControlForm");
+            
+          elem.setAttribute('action', window.location.href);
+
+          if (window.parent)
+          {
+          var purl = getParameterByName('parenturl');
+          if (purl)
+          {
+          if (purl.length &gt; 4)
+          {
+                  gfnContinue = fnContinue;
+          $.postMessage("connectionCheckAndDisconnect", getParameterByName('parenturl'), window.parent);
+                  return true;
+          }
+          }
+          }
+            
+            return false;
+          }
+          }
+			
+          function networkSelection()
+          {
+          var elem = document.getElementById("ConfigControlForm");
+          elem.setAttribute('action', window.location.href);
+
+          if (window.parent)
+          {
+          var purl = getParameterByName('parenturl');
+          if (purl)
+          {
+          if (purl.length &gt; 4)
+          {
+			
+			//	only prompt about saving settings if settings need to be saved, otherwise
+			//	just open network selection screen
+
+			if (confChanged)
+			{
+				var ret = confirm("Network selection requires your changes to be saved.  Click 'OK' to save your changes.");
+				if( ret )
+				{
+					doNetworkSelection = true;
+					handleChange('saveId');
+				}
+			}
+			else
+			{
+				$.postMessage("networkSelection", getParameterByName('parenturl'), window.parent);
+			}
+
+          }
+          }
+          }
+          }
+        </script>
+        <style type="text/css">
+          #nwSubTypeSelId {width:127px;}
+        </style>
+      </head>
+      <body onunload="" style="background-color:#FFFFFF;" id ="bodyId">
+        <script type="text/javascript">
+          <![CDATA[          
+
+			  var subcompName;
+			  var nwObj = {
+			  selection: 'auto',
+			  main: ['Global','GSM/UMTS Mode','LTE/CDMA'],
+			  sub: ['disabled','GSM Only','UMTS Only','GSM/UMTS Dual'],
+			  subattr: 'disabled',
+			  auto: 'checked_disabled',
+			  button: 'disabled',
+			  val:  'auto'
+			  };
+			  var cpObj = {
+			  ac: 'false',
+			  acFilter: 'none',
+			  localRoam: 'true',
+			  intlRoam: 'true',
+			  prompt: 'false',
+			  text: ['Manually connect','Auto connect except when roaming','Auto connect'],
+			  selection: 0
+			  };
+			  var apn = 'VZWINTERNET';
+			  var apnDef = 'VZWINTERNET';
+			  var userItems;
+			  var currentConf;
+			  var confNeeded = ['AutoConnect','AutoConnectFilter','NetworkType','APN','PromptBeforeRoaming'];
+			  var confAvai   = ['0','0','0','0','0'];
+			  var confDef    = ['false','none','auto','VZWINTERNET','true'];
+			  var promptBeforeRoaming = 'false';
+			  var confChanged = false;
+			  var networkTypeChanged = false;		//	hms - used for blocking network type change when scanning
+			  var confWasChanged = false;
+			  var doNetworkSelection = false;
+
+			  var savedData = null;
+			  var savedtextStatus = null;
+			  var savedjqXHR = null;
+
+			  var debugData = null;
+
+			  if (window.addEventListener)
+			  {
+			  // For standards-compliant web browsers
+			  window.addEventListener("message", listenForMessages, false);
+			  }
+			  else
+			  {
+			  window.attachEvent("onmessage", listenForMessages);
+			  }
+
+			  get_settings();
+
+			  function listenForMessages(evt)
+			  {
+			  if (evt.data === 'settings_finishreset')
+			  {
+			  finishResetSettings();
+			  }
+			  else if (evt.data === 'settings_finishscanningblock')
+			  {
+			  finishScanningBlock();
+			  }
+			  else if (evt.data === 'settings_finishAutoConnectConfirm_Confirm')
+			  {
+			  finishAutoConnectConfirm_Confirm();
+			  }
+			  else if (evt.data === 'settings_finishAutoConnectConfirm_Deny')
+			  {
+			  finishAutoConnectConfirm_Deny();
+			  }
+        else if (evt.data === 'accept_disconnect')
+        {
+          if (gfnContinue)
+            gfnContinue();
+          gfnContinue = null;
+        }
+			  }
+
+			  function get_settings()
+			  {
+
+			  //	build a unique URL to get the settings
+
+			  var randValue = (new Date()).valueOf();
+			  var settingsURL = document.location.toString() + '?x_' + randValue;
+
+			  var cvurl = document.location.toString();
+			  var l = cvurl.indexOf("ShowComponentUserSettings");
+			  cvurl = cvurl.substring(0,l);
+			  cvurl += "configValues.xml";
+			  
+			  cvurl = document.location.toString();
+        	  cvurl += '?c=x_' + randValue;
+        	  
+        	  
+			  //alert(' config url is ' + cvurl );
+
+			  $.ajax({
+			  url: cvurl,//settingsURL,
+			  type: "GET",
+			  data: "",
+			  contentType:"text/plain",
+			  context: document.body,
+			  dataType: "xml",
+			  complete: function(xhr, status) {
+			  },
+			  success: function(data, textStatus, jqXHR){
+			  if ($.browser.msie)
+			  CollectGarbage();
+
+			  settingsData = data;
+			  savedtextStatus = textStatus;
+			  savedjqXHR = jqXHR;
+
+			  settings_init(data, textStatus, jqXHR);
+
+			  } // end success
+
+			  }); // end ajax
+			  }
+
+			  var lastcv = null;
+			  var newcv = null;
+
+			  function checkConfigValuesChanged(samefunc, difffunc)
+			  {
+
+			  //	this method gets the current config values from the device and compares it to the one
+			  //	we got last time. it returns true if the config values has changed
+
+			  //	build the URI for the config values
+
+			  var randValue = (new Date()).valueOf();
+			  var cvurl = document.location.toString();
+			  var l = cvurl.indexOf("ShowComponentUserSettings");
+			  cvurl = cvurl.substring(0,l);
+			  cvurl += "configValues.xml";
+        	  cvurl += '?c=x_' + randValue;
+
+			  $.ajax({
+			  url: cvurl,
+			  type: "GET",
+			  data: "",
+			  contentType:"text/plain",
+			  context: document.body,
+			  dataType: "xml",
+
+			  success: function(data, textStatus, jqXHR)
+			  {
+			  if ($.browser.msie)
+			  {
+			  CollectGarbage();
+			  }
+
+			  //	check to see if the config values data has changed, call the appropriate
+			  //	callback function
+
+			  newcv = data;
+			  if (newcv && lastcv && ($(newcv).text() == $(lastcv).text()))
+			  {
+			  if (samefunc)
+			  {
+			  samefunc();
+			  }
+			  }
+			  else
+			  {
+			  if (difffunc)
+			  {
+			  difffunc();
+			  }
+			  }
+			  lastcv = newcv;
+			  newcv = null;
+
+
+			  },
+
+			  error: function(jqXHR, textStatus, errorThrown)
+			  {
+			  window.setTimeout(function() {checkConfigValuesChanged(samefunc, difffunc);}, 1000);
+			  }
+
+
+			  });
+
+			  }
+
+			  var rawRsp;
+
+			  function settings_init(data, textStatus, jqXHR)
+			  {
+				  var nwObj_init = {
+					  selection: 'auto',
+					  main: ['Global','GSM/UMTS Mode','LTE/CDMA'],
+					  sub: ['disabled','GSM Only','UMTS Only','GSM/UMTS Dual'],
+					  subattr: 'disabled',
+					  auto: 'checked_disabled',
+					  button: 'disabled',
+					  val:  'auto'
+					  };
+					  var cpObj_init = {
+					  ac: 'false',
+					  acFilter: 'none',
+					  localRoam: 'true',
+					  intlRoam: 'true',
+					  prompt: 'false',
+					  text: ['Manually connect','Auto connect','Auto connect except when roaming'],
+					  selection: 0
+				  };
+
+				  //	get the config values so we can compare it later
+	
+				  checkConfigValuesChanged(null, null);
+	
+				  //	reset the settings to their initial state
+	
+				  nwObj = nwObj_init;
+				  cpObj = cpObj_init;
+	
+				  apn = 'VZWINTERNET';
+				  apnDef = 'VZWINTERNET';
+	
+				  confNeeded = ['AutoConnect','AutoConnectFilter','NetworkType','APN','PromptBeforeRoaming'];
+				  confAvai   = ['0','0','0','0','0'];
+				  confDef    = ['false','none','auto','VZWINTERNET','true'];
+				  confChanged = false;
+				  networkTypeChanged = false;
+	
+				  var subcomp = $(data).find('picaso_config > picaso_main_settings > component > subcomponent > name');
+				  subcompName = subcomp.text();
+	
+				  var mainItems = $(data).find('picaso_config > picaso_main_settings > component > subcomponent > item');
+				  mainItems.each
+				  (
+					  function(i,item)
+					  {
+						  // ToDo: Have to get 'allow' and 'restrict' value and apply them on config
+						  var val = 'null';
+						  var role = $(this).find('allow').text();
+						  var nme = $(this).find('name').text();
+						  var multi = $(this).find('multivalue').text();
+						  //alert("name "+nme+" role "+role+" multi "+multi);
+			
+						  //if( role === 'user')
+						  {
+							  switch(nme)
+							  {
+								  case 'AutoConnect':
+									  val = $(this).find('default').text();
+									  confDef[0] = val;
+									  cpObj.ac = val;
+									  //alert("set AutoConnect default = " + confDef[0]);
+									  break;
+					
+								  case 'AutoConnectFilterAutoConnect':
+									  val = $(this).find('default').text();
+									  confDef[1] = val;
+									  cpObj.acFilter = val;
+									  //alert("set AutoConnectFilter default = " + confDef[1]);
+									  break;
+					
+								  case 'NetworkType':
+									  val = $(this).find('default').text();
+									  confDef[2] = val;
+									  nwObj.selection = val;
+									  //alert("set NetworkType default = " + confDef[2]);
+									  break;
+					
+								  case 'PromptBeforeRoaming':
+									  val = $(this).find('default').text();
+									  confDef[4] = val;
+									  //alert("set NetworkType default = " + confDef[2]);
+									  break;
+					
+								  case 'APN':			
+									  $(this).find('default').each(function(i)
+									  {
+									  	if( $(this).attr('divid') === 'APN' )
+									  	{
+									  		val = $(this).text();
+									  	}
+									  });
+									  confDef[3] = val;
+									  //alert("set APN default = " + confDef[3]);
+									  break;
+							  }
+						  }
+					  }
+				  );
+	
+				  userItems = $(data).find('picaso_config > picaso_user_settings > component > subcomponent > item');
+				  currentConf = $(data).find('picaso_config > picaso_user_settings');
+	
+				  rawRsp = jqXHR.responseText;
+				  var usrBegin = rawRsp.indexOf('<picaso_user_settings');
+				  var usrEnd = rawRsp.indexOf('</picaso_config>');
+				  usrconf = rawRsp.substring(usrBegin,usrEnd);
+	
+				  userItems.each
+				  (
+					  function(i,item)
+					  {
+						  // alert(i + " " + $(this).find('name').text() + " = " + $(this).find('value').text() );
+						  var val = $(this).find('value').text();
+						  var nme = $(this).find('name').text();
+						  switch(nme)
+						  {
+							  case 'AutoConnect':
+								  cpObj.ac = val;
+								  confAvai[0] = '1';
+								  break;
+				
+							  case 'AutoConnectFilter':
+								  cpObj.acFilter = val;
+								  // alert("recvd AutoConnectFilter as " + cpObj.acFilter);
+								  confAvai[1] = '1';
+								  break;
+				
+							  case 'NetworkType':
+								  nwObj.selection = val;
+								  confAvai[2] = '1';
+								  break;
+				
+							  case 'APN':
+								  apn = val;
+								  confAvai[3] = '1';
+								  break;
+				
+							  case 'LocalRoam':
+								  cpObj.localRoam = val;
+								  break;
+					
+							  case 'InternationalRoam':
+								  cpObj.intlRoam = val;
+								  break;
+				
+							  case 'PromptBeforeRoaming':
+								  cpObj.prompt = val;
+								  confAvai[4] = '1';
+								  break;
+						  }
+					  }
+				  );
+	
+				  for( i = 0; i < confNeeded.length ; i++)
+				  {
+					  if(confAvai[i] === '0')
+					  {
+						  var n = usrconf.indexOf('</subcomponent>');
+						  var part1 = usrconf.substring(0,n);
+						  var part2 = usrconf.substring(n);
+						  part1 += "<item><service>ConnectivityData</service><name>" + confNeeded[i] + "</name><value>" + confDef[i] + "</value><revision>0</revision></item>";
+						  usrconf = part1 + part2;
+						  //alert("usrconf as " + usrconf);
+				  	  }
+				  }
+	
+				  cpObj.text[0] = 'Manually connect';
+				  cpObj.text[1] = 'Auto connect except when roaming';
+				  cpObj.text[2] = 'Auto connect';
+	
+				  // alert("cpObj.text = " + cpObj.text);
+				  // calcualte what is to be displayed for NwType, SubType
+				  // alert("selection = " + nwObj.selection);
+				  var spaces = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+				  if(nwObj.selection)
+				  {
+					  nwObj.main[0] = 'Global';
+					  nwObj.main[1] = 'LTE/CDMA Mode';
+					  nwObj.main[2] = 'GSM/UMTS Mode';
+		
+					  nwObj.sub[0]  = 'GSM Only';
+					  nwObj.sub[1]  = 'GSM/UMTS Dual';
+					  nwObj.sub[2]  = 'UMTS Only';
+		
+					  if(nwObj.selection === 'auto')
+					  {
+						  //nwObj.main[0] = 'Global';
+						  //nwObj.main[1] = 'LTE/CDMA Mode';
+						  //nwObj.main[2] = 'GSM/UMTS Mode';
+						  nwObj.sub[0] = spaces;
+						  nwObj.sub[1] = spaces;
+						  nwObj.sub[2] = spaces;
+						  nwObj.subattr = 'disabled';
+						  nwObj.auto = 'checked_disabled';
+						  nwObj.button = 'disabled';
+						  // No subType, autoSelect checked and disabled , networkSel button disabled
+					  }
+					  else if(nwObj.selection === 'ltecdma')
+					  {
+						  //nwObj.main[0] = 'LTE/CDMA Mode';
+						  //nwObj.main[1] = 'Global';
+						  //nwObj.main[2] = 'GSM/UMTS Mode';
+						  nwObj.sub[0] = spaces;
+						  nwObj.sub[1] = spaces;
+						  nwObj.sub[2] = spaces;
+						  nwObj.subattr = 'disabled';
+						  nwObj.auto = 'checked_disabled';
+						  nwObj.button = 'disabled';
+						  // No subType, autoSelect checked and disabled , networkSel button disabled
+					  }
+					  else if (nwObj.selection === 'umts preferred')
+					  {
+						  //nwObj.main[0] = 'GSM/UMTS Mode';
+						  //nwObj.main[1] = 'Global';
+						  //nwObj.main[2] = 'LTE/CDMA Mode';
+						  //nwObj.sub[0]  = 'GSM/UMTS Dual';
+						  //nwObj.sub[1]  = 'GSM Only';
+						  //nwObj.sub[2]  = 'UMTS Only';
+						  nwObj.subattr = 'enabled';
+						  nwObj.auto = 'checked_disabled';
+						  nwObj.button = 'enabled';
+						  // autoSelect checked and disabled , networkSel button disabled
+					  }
+					  else if (nwObj.selection === 'gprs only')
+					  {
+						  //nwObj.main[0] = 'GSM/UMTS Mode';
+						  //nwObj.main[1] = 'Global';
+						  //nwObj.main[2] = 'LTE/CDMA Mode';
+						  //nwObj.sub[0]  = 'GSM Only';
+						  //nwObj.sub[1]  = 'GSM/UMTS Dual';
+						  //nwObj.sub[2]  = 'UMTS Only';
+						  nwObj.subattr = 'enabled';
+						  nwObj.auto = 'enabled';
+						  nwObj.button = 'enabled';
+					  }
+					  else if (nwObj.selection === 'umts only')
+					  {
+						  //nwObj.main[0] = 'GSM/UMTS Mode';
+						  //nwObj.main[1] = 'Global';
+						  //nwObj.main[2] = 'LTE/CDMA Mode';
+						  //nwObj.sub[0]  = 'UMTS Only';
+						  //nwObj.sub[1]  = 'GSM/UMTS Dual';
+						  //nwObj.sub[2]  = 'GSM Only';
+						  nwObj.subattr = 'enabled';
+						  nwObj.auto = 'enabled';
+						  nwObj.button = 'enabled';
+					  }
+				  }
+	
+				  buildHtml();
+	
+				  if(nwObj.button === 'disabled')
+				  {
+					  $('#nwSelButtonId').addClass('disabled');
+					  $('#nwSelButtonId').unbind('click');
+				  }
+				  else
+				  {
+					  $('#nwSelButtonId').removeClass('disabled');
+					  $('#nwSelButtonId').unbind('click');
+					  $('#nwSelButtonId').bind('click',function(){networkSelection();});
+				  }
+	
+				  if($("#apnId").val() === 'VZWINTERNET')
+				  {
+					  $('#rstApnId').addClass('disabled');
+					  $('#rstApnId').unbind('click');
+				  }
+				  else
+				  {
+					  $('#rstApnId').removeClass('disabled');
+					  $('#rstApnId').unbind('click');
+					  $('#rstApnId').bind('click', function(){handleChange(this.id);});
+				  }
+	
+				  checkSettingsUI(false);
+			  }
+
+			  function findValue(answer,key,index)
+			  {
+				  var theValue = null;
+				  var theValues = $(answer).find(key);
+				  if (theValues.length > 0)
+				  {
+					  theValue = theValues.eq(index).text();
+				  }
+				  return theValue;
+			  }
+
+			  function handleChange(theID)
+			  {
+				  // alert(theID);
+				  switch(theID)
+				  {
+					  case 'apnId':
+					  {
+						  confChanged = true;
+						  confWasChanged = false;
+			
+						  if($("#apnId").val() === 'VZWINTERNET')
+						  {
+							  $('#rstApnId').addClass('disabled');
+							  $('#rstApnId').unbind('click');
+						  }
+						  else
+						  {
+							  $('#rstApnId').removeClass('disabled');
+							  $('#rstApnId').unbind('click');
+							  $('#rstApnId').bind('click', function(){handleChange(this.id);});
+						  }
+					  }
+					  break;
+		
+					  case 'nwTypeSelId':
+					  {
+						  var selectInput = document.getElementById(theID);
+						  var index = selectInput.selectedIndex;
+						  var selected_option_value = selectInput.options[index].value;
+						  // alert(selected_option_value);
+						  if(selected_option_value === "GSM/UMTS Mode")
+						  {
+							  $('#nwSubTypeSelId').removeAttr('disabled');
+							  $('#nwSelButtonId').removeClass('disabled');
+							  $('#nwSelButtonId').unbind('click');
+							  
+							  $('#nwSelButtonId').bind('click',function()
+							  {
+							  	networkSelection();
+							  });
+							  
+							  nwObj.selection = 'umts preferred';
+							  
+							  // ToDo Have to Fill Values in NwSubTypes
+							  $("#nwSubTypeSelId > option").each(function(i,val) 
+							  {
+								  switch(i)
+								  {
+									  case 0:
+										  this.text = "GSM/UMTS Dual";
+										  //this.value = "umts preferred";
+										  this.value = "GSM/UMTS Dual";
+							
+										  break;
+									  case 1:
+										  this.text = "GSM Only";
+										  //this.value = "gprs only";
+										  this.value = "GSM Only";
+							
+										  break;
+									  case 2:
+										  this.text = "UMTS Only";
+										  //this.value = "umts only";
+										  this.value = "UMTS Only";
+							
+										  break;
+								  }
+							  });
+						  }
+						  else
+						  {
+							  if(selected_option_value === "Global")
+								  nwObj.selection = 'auto';
+							  else if(selected_option_value === "LTE/CDMA Mode")
+								  nwObj.selection = 'ltecdma';
+				
+							  $('#nwSubTypeSelId').attr('disabled','disabled');
+							  //$('#nwAutoSelectId').attr('checked','checked');
+							  //$('#nwAutoSelectId').attr('disabled','disabled');
+							  //$('#nwSelButtonId').attr('disabled','disabled');
+							  $('#nwSelButtonId').addClass('disabled');
+							  $('#nwSelButtonId').unbind('click');
+							  
+							  $("#nwSubTypeSelId > option").each(function(i,val) 
+							  {
+								  switch(i)
+								  {
+									  case 0:
+									  case 1:
+									  case 2:
+									  this.text = "                   ";
+									  this.value = "                   ";
+									  break;
+								  }
+							  });
+						  } // end else
+						  confChanged = true;
+						  networkTypeChanged = true;
+						  confWasChanged = false;
+					  }
+					  break;
+		
+					  case 'nwSubTypeSelId':
+					  {
+						  var selectInput = document.getElementById(theID);
+						  var index = selectInput.selectedIndex;
+						  var selected_option_value = selectInput.options[index].value;
+			
+						  if(selected_option_value === "GSM/UMTS Dual" || selected_option_value === "GSM Only" || selected_option_value === "UMTS Only")
+						  {
+							  $('#nwSubTypeSelId').removeAttr('disabled');
+							  $('#nwSelButtonId').removeClass('disabled');
+							  $('#nwSelButtonId').unbind('click');
+							  
+							  $('#nwSelButtonId').bind('click',function()
+							  {
+							  	networkSelection();
+							  });
+							  
+							  if(selected_option_value === "GSM Only")
+								  nwObj.selection = 'gprs only';
+							  else if(selected_option_value === "GSM/UMTS Dual")
+								  nwObj.selection = 'umts preferred';
+							  else
+								  nwObj.selection = 'umts only';
+						  }
+						  else
+						  {
+							  $('#nwSelButtonId').addClass('disabled');
+							  $('#nwSelButtonId').unbind('click');
+						  }
+						  confChanged = true;
+						  networkTypeChanged = true;
+						  confWasChanged = false;
+					  }
+					  break;
+		
+					  case 'connPrefId':
+					  {
+						  confChanged = true;
+						  confWasChanged = false;
+			
+						  var selectInput = document.getElementById(theID);
+						  var index = selectInput.selectedIndex;
+						  var selected_option_value = selectInput.options[index].value;
+						  if(selected_option_value === 'Auto connect')
+						  {
+							  cpObj.ac = 'true'; cpObj.acFilter= 'none';
+							  autoConnectConfirm();
+						  }
+						  if(selected_option_value === 'Manually connect')
+						  {
+							  cpObj.ac = 'false'; cpObj.acFilter= 'none';
+						  }
+						  if(selected_option_value === 'Auto connect except when roaming')
+						  {
+							  // alert("setting cpObj.acFilter to LocalRoamInternationalRoam");
+							  cpObj.ac = 'true'; cpObj.acFilter = 'LocalRoamInternationalRoam';
+							  autoConnectConfirm2();
+						  }
+					  }
+					  break;
+		
+					  case 'rstApnId':
+					  {
+						  $('#apnId').val(apnDef);
+						  confChanged = true;
+					  }
+					  break;
+		
+					  case 'resetId':
+					  {
+						  confChanged = false;
+						  networkTypeChanged = false;
+						  confWasChanged = false;
+						  get_settings();
+					  }
+					  break;
+		
+					  case 'saveId':
+					  {
+		
+						  //	we check the config values to see if they have been changed behind our back, if they have
+						  //	we reset the settings
+			
+						  if (networkTypeChanged)
+						  {
+			
+							  //	if we're trying to change the network type we need to make sure we're
+							  //	not scanning before we allow the settings to be saved
+				
+							  checkConfigValuesChanged(doCheckForScanning, doResetSettings);
+			
+						  }
+						  else
+						  {
+							  checkConfigValuesChanged(doSaveSettings, doResetSettings);
+						  }
+		
+					  }
+					  break;
+	
+				  } // end switch
+	
+				  //	saving has its own process for updating the UI
+	
+				  if (theID != 'saveId')
+				  {
+				  	checkSettingsUI(confChanged);
+				  }
+
+			  } // end function
+
+			  function finishResetSettings()
+			  {
+				  confChanged = false;
+				  networkTypeChanged = false;
+				  confWasChanged = false;
+				  doNetworkSelection = false;
+				  get_settings();
+			  }
+
+			  function doResetSettings()
+			  {
+				  $.postMessage("settings_cannotsave", getParameterByName('parenturl'), window.parent);
+			  }
+
+			  function finishScanningBlock()
+			  {
+				  doNetworkSelection = false;
+			  }
+
+			  function doCheckForScanning()
+			  {
+	
+				  //	check to see if we are scanning, if we are we need to stop the user from saving the
+				  //	changed settings, but we don't need to reset them. Otherwise we need to just save the settings
+	
+				  //	build the URI for the config values
+	
+				  var cvurl = document.location.toString();
+				  var l = cvurl.indexOf("ShowComponentUserSettings");
+				  cvurl = cvurl.substring(0,l);
+				  cvurl += "NetworkSelection";
+	
+				  $.ajax({
+				  url: cvurl,
+				  type: "GET",
+				  data: "",
+				  contentType:"text/plain",
+				  context: document.body,
+				  dataType: "xml",
+	
+				  success: function(data, textStatus, jqXHR)
+				  {
+				  if ($.browser.msie)
+				  {
+				  CollectGarbage();
+				  }
+	
+				  //	check to see if we are scanning
+	
+				  var networkSelectionStatus = $(data).find('networkselection > scan > status').text();
+				  if (networkSelectionStatus == 'scanning')
+				  {
+				  $.postMessage("settings_scanningblock", getParameterByName('parenturl'), window.parent);
+				  }
+				  else
+				  {
+				  doSaveSettings();
+				  }
+	
+				  },
+	
+				  error: function(jqXHR, textStatus, errorThrown)
+				  {
+				  window.setTimeout(doCheckForScanning, 500);
+				  }
+	
+	
+				  });
+
+			  }
+
+			function doSaveSettings()
+			{
+				var saveurl = document.location.toString();
+				var l = saveurl.indexOf("ShowComponentUserSettings");
+				saveurl = saveurl.substring(0,l);
+				saveurl += "SetComponentUserSettings";
+				
+				var bCancel = false;
+				
+				closeSettings(); // PS5 Settings add
+				
+				var fnContinue = function()
+				{
+					//	prompt before roaming is false for auto connect, and true for manual and for "auto connect except when roaming"
+					
+					if((cpObj.ac == 'true') && (cpObj.acFilter == 'none'))
+					{
+						promptBeforeRoaming = 'false';
+					}
+					else
+					{
+						promptBeforeRoaming = 'true';
+					}
+					
+					var xml2Send = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><picaso_config version=\"1.0\"><picaso_user_settings version=\"1.0\"><component><name>";
+					var xmlDoc = $.parseXML( usrconf );
+					var itm = 'null';
+					xml2Send += $(xmlDoc).find('component>name').text() + "</name><subcomponent><name>" + $(xmlDoc).find('subcomponent>name').text() + "</name>";
+					
+					$(xmlDoc).find('item').each(function(i) 
+					{
+						
+						var value = 'null';
+						var value1 = 'null';
+						itm = 'null';
+						switch($(this).find('name').text())
+						{
+							case 'APN':
+								value = $("#apnId").val();
+								break;
+							
+							case 'AutoConnect':
+								value = cpObj.ac;
+								break;
+							
+							case 'AutoConnectFilter':
+								if(cpObj.acFilter === 'none')
+									value = cpObj.acFilter;
+								else if(cpObj.acFilter === 'LocalRoamInternationalRoam')
+								{
+									value = 'LocalRoam';
+									value1 = 'InternationalRoam';
+									// alert("setting AutoConnectFilter to " + value + " and " + value1);
+								}
+								else if(cpObj.acFilter === 'InternationalRoamLocalRoam')
+								{
+									value1 = 'LocalRoam';
+									value = 'InternationalRoam';
+									// alert("setting AutoConnectFilter to " + value + " and " + value1);
+								}
+							break;
+							
+							case 'NetworkType':
+								value = nwObj.selection;
+								break;
+							
+							case 'PromptBeforeRoaming':
+								value = promptBeforeRoaming;
+								break;
+							
+							default:
+								value = $(this).find('value').text();
+								break;
+						
+						} // end switch
+						
+						if(value != 'null')
+						{
+							$(this).find('value').text(value);
+							var it = "service = " + $(this).find('service').text() + "\n" + "name = " + $(this).find('name').text() + "\n";
+							it += "value = " + value + "\n" + "revision = " + $(this).find('revision').text();
+							// alert(it);
+							
+							itm = "<item><service>" + $(this).find('service').text() + "</service>";
+							itm += "<name>" + $(this).find('name').text() + "</name>";
+							itm += "<value>" + value + "</value>";
+							if(value1 != 'null')
+								itm += "<value>" + value1 + "</value>";
+							itm += "<revision>" + $(this).find('revision').text() + "</revision></item>";
+							xml2Send += itm;
+						}
+					}); // end .each call
+						
+					xml2Send += "</subcomponent></component></picaso_user_settings></picaso_config>";
+					//alert(xml2Send);
+					
+					confWasChanged = true;
+					
+					$.ajax(
+					{
+						url: saveurl,
+						type: "post",
+						data: xml2Send,
+						success: function(response, textStatus, jqXHR)
+						{
+						
+							//	after we save, we need to re-read the prefs to get everything updated locally to match what was saved
+						
+							get_settings();
+						
+							//	if the network selection button was clicked we need to launch the network selectio
+							//	window now
+						
+							if (doNetworkSelection)
+							{
+								$.postMessage("networkSelection", getParameterByName('parenturl'), window.parent);
+								doNetworkSelection = false;
+							}
+						
+						},
+						error: function(jqXHR, textStatus, errorThrown)
+						{
+						},
+						complete: function()
+						{
+						}
+					});
+					
+					// closeSettings(); // PS5 Settings remove
+				};
+				
+				if ( confChanged )
+					bCancel = connectionCheckAndDisconnect(fnContinue);
+				
+				if (bCancel)
+				{
+					confWasChanged = false;
+					checkSettingsUI(true);
+					return;
+				}
+				else if ($.browser.opera)
+					window.setTimeout(fnContinue, 3000);
+				else
+					fnContinue();
+			}
+
+			  function checkSettingsUI(confChanged)
+			  {
+
+			  //	hms - the confChanged flag indicates that the user changed something, we need to display the info message and change
+			  //	the state of the buttons
+			  //
+			  //		resetID for the reset button
+			  //		saveID for the save button
+			  //		settings-error-message for the error message and/or spacial padding
+
+			  if (confChanged)
+			  {
+			  document.getElementById("settings-error-message").innerHTML = '<br>Click \"Save Settings\" to save your changes.<br><br><br><br><br><br><br><br><br>';
+			  document.getElementById("saveIdcontainer").innerHTML = "<button id=\"saveId\" onclick=\"handleChange(this.id);\" style=\"cursor:pointer;background-color:#B20B0B;border-style:none;width:120px;height:24px;\"><b><font color=\"white\">&nbsp;&nbsp;&nbsp;Save&nbsp;Settings&nbsp;&nbsp;&nbsp;&nbsp;</b></font></button>";
+			  document.getElementById("resetIdcontainer").innerHTML = "<button id=\"resetId\" onclick=\"handleChange(this.id);\" style=\"cursor:pointer;background-color:#D4D0D0;border-style:none;width:80px;height:24px;\"><b><font color=\"black\">&nbsp;Reset&nbsp;</b></font></button>";
+			  }
+			  else
+			  {
+			  if (confWasChanged)
+			  {
+			  document.getElementById("settings-error-message").innerHTML = '<br>Your Settings have been saved.<br><br><br><br><br><br><br><br><br>';
+			  }
+			  else
+			  {
+			  document.getElementById("settings-error-message").innerHTML = '<br><br><br><br><br><br><br><br><br><br>';
+			  }
+
+			  document.getElementById("saveIdcontainer").innerHTML = "<button id=\"saveId\" style=\"cursor:pointer;background-color:#CCCCCC;border-style:none;width:120px;height:24px;\"><b><font color=\"gray\">&nbsp;&nbsp;&nbsp;Save&nbsp;Settings&nbsp;&nbsp;&nbsp;&nbsp;</b></font></button>";
+			  document.getElementById("resetIdcontainer").innerHTML = "<button id=\"resetId\" onclick=\"handleChange(this.id);\" style=\"cursor:pointer;background-color:#CCCCCC;border-style:none;width:80px;height:24px;\"><b><font color=\"gray\">&nbsp;Reset&nbsp;</b></font></button>";
+			  }
+
+			  }
+
+			  function finishAutoConnectConfirm_Confirm()
+			  {
+			  //	do nothing
+			  }
+
+			  function finishAutoConnectConfirm_Deny()
+			  {
+			  finishResetSettings();
+			  }
+
+			  function autoConnectConfirm()
+			  {
+			  $.postMessage("settings_autoConnectConfirm", getParameterByName('parenturl'), window.parent);
+			  }
+
+			  function autoConnectConfirm2()
+			  {
+			  $.postMessage("settings_autoConnectConfirm2", getParameterByName('parenturl'), window.parent);
+			  }
+
+			  function buildHtml()
+			  {
+			  var br = "<br />";
+			  htmlOut = [];
+
+			  htmlOut.push("<section style=\"font-family:arial;\">");
+
+			  /*
+			  if (debugData != null)
+			  {
+			  htmlOut.push("<div id=\"debugdiv2\">");
+			  htmlOut.push("<h4>");
+			  htmlOut.push(debugData);
+			  htmlOut.push("</h4>");
+			  htmlOut.push("</div>");
+			  }
+			  */
+
+			  htmlOut.push("<form id=\"ConfigControlForm\" onsubmit=\"return false;\">");
+			  htmlOut.push("<div id=\"configformdiv\">");
+
+			  htmlOut.push("<h4>");
+			  htmlOut.push("4G LTE");
+			  htmlOut.push("</h4>");
+			  htmlOut.push(br);
+
+			  // build 'Device connection preference' section
+			  htmlOut.push("<fieldset style=\"border-style:none;\">");
+			  htmlOut.push("<label for=\"connPrefId\" style=\"cursor:default; font-size:12px; \">Device connection preference</label>");
+			  htmlOut.push("<img title=\"Connection preference settings. Selected option will determine device connection behavior during roaming and auto connect.\" src=\"/i/header/png/help-small.png\" alt=\"?\" height=\"10\" width=\"10\" />");
+			  htmlOut.push(br);
+			  htmlOut.push("<select class=\"dropdown\" name=\"connPreferenceSelect\" id=\"connPrefId\" onchange=\"handleChange(this.id);\" size=\"1\" style=\"cursor:default;\">");
+
+			  if(cpObj.ac === 'false')
+			  {
+			  htmlOut.push("<option selected=\"selected\" value=\"" + cpObj.text[0] + "\">" + cpObj.text[0] + "</option>");
+			  htmlOut.push("<option value=\"" + cpObj.text[1] +  "\">" + cpObj.text[1] + "</option>");
+			  htmlOut.push("<option value=\"" + cpObj.text[2] +  "\">" + cpObj.text[2] + "</option>");
+			  }
+			  else if((cpObj.ac === 'true') && (cpObj.acFilter === 'none'))
+			  {
+			  htmlOut.push("<option value=\"" + cpObj.text[0] +  "\">" + cpObj.text[0] + "</option>");
+			  htmlOut.push("<option value=\"" + cpObj.text[1] +  "\">" + cpObj.text[1] + "</option>");
+			  htmlOut.push("<option selected=\"selected\" value=\"" + cpObj.text[2] + "\">" + cpObj.text[2] + "</option>");
+			  }
+			  else if((cpObj.ac === 'true') && (cpObj.acFilter !== 'none'))
+			  {
+			  var indx = cpObj.acFilter.indexOf('Roam');
+			  if(indx !== -1)
+			  {
+			  htmlOut.push("<option value=\"" + cpObj.text[0] +  "\">" + cpObj.text[0] + "</option>");
+			  htmlOut.push("<option selected=\"selected\" value=\"" + cpObj.text[1] + "\">" + cpObj.text[1] + "</option>");
+			  htmlOut.push("<option value=\"" + cpObj.text[2] +  "\">" + cpObj.text[2] + "</option>");
+			  }
+			  }
+
+			  htmlOut.push("</select>");
+			  htmlOut.push("</fieldset>");
+
+			  htmlOut.push(br+br);
+			  // build networkType and subtype
+			  htmlOut.push("<fieldset style=\"border-style:none;\">");
+			  htmlOut.push("<table border=\"0\">");
+			  htmlOut.push("<tr>");
+			  htmlOut.push("<td>");
+			  htmlOut.push("<label for=\"nwTypeId\" style=\"cursor:default; font-size:12px;\">Network type</label>");
+			  htmlOut.push("<img title=\"Preferred Network type to connect to\" src=\"/i/header/png/help-small.png\" alt=\"?\" height=\"10\" width=\"10\" />");
+			  htmlOut.push("</td>");
+			  htmlOut.push("<td>");
+			  htmlOut.push("<label for=\"nwSubTypeId\" style=\"cursor:default; font-size:12px;\">Subtype</label>");
+			  htmlOut.push("<img title=\"Preferred Network subtype if applicable.\" src=\"/i/header/png/help-small.png\" alt=\"?\" height=\"10\" width=\"10\" />");
+			  htmlOut.push("</td>");
+			  htmlOut.push("<td>");
+			  htmlOut.push("</td>");
+			  htmlOut.push("</tr>");
+			  htmlOut.push("<tr>");
+			  htmlOut.push("<td>");
+			  htmlOut.push("<select name=\"nwTypeSel\" id=\"nwTypeSelId\" size=\"1\" onchange=\"handleChange(this.id);\" style=\"cursor:default;\">");
+
+			  if(nwObj.selection === 'auto')
+			  {
+			  htmlOut.push("<option selected=\"selected\" value=\"" + nwObj.main[0] + "\">" + nwObj.main[0] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.main[1] +  "\">" + nwObj.main[1] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.main[2] +  "\">" + nwObj.main[2] + "</option>");
+			  }
+			  else if(nwObj.selection === 'ltecdma')
+			  {
+			  htmlOut.push("<option value=\"" + nwObj.main[0] +  "\">" + nwObj.main[0] + "</option>");
+			  htmlOut.push("<option selected=\"selected\" value=\"" + nwObj.main[1] + "\">" + nwObj.main[1] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.main[2] +  "\">" + nwObj.main[2] + "</option>");
+			  }
+			  else if (nwObj.selection === 'umts preferred')
+			  {
+			  htmlOut.push("<option value=\"" + nwObj.main[0] +  "\">" + nwObj.main[0] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.main[1] +  "\">" + nwObj.main[1] + "</option>");
+			  htmlOut.push("<option selected=\"selected\" value=\"" + nwObj.main[2] + "\">" + nwObj.main[2] + "</option>");
+			  }
+			  else if (nwObj.selection === 'gprs only')
+			  {
+			  htmlOut.push("<option value=\"" + nwObj.main[0] +  "\">" + nwObj.main[0] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.main[1] +  "\">" + nwObj.main[1] + "</option>");
+			  htmlOut.push("<option selected=\"selected\" value=\"" + nwObj.main[2] + "\">" + nwObj.main[2] + "</option>");
+			  }
+			  else if (nwObj.selection === 'umts only')
+			  {
+			  htmlOut.push("<option value=\"" + nwObj.main[0] +  "\">" + nwObj.main[0] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.main[1] +  "\">" + nwObj.main[1] + "</option>");
+			  htmlOut.push("<option selected=\"selected\" value=\"" + nwObj.main[2] + "\">" + nwObj.main[2] + "</option>");
+			  }
+
+			  htmlOut.push("</select>");
+			  htmlOut.push("</td>");
+			  htmlOut.push("<td>");
+			  if(nwObj.subattr === 'disabled')
+			  htmlOut.push("<select name=\"nwSubTypeSel\" id=\"nwSubTypeSelId\" disabled=\"disabled\" size=\"1\" onchange=\"handleChange(this.id);\" style=\"cursor:default;\">");
+			  else
+			  htmlOut.push("<select name=\"nwSubTypeSel\" id=\"nwSubTypeSelId\" size=\"1\" onchange=\"handleChange(this.id);\" style=\"cursor:default;\">");
+
+			  if(nwObj.selection === 'auto')
+			  {
+			  htmlOut.push("<option selected=\"selected\" value=\"" + nwObj.sub[0] + "\">" + nwObj.sub[0] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.sub[1] +  "\">" + nwObj.sub[1] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.sub[2] +  "\">" + nwObj.sub[2] + "</option>");
+			  }
+			  else if(nwObj.selection === 'ltecdma')
+			  {
+			  htmlOut.push("<option selected=\"selected\" value=\"" + nwObj.sub[0] + "\">" + nwObj.sub[0] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.sub[1] +  "\">" + nwObj.sub[1] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.sub[2] +  "\">" + nwObj.sub[2] + "</option>");
+			  }
+			  else if (nwObj.selection === 'umts preferred')
+			  {
+			  htmlOut.push("<option value=\"" + nwObj.sub[0] +  "\">" + nwObj.sub[0] + "</option>");
+			  htmlOut.push("<option selected=\"selected\" value=\"" + nwObj.sub[1] + "\">" + nwObj.sub[1] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.sub[2] +  "\">" + nwObj.sub[2] + "</option>");
+			  }
+			  else if (nwObj.selection === 'gprs only')
+			  {
+			  htmlOut.push("<option selected=\"selected\" value=\"" + nwObj.sub[0] + "\">" + nwObj.sub[0] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.sub[1] +  "\">" + nwObj.sub[1] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.sub[2] +  "\">" + nwObj.sub[2] + "</option>");
+			  }
+			  else if (nwObj.selection === 'umts only')
+			  {
+			  htmlOut.push("<option value=\"" + nwObj.sub[0] +  "\">" + nwObj.sub[0] + "</option>");
+			  htmlOut.push("<option value=\"" + nwObj.sub[1] +  "\">" + nwObj.sub[1] + "</option>");
+			  htmlOut.push("<option selected=\"selected\" value=\"" + nwObj.sub[2] + "\">" + nwObj.sub[2] + "</option>");
+			  }
+
+			  htmlOut.push("</select>");
+			  htmlOut.push("</td>");
+			  htmlOut.push("<td>");
+			  htmlOut.push("<fieldset style=\"border-style:none;\">");
+
+			  htmlOut.push("<a class=\"button\" id=\"nwSelButtonId\"><span class=\"gray\">&nbsp;Network&nbsp;Selection&nbsp;</span></a>");
+
+			  htmlOut.push("</fieldset>");
+			  htmlOut.push("</td>");
+			  htmlOut.push("</tr>");
+			  htmlOut.push("</table>");
+			  htmlOut.push("</fieldset>");
+
+			  htmlOut.push(br);
+			  // build APN Button
+			  htmlOut.push("<fieldset style=\"border-style:none;\">");
+			  htmlOut.push(br);
+			  htmlOut.push("<label for=\"apnLbl\" style=\"cursor:default; margin-left: 0.25em; font-size:12px;\">     APN&nbsp;&nbsp;  </label>");
+			  htmlOut.push("<img title=\"Access point name to connect to. Please note that wrong APN will deprive VMBM internet connection\" src=\"/i/header/png/help-small.png\" alt=\"?\" height=\"10\" width=\"10\" />");
+			  htmlOut.push("<table border=\"0\">");
+			  htmlOut.push("<tr>");
+			  htmlOut.push("<td>");
+			  htmlOut.push("<input id=\"apnId\" onkeyup=\"handleChange(this.id);\" type=\"text\" name=\"apnName\" style=\"font-size:12px;\" value=\"" + apn + "\" />");
+			  htmlOut.push("</td>");
+			  htmlOut.push("<td>");
+			  //htmlOut.push("<fieldset style=\"border-style:none;\">");
+			  htmlOut.push("<a class=\"button\" id=\"rstApnId\"><span class=\"gray\">&nbsp;&nbsp;Restore&nbsp;Default&nbsp;&nbsp;</span></a>");
+			  //htmlOut.push("</fieldset>");
+			  htmlOut.push("</td>");
+			  htmlOut.push("</tr>");
+			  
+			  htmlOut.push("</table>");
+			  htmlOut.push("</fieldset>");
+			  
+			  //	hms
+			  htmlOut.push("<div><span id=\"settings-error-message\" class=\"red-text\" style=\"font-size:12px;\"></span></div>");
+			  
+			  htmlOut.push("<div>");
+			  htmlOut.push("	<table STYLE=\"margin-left: 15.50em; padding-left: 0;\" border=\"0\" width=\"250\" >");
+			  htmlOut.push("		<tr>");
+			  htmlOut.push("			<td align=\"right\">");
+			  htmlOut.push("				<fieldset style=\"border-style:none;\">");
+			  htmlOut.push("				<div id=\"saveIdcontainer\">");
+			  htmlOut.push("					<button id=\"saveId\" onclick=\"handleChange(this.id);\" style=\"cursor:pointer;background-color:#B20B0B;border-style:none;width:120px;height:24px;\"><b><font color=\"white\">&nbsp;&nbsp;&nbsp;Save&nbsp;Settings&nbsp;&nbsp;&nbsp;&nbsp;</b></font></button>");
+			  htmlOut.push("				</div>");
+			  htmlOut.push("				</fieldset>");
+			  htmlOut.push("			</td>");
+			  htmlOut.push("      <td align=\"right\" >");
+			  htmlOut.push("				<fieldset style=\"border-style:none;\">");
+			  htmlOut.push("				<div id=\"resetIdcontainer\">");
+			  htmlOut.push("					<button id=\"resetId\" onclick=\"handleChange(this.id);\" style=\"cursor:pointer;background-color:#D4D0D0;border-style:none;width:80px;height:24px;\"><b><font color=\"black\">&nbsp;Reset&nbsp;</b></font></button>");
+			  htmlOut.push("				</div>");
+			  htmlOut.push("				</fieldset>");
+			  htmlOut.push("			</td>");
+			  htmlOut.push("		</tr>");
+			  htmlOut.push("	</table>");
+			  htmlOut.push("</div>");
+			  htmlOut.push("</div>");
+			  htmlOut.push("</form>");
+			  htmlOut.push("</section>");
+			  
+			  $('#bodyId').html(htmlOut.join('\n'));
+			  
+			  }
+
+		  ]]>
+        </script>
+      </body>
+    </html>
+  </xsl:template>
+</xsl:stylesheet>

@@ -59,6 +59,34 @@ Description: File Selection Dialog Library for KDE Platform
 Homepage: http://www.kde.org/
 Original-Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
 
+Package: module-assistant
+Priority: optional
+Section: kernel
+Installed-Size: 568
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 0.11.4
+Depends: perl, libtext-wrapi18n-perl, bzip2
+Recommends: liblocale-gettext-perl
+Suggests: build-essential, dialog | whiptail
+Size: 101304
+Description: tool to make module package creation easier
+ The module-assistant tool (also known as m-a) helps users and
+ maintainers with managing external kernel modules packaged for
+ Debian. It can do:
+ .
+  - automated preparation of build environment for modules compilation
+    (eg. automatical detection and installation of required kernel
+    source/headers)
+  - automated module source downloads
+  - configuring and keeping track of external and localy built modules
+    packages
+  - semi-automated multiple builds for multiple kernel versions
+ .
+ It also contains some framework to be used by the build-scripts in the
+ accompanying modules-source packages in Debian.
+Original-Maintainer: Eduard Bloch <blade@debian.org>
+
 Package: libgtkspell0
 Priority: optional
 Section: libs
@@ -1377,6 +1405,30 @@ Description: Enlightened Sound Daemon - Common files
  .
  This package contains the documentation and configuration files.
 Original-Maintainer: Josselin Mouette <joss@debian.org>
+
+Package: ndiswrapper-common
+Priority: optional
+Section: misc
+Installed-Size: 71
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: ndiswrapper
+Version: 1.57-1ubuntu1
+Replaces: ndiswrapper-utils
+Suggests: ndiswrapper-source
+Size: 5988
+Description: Common scripts required to use the utilities for ndiswrapper
+ Some vendors do not release specifications of the hardware or provide a
+ Linux driver for their wireless network cards. This project implements
+ Windows kernel API and NDIS (Network Driver Interface Specification) API
+ within Linux kernel. A Windows driver for wireless network card is then
+ linked to this implementation so that the driver runs natively, as though
+ it is in Windows, without binary emulation.
+ .
+ This package contains wrapper scripts to call out to the proper
+ versions of whatever -utils-X.X package is installed.
+Original-Maintainer: Julian Andres Klode <jak@debian.org>
+Homepage: http://ndiswrapper.sourceforge.net/
 
 Package: libatk1.0-dev
 Priority: optional
@@ -5999,6 +6051,23 @@ Description: Debian package development tools
  for example, most packages need make and the C compiler gcc.
 Homepage: http://wiki.debian.org/Teams/Dpkg
 Original-Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+
+Package: dkms
+Priority: optional
+Section: kernel
+Installed-Size: 340
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 2.2.0.3-1ubuntu3linaro1
+Depends: module-init-tools, gcc, make | build-essential | dpkg-dev, coreutils (>= 7.4), patch
+Recommends: fakeroot, menu | sudo
+Size: 79042
+Description: Dynamic Kernel Module Support Framework
+ DKMS is a framework designed to allow individual kernel modules to be upgraded
+ without changing the whole kernel. It is also very easy to rebuild modules as
+ you upgrade kernels.
+Homepage: http://linux.dell.com/dkms
+Original-Maintainer: Dynamic Kernel Modules Support Team <pkg-dkms-maint@lists.alioth.debian.org>
 
 Package: dctrl-tools
 Priority: optional
@@ -13158,6 +13227,29 @@ Description: encoder and decoders such as Base64 and hexadecimal codec
 Original-Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
 Homepage: http://commons.apache.org/codec/
 
+Package: ndiswrapper-source
+Priority: optional
+Section: kernel
+Installed-Size: 189
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: ndiswrapper
+Version: 1.57-1ubuntu1
+Depends: module-assistant, debhelper (>= 5), bzip2
+Suggests: kernel-package
+Size: 147696
+Description: Source for the ndiswrapper Linux kernel module
+ Some vendors do not release specifications of the hardware or provide a
+ Linux driver for their wireless network cards. This project implements
+ Windows kernel API and NDIS (Network Driver Interface Specification) API
+ within Linux kernel. A Windows driver for wireless network card is then
+ linked to this implementation so that the driver runs natively, as though
+ it is in Windows, without binary emulation.
+ .
+ This package provides the source code for the ndiswrapper kernel module.
+Original-Maintainer: Julian Andres Klode <jak@debian.org>
+Homepage: http://ndiswrapper.sourceforge.net/
+
 Package: python2.7
 Priority: optional
 Section: python
@@ -15602,27 +15694,6 @@ Description: Heimdal Kerberos - stringprep implementation
 Original-Maintainer: Brian May <bam@debian.org>
 Homepage: http://www.h5l.org/
 
-Package: libldap2-dev
-Multi-Arch: same
-Priority: extra
-Section: libdevel
-Installed-Size: 1056
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Source: openldap
-Version: 2.4.28-1.1ubuntu4
-Replaces: libopenldap-dev
-Provides: libldap-dev
-Depends: libldap-2.4-2 (= 2.4.28-1.1ubuntu4)
-Conflicts: libldap-dev, libopenldap-dev
-Size: 460426
-Description: OpenLDAP development libraries
- This package allows development of LDAP applications using the OpenLDAP
- libraries. It includes headers, libraries and links to allow static and
- dynamic linking.
-Homepage: http://www.openldap.org/
-Original-Maintainer: Debian OpenLDAP Maintainers <pkg-openldap-devel@lists.alioth.debian.org>
-
 Package: conky
 Priority: extra
 Section: utils
@@ -15643,6 +15714,27 @@ Description: highly configurable system monitor (transitional package)
  It may be safely removed after upgrade/installation.
 Original-Maintainer: Vincent Cheng <Vincentc1208@gmail.com>
 Homepage: http://conky.sourceforge.net/
+
+Package: libldap2-dev
+Multi-Arch: same
+Priority: extra
+Section: libdevel
+Installed-Size: 1056
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: openldap
+Version: 2.4.28-1.1ubuntu4
+Replaces: libopenldap-dev
+Provides: libldap-dev
+Depends: libldap-2.4-2 (= 2.4.28-1.1ubuntu4)
+Conflicts: libldap-dev, libopenldap-dev
+Size: 460426
+Description: OpenLDAP development libraries
+ This package allows development of LDAP applications using the OpenLDAP
+ libraries. It includes headers, libraries and links to allow static and
+ dynamic linking.
+Homepage: http://www.openldap.org/
+Original-Maintainer: Debian OpenLDAP Maintainers <pkg-openldap-devel@lists.alioth.debian.org>
 
 Package: lockfile-progs
 Priority: optional
@@ -15823,6 +15915,29 @@ Description: GNU Spell, a clone of Unix `spell'
  file name arguments, Spell assumes that it should process standard input.
 Original-Maintainer: Giacomo Catenazzi <cate@debian.org>
 Homepage: http://directory.fsf.org/project/spell/
+
+Package: ndiswrapper-dkms
+Priority: optional
+Section: kernel
+Installed-Size: 760
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: ndiswrapper
+Version: 1.57-1ubuntu1
+Depends: dkms (>= 2.1.0.0)
+Size: 176076
+Description: Source for the ndiswrapper Linux kernel module (DKMS)
+ Some vendors do not release specifications of the hardware or provide a
+ Linux driver for their wireless network cards. This project implements
+ Windows kernel API and NDIS (Network Driver Interface Specification) API
+ within Linux kernel. A Windows driver for wireless network card is then
+ linked to this implementation so that the driver runs natively, as though
+ it is in Windows, without binary emulation.
+ .
+ This package provides the source code for ndiswrapper kernel module to be
+ build with dkms.
+Original-Maintainer: Julian Andres Klode <jak@debian.org>
+Homepage: http://ndiswrapper.sourceforge.net/
 
 Package: libnepomukquery4a
 Priority: optional

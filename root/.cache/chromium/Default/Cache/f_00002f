@@ -1,0 +1,740 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<picaso_main_settings version="1.0">
+  <component>
+    <name>wireless</name>
+    <subcomponent>
+      <name>CDMA-GSM-LTE</name>
+      <item>
+        <service>ConnectivityData</service>
+        <name>GpsEnable</name>
+        <revision>0</revision>
+        <default>true</default>
+        <values>true</values>
+        <values>false</values>
+        <allow>mno</allow>
+        <description>Determines if the Component should provide support for GPS.  When set to false, the Component shall disable all GPS functionality</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>GpsAutoStart</name>
+        <revision>0</revision>
+        <default>off</default>
+        <values>on</values>
+        <values>off</values>
+        <values>always on</values>
+        <values>always off</values>
+        <allow>mno</allow>
+        <description>Determines the initial state of the GPS receiver when the device is powered on</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>SolitaryConnection</name>
+        <revision>0</revision>
+        <default>false</default>
+        <allow>mno</allow>
+        <description>Solitary Connection Setting which will disconnect the current connection if it sees other connection</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>SolitaryConnectionTimer</name>
+        <revision>0</revision>
+        <default>20</default>
+        <allow>mno</allow>
+        <description>Solitary Connection Timer-Max timer value before requests for ConData is sent out to get the current connections and starts to disconnect if there is more than one connection</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>IgnoreUnknownPower</name>
+        <revision>0</revision>
+        <default>true</default>
+        <allow>mno</allow>
+        <description>If this setting is turned on, device will treat unknown host power state as full power.</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>ConDataInvalidateTime</name>
+        <revision>0</revision>
+        <default>30000</default>
+        <allow>mno</allow>
+        <description>Wait time, after which VDC will invalidate Con Data from a component if it has not received another Con Data since.</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>AutoConnect</name>
+        <revision>0</revision>
+        <default>false</default>
+        <values>true</values>
+        <values>false</values>
+        <allow>user</allow>
+        <description>Wireless devices will automatically connect unless overridden below.</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>LocalRoam</name>
+        <revision>0</revision>
+        <default>true</default>
+        <values>true</values>
+        <values>false</values>
+        <description>Allows Device to Roam</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>InternationalRoam</name>
+        <revision>0</revision>
+        <default>true</default>
+        <values>true</values>
+        <values>false</values>
+        <requires>
+          <item>
+            <service>ConnectivityData</service>
+            <name>LocalRoam</name>
+            <itemvalue>true</itemvalue>
+          </item>
+          <reversionvalue>false</reversionvalue>
+        </requires>
+        <description>Allows Device to Roam Internationally</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>PromptBeforeRoaming</name>
+        <revision>0</revision>
+        <default>true</default>
+        <values>true</values>
+        <values>false</values>
+        <requires>
+          <item>
+            <service>ConnectivityData</service>
+            <name>LocalRoam</name>
+            <itemvalue>true</itemvalue>
+          </item>
+          <reversionvalue>false</reversionvalue>
+        </requires>
+        <description>Prompt prior to roaming</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>AutoConnectFilter</name>
+        <revision>0</revision>
+        <multivalue>true</multivalue>
+        <default>none</default>
+        <values>none</values>
+        <values>InternationalRoam</values>
+        <values>LocalRoam</values>
+        <allow>user</allow>
+        <requires>
+          <item>
+            <service>ConnectivityData</service>
+            <name>AutoConnect</name>
+            <itemvalue>true</itemvalue>
+          </item>
+          <reversionvalue>none</reversionvalue>
+        </requires>
+        <description>Disable auto connect when roaming</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>NetworkType</name>
+        <revision>0</revision>
+        <default>auto</default>
+        <values>auto</values>
+        <values>gprs only</values>
+        <values>umts only</values>
+        <values>umts preferred</values>
+        <values>ltecdma</values>
+        <values>lte only</values>
+        <values>evdo only</values>
+        <values>1xrtt only</values>
+        <allow>user</allow>
+        <description>User limits on type of network to connect to</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>PowerDownWaitTime</name>
+        <revision>0</revision>
+        <default>500000</default>
+        <minimum>1000</minimum>
+        <allow>enterprise</allow>
+        <description>Time after falling below tx/rx total byte thresholds to power down the device (in milliseconds)</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>PowerOnWaitTime</name>
+        <revision>0</revision>
+        <default>500000</default>
+        <minimum>1000</minimum>
+        <allow>enterprise</allow>
+        <description>Time to wait before powering on device to check for available networks (in milliseconds)</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>MinimumRXBytesThreshold</name>
+        <revision>1</revision>
+        <default>120</default>
+        <minimum>1</minimum>
+        <allow>enterprise</allow>
+        <description>Minimum traffic RX required to consider connection non-idle</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>MinimumTXBytesThreshold</name>
+        <revision>1</revision>
+        <default>120</default>
+        <minimum>1</minimum>
+        <restrict>user</restrict>
+        <description>Minimum traffic TX required to consider connection non-idle</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>ProactiveConnect</name>
+        <revision>0</revision>
+        <default>false</default>
+        <values>true</values>
+        <values>false</values>
+        <restrict>user</restrict>
+        <description>Allow establishment of a connection regardless of other connections</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>DependantConnect</name>
+        <revision>0</revision>
+        <default>false</default>
+        <values>true</values>
+        <values>false</values>
+        <allow>mno</allow>
+        <description>Monitor Other Connections for RAC and Generate own RAC notifications</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>ManageDevicePower</name>
+        <revision>0</revision>
+        <default>false</default>
+        <values>true</values>
+        <values>false</values>
+        <allow>enterprise</allow>
+        <description>Actively Manage the Device's power state to minimize battery drain</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>RACMinimumSignal</name>
+        <revision>0</revision>
+        <default>15</default>
+        <minimum>0</minimum>
+        <allow>mno</allow>
+        <description>Minimum signal Level (%) under which RAC is triggered</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>RACMaximumTransmissionError</name>
+        <revision>0</revision>
+        <default>60</default>
+        <minimum>0</minimum>
+        <allow>mno</allow>
+        <description>Maximum number of transmit (%) failures before RAC is trigged</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>RACMinimumWaitTime</name>
+        <revision>0</revision>
+        <default>5000</default>
+        <minimum>0</minimum>
+        <allow>mno</allow>
+        <description>Minimum time to wait before sending an RAC notification after all other triggers are met (in milliseconds)</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>IdleRollingRange</name>
+        <revision>0</revision>
+        <default>300</default>
+        <minimum>0</minimum>
+        <allow>mno</allow>
+        <description>Duration to calculate rolling average for Rx/Tx (in seconds)</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>roaming_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">300000</default>
+        <default divid="x">480</default>
+        <default divid="y">150</default>
+        <default divid="title">Roaming</default>
+        <default divid="icon">condataAlert.jpg</default>
+        <default divid="noXclose">true</default>
+        <default divid="body">
+          The charge for data transmitted and received while roaming can be as high as $20.48 per MB. Please check your price plan for the applicable charges in the location where you plan to access the service. To check your usage, please go to the "My Verizon" button on the Verizon Mobile Broadband Manager. Data usage charges will apply for accessing this link in accordance with your price plan.
+        </default>
+        <default divid="button1text">Accept</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=acceptroaming';self.close();return false;</default>
+        <default divid="button2text">Cancel</default>
+        <default divid="button2action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=cancelroaming';self.close();return false;</default>
+        <description>prompt for roaming</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>activation_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.notification</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">300000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Activation</default>
+        <default divid="body">Your device is currently inactive, select OK to begin the activation</default>
+        <default divid="button1text">OK</default>
+        <default divid="button1action">window.open('https://wlp-ist.activationnow.com/gateway/rest/idav1?saleType=APOS&amp;srvceType=CONVERGED&amp;cntrctType=POSTPAID&amp;devName=#/discovery/platform/model#&amp;macAddr=#/discovery/uniqueids/ui@type=MAC Address#&amp;msid=#/discovery/uniqueids/ui@type=MSID#&amp;iccid=#/discovery/uniqueids/ui@type=ICCID#&amp;IMEI=#/discovery/uniqueids/ui@type=IMEI#&amp;ESN=#/discovery/uniqueids/ui@type=ESN#&amp;MEID=#/discovery/uniqueids/ui@type=MEID#','mywindow','width=1200,height=1024');self.close();return false;</default>
+        <description>prompt for activation</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>nosim_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <default divid="displaytype">dialog</default>
+        <default divid="timeout">300000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Notification</default>
+        <default divid="icon">sim_test.png</default>
+        <default divid="body">A SIM card is needed to operate the device. Please turn off your device and insert your SIM card.</default>
+        <default divid="button1text">Close</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=close';self.close();return false;</default>
+        <description>prompt for nosim warning</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>failed_to_switch_global_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <default divid="displaytype">dialog</default>	
+        <default divid="timeout">900000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Notification</default>
+        <default divid="icon">sim_test.png</default>
+        <default divid="noXclose">true</default>
+        <default divid="body">Switch to global mode? ([Yes] switch to global, [No] keep the current mode, [Cancel] keep the current mode and do not prompt again)</default>
+        <default divid="button1text">Yes</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=acceptswitching';self.close();return false;</default>
+        <!-- change no / cancel action -->
+        <!--default divid="button2text">No</default>
+        <default divid="button2action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=noswitching';self.close();return false;</default>
+        <default divid="button3text">Cancel</default>
+        <default divid="button3action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=cancelswitching';self.close();return false;</default-->
+        <default divid="button2text">No</default>
+        <default divid="button2action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=cancelswitching';self.close();return false;</default>
+        <default divid="button3text">Cancel</default>
+        <default divid="button3action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=noswitching';self.close();return false;</default>
+
+        <description>failed_to_switch_global_prompt</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>switch_global_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>	
+        <default divid="displaytype">dialog</default>	
+        <default divid="timeout">300000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Notification</default>
+        <default divid="icon">sim_test.png</default>
+        <default divid="body">SIM card is detected. Your Device will switch to global mode now.</default>
+        <default divid="button1text">Close</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=close';self.close();return false;</default>
+        <description>switch_global_prompt</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>never_switch_roam_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <default divid="displaytype">dialog</default>
+        <default divid="timeout">300000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Notification</default>
+        <default divid="icon">sim_test.png</default>
+        <default divid="body">Connection is not allowed while roaming. Go to the Settings menu to change the roaming setting if you need to connect. </default>
+        <default divid="button1text">Close</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=close';self.close();return false;</default>
+        <description>prompt for roaming never warning</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>call_fail_reason_popup</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <default divid="displaytype">dialog</default>
+        <default divid="timeout">1000000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Notification</default>
+        <default divid="icon">sim_test.png</default>
+        <default divid="body">#reason#</default>
+        <default divid="button1text">Close</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=close';self.close();return false;</default>
+        <description></description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_available_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">100000000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="noXclose">true</default>
+        <default divid="body">New Firmware is available to be downloaded</default>
+        <default divid="button1text">Accept</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=acceptdownload';self.close();return false;</default>
+        <default divid="button2text">Cancel</default>
+        <default divid="button2action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=rejectdownload';self.close();return false;</default>
+        <default divid="button3text">Defer</default>
+        <default divid="button3action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=deferdownload';self.close();return false;</default>
+        <description>firmware_available</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_install_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">100000000</default>
+        <default divid="x">280</default>
+        <default divid="y">150</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="noXclose">true</default>
+        <default divid="body">New Firmware is ready to be installed. If you press the 'Accept' button the Firmware update process will begin. Please do not remove your device or power down your computer during the firmware update process.  The Verizon Mobile Broadband Manager will automatically restart to complete the firmware update process.</default>
+        <default divid="button1text">Accept</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=acceptinstall';self.close();return false;</default>
+        <default divid="button2text">Cancel</default>
+        <default divid="button2action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=rejectinstall';self.close();return false;</default>
+        <default divid="button3text">Defer</default>
+        <default divid="button3action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=deferinstall';self.close();return false;</default>
+        <description>firmware_install</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_mandatory_download_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+	<!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">100000000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="noXclose">true</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="body">New Firmware is available to be downloaded</default>
+        <default divid="button1text">Accept</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=acceptdownload';</default>
+        <description>firmware_available</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_optional_download_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">100000000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="noXclose">true</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="body">New Firmware is available to be downloaded</default>
+        <default divid="button1text">Accept</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=acceptdownload';self.close();return false;</default>
+        <default divid="button2text">Defer</default>
+        <default divid="button2action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=deferdownload';self.close();return false;</default>
+        <default divid="button3text">Reject</default>
+        <default divid="button3action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=rejectdownload';self.close();return false;</default>
+        <description>firmware_available</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_no_available_download_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">60000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="body">No Firmware update was found to be available.</default>
+        <default divid="button1text">OK</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=confirm_noupdate';self.close();return false;</default>
+        <description>firmware_available</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_download_fail_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">60000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="body">Verizon Wireless was unable to download the firmware to your device. The specified firmware is not, or is no longer, available on the device.</default>
+        <default divid="button1text">OK</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=download_fail';self.close();return false;</default>
+        <description>firmware_available</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_mandatory_install_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">100000000</default>
+        <default divid="x">280</default>
+        <default divid="y">150</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="noXclose">true</default>
+        <default divid="body">New Firmware is ready to be installed. If you press the 'Accept' button the Firmware update process will begin. Please do not remove your device or power down your computer during the firmware update process.  The Verizon Mobile Broadband Manager will automatically restart to complete the firmware update process.</default>
+        <default divid="button1text">Accept</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=acceptinstall';self.close();return false;</default>
+        <default divid="button2text">Defer</default>
+        <default divid="button2action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=deferinstall';self.close();return false;</default>
+        <description>firmware_install</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_optional_install_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">100000000</default>
+        <default divid="x">280</default>
+        <default divid="y">150</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="noXclose">true</default>
+        <default divid="body">New Firmware is ready to be installed. If you press the 'Accept' button the Firmware update process will begin. Please do not remove your device or power down your computer during the firmware update process.  The Verizon Mobile Broadband Manager will automatically restart to complete the firmware update process.</default>
+        <default divid="button1text">Accept</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=acceptinstall';self.close();return false;</default>
+        <default divid="button2text">Defer</default>
+        <default divid="button2action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=deferinstall';self.close();return false;</default>
+        <default divid="button3text">Reject</default>
+        <default divid="button3action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=rejectinstall';self.close();return false;</default>
+        <description>firmware_install</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_install_not_allowed_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">60000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="body">Failed to start the firmware update. Cannot start the firmware update while the device is connected. Please click "OK" and then click the "Disconnect" button to continue the firmware update.</default>
+        <default divid="button1text">OK</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=install_not_allowed';self.close();return false;</default>
+        <description>firmware_install</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_install_complete_success_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <default divid="displaytype">dialog</default>
+        <default divid="timeout">60000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="body">The Firmware Update was successful.</default>
+        <default divid="button1text">OK</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=confirm_install_success';self.close();return false;</default>
+        <description>firmware_install</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_install_complete_fail_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <default divid="displaytype">dialog</default>
+        <default divid="timeout">60000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="body">The Firmware Update failed.</default>
+        <default divid="button1text">OK</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=confirm_install_fail';self.close();return false;</default>
+        <description>firmware_install</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>firmware_install_complete_fail_404_prompt</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.prompt</default>
+        <default divid="displaytype">dialog</default>
+        <default divid="timeout">60000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Firmware Update</default>
+        <default divid="icon">firmware.jpg</default>
+        <default divid="body">The Firmware update failed integrity check.</default>
+        <default divid="button1text">OK</default>
+        <default divid="button1action">parent.location='#address_root#/notifications?target=#id#&amp;id=notifier&amp;nid=#nid#&amp;action=confirm_install_fail404';self.close();return false;</default>
+        <description>firmware_install</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>message_notify</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.notification</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">60000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Message Notification</default>
+        <default divid="body">#msgBody#</default>
+        <description>notification</description>
+      </item>
+      <item>
+        <service>notification</service>
+        <name>demo_notify</name>
+        <revision>0</revision>
+        <default divid="displaytype">gen.notification</default>
+        <!-- most preferred way to show this -->
+        <default divid="displaytype">dialog</default>
+        <!-- way to display this if first one is not applicable to the targeted PSC -->
+        <default divid="timeout">60000</default>
+        <default divid="x">280</default>
+        <default divid="y">120</default>
+        <default divid="title">Demo Notify</default>
+        <default divid="body">This a demo notification from Synchronoss Virtual Device</default>
+        <description>notification</description>
+      </item>
+      <item>
+        <service>ConnectivityData</service>
+        <name>APN</name>
+        <revision>0</revision>
+        <default divid="name">Verizon 3G</default>
+        <default divid="APN">VZWINTERNET</default>
+        <default divid="class">1</default>
+        <default divid="ip type">IPV4</default>
+        <default divid="enabled">true</default>
+        <default divid="inactive timer">600000</default>
+        <default divid="bearer">lte only</default>
+        <allow>user</allow>
+        <description>APN entry field</description>
+      </item>
+      <item>
+        <service>GpsEula</service>
+        <name>Displayed</name>
+        <revision>0</revision>
+        <value>false</value>
+        <allow>mno</allow>
+        <description>Has GPS disclaimer been displayed?</description>
+      </item>
+      <item>
+        <service>uniqueids</service>
+        <name>uniqueids</name>
+        <revision>0</revision>
+        <value divid="vzwspecial">super special value</value>
+      </item>
+      <item>
+        <service>ConditionManager</service>
+        <name>OnData</name>
+        <revision>0</revision>
+      </item>
+      <item>
+        <service>ConditionManager</service>
+        <name>disconnect</name>
+        <revision>0</revision>
+      </item>
+      <item>
+        <service>ConditionManager</service>
+        <name>setvpnconditiontrue</name>
+        <revision>0</revision>
+      </item>
+      <item>
+        <service>ConditionManager</service>
+        <name>DisconnectNotification</name>
+        <revision>0</revision>
+        <allow>user</allow>
+      </item>
+      <item>
+        <service>UI</service>
+        <name>LandingPageType</name>
+        <revision>0</revision>
+        <default>both</default>
+        <values>per device</values>
+        <values>per computer</values>
+        <values>both</values>
+        <values>off</values>
+        <allow>mno</allow>
+        <description>Landing Page Settings</description>
+      </item>
+      <item>
+        <service>LandingDevice</service>
+        <name>Displayed</name>
+        <default>false</default>
+        <revision>0</revision>
+        <allow>mno</allow>
+        <description>Indicates whether or not the landing page has been displayed</description>
+      </item>
+      <item>
+        <service>LandingDevice</service>
+        <name>HideNoCookies</name>
+        <default>false</default>
+        <revision>0</revision>
+        <allow>mno</allow>
+        <description>Indicates whether landing page should be displayed when cookies have been disabled (and browser does not support localstorage)</description>
+      </item>
+      <item>
+        <service>UpdateCheck</service>
+        <name>ScopeCheck</name>
+        <revision>0</revision>
+        <value divid="Startup">false</value>
+        <value divid="Manual">true</value>
+        <value divid="AutomaticInterval">0</value>
+        <value divid="RetrieveScope">http://scope.smartmobility.activationnow.com/gateway/rest/retrievescope</value>
+        <value divid="ScopesPath">http://scope.smartmobility.activationnow.com/gateway/rest/scope</value>
+        <value divid="BaseUrl">http://scope.smartmobility.activationnow.com/gateway/rest</value>
+        <value divid="StartupConditionExpression">#//wireless/cdma-gsm-lte/condata/state/value# != connected</value>
+        <value divid="IntervalConditionExpression">#//wireless/cdma-gsm-lte/condata/state/value# != connected</value>
+        <value divid="ManualConditionExpression"></value>
+      </item>      
+    </subcomponent>
+  </component>
+</picaso_main_settings>
