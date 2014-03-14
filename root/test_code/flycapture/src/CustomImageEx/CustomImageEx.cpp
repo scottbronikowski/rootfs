@@ -134,7 +134,7 @@ int main(int /*argc*/, char** /*argv*/)
     // unsigned char tempbuf[512];
     // int len;
 
-    //int img_size;
+    int img_size;
 
     double start = current_time();
     for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
@@ -142,7 +142,8 @@ int main(int /*argc*/, char** /*argv*/)
       for (unsigned int i = 0; i < numCameras; i++)
       {
 	/* PGR functions only */
-	PGR_GetFrame(&PG[i]);
+	//PGR_GetFrame(&PG[i]);
+	PGR_GetFrameRaw(&PG[i]);
 
 	/* now with Imlib functions */
 	// Imlib_GetFrame(&PG[i]);
@@ -152,6 +153,50 @@ int main(int /*argc*/, char** /*argv*/)
 	// // /* LOOK TO FUNCTIONALIZE THIS SECTION */
 	// // //SEND IMAGE HERE
 	
+	//first send image dimensions
+	printf("rows = %u, cols = %u, stride = %u, dataSize = %u\n",
+	       PG[i].rows, PG[i].cols, PG[i].stride, PG[i].dataSize);
+	printf("pixFormat = %u, bayerFormat = %u\n", PG[i].pixFormat,
+	       PG[i].bayerFormat);
+
+	if (send(PG[i].sockfd, &PG[i].cols, sizeof(PG[i].cols), 0) <= 0)
+	{
+	  printf("Error sending cols");
+	}
+	if (send(PG[i].sockfd, &PG[i].rows, sizeof(PG[i].rows), 0) <= 0)
+	{
+	  printf("Error sending rows");
+	}	
+	if (send(PG[i].sockfd, &PG[i].stride, sizeof(PG[i].stride), 0) <= 0)
+	{
+	  printf("Error sending stride");
+	}
+	if (send(PG[i].sockfd, &PG[i].dataSize, sizeof(PG[i].dataSize), 0) <= 0)
+	{
+	  printf("Error sending dataSize");
+	}	
+	if (send(PG[i].sockfd, &PG[i].pixFormat, sizeof(PG[i].pixFormat), 0) <= 0)
+	{
+	  printf("Error sending pixFormat");
+	}
+	if (send(PG[i].sockfd, &PG[i].bayerFormat, sizeof(PG[i].bayerFormat), 0) <= 0)
+	{
+	  printf("Error sending bayerFormat");
+	}	
+
+	//then send data
+	img_size = (int)(PG[i].dataSize);
+
+	// unsigned char *frame = 
+	//   (unsigned char *)imlib_image_get_data_for_reading_only();
+
+	if (sendall(PG[i].sockfd, PG[i].pData, &img_size) != 0)
+	{
+	  printf("Error in sendall\n");
+	}
+	
+
+
 	// /* second draft -- works with converted Imlib images*/
 	// // //first send image dimensions
 	// // // printf("rows = %u, cols = %u, stride = %u\n", PG[i].rows,
@@ -602,6 +647,7 @@ void PGR_GetFrameRaw(PointGrey_t* PG)
   // Get the raw image dimensions
   PG->rawImage.GetDimensions(&PG->rows, &PG->cols, &PG->stride, 
 			     &PG->pixFormat, &PG->bayerFormat);
+  PG->dataSize = PG->rawImage.GetDataSize();
 }
 
 

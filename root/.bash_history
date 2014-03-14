@@ -1,35 +1,3 @@
-halt
-cd /
-git status
-mount
-vi /etc/fstab
-mount
-vi /etc/fstab
-reboot
-emacs &
-date
-emacs -nw
-exit
-mount
-cd ..
-git status
-date
-/etc/init.d/time-update.sh start
-git status
-git add -A
-git commit -m "first commit from new card; added noatime,nodiratime to /etc/fstab"
-git push
-ps -ef | grep ssh
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-ifdown wlan0
-ifup wlan0
-ls /etc/init.d
-/etc/init.d/keepalive-ping.sh start
-/etc/init.d/ssh-tunnel.sh start
-pwd
-git status
-git add -A
 git commit -m "started working on point-grey.c to use multiple cameras"
 git push
 reboot
@@ -1998,3 +1966,35 @@ dhcpd wlan2
 dhclient wlan2
 htop
 iptraf
+emacs today.text &
+cd test_code/fly
+cd test_code/flycapture/include/
+grep -r ImageMetadata *
+cd ../src/CustomImageEx/
+make
+htop
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+ls
+./FlyCap2
+lsusb
+exit
+iptraf
+dhclient wlan2
+htop
+emacs today.text &
+ip addr
+ifup wlan2
+ip addr
+ls /sys/class/net
+iwconfig
+ifconfig wlan2 down
+dhclient -r wlan2
+ifconfig wlan2 up
+iwconfig
+iwconfig wlan2 essid "qobi-cccp"
+iwconfig
+iwconfig wlan2 mode managed
+dhcleint wlan2
+dhclient wlan2
