@@ -154,10 +154,10 @@ int main(int /*argc*/, char** /*argv*/)
 	// // //SEND IMAGE HERE
 	
 	//first send image dimensions
-	printf("rows = %u, cols = %u, stride = %u, dataSize = %u\n",
-	       PG[i].rows, PG[i].cols, PG[i].stride, PG[i].dataSize);
-	printf("pixFormat = %u, bayerFormat = %u\n", PG[i].pixFormat,
-	       PG[i].bayerFormat);
+	// printf("rows = %u, cols = %u, stride = %u, dataSize = %u\n",
+	//        PG[i].rows, PG[i].cols, PG[i].stride, PG[i].dataSize);
+	// printf("pixFormat = %u, bayerFormat = %u\n", PG[i].pixFormat,
+	//        PG[i].bayerFormat);
 
 	if (send(PG[i].sockfd, &PG[i].cols, sizeof(PG[i].cols), 0) <= 0)
 	{
@@ -770,6 +770,6 @@ int sendall(int s, unsigned char *buf, int *len)
   }
   
   *len = total; // return number actually sent here
-  printf("sent %d\n", *len);
+  //printf("sent %d\n", *len);
   return n==-1?-1:0; // return -1 on failure, 0 on success
 } 

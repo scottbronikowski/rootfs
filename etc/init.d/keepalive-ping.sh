@@ -15,7 +15,7 @@ start(){
 }
 
 stop(){
-    kill $(ps -ef | grep "[p]ing -i 5 purdue.edu" | awk '{print $2}')
+    kill $(ps -ef | grep "[p]ing -i 5 www.purdue.edu" | awk '{print $2}')
     echo "Killed keepalive-ping process"
 }
 

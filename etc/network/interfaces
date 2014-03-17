@@ -1,5 +1,4 @@
 # interfaces(5) file used by ifup(8) and ifdown(8)
-allow-hotplug wlan0
 
 #auto eth0
 #iface eth0 inet dhcp 
@@ -9,6 +8,8 @@ auto lo
 iface lo inet loopback
 
 #wifi
+
+allow-hotplug wlan0
 auto wlan0
 iface wlan0 inet dhcp
 #      pre-up wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf -B
@@ -17,11 +18,20 @@ iface wlan0 inet dhcp
 	wireless-essid qobi-office
 	wireless-mode managed
 
-#auto wlan2
-allow-hotplug wlan2
-iface wlan2 inet dhcp
+allow-hotplug wlan1
+auto wlan1
+iface wlan1 inet dhcp
 #      pre-up wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf -B
 #      down killall wpa_supplicant
 #	pre-ub /sbin/iwconfig wlan0 essid qobi-cccp
 	wireless-essid qobi-cccp
 	wireless-mode managed
+
+#allow-hotplug wlan2
+#auto wlan2
+#iface wlan2 inet dhcp
+##      pre-up wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf -B
+##      down killall wpa_supplicant
+##	pre-ub /sbin/iwconfig wlan0 essid qobi-cccp
+#	wireless-essid qobi-cccp
+#	wireless-mode managed

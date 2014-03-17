@@ -8,7 +8,7 @@
 # hlsearch on (H) or off (h):
 ~h
 # Last Search Pattern:
-~Msle0~/\<hwclock\>
+~Msle0~/\<auto\>
 
 # Last Substitute Search Pattern:
 ~MSle0&
@@ -17,9 +17,9 @@
 $
 
 # Command Line History (newest to oldest):
-:q!
-:q
 :wq
+:q
+:q!
 :WQ
 :%s///g
 :set fileformat=unix
@@ -33,6 +33,8 @@ $
 :Wq
 
 # Search String History (newest to oldest):
+? \<auto\>
+? \<allow\>
 ? \<hwclock\>
 ? 
 ?/linaro
@@ -47,7 +49,10 @@ $
 # Registers:
 "0	LINE	0
 	OsDetect.register_default(OS_UBUNTU, LsbDetect("Ubuntu"))
-""1	CHAR	0
+""1	LINE	0
+		wireless-mode managed
+	
+"2	CHAR	0
 	ssh -f -N -Y -R 22222:localhost:22 seykhl
 	    echo "Started reverse SSH tunnel to seykhl.ecn.purdue.edu"
 "i	CHAR	0
@@ -56,20 +61,29 @@ $
 	f
 
 # File marks:
-'0  18  0  /etc/init.d/ssh-tunnel.sh
-'1  1  0  /tmp/post_response.txt
-'2  2  13  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
-'3  20  12  /etc/init.d/time-update.sh
-'4  55  55  /etc/init.d/ntp
-'5  22  0  /etc/init.d/ntp
-'6  59  0  /etc/ntp.conf
-'7  1  0  ~/notes3march.txt
-'8  9  77  /etc/init.d/time-update.sh
-'9  14  28  /etc/init.d/monitor.sh
+'0  18  41  /etc/init.d/keepalive-ping.sh
+'1  43  0  /etc/init.d/ssh-tunnel.sh
+'2  1  0  /etc/init.d/keepalive-ping.sh
+'3  18  24  /etc/network/interfaces
+'4  19  0  /etc/network/interfaces
+'5  27  0  /etc/network/interfaces
+'6  18  0  /etc/init.d/ssh-tunnel.sh
+'7  1  0  /tmp/post_response.txt
+'8  2  13  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
+'9  20  12  /etc/init.d/time-update.sh
 
 # Jumplist (newest first):
--'  18  0  /etc/init.d/ssh-tunnel.sh
+-'  18  41  /etc/init.d/keepalive-ping.sh
+-'  1  0  /etc/init.d/keepalive-ping.sh
+-'  43  0  /etc/init.d/ssh-tunnel.sh
 -'  1  0  /etc/init.d/ssh-tunnel.sh
+-'  18  24  /etc/network/interfaces
+-'  1  0  /etc/network/interfaces
+-'  19  0  /etc/network/interfaces
+-'  20  0  /etc/network/interfaces
+-'  27  0  /etc/network/interfaces
+-'  21  0  /etc/network/interfaces
+-'  18  0  /etc/init.d/ssh-tunnel.sh
 -'  1  0  /tmp/post_response.txt
 -'  2  13  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
 -'  1  0  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
@@ -93,7 +107,6 @@ $
 -'  28  2  /etc/init.d/time-update.sh
 -'  19  55  /etc/init.d/time-update.sh
 -'  14  17  /etc/init.d/keepalive-ping.sh
--'  1  0  /etc/init.d/keepalive-ping.sh
 -'  3  68  /etc/fstab
 -'  1  0  /etc/fstab
 -'  138  18  ~/.bashrc
@@ -158,23 +171,54 @@ $
 -'  1  0  /run/udev/data/c81:5
 -'  3  0  /run/udev/data/c81:4
 -'  1  0  /run/udev/data/c81:4
--'  3  0  /run/udev/data/c81:3
--'  1  0  /run/udev/data/c81:3
--'  3  0  /run/udev/data/c81:2
--'  1  0  /run/udev/data/c81:2
--'  2  0  /run/udev/data/c81:14
--'  1  0  /run/udev/data/c81:14
--'  2  0  /run/udev/data/c81:13
--'  1  0  /run/udev/data/c81:13
--'  2  0  /run/udev/data/c81:12
 
 # History of marks within files (newest to oldest):
 
+> /etc/init.d/keepalive-ping.sh
+	"	18	41
+	^	18	42
+	.	18	41
+	+	14	37
+	+	13	41
+	+	9	30
+	+	14	17
+	+	18	41
+
 > /etc/init.d/ssh-tunnel.sh
-	"	18	0
+	"	43	0
 	^	18	1
 	.	18	0
 	+	18	0
+
+> /etc/network/interfaces
+	"	18	24
+	^	18	25
+	.	18	24
+	+	21	0
+	+	20	0
+	+	14	0
+	+	15	0
+	+	16	0
+	+	17	0
+	+	18	0
+	+	19	0
+	+	20	0
+	+	12	0
+	+	14	0
+	+	12	0
+	+	15	0
+	+	16	0
+	+	17	0
+	+	18	0
+	+	19	0
+	+	13	0
+	+	14	0
+	+	15	0
+	+	16	0
+	+	17	0
+	+	18	0
+	+	19	0
+	+	18	24
 
 > /tmp/post_response.txt
 	"	1	0
@@ -264,15 +308,6 @@ $
 	+	15	0
 	+	13	33
 	+	14	28
-
-> /etc/init.d/keepalive-ping.sh
-	"	14	17
-	^	14	18
-	.	14	17
-	+	14	37
-	+	13	41
-	+	9	30
-	+	14	17
 
 > /etc/fstab
 	"	3	68
@@ -625,6 +660,3 @@ $
 	"	11	0
 	.	11	0
 	+	11	0
-
-> /var/lib/dhcp/dhclient.wlan0.leases.LOCAL.1573.leases
-	"	11	0

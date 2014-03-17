@@ -1,229 +1,3 @@
-git commit -m "started working on point-grey.c to use multiple cameras"
-git push
-reboot
-emacs &
-ls
-cp point-grey* ./pointgrey/flycapture.2.6.3.2_armhf/src/testing/
-rm point-grey*
-cd pointgrey/
-ls
-rmdir flycapture.2.5.3.5_armhf
-rm -rf flycapture.2.5.3.5_armhf/*
-rmdir flycapture.2.5.3.5_armhf
-ls
-mkdir tarballs
-mv *.gz ./tarballs/
-ls
-cd flycapture.2.6.3.2_armhf/
-ls
-cd bin
-ls
-./testcapture 
-./testcapture 30
-cd ../..
-ls
-cd ../test_code/
-ls
-mkdir flycapture
-cd ..
-cd pointgrey/
-cp -r ./flycapture.2.6.3.2_armhf/* ../test_code/flycapture/
-cd ../test_code/
-rm -rf flycapture/*
-rmdir flycapture/
-mkdir flycapture
-cd ..
-cd pointgrey/
-cp -av ./flycapture.2.6.3.2_armhf/* ../test_code/flycapture/
-cd ..
-cd test_code/
-cd flycapture/src/
-ls
-cd testing/
-ls
-ls ../test_c/
-man diff
-diff RoverCamDefs.h ../test_c/RoverCamDefs.h 
-rm ../test_c/RoverCamDefs.h 
-diff Makefile ../test_c/Makefile 
-more Makefile 
-make clean_obj
-make
-ls
-emacs &
-cd ..
-grep -r context *
-cd sr
-cd src/testing/
-ls
-touch test-capture-c.c
-ls
-apt-get install imlib2
-apt-get install libimlib2 libimlib2-dev
-ls
-cp Makefile oldMakefile
-make
-darpa-wrap make
-locate libflycapture*
-cd /
-locate libflycapture*
-find libflycapture*
-cd ~/pointgrey/flycapture.2.6.3.2_armhf/
-ls
-cd lib
-ls
-find libflycapture
-locate libflycapture*
-cd /usr/lib
-ls
-ls C*
-cd C
-ls libfly*
-cd ~/pointgrey/flycapture.2.6.3.2_armhf/src/
-cd test_c/
-ls
-more Makefile 
-cd ~/test_code/
-ls
-cd flycapture/
-cd src/
-cd testing/
-ls
-make
-ls
-make
-make clean
-make
-./test-capture 
-make
-./test-capture 
-ulimit -a
-make
-make clean
-make
-./test-capture 
-make clean
-make
-./test-capture 
-make
-./test-capture 
-make clean
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-cd ../..
-grep -r "fc2StartCapture" *
-cd src/testing/
-make
-./test-capture 
-make
-./test-capture 
-make
-./test-capture 
-./test-capture 100
-make
-./test-capture 100
-./test-capture 10 write
-make
-./test-capture 10 write
-./test-capture 100 write
-./test-capture 50 write
-make clean
-make 
-ls
-cp testcapture.cc testcapture-cpp.cpp
-make clean
-ls
-rm testcapture.o
-mv testcapture.cc OLDtestcapture.cc
-ls
-make
-make clean
-make
-ls
-make clean
-ls
-make
-ls
-mv testcapture-cpp.cpp test-capture-cpp.cpp
-ls
-make
-ls
-make
-make clean
-ls
-make
-ls
-./cpp-test-capture 
-./cpp-test-capture 100
-./c-test-capture 10 write
-make clean
-ls
-make
-make clean
-ls
-make
-make clean
-make
-./cpp-test-capture 10 write
-./cpp-test-capture 100 write
-./cpp-test-capture 100
-./c-test-capture 10 write
-make
-./cpp-test-capture 10
-./c-test-capture 10
-make
-./cpp-test-capture 10
-./cpp-test-capture 100
-make
-./cpp-test-capture 100
-make
-./cpp-test-capture 100
-make
-./cpp-test-capture 100
-./cpp-test-capture 10 write
-./c-test-capture 10 write
-make
-./c-test-capture 10 write
-make
-./c-test-capture 10 write
-make
-./cpp-test-capture 10 write
-./cpp-test-capture 100 write
-make clean
 cd ..
 ls
 tar -czvf testing.tar.gz testing/
@@ -1998,3 +1772,229 @@ iwconfig
 iwconfig wlan2 mode managed
 dhcleint wlan2
 dhclient wlan2
+ip addr
+ifup wlan2
+ifconfig wlan2 down
+dhclient -r wlan2
+ifconfig wlan2 up
+iwconfig wlan2 essid "qobi-cccp"
+iwconfig
+dhclient wlan2
+iwconfig
+ip addr
+ifup wlan2
+ifconfig wlan2 up
+ip addr
+ifdown wlan2
+ip addr
+ifup wlan2
+ip addr
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+lsusb
+emacs today.text &
+ping google.com
+ssh scott@scottbronikowski-2.yourhda.com -p 2222
+ip addr
+ssh scott@scottbronikowski-2.yourhda.com -p 2222
+cd /
+git status
+git add -A
+git commit -m "-- First test of sending raw images across network successful, images saved via PGR methods as color PPM.  Getting ~1.2-1.3 frames/sec/cam.
+-- Need to look into ways to speed up transfer to the 5-8 f/s/c range (possibly compression, alternate wifi, ???)"
+git push
+htop
+iptraf
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+cd /
+git status
+git add -A
+git commit -m "-- started on sending the raw PGR image across the network piece by piece...need to finish receiver and test
+"
+git push
+cd /root/test_code/flycapture/bin
+./CustomImageEx 
+cd test_code/flycapture/bin
+./CustomImageEx 
+iwconfig
+iptraf
+htop
+ping google.com
+ls /etc/rc2.d/
+cat /etc/init.d/servo-control.sh 
+insmod /root/build/linux-omap-3.5/drivers/omap3-pwm/pwm.ko servo=1 timers=9,
+insmod /root/build/linux-omap-3.5/drivers/omap3-pwm/pwm.ko servo=1 timers=9,10
+iwconfig
+iwconfig wlan1
+iwconfig wlan2
+iwconfig wlan2 essid qobi-cccp
+iwconfig wlan2
+ip addr
+ifup wlan2
+ip addr
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/keepalive-ping.sh stop
+ifdown wlan0
+ps -ef | grep ping
+kill -9 867
+ip addr
+ping google.com
+ping 192.168.2.1
+ping google.com
+service network restart
+ifconfig
+ping google.com
+dhclient wlan2
+ifdown wlan2
+ifup wlan2
+ip addr
+dhclient wlan2
+ip addr
+ping google.com
+/etc/init.d/keepalive-ping.sh start
+/etc/init.d/ssh-tunnel.sh start
+ps -ef | grep ping
+kill -9 1450
+ps -ef | grep ssh
+kill -9 1453
+lsusb
+ping google.com
+iwconfig
+ip addr
+vi /etc/network/interfaces 
+reboot
+ping google.com
+ip addr
+ifdown wlan0
+ping google.com
+ps -ef | grep ping 
+kill -9 1023
+ps -ef | grep ssh
+kill -9 1061
+vi /etc/network/interfaces 
+reboot
+ping google.com
+/etc/init.d/ssh-tunnel.sh start
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+nano /etc/network/interfaces 
+ip traf
+iptraf
+htop
+ps -ef | grep ping
+kill -9 874
+vi /etc/network/interfaces 
+reboot
+iwconfig
+ls
+dpkg --get-selections | grep crda
+cd /
+locate regulatory.bin
+locate db.txt
+ip addr
+iwconfig
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+iptraf
+nano /etc/network/interfaces 
+reboot
+htop
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+nano /etc/network/interfaces 
+reboot
+iwconfig
+ip addr
+iwconfig
+iptraf 
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+lsusb
+htop
+reboot
+nano /etc/network/interfaces 
+ls /etc/udev/
+ls /etc/udev/rules.d/
+nano /etc/udev/rules.d/70-persistent-net.rules 
+udevadm
+udevadm info
+udevadm --info
+lsmod
+lsusb
+lsmod
+ip addr
+ls /sys/class/net
+ls
+mkdir realtek
+cd realtek/
+ls
+unzip RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911.zip 
+ls
+cd RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911
+ls
+chmod 755 ./install.sh 
+./install.sh 
+ls
+cat install.sh 
+ps -ef | grep ssh
+kill -9 880
+/etc/init.d/ssh-tunnel.sh start
+ps -ef | grep ssh
+kill -9 1083
+/etc/init.d/ssh-tunnel.sh start
+emacs today.text &
+cd realtek/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911
+ls
+cd document/
+ls
+xpdf
+lsusb
+cd ../..
+ls
+git clone https://github.com/dz0ny/rt8192cu.git
+ls
+cd rt
+cd rt8192cu/
+ls
+cat README.md 
+make
+cd ..
+rm -rf rt8192cu/
+ls
+git clone https://github.com/dz0ny/rt8192cu.git
+ls
+cd RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911
+ls
+./install.sh 
+lsusb
+iwconfig
+ip addr
+dhclient -r wlan1
+ifconfig wlan1 up
+iwconfig wlan1 essid "qobi-cccp"
+iwconfig wlan1 mode Managed
+dhclient wlan1
+ifconfig wlan1 down
+ifconfig wlan1 up
+ip addr
+dhclient wlan1
+iwconfig wlan1 essid "qobi-cccp
+"
+iwconfig wlan1 essid "qobi-cccp"
+dhclient wlan1
+iwlist wlan1 scan
+iwlist wlan1 scan | grep ESSID
+iwconfig wlan1
+iwconfig wlan0
+reboot
+emacs today.text &
+exit
+iptraf
+exit
+htop
+exit
