@@ -648,6 +648,7 @@ void PGR_GetFrameRaw(PointGrey_t* PG)
   PG->rawImage.GetDimensions(&PG->rows, &PG->cols, &PG->stride, 
 			     &PG->pixFormat, &PG->bayerFormat);
   PG->dataSize = PG->rawImage.GetDataSize();
+  PG->pData = PG->rawImage.GetData();
 }
 
 
