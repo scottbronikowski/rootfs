@@ -1,85 +1,3 @@
-cd ..
-ls
-tar -czvf testing.tar.gz testing/
-ls
-cd testing
-ls
-make
-./c-test-capture 100
-./cpp-test-capture 100
-./c-test-capture 10
-./c-test-capture 100
-ls
-lla
-./c-test-capture 10
-./cpp-test-capture 10
-make
-./c-test-capture 100
-./cpp-test-capture 100
-make
-./cpp-test-capture 100
-./c-test-capture 100
-./cpp-test-capture 100
-make
-./cpp-test-capture 100
-make
-./cpp-test-capture 
-./c-test-capture
-make
-./c-test-capture
-./cpp-test-capture 
-make
-./cpp-test-capture 
-./c-test-capture
-man cp
-cd /
-git status
-git add -A
-git commit -m "more work on {c-,cpp-}test-capture...both working near speed, but not color...still need to do network stuff"
-git push
-cd /tmp/images/
-ls
-feh *.png
-lla
-feh *
-lla
-feh *
-lla
-feh *
-rm *
-feh *
-lla
-feh *
-top
-cd ~
-cat .bashrc
-cd bin
-ls
-cat architecture-path 
-`architecture-path`
-ls
-pwd
-top
-cd test_code/flycapture/src/
-ls
-cd FlyCapture2Test
-ls
-cd ~
-;s
-ls
-rm Panoramic_camera_final.ppm 
-exit
-emacs &
-cd test_code/flycapture/src/testing
-ls
-./c-test-capture 
-./cpp-test-capture 
-man index++
-./cpp-test-capture 
-./c-test-capture 
-make
-./cpp-test-capture 
-./c-test-capture 
 make
 ./c-test-capture 10 write
 ls /tmp/images
@@ -1998,3 +1916,85 @@ iptraf
 exit
 htop
 exit
+cd test_code/flycapture/bin
+./CustomImageEx 
+cd ../src/CustomImageEx/
+./bigtest.sh 
+htop
+iwconfig
+cd /
+git status
+git add -A
+git commit -m "-- First effort at using TP-LINK TL-W822N USB Wifi adapter.  Driver installed and works, but still need to have it come up automatically on boot.  First test of transfer gets ~2.9 f/s/c.  Getting same "task crda blocked" message as with other USB Wifi--not sure if I can just ignore it"
+git commit -m "-- First effort at using TP-LINK TL-W822N USB Wifi adapter.  Driver installed and works, but still need to have it come up automatically on boot.  First test of transfer gets ~2.9 f/s/c.  Getting same 'task crda blocked' message as with other USB Wifi--not sure if I can just ignore it"
+git push
+iptraf 
+ip addr
+ping google.com
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/keepalive-ping.sh stop
+ps -ef | grep ping
+vi /etc/init.d/keepalive-ping.sh 
+ps -ef | grep "[p]ing -i 5 purdue.edu"
+vi /etc/init.d/ssh-tunnel.sh
+ps -ef | grep ping
+ps -ef | grep "[p]ing -i 5 www.purdue.edu"
+vi /etc/init.d/keepalive-ping.sh 
+/etc/init.d/keepalive-ping.sh stop
+ifdown wlan0
+ping google.com
+ip addr
+dhclient wlan1
+ping google.com
+/etc/init.d/keepalive-ping.sh 
+/etc/init.d/keepalive-ping.sh start
+/etc/init.d/ssh-tunnel.sh start
+STARTING BIGTEST HERE
+ps -ef | grep ping
+kill -9 1435
+/etc/init.d/ssh-tunnel.sh stop
+lsusb
+vi /etc/network/interfaces 
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+cd test_code/flycapture/bin
+./CustomImageEx 
+COUNTRY=US crda
+iptraf
+reboot
+emacs today.text &
+iwconfig
+lsmod
+crda
+iw set country US
+htop
+ps -ef
+kill -9 1403
+kill -9 1405
+kill -9 1406
+iw reg
+locate wireless-regdom
+locate wireless-reg
+cat /usr/share/doc/wireless-regdb/
+ls /usr/share/doc/wireless-regdb/
+wireless-regdb
+ls /lib/udev/rules.d/
+cat /lib/udev/rules.d/85-regulatory.rules 
+ls /etc/wi*
+locate regdb
+reboot
+apt-get install wireless-regdb
+nano today.text 
+apt-get install iw
+apt-get update
+apt-get upgrade
+reboot
+export COUNTRY=US
+echo $COUNTRY
+crda
+clear
+iwconfig
+iw reg get
+ps -ef
+iw list

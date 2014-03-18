@@ -2166,23 +2166,6 @@ Description: The Vorbis General Audio Compression Codec (High Level API)
  and basic manipulation of all Vorbis I audio streams.
 Original-Maintainer: Debian Xiph.org Maintainers <pkg-xiph-maint@lists.alioth.debian.org>
 
-Package: gettext-base
-Status: install ok installed
-Priority: standard
-Section: utils
-Installed-Size: 328
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Source: gettext
-Version: 0.18.1.1-5ubuntu3
-Provides: libasprintf0c2
-Depends: libc6 (>= 2.8), libgcc1 (>= 1:4.4.0), libstdc++6 (>= 4.4.0)
-Description: GNU Internationalization utilities for the base system
- This package includes the gettext and ngettext programs which allow
- other packages to internationalize the messages given by shell scripts.
-Homepage: http://www.gnu.org/software/gettext/
-Original-Maintainer: Santiago Vila <sanvila@debian.org>
-
 Package: libvorbis-dev
 Status: install ok installed
 Multi-Arch: same
@@ -3768,6 +3751,27 @@ Description: Music player for tunes from C64 and C128 (console)
  files.
 Original-Maintainer: Laszlo Boszormenyi (GCS) <gcs@debian.hu>
 
+Package: libnl-dev
+Status: install ok unpacked
+Priority: optional
+Section: libdevel
+Installed-Size: 177
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libnl
+Version: 1.1-7
+Depends: libnl1 (= 1.1-7)
+Suggests: libnl-doc
+Description: development library and headers for libnl
+ This is a library for applications dealing with netlink sockets.
+ The library provides an interface for raw netlink messaging and various
+ netlink family specific interfaces.
+ .
+ This package contains all files that are needed to build applications using
+ libnl.
+Original-Maintainer: Michael Biebl <biebl@debian.org>
+Homepage: http://www.infradead.org/~tgr/libnl/
+
 Package: ri1.8
 Status: install ok installed
 Priority: optional
@@ -5143,26 +5147,6 @@ Description: generic graph components and algorithms in C++
 Homepage: http://www.boost.org/libs/graph/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
 
-Package: dh-apparmor
-Status: install ok installed
-Multi-Arch: foreign
-Priority: extra
-Section: devel
-Installed-Size: 76
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: all
-Source: apparmor
-Version: 2.7.102-0ubuntu3
-Replaces: debhelper (<< 9.20120115ubuntu3)
-Depends: perl
-Breaks: debhelper (<< 9.20120115ubuntu3)
-Description: AppArmor debhelper routines
- This provides the debhelper tools used to install and migrate AppArmor
- profiles. This is normally used from package maintainer scripts during
- install and removal.
-Homepage: http://apparmor.net/
-Original-Maintainer: Kees Cook <kees@debian.org>
-
 Package: libxkbfile1
 Status: install ok installed
 Priority: optional
@@ -5235,28 +5219,6 @@ Description: Perl module providing delayed creation of objects
  use, so spread over time.
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Homepage: http://search.cpan.org/dist/Object-Realize-Later/
-
-Package: debhelper
-Status: install ok installed
-Multi-Arch: foreign
-Priority: optional
-Section: devel
-Installed-Size: 973
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: all
-Version: 9.20120115ubuntu3
-Depends: perl, file (>= 3.23), dpkg-dev (>= 1.16.0), html2text, binutils, po-debconf, man-db (>= 2.5.1-1), dh-apparmor
-Suggests: dh-make
-Conflicts: dpkg-cross (<< 1.18), python-central (<< 0.5.6), python-support (<< 0.5.3)
-Description: helper programs for debian/rules
- A collection of programs that can be used in a debian/rules file to
- automate common tasks related to building debian packages. Programs
- are included to install various files into your package, compress
- files, fix file permissions, integrate your package with the debian
- menu system, debconf, doc-base, etc. Most debian packages use debhelper
- as part of their build process.
-Homepage: http://kitenet.net/~joey/code/debhelper/
-Original-Maintainer: Joey Hess <joeyh@debian.org>
 
 Package: update-inetd
 Status: deinstall ok config-files
@@ -5411,40 +5373,6 @@ Description: Debian package development tools
  for example, most packages need make and the C compiler gcc.
 Homepage: http://wiki.debian.org/Teams/Dpkg
 Original-Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
-
-Package: dkms
-Status: install ok installed
-Priority: optional
-Section: kernel
-Installed-Size: 340
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: all
-Version: 2.2.0.3-1ubuntu3linaro1
-Depends: module-init-tools, gcc, make | build-essential | dpkg-dev, coreutils (>= 7.4), patch
-Recommends: fakeroot, menu | sudo
-Conffiles:
- /etc/dkms/framework.conf 4e72dd99504978161b561f69256c1696
- /etc/dkms/template-dkms-mkdeb/Makefile d97acaeba72f667d3eb69695e9018243
- /etc/dkms/template-dkms-mkdeb/debian/changelog f14e36c92f14270163eb20fa883d463e
- /etc/dkms/template-dkms-mkdeb/debian/copyright de471e376ba2c3886424b5c4649c42d6
- /etc/dkms/template-dkms-mkdeb/debian/control 932cd11859c7c153a8c458325e74497f
- /etc/dkms/template-dkms-mkdeb/debian/dirs ea7a90f4a1be2e0054c3d4920c29e33f
- /etc/dkms/template-dkms-mkdeb/debian/compat 84bc3da1b3e33a18e8d5e1bdd7a18d7a
- /etc/dkms/template-dkms-mkdeb/debian/prerm e7c0c39003edb2255d22a775efa907e5
- /etc/dkms/template-dkms-mkdeb/debian/postinst 205c51f28c7327c0d13f5891fac55d04
- /etc/dkms/template-dkms-mkdeb/debian/rules c385ec9e8f6c6745ad9b9665c38cbd84
- /etc/dkms/template-dkms-mkdeb/debian/README.Debian 6707f5716bc3a2d65fa1b05d81ba8add
- /etc/bash_completion.d/dkms fbb05514b62b89752809c57964679b3b
- /etc/kernel/header_postinst.d/dkms fa05cd89316f042b4ed12090e5aad896
- /etc/kernel/prerm.d/dkms 97139ec74350d65636320b76a11b1f47
- /etc/kernel/postinst.d/dkms fa05cd89316f042b4ed12090e5aad896
- /etc/modprobe.d/dkms.conf 74452a1f23577a0bb30d764a895429d0
-Description: Dynamic Kernel Module Support Framework
- DKMS is a framework designed to allow individual kernel modules to be upgraded
- without changing the whole kernel. It is also very easy to rebuild modules as
- you upgrade kernels.
-Homepage: http://linux.dell.com/dkms
-Original-Maintainer: Dynamic Kernel Modules Support Team <pkg-dkms-maint@lists.alioth.debian.org>
 
 Package: dctrl-tools
 Status: install ok installed
@@ -7908,26 +7836,6 @@ Description: high-quality block-sorting file compressor library - development
 Original-Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
 Homepage: http://www.bzip.org/
 
-Package: gettext
-Status: install ok installed
-Multi-Arch: allowed
-Priority: optional
-Section: devel
-Installed-Size: 3428
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Version: 0.18.1.1-5ubuntu3
-Provides: libasprintf-dev, libgettextpo-dev
-Depends: libc6 (>= 2.4), libcroco3 (>= 0.6.2), libglib2.0-0 (>= 2.12.0), libgomp1 (>= 4.2.1), libncurses5 (>= 5.5-5~), libtinfo5, libunistring0, libxml2 (>= 2.6.27), libgettextpo0 (= 0.18.1.1-5ubuntu3), gettext-base, dpkg (>= 1.15.4) | install-info
-Recommends: curl | wget | lynx-cur
-Suggests: gettext-doc
-Conflicts: autopoint (<= 0.17-11)
-Description: GNU Internationalization utilities
- Interesting for authors or maintainers of other packages or programs
- which they want to see internationalized.
-Homepage: http://www.gnu.org/software/gettext/
-Original-Maintainer: Santiago Vila <sanvila@debian.org>
-
 Package: libqca2-plugin-gnupg
 Status: install ok installed
 Priority: optional
@@ -10015,6 +9923,25 @@ Description: module to manipulate and access URI strings
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Homepage: http://search.cpan.org/dist/URI/
 
+Package: libnl1
+Status: install ok unpacked
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 249
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libnl
+Version: 1.1-7
+Depends: libc6 (>= 2.8), libgcc1 (>= 1:4.4.0)
+Pre-Depends: multiarch-support
+Description: library for dealing with netlink sockets
+ This is a library for applications dealing with netlink sockets.
+ The library provides an interface for raw netlink messaging and various
+ netlink family specific interfaces.
+Original-Maintainer: Michael Biebl <biebl@debian.org>
+Homepage: http://www.infradead.org/~tgr/libnl/
+
 Package: libdrm-radeon1
 Status: install ok installed
 Multi-Arch: same
@@ -11050,31 +10977,6 @@ Description: common files for locale support
  shipped in the language packs and are installed and removed
  automatically.
 
-Package: html2text
-Status: install ok installed
-Priority: optional
-Section: web
-Installed-Size: 223
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Version: 1.3.2a-15
-Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libstdc++6 (>= 4.6)
-Suggests: curl | wget
-Description: advanced HTML to text converter
- html2text is a converter from HTML to plain text.
- .
- html2text reads HTML documents supplied in the command line (or from standard
- input), converts each of them into a stream of plain text characters and
- writes output to the file or the terminal.
- .
- Debian version also can recognize encoding of documents, do on-fly
- input and output recoding.
- .
- html2text was written because the author wasn't happy with the
- output of "lynx -dump" and so he wrote something better.
-Original-Maintainer: Eugene V. Lyubimkin <jackyf@debian.org>
-Homepage: http://www.mbayer.de/html2text/
-
 Package: python-dbus-dev
 Status: install ok installed
 Priority: optional
@@ -11115,29 +11017,6 @@ Description: encoder and decoders such as Base64 and hexadecimal codec
  This is a part of the Apache Commons Project.
 Original-Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
 Homepage: http://commons.apache.org/codec/
-
-Package: ndiswrapper-source
-Status: install ok installed
-Priority: optional
-Section: kernel
-Installed-Size: 189
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: all
-Source: ndiswrapper
-Version: 1.57-1ubuntu1
-Depends: module-assistant, debhelper (>= 5), bzip2
-Suggests: kernel-package
-Description: Source for the ndiswrapper Linux kernel module
- Some vendors do not release specifications of the hardware or provide a
- Linux driver for their wireless network cards. This project implements
- Windows kernel API and NDIS (Network Driver Interface Specification) API
- within Linux kernel. A Windows driver for wireless network card is then
- linked to this implementation so that the driver runs natively, as though
- it is in Windows, without binary emulation.
- .
- This package provides the source code for the ndiswrapper kernel module.
-Original-Maintainer: Julian Andres Klode <jak@debian.org>
-Homepage: http://ndiswrapper.sourceforge.net/
 
 Package: python2.7
 Status: install ok installed
@@ -13279,29 +13158,6 @@ Description: GNU Spell, a clone of Unix `spell'
 Original-Maintainer: Giacomo Catenazzi <cate@debian.org>
 Homepage: http://directory.fsf.org/project/spell/
 
-Package: ndiswrapper-dkms
-Status: install ok installed
-Priority: optional
-Section: kernel
-Installed-Size: 760
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: all
-Source: ndiswrapper
-Version: 1.57-1ubuntu1
-Depends: dkms (>= 2.1.0.0)
-Description: Source for the ndiswrapper Linux kernel module (DKMS)
- Some vendors do not release specifications of the hardware or provide a
- Linux driver for their wireless network cards. This project implements
- Windows kernel API and NDIS (Network Driver Interface Specification) API
- within Linux kernel. A Windows driver for wireless network card is then
- linked to this implementation so that the driver runs natively, as though
- it is in Windows, without binary emulation.
- .
- This package provides the source code for ndiswrapper kernel module to be
- build with dkms.
-Original-Maintainer: Julian Andres Klode <jak@debian.org>
-Homepage: http://ndiswrapper.sourceforge.net/
-
 Package: libboost-thread-dev
 Status: install ok installed
 Priority: optional
@@ -14317,22 +14173,6 @@ Description: C++ wrappers for Cairo (shared libraries)
  This package contains the shared libraries.
 Homepage: http://cairographics.org/cairomm/
 Original-Maintainer: Dave Beckett <dajobe@debian.org>
-
-Package: intltool-debian
-Status: install ok installed
-Priority: optional
-Section: devel
-Installed-Size: 140
-Maintainer: Ubuntu Core Developers <ubuntu-devel@lists.ubuntu.com>
-Architecture: all
-Version: 0.35.0+20060710.1
-Depends: perl, gettext
-Description: Help i18n of RFC822 compliant config files
- Intltool is a bunch of scripts written by the GNOME project to
- internationalize many different file formats.  This package is
- a slightly modified version which adds support for RFC822
- compliant config files, e.g. Debconf templates files.
-Original-Maintainer: Nicolas FRANCOIS (Nekral) <nicolas.francois@centraliens.net>
 
 Package: libopencv-highgui2.3
 Status: install ok installed
@@ -29188,24 +29028,6 @@ Description: Cartographic projection library
  parties programs.
 Original-Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
 Homepage: http://trac.osgeo.org/proj/
-
-Package: po-debconf
-Status: install ok installed
-Multi-Arch: foreign
-Priority: optional
-Section: devel
-Installed-Size: 443
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: all
-Version: 1.0.16+nmu2ubuntu1
-Depends: perl, gettext (>= 0.16), intltool-debian (>= 0.34.2+20060512)
-Recommends: libmail-sendmail-perl, libcompress-zlib-perl
-Suggests: libmail-box-perl
-Description: tool for managing templates file translations with gettext
- This package is an alternative to debconf-utils, and provides tools
- for managing translated debconf templates files with common gettext
- utilities.
-Original-Maintainer: Nicolas FRANCOIS (Nekral) <nicolas.francois@centraliens.net>
 
 Package: libio-multiplex-perl
 Status: install ok installed
