@@ -10,7 +10,10 @@
 ### END INIT INFO
 
 start(){
-    ##first two commands load kernel module and set up bump switches
+    modprobe g_multi
+    echo "Loaded g_multi.ko for USB OTG port"    
+
+    ##next two commands load kernel module and set up bump switches
     insmod /root/build/linux-omap-3.5/drivers/gpio-event/module/gpio-event-drv.ko
     echo "Loaded gpio-event-drv.ko"
     /root/build/linux-omap-3.5/drivers/gpio-event/app/gpio-event 184:f:20 185:f:20

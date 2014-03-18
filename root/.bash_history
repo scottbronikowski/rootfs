@@ -1,265 +1,3 @@
-make
-./c-test-capture 10 write
-ls /tmp/images
-feh /tmp/images *
-display /tmp/images/*
-./cpp-test-capture 10 write
-ls
-make clean
-ls
-cd ..
-tar czf testing.tar.gz testing/
-ls
-rsync testing.tar.gz seykhl:~/temp/testing.tar.gz
-rsync testing.tar.gz seykhl:~.
-rsync testing.tar.gz seykhl:.
-cd ../bin
-ls
-./FlyCap2
-cd ../libs
-cd ../lib
-ls
-cd ../src/testing
-make clean
-make
-rm /tmp/images/*
-./c-test-capture 10 write
-cp test-capture-c.c test-capture-c.c-original
-make
-./c-test-capture 10 write
-rsync -avz vader-rover:/tmp/images/* ~/.
-ls
-feh /tmp/images/*
-./c-test-capture 10 write
-feh /tmp/images/*
-make
-./c-test-capture 10 write
-feh /tmp/images/*
-make
-./cpp-test-capture 10 write
-feh /tmp/images/*
-make
-./c-test-capture 10 write
-ls /tmp/images/
-lla /tmp/images/
-feh /tmp/images/
-./cpp-test-capture 10 write
-feh /tmp/images/*
-./c-test-capture 10 write
-feh /tmp/images/*
-exit
-cd /
-git status
-git add -A
-git commit -m "more work on {c-,cpp-}testcapture--now at 1280x960Y8, 15FPS, c- performs near framerate, cpp- much slower (0-3 fps)"
-git push
-apt-get remove switsh++
-apt-get remove swish++
-git add -A
-git commit -m "apt-get remove swish++"
-git push
-exit
-halt
-ls
-cd test_code/
-ls
-cd ..
-locate flycap
-cd pointgrey/
-ls
-cd flycapture.2.6.3.2_armhf/bin
-ls
-FlyCap2
-./FlyCap2
-lsusb
-./FlyCap2
-cd ..
-ls
-cd src/
-ls
-cd FlyCap2_ARM/
-ls
-emacs &
-ls
-grep "ConvertMonoToOutput" *
-grep "sk_ouptutPixelFormat" *
-grep "sk_outputPixelFormat" *
-cd ..
-grep -r "PIXEL_FORMAT" *
-grep -r "fc2ColorProcessing" *
-grep -r "m_convertedImage" *
-grep -r "ForcePGRY16Mode" *
-bin/FlyCap2 
-cd bin
-ls
-./FlyCap2
-lsusb
-cd ..
-grep -r "ReadRegister" *
-date
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-emacs &
-ps -ef | grep emacs
-killall emacs
-ps -ef | grep emacs
-killall -9 emacs
-ps -ef | grep emacs
-emacs &
-killkl
-reboot
-date
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-ls
-./FlyCap2
-lsusb
-cd ../src/FlyCap2_ARM/
-ls
-grep "SetVideo" *
-cd ../../bin
-./FlyCap2
-lsusb
-./FlyCap2
-lsusb
-reboot
-cd test_code/
-ls
-cd flycapture/src/testing
-ls
-emacs &
-make clean
-make
-./cpp-test-capture 1 write
-make
-./cpp-test-capture 1 write
-MAKE
-make
-./c-test-capture 1 write
-./cpp-test-capture 1 write
-lsusb
-emacs &
-lsusub
-lsusb
-reboot
-cd test_code/flycapture/testing
-cd test_code/flycapture/
-cd src/testing
-ls
-./c-test-capture 1 write
-./cpp-test-capture 1 write
-./c-test-capture 1 write
-./c-test-capture 100 write
-emacs &
-./cpp-test-capture 1 write
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/bin/
-./FlyCap2
-lsusb
-reboot
-cd test_code/flycapture/src/testing
-emacs &
-make
-./cpp-test-capture 1 write
-make
-./cpp-test-capture 1 write
-make
-./cpp-test-capture 1 write
-make
-./cpp-test-capture 1 write
-make
-./cpp-test-capture 1 write
-lsusb
-emacs &
-ls
-mv test.c test_code/flycapture/src/testing
-ls
-cd test_code/flycapture/src/testing
-ls
-make test
-./test 
-make test
-./test
-ls
-make clean
-ls
-rm test
-ls
-diff test-capture-c.c test-capture-c.c-original 
-rm *.c-original
-ls
-cp test-capture-c.c test-capture-c.c-backup
-cp test-capture-cpp.cpp test-capture-cpp.cpp-backup
-make
-./c-test-capture 1 write
-ulimit -c unlimited
-./c-test-capture 1 write
-make
-./c-test-capture 1 write
-make
-./c-test-capture 1 write
-lla /tmp/images
-make
-./c-test-capture 1 write
-make
-./c-test-capture 1 write
-lla /tmp/images
-./c-test-capture 1 write
-make clean
-make
-./c-test-capture 1 write
-make
-./c-test-capture 1 write
-make
-./c-test-capture 1 write
-make test
-./test
-make
-./test
-make
-./test
-make
-./test
-make
-./test
-make
-test
-./test
-touch test2.c
-touch test2.h
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
 ./test2
 make
 ./test2
@@ -1998,3 +1736,265 @@ iwconfig
 iw reg get
 ps -ef
 iw list
+dpkg-query -l | grep iw
+dpkg-query -l | grep iwconfig
+lla /sys/module/cfg80211/
+cd /sys/module/cfg80211/pa
+cd /sys/module/cfg80211/parameters/
+lla
+chmod u+w ieee80211_regdom 
+lla
+vi ieee80211_regdom 
+cat ieee80211_regdom 
+cat /var/log/syslog | grep cfg
+dpkg-query -l | grep iw
+dpkg-query -l | grep libnl
+dpkg-query -l | grep libnl-dev
+dpkg-query -l | grep pkg-config
+apt-get install libnl-dev
+iw dev
+ps -ef | grep iw
+kill -9 1145
+ps -ef | grep iw
+cd /
+git status
+cat .gitignore 
+nano .gitignore 
+git status
+git add -A
+~
+git status
+git add -A
+git rm -f sys/module/8192cu/coresize 
+cat .gitignore 
+nano .gitignore 
+git status
+git add -A
+git commit -m "-- apt-get install libnl1 libnl-dev
+-- changed /sys/module/cfg80211/parameters/ieee80211_regdom from '00' to 'US' using 'cat US >> ...' in an attempt to try to fix crda error message -- FILE NOT IN GIT"
+git push
+ps -ef | grep iw
+reboot
+iw dev wlan1 link
+ls
+ps -ef | grep
+ps -ef 
+locate cfg80211.conf
+locate cfg80211
+ls /etc/modprobe.d/
+locate syslog
+cat /var/log/syslog | grep cfg
+iwconfig
+echo $COUNTRY
+cat /var/log/syslog | grep cfg
+ls /sys/module/cfg80211/parameters/
+cat /sys/module/cfg80211/parameters/ieee80211_regdom 
+cat /sys/module/cfg80211/parameters/cfg80211_disable_40mhz_24ghz 
+nano /sys/module/cfg80211/parameters/ieee80211_regdom 
+cat /sys/module/cfg80211/parameters/ieee80211_regdom 
+sudo nano /sys/module/cfg80211/parameters/ieee80211_regdom 
+lla /sys/module/cfg80211/parameters/
+lla /sys/module/cfg80211/
+cd /sys/module/cfg80211/parameters/
+lla
+echo US >> ieee80211_regdom 
+lla
+cat ieee80211_regdom 
+chmod u-w ieee80211_regdom 
+lla
+cd /sys
+ls
+cd dev
+ls
+cd ..
+cd module/
+ls
+cat cfg80211/parameters/ieee80211_regdom 
+cd 8192cu/
+ls
+lla
+cat coresize 
+lla
+cd ..
+lla
+cd ..
+lla
+cd ..
+lla
+cd sys
+touch .gitignore
+lla
+cd ..
+nano .gitignore 
+iw reg get
+htop
+iwconfig
+iwlist
+cat /sys/module/cfg80211/parameters/
+cat /sys/module/cfg80211/parameters/ieee80211_regdom 
+cat /sys/module/cfg80211/taint
+lla /sys/module/cfg80211/
+cd /sys/module/cfg80211/par
+cd /sys/module/cfg80211/parameters/
+ls
+cat ieee80211_regdom 
+lla
+chmod u+w ieee80211_regdom 
+echo US>>ieee80211_regdom 
+cat ieee80211_regdom 
+lla
+chmod u-w ieee80211_regdom 
+cat ieee80211_regdom 
+reboot
+iw
+exit
+cat /sys/module/cfg80211/parameters/ieee80211_regdom 
+iwlist
+iwconfig
+ilsusb
+lsusb
+reboot
+iwconfig
+apt-get purge iw
+iwconfig
+apt-get install iw
+iw
+iw list
+lla
+iw
+iw help
+iw list
+lla
+dpkg-query -l | grep nl80211
+apt-get install nl80211
+lsusb
+reboot
+lsusb
+ps -ef | grep ssh
+kill -9 894
+/etc/init.d/ssh-tunnel.sh start
+iwconfig
+iwconfig wlan1 txpower 30dBm
+apt-get purge crda wireless-crda wireless-regdb
+reboot
+dmesg | grep crda
+dmesg | tail
+dmesg
+crda
+cat /var/log/syslog | grep crda
+dmesg
+dmesg tail
+cat /var/log/syslog | tail -n20
+lsmod
+touch /etc/modprobe.d/8192cu.conf
+nano /etc/modprobe.d/8192cu.conf 
+iwconfig
+iwconfig
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+iwconfig
+lsusb
+reboot
+iwconfig wlan1 power off
+iwconfig wlan1 power on
+iwconfig
+iptraf
+htop
+cd test_code/flycapture/src/Cu
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+iwconfig
+iptraf
+ps -ef | grep ping
+kill -9 857
+lsusb
+tail -F /var/log/syslog
+lsusb
+ls
+lsusb
+cd /sys/bus/usb/
+ls
+cd devices/
+ls
+lla
+tail -F /var/log/syslog
+ls
+lla
+cd usb1
+ls
+lla
+cat bConfigurationValue 
+cat quirks 
+cat avoid_reset_quirk 
+tail -F /var/log/syslog
+lsusb
+reboot
+lsusb
+cd
+cd /sys/bus/usb/
+ls
+cd devices/
+ls
+lla
+cd 1-0\:1.0
+ls
+tail -F /var/log/syslog
+cd ..
+ls
+lsusb
+lsmod
+lsusb
+dmesg | grep usb
+ps -ef | grep ping
+kill -9 862
+ls /etc/rc2.d/
+cat /etc/init.d/servo-control.sh 
+cat /etc/init.d/pinmux.sh 
+ls /etc/rc2.d/
+cat /etc/init.d/gpio-
+cat /etc/init.d/gpio-monitor.sh 
+vi /etc/init.d/gpio-monitor.sh 
+ls
+reboot
+depmod
+lsmod
+ls /sys/devices/platform/
+ls /sys/devices/platform/ | grep usb
+cd /sys/devices/platform/musb-omap2430/
+ls
+cat modalias 
+cd musb-hdrc/
+ls
+cat mode 
+lla
+echo host > mode 
+cat mode
+echo host >> mode 
+cat mode
+nano mode
+cat mode
+nano mode
+cat mode
+echo host >> ./mode
+cat mode
+lsusb
+echo host >> ./mode
+cd /
+locate g_serial
+cd /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/usb/
+ls
+cd gadget/
+ls
+modinfo g_serial
+modprobe g_serial
+lsusb
+modprobe -r g_serial
+modprobe g_multi
+lsusb
+modinfo g_multi
+lsusb
+clear
+tail -F /var/log/syslog
+tail -f /var/log/syslog
+lsusb
+reboot
