@@ -102,8 +102,6 @@ void *get_in_addr(struct sockaddr *sa);
 int ClientConnect(const char* server, const char* port);
 int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras);
 int sendall(int s, unsigned char *buf, int *len);
-int SendMetadata (PointGrey_t* PG);
-int SendFrame(PointGrey_t* PG);
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -136,7 +134,7 @@ int main(int /*argc*/, char** /*argv*/)
     // unsigned char tempbuf[512];
     // int len;
 
-    //int img_size;
+    int img_size;
 
     double start = current_time();
     for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
@@ -155,20 +153,49 @@ int main(int /*argc*/, char** /*argv*/)
 	// // /* LOOK TO FUNCTIONALIZE THIS SECTION */
 	// // //SEND IMAGE HERE
 	
-	if (imageCount == 0)
+	//first send image dimensions
+	// printf("rows = %u, cols = %u, stride = %u, dataSize = %u\n",
+	//        PG[i].rows, PG[i].cols, PG[i].stride, PG[i].dataSize);
+	// printf("pixFormat = %u, bayerFormat = %u\n", PG[i].pixFormat,
+	//        PG[i].bayerFormat);
+
+	if (send(PG[i].sockfd, &PG[i].cols, sizeof(PG[i].cols), 0) <= 0)
 	{
-	  //try sending metadata only the first time
-	  if (SendMetadata(&PG[i]) != 0)
-	  {
-	    printf("Error sending metadata\n");
-	  }
+	  printf("Error sending cols");
 	}
+	if (send(PG[i].sockfd, &PG[i].rows, sizeof(PG[i].rows), 0) <= 0)
+	{
+	  printf("Error sending rows");
+	}	
+	if (send(PG[i].sockfd, &PG[i].stride, sizeof(PG[i].stride), 0) <= 0)
+	{
+	  printf("Error sending stride");
+	}
+	if (send(PG[i].sockfd, &PG[i].dataSize, sizeof(PG[i].dataSize), 0) <= 0)
+	{
+	  printf("Error sending dataSize");
+	}	
+	if (send(PG[i].sockfd, &PG[i].pixFormat, sizeof(PG[i].pixFormat), 0) <= 0)
+	{
+	  printf("Error sending pixFormat");
+	}
+	if (send(PG[i].sockfd, &PG[i].bayerFormat, sizeof(PG[i].bayerFormat), 0) <= 0)
+	{
+	  printf("Error sending bayerFormat");
+	}	
 
 	//then send data
-	if (SendFrame(&PG[i]) != 0)
+	img_size = (int)(PG[i].dataSize);
+
+	// unsigned char *frame = 
+	//   (unsigned char *)imlib_image_get_data_for_reading_only();
+
+	if (sendall(PG[i].sockfd, PG[i].pData, &img_size) != 0)
 	{
-	  printf("Error sending data\n");
+	  printf("Error in sendall\n");
 	}
+	
+
 
 	// /* second draft -- works with converted Imlib images*/
 	// // //first send image dimensions
@@ -746,58 +773,3 @@ int sendall(int s, unsigned char *buf, int *len)
   //printf("sent %d\n", *len);
   return n==-1?-1:0; // return -1 on failure, 0 on success
 } 
-
-int SendMetadata (PointGrey_t* PG)
-{
-  //first send image dimensions
-  // printf("rows = %u, cols = %u, stride = %u, dataSize = %u\n",
-  //        PG->rows, PG->cols, PG->stride, PG->dataSize);
-  // printf("pixFormat = %u, bayerFormat = %u\n", PG->pixFormat,
-  //        PG->bayerFormat);
-
-  if (send(PG->sockfd, &PG->cols, sizeof(PG->cols), 0) <= 0)
-  {
-    printf("Error sending cols");
-    return -1;
-  }
-  if (send(PG->sockfd, &PG->rows, sizeof(PG->rows), 0) <= 0)
-  {
-    printf("Error sending rows");
-    return -1;
-  }	
-  if (send(PG->sockfd, &PG->stride, sizeof(PG->stride), 0) <= 0)
-  {
-    printf("Error sending stride");
-    return -1;
-  }
-  if (send(PG->sockfd, &PG->dataSize, sizeof(PG->dataSize), 0) <= 0)
-  {
-    printf("Error sending dataSize");
-    return -1;
-  }	
-  if (send(PG->sockfd, &PG->pixFormat, sizeof(PG->pixFormat), 0) <= 0)
-  {
-    printf("Error sending pixFormat");
-    return -1;
-  }
-  if (send(PG->sockfd, &PG->bayerFormat, sizeof(PG->bayerFormat), 0) <= 0)
-  {
-    printf("Error sending bayerFormat");
-    return -1;
-  }	
-  //if we haven't hit a return yet, we succeeded
-  return 0;
-}
-
-int SendFrame(PointGrey_t* PG)
-{
-  int img_size = (int)(PG->dataSize);
-    
-  if (sendall(PG->sockfd, PG->pData, &img_size) != 0)
-  {
-    printf("Error in sendall\n");
-    return -1;
-  }
-  
-  return 0;
-}
