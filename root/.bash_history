@@ -1,56 +1,3 @@
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-lla /tmp/images
-make
-./test2
-lla /tmp/images
-make
-./test2
-make
-./test2
-cp test2.c test2.c.backup
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-make
-./test2
-./test2 100
-./test2 10 write
-make
-./test2 100
-make
-./test2 100
-./test2 40
-lsusb
-dmesg | tail
-less dmesg
-dmesg
-top
-htop
 top
 emacs &
 cd test_code/flycapture/include/C
@@ -1998,3 +1945,56 @@ tail -F /var/log/syslog
 tail -f /var/log/syslog
 lsusb
 reboot
+lsusb
+halt
+lsusb
+emacs today.text &
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+lsusb
+./bigtest.sh 
+cd /
+git status
+git add -A
+git commit -m "-- changing of /sys/module/cfg80211/parameters/ieee80211_regdom did not work--file gets rewritten at boot
+-- attempting to uninstall crda, wireless-crda, wireless-regdb to fix
+   apt-get purge crda wireless-crda wireless-regdb
+-- purge of crda/regdb seemed to work
+-- still having issues with USB port quitting after a certain amount of time (non-deterministic)
+-- added 'modprobe g_multi' to /etc/init.d/gpio-monitor.sh to load module needed to enable USB OTG port as second USB"
+git push
+git status
+git add -A
+git commit -m "-- Modified CustomImageEx.cpp with methods to just transfer image data on first image to see if it speeds things up...still need to finish work on camera-server.cpp to get it to break out of fork before we can see if it speeds things up or not"
+git push
+ps -ef | grep Custom
+cd test_code/flycapture/bin
+./CustomImageEx 
+lsusb
+./CustomImageEx 
+lsusb
+./CustomImageEx 
+iptraf
+clear
+ls
+whereis 7za
+ls
+cd miniz
+ls
+htop
+top
+htop
+lsusb
+iwconfig
+cd test_code/flycapture/bin
+./CustomImageEx 
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+./CustomImageEx 
+halt
+cd test_code/flycapture/bin
+./CustomImageEx 
+emacs today.text &
+cd test_code/flycapture/
+grep -ri "getdatasize" *
+iptraf

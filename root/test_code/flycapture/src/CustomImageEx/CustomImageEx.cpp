@@ -147,6 +147,17 @@ int main(int /*argc*/, char** /*argv*/)
 	//PGR_GetFrame(&PG[i]);
 	PGR_GetFrameRaw(&PG[i]);
 
+	//check image dimensions
+	// printf("rows = %u, cols = %u, stride = %u, dataSize = %u ",
+	//        PG[i].rows, PG[i].cols, PG[i].stride, PG[i].dataSize);
+	// printf("pixFormat = %u, bayerFormat = %u\n", PG[i].pixFormat,
+	//        PG[i].bayerFormat);
+	
+
+	if (imageCount % 10 == 0)
+	  printf("Captured %u-%d\n",PG[i].cameraInfo.serialNumber, imageCount);
+	
+
 	/* now with Imlib functions */
 	// Imlib_GetFrame(&PG[i]);
 	// //Imlib_GetFrameWithResize(&PG[i]);
@@ -169,6 +180,10 @@ int main(int /*argc*/, char** /*argv*/)
 	{
 	  printf("Error sending data\n");
 	}
+	// else
+	// {
+	//   printf("Sent %u-%u\n", PG[i].cameraInfo.serialNumber, imageCount);
+	// }
 
 	// /* second draft -- works with converted Imlib images*/
 	// // //first send image dimensions
@@ -227,8 +242,7 @@ int main(int /*argc*/, char** /*argv*/)
 
 	/* use OpenCV functions here*/
 	/* OpenCV */
-    	if (imageCount % 10 == 0)
-    	  printf("Captured %u-%d\n",PG[i].cameraInfo.serialNumber, imageCount);
+    	
       }
     }
     double stop = current_time();
@@ -239,26 +253,28 @@ int main(int /*argc*/, char** /*argv*/)
     printf("%d images per camera taken in %f seconds (%f images/sec/cam)\n",
     	   k_numImages, elapsed, images_per_sec);
     
-    //grab and save one last image from each camera, after time has been measured
-    // Since this section of code saves images in the k_OutputDir folder,
-    // must ensure that this folder exists and we have permissions to write to it
-    if (CheckSaving(k_OutputDir) != 0)
-    {
-      printf("Cannot save to %s, please check permissions\n",k_OutputDir);
-      return -1;
-    }
-    for (unsigned int i = 0; i < numCameras; i++)
-    {
-      /* PGR functions only*/
-      PGR_GetFrame(&PG[i]);
-      PGR_SaveImage(&PG[i]);
+    /* SAVING BLOCK */
+    // //grab and save one last image from each camera, after time has been measured
+    // // Since this section of code saves images in the k_OutputDir folder,
+    // // must ensure that this folder exists and we have permissions to write to it
+    // if (CheckSaving(k_OutputDir) != 0)
+    // {
+    //   printf("Cannot save to %s, please check permissions\n",k_OutputDir);
+    //   return -1;
+    // }
+    // for (unsigned int i = 0; i < numCameras; i++)
+    // {
+    //   /* PGR functions only*/
+    //   PGR_GetFrame(&PG[i]);
+    //   PGR_SaveImage(&PG[i]);
 
-      /* now with Imlib functions */
-      //Imlib_GetFrame(&PG[i]);
-      //Imlib_SaveImage(&PG[i]);
+    //   /* now with Imlib functions */
+    //   //Imlib_GetFrame(&PG[i]);
+    //   //Imlib_SaveImage(&PG[i]);
 
-      /* use OpenCV functions here */
-    }
+    //   /* use OpenCV functions here */
+    // }
+    /* END SAVING BLOCK */
 
     PGR_StopAndCleanup(PG, numCameras);
     printf( "Done!\n" );
@@ -616,12 +632,17 @@ void PGR_GetFrameRaw(PointGrey_t* PG)
 {
   // Retrieve an image
   CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
+  //printf("Captured from %u / ", PG->cameraInfo.serialNumber);
   //printf("rawImage.GetDataSize() = %u\n", PG->rawImage.GetDataSize());
   // Get the raw image dimensions
   PG->rawImage.GetDimensions(&PG->rows, &PG->cols, &PG->stride, 
 			     &PG->pixFormat, &PG->bayerFormat);
+  //printf("got dimensions / ");
   PG->dataSize = PG->rawImage.GetDataSize();
+  //printf("got data size / ");
   PG->pData = PG->rawImage.GetData();
+  //memcpy(PG->pData, PG->rawImage.GetData(), PG->dataSize); //SEGFAULTS
+  //printf("got data, strlen(data) = %zu\n", strlen((const char*)PG->pData));
 }
 
 

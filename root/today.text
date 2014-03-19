@@ -1,14 +1,15 @@
--- Modified CustomImageEx.cpp with methods to just transfer image data on first image to see if it speeds things up...still need to finish work on camera-server.cpp to get it to break out of fork before we can see if it speeds things up or not
+-- Noticed some issues with USB OTG port when cameras were connected to it--sometimes gave error 'musb_host_rx 1625: Rx interrupt with no errors or packet!' which would cause image capture to stop.  Couldn't find an easy workaround, so went back to putting cameras and wifi in main USB port.
+-- Finished mod of camera-server.cpp to break out of forked receive process when no image data received--no significant speedup.
 
 
 Buffers
 ----------------------------------------
-.   CustomImageEx.cpp    20906  C++/l		  ~/test_code/flycapture/src/CustomImageEx/CustomImageEx.cpp
-  * today.text            1502  Text		  ~/today.text
+    CustomImageEx.cpp    22846  C++/l		  ~/test_code/flycapture/src/CustomImageEx/CustomImageEx.cpp
+    today.text            3778  Text		  ~/today.text
     FlyCapture2Defs.h    60497  C++/l		  ~/test_code/flycapture/include/FlyCapture2Defs.h
-    monitor.cc            3657  C++/l		  ~/test_code/monitor.cc
     Image.h              20398  C++/l		  ~/test_code/flycapture/include/Image.h
     monitor.h              592  C++/l		  ~/test_code/monitor.h
+    monitor.cc            3657  C++/l		  ~/test_code/monitor.cc
     test-capture-cpp.cp: 21345  C++/l		  ~/test_code/flycapture/src/testing/test-capture-cpp.cpp
     test2.h               2022  C++/l		  ~/test_code/flycapture/src/support/test2.h
     test2.c               8096  C/l		  ~/test_code/flycapture/src/support/test2.c

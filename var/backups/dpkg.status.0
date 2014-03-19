@@ -1821,19 +1821,6 @@ Description: Manipulate IPv4/IPv6 netblocks in CIDR notation
 Original-Maintainer: Bart Martens <bartm@debian.org>
 Homepage: http://search.cpan.org/dist/Net-CIDR/
 
-Package: wireless-crda
-Status: install ok installed
-Priority: optional
-Section: admin
-Installed-Size: 27
-Maintainer: Ubuntu Kernel Team <kernel-team@lists.ubuntu.com>
-Architecture: armhf
-Version: 1.16
-Depends: crda (>= 1.1.1-1ubuntu2)
-Description: Wireless Central Regulatory Domain Agent
- This package depends on the CRDA agent for wireless drivers to
- determine the regulatory domain channel and power settings.
-
 Package: libxml2
 Status: install ok installed
 Multi-Arch: same
@@ -3750,6 +3737,27 @@ Description: Music player for tunes from C64 and C128 (console)
  SID tunes. The package includes a program (sid2wav) for creating .wav
  files.
 Original-Maintainer: Laszlo Boszormenyi (GCS) <gcs@debian.hu>
+
+Package: libnl-dev
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 177
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libnl
+Version: 1.1-7
+Depends: libnl1 (= 1.1-7)
+Suggests: libnl-doc
+Description: development library and headers for libnl
+ This is a library for applications dealing with netlink sockets.
+ The library provides an interface for raw netlink messaging and various
+ netlink family specific interfaces.
+ .
+ This package contains all files that are needed to build applications using
+ libnl.
+Original-Maintainer: Michael Biebl <biebl@debian.org>
+Homepage: http://www.infradead.org/~tgr/libnl/
 
 Package: ri1.8
 Status: install ok installed
@@ -9901,6 +9909,25 @@ Description: module to manipulate and access URI strings
  interface, which implements both the old and the new interface.
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Homepage: http://search.cpan.org/dist/URI/
+
+Package: libnl1
+Status: install ok installed
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 249
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libnl
+Version: 1.1-7
+Depends: libc6 (>= 2.8), libgcc1 (>= 1:4.4.0)
+Pre-Depends: multiarch-support
+Description: library for dealing with netlink sockets
+ This is a library for applications dealing with netlink sockets.
+ The library provides an interface for raw netlink messaging and various
+ netlink family specific interfaces.
+Original-Maintainer: Michael Biebl <biebl@debian.org>
+Homepage: http://www.infradead.org/~tgr/libnl/
 
 Package: libdrm-radeon1
 Status: install ok installed
@@ -17241,27 +17268,6 @@ Description: The NET-3 networking toolkit
 Homepage: http://net-tools.berlios.de/
 Original-Maintainer: net-tools Team <pkg-net-tools-maintainers@lists.alioth.debian.org>
 
-Package: wireless-regdb
-Status: install ok installed
-Multi-Arch: foreign
-Priority: optional
-Section: net
-Installed-Size: 52
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: all
-Version: 2011.04.28-1ubuntu3
-Suggests: crda
-Description: wireless regulatory database
- This package contains the wireless regulatory database used by the Central
- Regulatory Database Agent (CRDA) to configure wireless devices to operate
- within the radio spectrum allowed in the local jurisdiction.
- .
- This regulatory information is provided with no warranty either expressed or
- implied. Only Linux drivers which use cfg80211 framework can make use of the
- regulatory database and CRDA.
-Homepage: http://wireless.kernel.org/en/developers/Regulatory/#Theregulatorydatabase
-Original-Maintainer: Ben Hutchings <ben@decadent.org.uk>
-
 Package: libxfixes3
 Status: install ok installed
 Multi-Arch: same
@@ -23079,31 +23085,6 @@ Description: Ensure that a platform has weaken support
  that weaken is available.
 Original-Maintainer: Christian Sánchez <csanchez@unplug.org.ve>
 Homepage: http://search.cpan.org/dist/Task-Weaken/
-
-Package: crda
-Status: install ok installed
-Multi-Arch: foreign
-Priority: optional
-Section: net
-Installed-Size: 91
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Architecture: armhf
-Version: 1.1.2-1ubuntu1
-Replaces: wireless-crda (<< 1.15), wireless-regdb (= 2011.04.28-1ubuntu1), wireless-regdb (= 2011.04.28-1ubuntu2)
-Depends: libc6 (>= 2.4), libnl-3-200 (>= 3.2.3), libnl-genl-3-200 (>= 3.2.3), libssl1.0.0 (>= 1.0.0), wireless-regdb
-Recommends: iw
-Breaks: wireless-crda (<< 1.15), wireless-regdb (= 2011.04.28-1ubuntu1), wireless-regdb (= 2011.04.28-1ubuntu2)
-Conffiles:
- /etc/default/crda d1f1468521b60cdfc0b9d22d5a74975a
-Description: wireless Central Regulatory Domain Agent
- This package provides a Central Regulatory Domain Agent (CRDA) to be used by
- the Linux kernel cf80211 wireless subsystem to query and apply the regulatory
- domain settings wireless devices may operate within for a given location.
- .
- CRDA queries operational frequency regulations stored within the regulatory
- database provided by the wireless-regdb package.
-Homepage: http://wireless.kernel.org/en/developers/Regulatory/#CRDA
-Original-Maintainer: Ben Hutchings <ben@decadent.org.uk>
 
 Package: libpackage-stash-perl
 Status: install ok installed
