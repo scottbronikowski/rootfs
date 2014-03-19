@@ -1,68 +1,3 @@
-top
-emacs &
-cd test_code/flycapture/include/C
-ls
-grep -i "property" *
-grep -i "fc2Context" *
-ls
-cd ../
-cd ..
-cd src/
-ls
-cd MultipleCameraEx/
-ls
-emacs MultipleCameraEx.cpp &
-cd ..
-cd..
-cd ..
-grep -r "fc2StartSyncCapture" *
-top
-reboot
-cd /
-git status
-git add -A
-git commit -m "got test.c to work reliably for a color image; now need to modify test-capture-c.c to work better"
-git push
-git add -A
-git commit -m "working on test2.c--pictures good when starting and stopping capture inside picture taking loop, but bad when starting in init loop"
-git push
-git add -A
-git commit -m "got test2.c working with numPics and write input--still chasing down crash"
-git push
-emacs &
-cd test_code/flycapture/src/testing
-ls
-./c-test-capture 1 write
-./test2 40
-./cpp-test-capture 1 write
-./cpp-test-capture 11
-./test2 40 write
-ls
-make clean
-ls
-tar -czf testing-25-feb.tgz *
-ls
-lla
-rsync -avz ./testing-25-feb.tgz seykhl:.
-./test2 100
-ls
-make
-./test2 100
-emacs &
-top
-cd pointgrey/flycapture.2.6.3.2_armhf/bin/
-ls
-./FlyCap2
-lsusb
-reboot
-ls
-reboot
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-./FlyCap2
-lsusub
-lsusb
-ifdown wlan0
-reboot
 cd test_code/flycapture/src/testing
 ls
 ./c-test-capture 1 write
@@ -1998,3 +1933,68 @@ emacs today.text &
 cd test_code/flycapture/
 grep -ri "getdatasize" *
 iptraf
+cd test_code/flycapture/bin
+./CustomImageEx 
+emacs today.text &
+cd /
+git status
+git add -A
+git commit -m "Commit prior to incorporating miniz compression
+-- Noticed some issues with USB OTG port when cameras were connected to it--sometimes gave error 'musb_host_rx 1625: Rx interrupt with no errors or packet!' which would cause image capture to stop.  Couldn't find an easy workaround, so went back to putting cameras and wifi in main USB port.
+-- Finished mod of camera-server.cpp to break out of forked receive process when no image data received--no significant speedup.
+"
+git push
+fstrim /
+locate lvm
+locate crypttab
+man update-initramfs
+update-initramfs -u -k all
+fstrim /
+locate miniz
+ls
+cd miniz
+ls
+cd bin_linux/
+ls
+example1
+./example1
+lla
+chmod a+x *
+lla
+./example1
+cd ..
+cd bin
+ls
+rm *
+ls
+cd ..
+rmdir bin
+ls
+cat CMakeLists.txt 
+make
+gcc -o example1 example1.c
+ls
+./example1 
+./example1 fjdkal
+ls
+cp miniz.c ../test_code/flycapture/src/CustomImageEx/
+cd /boot
+ls
+lla
+git status
+git add -A
+git commit -m "commit after 'update-initramfs -u -k all'"
+git push
+ls -la
+cd ..
+cat .gitignore 
+fdisk -l
+ls /dev/s*
+cat /etc/fstab
+lsblk
+parted -l
+sfdisk -d /dev/mmcblk0
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+htop

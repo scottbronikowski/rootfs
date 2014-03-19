@@ -134,5 +134,5 @@ export ARCHITECTURE_PATH=`~/bin/architecture-path`
 export QARCHITECTURE_PATH=${ARCHITECTURE_PATH}
 export PATH=${PATH}:~/bin
 export PATH=${PATH}:~/bin/${ARCHITECTURE_PATH}
-export LD_LIBRARY_PATH=${HOME}/lib/${ARCHITECTURE_PATH}:${HOME}/include/$(architecture-path):${HOME}/lib/$(architecture-path)/include:${HOME}/lib/$(architecture-path):$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/usr/local/lib:${HOME}/lib/${ARCHITECTURE_PATH}:${HOME}/include/$(architecture-path):${HOME}/lib/$(architecture-path)/include:${HOME}/lib/$(architecture-path):$LD_LIBRARY_PATH
 ulimit -c unlimited

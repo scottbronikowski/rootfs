@@ -1,11 +1,12 @@
--- Noticed some issues with USB OTG port when cameras were connected to it--sometimes gave error 'musb_host_rx 1625: Rx interrupt with no errors or packet!' which would cause image capture to stop.  Couldn't find an easy workaround, so went back to putting cameras and wifi in main USB port.
--- Finished mod of camera-server.cpp to break out of forked receive process when no image data received--no significant speedup.
 
 
 Buffers
 ----------------------------------------
-    CustomImageEx.cpp    22846  C++/l		  ~/test_code/flycapture/src/CustomImageEx/CustomImageEx.cpp
-    today.text            3778  Text		  ~/today.text
+    example1.c            3091  C/l		  ~/miniz/example1.c
+    CustomImageEx.cpp    23415  C++/l		  ~/test_code/flycapture/src/CustomImageEx/CustomImageEx.cpp
+    bigtest.sh             155  Shell-script[bas  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
+    today.text            3955  Text		  ~/today.text
+    miniz.c             225896  C/l		  ~/miniz/miniz.c
     FlyCapture2Defs.h    60497  C++/l		  ~/test_code/flycapture/include/FlyCapture2Defs.h
     Image.h              20398  C++/l		  ~/test_code/flycapture/include/Image.h
     monitor.h              592  C++/l		  ~/test_code/monitor.h
@@ -46,3 +47,9 @@ Old notes
 -- added 'modprobe g_multi' to /etc/init.d/gpio-monitor.sh to load module needed to enable USB OTG port as second USB
 ------
 -- Modified CustomImageEx.cpp with methods to just transfer image data on first image to see if it speeds things up...still need to finish work on camera-server.cpp to get it to break out of fork before we can see if it speeds things up or not
+
+19 Mar 14
+-- Commit before incorporating miniz.c compression
+-- Noticed some issues with USB OTG port when cameras were connected to it--sometimes gave error 'musb_host_rx 1625: Rx interrupt with no errors or packet!' which would cause image capture to stop.  Couldn't find an easy workaround, so went back to putting cameras and wifi in main USB port.
+-- Finished mod of camera-server.cpp to break out of forked receive process when no image data received--no significant speedup.
+-------

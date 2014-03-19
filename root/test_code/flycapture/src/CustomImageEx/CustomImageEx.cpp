@@ -24,6 +24,10 @@ Date: 28 February 2014
 #include <arpa/inet.h>
 #include <unistd.h>
 
+#include "snappy.h"
+
+//#include "miniz.c"
+
 using namespace FlyCapture2;
 
 //defines
@@ -59,6 +63,7 @@ const char* k_Server = "seykhl.ecn.purdue.edu";
 const char* k_FrontCamPort = "3601";
 const char* k_PanoCamPort = "3602";
 const unsigned int k_BytesPerPixel = 4;
+const unsigned long k_TempMaxImageSize = 1158160;
 
 //structures
 struct PointGrey_t {
@@ -74,6 +79,8 @@ struct PointGrey_t {
   unsigned int rows, cols, stride, dataSize;
   Imlib_Image firstImage, finalImage;
   int sockfd;
+  //unsigned long cmp_len;
+  //unsigned char* pCmp;
 };
 
 
@@ -118,6 +125,10 @@ int main(int /*argc*/, char** /*argv*/)
         return -1;
     }
     PointGrey_t* PG = new PointGrey_t[numCameras];
+    // for (unsigned int i = 0; i < numCameras; i++)
+    // {
+    //    PG[i].pCmp = new unsigned char[k_TempMaxImageSize];
+    // }
     if (PGR_StartCameras(&busMgr, PG, numCameras) != 0)
     {
       printf("Error starting cameras\n");
@@ -138,6 +149,10 @@ int main(int /*argc*/, char** /*argv*/)
 
     //int img_size;
 
+    //uLong src_len, cmp_len;
+    //unsigned char* pCmp;
+    //int cmp_status;
+    
     double start = current_time();
     for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
     {
@@ -166,6 +181,40 @@ int main(int /*argc*/, char** /*argv*/)
 	// // /* LOOK TO FUNCTIONALIZE THIS SECTION */
 	// // //SEND IMAGE HERE
 	
+
+	// //***COMPRESSION STUFF*****
+	// //src_len = (uLong)PG[i].dataSize;
+	// //cmp_len = compressBound(src_len);
+	// PG[i].cmp_len = compressBound((unsigned long)PG[i].dataSize);
+	// // if (imageCount == 0)
+	// // {
+	// //   PG[i].pCmp = new unsigned char[PG[i].cmp_len];
+	// // }
+	// // Allocate buffers to hold compressed and uncompressed data.
+	// // pCmp = (mz_uint8 *)malloc((size_t)cmp_len);
+	// // if (!pCmp)
+	// // {
+	// //   printf("Out of memory!\n");
+	// //   return EXIT_FAILURE;
+	// //}
+	
+	// // Compress the string.
+	// printf("PG[i].pCmp = %p\n", PG[i].pCmp);
+	// cmp_status = compress(PG[i].pCmp, &PG[i].cmp_len, 
+	// 		      (const unsigned char *)PG[i].pData,
+	// 		      (unsigned long)PG[i].dataSize);
+	// if (cmp_status != Z_OK)
+	// {
+	//   printf("compress() failed!, %s\n", mz_error(cmp_status));
+	//   //free(pCmp);
+	//   return EXIT_FAILURE;
+	// }
+	// printf("dataSize = %u, cmp_len = %lu\n", PG[i].dataSize, PG[i].cmp_len);
+	// //**END COMPRESSION STUFF***
+	
+	
+
+	
 	if (imageCount == 0)
 	{
 	  //try sending metadata only the first time
@@ -180,6 +229,14 @@ int main(int /*argc*/, char** /*argv*/)
 	{
 	  printf("Error sending data\n");
 	}
+
+	//**CLEANUP COMPRESSION MALLOC
+	// if (imageCount == (k_numImages -1))
+	// {
+	//   delete[] PG[i].pCmp;
+	// }
+	//free(pCmp);
+	
 	// else
 	// {
 	//   printf("Sent %u-%u\n", PG[i].cameraInfo.serialNumber, imageCount);
