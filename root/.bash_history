@@ -1,84 +1,3 @@
-cd test_code/flycapture/src/testing
-ls
-./c-test-capture 1 write
-./test2
-emacs &
-make
-./test2 1 
-/etc/init.d/ssh-tunnel.sh start
-halt
-emacs &
-cd test_code/flycapture/src/support/
-make
-ls
-make clean
-ls
-make clean
-make
-ls
-make clean
-ls
-make
-./test2 50
-./test2 1 write
-make
-./test2 50
-make
-make clean
-tar -czf test2.tgz *
-ls
-rm *.tgz
-tar -cvzf test2.tgz *
-rsync -avz test2.tgz seykhl:.
-cd ../testing
-cd
-cd test_code/flycapture/
-ls
-cd src
-ls
-cd testing
-ls
-./test2 100
-ls
-mkdir ../support
-cp test2.c ../support
-cp test2.h ../support
-cp RoverCamDefs.h ../support
-cp Makefile ../support
-cd ../support
-ls
-cd ../testing
-emacs &
-cd test_code/
-ls
-./motor_control 
-./motor_control forward_1
-./motor_control 
-./motor_control forward_1
-./motor_control 
-ifdown wlan0
-ifup wlan0
-/etc/init.d/ssh-tunnel.sh start
-reboot
-test_code/motor_control
-test_code/motor_control forward_2
-test_code/motor_control
-lsusb
-reboot
-emacs &
-ps -ef | grep ping
-vi /etc/init.d/keepalive-ping.sh 
-ping www.purdue.edu
-/etc/init.d/keepalive-ping.sh start
-cd test_code/flycapture/src/testing
-ls
-./test2 10 write
-make
-./test2 10 write
-make
-./test2 10 write
-./test2 10
-./test2 10 write
 make
 ./test 10 write
 ./test2 10 write
@@ -1998,3 +1917,84 @@ reboot
 cd test_code/flycapture/bin
 ./CustomImageEx 
 htop
+cd test_code/flycapture/bin/
+./CustomImageEx 
+source ~/.bashrc
+cd ../src/CustomImageEx/
+./bigtest.sh 
+cd miniz
+grep -ri "unit8" *
+grep -ri "uint8" *
+grep -ri "uLong" *
+cd ..
+ls
+rm -rf miniz/*
+rmdir miniz/
+lla
+ls
+rsync -avrz seykhl:~/Downloads/snappy-1.1.2.tar.gz .
+tar -xvf snappy-1.1.2.tar.gz 
+ls
+cd snappy-1.1.2
+ls
+configure
+./configure
+make
+make check
+make install
+echo $LD_LIBRARY_PATH
+echo $LD_RUN_PATH
+make clean
+cd ..
+source .bashrc
+cd /usr/include/
+ls
+ls s*
+cd /
+git status
+git add -A
+git commit -m "-- Testing of miniz.c compression showed it to be worse than just sending uncompressed images via wifi (~0.5 f/s/c to get miniz-compressed data vs. ~3.5 f/s/c for uncompressed data over 802.11n or ~1.2 f/s/c for 802.11g)
+-- Now trying 'snappy' from Google"
+git push
+emacs today.text &
+source .bashrc
+locate snappy.h
+updatedb
+locate snappy.h
+cd snappy-1.1.2
+grep -r "Source" *
+iptraf
+iwconfig
+ping google.com
+fstrim /
+ps -ef | grep ping
+kill -9 861
+lsusb
+reboot
+ps -ef | grep ping
+kill -9 855
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+cd ..
+ls
+cd src/
+ls
+cd support/
+ls
+lla
+./simpletest 
+cd ../../bin
+./CustomImageEx 
+cd /usr/include
+ls
+cd ..
+cd local/include/
+ls
+grep -r "Source" *
+iptraf
+htop
+emacs today.text &
+cd test_code/flycapture/src/CustomImageEx/
+make
+./bigtest.sh 

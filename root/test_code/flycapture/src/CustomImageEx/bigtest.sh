@@ -1,5 +1,5 @@
 #!/bin/bash
-for i in {1..500}
+for i in {1..10000}
 do
     echo "***Starting test $i"
     /root/test_code/flycapture/bin/CustomImageEx

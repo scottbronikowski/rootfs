@@ -1,12 +1,13 @@
 
+USE A SOCKET INSTEAD OF FILE DESCRIPTOR TO COMMUNICATE BETWEEN GPIO AND MONITOR!!!!  READ WILL BLOCK!!!
+
 
 Buffers
 ----------------------------------------
-    example1.c            3091  C/l		  ~/miniz/example1.c
+
     CustomImageEx.cpp    23415  C++/l		  ~/test_code/flycapture/src/CustomImageEx/CustomImageEx.cpp
     bigtest.sh             155  Shell-script[bas  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
     today.text            3955  Text		  ~/today.text
-    miniz.c             225896  C/l		  ~/miniz/miniz.c
     FlyCapture2Defs.h    60497  C++/l		  ~/test_code/flycapture/include/FlyCapture2Defs.h
     Image.h              20398  C++/l		  ~/test_code/flycapture/include/Image.h
     monitor.h              592  C++/l		  ~/test_code/monitor.h
@@ -53,3 +54,10 @@ Old notes
 -- Noticed some issues with USB OTG port when cameras were connected to it--sometimes gave error 'musb_host_rx 1625: Rx interrupt with no errors or packet!' which would cause image capture to stop.  Couldn't find an easy workaround, so went back to putting cameras and wifi in main USB port.
 -- Finished mod of camera-server.cpp to break out of forked receive process when no image data received--no significant speedup.
 -------
+-- Testing of miniz.c compression showed it to be worse than just sending uncompressed images via wifi (~0.5 f/s/c to get miniz-compressed data vs. ~3.5 f/s/c for uncompressed data over 802.11n or ~1.2 f/s/c for 802.11g)
+-- Now trying 'snappy' from Google
+
+20 Mar 14
+-- attempted setting non-blocking send sockets with fcntl--improved speed, but got garbled images on workstation end...maybe need to adapt recv calls?
+-- UDP (DGRAM) sockets might be a possibility, but would require a complete refiguring of the send/receive code.
+-- ***Got framerate to ~8 f/s/c (close to rate at which cameras produce) by 1) changing save location on seykhl to /aux vice /home, and 2) changing pano cam to 640x480 greyscale.   If pano cam stays at 1240x934 color, framerate ~4.75 f/s/c

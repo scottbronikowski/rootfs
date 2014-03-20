@@ -23,6 +23,7 @@ Date: 28 February 2014
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #include "snappy.h"
 
@@ -97,6 +98,7 @@ void SetWhiteBalance(Camera* cam);
 void PGR_StopAndCleanup(PointGrey_t* PG, unsigned int numCameras);
 unsigned int PGR_Init(BusManager* busMgr);
 int PGR_SetCamera(PointGrey_t* PG);
+int PGR_SetCameraNEW(PointGrey_t* PG);
 int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCameras);
 void PGR_GetFrame(PointGrey_t* PG);
 void PGR_GetFrameRaw(PointGrey_t* PG);
@@ -537,6 +539,15 @@ int PGR_SetCamera(PointGrey_t* PG)
   }
   else if (PG->cameraInfo.serialNumber == k_PanoCamSerial)
   {
+    /* NEW way -- trying for 640x480 grayscale */
+    // PG->imageSettings.mode = MODE_0;
+    // PG->imageSettings.pixelFormat = PIXEL_FORMAT_RAW8;
+    // PG->imageSettings.width = PG->format7Info.maxWidth;
+    // PG->imageSettings.height = PG->format7Info.maxHeight;
+    // PG->imageSettings.offsetX =0;
+    // PG->imageSettings.offsetY = 0;
+
+    /* OLD way -- give large color image*/ 
     PG->imageSettings.width = k_PanoCamWidth;
     PG->imageSettings.height = k_PanoCamHeight;
     PG->imageSettings.offsetX = k_PanoCamOffsetX;
@@ -567,6 +578,67 @@ int PGR_SetCamera(PointGrey_t* PG)
   return 0;
 }
 
+int PGR_SetCameraNEW(PointGrey_t* PG)
+{
+  // this sets the front camera to Format 7  640x480 color (smaller ROI), 
+  // panoramic camera to 640x480 greyscale (full ROI)
+
+  // Get the camera information
+  CheckPGR(PG->camera.GetCameraInfo(&PG->cameraInfo));
+  
+  if (PG->cameraInfo.serialNumber == k_FrontCamSerial)
+  {
+    // Query for available Format 7 modes
+    bool supported;
+    PG->format7Info.mode = k_fmt7Mode;
+    CheckPGR(PG->camera.GetFormat7Info(&PG->format7Info, &supported));
+    
+    if (((k_fmt7PixFmt & PG->format7Info.pixelFormatBitField) == 0) || !supported)
+    {
+      // Pixel format not supported!
+      printf("Pixel format is not supported\n");
+      return -1;
+    }
+    PG->imageSettings.mode = k_fmt7Mode;
+    PG->imageSettings.pixelFormat = k_fmt7PixFmt;
+    PG->imageSettings.width = k_FrontCamWidth;
+    PG->imageSettings.height = k_FrontCamHeight;
+    PG->imageSettings.offsetX = (PG->format7Info.maxWidth - 
+				   PG->imageSettings.width) / 2;
+    PG->imageSettings.offsetY = (PG->format7Info.maxHeight - 
+				   PG->imageSettings.height) / 2;
+    bool valid;
+    // Validate the settings to make sure that they are valid
+    CheckPGR(PG->camera.ValidateFormat7Settings(&PG->imageSettings,
+						&valid,
+						&PG->packetInfo ));
+    
+    if ( !valid )
+    { // Settings are not valid
+      printf("Format7 settings are not valid\n");
+      return -1;
+    }  
+    // Send the settings to the camera
+    CheckPGR(PG->camera.SetFormat7Configuration(&PG->imageSettings,
+			PG->packetInfo.recommendedBytesPerPacket ));
+    SetFrameRate(&PG->camera);
+    SetWhiteBalance(&PG->camera);
+  }
+  else if (PG->cameraInfo.serialNumber == k_PanoCamSerial)
+  {
+    CheckPGR(PG->camera.SetVideoModeAndFrameRate(VIDEOMODE_640x480Y8,
+						 FRAMERATE_15));	     
+  }
+  else
+  {
+    printf("ERROR! Camera serial number not recognized!");
+    return -1;
+  }
+  
+
+  return 0;
+}
+
 int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCameras)
 {
   PGRGuid tmpGuid;
@@ -575,7 +647,14 @@ int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCamera
     // Connect to a camera
     CheckPGR(busMgr->GetCameraFromIndex(i, &tmpGuid));
     CheckPGR(PG[i].camera.Connect(&tmpGuid));
-    if (PGR_SetCamera(&PG[i]) != 0)
+
+    // if (PGR_SetCamera(&PG[i]) != 0)
+    // {
+    //   printf("Error in setting camera\n");
+    //   return -1;
+    // }
+
+    if (PGR_SetCameraNEW(&PG[i]) != 0)
     {
       printf("Error in setting camera\n");
       return -1;
@@ -799,9 +878,16 @@ int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras)
     }
     else
     {
-      printf("ERROR! Camera serial number not recognized in Network_StartCameras!");
+      printf("ERROR! Camera serial number not recognized in Network_StartCameras!\n");
       return -1;
     }
+    // //try setting connected socket as nonblocking
+    // int status = fcntl(PG[i].sockfd, F_SETFL, fcntl(PG[i].sockfd, F_GETFL, 0) | O_NONBLOCK);
+    // if (status == -1)
+    // {
+    //   printf("Error setting nonblocking\n");
+    //   return -1;
+    // }
     printf("Camera %u connected to %s\n", PG[i].cameraInfo.serialNumber, k_Server);
   }
   return 0;

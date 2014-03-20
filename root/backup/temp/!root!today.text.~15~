@@ -1,0 +1,59 @@
+-- attempted setting non-blocking send sockets with fcntl--improved speed, but got garbled images on workstation end...maybe need to adapt recv calls?
+
+-- UDP (DGRAM) sockets might be a possibility, but would require a complete refiguring of the send/receive code.
+
+
+
+Buffers
+----------------------------------------
+    CustomImageEx.cpp    23415  C++/l		  ~/test_code/flycapture/src/CustomImageEx/CustomImageEx.cpp
+    bigtest.sh             155  Shell-script[bas  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
+    today.text            3955  Text		  ~/today.text
+    FlyCapture2Defs.h    60497  C++/l		  ~/test_code/flycapture/include/FlyCapture2Defs.h
+    Image.h              20398  C++/l		  ~/test_code/flycapture/include/Image.h
+    monitor.h              592  C++/l		  ~/test_code/monitor.h
+    monitor.cc            3657  C++/l		  ~/test_code/monitor.cc
+    test-capture-cpp.cp: 21345  C++/l		  ~/test_code/flycapture/src/testing/test-capture-cpp.cpp
+    test2.h               2022  C++/l		  ~/test_code/flycapture/src/support/test2.h
+    test2.c               8096  C/l		  ~/test_code/flycapture/src/support/test2.c
+    simpletest.c          9215  C/l		  ~/test_code/flycapture/src/support/simpletest.c
+    Makefile               516  GNUmakefile	  ~/test_code/flycapture/src/CustomImageEx/Makefile
+
+
+Old notes
+--------------------------
+13 Mar 14
+-- Discovered that 1. Raw PGR images are 1/4 the size of BGRU-converted PGR (and Imlib) images, 2. Raw PGR images can be converted to BGR (vice BGRU) for a 25% reduction in size);
+-- Looking into sending raw PGR images across network, but first need to have flycapture libraries installed on seykhl in order to reconstruct the PGR image and convert it to color (specifically need PGR Image class, along with PixelFormat and BayerTileFormat data types);
+-- Got 4g dongle working--comes up as eth0 automatically, then must call 'dhclient eth0' to get local IP, should be set to connect to internet automatically now, but if not, use 'wget -T 30 http://192.168.32.2/condata?action=connect';
+-- Generic USB Wifi dongle "sort-of" working--causes crashes after sustained data transfer.  Need to look at how it's set up.  Added lines for wlan2 in /etc/network/interfaces;
+-- try UDP sockets instead of TCP for less overhead??
+
+14 Mar 14
+-- started on sending the raw PGR image across the network piece by piece...need to finish receiver and test
+
+17 Mar 14
+-- First test of sending raw images across network successful, images saved via PGR methods as color PPM.  Getting ~1.2-1.3 frames/sec/cam.
+-- Need to look into ways to speed up transfer to the 5-8 f/s/c range (possibly compression, alternate wifi, ???)
+-- First effort at using TP-LINK TL-W822N USB Wifi adapter. Driver installed and works, but still need to have it come up automatically on boot. First test of transfer gets ~2.9 f/s/c. Getting same 'task crda blocked' message as with other USB Wifi--not sure if I can just ignore it
+
+18 Mar 14
+-- apt-get install libnl1 libnl-dev
+-- changed /sys/module/cfg80211/parameters/ieee80211_regdom from '00' to 'US' using 'cat US >> ...' in an attempt to try to fix crda error message -- FILE NOT IN GIT
+------
+-- changing of /sys/module/cfg80211/parameters/ieee80211_regdom did not work--file gets rewritten at boot
+-- attempting to uninstall crda, wireless-crda, wireless-regdb to fix
+   apt-get purge crda wireless-crda wireless-regdb
+-- purge of crda/regdb seemed to work
+-- still having issues with USB port quitting after a certain amount of time (non-deterministic)
+-- added 'modprobe g_multi' to /etc/init.d/gpio-monitor.sh to load module needed to enable USB OTG port as second USB
+------
+-- Modified CustomImageEx.cpp with methods to just transfer image data on first image to see if it speeds things up...still need to finish work on camera-server.cpp to get it to break out of fork before we can see if it speeds things up or not
+
+19 Mar 14
+-- Commit before incorporating miniz.c compression
+-- Noticed some issues with USB OTG port when cameras were connected to it--sometimes gave error 'musb_host_rx 1625: Rx interrupt with no errors or packet!' which would cause image capture to stop.  Couldn't find an easy workaround, so went back to putting cameras and wifi in main USB port.
+-- Finished mod of camera-server.cpp to break out of forked receive process when no image data received--no significant speedup.
+-------
+-- Testing of miniz.c compression showed it to be worse than just sending uncompressed images via wifi (~0.5 f/s/c to get miniz-compressed data vs. ~3.5 f/s/c for uncompressed data over 802.11n or ~1.2 f/s/c for 802.11g)
+-- Now trying 'snappy' from Google
