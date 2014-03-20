@@ -1,47 +1,3 @@
-make
-./test 10 write
-./test2 10 write
-../../bin
-cd ../../bin
-ls
-cd C
-ls
-./FlyCapture2Test_C 
-cd /
-git status
-git add -A
-git commit -m "commit before modifying test2.c to remove all Imlib2 references"
-git push
-emacs &`
-
-emacs &
-top
-reboot
-ls
-cp testcapture.cc testcapture.cc.backup
-make clean
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/bin
-ls
-lla /tmp/images
-cd /tmp
-ls
-cd ~/pointgrey/flycapture.2.6.3.2_armhf/bin
-ps -ef | grep emacs
-kill -9 1112
-emacs &
-./testcapture 2
-lsusb
-./testcapture 2
-make
-./testcapture 2
-./testcapture 10
-./testcapture 100
-lsusb
-top
-emacs &
-top
-reboot
 emacs &
 cd pointgrey/flycapture.2.6.3.2_armhf/src/testing/
 emacs &
@@ -1998,3 +1954,47 @@ emacs today.text &
 cd test_code/flycapture/src/CustomImageEx/
 make
 ./bigtest.sh 
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+c
+ps -ef | grep ping
+kill -9 856
+lsusb
+ps -ef | grep ssh
+ping google.com
+halt
+emacs today.text &
+iwconfig
+cd /etc/init.d/
+update-rc.d g-multi.sh defaults 01
+ls
+chmod a+x g-multi.sh 
+ls
+cd /
+git status
+git add -A
+git commit -m "-- attempted setting non-blocking send sockets with fcntl--improved speed, but got garbled images on workstation end...maybe need to adapt recv calls?
+-- UDP (DGRAM) sockets might be a possibility, but would require a complete refiguring of the send/receive code.
+-- ***Got framerate to ~8 f/s/c (close to rate at which cameras produce) by 1) changing save location on seykhl to /aux vice /home, and 2) changing pano cam to 640x480 greyscale.   If pano cam stays at 1240x934 color, framerate ~4.75 f/s/c
+"
+git status
+git add -A
+git commit -m "-- Removed g_multi.ko load from gpio-monitor.sh and added it to g-multi.sh with priority 01"
+git push
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+ls
+./bigtest.sh 
+htop
+iptraf
+iwconfig
+ip addr
+cd /etc/init.d/
+ls
+cat networking 
+cat network
+ls net*
+cat network-interface
+lla net*
+iwconfig
+reboot

@@ -25,9 +25,13 @@ Date: 28 February 2014
 #include <unistd.h>
 #include <fcntl.h>
 
-#include "snappy.h"
-
 //#include "miniz.c"
+#include "snappy.h"
+extern "C" {
+#include <libavutil/imgutils.h>
+#include <libavcodec/avcodec.h>
+#include <libswscale/swscale.h>
+}
 
 using namespace FlyCapture2;
 
@@ -45,7 +49,7 @@ using namespace FlyCapture2;
 const unsigned int k_FrontCamSerial = 12262775;
 const unsigned int k_PanoCamSerial = 13282227;
 const Mode k_fmt7Mode = MODE_0;
-const PixelFormat k_fmt7PixFmt = PIXEL_FORMAT_RAW8;
+const FlyCapture2::PixelFormat k_fmt7PixFmt = PIXEL_FORMAT_RAW8;
 const char k_OutputDir[] = "/tmp/images/";
 const float k_FrameRate = 8.5;
 const unsigned int k_FrontCamWidth = 640;//800;//1200;//fmt7Info.maxWidth;
@@ -74,7 +78,7 @@ struct PointGrey_t {
   Format7ImageSettings imageSettings;
   Format7PacketInfo packetInfo;
   Image rawImage, convertedImage;  
-  PixelFormat pixFormat;
+  FlyCapture2::PixelFormat pixFormat;
   BayerTileFormat bayerFormat;
   unsigned char* pData;
   unsigned int rows, cols, stride, dataSize;
@@ -82,6 +86,8 @@ struct PointGrey_t {
   int sockfd;
   //unsigned long cmp_len;
   //unsigned char* pCmp;
+  size_t compressed_length;
+  char* compressed;
 };
 
 
@@ -113,6 +119,8 @@ int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras);
 int sendall(int s, unsigned char *buf, int *len);
 int SendMetadata (PointGrey_t* PG);
 int SendFrame(PointGrey_t* PG);
+void SnappyCompress(PointGrey_t* PG);
+int SendMetadataCompressed (PointGrey_t* PG);
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -127,10 +135,11 @@ int main(int /*argc*/, char** /*argv*/)
         return -1;
     }
     PointGrey_t* PG = new PointGrey_t[numCameras];
-    // for (unsigned int i = 0; i < numCameras; i++)
-    // {
-    //    PG[i].pCmp = new unsigned char[k_TempMaxImageSize];
-    // }
+    for (unsigned int i = 0; i < numCameras; i++)
+    {
+      PG[i].compressed = new char[snappy::MaxCompressedLength(k_TempMaxImageSize)];
+      //PG[i].pCmp = new unsigned char[k_TempMaxImageSize];
+    }
     if (PGR_StartCameras(&busMgr, PG, numCameras) != 0)
     {
       printf("Error starting cameras\n");
@@ -154,6 +163,9 @@ int main(int /*argc*/, char** /*argv*/)
     //uLong src_len, cmp_len;
     //unsigned char* pCmp;
     //int cmp_status;
+
+    // char* tmpOutput = new char[snappy::MaxCompressedLength(k_TempMaxImageSize)];
+    // size_t output_length;
     
     double start = current_time();
     for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
@@ -183,8 +195,11 @@ int main(int /*argc*/, char** /*argv*/)
 	// // /* LOOK TO FUNCTIONALIZE THIS SECTION */
 	// // //SEND IMAGE HERE
 	
-
 	// //***COMPRESSION STUFF*****
+
+	//SnappyCompress(&PG[i]);
+	
+
 	// //src_len = (uLong)PG[i].dataSize;
 	// //cmp_len = compressBound(src_len);
 	// PG[i].cmp_len = compressBound((unsigned long)PG[i].dataSize);
@@ -216,7 +231,11 @@ int main(int /*argc*/, char** /*argv*/)
 	
 	
 
-	
+	// //can't send metadata just once when sending compressed
+	// if (SendMetadataCompressed(&PG[i]) != 0)
+	// {
+	//   printf("Error sending metadata\n");
+	// }
 	if (imageCount == 0)
 	{
 	  //try sending metadata only the first time
@@ -304,6 +323,9 @@ int main(int /*argc*/, char** /*argv*/)
     	
       }
     }
+    /* CLEAN UP COMPRESSION */
+    //delete[] tmpOutput;
+
     double stop = current_time();
     //check elapsed time
     double elapsed = stop - start;
@@ -648,17 +670,17 @@ int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCamera
     CheckPGR(busMgr->GetCameraFromIndex(i, &tmpGuid));
     CheckPGR(PG[i].camera.Connect(&tmpGuid));
 
-    // if (PGR_SetCamera(&PG[i]) != 0)
-    // {
-    //   printf("Error in setting camera\n");
-    //   return -1;
-    // }
-
-    if (PGR_SetCameraNEW(&PG[i]) != 0)
+    if (PGR_SetCamera(&PG[i]) != 0)
     {
       printf("Error in setting camera\n");
       return -1;
     }
+
+    // if (PGR_SetCameraNEW(&PG[i]) != 0)
+    // {
+    //   printf("Error in setting camera\n");
+    //   return -1;
+    // }
 
     // PrintCameraInfo(&PG->cameraInfo);
     // PrintFormat7Capabilities(PG[i].format7Info);
@@ -953,6 +975,47 @@ int SendMetadata (PointGrey_t* PG)
   return 0;
 }
 
+int SendMetadataCompressed (PointGrey_t* PG)
+{
+  if (send(PG->sockfd, &PG->cols, sizeof(PG->cols), 0) <= 0)
+  {
+    printf("Error sending cols");
+    return -1;
+  }
+  if (send(PG->sockfd, &PG->rows, sizeof(PG->rows), 0) <= 0)
+  {
+    printf("Error sending rows");
+    return -1;
+  }	
+  if (send(PG->sockfd, &PG->stride, sizeof(PG->stride), 0) <= 0)
+  {
+    printf("Error sending stride");
+    return -1;
+  }
+  if (send(PG->sockfd, &PG->dataSize, sizeof(PG->dataSize), 0) <= 0)
+  {
+    printf("Error sending dataSize");
+    return -1;
+  }	
+  if (send(PG->sockfd, &PG->pixFormat, sizeof(PG->pixFormat), 0) <= 0)
+  {
+    printf("Error sending pixFormat");
+    return -1;
+  }
+  if (send(PG->sockfd, &PG->bayerFormat, sizeof(PG->bayerFormat), 0) <= 0)
+  {
+    printf("Error sending bayerFormat");
+    return -1;
+  }	
+  if (send(PG->sockfd, &PG->compressed_length, sizeof(PG->compressed_length), 0) <= 0)
+  {
+    printf("Error sending compressed_length");
+    return -1;
+  }
+  //if we haven't hit a return yet, we succeeded
+  return 0;
+}
+
 int SendFrame(PointGrey_t* PG)
 {
   int img_size = (int)(PG->dataSize);
@@ -964,4 +1027,11 @@ int SendFrame(PointGrey_t* PG)
   }
   
   return 0;
+}
+
+void SnappyCompress(PointGrey_t* PG)
+{
+  snappy::RawCompress((char*)PG->pData, (size_t)PG->dataSize,
+		      PG->compressed, &PG->compressed_length);
+  printf("dataSize = %u, cmp_len = %d\n", PG->dataSize, PG->compressed_length);
 }
