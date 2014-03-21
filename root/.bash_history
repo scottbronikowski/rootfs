@@ -1,108 +1,3 @@
-emacs &
-cd pointgrey/flycapture.2.6.3.2_armhf/src/testing/
-emacs &
-cd ../../bin
-ls
-./testcapture 50
-lsusb
-./testcapture 50
-lsusb
-./testcapture 50
-rm /tmp/images/OLD*
-./testcapture 5
-rm /tmp/images/OLD*
-./testcapture 5
-rm /tmp/images/OLD*
-./testcapture 50
-lsusb
-reboot
-top
-ps -ef | grep ssh
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-ps -ef | grep ping
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-ls
-cp CustomImageEx.cpp CustomImageEx-original.cpp
-rsync -avz seykhl:~/CustomImageEx.cpp .
-lla
-make
-emacs &
-kill -9 1141
-emacs &
-cd test_code/flycapture/src/support/
-ls
-rm test2.tgz
-make clean
-cat Makefile 
-tar -cvzf test2.tgz *
-rsync test2.tgz seykhl:~/test2.tgz
-cd /
-git status
-git add -A
-git commit -m "more work on testing/test2.c, support/test2.c, old testcapture.cc under ~/pointgrey"
-cd test_code/flycapture/bin
-ls
-./CustomImageEx 
-lla
-lsusb
-cd test_code/flycapture/bin
-./CustomImageEx 
-lsusb
-reboot
-cd test_code/flycapture/src/support/
-cd test_code/flycapture/bin
-ls
-rm *.ppm
-./CustomImageEx 
-ls
-rm *-99*
-./CustomImageEx 
-emacs &
-top
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-make
-rsync CustomImageEx.cpp seykhl:~/.
-lsusb
-
-ls
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-exit
-halt
-cd test_code/flycapture/bin
-ls
-./CustomImageEx 
-date
-/etc/init.d/time-update.sh start
-date
-date
-daet
-date
-cd test_code/flycapture/bin
-./CustomImageEx 
-emacs &
-cd ..
-cd src/
-ls
-cd ../bin
-cd ../src/Cu
-cd ../src/CustomImageEx/
-make
-../../bin/CustomImageEx 
-ls ../../bin
-lla ../../bin
-rm ../../bin/*.ppm
-lla ../../bin
-../../bin/CustomImageEx 
-lla ../../bin
-ls
-rm *.ppm
 cd ../../bin
 ./CustomImageEx 
 lla
@@ -1998,3 +1893,108 @@ cat network-interface
 lla net*
 iwconfig
 reboot
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+emacs today.text &
+locate avcodec.h
+locate avformat.h
+dpkg-query -l | grep libav
+dpkg-query -l | grep libsw
+apt-cache search libswresample
+locate ffmpeg.c
+locate ffplay.c
+dpkg-query -l | grep ffmpeg
+dpkg-query -l | grep ffplay
+whereis ffplay
+ffmpeg
+CD /
+cd /
+git status
+git add -A
+git commit -m "-- Tested snappy compression -- results in a 10-15% reduction in buffer size, currently a bug with Send/ReceiveMetadataCompressed
+"
+git push
+cd test_code/flycapture/bin
+./CustomImageEx 
+locate libsnap*
+locate snappy
+./CustomImageEx 
+htop
+iptraf
+exit
+exit
+emacs today.text &
+exit
+iwconfig wla0
+iwconfig wlan0
+iwconfig wlan0 scan
+iwlist wlan0 scan
+ifup wlan0
+ip link wlan0 show
+ip link show wlan0
+ip link set wlan0 up
+ip link show wlan0
+iw
+iw wlan0 link
+iw wlan0 scan
+iwlist wlan0 scan
+iwconfig wlan0 essid qobi-office
+iwlist
+iwconfig
+/etc/init.d/ssh-tunnel.sh stop
+ifdown wlan1
+iwconfig
+ps -ef | grep ping
+/etc/init.d/keepalive-ping.sh stop
+dhclient wlan0
+iwconfig
+ping google.com
+/etc/init.d/keepalive-ping.sh start
+/etc/init.d/ssh-tunnel.sh start
+iwconfig
+ls
+cd test_code/flycapture/
+htop
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+nano /etc/network/interfaces 
+reboot
+iptraf
+iwconfig
+nano /etc/network/interfaces 
+reboot
+emacs today.text &
+ls /etc/ssl/certs/
+ls /etc/ssl/certs/Add*
+whereis wpasupplicant
+whereis wpa_supplicant
+wpa_supplicant -h
+ip neigh
+guessnet
+iwlist wlan0 scan
+iwlist wlan1 scan
+locate boot.scr
+cd /etc/network
+ls
+lla
+cd if-pre-up.d/
+ls
+lla
+cd ../../
+ls
+ls wpa*
+cd wpa_supplicant
+cat if
+cat ifupdown.sh 
+cd ..
+ls wp*
+cat wpa_supplicant.conf 
+cp wpa_supplicant.conf wpa_supplicant.conf.bak
+cd network
+ls
+cp interfaces interfaces.bak
+iwconfig
+ls /etc/ssl/certs/Add*
+iwlist wlan1 scan
+htop
+iptraf

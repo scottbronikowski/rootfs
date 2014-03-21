@@ -27,6 +27,7 @@ Date: 28 February 2014
 
 //#include "miniz.c"
 #include "snappy.h"
+//for ffmpeg
 extern "C" {
 #include <libavutil/imgutils.h>
 #include <libavcodec/avcodec.h>
@@ -51,7 +52,7 @@ const unsigned int k_PanoCamSerial = 13282227;
 const Mode k_fmt7Mode = MODE_0;
 const FlyCapture2::PixelFormat k_fmt7PixFmt = PIXEL_FORMAT_RAW8;
 const char k_OutputDir[] = "/tmp/images/";
-const float k_FrameRate = 8.5;
+const float k_FrameRate = 15;
 const unsigned int k_FrontCamWidth = 640;//800;//1200;//fmt7Info.maxWidth;
 //const unsigned int k_FrontCamWidth = 960;//1248;//1072;//fmt7Info.maxWidth;
 const unsigned int k_FrontCamHeight = 480;//600;//720;//820;//fmt7Info.maxHeight;
@@ -670,12 +671,14 @@ int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCamera
     CheckPGR(busMgr->GetCameraFromIndex(i, &tmpGuid));
     CheckPGR(PG[i].camera.Connect(&tmpGuid));
 
+    //this sets up for pano cam 1240x934 color
     if (PGR_SetCamera(&PG[i]) != 0)
     {
       printf("Error in setting camera\n");
       return -1;
     }
-
+    
+    // //this sets up for pano cam 640x480 greyscale
     // if (PGR_SetCameraNEW(&PG[i]) != 0)
     // {
     //   printf("Error in setting camera\n");

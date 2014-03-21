@@ -9,29 +9,36 @@ iface lo inet loopback
 
 #wifi
 
-#allow-hotplug wlan0
+### USB Wifi adapter
+allow-hotplug wlan1
+auto wlan1
+iface wlan1 inet dhcp
+#	wpa-driver wext
+#	wpa-conf /etc/wpa_supplicant.conf
+#iface pal3 inet dhcp
+#      pre-up wpa_supplicant -Dwext -iwlan1 -c/etc/wpa_supplicant.conf -B
+	pre-up wpa_supplicant -iwlan1 -c/etc/wpa_supplicant.conf -B		
+      	down killall wpa_supplicant
+##	pre-up /sbin/iwconfig wlan0 essid qobi-cccp
+#	wireless-essid qobi-office
+#	wireless-mode managed
+
+### built-in wifi adapter
+allow-hotplug wlan0
 #auto wlan0
 #iface wlan0 inet dhcp
 ##      pre-up wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf -B
 ##      down killall wpa_supplicant
-##	pre-ub /sbin/iwconfig wlan0 essid qobi-cccp
+##	pre-up /sbin/iwconfig wlan0 essid qobi-cccp
 #	wireless-essid qobi-office
 #	wireless-mode managed
 
-allow-hotplug wlan1
-auto wlan1
-iface wlan1 inet dhcp
-#      pre-up wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf -B
-#      down killall wpa_supplicant
-#	pre-ub /sbin/iwconfig wlan0 essid qobi-cccp
-	wireless-essid qobi-office
-	wireless-mode managed
 
 #allow-hotplug wlan2
 #auto wlan2
 #iface wlan2 inet dhcp
-##      pre-up wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf -B
+##      pre-up wpa_supplicant -Dwext -iwlan2 -c/etc/wpa_supplicant.conf -B
 ##      down killall wpa_supplicant
-##	pre-ub /sbin/iwconfig wlan0 essid qobi-cccp
+##	pre-up /sbin/iwconfig wlan0 essid qobi-cccp
 #	wireless-essid qobi-cccp
 #	wireless-mode managed
