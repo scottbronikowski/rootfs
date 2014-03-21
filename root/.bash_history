@@ -1,26 +1,3 @@
-cd ../../bin
-./CustomImageEx 
-lla
-halt
-hwclock
-date
-hwclock -s
-date
-hwclock
-vi /etc/init.d/time-update.sh 
-halt
-date
-hwclock
-vi /etc/init.d/time-update.sh 
-halt
-/etc/init.d/time-update.sh start
-vi /etc/init.d/time-update.sh 
-/etc/init.d/time-update.sh 
-/etc/init.d/time-update.sh start
-halt
-date
-hwclock
-date
 cd /etc/init.d/
 ls ../rc2.d/
 update-rc.d -f remove time-update.sh 
@@ -1998,3 +1975,26 @@ ls /etc/ssl/certs/Add*
 iwlist wlan1 scan
 htop
 iptraf
+ls
+mkdir jpeg-compressor
+cd jpeg-compressor/
+rsync -avrz seykhl:~/vader-rover/jpeg-compressor/* .
+ls
+lla *.h
+cd /usr/include
+ls
+cat jpeglib.h 
+lla ~/jpeg-compressor/*.h
+ln -s /root/jpeg-compressor/jpgd.h ./jpgd.h
+lla jp*
+ln -s /root/jpeg-compressor/jpge.h ./jpge.h
+ln -s /root/jpeg-compressor/timer.h ./timer.h
+lla jp*
+lla tim*
+cd ~/jpeg-compressor/
+ls
+cp jpge.h ~/test_code/flycapture/src/CustomImageEx/
+cp jpge.cpp ~/test_code/flycapture/src/CustomImageEx/
+exit
+htop
+exit

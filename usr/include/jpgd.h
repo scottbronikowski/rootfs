@@ -1,0 +1,1 @@
+/root/jpeg-compressor/jpgd.h

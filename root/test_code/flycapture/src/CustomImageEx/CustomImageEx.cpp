@@ -33,6 +33,8 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libswscale/swscale.h>
 }
+//for jpeg-compressor
+#include "jpge.h"
 
 using namespace FlyCapture2;
 
@@ -69,7 +71,8 @@ const char* k_Server = "seykhl.ecn.purdue.edu";
 const char* k_FrontCamPort = "3601";
 const char* k_PanoCamPort = "3602";
 const unsigned int k_BytesPerPixel = 4;
-const unsigned long k_TempMaxImageSize = 1158160;
+const unsigned long k_TempMaxImageSize = (1024 * 1024 *4); //4MB
+const int k_numChannels = 3; //3 channels for RGB images
 
 //structures
 struct PointGrey_t {
@@ -167,6 +170,10 @@ int main(int /*argc*/, char** /*argv*/)
 
     // char* tmpOutput = new char[snappy::MaxCompressedLength(k_TempMaxImageSize)];
     // size_t output_length;
+    jpge::params parameters;
+    //parameters.m_quality = 50;
+    int bufSize = k_TempMaxImageSize;
+    unsigned char* compressedImage = new unsigned char[bufSize];
     
     double start = current_time();
     for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
@@ -174,8 +181,8 @@ int main(int /*argc*/, char** /*argv*/)
       for (unsigned int i = 0; i < numCameras; i++)
       {
 	/* PGR functions only */
-	//PGR_GetFrame(&PG[i]);
-	PGR_GetFrameRaw(&PG[i]);
+	PGR_GetFrame(&PG[i]);
+	//PGR_GetFrameRaw(&PG[i]);
 
 	//check image dimensions
 	// printf("rows = %u, cols = %u, stride = %u, dataSize = %u ",
@@ -197,7 +204,17 @@ int main(int /*argc*/, char** /*argv*/)
 	// // //SEND IMAGE HERE
 	
 	// //***COMPRESSION STUFF*****
-
+	if (!jpge::compress_image_to_jpeg_file_in_memory(compressedImage, bufSize,
+							 (int)PG[i].cols, (int)PG[i].rows, 
+							 k_numChannels, 
+							 PG[i].pData, parameters))
+	{
+	  printf("compression error\n");
+	}
+	else
+	{
+	  printf("Compressed image size = %d\n", bufSize);
+	}
 	//SnappyCompress(&PG[i]);
 	
 
@@ -231,26 +248,28 @@ int main(int /*argc*/, char** /*argv*/)
 	// //**END COMPRESSION STUFF***
 	
 	
-
-	// //can't send metadata just once when sending compressed
-	// if (SendMetadataCompressed(&PG[i]) != 0)
+	// /* SENDING BLOCK */
+	// // //can't send metadata just once when sending compressed
+	// // if (SendMetadataCompressed(&PG[i]) != 0)
+	// // {
+	// //   printf("Error sending metadata\n");
+	// // }
+	// if (imageCount == 0)
 	// {
-	//   printf("Error sending metadata\n");
+	//   //try sending metadata only the first time
+	//   if (SendMetadata(&PG[i]) != 0)
+	//   {
+	//     printf("Error sending metadata\n");
+	//   }
 	// }
-	if (imageCount == 0)
-	{
-	  //try sending metadata only the first time
-	  if (SendMetadata(&PG[i]) != 0)
-	  {
-	    printf("Error sending metadata\n");
-	  }
-	}
 
-	//then send data
-	if (SendFrame(&PG[i]) != 0)
-	{
-	  printf("Error sending data\n");
-	}
+	// //then send data
+	// if (SendFrame(&PG[i]) != 0)
+	// {
+	//   printf("Error sending data\n");
+	// }
+	// /* END SENDING BLOCK */
+
 
 	//**CLEANUP COMPRESSION MALLOC
 	// if (imageCount == (k_numImages -1))
@@ -258,6 +277,7 @@ int main(int /*argc*/, char** /*argv*/)
 	//   delete[] PG[i].pCmp;
 	// }
 	//free(pCmp);
+       
 	
 	// else
 	// {
@@ -326,6 +346,7 @@ int main(int /*argc*/, char** /*argv*/)
     }
     /* CLEAN UP COMPRESSION */
     //delete[] tmpOutput;
+    delete[] compressedImage;
 
     double stop = current_time();
     //check elapsed time
@@ -708,7 +729,8 @@ void PGR_GetFrame(PointGrey_t* PG)
 {
   // Retrieve an image
   CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
-  printf("rawImage.GetDataSize() = %u\n", PG->rawImage.GetDataSize());
+  printf("%u-rawImage.GetDataSize() = %u\n", PG->cameraInfo.serialNumber,
+	 PG->rawImage.GetDataSize());
   // Get the raw image dimensions
   PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
 			     &PG->stride, &PG->pixFormat );
@@ -717,7 +739,8 @@ void PGR_GetFrame(PointGrey_t* PG)
   // 				&PG->convertedImage));
   CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGR, 
 				&PG->convertedImage));
-  printf("convertedImage.GetDataSize() = %u\n", PG->convertedImage.GetDataSize());
+  printf("%u-convertedImage.GetDataSize() = %u\n", PG->cameraInfo.serialNumber,
+	 PG->convertedImage.GetDataSize());
 }
 
 void PGR_SaveImage(PointGrey_t* PG)
