@@ -1,4 +1,12 @@
 
+
+
+test jpeg-compressor on workstation
+get AAAI, ICRA, IROS deadlines
+
+OpenCV function: imwrite, imencode
+
+
 USE A SOCKET INSTEAD OF FILE DESCRIPTOR TO COMMUNICATE BETWEEN GPIO AND MONITOR!!!!  READ WILL BLOCK!!!
 
 
@@ -17,9 +25,6 @@ Buffers
     test2.c               8096  C/l		  ~/test_code/flycapture/src/support/test2.c
     simpletest.c          9215  C/l		  ~/test_code/flycapture/src/support/simpletest.c
     Makefile               516  GNUmakefile	  ~/test_code/flycapture/src/CustomImageEx/Makefile
-    snappy-stubs-public.: 3173  C++/l		  /usr/local/include/snappy-stubs-public.h
-    snappy-sinksource.h   4931  C++/l		  /usr/local/include/snappy-sinksource.h
-    snappy.h              8640  C++/l		  /usr/local/include/snappy.h
 
 
 Old notes
@@ -76,3 +81,9 @@ Old notes
 -- Still need to look into compressing data prior to sending across network
 -----------
 -- Started work on using jpeg-compressor from Google, but haven't gotten it to work yet.
+
+31 Mar 14
+-- Got jpeg-compressor working. Getting good compression ratios (~95-97%), but at the cost of framerate--w/o compression, getting 15 f/s/c, with compression < 1 f/s/c.  Working on improving that.
+-- Switched pano cam back to greyscale by calling PGR_SetCameraNEW from within PGR_StartCameras
+-- After testing jpeg-compressor using only 640x480 images, best framerate was about 2.5 f/s/c, regardless of parameters settings.
+-- Installed OpenCV based on http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html#linux-installation

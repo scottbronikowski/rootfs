@@ -1,162 +1,3 @@
-cd /etc/init.d/
-ls ../rc2.d/
-update-rc.d -f remove time-update.sh 
-update-rc.d -f time-update.sh remove
-halt
-date
-hwclock
-ntpdate -s -u us.pool.ntp.org
-date
-hwclock
-hwclock -w
-hwclock
-date
-cd /etc/init.d
-ls ../rc2.d/
-update-rc.d time-update.sh defaults 99
-halt
-date
-hwclock
-vi /etc/init.d/time-update.sh 
-date
-hwclock
-vi /etc/init.d/time-update.sh 
-hwclock -w
-datge
-date
-hwclock
-halt
-date
-hwclock
-cd /etc/init.d/
-update-rc.d time-update.sh remove
-update-rc.d -f time-update.sh remove
-ls ../rc2.d/
-update-rc.d time-update.sh defaults 98
-halt
-date
-hwclock
-vi /etc/init.d/time-update.sh 
-halt
-date
-hwclock
-hwclock -w
-hwclock
-date
-vi /etc/init.d/time-update.sh 
-halt
-reboot
-date
-ntpdate
-ntpdate -vq us.pool.ntp.org
-ntpdate -v us.pool.ntp.org
-ps -ef | grep ntp
-ntpd
-ntpdate -v us.pool.ntp.org
-date
-ls /etc/init.d/
-ls /etc/init.d/n*
-vi /etc/init.d/ntp
-man ntp
-man ntpd
-ntpd -g
-date
-dmesg | tail
-locate ntp.conf
-vi /etc/ntp.conf
-/etc/init.d/ntp stop
-/etc/init.d/ntp start
-date
-ntpd
-date
-nptd -g -u ntp:ntp
-ntpd -g -u ntp:ntp
-date
-locate syslog
-more /var/log/syslog
-lla /var/log/sys*
-more /var/log/syslog.1
-more /var/log/syslog.1 | grep ntp
-ntpdate -v pool.ntp.org
-ls /etc/rc2.d/
-cd /etc/init.d/
-update-rc.d -f time-update.sh remove
-update-rc.d time-update.sh defaults 27
-vi time-update.sh 
-halt
-date
-hwclock
-ntpdate pool.ntp.org
-ntpdate -uv ntp.ubuntu.com pool.ntp.org
-date
-hwclock
-hwclock -w
-hwclock
-date
-vi /etc/init.d/time-update.sh 
-date
-halt
-hwclock
-date
-vi /etc/init.d/time-update.sh 
-ls
-halt
-date
-ntpdate -uv ntp.ubuntu.com
-date
-ntpdate -buv ntp.ubuntu.com
-date
-ntpdate -buv pool.ntp.org
-date
-hwclock
-cat /etc/timezone 
-vi /etc/init.d/time-update.sh 
-halt
-date
-vi /etc/init.d/time-update.sh 
-halt
-date
-ntpdate -buv ntp.ubuntu.com
-date
-hwclock
-ntpdate -v ntp.ubuntu.com
-ntpdate -uv ntp.ubuntu.com
-vi /etc/init.d/time-update.sh 
-halt
-ls /etc/rc2.d/
-cd /etc/init.d/
-update-rc.d -f keepalive-ping.sh remove
-update-rc.d keepalive-ping.sh defaults 25
-update-rc.d -f time-update.sh remove
-update-rc.d -f ntp remove
-update-rc.d time-update.sh defaults 23
-update-rc.d ntp defaults 24
-vi time-update.sh 
-halt
-date
-ntpq -d
-ntpq -p
-cd /etc/init.d/
-ls
-update-rc.d -f time-update.sh remove
-halt
-ntpq -p
-date
-hwclock
-cd /etc/init.d/
-update-rc.d time-update.sh defaults 98
-vi time-update.sh 
-halt
-date
-vi /etc/init.d/time-update.sh 
-halt
-ntpq -p
-cd /etc/init.d/
-ls ../rc2.d/
-update-rc.d -f time-update.sh remove
-update-rc.d time-update.sh defaults 99
-vi time-update.sh 
-halt
 date
 hwclock
 ls /etc/rc2.d/
@@ -1998,3 +1839,162 @@ cp jpge.cpp ~/test_code/flycapture/src/CustomImageEx/
 exit
 htop
 exit
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+lsusb
+./bigtest.sh 
+exit
+emacs today.text &
+cd test_code/flycapture/bin
+./CustomImageEx 
+exit
+iwconfig
+ip addr
+cd /
+git status
+git add -A
+git commit -m "-- Got connected to PAL3.0 with changes to /etc/network/interfaces and /etc/wpa_supplicant.conf
+-- Checked raw frame rate (w/o sending)--seemed to top out around 17 fps, set it to 15 fps
+-- Experimented with putting one of the cameras onto the secondary USB of the gumstix, but the fastest capture rate was with both cameras and the wifi adapter plugged into the main USB
+-- Still need to look into compressing data prior to sending across network"
+git push
+git status
+git add -A
+git commit -m "-- Started work on using jpeg-compressor from Google, but haven't gotten it to work yet.
+"
+git push
+exit
+iwconfig
+ip link show wlan0
+ifup wlan0
+ip link set wlan0 up
+ip link show
+ip link set wlan0 down
+ip link show
+lsusb
+iwconfig
+ifdown wlan1
+ifup wlan1
+vi /etc/wpa_supplicant.conf
+ifdown wlan1
+ifup wlan1
+vi /etc/wpa_supplicant.conf
+ifup wlan1
+iwconfig
+vi /etc/network/interfaces
+ifup wlan1
+iwconfig
+ifdown wlan1
+ifup wlan1
+iwconfig
+ps -ef | grep ping
+kill -9 867
+ip addr
+iwconfig
+ip addr
+iwconfig
+ifdown wlan1
+ifup wlan1
+iwconfig
+wpa_supplicant
+wpa_supplicant -h
+iwconfig
+vi /etc/network/interfaces
+wpa_supplicant -h
+ifdown wlan1
+ifup wlan1
+cat /etc/network/interfaces
+iwconfig
+lsmod
+modinfo 8192cu
+modinfo 8192cu | grep depend
+ifup wlan1
+vi /etc/network/interfaces
+ifdown wlan1
+ifup wlan1
+iwconfig
+ip addr
+iwconfig
+ifup wlan1
+iwconfig
+ifdown wlan1
+ifup wlan1 &
+iwconfig
+vi /etc/wpa_supplicant.conf
+iwconfig
+ip addr
+iwconfig
+ifdown wlan1
+ifup wlan1 &
+iwconfig
+ip addr
+iwconfig
+ifdown wlan1
+vi /etc/wpa_supplicant.conf
+vi /etc/network/interfaces
+ifdown wlan1
+ifup wlan1
+iwconfig
+ping google.com
+vi /etc/network/interfaces
+vi /etc/wpa_supplicant.conf
+vi /etc/network/interfaces
+ifdown wlan1
+ifup wlan1
+iwconfig
+ip addr
+ping google.com
+dhclient wlan0
+ip addr
+iwconfig
+ifdown wlan1
+vi /etc/network/interfaces
+ifup wlan1
+ip addr
+ping google.com
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/keepalive-ping.sh start
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+lsusb
+reboot
+iwconfig
+halt
+lsusb
+reboot
+emacs today.text &
+cd test_code/flycapture/src/CustomImageEx/
+ls
+make
+htop
+iptraf
+ps -ef
+kill -9 1376
+ps -ef
+ping google.com
+lsusb
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+emacs today.text &
+cd test_code/flycapture/src/CustomImageEx/
+htop
+ps -ef | grep ping
+kill -9 858
+lla today.text
+lla *today*
+cat \#today.text# 
+cp \#today.text# today.text
+lla *today*
+reboot
+emacs today.text &
+cd test_code/flycapture/src/CustomImageEx/
+ls
+cd test_code/flycapture/bin
+./CustomImageEx 
+iptraf
+reboot
+emacs today.text &
+cd test_code/flycapture/bin
+./CustomImageEx 
+htop

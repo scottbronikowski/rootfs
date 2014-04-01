@@ -26,7 +26,7 @@ Date: 28 February 2014
 #include <fcntl.h>
 
 //#include "miniz.c"
-#include "snappy.h"
+//#include "snappy.h"
 //for ffmpeg
 extern "C" {
 #include <libavutil/imgutils.h>
@@ -54,7 +54,7 @@ const unsigned int k_PanoCamSerial = 13282227;
 const Mode k_fmt7Mode = MODE_0;
 const FlyCapture2::PixelFormat k_fmt7PixFmt = PIXEL_FORMAT_RAW8;
 const char k_OutputDir[] = "/tmp/images/";
-const float k_FrameRate = 15;
+const float k_FrameRate = 30.0;
 const unsigned int k_FrontCamWidth = 640;//800;//1200;//fmt7Info.maxWidth;
 //const unsigned int k_FrontCamWidth = 960;//1248;//1072;//fmt7Info.maxWidth;
 const unsigned int k_FrontCamHeight = 480;//600;//720;//820;//fmt7Info.maxHeight;
@@ -123,7 +123,7 @@ int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras);
 int sendall(int s, unsigned char *buf, int *len);
 int SendMetadata (PointGrey_t* PG);
 int SendFrame(PointGrey_t* PG);
-void SnappyCompress(PointGrey_t* PG);
+//void SnappyCompress(PointGrey_t* PG);
 int SendMetadataCompressed (PointGrey_t* PG);
 
 int main(int /*argc*/, char** /*argv*/)
@@ -139,11 +139,11 @@ int main(int /*argc*/, char** /*argv*/)
         return -1;
     }
     PointGrey_t* PG = new PointGrey_t[numCameras];
-    for (unsigned int i = 0; i < numCameras; i++)
-    {
-      PG[i].compressed = new char[snappy::MaxCompressedLength(k_TempMaxImageSize)];
-      //PG[i].pCmp = new unsigned char[k_TempMaxImageSize];
-    }
+    // for (unsigned int i = 0; i < numCameras; i++)
+    // {
+    //   PG[i].compressed = new char[snappy::MaxCompressedLength(k_TempMaxImageSize)];
+    //   //PG[i].pCmp = new unsigned char[k_TempMaxImageSize];
+    // }
     if (PGR_StartCameras(&busMgr, PG, numCameras) != 0)
     {
       printf("Error starting cameras\n");
@@ -171,10 +171,14 @@ int main(int /*argc*/, char** /*argv*/)
     // char* tmpOutput = new char[snappy::MaxCompressedLength(k_TempMaxImageSize)];
     // size_t output_length;
     jpge::params parameters;
-    //parameters.m_quality = 50;
-    int bufSize = k_TempMaxImageSize;
-    unsigned char* compressedImage = new unsigned char[bufSize];
-    
+    //parameters.m_quality = 25;
+    //parameters.m_subsampling = jpge::H1V1;
+
+    //try moving this inside loop
+    // int bufSize = k_TempMaxImageSize;
+    // unsigned char* compressedImage = new unsigned char[bufSize];
+    int bufSize;
+
     double start = current_time();
     for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
     {
@@ -204,17 +208,22 @@ int main(int /*argc*/, char** /*argv*/)
 	// // //SEND IMAGE HERE
 	
 	// //***COMPRESSION STUFF*****
-	if (!jpge::compress_image_to_jpeg_file_in_memory(compressedImage, bufSize,
-							 (int)PG[i].cols, (int)PG[i].rows, 
-							 k_numChannels, 
-							 PG[i].pData, parameters))
-	{
+	bufSize = k_TempMaxImageSize;
+	unsigned char* compressedImage = new unsigned char[bufSize];
+
+  	if (!jpge::compress_image_to_jpeg_file_in_memory(compressedImage, bufSize,
+  							 (int)PG[i].cols, (int)PG[i].rows, 
+  							 k_numChannels, 
+  							 PG[i].pData, parameters))
+  	{
 	  printf("compression error\n");
-	}
-	else
-	{
-	  printf("Compressed image size = %d\n", bufSize);
-	}
+  	}
+  	else
+  	{
+  	  printf("Compressed image size = %d\n", bufSize);
+  	}
+
+
 	//SnappyCompress(&PG[i]);
 	
 
@@ -277,6 +286,7 @@ int main(int /*argc*/, char** /*argv*/)
 	//   delete[] PG[i].pCmp;
 	// }
 	//free(pCmp);
+	delete[] compressedImage;
        
 	
 	// else
@@ -346,7 +356,7 @@ int main(int /*argc*/, char** /*argv*/)
     }
     /* CLEAN UP COMPRESSION */
     //delete[] tmpOutput;
-    delete[] compressedImage;
+    //delete[] compressedImage;
 
     double stop = current_time();
     //check elapsed time
@@ -583,7 +593,7 @@ int PGR_SetCamera(PointGrey_t* PG)
   }
   else if (PG->cameraInfo.serialNumber == k_PanoCamSerial)
   {
-    /* NEW way -- trying for 640x480 grayscale */
+    // /* NEW way -- trying for 640x480 grayscale */
     // PG->imageSettings.mode = MODE_0;
     // PG->imageSettings.pixelFormat = PIXEL_FORMAT_RAW8;
     // PG->imageSettings.width = PG->format7Info.maxWidth;
@@ -671,7 +681,7 @@ int PGR_SetCameraNEW(PointGrey_t* PG)
   else if (PG->cameraInfo.serialNumber == k_PanoCamSerial)
   {
     CheckPGR(PG->camera.SetVideoModeAndFrameRate(VIDEOMODE_640x480Y8,
-						 FRAMERATE_15));	     
+						 FRAMERATE_30));	     
   }
   else
   {
@@ -692,19 +702,19 @@ int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCamera
     CheckPGR(busMgr->GetCameraFromIndex(i, &tmpGuid));
     CheckPGR(PG[i].camera.Connect(&tmpGuid));
 
-    //this sets up for pano cam 1240x934 color
-    if (PGR_SetCamera(&PG[i]) != 0)
-    {
-      printf("Error in setting camera\n");
-      return -1;
-    }
-    
-    // //this sets up for pano cam 640x480 greyscale
-    // if (PGR_SetCameraNEW(&PG[i]) != 0)
+    // //this sets up for pano cam 1240x934 color
+    // if (PGR_SetCamera(&PG[i]) != 0)
     // {
     //   printf("Error in setting camera\n");
     //   return -1;
     // }
+    
+    //this sets up for pano cam 640x480 greyscale
+    if (PGR_SetCameraNEW(&PG[i]) != 0)
+    {
+      printf("Error in setting camera\n");
+      return -1;
+    }
 
     // PrintCameraInfo(&PG->cameraInfo);
     // PrintFormat7Capabilities(PG[i].format7Info);
@@ -731,9 +741,9 @@ void PGR_GetFrame(PointGrey_t* PG)
   CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
   printf("%u-rawImage.GetDataSize() = %u\n", PG->cameraInfo.serialNumber,
 	 PG->rawImage.GetDataSize());
-  // Get the raw image dimensions
-  PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
-			     &PG->stride, &PG->pixFormat );
+  // // Get the raw image dimensions
+  // PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
+  // 			     &PG->stride, &PG->pixFormat );
   // Convert the raw image
   // CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
   // 				&PG->convertedImage));
@@ -741,6 +751,16 @@ void PGR_GetFrame(PointGrey_t* PG)
 				&PG->convertedImage));
   printf("%u-convertedImage.GetDataSize() = %u\n", PG->cameraInfo.serialNumber,
 	 PG->convertedImage.GetDataSize());
+  // Get the converted image dimensions
+  PG->convertedImage.GetDimensions(&PG->rows, &PG->cols, 
+				   &PG->stride, &PG->pixFormat );
+  //printf("got dimensions / ");
+  PG->dataSize = PG->convertedImage.GetDataSize();
+  //printf("got data size / ");
+  PG->pData = PG->convertedImage.GetData();
+  //memcpy(PG->pData, PG->convertedImage.GetData(), PG->dataSize); //SEGFAULTS
+  //printf("got data, strlen(data) = %zu\n", strlen((const char*)PG->pData));
+
 }
 
 void PGR_SaveImage(PointGrey_t* PG)
@@ -1055,9 +1075,9 @@ int SendFrame(PointGrey_t* PG)
   return 0;
 }
 
-void SnappyCompress(PointGrey_t* PG)
-{
-  snappy::RawCompress((char*)PG->pData, (size_t)PG->dataSize,
-		      PG->compressed, &PG->compressed_length);
-  printf("dataSize = %u, cmp_len = %d\n", PG->dataSize, PG->compressed_length);
-}
+// void SnappyCompress(PointGrey_t* PG)
+// {
+//   snappy::RawCompress((char*)PG->pData, (size_t)PG->dataSize,
+// 		      PG->compressed, &PG->compressed_length);
+//   printf("dataSize = %u, cmp_len = %d\n", PG->dataSize, PG->compressed_length);
+// }
