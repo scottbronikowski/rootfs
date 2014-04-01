@@ -1,130 +1,3 @@
-date
-hwclock
-ls /etc/rc2.d/
-vi /etc/init.d/monitor.sh 
-halt
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-date
-vi /etc/init.d/time-update.sh 
-emacs &
-cd test_code/flycapture/bin
-ls
-rm *.ppm
-./CustomImageEx 
-lsusb
-./CustomImageEx 
-reboot
-cd test_code/flycapture/src/support/
-ls
-rsync seykhl:~/*test.c .
-ls
-cat test.c
-cd ../CustomImageEx/
-ls
-lla
-top
-date
-hwclock
-cd test_code/flycapture/bin
-ls
-./CustomImageEx 
-cd test_code/flycapture/src/CustomImageEx/
-emacs &
-top
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs &
-cd test_code/flycapture/src/CustomImageEx/
-./CustomImageEx 
-cd ../../bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs &
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs &
-top
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-lsusb
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs &
-cd test_code/flycapture/bin
-./CustomImageEx 
-lsusb
-cd test_code/flycapture/bin
-./CustomImageEx 
-emacs &
-./CustomImageEx 
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-lsusb
-./CustomImageEx 
-ls ../
-cd ../include/
-ls
-cd test_code/flycapture/src/support/
-ls
-make
-./test2 
-lsusb
-cat Makefile 
-less simpletest.c 
-cat simpletest.c 
-~gcc -Wall -g -I/usr/include/flycapture -std=gnu99 -o simpletest simpletest.c -L/usr/lib -lflycapture-c `imlib2-config --cflags --libs`
-gcc -Wall -g -I/usr/include/flycapture -std=gnu99 -o simpletest simpletest.c -L/usr/lib -lflycapture-c `imlib2-config --cflags --libs`
-gcc -Wall -g -I/../../include/ -std=gnu99 -o simpletest simpletest.c -L/../../lib -lflycapture-c `imlib2-config --cflags --libs`
-gcc -Wall -g -I../../include/ -std=gnu99 -o simpletest simpletest.c -L../../lib -lflycapture-c `imlib2-config --cflags --libs`
-./simpletest 
-./simpletest 1
-reboot
-cd test_code/flycapture/bin/
-ls
-./CustomImageEx 
-emacs &
-ls
-rm *.ppm
-./CustomImageEx 
-lsusb
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-lsusb
-reboot
-ps -ef | grep ssh
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-emacs &
-date
-hwclock
-cd test_code/flycapture/bin
-./CustomImageEx 
-lsusb
-cd ~
-vi notes3march.txt 
-emacs notes3march.txt &
 top
 reboot
 cd test_code/flycapture/bin
@@ -1993,6 +1866,133 @@ ls
 cd test_code/flycapture/bin
 ./CustomImageEx 
 iptraf
+reboot
+emacs today.text &
+cd test_code/flycapture/bin
+./CustomImageEx 
+htop
+lsusb
+ls
+reboot
+emacs today.text
+emacs today.text &
+ls
+cd open
+cd opencv-2.4.8
+ls
+lla
+cd release/
+lla
+cd CMakeFiles/
+ls
+cd CMakeTmp/
+ls
+cd CMakeFiles/
+ls
+tree
+cd ../../..
+tree
+cd ..
+rmdir -f opencv-2.4.8
+rmdir opencv-2.4.8
+rmdir --help
+rmdir -pv opencv-2.4.8/release/CMakeFiles/CMakeTmp/CMakeFiles/cmTryCompileExec.dir/
+ls
+mkdir opencv
+cd opencv
+git clone https://github.com/Itseez/opencv.git
+ls
+lla
+cd .
+cd ..
+rmdir opencv
+unzip
+unzip opencv-2.4.8.zip 
+cd opencv-2.4.8
+ls
+mkdir release
+cd release
+cmake -D CMAKE_BUILD_TYPE=RELEASE CMAKE_INSTALL_PREFIX=/usr/local ..
+make
+make; make install
+cd /
+git status
+git add -A
+git commit -m "-- Got jpeg-compressor working. Getting good compression ratios (~95-97%), but at the cost of framerate--w/o compression, getting 15 f/s/c, with compression < 1 f/s/c.  Working on improving that.
+-- Switched pano cam back to greyscale by calling PGR_SetCameraNEW from within PGR_StartCameras
+-- After testing jpeg-compressor using only 640x480 images, best framerate was about 2.5 f/s/c, regardless of parameters settings.
+-- Installed OpenCV based on http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html#linux-installation
+"
+git push
+locate opencv.hpp
+locate cv.h
+locate highgui.h
+cd /usr/local/bin
+ls
+./opencv_createsamples 
+cd ~/opencv-2.4.8
+ls
+cd apps/
+ls
+lla
+cd traincascade/
+ls
+cd ..
+cd ../samples/
+ls
+cd cpp/
+ls
+make
+cmake .
+ls
+cd CMakeFiles/
+ls
+cd ..
+ls
+cd c
+ls
+sh build_all.sh 
+./facedetect lena.jpg 
+cd test_code/flycapture/bin
+./CustomImageEx 
+locate opencv_test_core
+./CustomImageEx 
+cd test_code/flycapture/src/CustomImageEx/
+cd /tmp/images/
+ls
+feh *.jpg
+ls
+iptraf 
+lla /tmp/images
+reboot
+emacs today.text &
+cd test_code/flycapture/bin
+./CustomImageEx 
+ls /tmp/images
+rm /tmp/images/*
+./CustomImageEx 
+ls /tmp/images
+rm /tmp/images/*
+./CustomImageEx 
+ls /tmp/images
+./CustomImageEx 
+ls /tmp/images
+rm /tmp/images/*
+./CustomImageEx 
+clear
+htop
+reboot
+emacs today.text &
+cd test_code/flycapture/bin
+./CustomImageEx 
+ls /tmp/images
+lla /tmp/images
+rm /tmp/images/*
+./CustomImageEx 
+ls /tmp/images
+rm /tmp/images/*
+./CustomImageEx 
+lsusb
 reboot
 emacs today.text &
 cd test_code/flycapture/bin

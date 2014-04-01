@@ -35,6 +35,10 @@ extern "C" {
 }
 //for jpeg-compressor
 #include "jpge.h"
+//for opencv
+#include <vector>
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
 
 using namespace FlyCapture2;
 
@@ -73,6 +77,8 @@ const char* k_PanoCamPort = "3602";
 const unsigned int k_BytesPerPixel = 4;
 const unsigned long k_TempMaxImageSize = (1024 * 1024 *4); //4MB
 const int k_numChannels = 3; //3 channels for RGB images
+/*for OpenCV*/
+const int k_jpegQuality = 50; //0-100, default is 95
 
 //structures
 struct PointGrey_t {
@@ -90,8 +96,10 @@ struct PointGrey_t {
   int sockfd;
   //unsigned long cmp_len;
   //unsigned char* pCmp;
-  size_t compressed_length;
-  char* compressed;
+  //size_t compressed_length;
+  //char* compressed;
+  int compressed_size;
+  cv::vector<uchar> compressed;
 };
 
 
@@ -122,9 +130,10 @@ int ClientConnect(const char* server, const char* port);
 int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras);
 int sendall(int s, unsigned char *buf, int *len);
 int SendMetadata (PointGrey_t* PG);
+//int SendMetadataCompressed (PointGrey_t* PG);
 int SendFrame(PointGrey_t* PG);
 //void SnappyCompress(PointGrey_t* PG);
-int SendMetadataCompressed (PointGrey_t* PG);
+int OpenCV_CompressFrame(PointGrey_t* PG, unsigned int imageCount);
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -138,6 +147,14 @@ int main(int /*argc*/, char** /*argv*/)
         printf( "Insufficient number of cameras... exiting\n" );
         return -1;
     }
+
+    //TEMPORARY for OpenCV save testing
+    if (CheckSaving(k_OutputDir) != 0)
+    {
+      printf("Cannot save to %s, please check permissions\n",k_OutputDir);
+      return -1;
+    }
+
     PointGrey_t* PG = new PointGrey_t[numCameras];
     // for (unsigned int i = 0; i < numCameras; i++)
     // {
@@ -170,14 +187,14 @@ int main(int /*argc*/, char** /*argv*/)
 
     // char* tmpOutput = new char[snappy::MaxCompressedLength(k_TempMaxImageSize)];
     // size_t output_length;
-    jpge::params parameters;
+    //jpge::params parameters;
     //parameters.m_quality = 25;
     //parameters.m_subsampling = jpge::H1V1;
 
     //try moving this inside loop
     // int bufSize = k_TempMaxImageSize;
     // unsigned char* compressedImage = new unsigned char[bufSize];
-    int bufSize;
+    //int bufSize;
 
     double start = current_time();
     for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
@@ -206,22 +223,57 @@ int main(int /*argc*/, char** /*argv*/)
 	
 	// // /* LOOK TO FUNCTIONALIZE THIS SECTION */
 	// // //SEND IMAGE HERE
+
+
+	/**** OpenCV stuff ****/
+	OpenCV_CompressFrame(&PG[i], imageCount);
+	// cv::Mat imgbuf = cv::Mat((int)PG[i].rows, (int)PG[i].cols, CV_8UC3, PG[i].pData);
+	
+	// // //OpenCV save to make sure images aren't mangled
+	// // // Create a unique filename
+	// // char filename[512];
+	// // sprintf(filename, "%s%u-OpenCV-%.2u.jpg", k_OutputDir, PG[i].cameraInfo.serialNumber,
+	// // 	imageCount);
+	// // cv::imwrite(filename, imgbuf);
+	// // //end OpenCV save
+
+	// cv::vector<uchar> buf;
+	// std::vector<int> params = std::vector<int>(2);
+	// params[0] = CV_IMWRITE_JPEG_QUALITY;
+	// params[1] = 50; //0-100, default is 95
+
+	// cv::imencode(".jpg", imgbuf, buf, params);
+	// printf("Encoded image size = %d\n", buf.size());
+
+	// //send here???
+
+	// // //this should be what the receiving side does
+	// // cv::Mat jpegimage = imdecode(cv::Mat(buf), CV_LOAD_IMAGE_COLOR);
+	// // char filename[512];
+	// // sprintf(filename, "%s%u-OpenCV-%.2u.jpg", k_OutputDir, PG[i].cameraInfo.serialNumber,
+	// // 	imageCount);
+	// // cv::imwrite(filename, jpegimage);
+
+	
+	
+	
+
 	
 	// //***COMPRESSION STUFF*****
-	bufSize = k_TempMaxImageSize;
-	unsigned char* compressedImage = new unsigned char[bufSize];
+	// bufSize = k_TempMaxImageSize;
+	// unsigned char* compressedImage = new unsigned char[bufSize];
 
-  	if (!jpge::compress_image_to_jpeg_file_in_memory(compressedImage, bufSize,
-  							 (int)PG[i].cols, (int)PG[i].rows, 
-  							 k_numChannels, 
-  							 PG[i].pData, parameters))
-  	{
-	  printf("compression error\n");
-  	}
-  	else
-  	{
-  	  printf("Compressed image size = %d\n", bufSize);
-  	}
+  	// if (!jpge::compress_image_to_jpeg_file_in_memory(compressedImage, bufSize,
+  	// 						 (int)PG[i].cols, (int)PG[i].rows, 
+  	// 						 k_numChannels, 
+  	// 						 PG[i].pData, parameters))
+  	// {
+	//   printf("compression error\n");
+  	// }
+  	// else
+  	// {
+  	//   printf("Compressed image size = %d\n", bufSize);
+  	// }
 
 
 	//SnappyCompress(&PG[i]);
@@ -286,7 +338,7 @@ int main(int /*argc*/, char** /*argv*/)
 	//   delete[] PG[i].pCmp;
 	// }
 	//free(pCmp);
-	delete[] compressedImage;
+	//delete[] compressedImage;
        
 	
 	// else
@@ -1021,46 +1073,46 @@ int SendMetadata (PointGrey_t* PG)
   return 0;
 }
 
-int SendMetadataCompressed (PointGrey_t* PG)
-{
-  if (send(PG->sockfd, &PG->cols, sizeof(PG->cols), 0) <= 0)
-  {
-    printf("Error sending cols");
-    return -1;
-  }
-  if (send(PG->sockfd, &PG->rows, sizeof(PG->rows), 0) <= 0)
-  {
-    printf("Error sending rows");
-    return -1;
-  }	
-  if (send(PG->sockfd, &PG->stride, sizeof(PG->stride), 0) <= 0)
-  {
-    printf("Error sending stride");
-    return -1;
-  }
-  if (send(PG->sockfd, &PG->dataSize, sizeof(PG->dataSize), 0) <= 0)
-  {
-    printf("Error sending dataSize");
-    return -1;
-  }	
-  if (send(PG->sockfd, &PG->pixFormat, sizeof(PG->pixFormat), 0) <= 0)
-  {
-    printf("Error sending pixFormat");
-    return -1;
-  }
-  if (send(PG->sockfd, &PG->bayerFormat, sizeof(PG->bayerFormat), 0) <= 0)
-  {
-    printf("Error sending bayerFormat");
-    return -1;
-  }	
-  if (send(PG->sockfd, &PG->compressed_length, sizeof(PG->compressed_length), 0) <= 0)
-  {
-    printf("Error sending compressed_length");
-    return -1;
-  }
-  //if we haven't hit a return yet, we succeeded
-  return 0;
-}
+// int SendMetadataCompressed (PointGrey_t* PG)
+// {
+//   if (send(PG->sockfd, &PG->cols, sizeof(PG->cols), 0) <= 0)
+//   {
+//     printf("Error sending cols");
+//     return -1;
+//   }
+//   if (send(PG->sockfd, &PG->rows, sizeof(PG->rows), 0) <= 0)
+//   {
+//     printf("Error sending rows");
+//     return -1;
+//   }	
+//   if (send(PG->sockfd, &PG->stride, sizeof(PG->stride), 0) <= 0)
+//   {
+//     printf("Error sending stride");
+//     return -1;
+//   }
+//   if (send(PG->sockfd, &PG->dataSize, sizeof(PG->dataSize), 0) <= 0)
+//   {
+//     printf("Error sending dataSize");
+//     return -1;
+//   }	
+//   if (send(PG->sockfd, &PG->pixFormat, sizeof(PG->pixFormat), 0) <= 0)
+//   {
+//     printf("Error sending pixFormat");
+//     return -1;
+//   }
+//   if (send(PG->sockfd, &PG->bayerFormat, sizeof(PG->bayerFormat), 0) <= 0)
+//   {
+//     printf("Error sending bayerFormat");
+//     return -1;
+//   }	
+//   if (send(PG->sockfd, &PG->compressed_length, sizeof(PG->compressed_length), 0) <= 0)
+//   {
+//     printf("Error sending compressed_length");
+//     return -1;
+//   }
+//   //if we haven't hit a return yet, we succeeded
+//   return 0;
+// }
 
 int SendFrame(PointGrey_t* PG)
 {
@@ -1081,3 +1133,36 @@ int SendFrame(PointGrey_t* PG)
 // 		      PG->compressed, &PG->compressed_length);
 //   printf("dataSize = %u, cmp_len = %d\n", PG->dataSize, PG->compressed_length);
 // }
+
+int OpenCV_CompressFrame(PointGrey_t* PG, unsigned int imageCount)
+{
+  cv::Mat imgbuf = cv::Mat((int)PG->rows, (int)PG->cols, CV_8UC3, PG->pData);
+  
+  // //OpenCV save to make sure images aren't mangled
+  // // Create a unique filename
+  // char filename[512];
+  // sprintf(filename, "%s%u-OpenCV-%.2u.jpg", k_OutputDir, PG->cameraInfo.serialNumber,
+  // 	imageCount);
+  // cv::imwrite(filename, imgbuf);
+  // //end OpenCV save
+  
+  //  cv::vector<uchar> buf;
+  std::vector<int> params = std::vector<int>(2);
+  params[0] = CV_IMWRITE_JPEG_QUALITY;
+  params[1] = k_jpegQuality;
+  
+  cv::imencode(".jpg", imgbuf, PG->compressed, params);
+  PG->compressed_size = PG->compressed.size();
+  printf("Encoded image size = %d\n", PG->compressed_size);
+  
+  //send here
+   
+  //this should be what the receiving side does
+  cv::Mat jpegimage = imdecode(cv::Mat(PG->compressed), CV_LOAD_IMAGE_COLOR);
+  char filename[512];
+  sprintf(filename, "%s%u-OpenCV-%.2u.jpg", k_OutputDir, PG->cameraInfo.serialNumber,
+  	imageCount);
+  cv::imwrite(filename, jpegimage);
+
+  return 0;
+}
