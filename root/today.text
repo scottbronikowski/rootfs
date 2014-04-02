@@ -1,3 +1,10 @@
+-- Got images sending across network.  With JPEG compression set at 50 (range 0-100), can get images across network as fast as Gumstix can produce them (~9.5-11.5 f/s/c).  With JPEG compression at default (95), Gumstix produces images ~8.6 f/s/c, sends ~6.5-7 f/s/c.
+
+-- Changed PGR_GetFrame() and OpenCV_CompressFrame() to differentiate between 3-channel color images from front cam and 1-channel grayscale images from pano cam--now getting ~13 f/s/c across network with quality at 75, ~14 f/s/c with quality at 50.
+
+-- Saving across network is working (quality = 75) at ~11.9-12.5 f/s/c.  Can save as either .jpg or .png, doesn't seem to affect speed
+
+
 
 
 test jpeg-compressor on workstation -- compiles then crashes on workstation, won't compile on laptop

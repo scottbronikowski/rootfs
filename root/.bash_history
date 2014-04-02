@@ -1,78 +1,3 @@
-top
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/bin/
-./CustomImageEx 
-exit
-emacs &
-ps -ef | grep emacs
-kill -9 1210
-emacs &
-top
-exit
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-reboot
-ls
-rm notes3march.txt 
-emacs &
-dpkg-query -l
-dpkg-query -l > query.txt
-ls
-ps -ef | grep gvfs
-lsof
-aptitude why gvfs
-aptitude why gvfs-backends
-aptitude
-cd test_code/flycapture/bin/
-./CustomImageEx
-ls
-feh 12262775-final.ppm 
-feh *.ppm
-rfkill list
-rfkill help
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-lsusb
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs &
-cd test_code/flycapture/bin
-./CustomImageEx 
-ls
-rm *.ppm
-./CustomImageEx 
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs &
-ls
-make
-Dmake
-make
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs &
-date
-ntpq -p
-date
-hwclock 
-service ntpd restart
-service ntp restart
-date
-ntpq -p
-date
-vi /etc/ntp.conf
-cat /var/lib/ntp/ntp.drift 
-/etc/init.d/ntp stop
 /etc/init.d/ntp start
 date
 ntpq -p
@@ -1998,3 +1923,78 @@ emacs today.text &
 cd test_code/flycapture/bin
 ./CustomImageEx 
 htop
+ls
+lsusb
+ls
+top
+reboot
+emacs today.text &
+cd /
+rm /tmp/images/*
+git status
+git add -A
+git commit -m "-- Got OpenCV working with PGR images to encode in memory and checked via decoding and saving.  Next need to work on sending across network.
+-- Got OpenCV working with PGR images to encode in memory and checked via decoding and saving.  Next need to work on sending across network.
+git commit -m "-- Got OpenCV working with PGR images to encode in memory and checked via decoding and saving.  Next need to work on sending across network.
+"
+git push
+cd ~
+ls
+cd pointgrey/
+ls
+cd flycapture.2.6.3.2_armhf/
+ls
+cd src
+ls
+cd /
+cd test_code/flycapture/bin
+./CustomImageEx 
+ls /tmp/images/
+./CustomImageEx 
+ls /tmp/images
+rm /tmp/images/*
+./CustomImageEx 
+ls /opt/ros
+ls /opt
+cd /opt
+ls
+lla
+cd ~/test_code/flycapture/bin
+./CustomImageEx 
+cd /boot
+ls
+locate *.scr
+cd ..
+lla
+cd dev
+ls
+cd mmcblk0p1 
+lla mmcblk0*
+fdisk -l
+lsblk
+cd ~/test_code/flycapture/src/
+ls
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+emacs today.text &
+htop
+iptraf
+reboot
+emacs today.text &
+cd test_code/flycapture/bin
+./CustomImageEx 
+htop
+reboot
+emacs today.text &
+cd test_code/flycapture/bin
+./CustomImageEx 
+rm /tmp/images/*
+./CustomImageEx 
+rm /tmp/images/*
+./CustomImageEx 
+rm /tmp/images/*
+./CustomImageEx 
+rm /tmp/images/*
+./CustomImageEx 
+iptraf 

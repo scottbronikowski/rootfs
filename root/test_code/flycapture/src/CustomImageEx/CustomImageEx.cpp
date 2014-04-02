@@ -78,7 +78,7 @@ const unsigned int k_BytesPerPixel = 4;
 const unsigned long k_TempMaxImageSize = (1024 * 1024 *4); //4MB
 const int k_numChannels = 3; //3 channels for RGB images
 /*for OpenCV*/
-const int k_jpegQuality = 50; //0-100, default is 95
+const int k_jpegQuality = 75; //0-100, default is 95
 
 //structures
 struct PointGrey_t {
@@ -310,6 +310,23 @@ int main(int /*argc*/, char** /*argv*/)
 	
 	
 	// /* SENDING BLOCK */
+
+	//first send compressed image size
+	if (send(PG[i].sockfd, &PG[i].compressed_size, sizeof(PG[i].compressed_size), 0) <= 0)
+	{
+	  printf ("Error sending compressed size\n");
+	}
+	//then send compressed image
+	int img_size = PG[i].compressed_size;
+	if (sendall(PG[i].sockfd, &PG[i].compressed[0], &img_size) != 0)
+	{
+	  printf("Error in sendall\n");
+	} 
+	// else
+	// {
+	//   printf("Bytes sent (%u): %d\n", PG[i].cameraInfo.serialNumber, img_size);
+	// }
+
 	// // //can't send metadata just once when sending compressed
 	// // if (SendMetadataCompressed(&PG[i]) != 0)
 	// // {
@@ -791,23 +808,33 @@ void PGR_GetFrame(PointGrey_t* PG)
 {
   // Retrieve an image
   CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
-  printf("%u-rawImage.GetDataSize() = %u\n", PG->cameraInfo.serialNumber,
-	 PG->rawImage.GetDataSize());
+  // printf("%u-rawImage.GetDataSize() = %u\n", PG->cameraInfo.serialNumber,
+  // 	 PG->rawImage.GetDataSize());
   // // Get the raw image dimensions
   // PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
   // 			     &PG->stride, &PG->pixFormat );
   // Convert the raw image
   // CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
   // 				&PG->convertedImage));
-  CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGR, 
-				&PG->convertedImage));
-  printf("%u-convertedImage.GetDataSize() = %u\n", PG->cameraInfo.serialNumber,
-	 PG->convertedImage.GetDataSize());
+
+  //DIFFERENT CONVERSION FOR COLOR VS. GRAYSCALE
+  if (PG->cameraInfo.serialNumber == k_FrontCamSerial)
+
+    CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGR, 
+				  &PG->convertedImage));
+  else
+    CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_MONO8,
+				  &PG->convertedImage));
+  //end different conversion
+
   // Get the converted image dimensions
   PG->convertedImage.GetDimensions(&PG->rows, &PG->cols, 
 				   &PG->stride, &PG->pixFormat );
   //printf("got dimensions / ");
   PG->dataSize = PG->convertedImage.GetDataSize();
+  // printf("%u-convertedImage.GetDataSize() = %u\n", PG->cameraInfo.serialNumber,
+  // 	 PG->dataSize);
+ 
   //printf("got data size / ");
   PG->pData = PG->convertedImage.GetData();
   //memcpy(PG->pData, PG->convertedImage.GetData(), PG->dataSize); //SEGFAULTS
@@ -1136,7 +1163,12 @@ int SendFrame(PointGrey_t* PG)
 
 int OpenCV_CompressFrame(PointGrey_t* PG, unsigned int imageCount)
 {
-  cv::Mat imgbuf = cv::Mat((int)PG->rows, (int)PG->cols, CV_8UC3, PG->pData);
+  cv::Mat imgbuf;
+  if (PG->cameraInfo.serialNumber == k_FrontCamSerial)
+    imgbuf = cv::Mat((int)PG->rows, (int)PG->cols, CV_8UC3, PG->pData);
+  else
+    imgbuf = cv::Mat((int)PG->rows, (int)PG->cols, CV_8UC1, PG->pData);
+     
   
   // //OpenCV save to make sure images aren't mangled
   // // Create a unique filename
@@ -1153,16 +1185,23 @@ int OpenCV_CompressFrame(PointGrey_t* PG, unsigned int imageCount)
   
   cv::imencode(".jpg", imgbuf, PG->compressed, params);
   PG->compressed_size = PG->compressed.size();
-  printf("Encoded image size = %d\n", PG->compressed_size);
+  //printf("Encoded image size = %d\n", PG->compressed_size);
   
   //send here
    
-  //this should be what the receiving side does
-  cv::Mat jpegimage = imdecode(cv::Mat(PG->compressed), CV_LOAD_IMAGE_COLOR);
-  char filename[512];
-  sprintf(filename, "%s%u-OpenCV-%.2u.jpg", k_OutputDir, PG->cameraInfo.serialNumber,
-  	imageCount);
-  cv::imwrite(filename, jpegimage);
+  // //this should be what the receiving side does
+
+  // cv::Mat jpegimage;
+
+  // if (PG->cameraInfo.serialNumber == k_FrontCamSerial)
+  //   jpegimage = imdecode(cv::Mat(PG->compressed), CV_LOAD_IMAGE_COLOR);
+  // else
+  //   jpegimage = imdecode(cv::Mat(PG->compressed), CV_LOAD_IMAGE_GRAYSCALE);
+
+  // char filename[512];
+  // sprintf(filename, "%s%u-OpenCV-%.2u.jpg", k_OutputDir, PG->cameraInfo.serialNumber,
+  // 	imageCount);
+  // cv::imwrite(filename, jpegimage);
 
   return 0;
 }
