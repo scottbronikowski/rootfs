@@ -226,7 +226,9 @@ int main(int /*argc*/, char** /*argv*/)
 
 
 	/**** OpenCV stuff ****/
+
 	OpenCV_CompressFrame(&PG[i], imageCount);
+
 	// cv::Mat imgbuf = cv::Mat((int)PG[i].rows, (int)PG[i].cols, CV_8UC3, PG[i].pData);
 	
 	// // //OpenCV save to make sure images aren't mangled

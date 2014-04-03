@@ -1,29 +1,3 @@
-/etc/init.d/ntp start
-date
-ntpq -p
-date
-vi /etc/init.d/ntp
-date
-ntpd -q
-date
-ntpq -p
-ntpdate -s -u pool.ntp.org
-date
-hwclock
-/etc/init.d/time-update.sh start
-hwclock
-ntpd -g
-date
-ntpq -p
-/etc/init.d/ntp stop
-/etc/init.d/ntp start
-/etc/init.d/ntp stop
-ntpd -gq
-ntpd -g
-/etc/init.d/ntp start
-date
-exit
-emacs &
 exit
 /etc/init.d/ssh-tunnel.sh stop
 /etc/init.d/ssh-tunnel.sh start
@@ -1998,3 +1972,29 @@ rm /tmp/images/*
 rm /tmp/images/*
 ./CustomImageEx 
 iptraf 
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+cd test_code/flycapture/src/CustomImageEx/
+ls
+./bigtest.sh 
+iptraf
+htop
+emacs today.text &
+cd /
+git status
+ls /tmp/images
+git add -A
+git commit -m "-- Got images sending across network.  With JPEG compression set at 50 (range 0-100), can get images across network as fast as Gumstix can produce them (~9.5-11.5 f/s/c).  With JPEG compression at default (95), Gumstix produces images ~8.6 f/s/c, sends ~6.5-7 f/s/c.
+
+-- Changed PGR_GetFrame() and OpenCV_CompressFrame() to differentiate between 3-channel color images from front cam and 1-channel grayscale images from pano cam--now getting ~13 f/s/c across network with quality at 75, ~14 f/s/c with quality at 50.
+
+-- Saving across network is working (quality = 75) at ~11.9-12.5 f/s/c.  Can save as either .jpg or .png, doesn't seem to affect speed
+"
+git push
+cd test_code/flycapture/bin
+cd test_code/flycapture/src/CustomImageEx/
+./bigtest.sh 
+iptraf
+htop
+reboot

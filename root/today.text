@@ -1,9 +1,49 @@
--- Got images sending across network.  With JPEG compression set at 50 (range 0-100), can get images across network as fast as Gumstix can produce them (~9.5-11.5 f/s/c).  With JPEG compression at default (95), Gumstix produces images ~8.6 f/s/c, sends ~6.5-7 f/s/c.
+-- Attempted to install libjpeg-turbo then recompile/reinstall OpenCV with NEON and VFPv3 enabled.  Loosely followed instructions at http://blog.lemoneerlabs.com/3rdParty/Darling_BBB_30fps_DRAFT.html#XMatthew_cvdecode and https://github.com/aumuell/libjpeg-turbo/blob/master/BUILDING.txt
+-- apt-get install g++-4.6-multilib g++-multilib gcc-4.6-multilib gcc-multilib (used to attempt to get past libjpeg-turbo configure error--not sure if needed)
+-- Downloaded libjpeg-turbo-1.3.0 from http://sourceforge.net/projects/libjpeg-turbo/files/1.3.0/libjpeg-turbo-1.3.0.tar.gz
+-- Went to libjpeg-turbo-1.3.0/build and ran:
+   ../configure CPPFLAGS='-O3 -march=armv7-a -mcpu=cortex-a8 -mtune=cortex-a8 -mfpu=neon -mfloat-abi=hard -fPIC'
+   make
+   make install prefix=/usr/local libdir=/usr/local/lib
+   make install
 
--- Changed PGR_GetFrame() and OpenCV_CompressFrame() to differentiate between 3-channel color images from front cam and 1-channel grayscale images from pano cam--now getting ~13 f/s/c across network with quality at 75, ~14 f/s/c with quality at 50.
+   	Output:
+	----------------------------------------------------------------------
+	Libraries have been installed in:
+	   /opt/libjpeg-turbo/lib
+	   (/usr/local/lib)
 
--- Saving across network is working (quality = 75) at ~11.9-12.5 f/s/c.  Can save as either .jpg or .png, doesn't seem to affect speed
+	   If you ever happen to want to link against installed libraries
+	   in a given directory, LIBDIR, you must either use libtool, and
+	   specify the full pathname of the library, or use the `-LLIBDIR'
+	   flag during linking and do at least one of the following:
+	      - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+	      	during execution
+	      - add LIBDIR to the `LD_RUN_PATH' environment variable
+                during linking
+	      - use the `-Wl,--rpath -Wl,LIBDIR' linker flag
+   	      - have your system administrator add LIBDIR to `/etc/ld.so.conf'
 
+	See any operating system documentation about shared libraries for
+	more information, such as the ld(1) and ld.so(8) manual pages.
+	 ---------------------------------------------------------------------- 
+-- Then went to ~/opencv-2.4.8/release and ran:
+     cmake -D CMAKE_C_FLAGS='-O3 -march=armv7-a -mcpu=cortex-a8 -mtune=cortex-a8 \
+     -mfpu=neon -mfloat-abi=hard -fPIC' -D CMAKE_CXX_FLAGS='-O3 -march=armv7-a \
+     -mcpu=cortex-a8 -mtune=cortex-a8 -mfpu=neon -mfloat-abi=hard -fPIC' \
+     -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
+     -D BUILD_PYTHON_SUPPORT=ON -DWITH_JPEG=ON -DBUILD_JPEG=OFF \
+     -DJPEG_INCLUDE_DIR=/usr/local/include/ \
+     -DJPEG_LIBRARY=/usr/local/lib/libjpeg.a -DUSE_VFPV3=ON -DUSE_NEON=ON \
+     -DENABLE_VFPV3=ON -DENABLE_NEON=ON .. 
+     make
+     make install
+-- When complete, did a make clean and then make on CustomImageEx.cpp.  Did not see any improvment in OpenCV compression speed (~12 f/s/c with compression on, 24 f/s/c with compression off).
+
+
+
+first OpenCV install:
+cmake -DENABLE_VFPV3=ON -DENABLE_NEON=ON -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local .. 
 
 
 
@@ -102,3 +142,8 @@ Old notes
 
 1 Apr 14
 -- Got OpenCV working with PGR images to encode in memory and checked via decoding and saving.  Next need to work on sending across network.
+
+2 Apr 14
+-- Got images sending across network.  With JPEG compression set at 50 (range 0-100), can get images across network as fast as Gumstix can produce them (~9.5-11.5 f/s/c).  With JPEG compression at default (95), Gumstix produces images ~8.6 f/s/c, sends ~6.5-7 f/s/c.
+-- Changed PGR_GetFrame() and OpenCV_CompressFrame() to differentiate between 3-channel color images from front cam and 1-channel grayscale images from pano cam--now getting ~13 f/s/c across network with quality at 75, ~14 f/s/c with quality at 50.
+-- Saving across network is working (quality = 75) at ~11.9-12.5 f/s/c.  Can save as either .jpg or .png, doesn't seem to affect speed
