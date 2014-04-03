@@ -1,101 +1,3 @@
-exit
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-halt
-date
-ntpq -p
-nptd -gq
-ntpd -gq
-date
-vi /etc/init.d/ntp
-halt
-date
-ntpd 
-date
-n
-ping www.purdue.edu
-date
-ntpd -gq
-date
-ntpq -d
-ntpq -p
-date
-ntpd -gq
-date
-reboot
-emacs &
-date
-ntpdate -uvb ntp.ubuntu.com us.pool.ntp.org
-date
-hwclock
-hwclock -w
-hwclock
-ntpdate -uvb ntp.ubuntu.com us.pool.ntp.org
-exit
-cd /etc/init.d/
-ls ../rc2.d/
-locate ntpdate
-exit
-date
-ntpd -gq
-date
-ntpd -v
-man ntpd
-ntpd -help
-date
-ntpd -gq
-ntpd -g
-date
-/etc/init.d/ntp stop
-date
-ntpd -gq
-date
-ntpd -q
-date
-ntpd -gq
-date
-hwclock
-date
-halt
-emacs /etc/init.d/time-update.sh &
-exit
-exit
-date
-hwclock
-halt
-date
-ifdown wlan0
-ifup wlan0
-ping www.purdue.edu
-date
-reboot
-date
-ping www.google.com
-date
-hwclock
-vi /etc/init.d/time-update.sh 
-reboot
-date
-hwclock
-date
-hwclock -w
-date
-hwclock
-halt
-date
-hwclock
-date
-hwclock
-hwclock -w
-hwclock
-hwclock --debug
-vi /etc/init.d/time-update.sh 
-halt
-exit
-top
-cd test_code/flycapture/bin
-./CustomImageEx 
-ls /tmp/images
 lla
 date
 hwclock
@@ -1998,3 +1900,101 @@ cd test_code/flycapture/src/CustomImageEx/
 iptraf
 htop
 reboot
+ps -ef
+cd test_code/flycapture/src/CustomImageEx/
+cd ~
+ls
+cd opencv-2.4.8
+ls
+cd release/
+cmake -DENABLE_VFPV3=ON -DENABLE_NEON=ON -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local .. 
+make; make install
+cd ~/test_code/flycapture/src/CustomImageEx/
+make clean
+make
+cd ~
+ls
+mkdir libjpeg-turbo
+cd libjpeg-turbo/
+rsync -avrz seykhl:~/Downloads/libjpeg-turbo-1.3.1.tar.gz .
+ls
+tar -xzvf libjpeg-turbo-1.3.1.tar.gz 
+ls
+cd libjpeg-turbo-1.3.1
+ls
+mkdir build
+cd build/
+./configure CPPFLAGS=’-O3 -pipe -fPIC -mfpu=neon -mfloat-abi=hard’
+../configure CPPFLAGS=’-O3 -pipe -fPIC -mfpu=neon -mfloat-abi=hard’
+../configure CPPFLAGS=’-O3 -fPIC -mfpu=neon -mfloat-abi=hard’
+cd ..
+rm -rf libjpeg-turbo-1.3.1
+ls
+rm libjpeg-turbo-1.3.1.tar.gz 
+rsync -avrz seykhl:~/Downloads/libjpeg-turbo-1.3.0.tar.gz
+ls
+rsync -avrz seykhl:~/Downloads/libjpeg-turbo-1.3.0.tar.gz .
+tar -xvzf libjpeg-turbo-1.3.0.tar.gz 
+cd libjpeg-turbo-1.3.0
+mkdir build
+cd build
+../configure CPPFLAGS=’-O3 -pipe -fPIC -mfpu=neon -mfloat-abi=hard’
+../configure --help
+ls /opt
+ls /opt/
+locate libjpeg
+locate libjpeg-tur
+apt-get remove libjpeg-turb*
+apt-get install libjpeg8
+`architecture-path`
+apt-get --reinstall install libjpeg-turb*
+locate libjpeg-turb
+ls /usr/share/doc/libjpeg-turbo
+ls /usr/share/doc/libjpeg-turb*
+cd ..
+ls
+echo `architecture-path`
+locate libjpeg-turbo
+cd /usr/local/lib
+ls
+cd ../include/
+ls
+ls /opt/libjpeg-turbo/include/
+cd test_code/flycapture/bin
+./CustomImageEx 
+whereis libjpeg-turbo
+locate libjpeg-turbo
+apt-get install libjpeg-turbo
+apt-get install libjpeg-turb*
+./CustomImageEx 
+halt
+emacs today.text &
+cd /
+dpkg-query 
+dpkg-query --help
+dpkg-query -l
+dpkg-query -l | grep libjpeg
+apt-get install multilib-devel
+apt-cache search multilib
+apt-get install gcc*multilib* g++*multilib*
+apt-cache search multilib
+apt-get install g++-4.6-multilib g++-multilib gcc-4.6-multilib gcc-multilib g++-4.6-multilib-arm-linux-gnueabi g++-4.6-multilib-arm-linux-gnueabihf gcc-4.6-multilib-arm-linux-gnueabi gcc-4.6-multilib-arm-linux-gnueabihf 
+apt-get install g++-4.6-multilib g++-multilib gcc-4.6-multilib gcc-multilib 
+ls /usr/local
+ls /usr/local/lib
+htop
+ps -ef | grep git
+ls
+htop
+reboot
+emacs today.text &
+cd test_code/flycapture/bin
+./CustomImageEx 
+reboot
+emacs today.text &
+cd test_code/flycapture/bin
+./CustomImageEx 
+cd test_code/flycapture/bin
+./CustomImageEx 
+ls
+cat today.text.save 
