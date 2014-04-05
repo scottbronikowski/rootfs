@@ -1,7 +1,8 @@
+-- apt-get install libv4l-dev v4l-utils qv4l2 v4l2ucp
 
 
 
-
+USE A SOCKET INSTEAD OF FILE DESCRIPTOR TO COMMUNICATE BETWEEN GPIO AND MONITOR!!!!  READ WILL BLOCK!!!
 
 Paper deadlines:
 AAAI: 10Sep14-abstract, 15Sep14-final paper (conference 25-29Jan15 Austin, TX)
@@ -9,12 +10,6 @@ ICRA: 15Sep14-abstract, 12Feb15-final paper (conference 25-30May15, Seattle, WA)
       (last conference 31May-5June14, paper deadline was 16Sep13)
 IROS: 18Feb15-abstract, 8Jul15-final paper (conference 28Sep-2Oct15, Hamburg, Germany)
       (last conference 14-18Sep14, paper deadline was 6Feb14)
-
-OpenCV function: imwrite, imencode
-
-
-USE A SOCKET INSTEAD OF FILE DESCRIPTOR TO COMMUNICATE BETWEEN GPIO AND MONITOR!!!!  READ WILL BLOCK!!!
-
 
 Buffers
 ----------------------------------------
@@ -102,7 +97,7 @@ Old notes
 -- Got images sending across network.  With JPEG compression set at 50 (range 0-100), can get images across network as fast as Gumstix can produce them (~9.5-11.5 f/s/c).  With JPEG compression at default (95), Gumstix produces images ~8.6 f/s/c, sends ~6.5-7 f/s/c.
 -- Changed PGR_GetFrame() and OpenCV_CompressFrame() to differentiate between 3-channel color images from front cam and 1-channel grayscale images from pano cam--now getting ~13 f/s/c across network with quality at 75, ~14 f/s/c with quality at 50.
 -- Saving across network is working (quality = 75) at ~11.9-12.5 f/s/c.  Can save as either .jpg or .png, doesn't seem to affect speed
-(first OpenCV install: cmake -DENABLE_VFPV3=ON -DENABLE_NEON=ON -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local .. )
+(first attempt at libjpeg-turbo/OpenCV install: cmake -DENABLE_VFPV3=ON -DENABLE_NEON=ON -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local .. )
 
 3 Apr 14
 -- Attempted to install libjpeg-turbo then recompile/reinstall OpenCV with NEON and VFPv3 enabled.  Loosely followed instructions at http://blog.lemoneerlabs.com/3rdParty/Darling_BBB_30fps_DRAFT.html#XMatthew_cvdecode and https://github.com/aumuell/libjpeg-turbo/blob/master/BUILDING.txt
@@ -146,3 +141,4 @@ Old notes
      make
      make install
 -- When complete, did a make clean and then make on CustomImageEx.cpp.  Did not see any improvment in OpenCV compression speed (~12 f/s/c with compression on, ~17-24 f/s/c with compression off).
+-- Have machine shop working on mounting brace for USB wifi adapter

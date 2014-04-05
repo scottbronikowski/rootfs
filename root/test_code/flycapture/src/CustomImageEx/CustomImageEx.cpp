@@ -794,7 +794,7 @@ int sendall(int s, unsigned char *buf, int *len)
 {
   int total = 0;        // how many bytes we've sent
   int bytesleft = *len; // how many we have left to send
-  int n;
+  int n = 0;
   
   while(total < *len) {
     n = send(s, buf+total, bytesleft, 0);
@@ -870,6 +870,9 @@ void OpenCV_CompressFrame(PointGrey_t* PG, unsigned int imageCount)
     imgbuf = cv::Mat((int)PG->rows, (int)PG->cols, CV_8UC3, PG->pData);
   else
     imgbuf = cv::Mat((int)PG->rows, (int)PG->cols, CV_8UC1, PG->pData);
+
+  cv::vector<uchar> tempbuf;
+  tempbuf
      
   
   // //OpenCV save to make sure images aren't mangled

@@ -7,6 +7,7 @@ INCLUDE = -I../../include -I/usr/include/flycapture
 LIBS = -L../../lib -lflycapture${D} `imlib2-config --cflags --libs` `pkg-config opencv --cflags --libs` -L/usr/local/lib
 #LIBS = -L../../lib -lflycapture${D} `imlib2-config --cflags --libs` `pkg-config opencv --cflags --libs` -L/usr/local/lib -lsnappy
 CFLAGS = -D__STDC_CONSTANT_MACROS
+OPTFLAGS = -Ofast -march=native -flto -fwhole-program
 
 OUTDIR = ../../bin
 
@@ -18,7 +19,7 @@ ${OUTPUTNAME}: ${OBJS}
 	mv ${OUTPUTNAME} ${OUTDIR}
 
 %.o: %.cpp
-	${CC} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp
 
 clean_obj:
 	rm -f ${OBJS}	@echo "all cleaned up!"

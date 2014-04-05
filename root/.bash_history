@@ -1,51 +1,3 @@
-lla
-date
-hwclock
-date
-hwclock
-date
-cd /
-git add -A
-git commit -m "tweaks to bootup time sync in /etc/init.d/ntp and time-update.sh--looks like it should update 'date' and 'hwclock' correctly now"
-git push
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-ifdown wlan0
-ifup wlan0
-ps -ef | grep ping
-/etc/init.d/keepalive-ping.sh stop
-/etc/init.d/keepalive-ping.sh start
-ps -ef | grep ping
-kill -9 911
-ps -ef | grep ping
-/etc/init.d/ssh-tunnel.sh start
-cd test_code/flycapture/src/CustomImageEx/
-emacs &
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-ps -ef | grep ssh
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-cd test_code/flycapture/src/CustomImageEx/
-emacs &
-cd
-reboot
-cd test_code/flycapture/bin
-./Cus
-./CustomImageEx 
-reboot
-date
-cd test_code/flycapture/src/CustomImageEx/
-cd test_code/flycapture/bin
-./CustomImageEx 
-emacs CustomImageEx.cpp &
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-make
-reboot
-cd test_code/flycapture/bin
 ./CustomImageEx 
 cd test_code/flycapture/bin
 ./CustomImageEx 
@@ -1998,3 +1950,51 @@ cd test_code/flycapture/bin
 ./CustomImageEx 
 ls
 cat today.text.save 
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+emacs today.text &
+cd /
+git status
+git add -A
+git commit -m "Code cleanup in CustomImageEx.cpp"
+git push
+reboot
+emacs today.text &
+cd /
+git status
+cd ~
+emacs today.text &
+cd test_code/flycapture/src/CustomImageEx/
+iptraf
+htop
+emacs today.text &
+cd test_code/flycapture/bin
+./CustomImageEx 
+cd test_code/flycapture/src/CustomImageEx/
+make
+./bigtest.sh 
+hwclock
+halt
+emacs today.text &
+htop
+cd test_code/flycapture/bin
+./CustomImageEx 
+~~~~~~~~~~~~~~~
+./CustomImageEx 
+v4l2-ctl
+dkpg-query -l | grep v4l2
+dpkg-query -l | grep v4l2
+dpkg-query -l
+dpkg-query -l | grep v4l
+apt-get install libv4l-dev v4l-utils
+v4l2-ctl
+v4l2-ctl --list-formats
+v4l2-ctl --list-formats-ext
+v4l2-ctl --all
+./CustomImageEx 
+lla
+./CustomImageEx 
+halt
+cd test_code/flycapture/src/CustomImageEx/
+make

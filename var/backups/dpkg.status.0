@@ -3311,6 +3311,23 @@ Description: X11 Xinerama extension library (development headers)
  git://anongit.freedesktop.org/git/xorg/lib/libXinerama
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
+Package: libsfgomp1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 70
+Maintainer: Ubuntu Core developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-4.6
+Version: 4.6.3-1ubuntu5
+Depends: gcc-4.6-base (= 4.6.3-1ubuntu5), libc6-armel (>= 2.11) | libc6-armel, libc6 (>= 2.15), libgcc1 (>= 1:4.4.0)
+Conflicts: libgomp1-armel
+Description: GCC OpenMP (GOMP) support library (soft float ABI)
+ GOMP is an implementation of OpenMP for the C, C++, and Fortran compilers
+ in the GNU Compiler Collection.
+Homepage: http://gcc.gnu.org/
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+
 Package: libxml-dom-perl
 Status: install ok installed
 Priority: optional
@@ -4536,6 +4553,24 @@ Description: filesystem operations (portable paths, iteration over directories, 
  facilitate portable script-like operations from within C++ programs.
 Homepage: http://boost.org/libs/filesystem/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
+
+Package: libsfgcc1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 62
+Maintainer: Ubuntu Core developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-4.6 (4.6.3-1ubuntu5)
+Version: 1:4.6.3-1ubuntu5
+Depends: gcc-4.6-base (= 4.6.3-1ubuntu5), libc6-armel (>= 2.11) | libc6-armel
+Conflicts: libgcc1-armel
+Description: GCC support library (soft float ABI)
+ Shared version of the support library, a library of internal subroutines
+ that GCC uses to overcome shortcomings of particular machines, or
+ special needs for some languages.
+Homepage: http://gcc.gnu.org/
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 
 Package: ucf
 Status: install ok installed
@@ -12357,6 +12392,25 @@ Description: shared libraries for mod music based on ModPlug
 Original-Maintainer: Zed Pobre <zed@debian.org>
 Homepage: http://modplug-xmms.sourceforge.net/
 
+Package: gcc-multilib
+Status: install ok installed
+Priority: optional
+Section: devel
+Installed-Size: 25
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-defaults (1.112ubuntu5)
+Version: 4:4.6.3-1ubuntu5
+Replaces: gcc (<< 4.6.1-2ubuntu5)
+Depends: cpp (>= 4:4.6.3-1ubuntu5), gcc (>= 4:4.6.3-1ubuntu5), gcc-4.6-multilib (>= 4.6.3-1~), linux-libc-dev (>= 3.0.0-2)
+Pre-Depends: linux-libc-dev (>= 2.6.38-8.42)
+Description: GNU C compiler (multilib files)
+ This is the GNU C compiler, a fairly portable optimizing compiler for C.
+ .
+ On architectures with multilib support, the package contains dependencies
+ for the non-default multilib architecture(s).
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+
 Package: libcups2
 Status: install ok installed
 Multi-Arch: same
@@ -12565,6 +12619,27 @@ Description: development files for libopencv-contrib
  recognition, camera calibration and 3D reconstruction.
 Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
 Homepage: http://opencvlibrary.sourceforge.net/
+
+Package: libsfstdc++6
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 639
+Maintainer: Ubuntu Core developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-4.6
+Version: 4.6.3-1ubuntu5
+Depends: gcc-4.6-base (= 4.6.3-1ubuntu5), libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libsfgcc1
+Conflicts: libstdc++6-armel
+Description: GNU Standard C++ Library v3 (soft float ABI)
+ This package contains an additional runtime library for C++ programs
+ built with the GNU compiler.
+ .
+ libstdc++-v3 is a complete rewrite from the previous libstdc++-v2, which
+ was included up to g++-2.95. The first version of libstdc++-v3 appeared
+ in g++-3.0.
+Homepage: http://gcc.gnu.org/
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 
 Package: xserver-xorg-video-vesa
 Status: install ok installed
@@ -13627,6 +13702,23 @@ Description: serialization library for C++
  archive: to refer to a specific rendering of this stream of bytes.
 Homepage: http://www.boost.org/libs/serialization/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
+
+Package: g++-multilib
+Status: install ok installed
+Priority: optional
+Section: devel
+Installed-Size: 21
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-defaults (1.112ubuntu5)
+Version: 4:4.6.3-1ubuntu5
+Depends: cpp (>= 4:4.6.3-1ubuntu5), gcc-multilib (>= 4:4.6.3-1ubuntu5), g++ (>= 4:4.6.3-1ubuntu5), g++-4.6-multilib (>= 4.6.3-1~)
+Description: GNU C++ compiler (multilib files)
+ This is the GNU C++ compiler, a fairly portable optimizing compiler for C++.
+ .
+ On architectures with multilib support, the package contains dependencies
+ for the non-default multilib architecture(s).
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 
 Package: libdirectfb-1.2-9
 Status: install ok installed
@@ -16668,6 +16760,24 @@ Description: common error description library
  have the problems identified with mechanisms commonly in use.
 Homepage: http://e2fsprogs.sourceforge.net
 Original-Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
+
+Package: libjpeg-turbo8-dbg
+Status: install ok installed
+Priority: extra
+Section: debug
+Installed-Size: 301
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libjpeg-turbo
+Version: 1.2.1+svn837~ci9+20120614+f8eb71d-0linaro1
+Replaces: libjpeg-turbo-dbg (<< 1.1.90+svn722-1ubuntu6), libjpeg62-dbg, libjpeg7-dbg
+Depends: libjpeg-turbo8 (= 1.2.1+svn837~ci9+20120614+f8eb71d-0linaro1)
+Description: Debugging symbols for the libjpeg-turbo library
+ An optimized implementation of the Independent JPEG Group's
+ JPEG library is a library for handling JPEG files.
+ .
+ This package contains the debugging symbols for libjpeg-turbo.
+Homepage: http://libjpeg-turbo.virtualgl.org/
 
 Package: libfile-listing-perl
 Status: install ok installed
@@ -22653,6 +22763,25 @@ Description: freeware Advanced Audio Decoder - development files
 Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Homepage: http://www.audiocoding.com/
 
+Package: gcc-4.6-multilib
+Status: install ok installed
+Priority: optional
+Section: devel
+Installed-Size: 314
+Maintainer: Ubuntu Core developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-4.6
+Version: 4.6.3-1ubuntu5
+Depends: gcc-4.6-base (= 4.6.3-1ubuntu5), gcc-4.6 (= 4.6.3-1ubuntu5), libc6-dev-armel (>= 2.11) | libc6-dev-armel, libsfgcc1 (>= 1:4.6.3-1ubuntu5) | libgcc1-armel, libsfgomp1 (>= 4.6.3-1ubuntu5) | libgomp1-armel
+Suggests: libsfmudflap0 (>= 4.6.3-1ubuntu5) | libmudflap0-armel
+Description: GNU C compiler (multilib files)
+ This is the GNU C compiler, a fairly portable optimizing compiler for C.
+ .
+ On architectures with multilib support, the package contains files
+ and dependencies for the non-default multilib architecture(s).
+Homepage: http://gcc.gnu.org/
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+
 Package: libtemplate-perl-doc
 Status: install ok installed
 Priority: optional
@@ -22777,6 +22906,24 @@ Description: list of default blacklisted OpenSSH RSA and DSA keys
  Contains the list of known-bad default OpenSSH keys, for ssh-vulnkeys to
  use when examining suspect keys: DSA-1024, RSA-2048
 Original-Maintainer: Kees Cook <kees@outflux.net>
+
+Package: libc6-dev-armel
+Status: install ok installed
+Priority: optional
+Section: libdevel
+Installed-Size: 6105
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: eglibc
+Version: 2.15-0ubuntu10
+Depends: libc6-armel (= 2.15-0ubuntu10), libc6-dev (= 2.15-0ubuntu10)
+Recommends: gcc-multilib
+Description: Embedded GNU C Library: ARM softfp development libraries for armhf
+ Contains the symlinks and object files needed to compile and link programs
+ which use the standard C library. This is the ARM softfp version of the
+ library, meant for armhf systems.
+Homepage: http://www.eglibc.org
+Original-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 
 Package: libcanberra-gtk0
 Status: install ok installed
@@ -23126,6 +23273,23 @@ Description: The Linux Kernel Device Mapper userspace library
  This package contains a utility for modifying device mappings.
 Homepage: http://sources.redhat.com/lvm2/
 Original-Maintainer: Debian LVM Team <pkg-lvm-maintainers@lists.alioth.debian.org>
+
+Package: libjpeg-turbo-test
+Status: install ok installed
+Priority: extra
+Section: debug
+Installed-Size: 83
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libjpeg-turbo
+Version: 1.2.1+svn837~ci9+20120614+f8eb71d-0linaro1
+Replaces: libjpeg-test (<< 1.1.90+svn722-1ubuntu6)
+Depends: libc6 (>= 2.15-0ubuntu8), libjpeg8 (>= 8c)
+Description: Program for testing libjpeg-turbo
+ This package contains tjunittest which tests
+ the basic functionality of the library and
+ data files for performing those tests.
+Homepage: http://libjpeg-turbo.virtualgl.org/
 
 Package: tsconf
 Status: install ok installed
@@ -23961,6 +24125,25 @@ Description: Userspace interface to kernel DRM buffer management
  This library implements a unified userspace interface to the different buffer
  management interfaces of the kernel DRM hardware drivers.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: libc6-armel
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 7859
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: eglibc
+Version: 2.15-0ubuntu10
+Depends: libc6 (= 2.15-0ubuntu10)
+Conffiles:
+ /etc/ld.so.conf.d/zz_armel-biarch-compat.conf 8a91f734be05849526e29b33b9ef402b
+Description: Embedded GNU C Library: ARM softfp shared libraries for armhf
+ This package includes shared versions of the standard C
+ library and the standard math library, as well as many others.
+ This is the ARM softfp version of the library, meant for armhf systems.
+Homepage: http://www.eglibc.org
+Original-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 
 Package: libopencv-features2d2.3
 Status: install ok installed
@@ -28517,6 +28700,25 @@ Description: displays directory tree, in color
  ls, via the LS_COLORS environment variable.
 Original-Maintainer: Florian Ernst <florian@debian.org>
 Homepage: http://mama.indstate.edu/users/ice/tree/
+
+Package: g++-4.6-multilib
+Status: install ok installed
+Priority: optional
+Section: devel
+Installed-Size: 5505
+Maintainer: Ubuntu Core developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-4.6
+Version: 4.6.3-1ubuntu5
+Depends: gcc-4.6-base (= 4.6.3-1ubuntu5), g++-4.6 (= 4.6.3-1ubuntu5), gcc-4.6-multilib (= 4.6.3-1ubuntu5), libsfstdc++6 (>= 4.6.3-1ubuntu5) | libstdc++6-armel
+Suggests: libsfstdc++6-4.6-dbg | libstdc++6-4.6-dbg-armel
+Description: GNU C++ compiler (multilib files)
+ This is the GNU C++ compiler, a fairly portable optimizing compiler for C++.
+ .
+ On architectures with multilib support, the package contains files
+ and dependencies for the non-default multilib architecture(s).
+Homepage: http://gcc.gnu.org/
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 
 Package: bash
 Essential: yes

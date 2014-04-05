@@ -3745,6 +3745,23 @@ Description: X11 Xinerama extension library (development headers)
  git://anongit.freedesktop.org/git/xorg/lib/libXinerama
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
+Package: libsfgomp1
+Priority: optional
+Section: libs
+Installed-Size: 70
+Maintainer: Ubuntu Core developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-4.6
+Version: 4.6.3-1ubuntu5
+Depends: gcc-4.6-base (= 4.6.3-1ubuntu5), libc6-armel (>= 2.11) | libc6-armel, libc6 (>= 2.15), libgcc1 (>= 1:4.4.0)
+Conflicts: libgomp1-armel
+Size: 22882
+Description: GCC OpenMP (GOMP) support library (soft float ABI)
+ GOMP is an implementation of OpenMP for the C, C++, and Fortran compilers
+ in the GNU Compiler Collection.
+Homepage: http://gcc.gnu.org/
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+
 Package: libxml-dom-perl
 Priority: optional
 Section: perl
@@ -5000,6 +5017,24 @@ Description: DNS-SD Protocol Library for the KDE Platform
  This package is part of the KDE Development Platform libraries module.
 Homepage: http://www.kde.org/
 Original-Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
+
+Package: libsfgcc1
+Priority: optional
+Section: libs
+Installed-Size: 62
+Maintainer: Ubuntu Core developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-4.6 (4.6.3-1ubuntu5)
+Version: 1:4.6.3-1ubuntu5
+Depends: gcc-4.6-base (= 4.6.3-1ubuntu5), libc6-armel (>= 2.11) | libc6-armel
+Conflicts: libgcc1-armel
+Size: 20778
+Description: GCC support library (soft float ABI)
+ Shared version of the support library, a library of internal subroutines
+ that GCC uses to overcome shortcomings of particular machines, or
+ special needs for some languages.
+Homepage: http://gcc.gnu.org/
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 
 Package: ucf
 Priority: standard
@@ -9172,6 +9207,38 @@ Description: interactive high-level object-oriented language (default version)
  Python version (currently v2.7).
 Homepage: http://www.python.org/
 Original-Maintainer: Matthias Klose <doko@debian.org>
+
+Package: libv4l-dev
+Priority: optional
+Section: libdevel
+Installed-Size: 56
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: v4l-utils
+Version: 0.8.6-1ubuntu1
+Depends: libv4l-0 (= 0.8.6-1ubuntu1), libv4lconvert0 (= 0.8.6-1ubuntu1)
+Suggests: pkg-config (>= 0.18)
+Size: 7894
+Description: Collection of video4linux support libraries (development files)
+ libv4l is a collection of libraries which adds a thin abstraction layer on
+ top of video4linux2 devices. The purpose of this (thin) layer is to make it
+ easy for application writers to support a wide variety of devices without
+ having to write separate code for different devices in the same class. libv4l
+ consists of 3 different libraries: libv4lconvert, libv4l1 and libv4l2.
+ .
+ libv4lconvert offers functions to convert from any (known) pixelformat
+ to BGR24, RGB24, YUV420 and YVU420.
+ .
+ libv4l1 offers the (deprecated) v4l1 API on top of v4l2 devices, independent
+ of the drivers for those devices supporting v4l1 compatibility (which many
+ v4l2 drivers do not).
+ .
+ libv4l2 offers the v4l2 API on top of v4l2 devices, while adding for the
+ application transparent libv4lconvert conversion where necessary.
+ .
+ This package contains the development files.
+Original-Maintainer: Gregor Jasny <gjasny@googlemail.com>
+Homepage: http://linuxtv.org/downloads/v4l-utils/
 
 Package: libopencv-video-dev
 Priority: optional
@@ -15059,6 +15126,25 @@ Description: Perl extension for using UUID interfaces as defined in e2fsprogs
 Homepage: http://search.cpan.org/dist/UUID/
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 
+Package: gcc-multilib
+Priority: optional
+Section: devel
+Installed-Size: 25
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-defaults (1.112ubuntu5)
+Version: 4:4.6.3-1ubuntu5
+Replaces: gcc (<< 4.6.1-2ubuntu5)
+Depends: cpp (>= 4:4.6.3-1ubuntu5), gcc (>= 4:4.6.3-1ubuntu5), gcc-4.6-multilib (>= 4.6.3-1~), linux-libc-dev (>= 3.0.0-2)
+Pre-Depends: linux-libc-dev (>= 2.6.38-8.42)
+Size: 1162
+Description: GNU C compiler (multilib files)
+ This is the GNU C compiler, a fairly portable optimizing compiler for C.
+ .
+ On architectures with multilib support, the package contains dependencies
+ for the non-default multilib architecture(s).
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+
 Package: libkde3support4
 Priority: optional
 Section: libs
@@ -15340,6 +15426,27 @@ Description: development files for libopencv-contrib
  recognition, camera calibration and 3D reconstruction.
 Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
 Homepage: http://opencvlibrary.sourceforge.net/
+
+Package: libsfstdc++6
+Priority: optional
+Section: libs
+Installed-Size: 639
+Maintainer: Ubuntu Core developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-4.6
+Version: 4.6.3-1ubuntu5
+Depends: gcc-4.6-base (= 4.6.3-1ubuntu5), libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libsfgcc1
+Conflicts: libstdc++6-armel
+Size: 248514
+Description: GNU Standard C++ Library v3 (soft float ABI)
+ This package contains an additional runtime library for C++ programs
+ built with the GNU compiler.
+ .
+ libstdc++-v3 is a complete rewrite from the previous libstdc++-v2, which
+ was included up to g++-2.95. The first version of libstdc++-v3 appeared
+ in g++-3.0.
+Homepage: http://gcc.gnu.org/
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 
 Package: xserver-xorg-video-vesa
 Priority: optional
@@ -16779,6 +16886,23 @@ Description: Structured File Library - common files
  These are the architecture independent files that are part of libgsf,
  like translations of messages.
 Original-Maintainer: J.H.M. Dassen (Ray) <jdassen@debian.org>
+
+Package: g++-multilib
+Priority: optional
+Section: devel
+Installed-Size: 21
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-defaults (1.112ubuntu5)
+Version: 4:4.6.3-1ubuntu5
+Depends: cpp (>= 4:4.6.3-1ubuntu5), gcc-multilib (>= 4:4.6.3-1ubuntu5), g++ (>= 4:4.6.3-1ubuntu5), g++-4.6-multilib (>= 4.6.3-1~)
+Size: 876
+Description: GNU C++ compiler (multilib files)
+ This is the GNU C++ compiler, a fairly portable optimizing compiler for C++.
+ .
+ On architectures with multilib support, the package contains dependencies
+ for the non-default multilib architecture(s).
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 
 Package: libyelp0
 Priority: optional
@@ -27234,6 +27358,28 @@ Description: simple interprocess messaging system (X11 deps)
 Homepage: http://dbus.freedesktop.org/
 Original-Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
 
+Package: v4l-utils
+Priority: optional
+Section: utils
+Installed-Size: 252
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 0.8.6-1ubuntu1
+Replaces: ivtv-utils (<< 1.4.1-2)
+Depends: libv4l-0 (= 0.8.6-1ubuntu1), libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libstdc++6 (>= 4.6)
+Breaks: ivtv-utils (<< 1.4.1-2)
+Size: 109092
+Description: Collection of command line video4linux utilities
+ v4l-utils contains the following video4linux command line utilities:
+ .
+  decode_tm6000: decodes tm6000 proprietary format streams
+  v4l2-compliance: tool to test v4l2 API compliance of drivers
+  v4l2-ctl, cx18-ctl, ivtv-ctl: tools to control v4l2 controls from the cmdline
+  v4l2-dbg: tool to directly get and set registers of v4l2 devices
+  v4l2-sysfs-path: sysfs helper tool
+Original-Maintainer: Gregor Jasny <gjasny@googlemail.com>
+Homepage: http://linuxtv.org/downloads/v4l-utils/
+
 Package: emacs23-common
 Priority: optional
 Section: editors
@@ -28108,6 +28254,25 @@ Description: freeware Advanced Audio Decoder - development files
 Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Homepage: http://www.audiocoding.com/
 
+Package: gcc-4.6-multilib
+Priority: optional
+Section: devel
+Installed-Size: 314
+Maintainer: Ubuntu Core developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-4.6
+Version: 4.6.3-1ubuntu5
+Depends: gcc-4.6-base (= 4.6.3-1ubuntu5), gcc-4.6 (= 4.6.3-1ubuntu5), libc6-dev-armel (>= 2.11) | libc6-dev-armel, libsfgcc1 (>= 1:4.6.3-1ubuntu5) | libgcc1-armel, libsfgomp1 (>= 4.6.3-1ubuntu5) | libgomp1-armel
+Suggests: libsfmudflap0 (>= 4.6.3-1ubuntu5) | libmudflap0-armel
+Size: 64046
+Description: GNU C compiler (multilib files)
+ This is the GNU C compiler, a fairly portable optimizing compiler for C.
+ .
+ On architectures with multilib support, the package contains files
+ and dependencies for the non-default multilib architecture(s).
+Homepage: http://gcc.gnu.org/
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+
 Package: libtemplate-perl-doc
 Priority: optional
 Section: doc
@@ -28293,6 +28458,24 @@ Description: list of default blacklisted OpenSSH RSA and DSA keys
  Contains the list of known-bad default OpenSSH keys, for ssh-vulnkeys to
  use when examining suspect keys: DSA-1024, RSA-2048
 Original-Maintainer: Kees Cook <kees@outflux.net>
+
+Package: libc6-dev-armel
+Priority: optional
+Section: libdevel
+Installed-Size: 6105
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: eglibc
+Version: 2.15-0ubuntu10
+Depends: libc6-armel (= 2.15-0ubuntu10), libc6-dev (= 2.15-0ubuntu10)
+Recommends: gcc-multilib
+Size: 1757066
+Description: Embedded GNU C Library: ARM softfp development libraries for armhf
+ Contains the symlinks and object files needed to compile and link programs
+ which use the standard C library. This is the ARM softfp version of the
+ library, meant for armhf systems.
+Homepage: http://www.eglibc.org
+Original-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 
 Package: libcanberra-gtk0
 Multi-Arch: same
@@ -29693,6 +29876,23 @@ Description: Userspace interface to kernel DRM buffer management
  This library implements a unified userspace interface to the different buffer
  management interfaces of the kernel DRM hardware drivers.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: libc6-armel
+Priority: optional
+Section: libs
+Installed-Size: 7859
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: eglibc
+Version: 2.15-0ubuntu10
+Depends: libc6 (= 2.15-0ubuntu10)
+Size: 3694120
+Description: Embedded GNU C Library: ARM softfp shared libraries for armhf
+ This package includes shared versions of the standard C
+ library and the standard math library, as well as many others.
+ This is the ARM softfp version of the library, meant for armhf systems.
+Homepage: http://www.eglibc.org
+Original-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 
 Package: libopencv-features2d2.3
 Priority: optional
@@ -34911,6 +35111,25 @@ Description: Qt implementation of the DBusMenu protocol
  This package provides shared libraries.
 Homepage: https://launchpad.net/libdbusmenu-qt
 Original-Maintainer: Jonathan Riddell <jriddell@ubuntu.com>
+
+Package: g++-4.6-multilib
+Priority: optional
+Section: devel
+Installed-Size: 5505
+Maintainer: Ubuntu Core developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: gcc-4.6
+Version: 4.6.3-1ubuntu5
+Depends: gcc-4.6-base (= 4.6.3-1ubuntu5), g++-4.6 (= 4.6.3-1ubuntu5), gcc-4.6-multilib (= 4.6.3-1ubuntu5), libsfstdc++6 (>= 4.6.3-1ubuntu5) | libstdc++6-armel
+Suggests: libsfstdc++6-4.6-dbg | libstdc++6-4.6-dbg-armel
+Size: 1141316
+Description: GNU C++ compiler (multilib files)
+ This is the GNU C++ compiler, a fairly portable optimizing compiler for C++.
+ .
+ On architectures with multilib support, the package contains files
+ and dependencies for the non-default multilib architecture(s).
+Homepage: http://gcc.gnu.org/
+Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 
 Package: libavalon-framework-java-doc
 Priority: optional
