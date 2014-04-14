@@ -1,32 +1,3 @@
-./CustomImageEx 
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-make
-cd test_code/flycapture/bin
-./CustomImageEx 
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-make
-ls
-chmod a+x bigtest.sh 
-ls
-./bigtest
-./bigtest.sh 
-make
-./bigtest.sh 
-make
-./bigtest.sh 
-make
-./bigtest.sh 
 make
 ./bigtest.sh 
 make
@@ -1998,3 +1969,32 @@ lla
 halt
 cd test_code/flycapture/src/CustomImageEx/
 make
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+emacs today.text &
+find /usr /opt -iname libjpeg\*so\*
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+htop
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+htop
+exit
+cd test_code/flycapture/bin
+./CustomImageEx 
+exit
+cd /
+git status
+exit
+exit
+cd test_code/flycapture/bin
+ls
+./CustomImageEx 
+exit

@@ -11,11 +11,12 @@
 
 start(){
     echo "Starting monitor client"	
-    /root/test_code/monitor &
+    #/root/test_code/monitor &
+    /root/bin/monitor &
 }
 
 stop(){
-    kill $(ps -ef | grep "[/]root/test_code/monitor" | awk '{print $2}')
+    kill $(ps -ef | grep "[/]root/bin/monitor" | awk '{print $2}')
     echo "Killed monitor process"
 }
 
