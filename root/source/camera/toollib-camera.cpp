@@ -38,99 +38,6 @@ const char* k_PanoCamPort = "3602";
 /*for OpenCV*/
 const int k_jpegQuality = 75; //0-100, default is 95
 
-
-
-// int main(int /*argc*/, char** /*argv*/)
-// {
-//     PrintBuildInfo();
-//     const int k_numImages = 100;
-//     BusManager busMgr;
-//     unsigned int numCameras = PGR_Init(&busMgr);
-//     printf( "Number of cameras detected: %u\n", numCameras );
-//     if ( numCameras < 1 )
-//     {
-//         printf( "Insufficient number of cameras... exiting\n" );
-//         return -1;
-//     }
-
-//     PointGrey_t* PG = new PointGrey_t[numCameras];
-//     if (PGR_StartCameras(&busMgr, PG, numCameras) != 0)
-//     {
-//       printf("Error starting cameras\n");
-//       PGR_StopAndCleanup(PG, numCameras);
-//       return -1;
-//     }
-
-//     if (Network_StartCameras(PG, numCameras) != 0)
-//     {
-//       printf("Error starting network\n");
-//       //return -1;
-//     }
-
-//     printf( "Grabbing %d images\n", k_numImages ); //setup completed
-
-//     double start = current_time();
-//     for ( int imageCount=0; imageCount < k_numImages; imageCount++ ) //main capture loop
-//     {
-//       for (unsigned int i = 0; i < numCameras; i++)
-//       {
-// 	/* PGR functions */
-// 	PGR_GetFrame(&PG[i]);
-// 	//PGR_GetFrameRaw(&PG[i]);
-
-// 	/* Imlib functions */
-// 	// Imlib_GetFrame(&PG[i]);
-// 	// //Imlib_GetFrameWithResize(&PG[i]);
-// 	// imlib_context_set_image(PG[i].finalImage); //move this closer to imlib calls?
-
-// 	/* OpenCV stuff */
-// 	OpenCV_CompressFrame(&PG[i], imageCount);
-
-// 	if (imageCount % 10 == 0)
-// 	  printf("Captured %u-%d\n",PG[i].cameraInfo.serialNumber, imageCount);
-	
-// 	/* SENDING BLOCK */
-// 	OpenCV_SendFrame(&PG[i]);
-//       }
-//     }
-
-//     double stop = current_time();
-//     //check elapsed time
-//     double elapsed = stop - start;
-//     double images_per_sec = (double)k_numImages / elapsed;
-//     printf( "\nFinished grabbing images\n" );
-//     printf("%d images per camera taken in %f seconds (%f images/sec/cam)\n",
-//     	   k_numImages, elapsed, images_per_sec);
-    
-//     /* SAVING BLOCK */
-//     // //grab and save one last image from each camera, after time has been measured
-//     // // Since this section of code saves images in the k_OutputDir folder,
-//     // // must ensure that this folder exists and we have permissions to write to it
-//     // if (CheckSaving(k_OutputDir) != 0)
-//     // {
-//     //   printf("Cannot save to %s, please check permissions\n",k_OutputDir);
-//     //   return -1;
-//     // }
-//     // for (unsigned int i = 0; i < numCameras; i++)
-//     // {
-//     //   /* PGR functions only*/
-//     //   PGR_GetFrame(&PG[i]);
-//     //   PGR_SaveImage(&PG[i]);
-
-//     //   /* now with Imlib functions */
-//     //   //Imlib_GetFrame(&PG[i]);
-//     //   //Imlib_SaveImage(&PG[i]);
-
-//     //   /* use OpenCV functions here */
-//     // }
-//     /* END SAVING BLOCK */
-
-//     PGR_StopAndCleanup(PG, numCameras);
-//     printf( "Done!\n" );
-//     return 0;
-// }
-
-
 void PrintBuildInfo()
 {
     FC2Version fc2Version;
@@ -142,10 +49,8 @@ void PrintBuildInfo()
         fc2Version.major, fc2Version.minor, fc2Version.type, fc2Version.build );
 
     printf( "%s", version );
-
     char timeStamp[512];
     sprintf( timeStamp, "Application build date: %s %s\n\n", __DATE__, __TIME__ );
-
     printf( "%s", timeStamp );
 }
 
@@ -211,12 +116,7 @@ void CheckPGR(Error error)
   {
     PrintError( error );
     abort();
-    //return -1;
   }
-  // else
-  // {
-  //   return 0;
-  // }
 }
 
 int CheckSaving(const char *dir)
@@ -304,12 +204,10 @@ int PGR_SetCamera(PointGrey_t* PG)
 {
   // Get the camera information
   CheckPGR(PG->camera.GetCameraInfo(&PG->cameraInfo));
-  
   // Query for available Format 7 modes
   bool supported;
   PG->format7Info.mode = k_fmt7Mode;
   CheckPGR(PG->camera.GetFormat7Info(&PG->format7Info, &supported));
-    
   if (((k_fmt7PixFmt & PG->format7Info.pixelFormatBitField) == 0) || !supported)
   {
     // Pixel format not supported!
@@ -329,8 +227,8 @@ int PGR_SetCamera(PointGrey_t* PG)
   }
   else if (PG->cameraInfo.serialNumber == k_PanoCamSerial)
   {
-    // /* NEW way -- trying for 640x480 grayscale */
-    // PG->imageSettings.mode = MODE_0;
+    // /* NEW way -- trying for 640x480 grayscale */ //THIS DOESN'T WORK
+    // PG->imageSettings.mode = MODE_0;              //SEE PGR_SetCameraNEW
     // PG->imageSettings.pixelFormat = PIXEL_FORMAT_RAW8;
     // PG->imageSettings.width = PG->format7Info.maxWidth;
     // PG->imageSettings.height = PG->format7Info.maxHeight;
@@ -348,21 +246,19 @@ int PGR_SetCamera(PointGrey_t* PG)
     printf("ERROR! Camera serial number not recognized!");
     return -1;
   }
-    
   bool valid;
   // Validate the settings to make sure that they are valid
   CheckPGR(PG->camera.ValidateFormat7Settings(&PG->imageSettings,
 					      &valid,
 					      &PG->packetInfo ));
-  
   if ( !valid )
   { // Settings are not valid
     printf("Format7 settings are not valid\n");
     return -1;
   }  
   // Send the settings to the camera
-  CheckPGR(PG->camera.SetFormat7Configuration(&PG->imageSettings,
-					      PG->packetInfo.recommendedBytesPerPacket ));
+  CheckPGR(PG->camera.SetFormat7Configuration
+	   (&PG->imageSettings, PG->packetInfo.recommendedBytesPerPacket ));
   SetFrameRate(&PG->camera);
   SetWhiteBalance(&PG->camera);
   return 0;
@@ -375,14 +271,12 @@ int PGR_SetCameraNEW(PointGrey_t* PG)
 
   // Get the camera information
   CheckPGR(PG->camera.GetCameraInfo(&PG->cameraInfo));
-  
   if (PG->cameraInfo.serialNumber == k_FrontCamSerial)
   {
     // Query for available Format 7 modes
     bool supported;
     PG->format7Info.mode = k_fmt7Mode;
     CheckPGR(PG->camera.GetFormat7Info(&PG->format7Info, &supported));
-    
     if (((k_fmt7PixFmt & PG->format7Info.pixelFormatBitField) == 0) || !supported)
     {
       // Pixel format not supported!
@@ -400,17 +294,15 @@ int PGR_SetCameraNEW(PointGrey_t* PG)
     bool valid;
     // Validate the settings to make sure that they are valid
     CheckPGR(PG->camera.ValidateFormat7Settings(&PG->imageSettings,
-						&valid,
-						&PG->packetInfo ));
-    
+						&valid, &PG->packetInfo ));
     if ( !valid )
     { // Settings are not valid
       printf("Format7 settings are not valid\n");
       return -1;
     }  
     // Send the settings to the camera
-    CheckPGR(PG->camera.SetFormat7Configuration(&PG->imageSettings,
-			PG->packetInfo.recommendedBytesPerPacket ));
+    CheckPGR(PG->camera.SetFormat7Configuration
+	     (&PG->imageSettings, PG->packetInfo.recommendedBytesPerPacket ));
     SetFrameRate(&PG->camera);
     SetWhiteBalance(&PG->camera);
   }
@@ -424,8 +316,6 @@ int PGR_SetCameraNEW(PointGrey_t* PG)
     printf("ERROR! Camera serial number not recognized!");
     return -1;
   }
-  
-
   return 0;
 }
 
@@ -433,11 +323,9 @@ int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCamera
 {
   PGRGuid tmpGuid;
   for (unsigned int i = 0; i < numCameras; i++) //setup/init loop
-  {
-    // Connect to a camera
+  { // Connect to a camera
     CheckPGR(busMgr->GetCameraFromIndex(i, &tmpGuid));
     CheckPGR(PG[i].camera.Connect(&tmpGuid));
-
     // //this sets up for pano cam 1240x934 color
     // if (PGR_SetCamera(&PG[i]) != 0)
     // {
@@ -472,58 +360,36 @@ int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCamera
 }
 
 void PGR_GetFrame(PointGrey_t* PG)
-{
-  // Retrieve an image
+{ // Retrieve an image
   CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
-  // printf("%u-rawImage.GetDataSize() = %u\n", PG->cameraInfo.serialNumber,
-  // 	 PG->rawImage.GetDataSize());
-  // // Get the raw image dimensions
-  // PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
-  // 			     &PG->stride, &PG->pixFormat );
-  // Convert the raw image
-  // CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
-  // 				&PG->convertedImage));
-
   //DIFFERENT CONVERSION FOR COLOR VS. GRAYSCALE
   if (PG->cameraInfo.serialNumber == k_FrontCamSerial)
-
     CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGR, 
 				  &PG->convertedImage));
   else
     CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_MONO8,
 				  &PG->convertedImage));
   //end different conversion
-
   // Get the converted image dimensions
   PG->convertedImage.GetDimensions(&PG->rows, &PG->cols, 
 				   &PG->stride, &PG->pixFormat );
-  //printf("got dimensions / ");
   PG->dataSize = PG->convertedImage.GetDataSize();
-  // printf("%u-convertedImage.GetDataSize() = %u\n", PG->cameraInfo.serialNumber,
-  // 	 PG->dataSize);
- 
-  //printf("got data size / ");
   PG->pData = PG->convertedImage.GetData();
-  //memcpy(PG->pData, PG->convertedImage.GetData(), PG->dataSize); //SEGFAULTS
-  //printf("got data, strlen(data) = %zu\n", strlen((const char*)PG->pData));
-
 }
 
 void PGR_SaveImage(PointGrey_t* PG)
-{
-  // Create a unique filename
+{ // Create a unique filename
   char filename[512];
   sprintf(filename, "%s%u-PGR-final.ppm", k_OutputDir, 
 	  PG->cameraInfo.serialNumber);
-    // Save the image. If a file format is not passed in, then the file
+  // Save the image. If a file format is not passed in, then the file
   // extension is parsed to attempt to determine the file format.
   CheckPGR(PG->convertedImage.Save(filename));
   printf("Saved %s\n",filename);
 }
 
 void Imlib_GetFrameWithResize(PointGrey_t* PG)
-{
-  // Retrieve an image
+{ // Retrieve an image
   CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
   // Get the raw image dimensions
   PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
@@ -532,22 +398,16 @@ void Imlib_GetFrameWithResize(PointGrey_t* PG)
   CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
 				&PG->convertedImage));
   PG->firstImage = 
-    imlib_create_image_using_copied_data(PG->cols,
-					 PG->rows,
+    imlib_create_image_using_copied_data(PG->cols, PG->rows,
 					 (unsigned int*)
 					 PG->convertedImage.GetData());
-    
-
-    //not sure if using this selection here is any faster
+  //not sure if using this selection here is any faster
   if ((PG->cols == k_ImageWidth) && (PG->rows = k_ImageHeight))
   { //no resize needed
-    //printf("Image from camera %u not resized\n", PG->cameraInfo.serialNumber);
-    PG->finalImage = PG->firstImage;
+      PG->finalImage = PG->firstImage;
   }
   else
-  {
-    //resize needed
-    //printf("Image from camera %u WILL BE resized\n", PG->cameraInfo.serialNumber);
+  { //resize needed
     imlib_context_set_image(PG->firstImage);
     PG->finalImage = 
       imlib_create_cropped_scaled_image(0, 0,
@@ -562,14 +422,12 @@ void Imlib_GetFrame(PointGrey_t* PG)
 {
   // Retrieve an image
   CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
-  printf("rawImage.GetDataSize() = %u\n", PG->rawImage.GetDataSize());
   // Get the raw image dimensions
   PG->rawImage.GetDimensions(&PG->rows, &PG->cols, 
 			     &PG->stride, &PG->pixFormat );
   // Convert the raw image
   CheckPGR(PG->rawImage.Convert(PIXEL_FORMAT_BGRU, 
 				&PG->convertedImage));
-  printf("convertedImage.GetDataSize() = %u\n", PG->convertedImage.GetDataSize());
   /* original code */
   PG->finalImage = 
     imlib_create_image_using_copied_data(PG->cols,
@@ -582,27 +440,20 @@ void PGR_GetFrameRaw(PointGrey_t* PG)
 {
   // Retrieve an image
   CheckPGR(PG->camera.RetrieveBuffer(&PG->rawImage));
-  //printf("Captured from %u / ", PG->cameraInfo.serialNumber);
-  //printf("rawImage.GetDataSize() = %u\n", PG->rawImage.GetDataSize());
   // Get the raw image dimensions
   PG->rawImage.GetDimensions(&PG->rows, &PG->cols, &PG->stride, 
 			     &PG->pixFormat, &PG->bayerFormat);
-  //printf("got dimensions / ");
   PG->dataSize = PG->rawImage.GetDataSize();
-  //printf("got data size / ");
   PG->pData = PG->rawImage.GetData();
-  //memcpy(PG->pData, PG->rawImage.GetData(), PG->dataSize); //SEGFAULTS
-  //printf("got data, strlen(data) = %zu\n", strlen((const char*)PG->pData));
 }
-
 
 void Imlib_SaveImage(PointGrey_t* PG)
 {
-  imlib_context_set_image(PG->finalImage);
   // Create a unique filename
   char filename[512];
   sprintf(filename, "%s%u-Imlib-final.ppm", k_OutputDir, 
 	  PG->cameraInfo.serialNumber);
+  imlib_context_set_image(PG->finalImage);
   imlib_save_image(filename);
   imlib_free_image_and_decache();
   printf("Saved %s\n",filename);
@@ -633,7 +484,6 @@ int ClientConnect(const char* server, const char* port)
     fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
     return -1;
   }
-
   // loop through all the results and connect to the first we can
   for(p = servinfo; p != NULL; p = p->ai_next) 
   {
@@ -650,7 +500,7 @@ int ClientConnect(const char* server, const char* port)
       continue;
     }
     //if we get here, we have connected successfully
-    printf("Connection established\n");
+    //printf("Connection established\n");
     break;
   }
   
@@ -662,7 +512,7 @@ int ClientConnect(const char* server, const char* port)
   }
   inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
 	    s, sizeof s);
-  printf("client: connecting to %s\n", s);
+  //printf("client: connecting to %s\n", s);
   
   freeaddrinfo(servinfo); // all done with this structure
   
@@ -671,7 +521,6 @@ int ClientConnect(const char* server, const char* port)
 
 int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras)
 {
- 
   for (unsigned int i = 0; i < numCameras; i++) //setup/init loop
   {
     if (PG[i].cameraInfo.serialNumber == k_FrontCamSerial)
@@ -695,14 +544,7 @@ int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras)
       printf("ERROR! Camera serial number not recognized in Network_StartCameras!\n");
       return -1;
     }
-    // //try setting connected socket as nonblocking
-    // int status = fcntl(PG[i].sockfd, F_SETFL, fcntl(PG[i].sockfd, F_GETFL, 0) | O_NONBLOCK);
-    // if (status == -1)
-    // {
-    //   printf("Error setting nonblocking\n");
-    //   return -1;
-    // }
-    printf("Camera %u connected to %s\n", PG[i].cameraInfo.serialNumber, k_Server);
+    //printf("Camera %u connected to %s\n", PG[i].cameraInfo.serialNumber, k_Server);
   }
   return 0;
 }
@@ -728,11 +570,6 @@ int sendall(int s, unsigned char *buf, int *len)
 int SendMetadata (PointGrey_t* PG)
 {
   //first send image dimensions
-  // printf("rows = %u, cols = %u, stride = %u, dataSize = %u\n",
-  //        PG->rows, PG->cols, PG->stride, PG->dataSize);
-  // printf("pixFormat = %u, bayerFormat = %u\n", PG->pixFormat,
-  //        PG->bayerFormat);
-
   if (send(PG->sockfd, &PG->cols, sizeof(PG->cols), 0) <= 0)
   {
     printf("Error sending cols");
@@ -770,35 +607,21 @@ int SendMetadata (PointGrey_t* PG)
 int SendFrame(PointGrey_t* PG)
 {
   int img_size = (int)(PG->dataSize);
-    
   if (sendall(PG->sockfd, PG->pData, &img_size) != 0)
   {
     printf("Error in sendall\n");
     return -1;
   }
-  
   return 0;
 }
 
-void OpenCV_CompressFrame(PointGrey_t* PG, unsigned int imageCount)
+void OpenCV_CompressFrame(PointGrey_t* PG)
 {
   cv::Mat imgbuf;
   if (PG->cameraInfo.serialNumber == k_FrontCamSerial)
     imgbuf = cv::Mat((int)PG->rows, (int)PG->cols, CV_8UC3, PG->pData);
   else
     imgbuf = cv::Mat((int)PG->rows, (int)PG->cols, CV_8UC1, PG->pData);
-
-  // cv::vector<uchar> tempbuf;
-  // tempbuf
-     
-  
-  // //OpenCV save to make sure images aren't mangled
-  // // Create a unique filename
-  // char filename[512];
-  // sprintf(filename, "%s%u-OpenCV-%.2u.jpg", k_OutputDir, PG->cameraInfo.serialNumber,
-  // 	imageCount);
-  // cv::imwrite(filename, imgbuf);
-  // //end OpenCV save
   
   std::vector<int> params = std::vector<int>(2);
   params[0] = CV_IMWRITE_JPEG_QUALITY;
@@ -806,21 +629,6 @@ void OpenCV_CompressFrame(PointGrey_t* PG, unsigned int imageCount)
   
   cv::imencode(".jpg", imgbuf, PG->compressed, params);
   PG->compressed_size = PG->compressed.size();
-  //printf("Encoded image size = %d\n", PG->compressed_size);
-  
-  //send here
-  // //this should be what the receiving side does
-
-  // cv::Mat jpegimage;
-  // if (PG->cameraInfo.serialNumber == k_FrontCamSerial)
-  //   jpegimage = imdecode(cv::Mat(PG->compressed), CV_LOAD_IMAGE_COLOR);
-  // else
-  //   jpegimage = imdecode(cv::Mat(PG->compressed), CV_LOAD_IMAGE_GRAYSCALE);
-  // char filename[512];
-  // sprintf(filename, "%s%u-OpenCV-%.2u.jpg", k_OutputDir, PG->cameraInfo.serialNumber,
-  // 	imageCount);
-  // cv::imwrite(filename, jpegimage);
-
   return;
 }
 
@@ -840,9 +648,5 @@ void OpenCV_SendFrame(PointGrey_t* PG)
     printf("Error in sendall\n");
     return;
   } 
-  // else
-  // {
-  //   printf("Bytes sent (%u): %d\n", PG->cameraInfo.serialNumber, img_size);
-  // }
   return; //return w/o printf = success
 }

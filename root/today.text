@@ -14,18 +14,12 @@ IROS: 18Feb15-abstract, 8Jul15-final paper (conference 28Sep-2Oct15, Hamburg, Ge
 Buffers
 ----------------------------------------
 
-    CustomImageEx.cpp    23415  C++/l		  ~/test_code/flycapture/src/CustomImageEx/CustomImageEx.cpp
-    bigtest.sh             155  Shell-script[bas  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
-    today.text            3955  Text		  ~/today.text
-    FlyCapture2Defs.h    60497  C++/l		  ~/test_code/flycapture/include/FlyCapture2Defs.h
-    Image.h              20398  C++/l		  ~/test_code/flycapture/include/Image.h
-    monitor.h              592  C++/l		  ~/test_code/monitor.h
-    monitor.cc            3657  C++/l		  ~/test_code/monitor.cc
-    test-capture-cpp.cp: 21345  C++/l		  ~/test_code/flycapture/src/testing/test-capture-cpp.cpp
-    test2.h               2022  C++/l		  ~/test_code/flycapture/src/support/test2.h
-    test2.c               8096  C/l		  ~/test_code/flycapture/src/support/test2.c
-    simpletest.c          9215  C/l		  ~/test_code/flycapture/src/support/simpletest.c
-    Makefile               516  GNUmakefile	  ~/test_code/flycapture/src/CustomImageEx/Makefile
+    toollib-camera.h      3356  C++/l		  ~/source/camera/toollib-camera.h
+    toollib-camera.cpp   18692  C++/l		  ~/source/camera/toollib-camera.cpp
+    run_cameras.cpp       1263  C++/l		  ~/source/camera/run_cameras.cpp
+    Makefile               894  GNUmakefile	  ~/source/camera/Makefile
+    today.text           11347  Text		  ~/today.text
+
 
 
 Old notes
@@ -152,3 +146,6 @@ Old notes
 ------
 --Moved CustomImageEx to ~/source/camera and broke it into toollib-camera.cpp/h and run-cameras.cpp.  Reconfigured Makefile to make run_cameras executable and put it int ~/bin.  Committing here prior to massive rework of run-cameras.cpp and cleanup of toollib-camera.cpp.
 --Also moved Flycapture includes from ~/test_code/flycapture/include to ~/include, and libs from ~/test_code/flycapture/lib to ~/lib (with symlinks in /usr/local/lib.
+-------
+--Cleaned up toollib-camera.cpp/h
+--Reconfigured run_cameras to use an infinite loop for capturing.  Killing the process with Ctrl-C doesn't seem to do any harm (so far), but I will still work on implementing a signal handler so that the PGR_StopAndCleanup() function can get called before exit.

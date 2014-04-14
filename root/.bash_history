@@ -1,179 +1,3 @@
-make
-./bigtest.sh 
-make
-./bigtest.sh 
-make
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-lsusb
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-make
-./bigtest.sh 
-cd test_code/flycapture/bin
-./CustomImageEx 
-lsusb
-reboot
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-cd test_code/flycapture/src/CustomImageEx/
-./bigtest.sh 
-reboot
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-cd test_code/flycapture/src/CustomImageEx/
-./bigtest.sh 
-lsusb
-reboot
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-cd test_code/flycapture/src/CustomImageEx/
-./bigtest.sh 
-reboot
-exit
-cd /
-git status
-git add -A
-git commit -m "more work on CustomImageEx.cpp--set cameras to synchronized frame rate--still having problem of cameras dying after a random number of captures"
-git push
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-ifdown wlan0
-ifup wlan0
-ps -ef | grep ntp
-ps -ef | grep ping
-/etc/init.d/keepalive-ping.sh start
-/etc/init.d/ssh-tunnel.sh start
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-ps -ef | grep ping
-/etc/init.d/keepalive-ping.sh stop
-ps -ef | grep ping
-kill -9 1102
-ps -ef | grep ping
-ps -ef | grep ssh
-ifdown wlan0
-ifup wlan0
-/etc/init.d/keepalive-ping.sh start
-ps -ef | grep ping
-/etc/init.d/ssh-tunnel.sh start
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-make
-./bigtest.sh 
-make
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-top
-reboot
-halt
-exit
-date
-hwclock
-hwclock -w
-hwclock
-halt
-cd test_code/flycapture/src/CustomImageEx/
-./bigtest.sh 
-cd test_code/flycapture/bin
-./CustomImageEx 
-exit
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-make
-./bigtest.sh 
-lsusub
-lsusb
-exit
-halt
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-make
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-lsusb
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-make
-top
-exit
-cd test_code/flycapture/bin
-./CustomImageEx 
-top
-./CustomImageEx 
-top
-exit
-date
-ifdown wlan0
-ifup wlan0
-/
-/etc/init.d/ntp
-/etc/init.d/ntp start
-date
-/etc/init.d/keepalive-ping.sh start
-/etc/init.d/ssh-tunnel.sh start
-reboot
-[]
-top
-hwclock
-halt
-cd test_code/flycapture/bin
-./CustomImageEx 
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-top
-emacs CustomImageEx.cpp &
-top
-reboot
-exitexit
-exit
-ATZ
-AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
-ls
-top
-ls
-top
-/etc/init.d/monitor.sh stop
-top
-reboot
-/etc/init.d/monitor.sh stop
-top
-ps -ef | grep ssh
-to
-top
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-cd test_code/flycapture/bin
-top
-apt-get install htop
-apt-get autoremove
-htop
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-ls
-cd test_code/flycapture/bin
-./CustomImageEx 
-lsusb
-cd test_code/flycapture/bin
-./CustomImageEx 
-rm /tmp/images/*
-./CustomImageEx 
-lsusb
-htop
-reboot
-cd test_code/flycapture/src/CustomImageEx/
-emacs CustomImageEx.cpp &
-cd test_code/flycapture/src/testing
-ls
-cd ..
-cd support/
-ls
-htop
-reboot
 cd test_code/flycapture/src/bin
 cd test_code/flycapture/bin
 ./CustomImageEx 
@@ -1998,3 +1822,179 @@ cd test_code/flycapture/bin
 ls
 ./CustomImageEx 
 exit
+ls
+ifconfig
+iwconfig
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/monitor.sh stop
+/etc/init.d/monitor.sh start
+ps -ef | grep monitor
+/etc/init.d/monitor.sh stop
+ps -ef | grep monitor
+/etc/init.d/monitor.sh start
+reboot
+ls
+ps -ef 
+top
+htop
+cd test_code/
+grep -r Makefile
+grep -r Makefile *
+cd flycapture/
+ls
+cd src/
+ls
+lla
+cd support/
+ls
+cat Makefile 
+cd ../test
+cd ../test_c/
+ls
+cat Makefile 
+cd ../testing
+ls
+cat Makefile 
+cd ../CustomImageEx/
+ls
+cp Makefile ~/source/monitor/
+cat Makefile.original 
+cat Makefile
+cd ~
+ls
+cd include/
+ls
+lla
+ln -s ~/source/monitor/monitor.h ./monitor.h
+lla
+ln -s ~/source/motor_control/motor_control.h ./motor_control.h
+lla
+cd ../source/monitor/
+ls ../../
+ls ../../include/
+ls ../../bin
+cd ~/bin
+ls
+./motor_control forward_1
+./motor_control 
+./motor_control forward_1
+./motor_control 
+cd ../source
+tree
+mkdir camera
+cd camera/
+cd ../../test_code/flycapture/src/
+cd CustomImageEx/
+ls
+cp CustomImageEx.cpp ~/source/camera/
+cp Makefile ~/source/camera/
+ls ../../include/
+find / FlyCapture2.h
+find / -name FlyCapture2.h
+ls /usr/include/f*
+cd ../../include/
+ls
+rsync -avrz * ~/include/
+ls ~/include/
+rm ~/include/#FlyCapture2Defs.h# 
+ls /usr/local/lib
+cd ../lib
+ls
+lla
+tree
+rsync -avrz * ~/lib/
+cd ~/lib
+lla
+ln -s ./libflycapture.so.2 /usr/local/lib/libflycapture.so
+ln -s ./libflycapturegui.so.2 /usr/local/lib/libflycapturegui.so
+lla /usr/local/lib
+cd /usr/local/lib
+ls
+rm libflycapture*
+ln -s /root/lib/libflycapture.so ./libflycapture.so
+lla
+lla libfly*
+ln -s /root/lib/libflycapturegui.so ./libflycapturegui.so
+ls /root/lib/C
+lla ls /root/lib/C
+ln -s /root/lib/C/libflycapture-c.so ./libflycapture-c.so
+ln -s /root/lib/C/libflycapturegui-c.so ./libflycapturegui-c.so
+lla libf*
+~~
+cd ~/source/camera/
+ls
+make
+ls ~/bin
+cd ~/bin
+./CustomImageEx 
+cd ../source/camera/
+make
+echo ${LIBS}
+echo ${LD_LIBRARY_PATH}
+echo ${COMMON_LIBS}
+`pkg-config opencv --cflags
+`
+`pkg-config opencv --cflags --libs`
+pkg-config opencv --cflags --libs
+ls /usr/local/include/o*
+pkg-config opencv --cflags
+ls
+make clean
+ls
+ls ~/bin
+ls
+pkg-config opencv --libs
+make
+ls
+echo ${D}
+make
+make clean
+ls
+make
+make clean
+make
+make clean
+make
+cd test_code/flycapture/
+ls
+cd src/
+ls
+cd ../..
+ls
+cd ..
+ls
+lla t*
+lla to*
+emacs today.text &
+ls
+cat notes28jan14.txt 
+cat notes10feb14.txt 
+ls no*
+cat notes4march.txt 
+cat notes7march.txt 
+ls /etc/rc2.d/
+cat /dev/gpio-event 
+cd /
+git status
+git add -A
+git status
+git add -A
+git commit -m "--Moved code for monitor and motor_control from ~/test_code/ to ~/source/*. Put symlinks to headers in ~/include. Have executables in ~/bin.  Created makefiles for each to automate compilation."
+git push
+cd ~/bin
+./CustomImageEx 
+ls
+./run_cameras 
+lla /usr/local/include/libf*
+ls /usr/local/include/
+find / -name FlyCapture*
+find / -name libfly*
+lla /usr/local/lib/libfl*
+lla /usr/lib/libfl*
+./run_cameras 
+ps -ef | grep run
+kill -9 16848
+ps -ef | grep run
+./run_cameras 
+htop

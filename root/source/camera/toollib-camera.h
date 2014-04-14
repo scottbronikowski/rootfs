@@ -67,7 +67,7 @@ extern const char* k_Server;
 extern const char* k_FrontCamPort;
 extern const char* k_PanoCamPort;
 /*for OpenCV*/
-extern const int k_jpegQuality; //0-100, default is 95
+extern const int k_jpegQuality;
 
 //structures
 struct PointGrey_t {
@@ -115,7 +115,7 @@ int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras);
 int sendall(int s, unsigned char *buf, int *len);
 int SendMetadata (PointGrey_t* PG);
 int SendFrame(PointGrey_t* PG);
-void OpenCV_CompressFrame(PointGrey_t* PG, unsigned int imageCount);
+void OpenCV_CompressFrame(PointGrey_t* PG);
 void OpenCV_SendFrame(PointGrey_t* PG);
 
 
