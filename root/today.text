@@ -149,3 +149,6 @@ Old notes
 -------
 --Cleaned up toollib-camera.cpp/h
 --Reconfigured run_cameras to use an infinite loop for capturing.  Killing the process with Ctrl-C doesn't seem to do any harm (so far), but I will still work on implementing a signal handler so that the PGR_StopAndCleanup() function can get called before exit.
+
+15 Apr 14
+--Implemented signal handler in run_cameras.cpp.  Can now exit cleanly from by sending 'pkill run_cameras' either locally or over ssh.
