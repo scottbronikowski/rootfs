@@ -1,16 +1,3 @@
-./run_cameras 
-ps -ef | grep run
-kill -9 16848
-ps -ef | grep run
-./run_cameras 
-htop
-exit
-ps -ef | grep run_cameras
-pkill -SIGINT run_cameras
-pkill run_cameras
-ps -ef | grep run_cameras
-exit
-emacs today.text &
 ps -ef | grep "[/]root/bin/run_cameras"
 ps -ef | grep "run_cameras"
 ps -ef | grep "[/]root/bin/run_cameras"
@@ -1998,3 +1985,16 @@ date
 iwconfig
 date
 htop
+emacs today.text &
+ls
+rsync -avrz dmesg-rover-1* seykhl:~/vader-rover/
+halt
+emacs today.text &
+halt
+cd /etc/
+ls
+cd modprobe.d/
+ls
+cat blacklist.conf 
+emacs -nw
+reboot
