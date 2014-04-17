@@ -7,6 +7,11 @@
 auto lo
 iface lo inet loopback
 
+#eth0 for USB 4G modem
+allow-hotplug eth0
+#auto eth0
+iface eth0 inet dhcp
+
 #wifi
 
 ### USB Wifi adapter
@@ -17,8 +22,8 @@ iface wlan1 inet dhcp
 #	wpa-conf /etc/wpa_supplicant.conf
 #iface pal3 inet dhcp
 #      pre-up wpa_supplicant -Dwext -iwlan1 -c/etc/wpa_supplicant.conf -B
-	pre-up wpa_supplicant -iwlan1 -c/etc/wpa_supplicant.conf -B		
-      	down killall wpa_supplicant
+       pre-up wpa_supplicant -iwlan1 -c/etc/wpa_supplicant.conf -B		
+       down killall wpa_supplicant
 ##	pre-up /sbin/iwconfig wlan0 essid qobi-cccp
 #	wireless-essid qobi-office
 #	wireless-mode managed
@@ -28,10 +33,11 @@ allow-hotplug wlan0
 #auto wlan0
 #iface wlan0 inet dhcp
 ##      pre-up wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf -B
-##      down killall wpa_supplicant
+#	pre-up wpa_supplicant -iwlan0 -c/etc/wpa_supplicant.conf -B		
+#      	down killall wpa_supplicant
 ##	pre-up /sbin/iwconfig wlan0 essid qobi-cccp
-#	wireless-essid qobi-office
-#	wireless-mode managed
+##	wireless-essid qobi-office
+##	wireless-mode managed
 
 
 #allow-hotplug wlan2

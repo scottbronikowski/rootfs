@@ -1,155 +1,3 @@
-grep -r Makefile *
-cd flycapture/
-ls
-cd src/
-ls
-lla
-cd support/
-ls
-cat Makefile 
-cd ../test
-cd ../test_c/
-ls
-cat Makefile 
-cd ../testing
-ls
-cat Makefile 
-cd ../CustomImageEx/
-ls
-cp Makefile ~/source/monitor/
-cat Makefile.original 
-cat Makefile
-cd ~
-ls
-cd include/
-ls
-lla
-ln -s ~/source/monitor/monitor.h ./monitor.h
-lla
-ln -s ~/source/motor_control/motor_control.h ./motor_control.h
-lla
-cd ../source/monitor/
-ls ../../
-ls ../../include/
-ls ../../bin
-cd ~/bin
-ls
-./motor_control forward_1
-./motor_control 
-./motor_control forward_1
-./motor_control 
-cd ../source
-tree
-mkdir camera
-cd camera/
-cd ../../test_code/flycapture/src/
-cd CustomImageEx/
-ls
-cp CustomImageEx.cpp ~/source/camera/
-cp Makefile ~/source/camera/
-ls ../../include/
-find / FlyCapture2.h
-find / -name FlyCapture2.h
-ls /usr/include/f*
-cd ../../include/
-ls
-rsync -avrz * ~/include/
-ls ~/include/
-rm ~/include/#FlyCapture2Defs.h# 
-ls /usr/local/lib
-cd ../lib
-ls
-lla
-tree
-rsync -avrz * ~/lib/
-cd ~/lib
-lla
-ln -s ./libflycapture.so.2 /usr/local/lib/libflycapture.so
-ln -s ./libflycapturegui.so.2 /usr/local/lib/libflycapturegui.so
-lla /usr/local/lib
-cd /usr/local/lib
-ls
-rm libflycapture*
-ln -s /root/lib/libflycapture.so ./libflycapture.so
-lla
-lla libfly*
-ln -s /root/lib/libflycapturegui.so ./libflycapturegui.so
-ls /root/lib/C
-lla ls /root/lib/C
-ln -s /root/lib/C/libflycapture-c.so ./libflycapture-c.so
-ln -s /root/lib/C/libflycapturegui-c.so ./libflycapturegui-c.so
-lla libf*
-~~
-cd ~/source/camera/
-ls
-make
-ls ~/bin
-cd ~/bin
-./CustomImageEx 
-cd ../source/camera/
-make
-echo ${LIBS}
-echo ${LD_LIBRARY_PATH}
-echo ${COMMON_LIBS}
-`pkg-config opencv --cflags
-`
-`pkg-config opencv --cflags --libs`
-pkg-config opencv --cflags --libs
-ls /usr/local/include/o*
-pkg-config opencv --cflags
-ls
-make clean
-ls
-ls ~/bin
-ls
-pkg-config opencv --libs
-make
-ls
-echo ${D}
-make
-make clean
-ls
-make
-make clean
-make
-make clean
-make
-cd test_code/flycapture/
-ls
-cd src/
-ls
-cd ../..
-ls
-cd ..
-ls
-lla t*
-lla to*
-emacs today.text &
-ls
-cat notes28jan14.txt 
-cat notes10feb14.txt 
-ls no*
-cat notes4march.txt 
-cat notes7march.txt 
-ls /etc/rc2.d/
-cat /dev/gpio-event 
-cd /
-git status
-git add -A
-git status
-git add -A
-git commit -m "--Moved code for monitor and motor_control from ~/test_code/ to ~/source/*. Put symlinks to headers in ~/include. Have executables in ~/bin.  Created makefiles for each to automate compilation."
-git push
-cd ~/bin
-./CustomImageEx 
-ls
-./run_cameras 
-lla /usr/local/include/libf*
-ls /usr/local/include/
-find / -name FlyCapture*
-find / -name libfly*
-lla /usr/local/lib/libfl*
-lla /usr/lib/libfl*
 ./run_cameras 
 ps -ef | grep run
 kill -9 16848
@@ -1998,3 +1846,155 @@ lsusb
 /etc/init.d/keepalive-ping.sh stop
 dmesg > dmesg-rover-15apr-long-run-last-one.text
 reboot
+halt
+ls dm*
+rsync -avrz dmesg* seykhl:~/vader-rover/
+cd /
+git status
+git add -A
+git commit -m "commit after drive testing...dmesg-rover-* files in ~/"
+git push
+emacs today.text &
+ls
+cd test_code/flycapture/bin
+./CustomImageEx 
+exit
+lla
+exit
+cd test_code/flycapture/bin
+./CustomImageEx 
+ifconfig
+ifup etho0
+ls /etc/ne*
+vi /etc/network/interfaces
+cat today.text | grep 4G
+cat today.text | grep 4g
+vi today.text
+ifconfig
+iwconfig
+dhclient eth0
+ifconfig
+ping google.com
+/etc/init.d/ssh-tunnel.sh start
+lsusb
+reboot
+ls
+lla
+vi /etc/network/interfaces
+reboot
+dhclient eth0
+/etc/init.d/ssh-tunnel.sh start
+lsusb
+iwconfig
+cat /etc/network/interfaces
+vi /etc/network/interfaces
+lsusb
+reboot
+ls
+iwconfig
+ifconfig
+vi /etc/network/interfaces
+lsusb
+ping google.com
+dmesg > dmesg-rover-16apr-1130.text
+ps -ef
+lsusb
+reboot
+htop
+rsync dmesg-rover-16apr-1130.text seykhl:~/vader-rover/
+ls
+lsusb
+reboot
+cd test_code/flycapture/bin
+./CustomImageEx 
+cd ~
+ls
+dmesg > dmesg-rover-16apr-1135.text
+rsync -avrz dmesg-rover-* seykhl:~/vader-rover/
+cd test_code/flycapture/bin
+./Cus
+./CustomImageEx 
+htop
+dmesg > dmesg-rover-16apr-1205-successful-lap.text
+rsync -avrz dmesg-rover-1* seykhl:~/vader-rover/
+halt
+iwconfig
+ifconfig
+iwconfig
+find / -name motor_control
+cd bin/
+ls
+./motor_control forward_1
+./motor_control stop
+./motor_control forward_1
+./motor_control stop
+ls
+echo 20000 > /dev/pwm9
+echo 10000 > /dev/pwm9
+echo 15000 > /dev/pwm9
+echo 10000 > /dev/pwm10
+echo 20000 > /dev/pwm10
+echo 15000 > /dev/pwm10
+ip link
+lsusb
+cat /etc/network/interfaces
+ifconfig wlan1
+ifconfig wlan3
+cat /etc/udev/rules.d/70-persistent-net.rules 
+cd /etc/udev/rules.d/
+ls 70-persistent-*
+cp 70-persistent-net.rules 70-persistent-net.rules.backup
+ls 70-persistent-*
+vi 70-persistent-net.rules
+cat /etc/network/interfaces
+vi 70-persistent-net.rules
+reboot
+iwconfig
+`w:`w:aw:aw: w:#w:
+exit
+lsusb
+emacs today.text &
+lsmod
+hwinfo
+hwinfo --usb
+man hwinfo
+sudo apt-get install hwinfo
+hwinfo
+hwinfo --usb
+iwconfig
+ifconfig
+iwconfig
+cd test_code/flycapture/bin
+./CustomImageEx 
+emacs today.text &
+cd ~
+emacs today.text &
+reboot
+clear
+iwconfig
+ip link
+iwconfig
+iwconfig
+vi 70-persistent-net.rules
+iwconfig
+lsusb
+ping google.com
+top
+ifconfig
+clear
+ifconfig
+ping google.com
+dmesg -T > dmesg-rover-17apr-first-run.text
+reboot
+iwconfig
+dmesg -T | tail
+iwconfig
+time
+date
+iwconfig
+date
+iwconfig
+date
+iwconfig
+date
+htop

@@ -8,7 +8,7 @@
 # hlsearch on (H) or off (h):
 ~h
 # Last Search Pattern:
-~Msle0~/\<auto\>
+~Msle0~/\<SUBSYSTEM\>
 
 # Last Substitute Search Pattern:
 ~MSle0&
@@ -17,8 +17,8 @@
 $
 
 # Command Line History (newest to oldest):
-:wq
 :q
+:wq
 :q!
 :WQ
 :%s///g
@@ -33,6 +33,7 @@ $
 :Wq
 
 # Search String History (newest to oldest):
+? \<SUBSYSTEM\>
 ? \<auto\>
 ? \<allow\>
 ? \<hwclock\>
@@ -47,9 +48,9 @@ $
 # Input Line History (newest to oldest):
 
 # Registers:
-"0	LINE	0
-	OsDetect.register_default(OS_UBUNTU, LsbDetect("Ubuntu"))
-""1	LINE	0
+""0	LINE	0
+	#	pre-up wpa_supplicant -iwlan1 -c/etc/wpa_supplicant.conf -B		
+"1	LINE	0
 		wireless-mode managed
 	
 "2	CHAR	0
@@ -61,42 +62,52 @@ $
 	f
 
 # File marks:
-'0  15  20  /etc/network/interfaces
-'1  21  0  /etc/network/interfaces
-'2  17  31  /etc/wpa_supplicant.conf
-'3  18  19  /etc/network/interfaces
-'4  17  33  /etc/network/interfaces
-'5  34  26  /etc/wpa_supplicant.conf
-'6  20  21  /etc/network/interfaces
-'7  19  47  /etc/network/interfaces
-'8  35  0  /etc/wpa_supplicant.conf
-'9  16  8  /etc/wpa_supplicant.conf
+'0  1  0  ~/70-persistent-net.rules
+'1  20  149  /etc/udev/rules.d/70-persistent-net.rules
+'2  12  0  /etc/network/interfaces
+'3  36  29  /etc/network/interfaces
+'4  13  19  /etc/network/interfaces
+'5  2  0  /etc/network/interfaces
+'6  27  0  ~/today.text
+'7  1  0  /etc/network/interfaces
+'8  20  20  /etc/network/interfaces
+'9  26  0  /etc/network/interfaces
 
 # Jumplist (newest first):
--'  15  20  /etc/network/interfaces
+-'  1  0  ~/70-persistent-net.rules
+-'  20  149  /etc/udev/rules.d/70-persistent-net.rules
+-'  8  0  /etc/udev/rules.d/70-persistent-net.rules
+-'  1  0  /etc/udev/rules.d/70-persistent-net.rules
+-'  12  0  /etc/network/interfaces
 -'  1  0  /etc/network/interfaces
--'  21  0  /etc/network/interfaces
+-'  36  29  /etc/network/interfaces
+-'  13  19  /etc/network/interfaces
+-'  2  0  /etc/network/interfaces
+-'  27  0  ~/today.text
+-'  1  0  ~/today.text
+-'  20  20  /etc/network/interfaces
+-'  26  0  /etc/network/interfaces
 -'  17  31  /etc/wpa_supplicant.conf
 -'  1  0  /etc/wpa_supplicant.conf
--'  18  19  /etc/network/interfaces
--'  17  33  /etc/network/interfaces
+-'  23  19  /etc/network/interfaces
+-'  22  33  /etc/network/interfaces
 -'  34  26  /etc/wpa_supplicant.conf
--'  20  21  /etc/network/interfaces
--'  19  47  /etc/network/interfaces
+-'  25  21  /etc/network/interfaces
+-'  24  47  /etc/network/interfaces
 -'  35  0  /etc/wpa_supplicant.conf
 -'  16  8  /etc/wpa_supplicant.conf
 -'  1  0  /etc/init.d/gpio-monitor.sh
 -'  14  44  /etc/init.d/gpio-monitor.sh
 -'  1  1  /sys/module/cfg80211/parameters/ieee80211_regdom
--'  31  26  /etc/network/interfaces
+-'  37  26  /etc/network/interfaces
 -'  18  41  /etc/init.d/keepalive-ping.sh
 -'  1  0  /etc/init.d/keepalive-ping.sh
 -'  43  0  /etc/init.d/ssh-tunnel.sh
 -'  1  0  /etc/init.d/ssh-tunnel.sh
--'  22  24  /etc/network/interfaces
--'  23  0  /etc/network/interfaces
--'  24  0  /etc/network/interfaces
--'  25  0  /etc/network/interfaces
+-'  27  24  /etc/network/interfaces
+-'  28  0  /etc/network/interfaces
+-'  29  0  /etc/network/interfaces
+-'  30  0  /etc/network/interfaces
 -'  18  0  /etc/init.d/ssh-tunnel.sh
 -'  1  0  /tmp/post_response.txt
 -'  2  13  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
@@ -161,73 +172,103 @@ $
 -'  1  0  /var/log/auth.log
 -'  154  0  /var/log/Xorg.0.log.old
 -'  1  0  /var/log/Xorg.0.log.old
--'  115  8  /var/log/Xorg.0.log
--'  1  0  /var/log/Xorg.0.log
--'  1  0  /var/log/ConsoleKit/history
--'  18  0  /var/lib/plymouth/boot-duration
--'  1  0  /var/lib/plymouth/boot-duration
--'  11  0  /var/lib/dhcp/dhclient.wlan0.leases
--'  1  0  /var/lib/dhcp/dhclient.wlan0.leases
--'  1  7  /tmp/.X0-lock
--'  1  0  /run/utmp
--'  1  0  /run/upstart-udev-bridge.pid
 
 # History of marks within files (newest to oldest):
 
+> ~/70-persistent-net.rules
+	"	1	0
+
+> /etc/udev/rules.d/70-persistent-net.rules
+	"	20	149
+	^	20	150
+	.	20	149
+	+	8	0
+	+	20	149
+
 > /etc/network/interfaces
-	"	15	20
-	^	15	21
-	.	15	20
+	"	12	0
+	^	12	1
+	.	12	1
+	+	30	0
+	+	29	0
+	+	19	0
+	+	20	0
+	+	24	0
 	+	25	0
+	+	27	0
+	+	28	0
+	+	29	0
+	+	17	0
+	+	19	0
+	+	17	0
+	+	20	0
 	+	24	0
-	+	14	0
-	+	15	0
+	+	25	0
+	+	27	0
+	+	28	0
+	+	18	0
 	+	19	0
 	+	20	0
-	+	22	0
-	+	23	0
 	+	24	0
-	+	12	0
-	+	14	0
-	+	12	0
-	+	15	0
-	+	19	0
-	+	20	0
-	+	22	0
-	+	23	0
-	+	13	0
-	+	14	0
-	+	15	0
-	+	19	0
-	+	20	0
-	+	22	0
-	+	23	0
-	+	22	24
-	+	12	0
-	+	13	0
-	+	14	0
-	+	15	0
-	+	19	0
-	+	20	0
-	+	22	0
-	+	23	0
-	+	31	26
-	+	19	0
-	+	20	0
-	+	21	6
-	+	20	0
-	+	21	0
-	+	15	0
-	+	14	0
-	+	17	33
-	+	16	15
-	+	18	19
-	+	16	0
+	+	25	0
+	+	27	0
+	+	28	0
+	+	27	24
 	+	17	0
 	+	18	0
+	+	19	0
+	+	20	0
+	+	24	0
+	+	25	0
+	+	27	0
+	+	28	0
+	+	37	26
+	+	24	0
+	+	25	0
+	+	26	6
+	+	25	0
+	+	26	0
+	+	20	0
+	+	19	0
+	+	22	33
+	+	21	15
+	+	23	19
+	+	21	0
+	+	22	0
+	+	23	0
+	+	25	0
+	+	26	0
+	+	20	20
+	+	10	21
+	+	11	18
+	+	13	20
+	+	11	18
+	+	12	8
+	+	19	0
 	+	20	0
 	+	21	0
-	+	15	20
+	+	22	0
+	+	23	0
+	+	24	0
+	+	25	0
+	+	26	0
+	+	27	1
+	+	28	1
+	+	29	1
+	+	33	0
+	+	34	0
+	+	35	0
+	+	37	0
+	+	38	0
+	+	39	0
+	+	37	0
+	+	36	0
+	+	37	6
+	+	36	29
+	+	12	1
+
+> ~/today.text
+	"	27	0
 
 > /etc/wpa_supplicant.conf
 	"	17	31
@@ -699,14 +740,3 @@ $
 
 > /var/log/ConsoleKit/history.BASE.1573
 	"	1	0
-
-> /var/log/ConsoleKit/history.REMOTE.1573
-	"	1	0
-
-> /var/lib/plymouth/boot-duration
-	"	18	0
-	.	1	0
-	+	1	0
-
-> /var/lib/plymouth/boot-duration.LOCAL.1573
-	"	18	0

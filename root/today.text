@@ -1,4 +1,4 @@
-
+-- remove 'modprobe g_multi' from /etc/init.d/gpio-monitor.sh??
 
 
 
@@ -150,3 +150,33 @@ Old notes
 
 15 Apr 14
 --Implemented signal handler in run_cameras.cpp.  Can now exit cleanly from by sending 'pkill run_cameras' either locally or over ssh.
+
+17 Apr 14
+--Switched over to backup gumstix in an effort to troubleshoot USB EMI failure.  All external systems functional after switchover.  Also changed USB cable running between gumstix and hub from one that I had shorted to an uncut cable.
+--Testing camera transmission to see if/when USB fails:
+	  Internal wifi on qobi-office:  ran for ~48 minutes until battery died (intermittent whole-system pauses/hangs...but images resume after ~5 sec or less)
+	  Internal wifi on PAL: ran for 29 minutes until I stopped the test to do a driving test (did not notice the hangs above)
+	  USB wifi on qobi-office: (skipped these and went to drive testing)
+	  USB wifi on PAL: (skipped these and went to drive testing)
+  ***Did not see USB EMI failure after over an hour and a half of operation (split between 2 tests due to a reboot for a battery change)
+-- 40-pin header configuration:
+   5 = right encoder yellow	
+   6 = right encoder green
+   7 = left encoder yellow
+   8 = left encoder green
+   10 = motors
+   15 = GND (with 16)
+   16 = VCC 1.8V to level shifters (with 15)
+   23 = Rear bump GPIO 184 RED (with 24)
+   24 = Front bump GPIO 185 YELLOW (with 23)
+   25 = GND to bump switches (with 26)
+   26 = VCC 1.8V to bump switch pullups (with 25)
+   27 = ultrasonic yellow (with 29)
+   28 = PWM10 - pan servo
+   29 = ultrasonic red (with 27)
+   30 = PWM9 - tilt servo
+--apt-get install hwinfo
+--Drive testing results:
+	Internal wifi on PAL: Performance OK, but still have occasions when connection seems to hang--which seem to coincide with AP handoffs (as observed by running iwconfig)
+	USB wifi on PAL: Very similar performance.  Long hangs that sometimes seem to resolve themselves sometimes.  However, had to terminate the test when a hang didn't recover after ~2 minutes of waiting--and then after I had walked out and recovered the robot, system was still moderately non-responsive to console commands.  Interestingly, when I went to terminate the Scheme GUI I noticed that it flashed an image of me carrying the robot back from several minutes prior--implying that somewhere there is a buffer of images that haven't been sent/received yet.  That seems to make sense, since I am using TCP sockets (SOCK_STREAM).  Perhaps I need to switch to UDP sockets to allow images to be dropped (and possibly RTP on top of UDP).
+
