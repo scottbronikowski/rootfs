@@ -1,5 +1,6 @@
--- Removed g-multi.sh from startup to kill driver for USB OTG (update-rc.d -f /etc/init.d/g-multi.sh remove) -- previously had 01 priority.
--- Made changes to /etc/modprobe.d/blacklist.conf and /etc/modules recommended in http://www.ajaykumarsingh.com/linux/tp-link-tl-wn822n-300mbps-high-gain-wireless-n-usb-adapter-not-working-on-ubuntu-12-04.html in order to see if it helps with wifi handoffs.
+
+
+
 
 
 
@@ -180,4 +181,10 @@ Old notes
 --Drive testing results:
 	Internal wifi on PAL: Performance OK, but still have occasions when connection seems to hang--which seem to coincide with AP handoffs (as observed by running iwconfig)
 	USB wifi on PAL: Very similar performance.  Long hangs that sometimes seem to resolve themselves sometimes.  However, had to terminate the test when a hang didn't recover after ~2 minutes of waiting--and then after I had walked out and recovered the robot, system was still moderately non-responsive to console commands.  Interestingly, when I went to terminate the Scheme GUI I noticed that it flashed an image of me carrying the robot back from several minutes prior--implying that somewhere there is a buffer of images that haven't been sent/received yet.  That seems to make sense, since I am using TCP sockets (SOCK_STREAM).  Perhaps I need to switch to UDP sockets to allow images to be dropped (and possibly RTP on top of UDP).
+-- Removed g-multi.sh from startup to kill driver for USB OTG (update-rc.d -f /etc/init.d/g-multi.sh remove) -- previously had 01 priority.
+-- Made changes to /etc/modprobe.d/blacklist.conf and /etc/modules recommended in http://www.ajaykumarsingh.com/linux/tp-link-tl-wn822n-300mbps-high-gain-wireless-n-usb-adapter-not-working-on-ubuntu-12-04.html in order to see if it helps with wifi handoffs.
 
+18 Apr 14
+--apt-get install wavemon (monitors wifi connection statistics similar to iptraf)
+--Making some tweaks to /etc/wpa_supplicant.conf and /etc/network/interfaces to see if it improves connectivity to PAL--tried 'wpa-roam' vice 'wpa-conf' but that didn't seem to work--did comment out all networks other than PAL from wpa_supplicant.conf
+--Added 'sleep 5' to /etc/init.d/keepalive-ping.sh prior to the ping call to allow time for new /etc/network/interfaces and /etc/wpa_supplicant.conf to bring network up.  Also removed 'sleep 15' from /etc/init.d/time-update.sh

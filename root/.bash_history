@@ -1,146 +1,3 @@
-ps -ef | grep "[/]root/bin/run_cameras"
-ps -ef | grep "run_cameras"
-ps -ef | grep "[/]root/bin/run_cameras"
-ps -ef | grep "[/]root/bin/run_cameras" | awk '{print $2}'
-kill ps -ef | grep "[/]root/bin/run_cameras" | awk '{print $2}'
-kill $(ps -ef | grep "[/]root/bin/run_cameras" | awk '{print $2}'
-)
-kill $(ps -ef | grep "[/]root/bin/run_cameras" | awk '{print $2}'
-)
-kill ps -ef | grep "run_cameras" | awk '{print $2}'
-ps -ef | grep "run_cameras" | awk '{print $2}'
-kill $(ps -ef | grep "run_cameras" | awk '{print $2}')
-pkill run_cameras
-cd test_code/flycapture/bin
-./CustomImageEx 
-exit
-lsusb
-ps -ef | grep run
-kill -9 1186
-ps -ef | grep run
-kill -9 1213
-cd bin
-./run_cameras 
-ps -ef | grep run
-kill -9 1262
-ps -ef | grep run
-kill -9 1289
-kill -9 1312
-ps -ef | grep run
-kill -9 1337
-ps -ef | grep run
-kill -9 1373
-kill 1396
-ps -ef | grep run
-kill -9 1495
-./run_cameras 
-cd ~
-/root/bin/run_cameras
-pkill run_cameras
-lsusb
-pkill run_cameras
-reboot
-lsusb
-reboot
-emacs today.text &
-pkill run_cameras
-htop
-exit
-exit
-cd /
-git status
-exit
-emacs today.text &
-halt
-reboot
-htop
-lsusb
-halt
-ps -ef
-exit
-reboot
-ping google.com
-iwconfig
-ipconfig
-ifconfig
-cd test_code/flycapture/bin
-./CustomImageEx 
-htop
-lsusb
-emacs today.text &
-modprobe
-man modprobe
-modprobe -l
-lsmod
-modprobe -r g_multi
-lsmod
-lsusb
-modprobe g_ether
-lsmod
-lsusb
-modprobe -r g_ether
-lsusb
-modprobe g_serial
-lsusb
-modprobe -r g_serial
-modprobe usbserial
-lsusb
-modprobe g_serial
-halt
-cd test_code/flycapture/bin
-./CustomImageEx 
-iptraf
-locate / -name g_mult*
-find / -name g_mult*
-cd /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/usb
-ls
-cd gadget/
-ls
-cd ..
-cd serial/
-ls
-lsusb
-cd ..
-tree
-iwconfig
-ifconfig
-ps -ef | grep ping
-/etc/init.d/keepalive-ping.sh start
-/etc/init.d/ssh-tunnel.sh start
-ps -ef | grep ping
-kill -9 1037
-dmesg
-[    9.438446] end_request: I/O error, dev mtdblock0, sector 8
-[    9.454528] end_request: I/O error, dev mtdblock0, sector 24
-[    9.468048] end_request: I/O error, dev mtdblock0, sector 24
-[    9.486694] end_request: I/O error, dev mtdblock0, sector 24
-[    9.494201] usb 1-2.4: pl2303 converter now attached to ttyUSB1
-[    9.508209] end_request: I/O error, dev mtdblock0, sector 24
-[    9.517913] end_request: I/O error, dev mtdblock0, sector 56
-[    9.532775] end_request: I/O error, dev mtdblock0, sector 56
-[    9.549102] end_request: I/O error, dev mtdblock0, sector 56
-[    9.563018] end_request: I/O error, dev mtdblock0, sector 56
-[    9.579040] end_request: I/O error, dev mtdblock0, sector 120
-[    9.596099] end_request: I/O error, dev mtdblock0, sector 120
-[    9.610443] end_request: I/O error, dev mtdblock0, sector 120
-[    9.627410] end_request: I/O error, dev mtdblock0, sector 120
-[    9.648315] end_request: I/O error, dev mtdblock0, sector 0
-[    9.663787] end_request: I/O error, dev mtdblock0, sector 0
-[    9.681915] end_request: I/O error, dev mtdblock0, sector 8
-[    9.693817] end_request: I/O error, dev mtdblock0, sector 8
-[    9.708435] end_request: I/O error, dev mtdblock0, sector 24
-[    9.732238] end_request: I/O error, dev mtdblock0, sector 24
-[    9.752655] end_request: I/O error, dev mtdblock0, sector 56
-[    9.776153] end_request: I/O error, dev mtdblock0, sector 56
-[    9.801879] end_request: I/O error, dev mtdblock0, sector 120
-[    9.828826] end_request: I/O error, dev mtdblock0, sector 120
-[    9.853179] end_request: I/O error, dev mtdblock0, sector 0
-[    9.878326] end_request: I/O error, dev mtdblock0, sector 0
-[    9.896118] end_request: I/O error, dev mtdblock0, sector 0
-[    9.916595] end_request: I/O error, dev mtdblock0, sector 0
-[    9.936859] end_request: I/O error, dev mtdblock0, sector 0
-[    9.955413] end_request: I/O error, dev mtdblock0, sector 0
-[    9.975585] end_request: I/O error, dev mtdblock0, sector 64
 [    9.997772] end_request: I/O error, dev mtdblock0, sector 64
 [   10.014923] end_request: I/O error, dev mtdblock0, sector 64
 [   10.033782] end_request: I/O error, dev mtdblock0, sector 64
@@ -1997,4 +1854,147 @@ cd modprobe.d/
 ls
 cat blacklist.conf 
 emacs -nw
+reboot
+date
+iwconfig
+dmesg -T
+emacs today.text &
+dmesg -T
+dmesg -T > dmesg-rover-18apr-overnight.text
+rsync -avrz dmesg-rover-1* seykhl:~/vader-rover/
+ps -ef | grep run
+ifconfig
+ifconfig -a
+iwconfig
+iwconfig -a
+iwconfig wlan1
+cat /proc/net/wireless
+wavemon
+apt-get install wavemon
+wavemon
+halt
+htop
+iwconfig sens 50
+iwconfig sens
+iwconfig wlan1 sens
+iwconfig wlan1 sens 50
+iwconfig wlan1 sens -80
+iwconfig wlan1 sens 60
+iwconfig wlan1 sens high
+wpa_cli
+iptraf
+emacs today.text &
+reboot
+wavemon
+htop
+clear
+ls dm*
+rsync -avrz dmesg-rover-18apr-* seykhl:~/vader-rover/
+exit
+emacs today.text &
+exit
+/etc/init.d/ssh-tunnel.sh start
+ls
+lsusb
+dmesg -T >dmesg-rover-18apr-run-1.text
+iwconfig
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ping google.com
+ifdown wlan1
+ifup wlan1
+ps -ef | grep ping
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh start
+reboot
+iwconfig
+ping google.com
+ping bing.com
+vi /etc/network/interfaces
+reboot
+iwconfig
+ping google.com
+vi /etc/network/interfaces
+reboot
+emacs today.text &
+exit
+ping google.com
+iwconfig
+ifconfig
+ping google.com
+/etc/init.d/ssh-tunnel.sh start
+reboot
+iwconfig
+ifconfig
+ping seykhl
+ping seykhl.ecn.purdue.edu
+cd /etc/init.d/
+vi ssh-tunnel.sh
+reboot
+ping seykhl.ecn.purdue.du
+ping seykhl.ecn.purdue.edu
+vi /etc/init.d/keepalive-ping.sh 
+reboot
+exit
+ps -ef | grep ping
+cd /etc/init.d/
+vi ssh-tunnel.sh
+ls ../rc2
+ls ../rc2.d/
+update-rc.d -f ssh-tunnel.sh remove
+cat ~/today.text | grep ssh-tunnel
+update-rc.d -f ssh-tunnel.sh defaults 26
+vi time-update.sh 
+reboot
+lsusb
+reboot
+emacs today.text &
+wavemon
+lsusb
+halt
+lsusb
+reboot
+emacs today.text &
+wavemon
+halt
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+echo 20000 > /dev/pwm9
+echo 10000 > /dev/pwm9
+echo 15000 > /dev/pwm9
+lsusb
+reboot
+wavemon
+tail -f dmesg
+tail -f /var/log/dmesg
+ls
+tail -f /var/log/dmesg
+dmesg -T
+emacs -nw
+dmesg -T > dmesg-rover-18apr-run-2-failed-at-first-corner(wpa-roam).text
+dmesg -T > dmesg-rover-18apr-run-2-failed-at-first-corner-using-wpa-roam.text
+rsync -avrz dm* seykhl:~/vader-rover
+exit
+exit
+ls dm*
+exit
+lsusb
+i
+iwconfig
+ifconfig
+ifdown wlan1
+ifup wlan1
+ifconfig
+ping google.com
+ps -ef | grep run
+ps -ef | grep run_
+kill -9 1257
+/root/bin/run_cameras 
+reboot
+ifconfig
+iwconfig
+dhclient wlan1
+ifconfig
+vi /etc/network/interfaces
 reboot

@@ -8,7 +8,7 @@
 # hlsearch on (H) or off (h):
 ~h
 # Last Search Pattern:
-~Msle0~/\<SUBSYSTEM\>
+~Msle0~/\<NEW\>
 
 # Last Substitute Search Pattern:
 ~MSle0&
@@ -17,9 +17,9 @@
 $
 
 # Command Line History (newest to oldest):
-:q
 :wq
 :q!
+:q
 :WQ
 :%s///g
 :set fileformat=unix
@@ -33,6 +33,7 @@ $
 :Wq
 
 # Search String History (newest to oldest):
+? \<NEW\>
 ? \<SUBSYSTEM\>
 ? \<auto\>
 ? \<allow\>
@@ -48,12 +49,15 @@ $
 # Input Line History (newest to oldest):
 
 # Registers:
-""0	LINE	0
+"0	LINE	0
 	#	pre-up wpa_supplicant -iwlan1 -c/etc/wpa_supplicant.conf -B		
-"1	LINE	0
+""1	LINE	0
+	     sleep 15
+	#    echo "date : " 
+"2	LINE	0
 		wireless-mode managed
 	
-"2	CHAR	0
+"3	CHAR	0
 	ssh -f -N -Y -R 22222:localhost:22 seykhl
 	    echo "Started reverse SSH tunnel to seykhl.ecn.purdue.edu"
 "i	CHAR	0
@@ -62,58 +66,62 @@ $
 	f
 
 # File marks:
-'0  1  0  ~/70-persistent-net.rules
-'1  20  149  /etc/udev/rules.d/70-persistent-net.rules
-'2  12  0  /etc/network/interfaces
-'3  36  29  /etc/network/interfaces
-'4  13  19  /etc/network/interfaces
-'5  2  0  /etc/network/interfaces
-'6  27  0  ~/today.text
-'7  1  0  /etc/network/interfaces
-'8  20  20  /etc/network/interfaces
-'9  26  0  /etc/network/interfaces
+'0  20  17  /etc/network/interfaces
+'1  20  0  /etc/init.d/time-update.sh
+'2  17  0  /etc/init.d/ssh-tunnel.sh
+'3  13  10  /etc/init.d/keepalive-ping.sh
+'4  43  0  /etc/init.d/ssh-tunnel.sh
+'5  24  0  /etc/init.d/time-update.sh
+'6  10  0  ~/today.text
+'7  22  6  /etc/network/interfaces
+'8  1  0  ~/70-persistent-net.rules
+'9  20  149  /etc/udev/rules.d/70-persistent-net.rules
 
 # Jumplist (newest first):
+-'  20  17  /etc/network/interfaces
+-'  1  0  /etc/network/interfaces
+-'  20  0  /etc/init.d/time-update.sh
+-'  1  0  /etc/init.d/time-update.sh
+-'  17  0  /etc/init.d/ssh-tunnel.sh
+-'  1  0  /etc/init.d/ssh-tunnel.sh
+-'  13  10  /etc/init.d/keepalive-ping.sh
+-'  1  0  /etc/init.d/keepalive-ping.sh
+-'  43  0  /etc/init.d/ssh-tunnel.sh
+-'  24  0  /etc/init.d/time-update.sh
+-'  10  0  ~/today.text
+-'  1  0  ~/today.text
+-'  22  6  /etc/network/interfaces
 -'  1  0  ~/70-persistent-net.rules
 -'  20  149  /etc/udev/rules.d/70-persistent-net.rules
 -'  8  0  /etc/udev/rules.d/70-persistent-net.rules
 -'  1  0  /etc/udev/rules.d/70-persistent-net.rules
 -'  12  0  /etc/network/interfaces
--'  1  0  /etc/network/interfaces
--'  36  29  /etc/network/interfaces
+-'  37  29  /etc/network/interfaces
 -'  13  19  /etc/network/interfaces
 -'  2  0  /etc/network/interfaces
--'  27  0  ~/today.text
--'  1  0  ~/today.text
--'  20  20  /etc/network/interfaces
--'  26  0  /etc/network/interfaces
+-'  33  0  ~/today.text
+-'  27  0  /etc/network/interfaces
 -'  17  31  /etc/wpa_supplicant.conf
 -'  1  0  /etc/wpa_supplicant.conf
--'  23  19  /etc/network/interfaces
--'  22  33  /etc/network/interfaces
+-'  24  19  /etc/network/interfaces
 -'  34  26  /etc/wpa_supplicant.conf
--'  25  21  /etc/network/interfaces
--'  24  47  /etc/network/interfaces
+-'  26  21  /etc/network/interfaces
+-'  25  47  /etc/network/interfaces
 -'  35  0  /etc/wpa_supplicant.conf
 -'  16  8  /etc/wpa_supplicant.conf
 -'  1  0  /etc/init.d/gpio-monitor.sh
 -'  14  44  /etc/init.d/gpio-monitor.sh
 -'  1  1  /sys/module/cfg80211/parameters/ieee80211_regdom
--'  37  26  /etc/network/interfaces
--'  18  41  /etc/init.d/keepalive-ping.sh
--'  1  0  /etc/init.d/keepalive-ping.sh
--'  43  0  /etc/init.d/ssh-tunnel.sh
--'  1  0  /etc/init.d/ssh-tunnel.sh
--'  27  24  /etc/network/interfaces
--'  28  0  /etc/network/interfaces
+-'  38  26  /etc/network/interfaces
+-'  19  41  /etc/init.d/keepalive-ping.sh
+-'  28  24  /etc/network/interfaces
 -'  29  0  /etc/network/interfaces
 -'  30  0  /etc/network/interfaces
+-'  31  0  /etc/network/interfaces
 -'  18  0  /etc/init.d/ssh-tunnel.sh
 -'  1  0  /tmp/post_response.txt
 -'  2  13  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
 -'  1  0  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
--'  20  12  /etc/init.d/time-update.sh
--'  1  0  /etc/init.d/time-update.sh
 -'  55  55  /etc/init.d/ntp
 -'  1  0  /etc/init.d/ntp
 -'  22  0  /etc/init.d/ntp
@@ -123,15 +131,14 @@ $
 -'  9  77  /etc/init.d/time-update.sh
 -'  14  28  /etc/init.d/monitor.sh
 -'  1  0  /etc/init.d/monitor.sh
--'  26  3  /etc/init.d/time-update.sh
--'  31  46  /etc/init.d/time-update.sh
--'  27  7  /etc/init.d/time-update.sh
--'  23  4  /etc/init.d/time-update.sh
--'  25  1  /etc/init.d/time-update.sh
+-'  29  46  /etc/init.d/time-update.sh
+-'  25  7  /etc/init.d/time-update.sh
+-'  21  4  /etc/init.d/time-update.sh
+-'  23  1  /etc/init.d/time-update.sh
 -'  24  0  /etc/init.d/ntp
--'  28  2  /etc/init.d/time-update.sh
+-'  26  2  /etc/init.d/time-update.sh
 -'  19  55  /etc/init.d/time-update.sh
--'  14  17  /etc/init.d/keepalive-ping.sh
+-'  15  17  /etc/init.d/keepalive-ping.sh
 -'  3  68  /etc/fstab
 -'  1  0  /etc/fstab
 -'  138  18  ~/.bashrc
@@ -141,7 +148,7 @@ $
 -'  32  0  ~/pointgrey/flycapture.2.5.3.5_armhf/include/C/FlyCapture2_C.h
 -'  1  0  ~/pointgrey/flycapture.2.5.3.5_armhf/include/C/FlyCapture2_C.h
 -'  4  0  ~/pointgrey/flycapture.2.5.3.5_armhf/include/C/FlyCapture2_C.h
--'  13  41  /etc/init.d/keepalive-ping.sh
+-'  14  41  /etc/init.d/keepalive-ping.sh
 -'  4  6  /etc/default/saned
 -'  1  0  /etc/default/saned
 -'  1  18  /etc/rcS.d/S05keymap.sh
@@ -167,77 +174,56 @@ $
 -'  50  0  /var/log/dmesg.0
 -'  1  0  /var/log/dmesg.0
 -'  50  0  /var/log/dmesg
--'  1  0  /var/log/dmesg
--'  1  0  /var/log/boot.log
--'  1  0  /var/log/auth.log
--'  154  0  /var/log/Xorg.0.log.old
--'  1  0  /var/log/Xorg.0.log.old
 
 # History of marks within files (newest to oldest):
 
-> ~/70-persistent-net.rules
-	"	1	0
-
-> /etc/udev/rules.d/70-persistent-net.rules
-	"	20	149
-	^	20	150
-	.	20	149
-	+	8	0
-	+	20	149
-
 > /etc/network/interfaces
-	"	12	0
-	^	12	1
-	.	12	1
+	"	20	17
+	^	20	18
+	.	20	17
+	+	28	0
+	+	29	0
 	+	30	0
-	+	29	0
-	+	19	0
-	+	20	0
-	+	24	0
-	+	25	0
-	+	27	0
-	+	28	0
-	+	29	0
 	+	17	0
 	+	19	0
 	+	17	0
 	+	20	0
-	+	24	0
-	+	25	0
-	+	27	0
-	+	28	0
-	+	18	0
-	+	19	0
-	+	20	0
-	+	24	0
-	+	25	0
-	+	27	0
-	+	28	0
-	+	27	24
-	+	17	0
-	+	18	0
-	+	19	0
-	+	20	0
-	+	24	0
-	+	25	0
-	+	27	0
-	+	28	0
-	+	37	26
-	+	24	0
-	+	25	0
-	+	26	6
 	+	25	0
 	+	26	0
+	+	28	0
+	+	29	0
+	+	18	0
+	+	19	0
+	+	20	0
+	+	25	0
+	+	26	0
+	+	28	0
+	+	29	0
+	+	28	24
+	+	17	0
+	+	18	0
+	+	19	0
+	+	20	0
+	+	25	0
+	+	26	0
+	+	28	0
+	+	29	0
+	+	38	26
+	+	25	0
+	+	26	0
+	+	27	6
+	+	26	0
+	+	27	0
 	+	20	0
 	+	19	0
 	+	22	33
 	+	21	15
-	+	23	19
+	+	24	19
 	+	21	0
 	+	22	0
-	+	23	0
-	+	25	0
+	+	24	0
 	+	26	0
+	+	27	0
 	+	20	20
 	+	10	21
 	+	11	18
@@ -248,27 +234,143 @@ $
 	+	20	0
 	+	21	0
 	+	22	0
-	+	23	0
 	+	24	0
 	+	25	0
 	+	26	0
-	+	27	1
+	+	27	0
 	+	28	1
 	+	29	1
+	+	30	1
+	+	34	0
+	+	35	0
+	+	36	0
+	+	38	0
+	+	39	0
+	+	40	0
+	+	38	0
+	+	37	0
+	+	38	6
+	+	37	29
+	+	12	1
+	+	21	0
+	+	21	0
+	+	23	0
+	+	22	5
+	+	23	0
+	+	24	6
+	+	23	1
+	+	22	6
+	+	20	0
+	+	21	0
+	+	22	0
+	+	23	0
+	+	24	0
+	+	25	0
+	+	24	8
+	+	25	3
+	+	26	0
+	+	27	0
+	+	30	0
+	+	31	0
+	+	32	0
 	+	33	0
 	+	34	0
 	+	35	0
+	+	36	0
 	+	37	0
 	+	38	0
 	+	39	0
-	+	37	0
-	+	36	0
-	+	37	6
-	+	36	29
-	+	12	1
+	+	20	17
+
+> /etc/init.d/time-update.sh
+	"	20	0
+	^	20	1
+	.	20	0
+	+	26	13
+	+	22	0
+	+	26	10
+	+	21	3
+	+	21	10
+	+	27	0
+	+	22	0
+	+	21	3
+	+	20	3
+	+	19	33
+	+	21	0
+	+	22	1
+	+	23	2
+	+	13	43
+	+	19	22
+	+	20	0
+	+	21	0
+	+	22	1
+	+	23	2
+	+	18	3
+	+	17	10
+	+	21	4
+	+	18	13
+	+	21	4
+	+	25	7
+	+	18	46
+	+	13	0
+	+	14	0
+	+	15	0
+	+	16	0
+	+	17	0
+	+	18	0
+	+	19	0
+	+	21	4
+	+	20	11
+	+	20	0
+	+	20	0
+	+	22	0
+	+	23	0
+	+	24	0
+	+	25	0
+	+	9	77
+	+	20	12
+	+	22	0
+	+	21	1
+	+	23	0
+	+	20	12
+	+	20	0
+	+	20	0
+
+> /etc/init.d/ssh-tunnel.sh
+	"	17	0
+	^	17	0
+	.	18	0
+	+	18	0
+	+	16	0
+	+	17	0
+	+	18	0
+
+> /etc/init.d/keepalive-ping.sh
+	"	13	10
+	^	13	11
+	.	13	10
+	+	15	37
+	+	14	41
+	+	9	30
+	+	15	17
+	+	19	41
+	+	13	10
 
 > ~/today.text
-	"	27	0
+	"	10	0
+	^	10	0
+	.	9	54
+	+	9	54
+
+> ~/70-persistent-net.rules
+	"	1	0
+
+> /etc/udev/rules.d/70-persistent-net.rules
+	"	20	149
+	^	20	150
+	.	20	149
+	+	8	0
+	+	20	149
 
 > /etc/wpa_supplicant.conf
 	"	17	31
@@ -306,22 +408,6 @@ $
 	.	1	2
 	+	1	2
 
-> /etc/init.d/keepalive-ping.sh
-	"	18	41
-	^	18	42
-	.	18	41
-	+	14	37
-	+	13	41
-	+	9	30
-	+	14	17
-	+	18	41
-
-> /etc/init.d/ssh-tunnel.sh
-	"	43	0
-	^	18	1
-	.	18	0
-	+	18	0
-
 > /tmp/post_response.txt
 	"	1	0
 
@@ -330,58 +416,6 @@ $
 	^	2	14
 	.	2	13
 	+	2	13
-
-> /etc/init.d/time-update.sh
-	"	20	12
-	^	20	13
-	.	20	12
-	+	28	13
-	+	24	0
-	+	28	10
-	+	23	3
-	+	23	10
-	+	29	0
-	+	24	0
-	+	23	3
-	+	21	3
-	+	19	33
-	+	23	0
-	+	24	1
-	+	25	2
-	+	13	43
-	+	19	22
-	+	21	0
-	+	23	0
-	+	24	1
-	+	25	2
-	+	18	3
-	+	17	10
-	+	23	4
-	+	18	13
-	+	23	4
-	+	27	7
-	+	18	46
-	+	13	0
-	+	14	0
-	+	15	0
-	+	16	0
-	+	17	0
-	+	18	0
-	+	19	0
-	+	23	4
-	+	20	10
-	+	21	0
-	+	22	0
-	+	24	0
-	+	25	0
-	+	26	0
-	+	27	0
-	+	9	77
-	+	20	11
-	+	24	0
-	+	23	1
-	+	25	0
-	+	20	12
 
 > /etc/init.d/ntp
 	"	55	55

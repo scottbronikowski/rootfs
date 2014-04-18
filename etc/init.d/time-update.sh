@@ -17,7 +17,7 @@ start(){
 #    hwclock
 #    ntpdate -uvb ntp.ubuntu.com us.pool.ntp.org
 #    echo "Updated time"
-     sleep 15
+#     sleep 15
 #    echo "date : " 
 #    date
      hwclock -w

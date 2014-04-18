@@ -17,7 +17,17 @@ iface eth0 inet dhcp
 ### USB Wifi adapter
 allow-hotplug wlan1
 auto wlan1
-iface wlan1 inet dhcp
+## NEW -- wpa-roam
+#iface wlan1 inet manual
+#     	#pre-up sh -c "sleep 5"
+#	wpa-driver wext
+#      	wpa-roam /etc/wpa_supplicant.conf 
+#	# wpa-conf /etc/wpa_supplicant.conf
+#iface default inet dhcp
+#iface pal3 inet dhcp
+
+# OLD
+ iface wlan1 inet dhcp
 #	wpa-driver wext
 #	wpa-conf /etc/wpa_supplicant.conf
 #iface pal3 inet dhcp

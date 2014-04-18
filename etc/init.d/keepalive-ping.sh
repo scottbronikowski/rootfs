@@ -10,6 +10,7 @@
 ### END INIT INFO
 
 start(){
+    sleep 5
     echo "Starting keep alive ping to purdue.edu"
     ping -i 5 www.purdue.edu > /dev/null &
 }
