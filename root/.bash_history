@@ -1,53 +1,3 @@
-[    9.997772] end_request: I/O error, dev mtdblock0, sector 64
-[   10.014923] end_request: I/O error, dev mtdblock0, sector 64
-[   10.033782] end_request: I/O error, dev mtdblock0, sector 64
-[   10.049407] end_request: I/O error, dev mtdblock0, sector 64
-[   10.068908] end_request: I/O error, dev mtdblock0, sector 64
-[   10.093749] end_request: I/O error, dev mtdblock0, sector 64
-[   10.107238] end_request: I/O error, dev mtdblock0, sector 64
-[   10.129486] end_request: I/O error, dev mtdblock0, sector 64
-[   10.145477] end_request: I/O error, dev mtdblock0, sector 0
-[   10.169372] end_request: I/O error, dev mtdblock0, sector 0
-[   10.185516] end_request: I/O error, dev mtdblock0, sector 0
-[   10.200622] end_request: I/O error, dev mtdblock0, sector 0
-[   10.215332] end_request: I/O error, dev mtdblock0, sector 0
-[   10.239929] end_request: I/O error, dev mtdblock0, sector 16
-[   10.256774] end_request: I/O error, dev mtdblock0, sector 0
-[   10.275604] end_request: I/O error, dev mtdblock0, sector 0
-[   10.291534] end_request: I/O error, dev mtdblock0, sector 0
-[   10.291839] end_request: I/O error, dev mtdblock0, sector 0
-[   10.292022] end_request: I/O error, dev mtdblock0, sector 0
-[   10.292205] end_request: I/O error, dev mtdblock0, sector 0
-[   10.292358] end_request: I/O error, dev mtdblock0, sector 0
-[   10.292541] end_request: I/O error, dev mtdblock0, sector 0
-[   10.292694] end_request: I/O error, dev mtdblock0, sector 0
-[   10.292846] end_request: I/O error, dev mtdblock0, sector 0
-[   10.293029] end_request: I/O error, dev mtdblock0, sector 0
-[   10.293182] end_request: I/O error, dev mtdblock0, sector 0
-[   10.293334] end_request: I/O error, dev mtdblock0, sector 0
-[   10.293518] end_request: I/O error, dev mtdblock0, sector 0
-[   10.293670] end_request: I/O error, dev mtdblock0, sector 0
-[   10.293823] end_request: I/O error, dev mtdblock0, sector 0
-[   10.294006] end_request: I/O error, dev mtdblock0, sector 0
-[   10.295928] end_request: I/O error, dev mtdblock0, sector 0
-[   10.296203] end_request: I/O error, dev mtdblock0, sector 8
-[   10.296386] end_request: I/O error, dev mtdblock0, sector 0
-[   10.296539] end_request: I/O error, dev mtdblock0, sector 0
-[   10.296722] end_request: I/O error, dev mtdblock0, sector 0
-[   10.296874] end_request: I/O error, dev mtdblock0, sector 0
-[   12.511535] libertas_sdio mmc1:0001:1: (unregistered net_device): 00:19:88:45:0b:0a, fw 9.70.3p36, cap 0x00000303
-[   12.519226] libertas_sdio mmc1:0001:1: wlan0: Marvell WLAN 802.11 adapter
-[   13.460571] NET: Registered protocol family 10
-[  129.747589] hub 1-2:1.0: state 7 ports 7 chg 0000 evt 0004
-[  129.748321] hub 1-2:1.0: port 2, status 01
-[  129.901031] hub 1-2:1.0: debounce: port 2: total 100ms stabl
-[  133.665649]  gadget: using random self ethernet address
-[  13
-[  133.690399] usb0: MAC 2e:39:50:5a:04:bb
-[  133.690429] usb0: 
-[  133.702026]  gadget: Mass Storage Function, version: 2009/09/
-[  133.702056]  gadget: Number of LUNs=1
-[  133.702056]  lun0: L
 [  133.702148]  gadget: Multifunction Composite Gadget
 [  133.
 [  133.702178]  gadget: g_multi ready
@@ -1998,3 +1948,53 @@ dhclient wlan1
 ifconfig
 vi /etc/network/interfaces
 reboot
+dmesg -T
+dmesg -T > dmesg-rover-18apr-run-3-all-the-way-jeff-following.text
+rsync -avrz dmesg-rover-1* seykhl:~/vader-rover/
+emacs today.text &
+exit
+wavemon 
+exit
+ps -ef | grep run_
+htop
+eit
+exit
+l
+ps -ef | grep ssh
+kill -9 1019
+ps -ef | grep ssh
+halt
+hatl
+halt
+cd bin/
+ls
+motor_control forward_1
+motor_control stop
+motor_control forward_1
+motor_control stop
+motor_control forward_1
+motor_control stop
+motor_control forward_2
+motor_control stop
+motor_control forward_2
+motor_control stop
+motor_control forward_3
+motor_control stop
+motor_control forward_3
+motor_control stop
+motor_control forward_4
+motor_control stop
+motor_control forward_4
+motor_control stop
+motor_control forward_4
+motor_control stop
+motor_control forward_4
+motor_control stop
+halt
+reboot
+htop
+exit
+ps -ef | grep cameras
+pkill run_cameras
+exit
+exit
