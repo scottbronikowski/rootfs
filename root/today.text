@@ -191,3 +191,7 @@ Old notes
 
 23 Apr 14
 --Started working on master program (~/source/emperor) that will listen for commands from seykhl and then start threads or call functions as needed.
+
+24 Apr 14
+--apt-get install lsof
+--Have control message-passing infrastructure working between rover and seykhl.  On vader-rover, emperor 'calls home' to open a socket to seykhl and then listens for commands on that socket.  Currently have start_cameras and stop_cameras working (had to make some tweaks to toollib-camera.cpp to explicitly close sockets to get cameras to start again after being stopped--previously that had been getting taken care of when I terminated run_cameras with a SIGINT).  Next working on getting pan and tilt to work from right thumb stick.

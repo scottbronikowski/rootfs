@@ -8,7 +8,7 @@ IMLIB_I = `imlib2-config --cflags`
 INCLUDE = -I../../include $(OPENCV_I) $(IMLIB_I)
 OPENCV_L =  `pkg-config opencv --cflags --libs`
 IMLIB_L = `imlib2-config --cflags --libs`
-LIBS = -L../../lib -lflycapture${D} -L/usr/local/lib $(OPENCV_L) $(IMLIB_L)
+LIBS = -L../../lib -lflycapture${D} -L/usr/local/lib $(OPENCV_L) $(IMLIB_L) -lpthread
 CFLAGS = -D__STDC_CONSTANT_MACROS
 OPTFLAGS = -Ofast -march=native -flto -fwhole-program
 OUTDIR = ../../bin
@@ -29,13 +29,13 @@ ${OUTPUTNAME}: ${OBJS}
 	mv ${OUTPUTNAME} ${OUTDIR}
 
 emperor.o: emperor.cpp emperor.h
-	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
 
 ${CAMDIR}/toollib-camera.o: ${CAMFILES}
-	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${CAMDIR}/toollib-camera.o
 
 ${MOTORDIR}/motor_control_functions.o: ${MOTORFILES}
-	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${MOTORDIR}/motor_control_functions.o
 
 # ${MONDIR}/monitor.o: ${MONFILES}
 # 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp

@@ -189,6 +189,11 @@ void PGR_StopAndCleanup(PointGrey_t* PG, unsigned int numCameras)
     CheckPGR(PG[i].camera.StopCapture()); 
     // Disconnect the camera
     CheckPGR(PG[i].camera.Disconnect());
+    // close the socket
+    if (close(PG[i].sockfd) != 0)
+      printf("Error closing socket for cam %u\n", i);
+    // else
+    //   printf("Socket for cam %u closed\n", i);
   }
   delete[] PG;
   //printf("All cleaned up!\n");
@@ -491,13 +496,13 @@ int ClientConnect(const char* server, const char* port)
     if ((sockfd = socket(p->ai_family, p->ai_socktype,
 			 p->ai_protocol)) == -1)
     {
-      perror("client: socket");
+      //perror("client: socket");
       continue;
     }
     if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) 
     {
       close(sockfd);
-      perror("client: connect");
+      //perror("client: connect");
       continue;
     }
     //if we get here, we have connected successfully
@@ -508,7 +513,7 @@ int ClientConnect(const char* server, const char* port)
   if (p == NULL) 
   {
     //looped off the end of the list with no connection
-    fprintf(stderr, "client: failed to connect\n");
+    //fprintf(stderr, "client: failed to connect\n");
     return -1;
   }
   inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
@@ -564,7 +569,7 @@ int sendall(int s, unsigned char *buf, int *len)
   }
   
   *len = total; // return number actually sent here
-  //printf("sent %d\n", *len);
+  //printf("sendall: sent %d\n", *len);
   return n==-1?-1:0; // return -1 on failure, 0 on success
 } 
 
