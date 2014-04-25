@@ -1,118 +1,3 @@
-[  133.702148]  gadget: Multifunction Composite Gadget
-[  133.
-[  133.702178]  gadget: g_multi ready
-[  133.722259] twl4030_u
-[  133.722320] musb-hdrc musb-hdrc: MUSB HDRC host driver
-[  1
-[  133.722778] musb-hdrc musb-hdrc: supports USB remote wakeup
-[  133.722839] usb usb2: default language 0x0409
-[  133.722900]
-[  133.722900] usb usb2: New USB device found, idVendor=1d6b, i
-[  133.722930] usb usb2: New USB device strings: Mfr=3, Product
-[  133.722930] usb usb2: Product: MUSB HDRC host driver
-[  133.
-[  133.722961] usb usb2: SerialNumber: musb-hdrc
-[  133.723449] 
-[  133.723480] usb usb2: configuration #1 chosen from 1 choice
-[
-[  133.723693] hub 2-0:1.0: usb_probe_interface
-[  133.723693]
-[  133.723724] hub 2-0:1.0: USB hub found
-[  133.723754] hub 2
-[  133.723754] hub 2-0:1.0: standalone hub
-[  133.723785] hub 
-[  133.723785] hub 2-0:1.0: no over-current protection
-[  133.
-[  133.723815] hub 2-0:1.0: TT requires at most 8 FS bit times
-[  133.723815] hub 2-0:1.0: power on to power good time: 10ms
-[  133.723876] hub 2-0:1.0: local power source is good
-[  133.7
-[  133.812011] twl4030_usb twl4030_usb: HW_CONDITIONS 0x90/144;
-[  133.822540] hub 2-0:1.0: state 7 ports 1 chg 0000 evt 0000
-[
-[  134.010864] twl4030_usb twl4030_usb: twl4030_phy_suspend
-[  
-[  134.608917] pwm: frequency=50 Hz servo=1 servo_min = 10000 s
-[  136.010040] hub 2-0:1.0: hub_suspend
-[  136.010101] usb usb2
-[  137.071838] init: lightdm main process (561) terminated with
-[  151.251312] hub 1-2:1.0: state 7 ports 7 chg 0000 evt 0004
-[
-[  151.408935] hub 1-2:1.0: debounce: port 2: total 100ms stabl
-[  151.494842] usb 1-2.2: new high-speed USB device number 11 
-[  151.613311] usb 1-2.2: default language 0x0409
-[  151.61447
-[  151.614501] usb 1-2.2: New USB device found, idVendor=0bda,
-[  151.614501] usb 1-2.2: New USB device strings: Mfr=1, Produ
-[  151.614532] usb 1-2.2: Product: USB WLAN
-[  151.614532] usb
-[  151.614562] usb 1-2.2: SerialNumber: 00e04c000001
-[  151.615
-[  151.615112] usb 1-2.2: configuration #1 chosen from 1 choic
-[  151.617736] usb 1-2.2: adding 1-2.2:1.0 (config #1, interfa
-[  151.618621] hub 1-2:1.0: state 7 ports 7 chg 0000 evt 0004
-[  151.724334] build time: Mar 17 2014 16:15:36
-[  151.724487]
-[  151.724487] rtl8192cu 1-2.2:1.0: usb_probe_interface - got 
-[  151.724517] 
-[  151.724517] usb_endpoint_descriptor(0):
-[  
-[  151.724548] bDescriptorType=5
-[  151.724548] bEndpointAddre
-[  151.724548] wMaxPacketSize=200
-[  151.724548] bInterval=0
-[
-[  151.724578] 
-[  151.724578] usb_endpoint_descriptor(1):
-[  
-[  151.724578] bDescriptorType=5
-[  151.724609] bEndpointAddre
-[  151.724609] wMaxPacketSize=200
-[  151.724609] bInterval=0
-[
-[  151.724609] 
-[  151.724609] usb_endpoint_descriptor(2):
-[  
-[  151.724639] bDescriptorType=5
-[  151.724639] bEndpointAddre
-[  151.724639] wMaxPacketSize=200
-[  151.724670] bInterval=0
-[
-[  151.724670] 
-[  151.724670] usb_endpoint_descriptor(3):
-[  
-[  151.724670] bDescriptorType=5
-[  151.724700] bEndpointAddre
-[  151.724700] wMaxPacketSize=40
-[  151.724700] bInterval=1
-[ 
-[  151.724700] nr_endpoint=4, in_num=2, out_num=2
-[  151.72470
-[  151.724731] USB_SPEED_HIGH
-[  151.724792] CHIP TYPE: RTL818
-[  151.724853] register rtw_netdev_ops to netdev_ops
-[  151.72
-[  151.725646] RF_Type is 2[  151.72
-[  151.726287] EEPROM type is E-
-[  151.726318] ====> ReadAdapterInfo8192C
-[  151.726593] Boot 
-[  151.989074] EEPROMVID = 0x0bda
-[  151.989105] EEPROMPID = 0
-[  151.989105] EEPROMCustomerID : 0x00
-[  151.989105] EEPROMSubCustomerID: 0x00
-[  151.989105] RT_CustomerID: 0x00
-[
-[  151.989135] EEPROMRegulatory = 0x0
-[  151.989135] _ReadBoardType(0)
-[  15
-[  151.989166] mlmepriv.ChannelPlan = 0x02
-[  151
-[  151.989196] ### PS params=>  power_mgnt(0),usbss_enable(0)
-[  151.989196] ### AntDivCfg(0)
-[  151.989196
-[  151.989196] <==== ReadAdapterInfo8192C in 265 ms
-[  151.9902
-[  151.990295] bDriverStopped:1, bSurpriseRemoved:0, bup:0
 [  15
 [  151.999206] usbcore: registered new int
 [  152.183288] +871x_
@@ -1997,4 +1882,119 @@ exit
 ps -ef | grep cameras
 pkill run_cameras
 exit
+exit
+emacs today.text &
+cd bin
+ls
+./emperor 
+lsof
+lsof -i
+apt-get install lsof
+lsof
+lsof -c emp
+lsof -c /root/bin/emperor
+lsof -c emperor
+lsof -c ssh
+lsof -i
+netstat -ltpu
+./emperor 
+clear
+lla
+./emperor 
+exit
+ls
+cd source/
+ls
+mkdir emperor
+cd emperor
+touch emperor.cpp
+touch emperor.h
+touch Makefile
+cd ../../include/
+ls
+lla
+ln -s /root/source/camera/toollib-camera.h toollib-camera.h
+lla
+cd ../lib
+ls
+lla
+cd ../source/camera/
+cp Makefile ../emperor/
+cd ..
+lla
+cd camera/
+lla
+cd ../motor_control/
+lla
+cd ../monitor/
+lla
+cd ../emperor/
+ls
+make
+cd ../../bin
+./emperor 
+cd ../source/emperor/
+cd ..
+grep -ri get_in_addr *
+grep -ri startserver *
+grep -ri server *
+cd emperor/
+make
+ps -ef | grep run_
+pkill run_cameras
+ps -ef | grep run_
+make
+make clean
+make
+tree ../
+make clean
+tree ../
+ls
+rm *.o
+ls
+make
+grep -ri k_maxbufsize ../*
+cd ..
+grep -ri k_maxbufsize *
+cd emperor/
+make
+cd ..
+grep -ri pthread *
+cd emperor/
+make
+ps -ef | grep emperor
+make
+cd ../camera/
+make
+cd ../emperor/
+make
+cd ../camera/
+make
+cd ../emperor/
+make
+cd ../camera/
+make
+cd ../emperor/
+../camera/make
+sh ../camera/make
+cd ../camera/
+make
+htop
+cd bin
+ls
+exit
+cd bin
+./emperor 
+exit
+cd bin
+./emperor 
+exit
+cd bin
+./emperor 
+exit
+cd bin
+./emperor 
+exit
+cd bin
+./emperor 
 exit

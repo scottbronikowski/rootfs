@@ -21,15 +21,17 @@ extern const char* k_CommandPort;
 extern const int k_maxBufSize;
 extern const char* cmd_start_cameras;
 extern const char* cmd_stop_cameras;
-extern const char* cmd_pan;
-extern const char* pan_fd;
-extern const char* cmd_tilt;
-extern const char* tilt_fd;
+extern const char* cmd_servo;
+//extern const char* cmd_pan;
+extern const char* pan_file;
+//extern const char* cmd_tilt;
+extern const char* tilt_file;
 
 //global vars
 extern int sockfd;
 extern int cam_thread_should_die;
 extern pthread_t cam_thread;
+extern int pan_fd, tilt_fd;
 
 //structures
 
@@ -37,9 +39,6 @@ extern pthread_t cam_thread;
 void emperor_signal_handler(int signum);
 void* emperor_run_cameras(void* args);
 int emperor_parse_and_execute(char* msgbuf);
-
-// int emperor_start_server(const char* PORT);
-// int emperor_accept_connection(int sockfd);
 
 
 #endif

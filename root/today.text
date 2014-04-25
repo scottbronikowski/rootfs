@@ -15,12 +15,14 @@ IROS: 18Feb15-abstract, 8Jul15-final paper (conference 28Sep-2Oct15, Hamburg, Ge
 
 Buffers
 ----------------------------------------
-    today.text           11147  Text		  ~/today.text
-    run_cameras.cpp       1640  C++/l		  ~/source/camera/run_cameras.cpp
-    toollib-camera.cpp   18725  C++/l		  ~/source/camera/toollib-camera.cpp
-    ssh-tunnel.sh          830  Shell-script[bas  /etc/init.d/ssh-tunnel.sh
+.   today.text           15243  Text		  ~/today.text
     toollib-camera.h      3356  C++/l		  ~/source/camera/toollib-camera.h
-    Makefile               894  GNUmakefile	  ~/source/camera/Makefile
+    toollib-camera.cpp   18914  C++/l		  ~/source/camera/toollib-camera.cpp
+    run_cameras.cpp       1640  C++/l		  ~/source/camera/run_cameras.cpp
+    emperor.h              906  C++/l		  ~/source/emperor/emperor.h
+    emperor.cpp           6400  C++/l		  ~/source/emperor/emperor.cpp
+    Makefile              1514  GNUmakefile	  ~/source/emperor/Makefile
+
 
 Old notes
 --------------------------
@@ -195,3 +197,7 @@ Old notes
 24 Apr 14
 --apt-get install lsof
 --Have control message-passing infrastructure working between rover and seykhl.  On vader-rover, emperor 'calls home' to open a socket to seykhl and then listens for commands on that socket.  Currently have start_cameras and stop_cameras working (had to make some tweaks to toollib-camera.cpp to explicitly close sockets to get cameras to start again after being stopped--previously that had been getting taken care of when I terminated run_cameras with a SIGINT).  Next working on getting pan and tilt to work from right thumb stick.
+
+25 Apr 14
+--apt-get install gdb
+--Got pan and tilt servos working from right thumbstick of gamepad controller.  
