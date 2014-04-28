@@ -77,6 +77,31 @@ static const int L_REV_3 = L_STOP - 3*(L_STOP - L_REV_FULL)/4; //three-quarter-s
 static const int R_REV_3 = R_STOP - 3*(R_STOP - R_REV_FULL)/4;
 
 //function prototypes
+int initport(void); //initializes UART port to send data to motors
+void motor_write(int fd, int L_speed, int R_speed);  //new send command
+void motor_stop(int fd);
+void motor_forward_1(int fd);
+void motor_forward_2(int fd);
+void motor_forward_3(int fd);
+void motor_forward_4(int fd);
+void motor_reverse_1(int fd);
+void motor_reverse_2(int fd);
+void motor_reverse_3(int fd);
+void motor_reverse_4(int fd);
+void motor_forward_right_1(int fd);
+void motor_forward_right_2(int fd);
+void motor_forward_left_1(int fd);
+void motor_forward_left_2(int fd);
+void motor_reverse_right_1(int fd);
+void motor_reverse_right_2(int fd);
+void motor_reverse_left_1(int fd);
+void motor_reverse_left_2(int fd);
+void motor_pivot_right_1(int fd);
+void motor_pivot_left_1(int fd);
+void motor_pivot_right_2(int fd);
+void motor_pivot_left_2(int fd);
+
+//OLD functions
 int mc_stop(void);
 int mc_forward_1(void);
 int mc_forward_2(void);
@@ -98,14 +123,7 @@ int mc_pivot_right_1(void);
 int mc_pivot_left_1(void);
 int mc_pivot_right_2(void);
 int mc_pivot_left_2(void);
-
-
-
 int send_to_motors(int L_speed, int R_speed); //sends integer values to motors
-
-int initport(void); //initializes UART port to send data to motors
-
 int send_message(int retval); //sends success or failure message
-
 int mc_print(void); //prints motor control values
 #endif

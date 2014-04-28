@@ -14,17 +14,36 @@ const char* k_CommandPort = "1999";
 const int k_maxBufSize = 50;
 const char* cmd_start_cameras = "start_cameras";
 const char* cmd_stop_cameras = "stop_cameras";
-//const char* cmd_pan = "pan";
+const char* cmd_forward_4 = "forward_4";
+const char* cmd_forward_3 = "forward_3";
+const char* cmd_forward_2 = "forward_2";
+const char* cmd_forward_1 = "forward_1";
+const char* cmd_stop = "stop";
+const char* cmd_reverse_1 = "reverse_1";
+const char* cmd_reverse_2 = "reverse_2";
+const char* cmd_reverse_3 = "reverse_3";
+const char* cmd_reverse_4 = "reverse_4";
+const char* cmd_forward_right_1 = "forward_right_1";
+const char* cmd_forward_right_2 = "forward_right_2";
+const char* cmd_forward_left_1 = "forward_left_1";
+const char* cmd_forward_left_2 = "forward_left_2";
+const char* cmd_pivot_left_1 = "pivot_left_1";
+const char* cmd_pivot_left_2 = "pivot_left_2";
+const char* cmd_pivot_right_1 = "pivot_right_1";
+const char* cmd_pivot_right_2 = "pivot_right_2";
+const char* cmd_reverse_left_1 = "reverse_left_1";
+const char* cmd_reverse_left_2 = "reverse_left_2";
+const char* cmd_reverse_right_1 = "reverse_right_1";
+const char* cmd_reverse_right_2 = "reverse_right_2";
 const char* cmd_servo = "servo";
 const char* pan_file = "/dev/pwm10";
-//const char* cmd_tilt = "tilt";
 const char* tilt_file = "/dev/pwm9";
 
 //global variables
 int sockfd;
 int cam_thread_should_die = TRUE; //cam thread not running
 pthread_t cam_thread;
-int pan_fd, tilt_fd;
+int pan_fd, tilt_fd, motor_fd;
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -41,6 +60,13 @@ int main(int /*argc*/, char** /*argv*/)
   if (tilt_fd < 1)
   {
     perror("tilt:");
+    emperor_signal_handler(SIGTERM);
+    return -1;
+  }
+  motor_fd = initport();
+  if (motor_fd < 1)
+  {
+    perror("motor:");
     emperor_signal_handler(SIGTERM);
     return -1;
   }
@@ -104,6 +130,7 @@ void emperor_signal_handler(int signum)
   //cleanup socket and file handles
   close(pan_fd);
   close(tilt_fd);
+  close(motor_fd);
   close(sockfd);
   printf("socket closed, exiting\n");
   exit(signum);
@@ -153,7 +180,7 @@ void* emperor_run_cameras(void* args)
 
 int emperor_parse_and_execute(char* msgbuf)
 {
-  if (strncmp(msgbuf, cmd_start_cameras, strlen(cmd_start_cameras)) == 0) //k_maxBufSize) == 0)
+  if (strncmp(msgbuf, cmd_start_cameras, strlen(cmd_start_cameras)) == 0) 
   { //start cameras
     printf("Matched start_cameras command\n");
     //do stuff
@@ -168,7 +195,7 @@ int emperor_parse_and_execute(char* msgbuf)
     }
     return 0;
   }
-  if (strncmp(msgbuf, cmd_stop_cameras, strlen(cmd_stop_cameras)) == 0) //k_maxBufSize) == 0)
+  if (strncmp(msgbuf, cmd_stop_cameras, strlen(cmd_stop_cameras)) == 0)
   { //stop cameras
     printf("Matched stop_cameras command\n");
     //do stuff
@@ -178,13 +205,15 @@ int emperor_parse_and_execute(char* msgbuf)
     return 0;
   }  
   if (strncmp(msgbuf, cmd_servo, strlen(cmd_servo)) == 0)
-  { //tilt 
-    printf("Matched servo command\n");
+  { //servo & motor
+    printf("Matched servo_n_n:motor command\n");
     //do stuff
-    char *servo, *tilt, *pan;
-    servo = strtok(msgbuf, " _");
-    tilt = strtok(NULL, " _");
-    pan = strtok(NULL, " _");
+    //parse the command
+    char *servo, *tilt, *pan, *motor;
+    servo = strtok(msgbuf, " _:");
+    tilt = strtok(NULL, " _:");
+    pan = strtok(NULL, " _:");
+    motor = strtok(NULL, " _:");
     // printf("Parsed: cmd[0] = %s, cmd[1] = %s, cmd[2] = %s\n", cmd[0], cmd[1], cmd[2]);
     // printf("strlen: cmd[0] = %d, cmd[1] = %d, cmd[2] = %d\n", strlen(cmd[0]), strlen(cmd[1]), strlen(cmd[2]));
     //write commands to pan and tilt fds
@@ -197,7 +226,12 @@ int emperor_parse_and_execute(char* msgbuf)
     if(retval < 0)
       printf("error writing pan\n");
     //printf("wrote pan\n");
-
+    //send motor command
+    if (strncmp(motor, cmd_stop, strlen(cmd_stop)) == 0) //stop
+      motor_stop(motor_fd);
+    else if (strncmp(motor, cmd_forward_1, strlen(cmd_forward_1)) == 0) //forward_1
+      motor_forward_1(motor_fd);
+    return 0;
   }
   //if we get here without returning, it means we didn't match any commands
   //printf("emperor_parse_and_execute error: no command matched msgbuf\n");

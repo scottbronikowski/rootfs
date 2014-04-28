@@ -18,44 +18,45 @@
 using namespace std;
    
 
-int send_to_motors(int L_speed, int R_speed)
-{
-  int file_desc;
 
-  file_desc = initport();
-  if (file_desc < 0){
-    perror("Error in initport() call.");
-    return file_desc;
+void motor_write(int fd, int L_speed, int R_speed)
+{
+  if(write(fd, &L_speed, write_size) != write_size)
+  {
+    perror("motor_write(L):");
+    return;
   }
-  write(file_desc, &L_speed, write_size);
-  tcdrain(file_desc);
-  write(file_desc, &R_speed, write_size);
-  tcdrain(file_desc);
-  close(file_desc);
-  return 0;   
+  tcdrain(fd);
+  if (write(fd, &R_speed, write_size) != write_size)
+  {
+    perror("motor_write(R):");
+    return;
+  }
+  tcdrain(fd);  
+  return;
 }
 
-int mc_stop(void){return send_to_motors(L_STOP, R_STOP);}
-int mc_forward_1(void){return send_to_motors(L_FWD_1, R_FWD_1);}
-int mc_forward_2(void){return send_to_motors(L_FWD_2, R_FWD_2);}
-int mc_forward_3(void){return send_to_motors(L_FWD_3, R_FWD_3);}
-int mc_forward_4(void){return send_to_motors(L_FWD_FULL, R_FWD_FULL);}
-int mc_reverse_1(void){return send_to_motors(L_REV_1, R_REV_1);}
-int mc_reverse_2(void){return send_to_motors(L_REV_2, R_REV_2);}
-int mc_reverse_3(void){return send_to_motors(L_REV_3, R_REV_3);}
-int mc_reverse_4(void){return send_to_motors(L_REV_FULL, R_REV_FULL);}
-int mc_forward_right_1(void){return send_to_motors(L_FWD_2, R_STOP);}
-int mc_forward_right_2(void){return send_to_motors(L_FWD_3, R_FWD_1);}
-int mc_forward_left_1(void){return send_to_motors(L_STOP, R_FWD_2);}
-int mc_forward_left_2(void){return send_to_motors(L_FWD_1, R_FWD_3);}
-int mc_reverse_right_1(void){return send_to_motors(L_REV_2, R_STOP);}
-int mc_reverse_right_2(void){return send_to_motors(L_REV_3, R_REV_1);}
-int mc_reverse_left_1(void){return send_to_motors(L_STOP, R_REV_2);}
-int mc_reverse_left_2(void){return send_to_motors(L_REV_1, R_REV_3);}
-int mc_pivot_right_1(void){return send_to_motors(L_FWD_2, R_REV_2);}
-int mc_pivot_left_1(void){return send_to_motors(L_REV_2, R_FWD_2);}
-int mc_pivot_right_2(void){return send_to_motors(L_FWD_3, R_REV_3);}
-int mc_pivot_left_2(void){return send_to_motors(L_REV_3, R_FWD_3);}
+void motor_stop(int fd){motor_write(fd, L_STOP, R_STOP);}
+void motor_forward_1(int fd){motor_write(fd, L_FWD_1, R_FWD_1);}
+void motor_forward_2(int fd){motor_write(fd, L_FWD_2, R_FWD_2);}
+void motor_forward_3(int fd){motor_write(fd, L_FWD_3, R_FWD_3);}
+void motor_forward_4(int fd){motor_write(fd, L_FWD_FULL, R_FWD_FULL);}
+void motor_reverse_1(int fd){motor_write(fd, L_REV_1, R_REV_1);}
+void motor_reverse_2(int fd){motor_write(fd, L_REV_2, R_REV_2);}
+void motor_reverse_3(int fd){motor_write(fd, L_REV_3, R_REV_3);}
+void motor_reverse_4(int fd){motor_write(fd, L_REV_FULL, R_REV_FULL);}
+void motor_forward_right_1(int fd){motor_write(fd, L_FWD_2, R_STOP);}
+void motor_forward_right_2(int fd){motor_write(fd, L_FWD_3, R_FWD_1);}
+void motor_forward_left_1(int fd){motor_write(fd, L_STOP, R_FWD_2);}
+void motor_forward_left_2(int fd){motor_write(fd, L_FWD_1, R_FWD_3);}
+void motor_reverse_right_1(int fd){motor_write(fd, L_REV_2, R_STOP);}
+void motor_reverse_right_2(int fd){motor_write(fd, L_REV_3, R_REV_1);}
+void motor_reverse_left_1(int fd){motor_write(fd, L_STOP, R_REV_2);}
+void motor_reverse_left_2(int fd){motor_write(fd, L_REV_1, R_REV_3);}
+void motor_pivot_right_1(int fd){motor_write(fd, L_FWD_2, R_REV_2);}
+void motor_pivot_left_1(int fd){motor_write(fd, L_REV_2, R_FWD_2);}
+void motor_pivot_right_2(int fd){motor_write(fd, L_FWD_3, R_REV_3);}
+void motor_pivot_left_2(int fd){motor_write(fd, L_REV_3, R_FWD_3);}
 
 int initport(void){
   int fd;
@@ -80,32 +81,26 @@ int initport(void){
     cfsetospeed(&term_attr, SABER_BAUD_RATE); 
     cfmakeraw(&term_attr);
 
-	term_attr.c_iflag = 0; 
-	term_attr.c_oflag = 0; 
-	term_attr.c_lflag = 0;
-	term_attr.c_cflag = 0;
-
- 
+    term_attr.c_iflag = 0; 
+    term_attr.c_oflag = 0; 
+    term_attr.c_lflag = 0;
+    term_attr.c_cflag = 0;
     term_attr.c_cc[VMIN] = 1;                 // finished after one bye 
     term_attr.c_cc[VTIME] = 8;             // or 800ms time out 
 
     term_attr.c_cflag &= ~(PARENB | CSTOPB | CSIZE); //added
     term_attr.c_cflag |= (SABER_BAUD_RATE | CS8 | CRTSCTS | CLOCAL | HUPCL);  // using flow control via CTS/RTS 
 
-
-	term_attr.c_oflag |= (OPOST | ONLCR); 
-
-
-	 /* save old configuration */ 
-
-  old_flags = term_attr; 
-  term_attr.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG); 
-
+    term_attr.c_oflag |= (OPOST | ONLCR); 
+    
+    /* save old configuration */ 
+    old_flags = term_attr; 
+    term_attr.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG); 
                                                             
     if (tcsetattr(fd, TCSAFLUSH, &term_attr) != 0) 
         { 
-        perror("terminal: tcsetattr() failed"); 
-        return -1; 
+	  perror("terminal: tcsetattr() failed"); 
+	  return -1; 
         } 
 
     /* change standard input */ 
@@ -124,6 +119,54 @@ int initport(void){
     FD_SET(fd, &input_fdset);                          /* Select the first channel 1 */ 
 
     return fd; 
+}
+
+//OLD functions
+int mc_stop(void){return send_to_motors(L_STOP, R_STOP);}
+int mc_forward_1(void){return send_to_motors(L_FWD_1, R_FWD_1);}
+int mc_forward_2(void){return send_to_motors(L_FWD_2, R_FWD_2);}
+int mc_forward_3(void){return send_to_motors(L_FWD_3, R_FWD_3);}
+int mc_forward_4(void){return send_to_motors(L_FWD_FULL, R_FWD_FULL);}
+int mc_reverse_1(void){return send_to_motors(L_REV_1, R_REV_1);}
+int mc_reverse_2(void){return send_to_motors(L_REV_2, R_REV_2);}
+int mc_reverse_3(void){return send_to_motors(L_REV_3, R_REV_3);}
+int mc_reverse_4(void){return send_to_motors(L_REV_FULL, R_REV_FULL);}
+int mc_forward_right_1(void){return send_to_motors(L_FWD_2, R_STOP);}
+int mc_forward_right_2(void){return send_to_motors(L_FWD_3, R_FWD_1);}
+int mc_forward_left_1(void){return send_to_motors(L_STOP, R_FWD_2);}
+int mc_forward_left_2(void){return send_to_motors(L_FWD_1, R_FWD_3);}
+int mc_reverse_right_1(void){return send_to_motors(L_REV_2, R_STOP);}
+int mc_reverse_right_2(void){return send_to_motors(L_REV_3, R_REV_1);}
+int mc_reverse_left_1(void){return send_to_motors(L_STOP, R_REV_2);}
+int mc_reverse_left_2(void){return send_to_motors(L_REV_1, R_REV_3);}
+int mc_pivot_right_1(void){return send_to_motors(L_FWD_2, R_REV_2);}
+int mc_pivot_left_1(void){return send_to_motors(L_REV_2, R_FWD_2);}
+int mc_pivot_right_2(void){return send_to_motors(L_FWD_3, R_REV_3);}
+int mc_pivot_left_2(void){return send_to_motors(L_REV_3, R_FWD_3);}
+
+int send_to_motors(int L_speed, int R_speed)
+{
+  int file_desc;
+
+  file_desc = initport();
+  if (file_desc < 0){
+    perror("Error in initport() call.");
+    return file_desc;
+  }
+  if(write(file_desc, &L_speed, write_size) != write_size)
+  {
+    perror("send_to_motors(L):");
+    return -99;
+  }
+  tcdrain(file_desc);
+  if(write(file_desc, &R_speed, write_size) != write_size)
+  {
+    perror("send_to_motors(R):");
+    return -99;
+  }
+  tcdrain(file_desc);
+  close(file_desc);
+  return 0;   
 }
 
 int send_message(int retval) //sends success or failure message
