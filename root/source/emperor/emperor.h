@@ -50,8 +50,8 @@ extern const char* tilt_file;
 extern int sockfd;
 extern int cam_thread_should_die;
 extern pthread_t cam_thread;
-extern int pan_fd, tilt_fd;
-
+extern int pan_fd, tilt_fd, motor_fd;
+//extern char motor_prev[k_maxBufSize];
 //structures
 
 //prototypes
@@ -61,3 +61,4 @@ int emperor_parse_and_execute(char* msgbuf);
 
 
 #endif
+

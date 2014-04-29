@@ -86,7 +86,7 @@ int initport(void){
     term_attr.c_lflag = 0;
     term_attr.c_cflag = 0;
     term_attr.c_cc[VMIN] = 1;                 // finished after one bye 
-    term_attr.c_cc[VTIME] = 8;             // or 800ms time out 
+    term_attr.c_cc[VTIME] = 0.01; // try 100ms  //8;             // or 800ms time out 
 
     term_attr.c_cflag &= ~(PARENB | CSTOPB | CSIZE); //added
     term_attr.c_cflag |= (SABER_BAUD_RATE | CS8 | CRTSCTS | CLOCAL | HUPCL);  // using flow control via CTS/RTS 

@@ -44,6 +44,7 @@ int sockfd;
 int cam_thread_should_die = TRUE; //cam thread not running
 pthread_t cam_thread;
 int pan_fd, tilt_fd, motor_fd;
+char motor_prev[k_maxBufSize];
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -86,6 +87,7 @@ int main(int /*argc*/, char** /*argv*/)
   char msgbuf[k_maxBufSize];
   char prevmsgbuf[k_maxBufSize];
   memset(prevmsgbuf, 0, sizeof(prevmsgbuf));
+  memset(motor_prev, 0, sizeof(motor_prev));
   int retval;
   //loop on listening for commands
   while(1)
@@ -107,7 +109,7 @@ int main(int /*argc*/, char** /*argv*/)
     //if we get here, we have something useful in msgbuf, so do something with it
     if (strncmp(msgbuf, prevmsgbuf, k_maxBufSize) != 0) //received new command
     {
-      printf("Received %d bytes: %s\n", retval, msgbuf);
+      // printf("Received %d bytes: %s\n", retval, msgbuf);
       strncpy(prevmsgbuf, msgbuf, k_maxBufSize);
     }
     else //got a repeat of the last received command, so ignore it
@@ -182,7 +184,7 @@ int emperor_parse_and_execute(char* msgbuf)
 {
   if (strncmp(msgbuf, cmd_start_cameras, strlen(cmd_start_cameras)) == 0) 
   { //start cameras
-    printf("Matched start_cameras command\n");
+    // printf("Matched start_cameras command\n");
     //do stuff
     if (cam_thread_should_die) //only start if not already running
     {
@@ -197,7 +199,7 @@ int emperor_parse_and_execute(char* msgbuf)
   }
   if (strncmp(msgbuf, cmd_stop_cameras, strlen(cmd_stop_cameras)) == 0)
   { //stop cameras
-    printf("Matched stop_cameras command\n");
+    // printf("Matched stop_cameras command\n");
     //do stuff
     cam_thread_should_die = TRUE;
     pthread_join(cam_thread, NULL);
@@ -205,17 +207,19 @@ int emperor_parse_and_execute(char* msgbuf)
     return 0;
   }  
   if (strncmp(msgbuf, cmd_servo, strlen(cmd_servo)) == 0)
-  { //servo & motor
-    printf("Matched servo_n_n:motor command\n");
+  { //tilt & motor
+    // printf("Matched servo & motor command\n");
     //do stuff
     //parse the command
     char *servo, *tilt, *pan, *motor;
-    servo = strtok(msgbuf, " _:");
-    tilt = strtok(NULL, " _:");
-    pan = strtok(NULL, " _:");
-    motor = strtok(NULL, " _:");
-    // printf("Parsed: cmd[0] = %s, cmd[1] = %s, cmd[2] = %s\n", cmd[0], cmd[1], cmd[2]);
-    // printf("strlen: cmd[0] = %d, cmd[1] = %d, cmd[2] = %d\n", strlen(cmd[0]), strlen(cmd[1]), strlen(cmd[2]));
+    servo = strtok(msgbuf, " :");
+    tilt = strtok(NULL, " :");
+    pan = strtok(NULL, " :");
+    motor = strtok(NULL, " :");
+    // printf("Parsed: servo = %s, tilt = %s, pan = %s, motor = %s\n", 
+    // 	   servo, tilt, pan, motor);
+    // printf("strlen: servo = %d, tilt = %d, tilt = %d, motor = %d\n", 
+    // 	   strlen(servo), strlen(tilt), strlen(pan), strlen(motor));
     //write commands to pan and tilt fds
     int retval;
     retval = write(tilt_fd, tilt, strlen(tilt));
@@ -226,15 +230,78 @@ int emperor_parse_and_execute(char* msgbuf)
     if(retval < 0)
       printf("error writing pan\n");
     //printf("wrote pan\n");
+
     //send motor command
-    if (strncmp(motor, cmd_stop, strlen(cmd_stop)) == 0) //stop
-      motor_stop(motor_fd);
-    else if (strncmp(motor, cmd_forward_1, strlen(cmd_forward_1)) == 0) //forward_1
-      motor_forward_1(motor_fd);
+    //  first check if motor command is new -- no need to send repeats
+    if (strncmp(motor, motor_prev, strlen(motor)) != 0)
+    {
+      // printf("new motor command: motor_prev = %s, motor = %s\n", motor_prev, motor);
+      memset(motor_prev, 0, sizeof(motor_prev));
+      strncpy(motor_prev, motor, strlen(motor));
+
+      if (strncmp(motor, cmd_stop, strlen(cmd_stop)) == 0) //stop
+ 	motor_stop(motor_fd);
+      else if (strncmp(motor, cmd_forward_1, strlen(cmd_forward_1)) == 0) //forward_1
+      	motor_forward_1(motor_fd);
+      else if (strncmp(motor, cmd_forward_2, strlen(cmd_forward_2)) == 0) //forward_2
+	motor_forward_2(motor_fd);
+      else if (strncmp(motor, cmd_forward_3, strlen(cmd_forward_3)) == 0) //forward_3
+	motor_forward_3(motor_fd);
+      else if (strncmp(motor, cmd_forward_4, strlen(cmd_forward_4)) == 0) //forward_4
+	motor_forward_4(motor_fd);
+      else if (strncmp(motor, cmd_reverse_1, strlen(cmd_reverse_1)) == 0) //reverse_1
+	motor_reverse_1(motor_fd);
+      else if (strncmp(motor, cmd_reverse_2, strlen(cmd_reverse_2)) == 0) //reverse_2
+	motor_reverse_2(motor_fd);
+      else if (strncmp(motor, cmd_reverse_3, strlen(cmd_reverse_3)) == 0) //reverse_3
+	motor_reverse_3(motor_fd);
+      else if (strncmp(motor, cmd_reverse_4, strlen(cmd_reverse_4)) == 0) //reverse_4
+	motor_reverse_4(motor_fd);
+      else if (strncmp(motor, cmd_forward_right_1, 
+		       strlen(cmd_forward_right_1)) == 0) //forward_right_1
+	motor_forward_right_1(motor_fd);
+      else if (strncmp(motor, cmd_forward_right_2, 
+		       strlen(cmd_forward_right_2)) == 0) //forward_right_2
+	motor_forward_right_2(motor_fd);
+      else if (strncmp(motor, cmd_forward_left_1, 
+		       strlen(cmd_forward_left_1)) == 0) //forward_left_1
+	motor_forward_left_1(motor_fd);
+      else if (strncmp(motor, cmd_forward_left_2, 
+		       strlen(cmd_forward_left_2)) == 0) //forward_left_2
+	motor_forward_left_2(motor_fd);
+      else if (strncmp(motor, cmd_pivot_left_1, 
+		       strlen(cmd_pivot_left_1)) == 0) //pivot_left_1
+	motor_pivot_left_1(motor_fd);
+      else if (strncmp(motor, cmd_pivot_left_2, 
+		       strlen(cmd_pivot_left_2)) == 0) //pivot_left_2
+	motor_pivot_left_2(motor_fd);
+      else if (strncmp(motor, cmd_pivot_right_1, 
+		       strlen(cmd_pivot_right_1)) == 0) //pivot_right_1
+	motor_pivot_right_1(motor_fd);
+      else if (strncmp(motor, cmd_pivot_right_2, 
+		       strlen(cmd_pivot_right_2)) == 0) //pivot_right_2
+	motor_pivot_right_2(motor_fd);
+      else if (strncmp(motor, cmd_reverse_right_1, 
+		       strlen(cmd_reverse_right_1)) == 0) //reverse_right_1
+	motor_reverse_right_1(motor_fd);
+      else if (strncmp(motor, cmd_reverse_right_2, 
+		       strlen(cmd_reverse_right_2)) == 0) //reverse_right_2
+	motor_reverse_right_2(motor_fd);
+      else if (strncmp(motor, cmd_reverse_left_1, 
+		       strlen(cmd_reverse_left_1)) == 0) //reverse_left_1
+	motor_reverse_left_1(motor_fd);
+      else if (strncmp(motor, cmd_reverse_left_2, 
+		       strlen(cmd_reverse_left_2)) == 0) //reverse_left_2
+	motor_reverse_left_2(motor_fd);
+    }
     return 0;
+
+
   }
   //if we get here without returning, it means we didn't match any commands
   //printf("emperor_parse_and_execute error: no command matched msgbuf\n");
   return -1;
 }
+
+
 

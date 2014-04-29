@@ -205,3 +205,7 @@ Old notes
 28 Apr 14
 --Have motor commands receiving and parsing properly on rover side.  Have implemented duplicate command checking on seykhl side, so may need to remove analogous code in emperor (observing slow execution of commands once received).
 --Started implementing the sending of commands from emperor to motors--not functional yet.
+
+29 Apr 14
+--Tracked down slowness of pan/tilt execution to tcdrain() used to send integer speeds to motors. tcdrain() is necessary to ensure that integers get sent to motor controllers--removing it results in missed motor commands.  Reduced tcdrain wait time to minimum allowable (100ms), and also implemented code to skip sending motor command when motor command is a repeat.  That seemed to resolve the problem.
+--Finished implementation of command parsing and sending to motors within emperor.cpp.  Also removed debugging printfs.
