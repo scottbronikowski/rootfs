@@ -1,50 +1,3 @@
-[  15
-[  151.999206] usbcore: registered new int
-[  152.183288] +871x_
-[  152.192047]  ===> FirmwareDownload91C() fw:Rtl819XFwImageArra
-[  152.192077] FirmwareDownload92C accqu
-[  152.192077] fw_ver=v
-[  152.244964] fw download ok!
-[  152.244964] Set RF C
-[  152.
-[  152.723876] Path A IQK Success[  152.
-[
-[  152.750793] Path A IQ
-[  152.760131] Path B IQK Success[  152.750793] Path A IQ
-[  152.770629] IQK: f
-[  1
-[  152.770629]  Path A IQ Calibration Success !
-[  152.775268]
-[  152.900115] pdmpriv->TxPowerTrackControl = 1
-[  152.934844]
-[  152.935333] -871x_drv - drv_open, bup=1
-[  152.936004] IPv6:
-[  152.936065] [rtw_wx_set_pmkid] IW_PMKSA_FLUSH!
-[  152.936126
-[  152.939392] hw_var_set_opmode()-4234 mode = 2
-[  152
-[  153.
-[  153.397979] init: plymouth-stop pre-start pro
-[  153.446746] 
-[  154.328643] survey done event(45) band:0 for wlan1
-[  154.3
-[
-[  154.334808] 
-[  154.334808]  wpa_ie(length:2
-[  154.334899]
-[  154.334899] 0x01 0x00 0x00 0x0f 0xac 0
-[  154.334930] 0x00 
-[  154.335693] hw_var_set_opmode()-4234 mo
-[  154.337127] SetH
-[  154.337493] =>rtw_wx_set_essid
-[  154.337524] ssid=
-[  154.
-[  154.337585] [by_bssid:0][assoc_ssid:PAL3.0][to_roaming:0] n
-[  154.337615] [by_bssid:0][assoc_ssid:PAL3.0][to_roaming:0] 
-[  154.337646] rtw_select_and_join_from_scanned_queue:
-[  154.3
-[  154.337738] <=rtw_wx_set_essid, ret 0
-[  154.338012] start_j
 [  154.340545] Set BSSID under fw_state=0x00000088
 [  154.550
 [ 154.554351] OnAuthClient
@@ -1998,3 +1951,50 @@ exit
 cd bin
 ./emperor 
 exit
+cd bin
+./emperor 
+gdb
+apt-get install gdb
+gdb ./emperor 
+./emperor 
+ls
+motor_control stop
+./emperor 
+exit
+cd bin
+cd ../source/emperor/fdas
+make
+ls /dev/pw*
+cat /dev/pwm9
+cat /dev/pwm10
+echo 12000 > /dev/pwm10
+cat /dev/pwm10
+echo 15000 > /dev/pwm10
+make
+make clean
+make
+exit
+exit
+echo 17000 > /dev/pwm9
+echo 18000 > /dev/pwm9
+echo 17500 > /dev/pwm9
+echo 17250 > /dev/pwm9
+echo 15000 > /dev/pwm9
+echo 17250 > /dev/pwm9
+echo 15000 > /dev/pwm9
+echo 17000 > /dev/pwm9
+echo 10000 > /dev/pwm9
+echo 11000 > /dev/pwm9
+echo 12000 > /dev/pwm9
+echo 11500 > /dev/pwm9
+echo 11000 > /dev/pwm9
+echo 12000 > /dev/pwm9
+echo 15000 > /dev/pwm9
+echo 10000 > /dev/pwm10
+echo 15000 > /dev/pwm10
+echo 20000 > /dev/pwm10
+echo 15000 > /dev/pwm10
+cd bin
+./emperor 
+emacs today.text &
+halt

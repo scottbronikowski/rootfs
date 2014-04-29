@@ -53,20 +53,21 @@ static const int L_FWD_ABS_FULL = 127;
 static const int R_FWD_ABS_FULL = 255;
 static const int L_REV_ABS_FULL = 1;
 static const int R_REV_ABS_FULL = 128;
-static const float R_OFFSET_PCT = -0.005;  //-5% for right
+static const float R_OFFSET_PCT = -0.3;  //-30% for right
 static const int R_OFFSET = (int)(R_OFFSET_PCT * (R_FWD_ABS_FULL - R_STOP));
+static const int R_CORRECTION = 3;
 static const float L_OFFSET_PCT = 0.0;  //no change for left
 static const int L_OFFSET = (int)(L_OFFSET_PCT * (L_FWD_ABS_FULL - L_STOP));
 
 //Forward speeds
 static const int L_FWD_FULL = L_FWD_ABS_FULL + L_OFFSET;
-static const int R_FWD_FULL = R_FWD_ABS_FULL + R_OFFSET;
+static const int R_FWD_FULL = R_FWD_ABS_FULL + R_OFFSET + R_CORRECTION;
 
 static const int L_FWD_1 = L_STOP + (L_FWD_FULL - L_STOP)/4; //quarter-speed
-static const int R_FWD_1 = R_STOP + (R_FWD_FULL - R_STOP)/4; 
+static const int R_FWD_1 = R_STOP + (R_FWD_FULL - R_CORRECTION - R_STOP)/4; 
 
 static const int L_FWD_2 = L_STOP + (L_FWD_FULL - L_STOP)/2; //half-speed
-static const int R_FWD_2 = R_STOP + (R_FWD_FULL - R_STOP)/2;
+static const int R_FWD_2 = R_STOP + (R_FWD_FULL - R_CORRECTION - R_STOP)/2;
 
 static const int L_FWD_3 = L_STOP + 3*(L_FWD_FULL - L_STOP)/4; //three-quarter-speed
 static const int R_FWD_3 = R_STOP + 3*(R_FWD_FULL - R_STOP)/4;

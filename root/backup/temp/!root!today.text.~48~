@@ -2,6 +2,8 @@
 
 
 
+
+
 USE A SOCKET INSTEAD OF FILE DESCRIPTOR TO COMMUNICATE BETWEEN GPIO AND MONITOR!!!!  READ WILL BLOCK!!!
 
 Paper deadlines:
@@ -13,19 +15,17 @@ IROS: 18Feb15-abstract, 8Jul15-final paper (conference 28Sep-2Oct15, Hamburg, Ge
 
 Buffers
 ----------------------------------------
-
-    CustomImageEx.cpp    23415  C++/l		  ~/test_code/flycapture/src/CustomImageEx/CustomImageEx.cpp
-    bigtest.sh             155  Shell-script[bas  ~/test_code/flycapture/src/CustomImageEx/bigtest.sh
-    today.text            3955  Text		  ~/today.text
-    FlyCapture2Defs.h    60497  C++/l		  ~/test_code/flycapture/include/FlyCapture2Defs.h
-    Image.h              20398  C++/l		  ~/test_code/flycapture/include/Image.h
-    monitor.h              592  C++/l		  ~/test_code/monitor.h
-    monitor.cc            3657  C++/l		  ~/test_code/monitor.cc
-    test-capture-cpp.cp: 21345  C++/l		  ~/test_code/flycapture/src/testing/test-capture-cpp.cpp
-    test2.h               2022  C++/l		  ~/test_code/flycapture/src/support/test2.h
-    test2.c               8096  C/l		  ~/test_code/flycapture/src/support/test2.c
-    simpletest.c          9215  C/l		  ~/test_code/flycapture/src/support/simpletest.c
-    Makefile               516  GNUmakefile	  ~/test_code/flycapture/src/CustomImageEx/Makefile
+.   today.text           16386  Text		  ~/today.text
+  * *shell*<2>            4589  Shell:run	  /
+    motor_control.h       4707  C++/l		  ~/source/motor_control/motor_control.h
+  * *shell*              17017  Shell:run	  ~/source/emperor/
+    emperor.cpp          10020  C++/l		  ~/source/emperor/emperor.cpp
+    emperor.h             1634  C++/l		  ~/source/emperor/emperor.h
+    motor_control_functi: 7126  C++/l		  ~/source/motor_control/motor_control_functions.cpp
+    Makefile              1514  GNUmakefile	  ~/source/emperor/Makefile
+    toollib-camera.h      3356  C++/l		  ~/source/camera/toollib-camera.h
+    toollib-camera.cpp   18914  C++/l		  ~/source/camera/toollib-camera.cpp
+    run_cameras.cpp       1640  C++/l		  ~/source/camera/run_cameras.cpp
 
 
 Old notes
@@ -146,3 +146,72 @@ Old notes
 4 Apr 14
 -- apt-get install libv4l-dev v4l-utils qv4l2 v4l2ucp
 -- Installed mounting brace for USB wifi adapter from machine shop
+
+14 Apr 14
+--Moved code for monitor and motor_control from ~/test_code/ to ~/source/*. Put symlinks to headers in ~/include. Have executables in ~/bin.  Created makefiles for each to automate compilation.
+------
+--Moved CustomImageEx to ~/source/camera and broke it into toollib-camera.cpp/h and run-cameras.cpp.  Reconfigured Makefile to make run_cameras executable and put it int ~/bin.  Committing here prior to massive rework of run-cameras.cpp and cleanup of toollib-camera.cpp.
+--Also moved Flycapture includes from ~/test_code/flycapture/include to ~/include, and libs from ~/test_code/flycapture/lib to ~/lib (with symlinks in /usr/local/lib.
+-------
+--Cleaned up toollib-camera.cpp/h
+--Reconfigured run_cameras to use an infinite loop for capturing.  Killing the process with Ctrl-C doesn't seem to do any harm (so far), but I will still work on implementing a signal handler so that the PGR_StopAndCleanup() function can get called before exit.
+
+15 Apr 14
+--Implemented signal handler in run_cameras.cpp.  Can now exit cleanly from by sending 'pkill run_cameras' either locally or over ssh.
+
+17 Apr 14
+--Switched over to backup gumstix in an effort to troubleshoot USB EMI failure.  All external systems functional after switchover.  Also changed USB cable running between gumstix and hub from one that I had shorted to an uncut cable.
+--Testing camera transmission to see if/when USB fails:
+	  Internal wifi on qobi-office:  ran for ~48 minutes until battery died (intermittent whole-system pauses/hangs...but images resume after ~5 sec or less)
+	  Internal wifi on PAL: ran for 29 minutes until I stopped the test to do a driving test (did not notice the hangs above)
+	  USB wifi on qobi-office: (skipped these and went to drive testing)
+	  USB wifi on PAL: (skipped these and went to drive testing)
+  ***Did not see USB EMI failure after over an hour and a half of operation (split between 2 tests due to a reboot for a battery change)
+-- 40-pin header configuration:
+   5 = right encoder yellow	
+   6 = right encoder green
+   7 = left encoder yellow
+   8 = left encoder green
+   10 = motors
+   15 = GND (with 16)
+   16 = VCC 1.8V to level shifters (with 15)
+   23 = Rear bump GPIO 184 RED (with 24)
+   24 = Front bump GPIO 185 YELLOW (with 23)
+   25 = GND to bump switches (with 26)
+   26 = VCC 1.8V to bump switch pullups (with 25)
+   27 = ultrasonic yellow (with 29)
+   28 = PWM10 - pan servo
+   29 = ultrasonic red (with 27)
+   30 = PWM9 - tilt servo
+--apt-get install hwinfo
+--Drive testing results:
+	Internal wifi on PAL: Performance OK, but still have occasions when connection seems to hang--which seem to coincide with AP handoffs (as observed by running iwconfig)
+	USB wifi on PAL: Very similar performance.  Long hangs that sometimes seem to resolve themselves sometimes.  However, had to terminate the test when a hang didn't recover after ~2 minutes of waiting--and then after I had walked out and recovered the robot, system was still moderately non-responsive to console commands.  Interestingly, when I went to terminate the Scheme GUI I noticed that it flashed an image of me carrying the robot back from several minutes prior--implying that somewhere there is a buffer of images that haven't been sent/received yet.  That seems to make sense, since I am using TCP sockets (SOCK_STREAM).  Perhaps I need to switch to UDP sockets to allow images to be dropped (and possibly RTP on top of UDP).
+-- Removed g-multi.sh from startup to kill driver for USB OTG (update-rc.d -f /etc/init.d/g-multi.sh remove) -- previously had 01 priority.
+-- Made changes to /etc/modprobe.d/blacklist.conf and /etc/modules recommended in http://www.ajaykumarsingh.com/linux/tp-link-tl-wn822n-300mbps-high-gain-wireless-n-usb-adapter-not-working-on-ubuntu-12-04.html in order to see if it helps with wifi handoffs.
+
+18 Apr 14
+--apt-get install wavemon (monitors wifi connection statistics similar to iptraf)
+--Making some tweaks to /etc/wpa_supplicant.conf and /etc/network/interfaces to see if it improves connectivity to PAL--tried 'wpa-roam' vice 'wpa-conf' but that didn't seem to work--did comment out all networks other than PAL from wpa_supplicant.conf
+--Added 'sleep 5' to /etc/init.d/keepalive-ping.sh prior to the ping call to allow time for new /etc/network/interfaces and /etc/wpa_supplicant.conf to bring network up.  Also removed 'sleep 15' from /etc/init.d/time-update.sh
+
+23 Apr 14
+--Started working on master program (~/source/emperor) that will listen for commands from seykhl and then start threads or call functions as needed.
+
+24 Apr 14
+--apt-get install lsof
+--Have control message-passing infrastructure working between rover and seykhl.  On vader-rover, emperor 'calls home' to open a socket to seykhl and then listens for commands on that socket.  Currently have start_cameras and stop_cameras working (had to make some tweaks to toollib-camera.cpp to explicitly close sockets to get cameras to start again after being stopped--previously that had been getting taken care of when I terminated run_cameras with a SIGINT).  Next working on getting pan and tilt to work from right thumb stick.
+
+25 Apr 14
+--apt-get install gdb
+--Got pan and tilt servos working from right thumbstick of gamepad controller.  
+
+28 Apr 14
+--Have motor commands receiving and parsing properly on rover side.  Have implemented duplicate command checking on seykhl side, so may need to remove analogous code in emperor (observing slow execution of commands once received).
+--Started implementing the sending of commands from emperor to motors--not functional yet.
+
+29 Apr 14
+--Tracked down slowness of pan/tilt execution to tcdrain() used to send integer speeds to motors. tcdrain() is necessary to ensure that integers get sent to motor controllers--removing it results in missed motor commands.  Reduced tcdrain wait time to minimum allowable (100ms), and also implemented code to skip sending motor command when motor command is a repeat.  That seemed to resolve the problem.
+--Finished implementation of command parsing and sending to motors within emperor.cpp.  Also removed debugging printfs.
+----
+--First modifications to motor_control.h in attempt to correct leftward pull while driving.
