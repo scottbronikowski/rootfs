@@ -45,9 +45,11 @@ extern const char* cmd_reverse_right_2;
 extern const char* cmd_servo;
 extern const char* pan_file;
 extern const char* tilt_file;
+extern const char* k_LogPort;
+extern const int k_LogBufSize;
 
 //global vars
-extern int sockfd;
+extern int sockfd, log_sockfd;
 extern int cam_thread_should_die;
 extern pthread_t cam_thread;
 extern int pan_fd, tilt_fd, motor_fd;
@@ -58,7 +60,7 @@ extern int pan_fd, tilt_fd, motor_fd;
 void emperor_signal_handler(int signum);
 void* emperor_run_cameras(void* args);
 int emperor_parse_and_execute(char* msgbuf);
-
+int emperor_log_data(char* databuf);
 
 #endif
 

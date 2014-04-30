@@ -38,9 +38,11 @@ const char* cmd_reverse_right_2 = "reverse_right_2";
 const char* cmd_servo = "servo";
 const char* pan_file = "/dev/pwm10";
 const char* tilt_file = "/dev/pwm9";
+const char* k_LogPort = "2001";
+const int k_LogBufSize = 100;
 
 //global variables
-int sockfd;
+int sockfd, log_sockfd;
 int cam_thread_should_die = TRUE; //cam thread not running
 pthread_t cam_thread;
 int pan_fd, tilt_fd, motor_fd;
@@ -49,6 +51,8 @@ char motor_prev[k_maxBufSize];
 int main(int /*argc*/, char** /*argv*/)
 {
   printf("Starting Emperor\n");
+  //printf("sizeof(long long int) = %d\n", sizeof(long long int));
+  //printf("sizeof(double) = %d\n", sizeof(double));
   printf("Please ensure that simple-gui.sc (viewer '()) is running on %s\n", k_Server);
   pan_fd = open(pan_file, O_WRONLY);
   if (pan_fd < 1)
@@ -72,7 +76,7 @@ int main(int /*argc*/, char** /*argv*/)
     return -1;
   }
   //start network stuff and wait for connection
-  printf("Connecting to %s on port %s...\n", k_Server, k_CommandPort);
+  printf("Connecting to %s on port %s for commands...\n", k_Server, k_CommandPort);
   sockfd = -1;
   while (sockfd == -1)
   {
@@ -80,6 +84,15 @@ int main(int /*argc*/, char** /*argv*/)
   }
   printf("success!\n");
   
+  printf("Connecting to %s on port %s for data logging...\n", k_Server, k_LogPort);
+  log_sockfd = -1;
+  while (log_sockfd == -1)
+  {
+    log_sockfd = ClientConnect(k_Server, k_LogPort);
+  }
+  printf("success!\n");
+
+
   //register signal handler for termination
   signal(SIGINT, emperor_signal_handler);
   signal(SIGTERM, emperor_signal_handler);
@@ -133,8 +146,10 @@ void emperor_signal_handler(int signum)
   close(pan_fd);
   close(tilt_fd);
   close(motor_fd);
+  close(log_sockfd);
+  printf("data logging socket closed\n");
   close(sockfd);
-  printf("socket closed, exiting\n");
+  printf("command socket closed, exiting\n");
   exit(signum);
 }
 
@@ -304,4 +319,9 @@ int emperor_parse_and_execute(char* msgbuf)
 }
 
 
-
+int emperor_log_data(char* databuf)
+{
+  char sendbuf[k_LogBufSize];
+  struct timeval tv;
+  return 0;
+}

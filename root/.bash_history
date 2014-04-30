@@ -1,12 +1,3 @@
-[  154.340545] Set BSSID under fw_state=0x00000088
-[  154.550
-[ 154.554351] OnAuthClient
-[  154.554412] network.SupportedRa
-[  
-[  154.554412] network.SupportedRates[2]=18
-[  154.554412] netw
-[  154.554443] network.SupportedRates[4
-[  154.554443] network.
 [  154.554443] network.SupportedRates[6]=60
 [  154.554443] netw
 [  154.554473] bssrate_len = 8
@@ -1997,4 +1988,13 @@ echo 15000 > /dev/pwm10
 cd bin
 ./emperor 
 emacs today.text &
+halt
+cd bin
+./emperor 
+exit
+iptraf
+exit
+htop
+exit
+emacs today.text
 halt
