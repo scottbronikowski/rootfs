@@ -16,8 +16,8 @@ CAMDIR = ../camera
 CAMFILES = ${CAMDIR}/toollib-camera.cpp ${CAMDIR}/toollib-camera.h
 MOTORDIR = ../motor_control
 MOTORFILES = ${MOTORDIR}/motor_control_functions.cpp ${MOTORDIR}/motor_control.h
-MONDIR = ../monitor
-MONFILES = ${MONDIR}/monitor.cpp ${MONDIR}/monitor.h
+#MONDIR = ../monitor
+#MONFILES = ${MONDIR}/monitor.cpp ${MONDIR}/monitor.h
 
 OBJS = ${CAMDIR}/toollib-camera.o \
        ${MOTORDIR}/motor_control_functions.o \

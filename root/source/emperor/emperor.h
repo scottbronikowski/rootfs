@@ -10,7 +10,7 @@
 
 #include "toollib-camera.h"
 #include "motor_control.h"
-#include "monitor.h"
+//#include "monitor.h"
 #include <csignal>
 
 //defines
@@ -47,12 +47,18 @@ extern const char* pan_file;
 extern const char* tilt_file;
 extern const char* k_LogPort;
 extern const int k_LogBufSize;
+//for bump switch monitoring
+extern const int bump_move_time;
+extern const int bump_read_size;
+extern const int bump_front;
+extern const int bump_rear;
+extern const char* gpio_file;
 
 //global vars
 extern int sockfd, log_sockfd;
-extern int cam_thread_should_die;
-extern pthread_t cam_thread;
-extern int pan_fd, tilt_fd, motor_fd;
+extern int cam_thread_should_die, gpio_thread_should_die;
+extern pthread_t cam_thread, gpio_thread;
+extern int pan_fd, tilt_fd, motor_fd, gpio_fd;
 //extern char motor_prev[k_maxBufSize];
 //structures
 
@@ -61,6 +67,8 @@ void emperor_signal_handler(int signum);
 void* emperor_run_cameras(void* args);
 int emperor_parse_and_execute(char* msgbuf);
 int emperor_log_data(char* databuf);
+double emperor_current_time(void);
+void* emperor_monitor_bump_switches(void* args);
 
 #endif
 
