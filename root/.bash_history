@@ -1,36 +1,3 @@
-[  154.554443] network.SupportedRates[6]=60
-[  154.554443] netw
-[  154.554473] bssrate_len = 8
-[  154.554473] declare support
-[  154.558807] OnAssocRsp
-[  154.558837] report_join_res(1)
-[  15
-[  154.558868] +rtw_update_ht_cap()
-[  154.558898] rtw_joinbss
-[  154.559234] IPv6: ADDRCONF(NETDEV_CHANGE): wla
-[  154.56015
-[  154.562561] WMM(0): 0, a42b
-[  154.563659] WMM(1): 0, a44f
-[  154.564392] WMM(3): 0, 2f3222
-[  154.564392] HTOnAssocRsp
-[
-[  154.587615] rtl8192c_set_FwJoinBssReport
-[  154.590393] Set
-[  154.590454] Set RSVD page location to Fw.
-[  154.
-[  154.643
-[  154.658813] rtw_aes_decrypt:rx bc/mc packets,but didn't ins
-[  154.728271] [rtw_wx_set_pmkid] IW_PMKSA_ADD!
-[  154.728302]
-[  154.739227] 
-[  154.739227]  ~~~~stastakey:unicastkey
-[  1
-
-[  154.747009] SetHwReg8192CU, 5126, RCR= 70006
-[  160.804901]
-[  160.804931] OnAction_back, action=0
-[  160.804931] issue_ac
-[  162.289550] 
 [  162.289581] rtw_wx_get_frag, frag_len=2
 [  
 [  281.450073] issue_action_BA, 
@@ -1998,3 +1965,36 @@ htop
 exit
 emacs today.text
 halt
+cd bin
+./emperor 
+date +%s
+date
+date +%s
+./emperor 
+exit
+cd source/emperor/
+make
+cd ../monitor/
+ls
+cp monitor.cpp monitor-old.cpp
+cp monitor.h monitor-old.h
+cd ../emperor/
+make
+exit
+ps -ef | grep monitor
+/etc/init.d/monitor.sh stop
+htop
+exit
+emacs today.text 
+exit
+ATZ
+AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
+ls
+ps
+halt
+reboot
+emacs today.text &
+cd bin
+ls
+./emperor 
+htop
