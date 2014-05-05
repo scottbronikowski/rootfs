@@ -1,8 +1,3 @@
-[  162.289581] rtw_wx_get_frag, frag_len=2
-[  
-[  281.450073] issue_action_BA, 
-[  281.450103] BA_starting_se
-[  281.455444] OnAction_back
 [  2
 [  281.455474] agg_enable 
 [
@@ -1998,3 +1993,8 @@ cd bin
 ls
 ./emperor 
 htop
+cd /
+git status
+git add -A
+git commit -m "Friday commit--no changes"
+git push

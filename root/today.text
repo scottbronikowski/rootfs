@@ -228,3 +228,7 @@ Old notes
 --First draft of data logging functional.  Need to filter pan/tilt commands in a way similar to how I filter motor commands to prevent excessive logging (currently in the log, every motor command is preceded by a pan/tilt command, even when the pan/tilt is unchanged).
 --Have logging working for all pan/tilt and motor commands without duplicates.
 --Integrated all bump switch monitor functions into emperor in a separate thread (emperor_monitor_bump_switches()).  Removed old monitor executable from startup--no longer needed (had been startup priority 98).
+
+5 May 14
+--Implemented sending of camera start and stop messages (toollib-camera.cpp, Network_StartCameras() and PGR_StopAndCleanup()).
+--Completed and debugged implementation of sending individual timestamps for images.  Needed to use a send of "0" before sending camera stop message in order to get OpenCV_ReceiveFrame() on workstation to exit and not interpret 1st 4 bytes of camera stop message as an int representing compressed image size.

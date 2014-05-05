@@ -68,6 +68,8 @@ extern const char* k_FrontCamPort;
 extern const char* k_PanoCamPort;
 /*for OpenCV*/
 extern const int k_jpegQuality;
+/*for timestamping*/
+extern const int k_timestamp_len;
 
 //structures
 struct PointGrey_t {
@@ -117,6 +119,7 @@ int SendMetadata (PointGrey_t* PG);
 int SendFrame(PointGrey_t* PG);
 void OpenCV_CompressFrame(PointGrey_t* PG);
 void OpenCV_SendFrame(PointGrey_t* PG);
-
+double camera_current_time(void);
+int camera_log_timestamp(PointGrey_t* PG);
 
 #endif
