@@ -64,7 +64,7 @@ int main(int /*argc*/, char** /*argv*/)
   printf("Starting Emperor\n");
   //printf("sizeof(long long int) = %d\n", sizeof(long long int));
   //printf("sizeof(double) = %d\n", sizeof(double));
-  printf("timestamp: %.6f\n", emperor_current_time()); //6 decimal places is microseconds
+  //printf("timestamp: %.6f\n", emperor_current_time()); //6 decimal places is microseconds
   printf("Please ensure that simple-gui.sc (viewer '()) is running on %s\n", k_Server);
   pan_fd = open(pan_file, O_WRONLY);
   if (pan_fd < 1)
@@ -179,7 +179,7 @@ int main(int /*argc*/, char** /*argv*/)
 void emperor_signal_handler(int signum)
 {
   //emperor_log_data("Logging stopped");
-  printf("received signal %d\n", signum);
+  //printf("received signal %d\n", signum);
   //kill bump switch thread
   gpio_thread_should_die = TRUE;
   pthread_join(gpio_thread, NULL);
