@@ -72,6 +72,7 @@ const char* k_FrontCamPort = "3601";
 const char* k_PanoCamPort = "3602";
 /*for OpenCV*/
 const int k_jpegQuality = 75; //0-100, default is 95
+const int k_timestamp_len = 18; //string length for timestamp only
 
 //structures
 struct PointGrey_t {
@@ -122,6 +123,9 @@ int SendMetadata (PointGrey_t* PG);
 int SendFrame(PointGrey_t* PG);
 void OpenCV_CompressFrame(PointGrey_t* PG, unsigned int imageCount);
 void OpenCV_SendFrame(PointGrey_t* PG);
+double camera_current_time(void);
+int camera_log_timestamp(PointGrey_t* PG);
+
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -871,8 +875,8 @@ void OpenCV_CompressFrame(PointGrey_t* PG, unsigned int imageCount)
   else
     imgbuf = cv::Mat((int)PG->rows, (int)PG->cols, CV_8UC1, PG->pData);
 
-  cv::vector<uchar> tempbuf;
-  tempbuf
+  // cv::vector<uchar> tempbuf;
+  // tempbuf
      
   
   // //OpenCV save to make sure images aren't mangled
@@ -910,10 +914,17 @@ void OpenCV_CompressFrame(PointGrey_t* PG, unsigned int imageCount)
 void OpenCV_SendFrame(PointGrey_t* PG)
 {
   //first send compressed image size
+  printf("sending compressed size: %d\n", PG->compressed_size);
   if (send(PG->sockfd, &PG->compressed_size, 
 	   sizeof(PG->compressed_size), 0) <= 0)
   {
     printf ("Error sending compressed size\n");
+    return;
+  }
+  //then send timestamp
+  if (camera_log_timestamp(PG) != 0)
+  {
+    printf("error sending timestamp\n");
     return;
   }
   //then send compressed image
@@ -928,4 +939,32 @@ void OpenCV_SendFrame(PointGrey_t* PG)
   //   printf("Bytes sent (%u): %d\n", PG->cameraInfo.serialNumber, img_size);
   // }
   return; //return w/o printf = success
+}
+
+double camera_current_time(void) 
+{
+  struct timeval time;
+  if (gettimeofday(&time, NULL)!=0) printf("gettimeofday failed");
+  return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
+}
+
+int camera_log_timestamp(PointGrey_t* PG)
+{
+  double now = camera_current_time();
+  char sendbuf[k_timestamp_len];
+  int retval;
+  retval = snprintf(sendbuf, k_timestamp_len, "%.6f", now);
+  if ((retval < 0) || (retval >= k_timestamp_len))
+  {
+    printf("camera_log_timestamp error: snprintf = %d\n", retval);
+    return -1;
+  }
+  retval = send(PG->sockfd, sendbuf, sizeof(sendbuf), 0);
+  if (retval != k_timestamp_len)
+  {
+    printf("camera_log_timestamp: send failed\n");
+    return -1;
+  }
+  else
+    return 0; //success
 }

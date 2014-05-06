@@ -37,7 +37,8 @@ const char* k_FrontCamPort = "3601";
 const char* k_PanoCamPort = "3602";
 /*for OpenCV*/
 const int k_jpegQuality = 75; //0-100, default is 95
-const int k_timestamp_len = 18 * 3; //string length for timestamp only
+const int k_timestamp_len = 18; //string length for timestamp only
+
 void PrintBuildInfo()
 {
     FC2Version fc2Version;
@@ -183,7 +184,7 @@ void SetWhiteBalance(Camera* cam)
 
 void PGR_StopAndCleanup(PointGrey_t* PG, unsigned int numCameras)
 {
-  char sendbuf[k_timestamp_len];
+  char sendbuf[k_timestamp_len * 3];
   int retval;
   int zero = 0;
   for (unsigned int i = 0; i < numCameras; i++)
@@ -198,19 +199,19 @@ void PGR_StopAndCleanup(PointGrey_t* PG, unsigned int numCameras)
     if (retval <= 0)
       printf("Error sending escape zero\n");
     memset(sendbuf, 0, sizeof(sendbuf));
-    retval = snprintf(sendbuf, (k_timestamp_len),
+    retval = snprintf(sendbuf, (k_timestamp_len * 3),
 		      "%.6f: Camera logging stopped",
 		      camera_current_time());
-    if ((retval < 0) || (retval >= (k_timestamp_len)))
+    if ((retval < 0) || (retval >= (k_timestamp_len * 3)))
       printf("error in PGR_StopAndCleanup, snprintf = %d\n", retval);
     retval = send(PG[i].sockfd, sendbuf, sizeof(sendbuf), 0);
-    if (retval != (k_timestamp_len))
+    if (retval != (k_timestamp_len * 3))
       printf("PGR_StopAndCleanup: send failed\n");
-    else
-    {
-      printf("sending: %s\n", sendbuf);
-      usleep(100000); //wait for send to complete
-    }
+    // else
+    // {
+    //   printf("sending: %s\n", sendbuf);
+    //   usleep(100000); //wait for send to complete
+    // }
     // close the socket
     if (close(PG[i].sockfd) != 0)
       printf("Error closing socket for cam %u\n", i);
@@ -549,7 +550,7 @@ int ClientConnect(const char* server, const char* port)
 
 int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras)
 {
-  char sendbuf[k_timestamp_len];
+  char sendbuf[k_timestamp_len * 3];
   int retval;
   for (unsigned int i = 0; i < numCameras; i++) //setup/init loop
   {
@@ -563,16 +564,16 @@ int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras)
       }
       else
       {//connection success
-	retval = snprintf(sendbuf, (k_timestamp_len), 
+	retval = snprintf(sendbuf, (k_timestamp_len * 3), 
 			  "%.6f: Front camera logging started", 
 			  camera_current_time());
-	if ((retval < 0) || (retval >= (k_timestamp_len)))
+	if ((retval < 0) || (retval >= (k_timestamp_len * 3)))
 	{
 	  printf("error in Network_StartCameras, snprintf = %d\n", retval);
 	  return -1;
 	}
 	retval = send(PG[i].sockfd, sendbuf, sizeof(sendbuf), 0);
-	if (retval != (k_timestamp_len))
+	if (retval != (k_timestamp_len * 3))
 	{
 	  printf("Network_StartCameras: send failed\n");
 	  return -1;
@@ -588,16 +589,16 @@ int Network_StartCameras(PointGrey_t* PG, unsigned int numCameras)
       }
       else
       {//connection success
-	retval = snprintf(sendbuf, (k_timestamp_len), 
+	retval = snprintf(sendbuf, (k_timestamp_len * 3), 
 			  "%.6f: Panoramic camera logging started", 
 			  camera_current_time());
-	if ((retval < 0) || (retval >= (k_timestamp_len)))
+	if ((retval < 0) || (retval >= (k_timestamp_len * 3)))
 	{
 	  printf("error in Network_StartCameras, snprintf = %d\n", retval);
 	  return -1;
 	}
 	retval = send(PG[i].sockfd, sendbuf, sizeof(sendbuf), 0);
-	if (retval != (k_timestamp_len))
+	if (retval != (k_timestamp_len * 3))
 	{
 	  printf("Network_StartCameras: send failed\n");
 	  return -1;

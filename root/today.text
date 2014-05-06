@@ -232,3 +232,6 @@ Old notes
 5 May 14
 --Implemented sending of camera start and stop messages (toollib-camera.cpp, Network_StartCameras() and PGR_StopAndCleanup()).
 --Completed and debugged implementation of sending individual timestamps for images.  Needed to use a send of "0" before sending camera stop message in order to get OpenCV_ReceiveFrame() on workstation to exit and not interpret 1st 4 bytes of camera stop message as an int representing compressed image size.
+
+6 May 14
+--Troubleshot slow framerate issue in emperor using new modifications to CustomImageEx.cpp.  Found problem was in the emperor_monitor_bump_switches() thread -- it was using ~95% processor without cameras running.  I am using select() with a blocking read() in order to allow the loop to exit when I change the global boolean gpio_thread_should_die.  However, the select() call takes the timeval timeout parameter as a pointer, and select() updates that value, which caused it to get set to 0 and cause subsequent select() calls to return immediately.  I changed the loop to set my timeval timeout variable inside each loop, ensuring that the timeout is set to 100 ms on every call to select().  CPU usage is now <1% without cameras running, and framerate is up to ~11-15 fps per camera (counted using timestamps in log files).

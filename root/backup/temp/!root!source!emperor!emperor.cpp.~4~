@@ -245,7 +245,8 @@ void* emperor_monitor_bump_switches(void* args)
   char logbuf[k_LogBufSize];
   fd_set recv_set;
   struct timeval timeout;
- 
+  timeout.tv_sec = 0;
+  timeout.tv_usec = 1000 * 100; //100ms timeout
   while (!gpio_thread_should_die)
   {
     memset(logbuf, 0, sizeof(logbuf));  //clear buffer
@@ -253,18 +254,11 @@ void* emperor_monitor_bump_switches(void* args)
     //gpio_thread_should_die every timeout
     FD_ZERO(&recv_set);
     FD_SET(gpio_fd, &recv_set);
-    //reset timeout inside loop to ensure it gets reset every time
-    timeout.tv_sec = 0;
-    timeout.tv_usec = 1000 * 100; //100ms timeout
     retval = select(gpio_fd+1, &recv_set, NULL, NULL, &timeout);
     if (retval < 0)
       printf("select error\n");
     else if (retval == 0) //timeout
-    {
-      // printf("select timeout at %.6f, gpio_fd = %d, timeout = %ld.%06ld\n", 
-      // 	     emperor_current_time(), gpio_fd, timeout.tv_sec, timeout.tv_usec);
       continue; //go back to the top of the loop and recheck gpio_thread_should_die
-    }
     else //retval >= 1-->we have data to receive
     {
       retval = read(gpio_fd, readbuffer, bump_read_size);
