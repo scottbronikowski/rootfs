@@ -65,7 +65,7 @@ int main(int /*argc*/, char** /*argv*/)
   //printf("sizeof(long long int) = %d\n", sizeof(long long int));
   //printf("sizeof(double) = %d\n", sizeof(double));
   //printf("timestamp: %.6f\n", emperor_current_time()); //6 decimal places is microseconds
-  printf("Please ensure that simple-gui.sc (viewer '()) is running on %s\n", k_Server);
+  printf("Please ensure that driver-gui.sc (viewer '()) is running on %s\n", k_Server);
   pan_fd = open(pan_file, O_WRONLY);
   if (pan_fd < 1)
   {
