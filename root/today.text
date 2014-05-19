@@ -237,3 +237,6 @@ Old notes
 --Troubleshot slow framerate issue in emperor using new modifications to CustomImageEx.cpp.  Found problem was in the emperor_monitor_bump_switches() thread -- it was using ~95% processor without cameras running.  I am using select() with a blocking read() in order to allow the loop to exit when I change the global boolean gpio_thread_should_die.  However, the select() call takes the timeval timeout parameter as a pointer, and select() updates that value, which caused it to get set to 0 and cause subsequent select() calls to return immediately.  I changed the loop to set my timeval timeout variable inside each loop, ensuring that the timeout is set to 100 ms on every call to select().  CPU usage is now <1% without cameras running, and framerate is up to ~11-15 fps per camera (counted using timestamps in log files).
 ----
 --Video saving working on seykhl.
+
+19 May 14
+--First attempts at using rotary encoders on wheels.  All example/test code downloaded so far has used too much (~50%+) CPU to be useful.  Looking into developing kernel-space interrupt handler to count ticks.
