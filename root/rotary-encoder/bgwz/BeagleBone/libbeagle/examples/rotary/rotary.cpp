@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
 	rotary.run();
 	while (1) {
 		printf("phase: %d  position: %d\n", rotary.phase(), rotary.position());
-		//	usleep(10000);
+		//		usleep(3750);
 	}
 	rotary.stop();
 

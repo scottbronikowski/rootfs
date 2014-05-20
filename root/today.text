@@ -240,3 +240,6 @@ Old notes
 
 19 May 14
 --First attempts at using rotary encoders on wheels.  All example/test code downloaded so far has used too much (~50%+) CPU to be useful.  Looking into developing kernel-space interrupt handler to count ticks.
+
+20 May 14
+--Started working on modifying the libbeagle (BeagleBone) code gathered from bwgz.org.  My first thought is that the slowness comes from the fact that every time the GPIO class reads a GPIO value, it opens, reads, and closes the file.  Trying to modify the code so that it opens a file descriptor in the constructor and just reads from that fd when getting the value.  Don't have it working just yet--still troubleshooting.

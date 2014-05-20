@@ -7,7 +7,7 @@ RMDIR=rmdir
 
 OBJS=rotary.o
 LIBA=$(LIBDIR)/libbeagle.a
-BINS=rotary
+BINS=rotary my_rotary
 
 all: $(BINS)
 
@@ -18,6 +18,12 @@ rotary: rotary.o
 	g++ -pthread $+ $(LIBA) -o rotary
 # use this if you want a version using the shared library
 #	$(CXX) $(LDFLAGS) -o $@ $+
+
+my_rotary: my_rotary.o
+	g++ -pthread $+ $(LIBA) -o my_rotary
+# use this if you want a version using the shared library
+#	$(CXX) $(LDFLAGS) -o $@ $+
+
 
 clean:
 	$(RM) $(OBJS) $(BINS)
