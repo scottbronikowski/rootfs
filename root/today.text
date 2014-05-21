@@ -243,3 +243,6 @@ Old notes
 
 20 May 14
 --Started working on modifying the libbeagle (BeagleBone) code gathered from bwgz.org.  My first thought is that the slowness comes from the fact that every time the GPIO class reads a GPIO value, it opens, reads, and closes the file.  Trying to modify the code so that it opens a file descriptor in the constructor and just reads from that fd when getting the value.  Don't have it working just yet--still troubleshooting.
+
+21 May 14
+--Have libbeagle code reading from a file descriptor opened in the GPIO constructor, but not sure what good it's doing me.  CPU usage on the test program is down to ~39% (from ~50%), but still too high to be useful while cameras are running.  Still think it might be better to have a kernel module running that counts ticks and keeps direction, and then reports that info out to user-space on demand.

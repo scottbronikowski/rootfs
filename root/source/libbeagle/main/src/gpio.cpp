@@ -62,33 +62,34 @@ GPIO::GPIO(int number, string direction) {
   if (dir != NULL) {
     existed = true;
     closedir(dir);
-    //so close the damn thing so it can be reopened
+    // //so close the damn thing so it can be reopened
+    // ofstream out;
+    // out.open("/sys/class/gpio/unexport");
+    // out << number;
+    // out.close();
+  }
+  else {
+    existed = false;
     ofstream out;
-    out.open("/sys/class/gpio/unexport");
-    out << number;
+    out.open("/sys/class/gpio/export");
+    out << number; //create gpio file node
     out.close();
   }
-  // else {
-  existed = false;
-  ofstream out;
-  out.open("/sys/class/gpio/export");
-  out << number; //create gpio file node
-  out.close();
-  
-  out.open((path + "/direction").c_str());
-  out << direction;  //set gpio direction
-  out.close();
+  ofstream out2;
+  out2.open((path + "/direction").c_str());
+  out2 << direction;  //set gpio direction
+  out2.close();
   //open file
-  path += "/value";
+  string value_path = path + "/value";
   if (direction.compare("in") == 0) {
-    fd = open(path.c_str(), O_RDONLY);
+    fd = open(value_path.c_str(), O_RDONLY);
     printf("opened file %s as read only with fd = %d\n",
-	   path.c_str(), fd);
+	   value_path.c_str(), fd);
   }
   else if (direction.compare("out") == 0) {
-    fd = open(path.c_str(), O_WRONLY);
+    fd = open(value_path.c_str(), O_WRONLY);
     printf("opened file %s as write only with fd = %d\n",
-	   path.c_str(), fd);
+	   value_path.c_str(), fd);
   }
   else {
     printf("Unrecognized direction string\n");
@@ -151,19 +152,21 @@ int GPIO::value() {
 	in.open((path + "/value").c_str());
 	in >> value;
 	in.close();
+	//printf("GPIO %d: value = %d\n", this->number, atoi(value.c_str()));
 	return atoi(value.c_str());
 }
 
 int GPIO::value2() {
-  int retval;
+  int retval, value;
   char buf[1];
   
-  retval = read(fd, buf, 1);
-  if (retval != 1) {
-    //printf("value2: read error\n");
-    //perror("value2");
+  retval = pread(fd, buf, 1, 0); //use pread(x,x,x,0) to always read the first byte of the file
+  if (retval < 0) {
+    perror("value2");
   }
-  return atoi(buf);
+  value = atoi(buf);
+  //  printf("GPIO %d: retval = %d, value2 = %d\n", this->number, retval, value);
+  return value;
 }
 
 void GPIO::dump() {

@@ -20,8 +20,10 @@ Rotary::Rotary(int a, int b) : _position(0) {
   A = new GPIO(a, "in");
   B = new GPIO(b, "in");
 
-	// A->direction("in");
-	// B->direction("in");
+  // A = new GPIO(a);
+  // B = new GPIO(b);
+  // A->direction("in");
+  // B->direction("in");
 }
 
 Rotary::~Rotary() {
