@@ -1,0 +1,205 @@
+#!/usr/bin/perl
+# Generate a debian/control from the control stub, the kernel-versions
+# files, and the package-list.
+use strict;
+use warnings;
+
+my @controlfields=qw(Package XC-Package-Type Provides Depends Architecture XB-Kernel-Version Section Priority Description);
+my @versions;
+my @packages;
+my %packages;
+my @builddeps;
+my %excluded;
+
+my $configdir = ($ENV{KW_CONFIG_DIR} || '.');
+
+my $fixkernelversion = $ARGV[0];
+
+if (open(EXCLUDED, "$configdir/exclude-packages")) {
+	while (<EXCLUDED>) {
+		chomp;
+		$excluded{$_}=1;
+	}
+	close EXCLUDED;
+}
+
+open(KVERS, "$configdir/kernel-versions") || die "kernel-versions: $!";
+while (<KVERS>) {
+	chomp;
+	next if /^#/ || ! length;
+	
+	my ($arch, $kernelversion, $flavour, $installedname, $multkern, $builddep)=split(' ', $_, 6);
+	if (! length $arch || ! length $kernelversion || ! length $flavour) {
+		die "parse error";
+	}
+	if (defined($fixkernelversion)) {
+		$kernelversion = $fixkernelversion;
+	}
+	elsif ($kernelversion eq "-") {
+		die "kernel version not set in file or on command line";
+	}
+	push @versions, [ $arch, $kernelversion, $flavour ];
+	if ($builddep ne "-") {
+		foreach my $pkg (split(", ", $builddep)) {
+			push @builddeps, "$pkg [$arch]";
+		}
+	}
+}
+close KVERS;
+
+# Building with installed kernel package, or as part of a package?
+if (open(STUB, "debian/control.stub")) {
+	while (<STUB>) {
+		chomp;
+		if (/^Build-Depends:/) {
+			$_=join(", ", $_, @builddeps);
+		}
+		print $_."\n";
+	}
+	close STUB;
+}
+else {
+	die "debian/control.stub: $!" if @builddeps;
+	# otherwise carry on
+}
+
+sub read_package_list
+{
+	sub merge_package
+	{
+		my %pkg = %{$_[0]};
+		if (not exists $packages{$pkg{Package}}) {
+			push @packages, $pkg{Package};
+			$packages{$pkg{Package}} = \%pkg;
+		}
+		else {
+			my %real_pkg = %{$packages{$pkg{Package}}};
+			foreach (keys(%pkg)) {
+				$real_pkg{$_} = $pkg{$_};
+			}
+			$packages{$pkg{Package}} = \%real_pkg;
+		}
+	}
+
+	my $file = shift;
+	open(LIST, $file) || die "package-list: $!";
+	my $field;
+	my %pkg;
+	while (<LIST>) {
+		chomp;
+		next if /^#/;
+		
+		if (/^(\S+):\s*(.*)/) {
+			$field=$1;
+			my $val=$2;
+			if (! grep { $field =~ /^\Q$_\E(_.+)?$/ } @controlfields) {
+				die "unknown field, $field";
+			}
+			$pkg{$field}=$val;
+		}
+		elsif (/^$/) {
+			if (%pkg) {
+				merge_package(\%pkg);
+				%pkg=();
+			}
+		}
+		elsif (/^(\s+.*)/) {
+			# continued field
+			$pkg{$field}.="\n".$1;
+		}
+	}
+	if (%pkg) {
+		merge_package(\%pkg);
+	}
+	close LIST;
+}
+read_package_list("/usr/share/kernel-wedge/package-list");
+read_package_list("$configdir/package-list");
+
+foreach my $ver (@versions) {
+	my ($arch, $kernelversion, $flavour) = @$ver;
+	foreach my $pkg_name (@packages) {
+		my %pkg = %{$packages{$pkg_name}};
+
+		# Used to get a field of the package, looking first for
+		# architecture-specific fields.
+		my $package = sub {
+			my $field=shift;
+			return $pkg{$field."_".$flavour}
+				if exists $pkg{$field."_".$flavour};
+			return $pkg{$field."_".$arch."_".$flavour}
+				if exists $pkg{$field."_".$arch."_".$flavour};
+			return $pkg{$field."_".$arch}
+				if exists $pkg{$field."_".$arch};
+			return $pkg{$field}
+				if exists $pkg{$field};
+			return undef;
+		};
+
+		# Check for a modules list file for this architecture and
+		# package.
+		my $modlistdir="";
+		if (-d "$configdir/modules/$arch-$flavour") {
+			$modlistdir = "$configdir/modules/$arch-$flavour";
+		}
+		elsif (-d "$configdir/modules/$flavour") {
+			$modlistdir = "$configdir/modules/$flavour";
+		}
+		else {
+			$modlistdir = "$configdir/modules/$arch";
+		}
+		
+		my $fwlistdir="";
+		if (-d "$configdir/firmware/$arch-$flavour") {
+			$fwlistdir="$configdir/firmware/$arch-$flavour";
+		}
+		elsif (-d "$configdir/firmware/$flavour") {
+			$fwlistdir="$configdir/firmware/$flavour";
+		}
+		else {
+			$fwlistdir="$configdir/firmware/$arch";
+		}
+
+		next unless -e "$modlistdir/".$package->("Package") or -e "$fwlistdir/".$package->("Package");
+
+		$pkg{Architecture}=$arch;
+		$pkg{orig_package}=$package->("Package");
+		$pkg{Package}=$package->("Package")."-".$kernelversion."-".$flavour."-di";
+		$pkg{'XC-Package-Type'}="udeb";
+		$pkg{'XB-Kernel-Version'}=$kernelversion."-".$flavour;
+
+		next if $excluded{$pkg{Package}};
+		
+		print "\n";
+		
+		if (! defined $package->("Section") || $package->("Section") !~ /debian-installer$/) {
+			$pkg{Section}="debian-installer";
+		}
+
+		if (defined $package->("Depends")) {
+			$pkg{Depends}=join(", ",
+				map { $_."-".$kernelversion."-".$flavour."-di" }
+				# Remove force marker.
+				map { s/!$//; $_ }
+				# If the dep is not built for this arch,
+				# skip it, unless it's forced.
+				grep { -e "$modlistdir/$_" || -e "$fwlistdir/$_" || /!$/ }
+				split(", ", $package->("Depends")));
+		}
+		
+		foreach my $field (@controlfields) {
+			if ($field eq 'Provides') {
+				if (defined $package->("Provides")) {
+					print $field.": ".$package->("orig_package").", ".$package->("Provides")."\n";
+				}
+				else {
+					print $field.": ".$package->("orig_package")."\n";
+				}
+			}
+			else {
+				print $field.": ".$package->($field)."\n"
+					if defined $package->($field);
+			}
+		}
+	}
+}

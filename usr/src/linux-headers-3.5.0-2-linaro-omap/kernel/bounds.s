@@ -12,22 +12,17 @@
 	.file	"bounds.c"
 @ GNU C (Ubuntu/Linaro 4.6.3-1ubuntu5) version 4.6.3 (arm-linux-gnueabihf)
 @	compiled by GNU C version 4.6.3, GMP version 5.0.2, MPFR version 3.1.0-p3, MPC version 0.9
-@ GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+@ GGC heuristics: --param ggc-min-expand=63 --param ggc-min-heapsize=62224
 @ options passed:  -nostdinc
-@ -I /home/adam/Code/linaro-12.10/kernel_build/test_build/linux/arch/arm/include
-@ -I arch/arm/include/generated -I include
-@ -I /home/adam/Code/linaro-12.10/kernel_build/test_build/linux/include
-@ -I /home/adam/Code/linaro-12.10/kernel_build/test_build/linux/. -I .
-@ -I /home/adam/Code/linaro-12.10/kernel_build/test_build/linux/arch/arm/mach-omap2/include
-@ -I /home/adam/Code/linaro-12.10/kernel_build/test_build/linux/arch/arm/plat-omap/include
-@ -imultilib sf -imultiarch arm-linux-gnueabi -D __KERNEL__
-@ -D __LINUX_ARM_ARCH__=7 -U arm -D KBUILD_STR(s)=#s
+@ -I /usr/src/linux-headers-3.5.0-2-linaro-omap/arch/arm/include
+@ -I arch/arm/include/generated -I include -I arch/arm/mach-omap2/include
+@ -I arch/arm/plat-omap/include -imultilib sf -imultiarch arm-linux-gnueabi
+@ -D __KERNEL__ -D __LINUX_ARM_ARCH__=7 -U arm -D KBUILD_STR(s)=#s
 @ -D KBUILD_BASENAME=KBUILD_STR(bounds)
 @ -D KBUILD_MODNAME=KBUILD_STR(bounds)
 @ -isystem /usr/lib/gcc/arm-linux-gnueabihf/4.6/include
-@ -include /home/adam/Code/linaro-12.10/kernel_build/test_build/linux/include/linux/kconfig.h
-@ -MD kernel/.bounds.s.d
-@ /home/adam/Code/linaro-12.10/kernel_build/test_build/linux/kernel/bounds.c
+@ -include /usr/src/linux-headers-3.5.0-2-linaro-omap/include/linux/kconfig.h
+@ -MD kernel/.bounds.s.d /root/build/linux-omap-3.5/kernel/bounds.c
 @ -mlittle-endian -marm -mabi=aapcs-linux -mno-thumb-interwork
 @ -march=armv7-a -msoft-float -mfpu=vfpv3-d16
 @ -auxbase-strip kernel/bounds.s -Os -Wall -Wundef -Wstrict-prototypes
@@ -36,16 +31,16 @@
 @ -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-aliasing
 @ -fno-common -fno-delete-null-pointer-checks -fno-dwarf2-cfi-asm
 @ -funwind-tables -fno-stack-protector -fomit-frame-pointer
-@ -fno-inline-functions-called-once -fno-strict-overflow -fconserve-stack
-@ -fverbose-asm
+@ -fno-strict-overflow -fconserve-stack -fverbose-asm
 @ options enabled:  -fauto-inc-dec -fbranch-count-reg -fcaller-saves
 @ -fcombine-stack-adjustments -fcompare-elim -fcprop-registers
 @ -fcrossjumping -fcse-follow-jumps -fdefer-pop -fdevirtualize
 @ -fearly-inlining -feliminate-unused-debug-types -fexpensive-optimizations
 @ -fforward-propagate -ffunction-cse -fgcse -fgcse-lm
 @ -fguess-branch-probability -fident -fif-conversion -fif-conversion2
-@ -findirect-inlining -finline -finline-functions -finline-small-functions
-@ -fipa-cp -fipa-profile -fipa-pure-const -fipa-reference -fipa-sra
+@ -findirect-inlining -finline -finline-functions
+@ -finline-functions-called-once -finline-small-functions -fipa-cp
+@ -fipa-profile -fipa-pure-const -fipa-reference -fipa-sra
 @ -fira-share-save-slots -fira-share-spill-slots -fivopts
 @ -fkeep-static-consts -fleading-underscore -fmath-errno -fmerge-constants
 @ -fmerge-debug-strings -fmove-loop-invariants -fomit-frame-pointer
@@ -69,7 +64,7 @@
 @ -fverbose-asm -fzero-initialized-in-bss -mglibc -mlittle-endian
 @ -msched-prolog -munaligned-access -mvectorize-with-neon-quad
 
-@ Compiler executable checksum: a6307c82fe8e2ed98c5aea4a84de9cda
+@ Compiler executable checksum: ffcbc490dd19d9f3c1e5842c6cc7a10d
 
 	.text
 	.align	2
@@ -81,15 +76,15 @@ foo:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
 #APP
-@ 17 "/home/adam/Code/linaro-12.10/kernel_build/test_build/linux/kernel/bounds.c" 1
+@ 17 "/root/build/linux-omap-3.5/kernel/bounds.c" 1
 	
 ->NR_PAGEFLAGS #22 __NR_PAGEFLAGS	@
 @ 0 "" 2
-@ 18 "/home/adam/Code/linaro-12.10/kernel_build/test_build/linux/kernel/bounds.c" 1
+@ 18 "/root/build/linux-omap-3.5/kernel/bounds.c" 1
 	
 ->MAX_NR_ZONES #3 __MAX_NR_ZONES	@
 @ 0 "" 2
-@ 19 "/home/adam/Code/linaro-12.10/kernel_build/test_build/linux/kernel/bounds.c" 1
+@ 19 "/root/build/linux-omap-3.5/kernel/bounds.c" 1
 	
 ->NR_PCG_FLAGS #3 __NR_PCG_FLAGS	@
 @ 0 "" 2

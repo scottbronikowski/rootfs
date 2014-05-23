@@ -1,0 +1,1 @@
+../../../../../share/pyshared/devscripts/test/test_pylint.py
