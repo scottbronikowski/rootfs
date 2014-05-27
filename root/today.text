@@ -274,3 +274,6 @@ Old notes
 ----
 *******JUST REVERTED LAST 3 COMMITS****************
 --Reverted 27 May, 23 May, 22 May commits because I rebooted the Gumstix and discovered that the kernel module compilation work done on those days actually deleted/destroyed all of my previously functional kernel modules, probably somewhere in the make process.  Gumstix was unable to boot with correct drivers for USB, wifi, etc.  Reverting back to 21 May commit fixed the problem.
+---
+--Was able to recompile pwm.ko in /omap3-pwm using command 'make ARCH=arm CROSS_COMPILE=<EMPTYQUOTES> -C /root/build/linux-omap-3.5 M=`pwd` modules', but it would not load with either insmod or modprobe.  Looking at modinfo for both versions of pwm.ko, I see the difference in the vermagic string is that the one that works has ARMv7 and the one that doesn't has ARMv6 as the second-to-last entry.  Also, the working pwm.ko is significantly smaller (17K vs. 134K).
+--Look more closely at realtek folder--the install.sh there was able to compile the wifi kernel module (8192cu.ko) that has the correct vermagic string.  Need to see what it does that the other modules need to do.

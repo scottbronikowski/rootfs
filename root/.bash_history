@@ -1,10 +1,3 @@
-[  2
-[  281.455474] agg_enable 
-[
-[  309.254882] 
-[  309.254913] BA_starting_seqctrl = 18 fo
-[  
-[  309.260711] OnAction_back, ac
 [  309.260711] agg_enable for
 [  381.689117] ehci-omap ehci-oma
 [  458.691925] ehci-omap e
@@ -1998,3 +1991,10 @@ git status
 git add -A
 git commit -m "Friday commit--no changes"
 git push
+reboot
+lsmod
+ls toda*
+diff today.text today.text.updated 
+emacs today.text
+emacs
+emacs today.text
