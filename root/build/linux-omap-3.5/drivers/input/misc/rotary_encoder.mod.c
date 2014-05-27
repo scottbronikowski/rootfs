@@ -1,0 +1,54 @@
+#include <linux/module.h>
+#include <linux/vermagic.h>
+#include <linux/compiler.h>
+
+MODULE_INFO(vermagic, VERMAGIC_STRING);
+
+struct module __this_module
+__attribute__((section(".gnu.linkonce.this_module"))) = {
+	.name = KBUILD_MODNAME,
+	.init = init_module,
+#ifdef CONFIG_MODULE_UNLOAD
+	.exit = cleanup_module,
+#endif
+	.arch = MODULE_ARCH_INIT,
+};
+
+MODULE_INFO(intree, "Y");
+
+static const struct modversion_info ____versions[]
+__used
+__attribute__((section("__versions"))) = {
+	{ 0xd3111ff9, "module_layout" },
+	{ 0xbf64d234, "platform_driver_unregister" },
+	{ 0x41e7c6a5, "platform_driver_register" },
+	{ 0x349e2618, "input_event" },
+	{ 0xf7802486, "__aeabi_uidivmod" },
+	{ 0x26e7b620, "malloc_sizes" },
+	{ 0xd36a3fe1, "input_free_device" },
+	{ 0xd6b8e852, "request_threaded_irq" },
+	{ 0x65d6d0f0, "gpio_direction_input" },
+	{ 0x47229b5c, "gpio_request" },
+	{ 0xd00aed59, "input_register_device" },
+	{ 0x78f980ab, "input_set_abs_params" },
+	{ 0x11f447ce, "__gpio_to_irq" },
+	{ 0x9e151a46, "input_allocate_device" },
+	{ 0xb9012926, "kmem_cache_alloc_trace" },
+	{ 0xe21352c5, "dev_err" },
+	{ 0x6c8d5ae8, "__gpio_get_value" },
+	{ 0xefd6cf06, "__aeabi_unwind_cpp_pr0" },
+	{ 0x37a0cba, "kfree" },
+	{ 0xfee429f7, "dev_set_drvdata" },
+	{ 0xab73919c, "input_unregister_device" },
+	{ 0xfe990052, "gpio_free" },
+	{ 0xf20dabd8, "free_irq" },
+	{ 0xd53ad1f8, "dev_get_drvdata" },
+};
+
+static const char __module_depends[]
+__used
+__attribute__((section(".modinfo"))) =
+"depends=";
+
+
+MODULE_INFO(srcversion, "8ECB5F79DD43C4E1EE355BA");

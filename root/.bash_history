@@ -1,664 +1,3 @@
-[  2
-[  281.455474] agg_enable 
-[
-[  309.254882] 
-[  309.254913] BA_starting_seqctrl = 18 fo
-[  
-[  309.260711] OnAction_back, ac
-[  309.260711] agg_enable for
-[  381.689117] ehci-omap ehci-oma
-[  458.691925] ehci-omap e
-[
-[  527.831146] 
-[  527.831176] hub 1-0:1.0: port 2 enable 
-[  
-[  527.854309] hub 1-0:1.0: port
-[  527.854339] usb 1-2: USB d
-[  527.854339] usb 1-2.1: USB dis
-[  527.854370] usb 1-2.1: 
-[
-[  527.854553] 
-[  527.854583] ehci-omap ehci-omap.0: shut
-[  
-[  527.854583] ehci-omap ehci-om
-[  527.854614] ehci-omap ehci
-[  527.854614] ehci-omap ehci-om
-[  527.854614] ehci-omap e
-[ 
-[  527.854644] ehci-omap ehci-omap.0: shutdown ur
-[  527.85467
-[  527.854675] ehci-omap ehci
-[  527.854675] ehci-omap ehci-om
-[  527.854705] ehci-omap ehci-omap.0: shutdown urb d
-[  527.85
-[  527.854705] ehci-omap ehci
-[  527.854736] ehci-omap ehci-om
-[  527.854736] ehci-omap ehci-omap.0: shu
-[  527.854736] ehci-
-[  527.854766] ehci-omap ehci-oma
-[  527.854766] ehci-omap ehc
-[  527.854766] ehci-omap ehci-omap.0: 
-[  527.854797] ehci-omap ehci-omap.0: sh
-[  527.854797] ehci-omap ehci-omap
-[
-[  527.854827] ehci-omap ehci-omap.0:
-[  527.854827] ehci-omap ehci-om
-[  52
-[  527.854858] ehci-omap ehci-omap.0: shut
-[  527
-[  527.854888] ehci-omap ehci-omap.0: shutdown urb de370d40 e
-[  527.854888] ehci-omap ehci-o
-[  527.854888
-[  527.854919] ehci-omap ehci-omap.0: shutdown urb 
-[  527.8549
-[  527.854919] ehci-omap ehci-omap.0: shutdown urb defd4e4
-[  52
-[  527.854949] ehci-omap ehci-omap.0: shut
-[  527.854949] ehci-o
-[  527.854980] ehci-omap ehci-omap.0: shutdown urb deffa7c0 ep1i
-[  527.854980] ehci-omap ehci-omap.0: sh
-[  527.855010] ehci-oma
-[  527.855010] ehci-omap ehci-
-[  527.855010] ehci-oma
-[  527.
-[  527.855041] ehci-omap ehci-omap.
-[
-[  527.855072] ehci-omap
-[  527.855072] ehci-omap ehci-omap.
-[  527.855072] ehci-o
-[  5
-[  527.855102] ehci-omap ehci-omap.0: shutdown 
-[  527.855133]
-[  527.855133] ehci-omap ehci-omap.0: shutdown 
-
-[  527.855163]
-[  527.855163] ehci-omap ehci-omap.0: shut
-[  527.855163] ehci-
-[  527.855194] ehci-omap ehci-omap.0: shutdown ur
-[  527.855194
-[  527.855224] ehci-omap ehci-omap.0: shutdown u
-[  527
-[  527.
-[  527.855255] ehci-omap ehci-omap.0: shutdown u
-[  527.855255] 
-[  527.855255] ehci-omap ehci-omap.0: shutdown urb de
-[  527.8
-[
-[  527.855285] 
-[  527.855316] ehci-omap ehci-o
-[  527.855316]
-[  527.855346] ehci-omap ehci-omap.0: shu
-[  527.855346] ehci-
-[  527.855346] ehci-omap ehci-omap.0: shut
-[  527.855377] ehci
-[  527.855377] ehci-omap ehci-oma
-[  527.855407] ehci-
-[  527.
-[  527.855407] ehci-omap ehci-omap.0: shutdown urb de38af40 ep
-[  527.855438] ehci-omap ehci-omap.0: shutdown urb deffae40 e
-
-[  527.855438] ehci-omap ehci-omap.0: shutdown urb def
-[  527.8
-[  527.855468] ehci-omap ehci-omap.0: sh
-[  527.855499] ehci-om
-[  527.855499] ehci-omap ehci-omap.0: shutdown urb
-[  527.855
-[  527.855529] ehci-omap e
-[  527.855529] ehci-omap ehci-omap
-[  
-[  527.855560] ehci-omap ehci-omap.0: shutd
-[  527.855560] ehci
-[  527.855590] ehci-omap ehci-omap.0: s
-[  527.855590] ehci-oma
-[  527.855590] ehci-omap ehci-omap.0: shutd
-[  527.855621] ehci
-[  527.855621] ehci-omap ehci-
-[  527.855651] ehci-omap ehci-
-[  527.855651] ehci-omap 
-[  527.855651] ehci-omap ehci-oma
-[  52
-[  527.855682] ehci-omap ehci-omap.
-[  527.855712] ehci-omap e
-[  527.855712] ehci-omap ehci-omap.0: shutdown ur
-[  527.85571
-[  527.855743] ehci-omap ehci-
-[  527.855743] ehci-omap ehci-
-
-[  527.855773] ehci-omap ehci-om
-[  527.855773] ehci-omap eh
-[
-[  527.855804] ehci-omap ehci-omap.0: shutd
-[  527.855834] ehc
-[  527.855834] ehci-omap ehci-omap.0: shutdo
-[  527.
-[  527.855
-[  527.855865] ehci-omap ehci-omap.0: shutdown urb de370c40 ep
-[  527.855895] ehci-omap ehci-omap.0: shutdown 
-[  527.855895]
-[  527.855895] 
-[  527.855926] ehci-omap ehci-omap.0: sh
-[  5
-
-[  527.855957] ehci-omap ehci-omap.0: shutdown 
-[  527.855957]
-[  527.855987] ehci-omap ehci-omap.0: 
-[  527.855987] ehci-oma
-[  527.856018] 
-[  527.856018] ehci-omap ehci-omap.0: shut
-[  
-[  527.856048] ehci-omap ehci-om
-[  527.856048] ehci-omap ehci
-[  527.856079] ehci-omap ehc
-[  5
-[  527.856109] ehci-omap e
-[
-[  527.856109] 
-[  527.856140] ehci-omap ehci-omap.0: shut
-[  
-[  527.856170] ehci-omap ehci-om
-[  527.856170] ehci-omap ehci
-[  527.856201] ehci-omap ehci-oma
-[  527.856201] ehci-omap e
-[
-[  527.856231] 
-[  527.856231] ehci-omap ehci-omap.0: shut
-[  
-[  527.856262] ehci-omap ehci-om
-[  527.856292] ehci-omap ehci
-[  527.856292] ehci-omap ehci-oma
-[  527.856292] ehci-omap e
-[
-[  527.856323] 
-[  527.856353] ehci-omap ehci-omap.0: shut
-[  
-[  527.856384] ehci-omap ehci-om
-[  527.856384] ehci-omap ehci
-[  527.856384] ehci-omap ehci-om
-[  527.856414] ehci-omap e
-[ 
-[  527.875518] usb 1-2.1: usb_disable_device nuki
-[  527.87988
-[  527.879913] usb 1-2.2: unr
-[  527.879913] usb 1-2.2: unregi
-[  527.880249] ehci-omap ehci-omap.0: shutdown urb d
-[  527.88
-[  527.880279] ehci-omap ehci
-[  527.880279] ehci-omap ehci-om
-[  527.893218] ###=> usb_read_port_comple
-[  527.893280] usb_r
-[  527.893280] usb_read_port_comp
-[  527.893310] usb_read_port
-[  527.893371] +rtw_dev_remove
-[  527.
-[  528.369934] usb 1-2.2: kworker/0:4 ti
-[  528.369964] reg 0x4c, usb read 
-[
-[  528.369995] reg 0x4c, usb read 1 f
-[  528.370025] reg 0x4c, usb rea
-[  52
-[  528.370086] reg 0x6a4, usb write 2 fail
-[  528
-[  528.370117] HW_VAR_BASIC_RATE: BrateCfg(0x15d)
-[  528.3702
-[  528.370269] -871x_drv - drv_
-[  528.373596
-[  528.824401] ehci-omap ehci-omap.0: shutdown urb 
-[  528.8244
-[  528.824432] ehci-omap ehci-omap.0: shutdown urb deff88c
-[  52
-[  528.824432] ehci-omap ehci-omap.0: shut
-[  528.824462] ehci-o
-[  528.824462] ehci-omap ehci-omap.0: shutdown urb de0296c0 ep1i
-[  528.824462] ehci-omap ehci-omap.0: sh
-[  528.824493] ehci-oma
-[  528.824493] ehci-omap ehci-
-[  528.824493] ehci-oma
-[  528.
-[  528.824523] ehci-omap ehci-omap.
-[
-[  528.824554] ehci-omap
-[  528.824554] ehci-omap ehci-omap.
-[  528.824584] ehci-o
-[  5
-[  528.824584] ehci-omap ehci-omap.0: shutdown 
-[  528.824615]
-[  528.824615] ehci-omap ehci-omap.0: shutdown 
-
-[  528.824645]
-[  528.824645] ehci-omap ehci-omap.0: shut
-[  528.824645] ehci-
-[  528.824676] ehci-omap ehci-omap.0: shutdown ur
-[  528.824676
-[  528.824707] ehci-omap ehci-omap.0: shutdown u
-[  528
-[  528.
-[  528.824737] ehci-omap ehci-omap.0: shutdown u
-[  528.824737] 
-[  528.824737] ehci-omap ehci-omap.0: shutdown urb de
-[  528.8
-[
-[  528.824768] 
-[  528.824798] ehci-omap ehci-o
-[  528.824798]
-[  528.824798] ehci-omap ehci-omap.0: shu
-[  528.824829] ehci-
-[  528.824829] ehci-omap ehci-omap.0: shut
-[  528.824859] ehci
-[  528.824859] ehci-omap ehci-oma
-[  528.824859] ehci-
-[  528.
-[  528.824890] ehci-omap ehci-omap.0: shutdown urb defeccc0 ep
-[  528.824890] ehci-omap ehci-omap.0: shutdown urb de3892c0 e
-
-[  528.824920] ehci-omap ehci-omap.0: shutdown urb de3
-[  528.8
-[  528.824951] ehci-omap ehci-omap.0: sh
-[  528.824951] ehci-om
-[  528.824981] ehci-omap ehci-omap.0: shutdown urb
-[  528.824
-[  528.824981] ehci-omap e
-[  528.825012] ehci-omap ehci-omap
-[  
-[  528.825012] ehci-omap ehci-omap.0: shutd
-[  528.825042] ehci
-[  528.825042] ehci-omap ehci-omap.0: s
-[  528.825073] ehci-oma
-[  528.825073] ehci-omap ehci-omap.0: shutd
-[  528.825073] ehci
-[  528.825103] ehci-omap ehci-
-[  528.825103] ehci-omap ehci-
-[  528.825103] ehci-omap 
-[  528.825134] ehci-omap ehci-oma
-[  52
-[  528.825164] ehci-omap ehci-omap.
-[  528.825164] ehci-omap e
-[  528.825164] ehci-omap ehci-omap.0: shutdown ur
-[  528.82519
-[  528.825195] ehci-omap ehci-
-[  528.825195] ehci-omap ehci-
-
-[  528.825225] ehci-omap ehci-om
-[  528.825256] ehci-omap eh
-[
-[  528.825256] ehci-omap ehci-omap.0: shutd
-[  528.825286] ehc
-[  528.825286] ehci-omap ehci-omap.0: shutdo
-[  528.
-[  528.825
-[  528.825317] ehci-omap ehci-omap.0: shutdown urb de3a23c0 ep
-[  528.825347] ehci-omap ehci-omap.0: shutdown 
-[  528.825347]
-[  528.825347] 
-[  528.825378] ehci-omap ehci-omap.0: sh
-[  5
-
-[  528.825408] ehci-omap ehci-omap.0: shutdown 
-[  528.825408]
-[  528.825439] ehci-omap ehci-omap.0: 
-[  528.825439] ehci-oma
-[  528.825439] 
-[  528.825469] ehci-omap ehci-omap.0: shut
-[  
-[  528.825500] ehci-omap ehci-om
-[  528.825500] ehci-omap ehci
-[  528.825500] ehci-omap ehc
-[  5
-[  528.825531] ehci-omap e
-[
-[  528.825561] 
-[  528.825561] ehci-omap ehci-omap.0: shut
-[  
-[  528.825592] ehci-omap ehci-om
-[  528.825622] ehci-omap ehci
-[  528.825622] ehci-omap ehci-oma
-[  528.825622] ehci-omap e
-[
-[  528.825653] 
-[  528.825683] ehci-omap ehci-omap.0: shut
-[  
-[  528.825683] ehci-omap ehci-om
-[  528.825714] ehci-omap ehci
-[  528.825714] ehci-omap ehci-oma
-[  528.825744] ehci-omap e
-[
-[  528.825744] 
-[  528.825775] ehci-omap ehci-omap.0: shut
-[  
-[  528.825805] ehci-omap ehci-om
-[  528.825805] ehci-omap ehci
-[  528.825805] ehci-omap ehci-om
-[  528.825836] ehci-omap e
-[ 
-[  528.825866] ehci-omap ehci-omap.0: shutdown ur
-[  528.82586
-[  528.825866] ehci-omap ehci
-[  528.825897] ehci-omap ehci-om
-[  528.825897] ehci-omap ehci-omap.0: shutdown urb d
-[  528.82
-[  528.825927] ehci-omap ehci
-[  529.158966] rtw_pm_set_ips IP
-[  529.158996] rtw_sta_flush(wlan1)
-[  52
-[  529.159057] usb_r
-[  529.159057] usb_write_port_can
-[  529.159149] <=== rtw_dev_
-[  529.159149] rtw_usb_if1_dei
-[  529.
-[  529.159606] =====> rtl8192c_free_hal_
-[  529.159606] <===== rtl8192c_fre
-[
-[  529.159820] usb 1-2.2: usb_disable
-[  529.163940] usb 1-2.4: USB di
-[  52
-[  529.163970] usb 1-2.4: unregistering in
-[  529
-[  529.170745] pl2303 1-2.4:1.0: device disconnec
-[  529.1708
-[  529.171630] usb 1-2.6: USB d
-[  529.171661
-[  529.171661] usb 1-2.6: unregistering interface 1
-[  529.1775
-[  529.177581] ftdi_sio 1-2.6:1.0: device disconnected
-[  
-[  52
-[  529.178161] usb 1-2.7: unregistering de
-[  529.178192] usb 1-
-[  529.178375] usb 1-2.7: usb_disable_device nuking all URBs
-[  
-[  529.179321] usb 1-2: unregistering in
-[  529.179504] usb 1-2:
-[  529.179565] ehci-omap ehci-
-[  529.179656] usb 1-2:
-[  529.
-[  529.339324] hub 1-0:1.0: debounc
-[
-[  532.010589] hub 1-0:1
-[  532.010681] usb usb1: bus auto-s
-[  532.010711] ehci-o
-[  5
-dmesg
-~~
-halt
-/etc/init.d/keepalive-ping.sh stop
-halt
-/root/bin/run_cameras
-htop
-emacs today.text &
-/etc/init.d/keepalive-ping.sh stop
-dmesg
-halt
-lsmod
-lsusb
-modprobe -r usbserial
-rmmod usbserial
-lsusb
-rmmod -f usbserial
-lsusb
-reboot
-/etc/ini
-/etc/init.d/keepalive-ping.sh stop
-dmesg | tail
-dmesg
-root@vader-rover:~# dmesg
-[    0.000000] Booting Linux on physical CPU 0
-[    0.000000] Initializing cgroup subsys cpuset
-[    0.000000] Initializing cgroup subsys cpu
-[    0.000000] Linux version 3.5.0-2-linaro-omap (adam@pine) (gcc version 4.6.3 (Ubuntu/Linaro 4.6.3-1ubuntu5) ) #2~ci+1212101902
-[    0.000000] CPU: ARMv7 Processor [413fc082] revision 2 (ARMv7), cr=10c53c7d
-[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
-[    0.000000] Machine: Gumstix Overo
-[    0.000000] Reserving 12582912 bytes SDRAM for VRAM
-[    0.000000] Memory policy: ECC disabled, Data cache writeback
-[    0.000000] On node 0 totalpages: 127744
-[    0.000000] free_area_init_node: node 0, pgdat c070b85c, node_mem_map c07a7000
-[    0.000000]   Normal zone: 1024 pages used for memmap
-[    0.000000]   Normal zone: 0 pages reserved
-[    0.000000]   Normal zone: 126720 pages, LIFO batch:31
-[    0.000000] OMAP3630 ES1.2 (l2cache iva sgx neon isp 192mhz_clk )
-[    0.000000] Clocking rate (Crystal/Core/MPU): 26.0/332/600 MHz
-[    0.000000] pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
-[    0.000000] pcpu-alloc: [0] 0 
-[    0.000000] Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 126720
-[    0.000000] Kernel command line: console=tty0 console=ttyO2,115200n8 root=/dev/mmcblk0p2 rootwait ro earlyprintk mpurate=720 0
-[    0.000000] PID hash table entries: 2048 (order: 1, 8192 bytes)
-[    0.000000] Dentry cache hash table entries: 65536 (order: 6, 262144 bytes)
-[    0.000000] Inode-cache hash table entries: 32768 (order: 5, 131072 bytes)
-[    0.000000] allocated 1048576 bytes of page_cgroup
-[    0.000000] please try 'cgroup_disable=memory' option if you don't want memory cgroups
-[    0.000000] Memory: 499MB = 499MB total
-[    0.000000] Memory: 495808k/495808k available, 28480k reserved, 0K highmem
-[    0.000000] Virtual kernel memory layout:
-[    0.000000]     vector  : 0xffff0000 - 0xffff1000   (   4 kB)
-[    0.000000]     fixmap  : 0xfff00000 - 0xfffe0000   ( 896 kB)
-[    0.000000]     vmalloc : 0xe0800000 - 0xff000000   ( 488 MB)
-[    0.000000]     lowmem  : 0xc0000000 - 0xe0000000   ( 512 MB)
-[    0.000000]     pkmap   : 0xbfe00000 - 0xc0000000   (   2 MB)
-[    0.000000]     modules : 0xbf000000 - 0xbfe00000   (  14 MB)
-[    0.000000]       .text : 0xc0008000 - 0xc067abfc   (6603 kB)
-[    0.000000]       .init : 0xc067b000 - 0xc06b2000   ( 220 kB)
-[    0.000000]       .data : 0xc06b2000 - 0xc071b268   ( 421 kB)
-[    0.000000]        .bss : 0xc071b28c - 0xc07a6020   ( 556 kB)
-[    0.000000] NR_IRQS:474
-[    0.000000] IRQ: Found an INTC at 0xfa200000 (revision 4.0) with 96 interrupts
-[    0.000000] Total of 96 interrupts on 1 active controller
-[    0.000000] OMAP clockevent source: GPTIMER1 at 32768 Hz
-[    0.000000] sched_clock: 32 bits at 32kHz, resolution 30517ns, wraps every 131071999ms
-[    0.000000] OMAP clocksource: 32k_counter at 32768 Hz
-[    0.000000] Console: colour dummy device 80x30
-[    0.000000] console [tty0] enabled
-[    0.001007] Calibrating delay loop... 597.64 BogoMIPS (lpj=2334720)
-[    0.039123] pid_max: default: 32768 minimum: 301
-[    0.039337] Security Framework initialized
-[    0.039459] Mount-cache hash table entries: 512
-[    0.040252] Initializing cgroup subsys debug
-[    0.040313] Initializing cgroup subsys cpuacct
-[    0.040313] Initializing cgroup subsys memory
-[    0.040405] Initializing cgroup subsys devices
-[    0.040435] Initializing cgroup subsys freezer
-[    0.040435] Initializing cgroup subsys perf_event
-[    0.040588] CPU: Testing write buffer coherency: ok
-[    0.040924] Setting up static identity map for 0x8046ea98 - 0x8046eaf0
-[    0.046081] devtmpfs: initialized
-[    0.050903] dummy: 
-[    0.051300] NET: Registered protocol family 16
-[    0.051757] GPMC revision 5.0
-[    0.051818] gpmc: irq-20 could not claim: err -22
-[    0.053497] gpiochip_add: registered GPIOs 0 to 31 on device: gpio
-[    0.053588] OMAP GPIO hardware version 2.5
-[    0.053863] gpiochip_add: registered GPIOs 32 to 63 on device: gpio
-[    0.054138] gpiochip_add: registered GPIOs 64 to 95 on device: gpio
-[    0.054412] gpiochip_add: registered GPIOs 96 to 127 on device: gpio
-[    0.054687] gpiochip_add: registered GPIOs 128 to 159 on device: gpio
-[    0.055084] gpiochip_add: registered GPIOs 160 to 191 on device: gpio
-[    0.056030] omap_mux_init: Add partition: #1: core, flags: 0
-[    0.061035] _omap_mux_get_by_name: Could not find signal uart4_rx.uart4_rx
-[    0.066894] Reprogramming SDRC clock to 332000000 Hz
-[    0.066955] dpll3_m2_clk rate change failed: -22
-[    0.066986] Found NAND on CS0
-[    0.066986] Registering NAND on CS0
-[    0.068206]  usbhs_omap: alias fck already exists
-[    0.0757
-[    0.078796]  omap-mcbsp.2: alias fck alr
-[    0.079010]  omap-mcbsp.3: alias fck already exists
-[    0.080078] Switched to
-[    0.080291] OMAP DMA hardware revision 5.0
-[    0.087
-[    0.088012] fixed-dummy: 
-[    0.088134] re
-[    0.088317] vads7846: override min_uV, 1 -> 3300000
-[ 
-[    0.088348] vads7846: 3300 mV 
-[    0.088439] reg-fixed-voltage r
-[    0.089050] SCSI subsystem initialized
-[    0.089324] usbcore:
-[    0.089477] usbcore: registered new interface driver hub
-
-[    0.090118] omap_i2c omap_i2c.
-[    0.092651] twl 1-0048: PIH (irq 7) chaining IRQs 320..328
-[    0.092803] twl 1-0048: p
-[    0.093383] twl4030_gpio twl4030_gpio: gpio (irq 320) chaining IRQs 336..353
-[    0.093688] gpiochip_add: registered GPIOs 192
-[    0.094421] VUSB1V5: override min_uV, 1 -> 1500000
-[    0.09442
-[    0.094451] VUSB1V5: 1500 mV normal standby
-[    0.094909] VUSB1V8: overrid
-[    0.094909] VUSB1V8: override max_uV, 2147483647 -> 1800000
-[    0.094940]
-[    0.095336] VUSB3V1: override min_uV, 1 -> 3100000
-[    0.095336] VUSB3V1: override max_uV, 2147483647 -> 3100000
-[    0.095367] VUSB3V1: 31
-[    0.096801] twl4030_usb twl4030_usb: HW
-[    0.097015] twl4030_usb twl4030_usb: Initialized TWL4030 USB module
-[    0
-[    0.097900] vdd_core: 600 <--> 1450 mV no
-[    0.098388] VMMC1: 1850 <--> 3150 mV at 3000 mV normal standb
-[    0.098907] VDAC: 1800 mV normal standby
-[    0.099395] VDVI:
-[    0.099853] omap_i2c omap_i2c.3: bus 3 rev1.4.0 at 400 kHz
-[ 
-[    0.100799] Advanced Linux Sound Architecture Driver Version 
-[    0.101684] Switching to clocksource 32k_counter
-[    0.12619
-[    0.126953] NET: Registered protocol family 2
-[    0.127258] 
-[    0.127807] TCP established hash table entries: 16384 (order:
-[    0.128112] TCP bind hash table entries: 16384 (order: 4, 655
-[    0.128326] TCP: Hash tables configured (established 16384 bi
-[    0.128326] TCP: reno registered
-[    0.128356] UDP hash tabl
-[    0.128417] UDP-Lite ha
-[    0.128692] NET: Registered protocol family 1
-[    0.129211] RPC: Registered n
-[    0.129272] RPC: Registered udp transport module.
-[    0.
-[    0.129302] RPC: Registered tcp NFSv4.1 backchannel tran
-[    0.129577] Trying to unpack rootfs image as initramfs...
-[    0.274627] Freeing initr
-[    0.276947] audit: initializing netlink socket (disab
-[    0.277038] type=2000 audit(0.273:1): initiali
-[    0.278411] VFS: Disk quotas dquot
-[    0.278533] Dquot-cache hash table entries: 1024 (order 0, 4096 byt
-[    0.278869] NFS: Registering the id_resolver key
-[    0.278961] Key type id_resolver registere
-[    0.279418] jffs2: version 2.2. (NAND) (SUMMARY
-[    0.280059] fuse init (API version 7.19)
-[  
-[    0.282348] Block layer SCSI generic (bsg) dri
-[    0.282379] io scheduler noop registered
-[   
-[    0.283172] OMAP DSS rev 2.0
-[    0.286132] om
-[    0.286621] omap_uart.1: ttyO1 at MMIO 0x4806c
-[    0.287017] omap_uart.2: ttyO2 at MMIO 0x49020000
-[    0.988189] console [ttyO2] enabled
-[    0.992309] 
-[    1.007232] brd: module loaded
-[    1.014282] loop: module loaded
-[   
-[    1.027740] NAND device: Manufact
-[    1.052581] Creatin
-[    1.058349] 0x000000000000-0x000000080000 : "x
-[    1.065185] 0x000000080000-0x
-[    1.072540] 0x000000240000-0x000000280000 : "uboo
-[    1.079895] 0x000000280000-0x000000680000 : "linux"
-[    1.088775]
-[    1.447418] smsc911x: Driver version 2008-
-[    1.452575] smsc911x: Driver version 2008-10-21
-[    1.457824] usbc
-[    1.463623] usbcore: registered new interface driver cdc_ether
-[   
-[    1.476135] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driv
-[    1.483032] ehci_hcd: block sizes: qh 64 qtd 96 itd 160 sitd 96
-[    
-[    2.484649] ehci-omap ehci-omap.0: phy reset operation timed out
-[   
-[    2.484680] ehci-omap ehci-omap.0: reset hcc_params 0016 thr
-[    2.484710] ehci-omap ehci-omap.0: reset command 0080b02  park=3 ithresh=8
-[    2.484741] ehci-omap ehci-omap.0: OMAP-EHCI Host Co
-[    2.490997] ehci-omap ehci-omap.0: new USB bus r
-[    2.498870] ehci-omap ehci-om
-[    2.498931] ehci-omap ehci-omap.0: 
-[    2.504913] ehci-omap ehci-omap.0: init command 0
-[    2.5159
-[    2.522125] usb usb1: default language 0
-[    2.522186] usb usb1: udev 1, busnum 1, minor = 0
-[
-[    2.529357] usb usb1: N
-[    2.536956] usb usb1: Product: OMAP-EHCI H
-[    2.542
-[    2.549438] usb usb1: Ser
-[    2.554687] us
-[    2.554718] usb usb1: configuration #1 chosen from 
-[ 
-[    2.554901] hub 1-0:1.0: usb_p
-[    2.554931] hub 1-0:1.0: usb_pr
-[    2.554931] hub 1-0:1.0: USB hub found
-[    2.558929] hub 1-0:
-[    2.563171] hub 1-0:1.0: standalone hub
-[    2.563201] h
-[    2.563201] hub 1-0:1.0: indivi
-[    2.563232] hub 1-0:1.0: power on to power good time: 20ms
-[    2.563262] hub 1-0:1.0: 
-[    2.563262] hub 1-0:1.0: enabling power on all ports
-[    2.563568] ehci-oma
-[    2.594238] Initializing USB Mass Storage driv
-[    2.599517] usbcore: registered new interface driv
-[    2.60586
-[    2.610748] musb-hdrc: version 6.0, ?dma?, 
-[    2.622741] twl4030_usb twl4
-[    2.622985] musb-hdrc: ConfigData=0xde (UTMI-8, dyn FIFOs, 
-[    2.623016]
-[    2.623016] musb-hdrc: setup fifo_mode 4
-[    2.62
-[    2.623443] musb-hdrc musb-hdrc: USB OTG mode controller at
-[    2.633728] twl4030_usb
-[    2.634216] mousedev: PS/2 mouse device
-[    2.640747] twl_rtc twl_rtc: Enabling TWL-RTC
-[    2.647949] twl_rt
-[    2
-[    2.660278] voltdm_scale: No voltage scal
-[    2.667572] ehci-omap ehci-omap.0: GetStatus port:2 status 00
-[    2.667572] hub 1-0:1.0: port 2: status 
-[    2.667633] platf
-[    2.674346] cpuidle: using governor ladder
-[    2.678649] 
-[ 
-[    2.766021] hub 1-0:1.0: state 7 ports 3 chg 0004 evt 0000
-[ 
-[    2.828491] ehci-omap ehci-omap.0: port 2 reset 
-[    2.82852
-[    2.890960] usb 1-2: new high-speed USB devic
-[    2.953460] 
-[    2.953491] ehci-omap ehci-omap.0: GetStatus port:2 status 00
-[    3.047698] usb 1-2: default language 0x0409
-[    3.047851] u
-[    3.047851] usb 1-2: New USB device found, idVendor=050d, idP
-[    3.054931] usb 1-2: New USB dev
-[    3.062438] usb 1-2: Prod
-[    3.067718] omap_hsmmc 
-[    3.074493] usb 1-2: usb_probe_device
-[    3.
-[    3.074798] usb 1-2: adding 1
-[    3.074951] hub 1-2:1.0: usb_probe_interface
-[   
-[    3.
-[    3.081695] hub 1-2:1.0: 7 ports detected
-[    3.085937]
-[    3.085968] hub 1-2:1.0: ganged power switching
-[    3.08
-[    3.086181] hub 1-2:1.0: 
-[    3.086212] hub 1-2:1.0: TT requires at most 8 FS bit
-[    3.086212] hub 1-2:1.0: Port indicators are s
-[    3.086303] hub 1-2:1.0: power on 
-[    3.086578] hub 1-2:1.0: local power source is good
-[    3.086639] 
-[    3.125793] Registered led device: overo:red:gpi
-[    3.125915] Registered led device: overo:b
-[    3.126556] Registered led device: overo:blue:C
-[    3.128021] usbcore: registered new inte
-[  
-[    3.139099] usbcore: registered new interface 
-[    3.146881] overo SoC init
 [    3.149932
 [   
 [    3.188201] hub 1-2:1.0: por
@@ -1998,3 +1337,664 @@ git status
 git add -A
 git commit -m "Friday commit--no changes"
 git push
+cd /
+git status
+git add -A
+git status
+git commit -m "--Started working on modifying the libbeagle (BeagleBone) code gathered from bwgz.org.  My first thought is that the slowness comes from the fact that every time the GPIO class reads a GPIO value, it opens, reads, and closes the file.  Trying to modify the code so that it opens a file descriptor in the constructor and just reads from that fd when getting the value.  Don't have it working just yet--still troubleshooting."
+git push
+locate rotary-encoder.h
+locate rotary_encoder.h
+locate bounds.c
+cd /usr/src/linux-headers-3.5.0-2-linaro-omap/
+ls
+cd kernel/
+ls
+cd ..
+cd linux-source-3.2.0
+ls
+cd debian
+ls
+cd ..
+cd linux-headers-3.5.0-2-linaro-omap/
+ls
+uname -r
+cd /root/build
+ls
+cd linux-omap-3.5/
+ls
+cd kernel/
+ls
+cd ..
+locate bounds.c
+ls -l /lib/modules/3.5.0-2-linaro-omap/build
+ls -l /usr/src/linux-headers-3.5.0-2-linaro-omap/source
+ls /usr/src/linux
+ls /usr/src
+ls /usr/src/linux-headers-3.5.0-2-linaro-omap/source
+lla /usr/src/linux-headers-3.5.0-2-linaro-omap/source
+cd /root/build/linux-omap-3.5/
+lla
+cat .config
+cat .config | grep ROTARY
+make menuconfig
+cd /lib/modules/
+ls
+cd 3.5.0-2-linaro-omap/
+ls
+cd build
+ls
+tree
+ls
+cd drivers/
+ls
+cd input/
+cd misc/
+ls
+cd ..
+tree
+cd ..
+tree
+tree | grep *.ko
+tree | grep Kconfig
+dmesg -tail
+dmesg -T | tail
+cd ..
+lla
+ls -l .
+cd ..
+ls
+ls -al
+cd ~/build/linux-omap-3.5/drivers/input/misc/
+ls
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
+cd /usr/src/linux-headers-3.5.0-2-linaro-omap/
+make scripts
+cd ~/build/linux-omap-3.5/
+~/get_config
+make ARCH=arm CROSS_COMPILE="" omap2plus_defconfig
+uname -4
+uname -r
+make ARCH=arm CROSS_COMPILE="" modules
+cd drivers/input/mis
+cd drivers/input/misc/
+ls
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build -M=`pwd` modules
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+cd /root/build/linux-omap-3.5/drivers/gpio-event/app
+ls
+make
+cat Makefile 
+cd
+cd build/
+ls
+ls -l /lib/modules/3.5.0-2-linaro-omap/build
+ls -l /usr/src/linux-headers-3.5.0-2-linaro-omap/source
+cd /usr/src/linux-headers-3.5.0-2-linaro-omap/
+make scripts
+cd ~/build/linux-omap-3.5/
+~/get_config 
+echo $COMMON_UBUNTU
+echo ${COMMON_UBUNTU}
+curl "$COMMON_UBUNTU"
+~/get_config 
+make ARCH=arm CROSS_COMPILE="" omap2plus_defconfig
+uname -r
+head Makefile 
+make ARCH=arm CROSS_COMPILE="" modules
+cd drivers/usb/gadget/
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+make CONFIG_DEBUG_SECTION_MISMATCH=y
+cd ../../input/misc/
+ls
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+make clean
+rm *.ko
+ls
+rm *.mod.*
+rm *.0
+rm *.o
+ls
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+cd ../../usb/gadget/
+ls
+ls -al
+cd ..
+ls -al
+cd ..
+ls -al
+cd ..
+ls -al
+make xconfig
+cd drivers/input/misc/
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd`
+echo ${CONFIG_INPUT_GPIO_ROTARY_ENCODER}
+echo ${CONFIG_USB_ZERO}
+source .config
+source ../../../.config
+echo ${CONFIG_USB_ZERO}
+echo ${CONFIG_INPUT_GPIO_ROTARY_ENCODER}
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd`
+make -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd`
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+cd source/libbeagle/main/src/
+ls
+make clean
+make
+make clean
+make
+make 
+make
+make clean
+make
+make clean
+make
+cd bin
+./emperor 
+tree
+cd ..
+ls
+cd test_code/
+ls
+cd flycapture/
+ls
+cd bin
+lla
+./CustomImageEx 
+cd ~/bin
+ls
+./emperor 
+cd ~/test_code/flycapture/bin
+./CustomImageEx 
+cd ../src/
+cd CustomImageEx/
+make
+cd ../../bin
+./CustomImageEx 
+cd ~/bin
+./emperor 
+cd ../test_code/flycapture/bin
+./CustomImageEx 
+cd ../src/CustomImageEx/
+make
+cd ../../bin
+./CustomImageEx 
+cd ~/bin
+./emperor 
+cd ~/rotary-encoder/bgwz/
+./test
+git clone git@github.com:bwgz/BeagleBone.git
+ls
+cd BeagleBone/
+ls
+cd libbeagle/
+ls
+cd ma
+cd main/
+ls
+cd src/
+ls
+cd ..
+ls
+cd ..
+cd examples/
+ls
+cd rotary/
+ls
+make
+cd ../../main/src/
+make
+cd ../../examples/rotary/
+make
+ls
+rm rotary.o
+make
+ls
+./rotary 
+./rotary 173 175
+make
+./rotary 173 175
+make
+./rotary 173 175
+cd ../../..
+ls
+lla
+cd ..
+lla
+cd BeagleBone/
+rm -rf .git/*
+lla
+rmdir .git
+lla
+cd libbeagle/
+ls
+lla
+cd examples/rotary/
+make
+./rotary 
+./rotary 173 175
+make
+./rotary 173 175
+cd ..
+grep -ri poll *
+grep -ri read *
+cd examples/rotary/
+make
+./my_rotary 
+make
+./my_rotary 
+make
+./rotary 173 175
+cat /dev/gpio-event
+cd ../..
+ls
+cd ..
+ls
+rsync -avrz ./libbeagle/ ~/source/libbeagle
+cd ~/source/libbeagle/
+ls
+cp ~/rotary-encoder/bgwz/test.c .
+lla
+grep -ri gpio *
+cd main/src
+ls
+mv stepper.cpp unmodified_stepper.cpp
+mv stepper.h unmodified_stepper.h
+ls
+make
+cd ../../examples/rotary/
+ls
+make clean
+make
+./rotary 173 175
+cd ../../main/src/
+make clean
+make
+cd ../../examples/rotary/
+make clean
+make
+./rotary 
+make clean
+cd ../../main/src/
+make clean
+make
+make clean
+make
+ls *step*
+mv unmodified_stepper.cpp stepper.cpp
+mv unmodified_stepper.h stepper.h
+make clean
+make
+cd ../../examples/rotary/
+make
+./rotary 
+make clean
+make
+./rotary 
+make clean
+make
+./rotary 
+make
+make clean
+make
+./rotary 
+make clean
+make
+./rotary 
+make clean
+make
+./rotary 
+make clean
+make
+./rotary 
+make clean
+make
+./rotary 
+cat /sys/class/gpio/gpio173/value
+tail /sys/class/gpio/gpio173/value 
+tail -f /sys/class/gpio/gpio173/value 
+./rotary 
+cat /sys/class/gpio/gpio173/direction
+make clean
+make
+make clean
+make
+make clean
+make
+make cealn
+make clean
+make
+make clean
+make
+make clean
+make
+./rotary 
+make clean
+make
+./rotary 
+make clean
+make
+./rotary 
+make clean
+make
+./rotary 
+make 
+./rotary 
+make
+./rotary 
+make clean
+make
+./rotary 
+make clean
+make
+./rotary 
+make clean
+make
+./rotary 
+make
+make clean
+make
+make clean
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+make
+./rotary 
+top
+htop
+top
+htop
+emacs today.text &
+ps -ef | grep emacs
+kill -9 1072
+emacs today.text
+cd source/emperor/
+make
+grep -ri "camera logging" *
+grep -ri camera *
+grep -ri emperor_log_data *
+grep -ri log_data *
+cd ..
+grep -ri "Panoramic camera logging started" *
+grep -ri seykhl' *
+grep -ri seykhl *
+cd camera/
+ls
+cat toollib-camera.h
+ps -ef | grep emp
+cd ..
+grep -ri PI *
+grep -ri k_PI *
+ls /sys/class/gpio
+echo 172 > /sys/class/gpio/export
+ls /sys/class/gpio
+echo in > /sys/class/gpio/gpio172/direction
+echo both > /sys/class/gpio/gpio172/edge
+echo 173 > /sys/class/gpio/export
+echo 175 > /sys/class/gpio/export
+echo in > /sys/class/gpio/gpio173/direction
+echo in > /sys/class/gpio/gpio175/direction
+echo both > /sys/class/gpio/gpio173/edge
+echo both > /sys/class/gpio/gpio175/edge
+cat /sys/class/gpio/gpio173/value
+tail -f /sys/class/gpio/gpio173/value
+tailf /sys/class/gpio/gpio173/value
+cd /
+locate overo.h
+cat /proc/gpio-event
+ls /proc/gpio-event/
+cat /dev/gpio-event
+cd ~/build/linux-omap-3.5/drivers/gpio-event/
+ls
+cd app
+ls
+./gpio-event 173:r:0 175:b:0
+ls /sys/class/gpio
+lla /sys/class/gpio
+rm /sys/class/gpio/gpio173
+./gpio-event -173:r:0 -175:b:0
+cat /proc/gpio-event/pins
+echo 173 > /sys/class/gpio/unexport
+lla /sys/class/gpio
+echo 172 > /sys/class/gpio/unexport
+echo 175 > /sys/class/gpio/unexport
+./gpio-event 173:r:0 175:b:0
+cat /proc/gpio-event/pins
+./gpio-event -173 -175
+cat /proc/gpio-event/pins
+./gpio-event -173:r:0 -175:b:0
+cat /proc/gpio-event/pins
+./gpio-event --173:r:0 -175:b:0
+./gpio-event -m -173:r:0 -175:b:0
+./gpio-event -173
+cat /proc/gpio-event/pins
+./gpio-event 300
+./gpio-event 300:b:0
+./gpio-event -173:b:0
+./gpio-event 300:b
+ls
+make
+/etc/init.d/gpio-monitor.sh stop
+/etc/init.d/gpio-monitor.sh start
+cat /proc/gpio-event/pins 
+cd /sys/class/gpio
+ls
+echo 173 > ./export 
+ls
+cat ./gpio173/value 
+echo in > ./gpio173/direction 
+cat ./gpio173/value 
+echo 173 ./unexport 
+echo 173 > ./unexport 
+ls
+echo 173 > ./export 
+echo blah > ./gpio173/direction 
+echo 173 > ./unexport 
+ls
+echo 173 > ./unexport 
+echo 175 > ./unexport 
+ls
+echo 175 > ./unexport 
+echo 173 > ./unexport 
+cd /root/build/linux-omap-3.5/drivers/
+ls
+ls misc/
+cat misc/Makefile 
+mkdir misc2
+ls
+cd misc2
+rysnc -avrz seykhl:~/Downloads/omap-glass* .
+rsync -avrz seykhl:~/Downloads/omap-glass* .
+ls
+tar -zxvf omap-glass-omap-xrr02-drivers-input-misc.tar.gz 
+ls
+make
+make rotary_encoder
+make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
+cd ../gpio-event/
+ls
+cat Makefile.txt 
+cd module/
+ls
+cat Makefile 
+cd ..
+mkdir rotary-encoder-module
+cd module/
+cp Makefile ../rotary-encoder-module/
+cp ../../misc2/rotary_encoder.c .
+ls
+mv rotary_encoder.c ../rotary-encoder-module/
+cd ../rotary-encoder-module/
+locate rotary-encoder.h
+cp /usr/src/linux-headers-3.5.0-2-linaro-omap/include/linux/rotary_encoder.h
+cp /usr/src/linux-headers-3.5.0-2-linaro-omap/include/linux/rotary_encoder.h .
+ls
+make ARCH=arm CROSS_COMPILE= -C /lib… …
+make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
+cd ../module/
+ls
+make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
+ls
+lla
+locate bounds.c
+cd
+ls g*
+cat get_config 
+cd /media/
+ls
+cd boot/
+ls
+lla
+cd ..
+lla
+cd ..
+ls
+cd rootfs/
+ls
+cd ..
+cd dev/
+ls
+cd input/
+ls
+cd ..
+ls
+cat modules.order 
+lla
+ls
+cd omap3-pwm/
+ls
+make
+cat overo-source-me.txt 
+echo ${LD_LIBRARY_PATH}
+echo ${OETMP}
+echo ${OVEROTOP}
+cd /root/build/linux-omap-3.5/drivers/omap3-pwm/
+ls
+mkdir temp
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=./temp/ modules
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
+cd ../gpio-event/module/
+ls
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
+ls
+cd build/linux-omap-3.5/
+make xconfig
+make config
+head Makefile 
+make ARCH=arm CROSS_COMPILE="" modules
+cd drivers/
+ls
+cd input/
+cd misc/
+ls
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+make config
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd`
+make ARCH=arm CROSS_COMPILE="" modules
+lla
+lla .*
+cd ../../../
+ls .c*
+lla .c*
+cp .config .config.backup
+apt-get install ncurses
+make xconfig
+make ARCH=arm CROSS_COMPILE="" modules
+locate rotary_encoder.ko
+cd drivers/misc
+ls
+cd ..
+cd input/misc/
+ls
+modprobe
+modprobe -l
+modprobe -l | grep rotary
+lsmod
+insmod rotary_encoder.ko
+depmod
+modprobe rotary_encoder.ko
+modprobe ./rotary_encoder.ko
+ls
+insmod rotary_encoder.ko
+depmod rotary_encoder.ko
+depmod ~/build/linux-omap-3.5/drivers/input/misc/rotary_encoder.ko
+insmod rotary_encoder.ko
+insmod ~/build/linux-omap-3.5/drivers/input/misc/rotary_encoder.ko
+modprobe ~/build/linux-omap-3.5/drivers/input/misc/rotary_encoder.ko
+ls /lib/modules/`uname -r`
+ls -l /lib/modules/3.5.0-2-linaro-omap/build
+apt-get install linux-source fakeroot devscripts curl
+cd ../../..
+make xconfig
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+source .config
+apt-get install kernel-headers
+apt-get install kernel-dev
+apt-get install kernel-devel
+apt-get install linux-kernel-devel
+apt-get install linux-source
+apt-get install linux-headers
+apt-get install linux-headers-$(uname -r)
+apt-get install build-sessential
+apt-get install build-essential
+apt-get install fakeroot build-essential crash kexec-tools makedumpfile kernel-wedge
+apt-get install fakeroot build-essential kexec-tools kernel-wedge
+apt-get build-dep linux
+apt-get install git-core libncurses5 libncurses5-dev libelf-dev asciidoc binutils-dev
+ls
+lla
+cp .config .config.backup23may
+make mrproper
+cp .config.backup23may .config
+make prepare
+make scripts
+ls
+cd cd
+cd arch
+ls
+cd arm
+lla
+cd mach-omap2
+ls
+lla
+cd ..

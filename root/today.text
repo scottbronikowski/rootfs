@@ -254,7 +254,7 @@ Old notes
 --Edited kernel config to have rotary_encoder built as a kernel module by running 'make xconfig' from ~/build/linux-omap-3.5 (dot in checkbox indicates build as module, vice check mark that indicates build into kernel), then compiled (all) kernel modules by running 'make ARCH=arm CROSS_COMPILE=<EMPTY QUOTES> modules' from same location. ** Module would not load via either modprobe or insmod--need to research error messages more--possibly compiled with wrong command or need Module.symvers somewhere while compiling.
 
 23 May 14
---In effort to get kernel modules to compile properly on Gumstix (via how-to located at http://gumstix.8.x6.nabble.com/Linaro-linux-source-has-no-makefiles-help-td4967421.html, Larry Martin 21Jun13), tried the following:
+--In an effort to get kernel modules to compile properly on Gumstix (via how-to located at http://gumstix.8.x6.nabble.com/Linaro-linux-source-has-no-makefiles-help-td4967421.html, Larry Martin 21Jun13), tried the following:
      #apt-get install devscripts
      #apt-get install fakeroot build-essential kexec-tools kernel-wedge
      #apt-get build-dep linux
@@ -266,3 +266,6 @@ Old notes
      #make prepare
      #make scripts
      #make && make modules_install (left running over the weekend)
+
+27 May 14
+--Kernel modules finished compilation without error, but when I try to load rotary_encoder.ko using 'modprobe rotary_encoder' I get an error stating 'Invalid module format'.  Not sure what the error is, because when I call 'modinfo rotary_encoder' the first entry on the vermagic line matches the output of `uname -r`, so the kernel versions should be the same.  The dmesg entry for that command is 'rotary_encoder: disagrees about version of symbol module_layout'.
