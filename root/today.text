@@ -16,10 +16,11 @@ IROS: 18Feb15-abstract, 8Jul15-final paper (conference 28Sep-2Oct15, Hamburg, Ge
 
 Buffers
 ----------------------------------------
-.   today.text           16386  Text		  ~/today.text
-  * *shell*<2>            4589  Shell:run	  /
+    today.text           23425  Text		  ~/today.text
+    gpio-monitor.sh       1137  Shell-script[bas  /etc/init.d/gpio-monitor.sh
+    servo-control.sh       630  Shell-script[bas  /etc/init.d/servo-control.sh
+    g-multi.sh             531  Shell-script[bas  /etc/init.d/g-multi.sh
     motor_control.h       4707  C++/l		  ~/source/motor_control/motor_control.h
-  * *shell*              17017  Shell:run	  ~/source/emperor/
     emperor.cpp          10020  C++/l		  ~/source/emperor/emperor.cpp
     emperor.h             1634  C++/l		  ~/source/emperor/emperor.h
     motor_control_functi: 7126  C++/l		  ~/source/motor_control/motor_control_functions.cpp
@@ -249,3 +250,27 @@ Old notes
 ----
 --Tested libbeagle code modified with a SIGALRM timer to fire the code that checks the state of the GPIO lines.  Based on 30:1 gearing on the motors and 400 pulses per revolution on the encoders, need to be able to capture 12,000 pulses per second if the wheel is turning at 1 revolution per second (motors are capable of 200 rpm or 3.33 revolutions per second) times 2 (because of two encoders).  Attempting to run the SIGALRM timer set at 40 microseconds (25,000 iterations per second) resulted in a runing time of ~5.6 seconds, and it should have taken 1 second.  I think that I can conclude from this that this code is unusable for my purposes--I think that the concept of polling the devices for their data, rather than being driven by hardware interrupts, is the wrong way to go.
 --I believe that I need to develop a kernel module that responds to interrupts caused by the state changes on the encoder data lines.  In my research I have found rotary_encoder.h (on the gumstix at /usr/src/linux-headers.../include/linux) and rotary_encoder.c (not found on the gumstix, but a couple different versions on various code sites).  These files appear to be a part of the Linux kernel.  I think my best bet is to figure out how to build this kernel module and make it work with my hardware.
+
+22 May 14
+--Edited kernel config to have rotary_encoder built as a kernel module by running 'make xconfig' from ~/build/linux-omap-3.5 (dot in checkbox indicates build as module, vice check mark that indicates build into kernel), then compiled (all) kernel modules by running 'make ARCH=arm CROSS_COMPILE=<EMPTY QUOTES> modules' from same location. ** Module would not load via either modprobe or insmod--need to research error messages more--possibly compiled with wrong command or need Module.symvers somewhere while compiling.
+
+23 May 14
+--In an effort to get kernel modules to compile properly on Gumstix (via how-to located at http://gumstix.8.x6.nabble.com/Linaro-linux-source-has-no-makefiles-help-td4967421.html, Larry Martin 21Jun13), tried the following:
+     #apt-get install devscripts
+     #apt-get install fakeroot build-essential kexec-tools kernel-wedge
+     #apt-get build-dep linux
+     #apt-get install git-core libncurses5 libncurses5-dev libelf-dev asciidoc binutils-dev
+     --in ~/build/linux-omap-3.5:
+     backup .config file
+     #make mrproper
+     #cp /path/to/config-backup .config
+     #make prepare
+     #make scripts
+     #make && make modules_install (left running over the weekend)
+
+27 May 14
+--Kernel modules finished compilation without error, but when I try to load rotary_encoder.ko using 'modprobe rotary_encoder' I get an error stating 'Invalid module format'.  Not sure what the error is, because when I call 'modinfo rotary_encoder' the first entry on the vermagic line matches the output of `uname -r`, so the kernel versions should be the same.  The dmesg entry for that command is 'rotary_encoder: disagrees about version of symbol module_layout'.
+--Had to replace *.ko, *.mod.c, *.mod.o, *.o, modules.order in ~/build/linux-omap-3.5/drivers/omap3-pwm and ~/build/linux-omap-3.5/drivers/gpio-event/module from old git commits (from January).  These were the kernel modules for the PWM (servos) and gpio-event monitor (bump switches), respectively.  They were apparently deleted during the make process on Friday.
+----
+*******JUST REVERTED LAST 3 COMMITS****************
+--Reverted 27 May, 23 May, 22 May commits because I rebooted the Gumstix and discovered that the kernel module compilation work done on those days actually deleted/destroyed all of my previously functional kernel modules, probably somewhere in the make process.  Gumstix was unable to boot with correct drivers for USB, wifi, etc.  Reverting back to 21 May commit fixed the problem.

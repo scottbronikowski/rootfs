@@ -2,6 +2,9 @@
 
 
 
+
+
+
 USE A SOCKET INSTEAD OF FILE DESCRIPTOR TO COMMUNICATE BETWEEN GPIO AND MONITOR!!!!  READ WILL BLOCK!!!
 
 Paper deadlines:
@@ -13,12 +16,20 @@ IROS: 18Feb15-abstract, 8Jul15-final paper (conference 28Sep-2Oct15, Hamburg, Ge
 
 Buffers
 ----------------------------------------
-    today.text           11147  Text		  ~/today.text
-    run_cameras.cpp       1640  C++/l		  ~/source/camera/run_cameras.cpp
-    toollib-camera.cpp   18725  C++/l		  ~/source/camera/toollib-camera.cpp
-    ssh-tunnel.sh          830  Shell-script[bas  /etc/init.d/ssh-tunnel.sh
+.   today.text           16386  Text		  ~/today.text
+  * *shell*<2>            4589  Shell:run	  /
+    motor_control.h       4707  C++/l		  ~/source/motor_control/motor_control.h
+  * *shell*              17017  Shell:run	  ~/source/emperor/
+    emperor.cpp          10020  C++/l		  ~/source/emperor/emperor.cpp
+    emperor.h             1634  C++/l		  ~/source/emperor/emperor.h
+    motor_control_functi: 7126  C++/l		  ~/source/motor_control/motor_control_functions.cpp
+    Makefile              1514  GNUmakefile	  ~/source/emperor/Makefile
+    monitor.h             1161  C++/l		  ~/source/monitor/monitor.h
+    monitor.cpp           3064  C++/l		  ~/source/monitor/monitor.cpp
     toollib-camera.h      3356  C++/l		  ~/source/camera/toollib-camera.h
-    Makefile               894  GNUmakefile	  ~/source/camera/Makefile
+    toollib-camera.cpp   18914  C++/l		  ~/source/camera/toollib-camera.cpp
+    run_cameras.cpp       1640  C++/l		  ~/source/camera/run_cameras.cpp
+
 
 Old notes
 --------------------------
@@ -152,12 +163,13 @@ Old notes
 --Implemented signal handler in run_cameras.cpp.  Can now exit cleanly from by sending 'pkill run_cameras' either locally or over ssh.
 
 17 Apr 14
---Switched over to backup gumstix in an effort to troubleshoot USB EMI failure.  All external systems functional after switchover.  Need to tweak network config files (/etc/network/interfaces, /etc/udev/rules.d/70-persistent-network.rules) to ensure network boots properly since new internal wifi has new MAC.  Need to finish securing new mount and tidying up wires.
---Testing camera transmission to see if/when USB fails
-	  Internal wifi on qobi-office:  (intermittent whole-system pauses/hangs...but images resume after ~5 sec or less)
-	  Internal wifi on PAL:
-	  USB wifi on qobi-office:
-	  USB wifi on PAL:
+--Switched over to backup gumstix in an effort to troubleshoot USB EMI failure.  All external systems functional after switchover.  Also changed USB cable running between gumstix and hub from one that I had shorted to an uncut cable.
+--Testing camera transmission to see if/when USB fails:
+	  Internal wifi on qobi-office:  ran for ~48 minutes until battery died (intermittent whole-system pauses/hangs...but images resume after ~5 sec or less)
+	  Internal wifi on PAL: ran for 29 minutes until I stopped the test to do a driving test (did not notice the hangs above)
+	  USB wifi on qobi-office: (skipped these and went to drive testing)
+	  USB wifi on PAL: (skipped these and went to drive testing)
+  ***Did not see USB EMI failure after over an hour and a half of operation (split between 2 tests due to a reboot for a battery change)
 -- 40-pin header configuration:
    5 = right encoder yellow	
    6 = right encoder green
@@ -174,4 +186,63 @@ Old notes
    28 = PWM10 - pan servo
    29 = ultrasonic red (with 27)
    30 = PWM9 - tilt servo
-   
+--apt-get install hwinfo
+--Drive testing results:
+	Internal wifi on PAL: Performance OK, but still have occasions when connection seems to hang--which seem to coincide with AP handoffs (as observed by running iwconfig)
+	USB wifi on PAL: Very similar performance.  Long hangs that sometimes seem to resolve themselves sometimes.  However, had to terminate the test when a hang didn't recover after ~2 minutes of waiting--and then after I had walked out and recovered the robot, system was still moderately non-responsive to console commands.  Interestingly, when I went to terminate the Scheme GUI I noticed that it flashed an image of me carrying the robot back from several minutes prior--implying that somewhere there is a buffer of images that haven't been sent/received yet.  That seems to make sense, since I am using TCP sockets (SOCK_STREAM).  Perhaps I need to switch to UDP sockets to allow images to be dropped (and possibly RTP on top of UDP).
+-- Removed g-multi.sh from startup to kill driver for USB OTG (update-rc.d -f /etc/init.d/g-multi.sh remove) -- previously had 01 priority.
+-- Made changes to /etc/modprobe.d/blacklist.conf and /etc/modules recommended in http://www.ajaykumarsingh.com/linux/tp-link-tl-wn822n-300mbps-high-gain-wireless-n-usb-adapter-not-working-on-ubuntu-12-04.html in order to see if it helps with wifi handoffs.
+
+18 Apr 14
+--apt-get install wavemon (monitors wifi connection statistics similar to iptraf)
+--Making some tweaks to /etc/wpa_supplicant.conf and /etc/network/interfaces to see if it improves connectivity to PAL--tried 'wpa-roam' vice 'wpa-conf' but that didn't seem to work--did comment out all networks other than PAL from wpa_supplicant.conf
+--Added 'sleep 5' to /etc/init.d/keepalive-ping.sh prior to the ping call to allow time for new /etc/network/interfaces and /etc/wpa_supplicant.conf to bring network up.  Also removed 'sleep 15' from /etc/init.d/time-update.sh
+
+23 Apr 14
+--Started working on master program (~/source/emperor) that will listen for commands from seykhl and then start threads or call functions as needed.
+
+24 Apr 14
+--apt-get install lsof
+--Have control message-passing infrastructure working between rover and seykhl.  On vader-rover, emperor 'calls home' to open a socket to seykhl and then listens for commands on that socket.  Currently have start_cameras and stop_cameras working (had to make some tweaks to toollib-camera.cpp to explicitly close sockets to get cameras to start again after being stopped--previously that had been getting taken care of when I terminated run_cameras with a SIGINT).  Next working on getting pan and tilt to work from right thumb stick.
+
+25 Apr 14
+--apt-get install gdb
+--Got pan and tilt servos working from right thumbstick of gamepad controller.  
+
+28 Apr 14
+--Have motor commands receiving and parsing properly on rover side.  Have implemented duplicate command checking on seykhl side, so may need to remove analogous code in emperor (observing slow execution of commands once received).
+--Started implementing the sending of commands from emperor to motors--not functional yet.
+
+29 Apr 14
+--Tracked down slowness of pan/tilt execution to tcdrain() used to send integer speeds to motors. tcdrain() is necessary to ensure that integers get sent to motor controllers--removing it results in missed motor commands.  Reduced tcdrain wait time to minimum allowable (100ms), and also implemented code to skip sending motor command when motor command is a repeat.  That seemed to resolve the problem.
+--Finished implementation of command parsing and sending to motors within emperor.cpp.  Also removed debugging printfs.
+----
+--First modifications to motor_control.h in attempt to correct leftward pull while driving.
+----
+--Final corrections to fix leftward pull.  Corrected by slowing right motors ~30% (see motor_control.h for details).
+
+30 Apr 14
+--Started modifications to emperor to add data logging.  Opened socket connection in first part of main().  Need to finish timestamp and send operation in emperor_log_data().
+
+1 May 14
+--First draft of data logging functional.  Need to filter pan/tilt commands in a way similar to how I filter motor commands to prevent excessive logging (currently in the log, every motor command is preceded by a pan/tilt command, even when the pan/tilt is unchanged).
+--Have logging working for all pan/tilt and motor commands without duplicates.
+--Integrated all bump switch monitor functions into emperor in a separate thread (emperor_monitor_bump_switches()).  Removed old monitor executable from startup--no longer needed (had been startup priority 98).
+
+5 May 14
+--Implemented sending of camera start and stop messages (toollib-camera.cpp, Network_StartCameras() and PGR_StopAndCleanup()).
+--Completed and debugged implementation of sending individual timestamps for images.  Needed to use a send of "0" before sending camera stop message in order to get OpenCV_ReceiveFrame() on workstation to exit and not interpret 1st 4 bytes of camera stop message as an int representing compressed image size.
+
+6 May 14
+--Troubleshot slow framerate issue in emperor using new modifications to CustomImageEx.cpp.  Found problem was in the emperor_monitor_bump_switches() thread -- it was using ~95% processor without cameras running.  I am using select() with a blocking read() in order to allow the loop to exit when I change the global boolean gpio_thread_should_die.  However, the select() call takes the timeval timeout parameter as a pointer, and select() updates that value, which caused it to get set to 0 and cause subsequent select() calls to return immediately.  I changed the loop to set my timeval timeout variable inside each loop, ensuring that the timeout is set to 100 ms on every call to select().  CPU usage is now <1% without cameras running, and framerate is up to ~11-15 fps per camera (counted using timestamps in log files).
+----
+--Video saving working on seykhl.
+
+19 May 14
+--First attempts at using rotary encoders on wheels.  All example/test code downloaded so far has used too much (~50%+) CPU to be useful.  Looking into developing kernel-space interrupt handler to count ticks.
+
+20 May 14
+--Started working on modifying the libbeagle (BeagleBone) code gathered from bwgz.org.  My first thought is that the slowness comes from the fact that every time the GPIO class reads a GPIO value, it opens, reads, and closes the file.  Trying to modify the code so that it opens a file descriptor in the constructor and just reads from that fd when getting the value.  Don't have it working just yet--still troubleshooting.
+
+21 May 14
+--Have libbeagle code reading from a file descriptor opened in the GPIO constructor, but not sure what good it's doing me.  CPU usage on the test program is down to ~39% (from ~50%), but still too high to be useful while cameras are running.  Still think it might be better to have a kernel module running that counts ticks and keeps direction, and then reports that info out to user-space on demand.

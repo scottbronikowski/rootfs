@@ -13,23 +13,12 @@
 #include <stdio.h>
 #include <rotary.h>
 
-#define DETENT	 0
-#define CW_1	 1
-#define CW_2	 2
-#define CW_3	 3
-#define CCW_1	-1
-#define CCW_2	-2
-#define CCW_3	-3
-
 Rotary::Rotary() : _position(0) {
 }
 
 Rotary::Rotary(int a, int b) : _position(0) {
   A = new GPIO(a, "in");
   B = new GPIO(b, "in");
-  loop_count = 0;
-  state = DETENT;
-  last = -1;
 
   // A = new GPIO(a);
   // B = new GPIO(b);
@@ -56,7 +45,13 @@ unsigned Rotary::phase() {
 	return (a << 1) | b;
 }
 
-
+#define DETENT	 0
+#define CW_1	 1
+#define CW_2	 2
+#define CW_3	 3
+#define CCW_1	-1
+#define CCW_2	-2
+#define CCW_3	-3
 
 void *Rotary::monitor(void *arg) {
 	Rotary *rotary = static_cast<Rotary *>(arg);
@@ -132,90 +127,11 @@ void *Rotary::monitor(void *arg) {
 			}
 
 			last = value;
-			//usleep(10);
 		}
-		//usleep(3);
-		rotary->loop_count++;
 	}
 
 	pthread_exit(NULL);
 }
-
-void Rotary::handler(int a) {
-  int value = phase();
-  
-  if (value != last) {
-    //printf("value: %x\n", value);
-    
-    switch (state) {
-    case DETENT:
-      if (value == 2) {
-	state = CW_1;
-      }
-      else if (value == 1) {
-	state = CCW_1;
-      }
-      break;
-    case CW_1:
-      if (value == 0) {
-	state = DETENT;
-      }
-      else if (value == 3) {
-	state = CW_2;
-      }
-      break;
-    case CW_2:
-      if (value == 2) {
-	state = CW_1;
-      }
-      else if (value == 1) {
-	state = CW_3;
-      }
-      break;
-    case CW_3:
-      if (value == 1) {
-	state = CW_2;
-      }
-      else if (value == 0) {
-	state = DETENT;
-	_position++;
-	//printf("CW! position: %d\n", rotary->_position);
-      }
-      break;
-    case CCW_1:
-      if (value == 0) {
-	state = DETENT;
-      }
-      else if (value == 3) {
-	state = CCW_2;
-      }
-      break;
-    case CCW_2:
-      if (value == 1) {
-	state = CCW_1;
-      }
-      else if (value == 2) {
-	state = CCW_3;
-      }
-      break;
-    case CCW_3:
-      if (value == 3) {
-	state = CCW_2;
-      }
-      else if (value == 0) {
-	state = DETENT;
-	_position--;
-	//printf("CCW! position: %d\n", rotary->_position);
-      }
-    }
-    
-    last = value;
-    //usleep(10);
-  }
-  //usleep(3);
-  loop_count++;
-}
-
 
 void Rotary::run() {
 	run_state = true;
