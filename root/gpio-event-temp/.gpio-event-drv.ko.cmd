@@ -1,0 +1,1 @@
+cmd_/root/gpio-event-temp/gpio-event-drv.ko := ld -EL -r  -T /usr/src/linux-headers-3.5.0-2-linaro-omap/scripts/module-common.lds --build-id  -o /root/gpio-event-temp/gpio-event-drv.ko /root/gpio-event-temp/gpio-event-drv.o /root/gpio-event-temp/gpio-event-drv.mod.o

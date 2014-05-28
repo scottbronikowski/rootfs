@@ -16,7 +16,13 @@ IROS: 18Feb15-abstract, 8Jul15-final paper (conference 28Sep-2Oct15, Hamburg, Ge
 
 Buffers
 ----------------------------------------
-    today.text           23425  Text		  ~/today.text
+.   install.sh            3106  Shell-script[bas  ~/realtek/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911/install.sh
+    output_of_install.t: 21807  Text		  ~/realtek/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911/output_of_install.text
+    Makefile|rtl8188C_8: 17292  GNUmakefile	  ~/realtek/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911/driver/rtl8188C_8192C_usb_linux_v4.0.2_9000.20130911/Makefile
+    today.text           24670  Text		  ~/today.text
+    Makefile|omap3-pwm|    364  GNUmakefile	  /omap3-pwm/Makefile
+    overo-source-me.txt    543  Text		  /omap3-pwm/overo-source-me.txt
+    servo-control.sh       630  Shell-script[bas  /etc/init.d/servo-control.sh
     gpio-monitor.sh       1137  Shell-script[bas  /etc/init.d/gpio-monitor.sh
     servo-control.sh       630  Shell-script[bas  /etc/init.d/servo-control.sh
     g-multi.sh             531  Shell-script[bas  /etc/init.d/g-multi.sh
@@ -277,3 +283,9 @@ Old notes
 ---
 --Was able to recompile pwm.ko in /omap3-pwm using command 'make ARCH=arm CROSS_COMPILE=<EMPTYQUOTES> -C /root/build/linux-omap-3.5 M=`pwd` modules', but it would not load with either insmod or modprobe.  Looking at modinfo for both versions of pwm.ko, I see the difference in the vermagic string is that the one that works has ARMv7 and the one that doesn't has ARMv6 as the second-to-last entry.  Also, the working pwm.ko is significantly smaller (17K vs. 134K).
 --Look more closely at realtek folder--the install.sh there was able to compile the wifi kernel module (8192cu.ko) that has the correct vermagic string.  Need to see what it does that the other modules need to do.
+
+28 May 14
+--Was able to recompile pwm.ko in /omap3-pwm and get 17K file using command 'make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules' (note blank (NO QUOTES) after CROSS_COMPILE=).  Also works with ARCH=armv7l (symlinked to arm).  Running modinfo on the new file shows identical output to the (working) regular pwm.ko module located in /root/build/linux-omap-3.5/drivers/omap3-pwm/, so it seems reasonable to assume that it would work the same way.  Also able to recompile gpio-event-drv.ko (from /root/build/linux-omap-3.5/drivers/gpio-event/module) the same way in a temp directory, with file size and modinfo matching original.
+--After editing Makefile in /root/build/linux-omap-3.5/drivers/input/misc to add 'obj-m := rotary_encoder.o' on its own line, was able to compile rotary encoder module using command 'make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules'.  After linking it to modules directory with 'ln -s `pwd`/rotary_encoder.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/input/rotary_encoder.ko' and running 'depmod -a', was able to check modinfo and see a vermagic line that matched the working modules.  Was able to load module with 'modprobe rotary_encoder', verify it was loaded with lsmod, and remove it with 'modprobe -r rotary_encoder'.  It appears that I have figured out the correct commands to make a loadable module.  Now I need to figure out how to modify and/or configure this module to monitor the gpio pins that I'm using for the encoders.
+--Taking rover down to machine shop for mounting of microphone and speakers.  Will see if it is possible to mount speakers on the underside of the rover.
+---
