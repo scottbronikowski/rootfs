@@ -288,4 +288,19 @@ Old notes
 --Was able to recompile pwm.ko in /omap3-pwm and get 17K file using command 'make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules' (note blank (NO QUOTES) after CROSS_COMPILE=).  Also works with ARCH=armv7l (symlinked to arm).  Running modinfo on the new file shows identical output to the (working) regular pwm.ko module located in /root/build/linux-omap-3.5/drivers/omap3-pwm/, so it seems reasonable to assume that it would work the same way.  Also able to recompile gpio-event-drv.ko (from /root/build/linux-omap-3.5/drivers/gpio-event/module) the same way in a temp directory, with file size and modinfo matching original.
 --After editing Makefile in /root/build/linux-omap-3.5/drivers/input/misc to add 'obj-m := rotary_encoder.o' on its own line, was able to compile rotary encoder module using command 'make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules'.  After linking it to modules directory with 'ln -s `pwd`/rotary_encoder.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/input/rotary_encoder.ko' and running 'depmod -a', was able to check modinfo and see a vermagic line that matched the working modules.  Was able to load module with 'modprobe rotary_encoder', verify it was loaded with lsmod, and remove it with 'modprobe -r rotary_encoder'.  It appears that I have figured out the correct commands to make a loadable module.  Now I need to figure out how to modify and/or configure this module to monitor the gpio pins that I'm using for the encoders.
 --Taking rover down to machine shop for mounting of microphone and speakers.  Will see if it is possible to mount speakers on the underside of the rover.
----
+
+29 May 14
+--Mounting of microphone and speakers complete.  Mic is mounted on left rear corner of rover.  Speakers (the smaller, separate pair measuring approx. 3in x 2in each) are mounted underneath the rover, between the front and middle wheels, angled out towards the sides of the rover.  Should get a natural echo effect off the ground from this positioning.  Angle of the speakers is somewhat variable due to hinges on the backs of the speakers.
+--Installed Arduino IDE (arduino-1.0.5-linux32.tgz from www.arduino.cc)and Teensyduino (teensyduino.32bit from http://www.pjrc.com/teensy/td_download.html) on rover.  Also tried the following:
+	    #apt-get install arduino-core arduino openjdk-7-jre openjdk-7-jdk
+	    #cd /usr/lib/jvm/java-7-openjdk-armhf/jre/lib/arm
+	    #ln -s jamvm/libjvm.so .
+	    #apt-get purge openjdk-7-* (looks like it automatically installs openjdk-6)
+	    #apt-get install openjdk-6-jdk openjdk-6-*
+Was unable to get this version of arduino to run, always throwing the error 'java.lang.UnsatisfiedLinkError: /root/arduino-1.0.5/lib/librxtxSerial.so: /root/arduino-1.0.5/lib/librxtxSerial.so: cannot open shared object file: No such file or directory (Possible cause: can't load IA 32-bit .so on a ARM-bit platform) thrown while loading gnu.io.RXTXCommDriver'.  Believe this is a dead end because the libraries are not built for ARM.
+However, was able to get the packaged version to run.
+Also able to get the UDOO version for ARM (v1.5.4) downloaded from http://www.udoo.org/install-the-arduino-ide-hfp/ to run as well.
+The teensyduino.32bit was also unable to run, and I found out after some research that it also is not built for ARM.
+Will try to manually copy the files that appear to be installed by the Teensyduino installer to see if I can hack a working Teensy programming environment together on the Gumstix.
+Copied 49-teensy.rules to /etc/udev/rules.d
+	    

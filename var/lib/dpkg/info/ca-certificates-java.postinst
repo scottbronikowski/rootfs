@@ -1,0 +1,112 @@
+#!/bin/bash
+
+set -e
+
+storepass='changeit'
+if [ -f /etc/default/cacerts ]; then
+    . /etc/default/cacerts
+fi
+
+arch=`dpkg --print-architecture`
+
+setup_path()
+{
+    for jvm in java-6-openjdk-$arch java-6-openjdk \
+               java-7-openjdk-$arch java-7-openjdk java-6-sun; do
+	if [ -x /usr/lib/jvm/$jvm/bin/java ]; then
+	    break
+	fi
+    done
+    export JAVA_HOME=/usr/lib/jvm/$jvm
+    PATH=$JAVA_HOME/bin:$PATH
+
+    CLASSPATH=/usr/share/ca-certificates-java
+    export CLASSPATH
+}
+
+first_install()
+{
+    if which dpkg-query --version >/dev/null; then
+	nsspkg=$(dpkg-query -L libnss3 | sed -n 's,\(.*\)/libnss3\.so$,\1,p')
+	nssjdk=$(sed -n '/nssLibraryDirectory/s/.*= *\(.*\)/\1/p' /etc/${jvm%-$arch}/security/nss.cfg)
+	if [ -n "$nsspkg" ] && [ -n "$nssjdk" ] && [ "$nsspkg" != "$nssjdk" ]; then
+	    ln -sf $nsspkg/libnss3.so $nssjdk/libnss3.so
+	fi
+    fi
+
+    # Forcibly remove diginotar cert (LP: #920758)
+    if [ -n "$FIXOLD" ]; then
+        echo -e "-diginotar_root_ca\n-diginotar_root_ca_pem" | \
+        java UpdateCertificates -storepass "$storepass"
+    fi
+
+    find /etc/ssl/certs -name \*.pem | \
+    while read filename; do
+	alias=$(basename $filename .pem | tr A-Z a-z | tr -cs a-z0-9 _)
+	alias=${alias%*_}
+        if [ -n "$FIXOLD" ]; then
+            echo "-${alias}"
+            echo "-${alias}_pem"
+        fi
+        echo "+${filename}"
+    done | \
+    java UpdateCertificates -storepass "$storepass"
+    echo "done."
+}
+
+do_cleanup()
+{
+    [ -z "$temp_jvm_cfg" ] || rm -f $temp_jvm_cfg
+    if [ -n "$nsspkg" ] && [ -n "$nssjdk" ] && [ "$nsspkg" != "$nssjdk" ]
+    then
+	rm -f $nssjdk/libnss3.so
+    fi
+}
+
+case "$1" in
+    configure)
+        if dpkg --compare-versions "$2" lt "20110912ubuntu6"; then
+            FIXOLD="true"
+            if [ -e /etc/ssl/certs/java/cacerts ]; then
+                cp -f /etc/ssl/certs/java/cacerts /etc/ssl/certs/java/cacerts.dpkg-old
+            fi
+        fi
+        if [ -z "$2" -o -n "$FIXOLD" ]; then
+	    setup_path
+
+	    if ! mountpoint -q /proc; then
+		echo >&2 "the keytool command requires a mounted proc fs (/proc)."
+		exit 1
+	    fi
+
+	    if [ ! -f /etc/${jvm%-$arch}/jvm.cfg -a ! -f /etc/${jvm%-$arch}/jvm-$arch.cfg ]; then
+		# the jre is not yet configured, but jvm.cfg is needed to run it
+		temp_jvm_cfg=/etc/${jvm%-$arch}/jvm.cfg
+		mkdir -p /etc/${jvm%-$arch}
+		printf -- "-server KNOWN\n" > $temp_jvm_cfg
+	    fi
+
+	    if first_install; then
+		do_cleanup
+	    else
+		do_cleanup
+		exit 1
+	    fi
+	fi
+	chmod 600 /etc/default/cacerts || true
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+
+
+exit 0
+
+

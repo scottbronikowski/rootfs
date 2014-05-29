@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [[ `id -u` -ne 0 ]]; then
+#    for group in dialout tty; do
+    for group in dialout; do
+	if ! groups $USER | grep -q " : .*\b$group\b"; then
+	    missing_groups="$missing_groups\n$group"
+	fi
+    done
+
+    if [[ -n $missing_groups ]] && ! java -jar /usr/share/arduino/arduinopc.jar; then
+	pkexec /usr/bin/arduino-add-groups
+    fi
+fi
+
+ 
+APPDIR=/usr/share/arduino
+
+cd $APPDIR
+ 
+for LIB in \
+    lib/*.jar \
+    ;
+do
+    CLASSPATH="${CLASSPATH}:${LIB}"
+done
+export CLASSPATH
+
+LD_LIBRARY_PATH="/usr/lib/jni${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export LD_LIBRARY_PATH
+
+
+java -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel processing.app.Base

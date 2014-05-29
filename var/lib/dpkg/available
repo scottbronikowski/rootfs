@@ -1869,6 +1869,26 @@ Description: regular expression library for C++
 Homepage: http://www.boost.org/libs/regex/
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
 
+Package: icedtea-7-jre-jamvm
+Multi-Arch: same
+Priority: extra
+Section: java
+Installed-Size: 1459
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: openjdk-7
+Version: 7~u3-2.1.1~pre1-1ubuntu2
+Depends: openjdk-7-jre-headless (= 7~u3-2.1.1~pre1-1ubuntu2), libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), zlib1g (>= 1:1.1.4)
+Size: 532784
+Description: Alternative JVM for OpenJDK, using JamVM
+ The package provides an alternative runtime using the JamVM.  This is a
+ somewhat faster alternative than the Zero port on architectures like armel,
+ mips, mipsel, powerpc.
+ .
+ The VM is started with the option `-jamvm'. See the README.Debian for details.
+Original-Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
+Homepage: http://openjdk.java.net/
+
 Package: grads
 Priority: optional
 Section: science
@@ -1973,6 +1993,30 @@ Description: X11 Input extension wire protocol
  This package is built from the X.org inputproto proto module.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 
+Package: openjdk-7-jre-headless
+Multi-Arch: same
+Priority: optional
+Section: java
+Installed-Size: 72832
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: openjdk-7
+Version: 7~u3-2.1.1~pre1-1ubuntu2
+Provides: java-runtime-headless, java2-runtime-headless, java5-runtime-headless, java6-runtime-headless, java7-runtime-headless, openjdk-7-jre-zero
+Depends: openjdk-7-jre-lib (>= 7~u3-2.1.1~pre1-1ubuntu2), icedtea-7-jre-jamvm (= 7~u3-2.1.1~pre1-1ubuntu2), ca-certificates-java, tzdata-java, java-common (>= 0.28), libcups2 (>= 1.4.0), liblcms2-2 (>= 2.2+git20110628-2), libjpeg8 (>= 8c), libnss3-1d (>= 3.12.9+ckbi-1.82-0ubuntu4), libpcsclite1, libc6 (>= 2.11), libfontconfig1 (>= 2.8.0), libfreetype6 (>= 2.2.1), libgcc1 (>= 1:4.4.0), libglib2.0-0 (>= 2.26.0), libstdc++6 (>= 4.4.0), zlib1g (>= 1:1.1.4)
+Pre-Depends: multiarch-support
+Recommends: icedtea-7-jre-cacao (= 7~u3-2.1.1~pre1-1ubuntu2)
+Suggests: libnss-mdns, sun-java6-fonts, ttf-dejavu-extra, fonts-ipafont-gothic, fonts-ipafont-mincho, ttf-wqy-microhei | ttf-wqy-zenhei, ttf-indic-fonts-core, ttf-telugu-fonts, ttf-oriya-fonts, ttf-kannada-fonts, ttf-bengali-fonts
+Conflicts: icedtea-netx (<< 1.1.1-2~)
+Size: 25541706
+Description: OpenJDK Java runtime, using Hotspot Zero (headless)
+ Minimal Java runtime - needed for executing non GUI Java programs.
+ Using Hotspot Zero.
+ The packages are built using the IcedTea build support and patches
+ from the IcedTea project.
+Original-Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
+Homepage: http://openjdk.java.net/
+
 Package: python-uniconvertor
 Priority: optional
 Section: python
@@ -2027,6 +2071,34 @@ Description: Manipulate IPv4/IPv6 netblocks in CIDR notation
  handle both IPv4 and IPv6 addresses.
 Original-Maintainer: Bart Martens <bartm@debian.org>
 Homepage: http://search.cpan.org/dist/Net-CIDR/
+
+Package: libjna-java
+Priority: optional
+Section: java
+Installed-Size: 567
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 3.2.7-4
+Depends: libc6 (>= 2.11), libffi6 (>= 3.0.4)
+Suggests: libjna-java-doc
+Size: 411368
+Description: Dynamic access of native libraries from Java without JNI
+ JNA provides Java programs easy access to native shared libraries without
+ writing anything but Java code - no JNI or native code is required. This
+ functionality is comparable to Windows' Platform/Invoke and Python's ctypes.
+ Access is dynamic at runtime without code generation.
+ .
+ JNA's design aims to provide native access in a natural way with a minimum of
+ effort. No boilerplate or generated code is required. While some attention is
+ paid to performance, correctness and ease of use take priority.
+ .
+ The JNA library uses a small native library stub to dynamically invoke native
+ code. The developer uses a Java interface to describe functions and structures
+ in the target native library. This makes it quite easy to take advantage of
+ native platform features without incurring the high overhead of configuring and
+ building JNI code for multiple platforms.
+Original-Maintainer: Debian Java maintainers <pkg-java-maintainers@lists.alioth.debian.org>
+Homepage: http://jna.dev.java.net/
 
 Package: wireless-crda
 Priority: optional
@@ -3668,6 +3740,31 @@ Description: HTTP library implementation in C -- GNOME support library
  This package contains the GNOME support shared library.
 Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 
+Package: openjdk-6-dbg
+Multi-Arch: same
+Priority: extra
+Section: debug
+Installed-Size: 124472
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: openjdk-6
+Version: 6b24-1.11.1-4ubuntu2
+Depends: openjdk-6-jre-headless (= 6b24-1.11.1-4ubuntu2)
+Recommends: openjdk-6-jre (= 6b24-1.11.1-4ubuntu2)
+Suggests: openjdk-6-jdk (= 6b24-1.11.1-4ubuntu2)
+Conflicts: openjdk-6-jre (<< 6b17~pre3-1), openjdk-6-jre-headless (<< 6b17~pre3-1)
+Size: 56047408
+Description: Java runtime based on OpenJDK (debugging symbols)
+ OpenJDK is a development environment for building applications,
+ applets, and components using the Java programming language.
+ .
+ This package contains the debugging symbols.
+ .
+ The packages are built using the IcedTea build support and patches
+ from the IcedTea project.
+Original-Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
+Homepage: http://openjdk.java.net/
+
 Package: libparted0debian1
 Multi-Arch: same
 Priority: optional
@@ -5143,6 +5240,29 @@ Description: MIT Kerberos runtime libraries - GSS enabled ONCRPC
 Original-Maintainer: Sam Hartman <hartmans@debian.org>
 Homepage: http://web.mit.edu/kerberos/
 
+Package: openjdk-7-jdk
+Multi-Arch: same
+Priority: optional
+Section: java
+Installed-Size: 33491
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: openjdk-7
+Version: 7~u3-2.1.1~pre1-1ubuntu2
+Provides: java-compiler, java-sdk, java2-sdk, java5-sdk, java6-sdk, java7-jdk
+Depends: openjdk-7-jre (>= 7~u3-2.1.1~pre1-1ubuntu2), libc6 (>= 2.4)
+Recommends: libxt-dev
+Suggests: openjdk-7-demo, openjdk-7-source, visualvm
+Size: 9348558
+Description: OpenJDK Development Kit (JDK)
+ OpenJDK is a development environment for building applications,
+ applets, and components using the Java programming language.
+ .
+ The packages are built using the IcedTea build support and patches
+ from the IcedTea project.
+Original-Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
+Homepage: http://openjdk.java.net/
+
 Package: perl-modules
 Priority: standard
 Section: perl
@@ -5513,6 +5633,26 @@ Description: XML parsing C library - development kit
  register handlers.
 Original-Maintainer: Debian XML/SGML Group <debian-xml-sgml-pkgs@lists.alioth.debian.org>
 Homepage: http://expat.sourceforge.net
+
+Package: openjdk-6-demo
+Multi-Arch: same
+Priority: extra
+Section: java
+Installed-Size: 3840
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: openjdk-6
+Version: 6b24-1.11.1-4ubuntu2
+Depends: openjdk-6-jre (>= 6b24-1.11.1-4ubuntu2), libc6 (>= 2.4), libgcc1 (>= 1:4.4.0), libstdc++6 (>= 4.3.0)
+Conflicts: openjdk-6-jre (<< 6b17~pre3-1), openjdk-6-jre-headless (<< 6b17~pre3-1)
+Size: 2260210
+Description: Java runtime based on OpenJDK (demos and examples)
+ OpenJDK Java runtime
+ .
+ The packages are built using the IcedTea build support and patches
+ from the IcedTea project.
+Original-Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
+Homepage: http://openjdk.java.net/
 
 Package: libwbclient0
 Multi-Arch: same
@@ -6426,6 +6566,28 @@ Description: library for decoding ATSC A/52 streams
  also known as AC-3.
 Original-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Homepage: http://liba52.sourceforge.net/
+
+Package: libjansson4
+Priority: optional
+Section: libs
+Installed-Size: 66
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: jansson
+Version: 2.2.1-1
+Depends: libc6 (>= 2.4)
+Size: 20884
+Description: C library for encoding, decoding and manipulating JSON data
+ Jansson is a C library for encoding, decoding and manipulating JSON data.
+ .
+ It features:
+  * Simple and intuitive API and data model
+  * Comprehensive documentation
+  * No dependencies on other libraries
+  * Full Unicode support (UTF-8)
+  * Extensive test suite
+Original-Maintainer: Alessandro Ghedini <al3xbio@gmail.com>
+Homepage: http://www.digip.org/jansson/
 
 Package: bzip2
 Multi-Arch: foreign
@@ -7769,6 +7931,25 @@ Description: Unicode string library for C
  This package contains the shared library.
 Original-Maintainer: Andreas Rottmann <rotty@debian.org>
 Homepage: http://www.gnu.org/software/libunistring/
+
+Package: librxtx-java
+Priority: optional
+Section: java
+Installed-Size: 876
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: rxtx
+Version: 2.2pre2-10
+Provides: lib-rxtx-java
+Depends: libc6 (>= 2.13)
+Conflicts: lib-rxtx-java
+Size: 166102
+Description: Full Java CommAPI implementation
+ RXTX is a full implementation of the Java CommAPI from Sun. It
+ contains  native libraries providing serial and parallel
+ communication for the Java Development Toolkit.
+Original-Maintainer: Debian Java maintainers <pkg-java-maintainers@lists.alioth.debian.org>
+Homepage: http://www.rxtx.org
 
 Package: libdbus-glib-1-2
 Multi-Arch: same
@@ -10672,6 +10853,30 @@ Description: SSL/TLS support for the Qt Cryptographic Architecture
 Original-Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
 Homepage: http://delta.affinix.com/qca/
 
+Package: openjdk-6-jdk
+Multi-Arch: same
+Priority: optional
+Section: java
+Installed-Size: 31301
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: openjdk-6
+Version: 6b24-1.11.1-4ubuntu2
+Provides: java-compiler, java-sdk, java2-sdk, java5-sdk, java6-sdk
+Depends: openjdk-6-jre (>= 6b24-1.11.1-4ubuntu2), libc6 (>= 2.4)
+Recommends: libxt-dev
+Suggests: openjdk-6-demo, openjdk-6-source, visualvm
+Conflicts: openjdk-6-jre (<< 6b17~pre3-1), openjdk-6-jre-headless (<< 6b17~pre3-1)
+Size: 8881970
+Description: OpenJDK Development Kit (JDK)
+ OpenJDK is a development environment for building applications,
+ applets, and components using the Java programming language.
+ .
+ The packages are built using the IcedTea build support and patches
+ from the IcedTea project.
+Original-Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
+Homepage: http://openjdk.java.net/
+
 Package: ttf-ubuntu-font-family
 Priority: optional
 Section: fonts
@@ -11719,6 +11924,29 @@ Description: Linux kernel image for version 3.5.0 on TI OMAP-based systems
  the linux-linaro-omap meta-package, which will ensure that upgrades work
  correctly, and that supporting packages are also installed.
 
+Package: openjdk-6-source
+Priority: extra
+Section: java
+Installed-Size: 43216
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: openjdk-6
+Version: 6b24-1.11.1-4ubuntu2
+Depends: openjdk-6-jre (>= 6b24-1.11.1-4ubuntu2), openjdk-6-jdk (>= 6b24-1.11.1-4ubuntu2)
+Conflicts: openjdk-6-jre (<< 6b17~pre3-1), openjdk-6-jre-headless (<< 6b17~pre3-1)
+Size: 40718136
+Description: OpenJDK Development Kit (JDK) source files
+ OpenJDK is a development environment for building applications,
+ applets, and components using the Java programming language.
+ .
+ This package contains the Java programming language source files
+ (src.zip) for all classes that make up the Java core API.
+ .
+ The packages are built using the IcedTea build support and patches
+ from the IcedTea project.
+Original-Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
+Homepage: http://openjdk.java.net/
+
 Package: libtdb1
 Multi-Arch: same
 Priority: optional
@@ -11831,6 +12059,23 @@ Description: transitional dummy package
 Original-Maintainer: Debian Fonts Task Force <pkg-fonts-devel@lists.alioth.debian.org>
 Homepage: https://fedorahosted.org/liberation-fonts/
 
+Package: gcc-avr
+Priority: extra
+Section: devel
+Installed-Size: 15382
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 1:4.5.3-3
+Provides: c-compiler-avr
+Depends: libc6 (>= 2.11), libgcc1 (>= 1:4.4.0), libgmp10, libmpc2, libmpfr4 (>= 3.1.0), zlib1g (>= 1:1.1.4), binutils-avr (>= 2.18-4)
+Suggests: task-c-devel, gcc-doc (>= 4:4.0.2-1), gcc-4.2, avr-libc (>= 1:1.6.2-2)
+Conflicts: avr-libc (<= 1:1.6.2-1)
+Size: 7034796
+Description: The GNU C compiler (cross compiler for avr)
+ This is the GNU C compiler, a fairly portable optimizing compiler which
+ supports multiple languages.  This package includes support for C.
+Original-Maintainer: Hakan Ardo <hakan@debian.org>
+
 Package: libsigsegv2
 Priority: optional
 Section: libs
@@ -11866,6 +12111,28 @@ Description: GNU C compiler
  This is the GNU C compiler, a fairly portable optimizing compiler for C.
 Homepage: http://gcc.gnu.org/
 Original-Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+
+Package: uwsgi-plugin-jvm-openjdk-6
+Priority: extra
+Section: web
+Installed-Size: 86
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: uwsgi
+Version: 1.0.3+dfsg-1
+Depends: libc6 (>= 2.4), uwsgi-core (= 1.0.3+dfsg-1), openjdk-6-jre-headless
+Size: 10902
+Description: Java plugin for uWSGI (OpenJDK 6)
+ uWSGI presents a complete stack for networked/clustered web applications,
+ implementing message/object passing, caching, RPC and process management.
+ It is designed to be fully modular. This means that different plugins can be
+ used in order to add compatibility with tons of different technology on top of
+ the same core.
+ .
+ This package provides Java plugin for uWSGI (linked with OpenJDK Java 6
+ runtime).
+Original-Maintainer: Janos Guljas <janos@resenje.org>
+Homepage: http://projects.unbit.it/uwsgi/
 
 Package: libclass-isa-perl
 Priority: standard
@@ -13610,6 +13877,27 @@ Description: Support for https protocol in LWP
  the libnet-ssleay-perl package).
 Homepage: http://search.cpan.org/dist/Crypt-SSLeay/
 Original-Maintainer: Noèl Köthe <noel@debian.org>
+
+Package: arduino-core
+Priority: extra
+Section: electronics
+Installed-Size: 3916
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: arduino
+Version: 1:1.0+dfsg-9
+Depends: gcc-avr, avrdude, gcc, avr-libc
+Suggests: arduino-mk
+Size: 613096
+Description: Code, examples, and libraries for the Arduino platform
+ Arduino is an open hardware microcontroller platform.  This package contains
+ the minimal set of tools to allow one to program an Arduino.  It also contains
+ examples and libraries. For a CLI, see the 'arduino-mk' package.
+ .
+ This package does not include the Java based Integrated Development
+ Environment, which can be found in the 'arduino' package.
+Original-Maintainer: Scott Howard <showard@debian.org>
+Homepage: http://www.arduino.cc
 
 Package: tasksel
 Priority: important
@@ -15840,6 +16128,29 @@ Description: computer vision GPU Processing library
 Original-Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
 Homepage: http://opencvlibrary.sourceforge.net/
 
+Package: arduino
+Priority: extra
+Section: electronics
+Installed-Size: 882
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 1:1.0+dfsg-9
+Depends: default-jre | java6-runtime, libjna-java, librxtx-java (>= 2.2pre2-3), arduino-core (= 1:1.0+dfsg-9)
+Recommends: extra-xdg-menus, policykit-1
+Size: 684278
+Description: AVR development board IDE and built-in libraries
+ Arduino is an open-source electronics prototyping platform based on
+ flexible, easy-to-use hardware and software. It's intended for artists,
+ designers, hobbyists, and anyone interested in creating interactive
+ objects or environments.
+ .
+ This package will install the integrated development environment that
+ allows for program writing, code verfication, compiling, and uploading
+ to the Arduino development board. Libraries and example code will also
+ be installed.
+Original-Maintainer: Scott Howard <showard@debian.org>
+Homepage: http://www.arduino.cc
+
 Package: libxcb-dri2-0
 Multi-Arch: same
 Priority: optional
@@ -17820,6 +18131,28 @@ Description: Linux USB utilities
  http://www.linux-usb.org/ .
 Original-Maintainer: Aurelien Jarno <aurel32@debian.org>
 
+Package: uwsgi-plugin-jwsgi-openjdk-6
+Priority: extra
+Section: web
+Installed-Size: 65
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: uwsgi
+Version: 1.0.3+dfsg-1
+Depends: libc6 (>= 2.4), uwsgi-plugin-jvm-openjdk-6 (= 1.0.3+dfsg-1), openjdk-6-jre-headless
+Size: 6168
+Description: JWSGI plugin for uWSGI (OpenJDK 6)
+ uWSGI presents a complete stack for networked/clustered web applications,
+ implementing message/object passing, caching, RPC and process management.
+ It is designed to be fully modular. This means that different plugins can be
+ used in order to add compatibility with tons of different technology on top of
+ the same core.
+ .
+ This package provides JWSGI plugin for uWSGI (linked with OpenJDK Java 6
+ runtime).
+Original-Maintainer: Janos Guljas <janos@resenje.org>
+Homepage: http://projects.unbit.it/uwsgi/
+
 Package: videolan-doc
 Priority: optional
 Section: doc
@@ -18695,6 +19028,39 @@ Description: Bonobo CORBA interfaces library -- support binaries
  This package contains a test component using bonobo and some utility
  binaries.
 Original-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+
+Package: uwsgi-core
+Priority: optional
+Section: web
+Installed-Size: 366
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: uwsgi
+Version: 1.0.3+dfsg-1
+Depends: libc6 (>= 2.8), libgcc1 (>= 1:4.4.0), libjansson4 (>= 2.0.1), libldap-2.4-2 (>= 2.4.7), libsqlite3-0 (>= 3.5.9), libuuid1 (>= 2.16), libxml2 (>= 2.7.4), libyaml-0-2, libzmq1
+Suggests: nginx-full | cherokee | libapache2-mod-uwsgi | libapache2-mod-ruwsgi, uwsgi-plugins-all, uwsgi-extra
+Size: 165722
+Description: fast, self-healing application container server (core)
+ uWSGI presents a complete stack for networked/clustered web applications,
+ implementing message/object passing, caching, RPC and process management.
+ It uses the uwsgi protocol for all the networking/interprocess communications.
+ .
+ uWSGI can be run in preforking, threaded, asynchronous/evented modes and
+ supports various forms of green threads/coroutines (such as uGreen, Greenlet,
+ Fiber). uWSGI provides several methods of configuration: via command line,
+ via environment variables, via XML, INI, YAML configuration files, via LDAP
+ and more.
+ .
+ On top of all this, it is designed to be fully modular. This means that
+ different plugins can be used in order to add compatibility with tons of
+ different technology on top of the same core.
+ .
+ This package provides:
+   * executable uWSGI core binary (built without any embedded plugins)
+   * uWSGI usage examples
+   * uWSGI test suite
+Original-Maintainer: Janos Guljas <janos@resenje.org>
+Homepage: http://projects.unbit.it/uwsgi/
 
 Package: w3m-el
 Priority: optional
@@ -22733,6 +23099,21 @@ Description: authentication module for NTLM
 Original-Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Homepage: http://search.cpan.org/dist/Authen-NTLM/
 
+Package: avr-libc
+Priority: extra
+Section: otherosfs
+Installed-Size: 33360
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Version: 1:1.7.1-2
+Depends: gcc-avr (>= 1:4.5.3-1), binutils-avr (>= 2.20.1-2)
+Size: 4665316
+Description: Standard C library for Atmel AVR development
+ Standard library used to the development of C programs for the
+ Atmel AVR micro controllers. This package contains static
+ libraries as well as the header files needed.
+Original-Maintainer: Hakan Ardo <hakan@debian.org>
+
 Package: libhpmud0
 Priority: optional
 Section: libs
@@ -24161,6 +24542,24 @@ Description: C++ interface to the Message Passing Interface (MPI)
  techniques to maintain maximal efficiency.
 Homepage: http://www.boost.org/doc/html/mpi.html
 Original-Maintainer: Debian Boost Team <pkg-boost-devel@lists.alioth.debian.org>
+
+Package: openjdk-7-jre-lib
+Multi-Arch: foreign
+Priority: optional
+Section: java
+Installed-Size: 9773
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: all
+Source: openjdk-7
+Version: 7~u3-2.1.1~pre1-1ubuntu2
+Depends: openjdk-7-jre-headless (>= 7~b130~pre0)
+Size: 5116800
+Description: OpenJDK Java runtime (architecture independent libraries)
+ OpenJDK Java runtime, using Hotspot JIT.
+ The packages are built using the IcedTea build support and patches
+ from the IcedTea project.
+Original-Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
+Homepage: http://openjdk.java.net/
 
 Package: vlc-nox
 Priority: optional
@@ -27213,6 +27612,28 @@ Description: Libav video filtering library
 Homepage: http://libav.org/
 Original-Maintainer: Debian multimedia packages maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 
+Package: libzmq1
+Priority: optional
+Section: libs
+Installed-Size: 198
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: zeromq
+Version: 2.1.11-1ubuntu1
+Depends: libc6 (>= 2.15), libgcc1 (>= 1:4.4.0), libpgm-5.1-0 (>= 5.1.116~dfsg), libstdc++6 (>= 4.4.0), libuuid1 (>= 2.16)
+Size: 93650
+Description: ZeroMQ lightweight messaging kernel (shared library)
+ The 0MQ lightweight messaging kernel is a library which extends the
+ standard socket interfaces with features traditionally provided by
+ specialised messaging middleware products. 0MQ sockets provide an
+ abstraction of asynchronous message queues, multiple messaging
+ patterns, message filtering (subscriptions), seamless access to
+ multiple transport protocols and more.
+ .
+ This package contains the ZeroMQ shared library.
+Homepage: http://www.zeromq.org/
+Original-Maintainer: Martin Lucina <mato@kotelna.sk>
+
 Package: libcroco3
 Multi-Arch: same
 Priority: optional
@@ -29218,6 +29639,23 @@ Description: Library of Optimized Inner Loops Runtime Compiler (development head
 Homepage: http://code.entropywave.com/projects/orc/
 Original-Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
 
+Package: avrdude
+Priority: extra
+Section: electronics
+Installed-Size: 865
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 5.11.1-1
+Depends: libc6 (>= 2.7), libftdi1 (>= 0.19), libreadline6 (>= 6.0), libusb-0.1-4 (>= 2:0.1.12)
+Suggests: avrdude-doc
+Size: 218844
+Description: software for programming Atmel AVR microcontrollers
+ AVRDUDE is an open source utility to download/upload/manipulate the
+ ROM and EEPROM contents of AVR microcontrollers using the in-system
+ programming technique (ISP).
+Original-Maintainer: Michael Biebl <biebl@debian.org>
+Homepage: http://savannah.nongnu.org/projects/avrdude/
+
 Package: libmtdev1
 Priority: optional
 Section: libs
@@ -29921,6 +30359,29 @@ Description: X transport library (development files)
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libxtrans
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+
+Package: openjdk-7-jre
+Multi-Arch: same
+Priority: optional
+Section: java
+Installed-Size: 514
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: openjdk-7
+Version: 7~u3-2.1.1~pre1-1ubuntu2
+Provides: java-runtime, java2-runtime, java5-runtime, java6-runtime, java7-runtime
+Depends: openjdk-7-jre-headless (>= 7~u3-2.1.1~pre1-1ubuntu2), libasound2 (>= 1.0.23), libc6 (>= 2.11), libcups2 (>= 1.4.0), libfontconfig1 (>= 2.8.0), libgcc1 (>= 1:4.4.0), libgdk-pixbuf2.0-0 (>= 2.22.0), libgif4 (>= 4.1.4), libglib2.0-0 (>= 2.16.0), libgtk2.0-0 (>= 2.8.0), libjpeg8 (>= 8c), libpango1.0-0 (>= 1.14.0), libpng12-0 (>= 1.2.13-4), libpulse0 (>= 1:0.99.1), libx11-6, libxext6, libxi6, libxrender1, libxtst6, libgnome2-0, libgnomevfs2-0, libgconf2-4, libxrandr2, libxinerama1, libgl1-mesa-glx, libatk-wrapper-java-jni (>= 0.30.4-0ubuntu2)
+Recommends: ttf-dejavu-extra
+Suggests: icedtea6-plugin
+Conflicts: icedtea-gcjwebplugin (<< 1.0-1ubuntu4)
+Size: 189498
+Description: OpenJDK Java runtime, using Hotspot Zero
+ Full Java runtime environment - needed for executing Java GUI and Webstart
+ programs. Using Hotspot Zero.
+ The packages are built using the IcedTea build support and patches
+ from the IcedTea project.
+Original-Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
+Homepage: http://openjdk.java.net/
 
 Package: xscreensaver
 Priority: optional
@@ -31187,6 +31648,23 @@ Description: JBIG2 decoder library - shared libraries
  This package contains the shared library libjbig2dec.
 Original-Maintainer: Jonas Smedegaard <dr@jones.dk>
 Homepage: http://jbig2dec.sourceforge.net/
+
+Package: binutils-avr
+Priority: extra
+Section: devel
+Installed-Size: 9944
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Version: 2.20.1-2
+Depends: libc6 (>= 2.11), libgcc1 (>= 1:4.4.0)
+Suggests: binutils (>= 2.20.1-2)
+Size: 3943532
+Description: Binary utilities supporting Atmel's AVR targets
+ The programs in this package are used to manipulate binary and object
+ files that may have been created for Atmel's AVR architecture.  This package
+ is primarily for AVR developers and cross-compilers and is not needed
+ by normal users or developers.
+Original-Maintainer: Hakan Ardo <hakan@debian.org>
 
 Package: btrfs-tools
 Priority: optional
@@ -33039,6 +33517,29 @@ Description: Perl module for configuration file and command line handling
  also a mechanism to utilise all these same features via a CGI.
 Original-Maintainer: Stefan Hornburg (Racke) <racke@linuxia.de>
 
+Package: libftdi1
+Multi-Arch: same
+Priority: optional
+Section: libs
+Installed-Size: 57
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libftdi
+Version: 0.19-4
+Depends: libc6 (>= 2.4), libusb-0.1-4 (>= 2:0.1.12)
+Pre-Depends: multiarch-support
+Size: 14024
+Description: Library to control and program the FTDI USB controller
+ This library could talk to FTDI's FT232 and FT245 type USB chips from
+ userspace. It uses libusb to communicate with the chips.
+ .
+ Functionalities include the possibility to use the chips in standard
+ mode, in bitbang mode, and to read or write the serial EEPROM.
+ .
+ This is the C version of the library.
+Original-Maintainer: Aurelien Jarno <aurel32@debian.org>
+Homepage: http://www.intra2net.com/en/developer/libftdi/
+
 Package: libisccc80
 Priority: optional
 Section: libs
@@ -34463,6 +34964,31 @@ Description: Geospatial Data Abstraction Library - Utility programs
  ogrtindex.
 Homepage: http://www.gdal.org/gdal_utilities.html
 Original-Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
+
+Package: libpgm-5.1-0
+Priority: optional
+Section: libs
+Installed-Size: 279
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: armhf
+Source: libpgm
+Version: 5.1.116~dfsg-2
+Depends: libc6 (>= 2.8), libgcc1 (>= 1:4.4.0)
+Size: 180228
+Description: OpenPGM shared library
+ OpenPGM is an open source implementation of the Pragmatic General Multicast
+ (PGM) specification in RFC 3208 available at www.ietf.org. PGM is a reliable
+ and scalable multicast protocol that enables receivers to detect loss,
+ request retransmission of lost data, or notify an application of
+ unrecoverable loss. PGM is a receiver-reliable protocol, which means the
+ receiver is responsible for ensuring all data is received, absolving the
+ sender of reception responsibility. PGM runs over a best effort datagram
+ service, currently OpenPGM uses IP multicast but could be implemented above
+ switched fabrics such as InfiniBand.
+ .
+ This is the runtime package for programs that use the OpenPGM library.
+Original-Maintainer: Gabriel de Perthuis <g2p.code+debian@gmail.com>
+Homepage: http://code.google.com/p/openpgm/
 
 Package: gvfs-daemons
 Multi-Arch: foreign

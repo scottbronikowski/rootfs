@@ -1,0 +1,10 @@
+# It seems to be acceptable to use rpath for private libraries like the
+# jdk is doing it. Check http://wiki.debian.org/RpathIssue for more
+# information.
+openjdk-6-jdk binary: binary-or-shlib-defines-rpath
+
+# this is in openjdk-6-jre
+openjdk-6-jdk binary: menu-icon-missing /usr/share/pixmaps/openjdk-6.xpm
+
+# lintian is plain wrong to complain
+openjdk-6-jdk binary: gzip-file-is-not-multi-arch-same-safe

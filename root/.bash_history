@@ -1,304 +1,3 @@
-[  309.260711] agg_enable for
-[  381.689117] ehci-omap ehci-oma
-[  458.691925] ehci-omap e
-[
-[  527.831146] 
-[  527.831176] hub 1-0:1.0: port 2 enable 
-[  
-[  527.854309] hub 1-0:1.0: port
-[  527.854339] usb 1-2: USB d
-[  527.854339] usb 1-2.1: USB dis
-[  527.854370] usb 1-2.1: 
-[
-[  527.854553] 
-[  527.854583] ehci-omap ehci-omap.0: shut
-[  
-[  527.854583] ehci-omap ehci-om
-[  527.854614] ehci-omap ehci
-[  527.854614] ehci-omap ehci-om
-[  527.854614] ehci-omap e
-[ 
-[  527.854644] ehci-omap ehci-omap.0: shutdown ur
-[  527.85467
-[  527.854675] ehci-omap ehci
-[  527.854675] ehci-omap ehci-om
-[  527.854705] ehci-omap ehci-omap.0: shutdown urb d
-[  527.85
-[  527.854705] ehci-omap ehci
-[  527.854736] ehci-omap ehci-om
-[  527.854736] ehci-omap ehci-omap.0: shu
-[  527.854736] ehci-
-[  527.854766] ehci-omap ehci-oma
-[  527.854766] ehci-omap ehc
-[  527.854766] ehci-omap ehci-omap.0: 
-[  527.854797] ehci-omap ehci-omap.0: sh
-[  527.854797] ehci-omap ehci-omap
-[
-[  527.854827] ehci-omap ehci-omap.0:
-[  527.854827] ehci-omap ehci-om
-[  52
-[  527.854858] ehci-omap ehci-omap.0: shut
-[  527
-[  527.854888] ehci-omap ehci-omap.0: shutdown urb de370d40 e
-[  527.854888] ehci-omap ehci-o
-[  527.854888
-[  527.854919] ehci-omap ehci-omap.0: shutdown urb 
-[  527.8549
-[  527.854919] ehci-omap ehci-omap.0: shutdown urb defd4e4
-[  52
-[  527.854949] ehci-omap ehci-omap.0: shut
-[  527.854949] ehci-o
-[  527.854980] ehci-omap ehci-omap.0: shutdown urb deffa7c0 ep1i
-[  527.854980] ehci-omap ehci-omap.0: sh
-[  527.855010] ehci-oma
-[  527.855010] ehci-omap ehci-
-[  527.855010] ehci-oma
-[  527.
-[  527.855041] ehci-omap ehci-omap.
-[
-[  527.855072] ehci-omap
-[  527.855072] ehci-omap ehci-omap.
-[  527.855072] ehci-o
-[  5
-[  527.855102] ehci-omap ehci-omap.0: shutdown 
-[  527.855133]
-[  527.855133] ehci-omap ehci-omap.0: shutdown 
-
-[  527.855163]
-[  527.855163] ehci-omap ehci-omap.0: shut
-[  527.855163] ehci-
-[  527.855194] ehci-omap ehci-omap.0: shutdown ur
-[  527.855194
-[  527.855224] ehci-omap ehci-omap.0: shutdown u
-[  527
-[  527.
-[  527.855255] ehci-omap ehci-omap.0: shutdown u
-[  527.855255] 
-[  527.855255] ehci-omap ehci-omap.0: shutdown urb de
-[  527.8
-[
-[  527.855285] 
-[  527.855316] ehci-omap ehci-o
-[  527.855316]
-[  527.855346] ehci-omap ehci-omap.0: shu
-[  527.855346] ehci-
-[  527.855346] ehci-omap ehci-omap.0: shut
-[  527.855377] ehci
-[  527.855377] ehci-omap ehci-oma
-[  527.855407] ehci-
-[  527.
-[  527.855407] ehci-omap ehci-omap.0: shutdown urb de38af40 ep
-[  527.855438] ehci-omap ehci-omap.0: shutdown urb deffae40 e
-
-[  527.855438] ehci-omap ehci-omap.0: shutdown urb def
-[  527.8
-[  527.855468] ehci-omap ehci-omap.0: sh
-[  527.855499] ehci-om
-[  527.855499] ehci-omap ehci-omap.0: shutdown urb
-[  527.855
-[  527.855529] ehci-omap e
-[  527.855529] ehci-omap ehci-omap
-[  
-[  527.855560] ehci-omap ehci-omap.0: shutd
-[  527.855560] ehci
-[  527.855590] ehci-omap ehci-omap.0: s
-[  527.855590] ehci-oma
-[  527.855590] ehci-omap ehci-omap.0: shutd
-[  527.855621] ehci
-[  527.855621] ehci-omap ehci-
-[  527.855651] ehci-omap ehci-
-[  527.855651] ehci-omap 
-[  527.855651] ehci-omap ehci-oma
-[  52
-[  527.855682] ehci-omap ehci-omap.
-[  527.855712] ehci-omap e
-[  527.855712] ehci-omap ehci-omap.0: shutdown ur
-[  527.85571
-[  527.855743] ehci-omap ehci-
-[  527.855743] ehci-omap ehci-
-
-[  527.855773] ehci-omap ehci-om
-[  527.855773] ehci-omap eh
-[
-[  527.855804] ehci-omap ehci-omap.0: shutd
-[  527.855834] ehc
-[  527.855834] ehci-omap ehci-omap.0: shutdo
-[  527.
-[  527.855
-[  527.855865] ehci-omap ehci-omap.0: shutdown urb de370c40 ep
-[  527.855895] ehci-omap ehci-omap.0: shutdown 
-[  527.855895]
-[  527.855895] 
-[  527.855926] ehci-omap ehci-omap.0: sh
-[  5
-
-[  527.855957] ehci-omap ehci-omap.0: shutdown 
-[  527.855957]
-[  527.855987] ehci-omap ehci-omap.0: 
-[  527.855987] ehci-oma
-[  527.856018] 
-[  527.856018] ehci-omap ehci-omap.0: shut
-[  
-[  527.856048] ehci-omap ehci-om
-[  527.856048] ehci-omap ehci
-[  527.856079] ehci-omap ehc
-[  5
-[  527.856109] ehci-omap e
-[
-[  527.856109] 
-[  527.856140] ehci-omap ehci-omap.0: shut
-[  
-[  527.856170] ehci-omap ehci-om
-[  527.856170] ehci-omap ehci
-[  527.856201] ehci-omap ehci-oma
-[  527.856201] ehci-omap e
-[
-[  527.856231] 
-[  527.856231] ehci-omap ehci-omap.0: shut
-[  
-[  527.856262] ehci-omap ehci-om
-[  527.856292] ehci-omap ehci
-[  527.856292] ehci-omap ehci-oma
-[  527.856292] ehci-omap e
-[
-[  527.856323] 
-[  527.856353] ehci-omap ehci-omap.0: shut
-[  
-[  527.856384] ehci-omap ehci-om
-[  527.856384] ehci-omap ehci
-[  527.856384] ehci-omap ehci-om
-[  527.856414] ehci-omap e
-[ 
-[  527.875518] usb 1-2.1: usb_disable_device nuki
-[  527.87988
-[  527.879913] usb 1-2.2: unr
-[  527.879913] usb 1-2.2: unregi
-[  527.880249] ehci-omap ehci-omap.0: shutdown urb d
-[  527.88
-[  527.880279] ehci-omap ehci
-[  527.880279] ehci-omap ehci-om
-[  527.893218] ###=> usb_read_port_comple
-[  527.893280] usb_r
-[  527.893280] usb_read_port_comp
-[  527.893310] usb_read_port
-[  527.893371] +rtw_dev_remove
-[  527.
-[  528.369934] usb 1-2.2: kworker/0:4 ti
-[  528.369964] reg 0x4c, usb read 
-[
-[  528.369995] reg 0x4c, usb read 1 f
-[  528.370025] reg 0x4c, usb rea
-[  52
-[  528.370086] reg 0x6a4, usb write 2 fail
-[  528
-[  528.370117] HW_VAR_BASIC_RATE: BrateCfg(0x15d)
-[  528.3702
-[  528.370269] -871x_drv - drv_
-[  528.373596
-[  528.824401] ehci-omap ehci-omap.0: shutdown urb 
-[  528.8244
-[  528.824432] ehci-omap ehci-omap.0: shutdown urb deff88c
-[  52
-[  528.824432] ehci-omap ehci-omap.0: shut
-[  528.824462] ehci-o
-[  528.824462] ehci-omap ehci-omap.0: shutdown urb de0296c0 ep1i
-[  528.824462] ehci-omap ehci-omap.0: sh
-[  528.824493] ehci-oma
-[  528.824493] ehci-omap ehci-
-[  528.824493] ehci-oma
-[  528.
-[  528.824523] ehci-omap ehci-omap.
-[
-[  528.824554] ehci-omap
-[  528.824554] ehci-omap ehci-omap.
-[  528.824584] ehci-o
-[  5
-[  528.824584] ehci-omap ehci-omap.0: shutdown 
-[  528.824615]
-[  528.824615] ehci-omap ehci-omap.0: shutdown 
-
-[  528.824645]
-[  528.824645] ehci-omap ehci-omap.0: shut
-[  528.824645] ehci-
-[  528.824676] ehci-omap ehci-omap.0: shutdown ur
-[  528.824676
-[  528.824707] ehci-omap ehci-omap.0: shutdown u
-[  528
-[  528.
-[  528.824737] ehci-omap ehci-omap.0: shutdown u
-[  528.824737] 
-[  528.824737] ehci-omap ehci-omap.0: shutdown urb de
-[  528.8
-[
-[  528.824768] 
-[  528.824798] ehci-omap ehci-o
-[  528.824798]
-[  528.824798] ehci-omap ehci-omap.0: shu
-[  528.824829] ehci-
-[  528.824829] ehci-omap ehci-omap.0: shut
-[  528.824859] ehci
-[  528.824859] ehci-omap ehci-oma
-[  528.824859] ehci-
-[  528.
-[  528.824890] ehci-omap ehci-omap.0: shutdown urb defeccc0 ep
-[  528.824890] ehci-omap ehci-omap.0: shutdown urb de3892c0 e
-
-[  528.824920] ehci-omap ehci-omap.0: shutdown urb de3
-[  528.8
-[  528.824951] ehci-omap ehci-omap.0: sh
-[  528.824951] ehci-om
-[  528.824981] ehci-omap ehci-omap.0: shutdown urb
-[  528.824
-[  528.824981] ehci-omap e
-[  528.825012] ehci-omap ehci-omap
-[  
-[  528.825012] ehci-omap ehci-omap.0: shutd
-[  528.825042] ehci
-[  528.825042] ehci-omap ehci-omap.0: s
-[  528.825073] ehci-oma
-[  528.825073] ehci-omap ehci-omap.0: shutd
-[  528.825073] ehci
-[  528.825103] ehci-omap ehci-
-[  528.825103] ehci-omap ehci-
-[  528.825103] ehci-omap 
-[  528.825134] ehci-omap ehci-oma
-[  52
-[  528.825164] ehci-omap ehci-omap.
-[  528.825164] ehci-omap e
-[  528.825164] ehci-omap ehci-omap.0: shutdown ur
-[  528.82519
-[  528.825195] ehci-omap ehci-
-[  528.825195] ehci-omap ehci-
-
-[  528.825225] ehci-omap ehci-om
-[  528.825256] ehci-omap eh
-[
-[  528.825256] ehci-omap ehci-omap.0: shutd
-[  528.825286] ehc
-[  528.825286] ehci-omap ehci-omap.0: shutdo
-[  528.
-[  528.825
-[  528.825317] ehci-omap ehci-omap.0: shutdown urb de3a23c0 ep
-[  528.825347] ehci-omap ehci-omap.0: shutdown 
-[  528.825347]
-[  528.825347] 
-[  528.825378] ehci-omap ehci-omap.0: sh
-[  5
-
-[  528.825408] ehci-omap ehci-omap.0: shutdown 
-[  528.825408]
-[  528.825439] ehci-omap ehci-omap.0: 
-[  528.825439] ehci-oma
-[  528.825439] 
-[  528.825469] ehci-omap ehci-omap.0: shut
-[  
-[  528.825500] ehci-omap ehci-om
-[  528.825500] ehci-omap ehci
-[  528.825500] ehci-omap ehc
-[  5
-[  528.825531] ehci-omap e
-[
-[  528.825561] 
 [  528.825561] ehci-omap ehci-omap.0: shut
 [  
 [  528.825592] ehci-omap ehci-om
@@ -1998,3 +1697,304 @@ diff today.text today.text.updated
 emacs today.text
 emacs
 emacs today.text
+htop
+cd realtek/
+ls
+RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911/
+cd RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911
+ls
+cd driver/
+ls
+cd rtl8188C_8192C_usb_linux_v4.0.2_9000.20130911
+ls
+lla
+uname -m
+uname
+uname -a
+uname -s
+uname -n
+uname -r
+uname -v
+uname -m
+uname -p
+uname -i
+uname -o
+exit
+cd /lib/modules/
+ls
+cd 3.5.0-2-linaro-omap/
+ls
+cd kernel/
+ls
+cd drivers/
+ls
+mkdir omap3-pwm
+ls
+mkdir gpio-event
+lla
+cd omap3-pwm/
+lla
+rm pwm.ko 
+lla
+depmod -a
+modinfo pwm
+modinfo g_multi
+cd ../gpio
+cd ../gpio-event/
+ls
+lla
+depmod -a
+modinfo gpio-event-drv.ko 
+cd /
+ls
+cd omap3-pwm/
+ls
+cat Makefile 
+source overo-source-me.txt 
+make
+cat overo-source-me.txt 
+cd /root/build/linux-omap-3.5/drivers/omap3-pwm/
+ls
+cat overo-source-me.txt 
+cd /omap3-pwm/
+ls
+lla
+make ARCH=arm CROSS_COMPILE="" -c /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
+make ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=/ modules
+make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
+make ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
+lla
+lla /root/build/linux-omap-3.5/drivers/omap3-pwm/
+/etc/init.d/servo-control.sh stop
+insmod pwm.ko servo=1 timers=8,9
+make clean
+make ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
+lla
+insmod pwm.ko servo=1 timers=8,9
+insmod pwm.ko servo=1 timers=9,10
+insmod pwm.ko
+dmesg -T | tail
+ln -s /omap3-pwm/pwm.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/pwm-new.ko
+make -march=armv7 ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
+make ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
+make clean
+make ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
+ls
+cp overo-source-me.txt overo-source-me.txt.old
+source overo-source-me.txt
+make
+source overo-source-me.txt
+make
+ls
+make clean
+make
+lla
+modinfo pwm-new
+dempod -a
+depmod -a
+modinfo pwm-new
+lla
+ls -al /root/build/linux-omap-3.5/drivers/omap3-pwm/
+lla /root/build/linux-omap-3.5/drivers/omap3-pwm/
+modinfo 8192cu
+cd /
+ls
+cd root
+ls
+cd Downloads/
+ls
+cd ..
+cd /
+locate RTL8188C_8192C_USB*.zip
+locate today*
+cat /etc/modules 
+lla /etc/modules
+locate 8192cu.ko
+cd lib/modules/3.5.0-2-linaro-omap/kernel/drivers/net/wireless/
+ls
+cp 8192cu.ko 8192cu.ko.backup
+lla
+rm 8192cu.ko
+lla
+modinfo 8192cu
+depmod -a
+modinfo 8192cu
+cd /omap3-pwm/
+make ARCH=armv7l CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
+ls
+cp overo-source-me.txt overo-source-me.txt.changed
+cp overo-source-me.txt.old overo-source-me.txt
+make ARCH=armv7l CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
+make ARCH=armv7l CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+lla
+make clean
+make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+lla
+ln -s `pwd`/pwm.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/pwm-new.ko
+lla /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/
+depmod -a
+modinfo pwm-new
+modinfo pwm
+cd 
+ls
+mkdir gpio-event-temp
+ls
+cd gpio-event-temp/
+ls
+make clean
+ls
+make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+ls
+ln -s `pwd`/gpio-event-drv.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/gpio-event-drv-new.ko
+lla /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/
+depmod -a
+lla
+modinfo gpio-event-drv-new
+exit
+cd build/linux-omap-3.5/
+ls vm*
+lla vm*
+lla
+cd drivers/
+ls
+lla
+cd usb/
+ls
+lla
+cd gadget/
+lla
+cat modules.builtin 
+cat modules.order 
+cd /
+locate g_multi.ko
+modinfo g_multi
+modinfo g_hid
+cd /lib/modules/3.5.0-2-linaro-omap/
+ls
+cd kernel/
+cd drivers/
+ls
+cd gpio/
+ls
+cd ..
+modinfo pwm.ko
+modinfo pwm
+dmesg -T | tail
+modinfo pwm
+dmesg -T | tail
+cd ~/build/linux-omap-3.5/drivers/omap3-pwm/
+cd
+ln -s ./pwm.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/omap3-pwm/
+ln -s ~/build/linux-omap-3.5/drivers/omap3-pwm/pwm.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/omap3-pwm/
+cd ../gpio-event/
+ls
+cd module/
+ls
+`pwd`
+pwd
+ln -s `pwd`/gpio-event-drv.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/gpio-event/
+cd /lib/modules/3.5.0-2-linaro-omap/
+ls
+cd ker
+cd kernel/
+ls
+cd drivers/
+ls
+lla
+depmod -a
+modinfo pwm-new
+modinfo pwm
+ls
+rm pwm-new.ko 
+lla
+modinfo pwm-new
+depmod -a
+modinfo pwm-new
+ln -s /omap3-pwm/pwm.ko ./pwm-new.ko
+lla
+depmod -a
+modinfo pwm-new
+cd 
+ls
+rsync -avrz seykhl:~/Downloads/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911\ \(3\).zip .
+rsync -avrz seykhl:~/Downloads/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911.zip .
+cd realtek/
+ls
+cd ..
+rm RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911.zip 
+cd realtek/
+ls
+lla
+cd rt8192cu/
+ls
+cd ../RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911
+ls
+./install.sh 
+modinfo 8192cu
+ls
+locate Makefile
+ls
+cd driver/
+ls
+ls | grep .tar.gz
+cd rtl8188C_8192C_usb_linux_v4.0.2_9000.20130911
+ls
+cd ..
+ls | grep -iv '.tar.gz'
+cd rtl8188C_8192C_usb_linux_v4.0.2_9000.20130911
+ls m*
+cd ../..
+cd ..
+locate make_drv
+cd 
+locate pwm.ko
+cd build/linux-omap-3.5/
+ls
+cd drivers/
+ls
+cd omap3-pwm/
+ls
+lla
+lla /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/omap3-pwm/
+cd ../gpio-event/
+ls
+cd module/
+ls
+rsync -avrz ./* ~/gpio-event-temp/
+modinfo gpio-event-drv
+lla
+cd ../..
+cd input/misc/
+ls
+make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
+modinfo rotary_encoder
+depmod -a
+modinfo rotary_encoder
+lla r*
+lla /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/input/
+ln -s `pwd`/rotary_encoder.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/input/rotary_encoder.ko
+lla /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/input/
+depmod -a
+modinfo rotary_encoder
+modprobe rotary_encoder
+lsmod
+modprobe -r rotary_encoder
+lsmod
+exit
+cd /lib/modules/3.5.0-2-linaro-omap/build
+ls
+cd arch/
+ls
+lla
+cd
+emacs today.text
+exit
+ls
+ping google.com
+halt
+reboot
+emacs today.text
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5-linux64.tgz
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5-linux64.tgz .

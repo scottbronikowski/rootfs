@@ -1,0 +1,34 @@
+Permissions required for access to USB/Serial ports:
+----------------------------------------------------
+
+User must be in the dialout group in order to write to USB/Serial ports.
+
+Fedora uses zenity to ask if a user wants to be added, but it is a big download.
+
+I wrote our own java code, in debian/permission-checker, which will ask if the
+user would like to be added, then runs a script with pkexec to add the user
+to the dialout group.
+
+--Scott Howard <showard@debian.org>, Dec 12, 2011
+
+
+
+
+
+Note for non-reparenting window manager users
+---------------------------------------------
+
+If you are using a non-reparenting window manager, such as ratpoison, awesome
+or dwm, some Java graphical applications using the AWT toolkit will only
+display empty grey windows, as described in bug #508650.
+
+There are two solutions to work around this issue:
+1. mask your window manager as one of the non-reparenting ones supported by AWT,
+  using the wmname <http://tools.suckless.org/wmname> tool from the dwm-tools
+  package:
+  $ wmname LG3D
+2. set the environment variable _JAVA_AWT_WM_NONREPARENTING:
+  $ export _JAVA_AWT_WM_NONREPARENTING=true
+
+You can automate these tasks by writing them to your ~/.xsessionrc:
+$ echo export _JAVA_AWT_WM_NONREPARENTING=true >> ~/.xsessionrc

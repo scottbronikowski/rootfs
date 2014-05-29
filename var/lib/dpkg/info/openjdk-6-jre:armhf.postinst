@@ -1,0 +1,67 @@
+#!/bin/sh
+
+set -e
+
+multiarch=arm-linux-gnueabihf
+priority=1057
+basedir=/usr/lib/jvm/java-6-openjdk-armhf
+mandir=$basedir/jre/man
+srcext=1.gz
+dstext=1.gz
+jre_tools='policytool'
+
+case "$1" in
+configure)
+    if [ -d /usr/share/doc/openjdk-6-jre ] && [ ! -h /usr/share/doc/openjdk-6-jre ]; then
+	rm -rf /usr/share/doc/openjdk-6-jre
+	ln -sf openjdk-6-jre-headless /usr/share/doc/openjdk-6-jre;
+    fi
+
+    if [ -z "$2" ]; then
+	update_alternatives=y
+    fi
+    if [ -n "$multiarch" ] && [ -n "$2" ]; then
+	for i in $jre_tools; do
+	    if [ -z "$(update-alternatives --list $i 2>/dev/null | grep ^$basedir/)" ]; then
+		update_alternatives=y
+		break
+	    fi
+	done
+    fi
+
+    if [ "$update_alternatives" = y ]; then
+    if [ -n "$multiarch" ] && [ "$DPKG_MAINTSCRIPT_ARCH" != $(dpkg --print-architecture) ]; then
+	priority=$(expr $priority - 1)
+    fi
+    for i in $jre_tools; do
+	unset slave1 slave2 || true
+        if [ -e $mandir/man1/$i.$srcext ]; then
+	    slave1="--slave \
+		/usr/share/man/man1/$i.$dstext \
+                $i.$dstext \
+                $mandir/man1/$i.$srcext"
+	fi
+	# disabled
+        if false && [ -e $mandir/ja/man1/$i.$srcext ]; then
+	    slave2="--slave \
+		/usr/share/man/ja/man1/$i.$dstext \
+                ${i}_ja.$dstext \
+                $mandir/ja/man1/$i.$srcext"
+	fi
+        update-alternatives \
+            --install \
+            /usr/bin/$i \
+            $i \
+            $basedir/jre/bin/$i \
+            $priority \
+	    $slave1 $slave2
+    done
+    fi # update alternatives
+
+    ;;
+
+esac
+
+
+
+exit 0
