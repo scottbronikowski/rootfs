@@ -303,4 +303,13 @@ Also able to get the UDOO version for ARM (v1.5.4) downloaded from http://www.ud
 The teensyduino.32bit was also unable to run, and I found out after some research that it also is not built for ARM.
 Will try to manually copy the files that appear to be installed by the Teensyduino installer to see if I can hack a working Teensy programming environment together on the Gumstix.
 Copied 49-teensy.rules to /etc/udev/rules.d
+
+30 May 14
+--Started trying to copy Teensyduino-specific files from seykhl to rover using a diff of a sorted find of the respective directores, first with the updated arduino-1.5.4 version on the rover.  Tried to launch this version of arduino after copying some of the files over and got the following error:
+	  Could not find boards.txt in /root/arduino-1.5.4/hardware/teensy/cores/boards.txt. Is it pre-1.5?
+	  WARNING: Error loading hardware folder teensy
+	    No valid hardware definitions found in folder teensy.
+After looking at the old and new boards.txt files, there is a significant difference in the format, so I don't think further work here will be fruitful.  Changing over to trying to copy the files into the package-installed version of arduino (1.0, vs. 1.0.5 on seykhl)
+--Copied over files added by Teensyduino from seykhl using a diff of ~/arduino-stuff/sorted-seykhl-arduino.txt and ~/arduino-stuff/sorted-arduino-package.txt.  It appears to have worked--I was able to start the package-installed arduino IDE, select the Teensy 3.1 board from the boards menu, and see the specific Teensy libraries (specifically, the Encoder library).
+
 	    

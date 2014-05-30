@@ -34,6 +34,7 @@ http://arduiniana.org.
 
 #include <inttypes.h>
 #include <Stream.h>
+#include <HardwareSerial.h>
 
 /******************************************************************************
 * Definitions
@@ -44,6 +45,35 @@ http://arduiniana.org.
 #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #endif
 
+#if defined(__MK20DX128__) || defined(__MK20DX256__)
+
+class SoftwareSerial : public Stream
+{
+public:
+	SoftwareSerial(uint8_t rxPin, uint8_t txPin, bool inverse_logic = false);
+	~SoftwareSerial() { end(); }
+	void begin(unsigned long speed);
+	void end();
+	bool listen() { return true; }
+	bool isListening() { return true; }
+	bool overflow() { bool ret = buffer_overflow; buffer_overflow = false; return ret; }
+	virtual int available();
+	virtual int read();
+	int peek();
+	virtual void flush();
+	virtual size_t write(uint8_t byte);
+	using Print::write;
+private:
+	HardwareSerial *port;
+	uint32_t cycles_per_bit;
+	volatile uint8_t *txreg;
+	volatile uint8_t *rxreg;
+	bool buffer_overflow;
+	uint8_t txpin;
+	uint8_t rxpin;
+};
+
+#else
 class SoftwareSerial : public Stream
 {
 private:
@@ -78,6 +108,7 @@ private:
   // private static method for timing
   static inline void tunedDelay(uint16_t delay);
 
+
 public:
   // public methods
   SoftwareSerial(uint8_t receivePin, uint8_t transmitPin, bool inverse_logic = false);
@@ -108,5 +139,7 @@ public:
 #undef float
 #undef abs
 #undef round
+
+#endif
 
 #endif

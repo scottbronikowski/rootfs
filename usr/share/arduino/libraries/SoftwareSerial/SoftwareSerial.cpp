@@ -40,8 +40,140 @@ http://arduiniana.org.
 // 
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
-#include "Arduino.h"
-#include "SoftwareSerial.h"
+#include <Arduino.h>
+#include <SoftwareSerial.h>
+
+
+#if defined(__MK20DX128__) || defined(__MK20DX256__)
+
+SoftwareSerial::SoftwareSerial(uint8_t rxPin, uint8_t txPin, bool inverse_logic /* = false */)
+{
+	buffer_overflow = false;
+	if (rxPin == 0 && txPin == 1) {
+		port = &Serial1;
+		return;
+	} else if (rxPin == 9 && txPin == 10) {
+		port = &Serial2;
+		return;
+	} else if (rxPin == 7 && txPin == 8) {
+		port = &Serial3;
+		return;
+	}
+	port = NULL;
+	pinMode(txPin, OUTPUT);
+	pinMode(rxPin, INPUT_PULLUP);
+	txpin = txPin;
+	rxpin = rxPin;
+	txreg = portOutputRegister(digitalPinToPort(txPin));
+	rxreg = portInputRegister(digitalPinToPort(rxPin));
+	cycles_per_bit = 0;
+}
+
+void SoftwareSerial::begin(unsigned long speed)
+{
+	if (port) {
+		port->begin(speed);
+	} else {
+		cycles_per_bit = (uint32_t)(F_CPU + speed / 2) / speed;
+		ARM_DEMCR |= ARM_DEMCR_TRCENA;
+		ARM_DWT_CTRL |= ARM_DWT_CTRL_CYCCNTENA;
+	}
+}
+
+void SoftwareSerial::end()
+{
+	if (port) {
+		port->end();
+		port = NULL;
+	} else {
+		pinMode(txpin, INPUT);
+		pinMode(rxpin, INPUT);
+	}
+	cycles_per_bit = 0;
+}
+
+// The worst case expected length of any interrupt routines.  If an
+// interrupt runs longer than this number of cycles, it can disrupt
+// the transmit waveform.  Increasing this number causes SoftwareSerial
+// to hog the CPU longer, delaying all interrupt response for other
+// libraries, so this should be made as small as possible but still
+// ensure accurate transmit waveforms.
+#define WORST_INTERRUPT_CYCLES 360
+
+static void wait_for_target(uint32_t begin, uint32_t target)
+{
+	if (target - (ARM_DWT_CYCCNT - begin) > WORST_INTERRUPT_CYCLES+20) {
+		uint32_t pretarget = target - WORST_INTERRUPT_CYCLES;
+		//digitalWriteFast(12, HIGH);
+		interrupts();
+		while (ARM_DWT_CYCCNT - begin < pretarget) ; // wait
+		noInterrupts();
+		//digitalWriteFast(12, LOW);
+	}
+	while (ARM_DWT_CYCCNT - begin < target) ; // wait
+}
+
+size_t SoftwareSerial::write(uint8_t b)
+{
+	elapsedMicros elapsed;
+	uint32_t target;
+	uint8_t mask;
+	uint32_t begin_cycle;
+
+	// use hardware serial, if possible
+	if (port) return port->write(b);
+	if (cycles_per_bit == 0) return 0;
+	ARM_DEMCR |= ARM_DEMCR_TRCENA;
+	ARM_DWT_CTRL |= ARM_DWT_CTRL_CYCCNTENA;
+	// start bit
+	target = cycles_per_bit;
+	noInterrupts();
+	begin_cycle = ARM_DWT_CYCCNT;
+	*txreg = 0;
+	wait_for_target(begin_cycle, target);
+	// 8 data bits
+	for (mask = 1; mask; mask <<= 1) {
+		*txreg = (b & mask) ? 1 : 0;
+		target += cycles_per_bit;
+		wait_for_target(begin_cycle, target);
+	}
+	// stop bit
+	*txreg = 1;
+	interrupts();
+	target += cycles_per_bit;
+	while (ARM_DWT_CYCCNT - begin_cycle < target) ; // wait
+	return 1;
+}
+
+void SoftwareSerial::flush()
+{
+	if (port) port->flush();
+}
+
+// TODO implement reception using pin change DMA capturing
+// ARM_DWT_CYCCNT and the bitband mapped GPIO_PDIR register
+// to a circular buffer (8 bytes per event... memory intensive)
+
+int SoftwareSerial::available()
+{
+	if (port) return port->available();
+	return 0;
+}
+
+int SoftwareSerial::peek()
+{
+	if (port) return port->peek();
+	return -1;
+}
+
+int SoftwareSerial::read()
+{
+	if (port) return port->read();
+	return -1;
+}
+
+#else
+
 //
 // Lookup table
 //
@@ -70,6 +202,7 @@ static const DELAY_TABLE PROGMEM table[] =
   { 4800,     233,       474,       474,      471,   },
   { 2400,     471,       950,       950,      947,   },
   { 1200,     947,       1902,      1902,     1899,  },
+  { 600,      1902,      3804,      3804,     3800,  },
   { 300,      3804,      7617,      7617,     7614,  },
 };
 
@@ -91,6 +224,7 @@ static const DELAY_TABLE table[] PROGMEM =
   { 4800,     110,        233,       233,    230,    },
   { 2400,     229,        472,       472,    469,    },
   { 1200,     467,        948,       948,    945,    },
+  { 600,      948,        1895,      1895,   1890,   },
   { 300,      1895,       3805,      3805,   3802,   },
 };
 
@@ -115,6 +249,7 @@ static const DELAY_TABLE PROGMEM table[] =
   { 4800,     296,        595,       595,    592,    },
   { 2400,     592,        1189,      1189,   1186,   },
   { 1200,     1187,       2379,      2379,   2376,   },
+  { 600,      2379,       4759,      4759,   4755,   },
   { 300,      4759,       9523,      9523,   9520,   },
 };
 
@@ -513,3 +648,5 @@ int SoftwareSerial::peek()
   // Read from "head"
   return _receive_buffer[_receive_buffer_head];
 }
+
+#endif
