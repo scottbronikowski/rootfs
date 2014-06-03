@@ -1,4 +1,5 @@
 
+
 /***************************************************************************************************************
 * Razor AHRS Firmware v1.4.2
 * 9 Degree of Measurement Attitude and Heading Reference System
@@ -214,33 +215,36 @@ boolean output_errors = false;  // true or false
 // Put MIN/MAX and OFFSET readings for your board here!
 // Accelerometer
 // "accel x,y,z (min/max) = X_MIN/X_MAX  Y_MIN/Y_MAX  Z_MIN/Z_MAX"
-#define ACCEL_X_MIN ((float) -250)
-#define ACCEL_X_MAX ((float) 250)
-#define ACCEL_Y_MIN ((float) -250)
-#define ACCEL_Y_MAX ((float) 250)
-#define ACCEL_Z_MIN ((float) -250)
-#define ACCEL_Z_MAX ((float) 250)
+#define ACCEL_X_MIN ((float) -287) //-250)
+#define ACCEL_X_MAX ((float) 254) //250)
+#define ACCEL_Y_MIN ((float) -257) //-250)
+#define ACCEL_Y_MAX ((float) 282) //250)
+#define ACCEL_Z_MIN ((float) -293) //-250)
+#define ACCEL_Z_MAX ((float) 240) //250)
 
 // Magnetometer (standard calibration mode)
 // "magn x,y,z (min/max) = X_MIN/X_MAX  Y_MIN/Y_MAX  Z_MIN/Z_MAX"
-#define MAGN_X_MIN ((float) -600)
-#define MAGN_X_MAX ((float) 600)
-#define MAGN_Y_MIN ((float) -600)
-#define MAGN_Y_MAX ((float) 600)
-#define MAGN_Z_MIN ((float) -600)
-#define MAGN_Z_MAX ((float) 600)
+//#define MAGN_X_MIN ((float) -309) //-600)
+//#define MAGN_X_MAX ((float) 620) //600)
+//#define MAGN_Y_MIN ((float) -487) //-600)
+//#define MAGN_Y_MAX ((float) 414) //600)
+//#define MAGN_Z_MIN ((float) -420) //-600)
+//#define MAGN_Z_MAX ((float) 480) //600)
 
 // Magnetometer (extended calibration mode)
 // Uncommend to use extended magnetometer calibration (compensates hard & soft iron errors)
 //#define CALIBRATION__MAGN_USE_EXTENDED true
 //const float magn_ellipsoid_center[3] = {0, 0, 0};
 //const float magn_ellipsoid_transform[3][3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+#define CALIBRATION__MAGN_USE_EXTENDED true
+const float magn_ellipsoid_center[3] = {-4.09438, -259.976, -97.1897};
+const float magn_ellipsoid_transform[3][3] = {{0.774906, -0.125709, -0.0731712}, {-0.125709, 0.748713, 0.00420121}, {-0.0731712, 0.00420121, 0.964999}};
 
 // Gyroscope
 // "gyro x,y,z (current/average) = .../OFFSET_X  .../OFFSET_Y  .../OFFSET_Z
-#define GYRO_AVERAGE_OFFSET_X ((float) 0.0)
-#define GYRO_AVERAGE_OFFSET_Y ((float) 0.0)
-#define GYRO_AVERAGE_OFFSET_Z ((float) 0.0)
+#define GYRO_AVERAGE_OFFSET_X ((float) 18.76) //0.0)
+#define GYRO_AVERAGE_OFFSET_Y ((float) 15.96) //0.0)
+#define GYRO_AVERAGE_OFFSET_Z ((float) 6.58) //0.0)
 
 /*
 // Calibration example:

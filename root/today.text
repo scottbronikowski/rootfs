@@ -319,3 +319,31 @@ After looking at the old and new boards.txt files, there is a significant differ
 
 2 Jun 14
 --Did more research on 9DOF Razor IMU in general and the AHRS code found on Friday in particular.  Figured out that I can use the yaw angle computed in AHRS for the rover's heading.  Not sure if the pitch or roll angles will be useful at all.  Also need to consider what information I can get from the accelerometers and gyros and what purpose it can serve. 
+
+3 Jun 14
+--Completed configuration procedure for accelerometer and  gyro.  Completed deprecated config procedure for magnetometer for reference.  Installed Oracle JDK, Processing, and EJML library on vader-ubuntu (Ubuntu laptop) in order to run new magnetometer config procedure.
+--Calibration values for accel, gyro, and (old) mag:
+  accel:
+    x: max = 254, min = -287
+    y: max = 282, min = -257
+    z: max = 240, min = -293
+  gyro: (average values)
+    x = 18.76
+    y = 15.96
+    z = 6.58
+  mag: (OLD)
+    x: max = 620, min = -309
+    y: max = 414, min = -487
+    z: max = 480, min = -420
+--Calibration data from new magnetometer calibration procedure (saved in  ~/razor-9dof-ahrs-Release-v1.4.2/Processing/Magnetometer_calibration/output.txt):
+   
+   In the Razor_AHRS.ino, under 'SENSOR CALIBRATION' find the section that reads 'Magnetometer (extended calibration)'
+   Replace the existing 3 lines with these:
+
+   #define CALIBRATION__MAGN_USE_EXTENDED true
+   const float magn_ellipsoid_center[3] = {-4.09438, -259.976, -97.1897};
+   const float magn_ellipsoid_transform[3][3] = {{0.774906, -0.125709, -0.0731712}, {-0.125709, 0.748713, 0.00420121}, {-0.0731712, 0.00420121, 0.964999}};
+
+--Currently have IMU mounted roughly midway back on the rover on the left side about 3.5 cm from the edge.  Orientation of IMU (axes with AHRS are different than originally marked on board; I marked new axes with marker): positive x axis (short side of board with header soldering holes) pointed to left of rover; positive y axis (long side of board to the right of positive x) pointed forward; positive z axis pointing down.  
+--With this orientation, the Yaw (Y) angle given by the AHRS should be my heading, with a fixed offset of -90 degrees, since the positive x axis (pointing left) should be 0 degrees on the z axis.
+--Quick testing does not bear the above out.  Heading changes of ~90 degrees (eyeballed) gave a Y reading change of less than 10 degrees.  Of course, this is testing done prior to inputting the calibration data, and using the compass app on my iPhone as a reference.  However, the large variability I observed with the compass on my iPhone makes me wonder if my calibration environment here in the office has too much magnetic interference.  I also think that I should use an actual lensatic compass for a reference (not sure if I have one at home in my Army gear or not).  I need to test in a more EM-free environment, which I unfortunately think will have to be outdoors, a reasonable distance away from the EE building.

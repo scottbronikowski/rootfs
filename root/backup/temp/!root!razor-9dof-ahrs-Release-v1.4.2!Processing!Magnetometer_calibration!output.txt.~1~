@@ -1,0 +1,11 @@
+;; This buffer is for notes you don't want to save, and for Lisp evaluation.
+;; If you want to create a file, visit that file with C-x C-f,
+;; then enter the text in that file's own buffer.
+
+In the Razor_AHRS.ino, under 'SENSOR CALIBRATION' find the section that reads 'Magnetometer (extended calibration)'
+Replace the existing 3 lines with these:
+
+#define CALIBRATION__MAGN_USE_EXTENDED true
+const float magn_ellipsoid_center[3] = {-4.09438, -259.976, -97.1897};
+const float magn_ellipsoid_transform[3][3] = {{0.774906, -0.125709, -0.0731712}, {-0.125709, 0.748713, 0.00420121}, {-0.0731712, 0.00420121, 0.964999}};
+

@@ -1,492 +1,3 @@
-[  528.825561] ehci-omap ehci-omap.0: shut
-[  
-[  528.825592] ehci-omap ehci-om
-[  528.825622] ehci-omap ehci
-[  528.825622] ehci-omap ehci-oma
-[  528.825622] ehci-omap e
-[
-[  528.825653] 
-[  528.825683] ehci-omap ehci-omap.0: shut
-[  
-[  528.825683] ehci-omap ehci-om
-[  528.825714] ehci-omap ehci
-[  528.825714] ehci-omap ehci-oma
-[  528.825744] ehci-omap e
-[
-[  528.825744] 
-[  528.825775] ehci-omap ehci-omap.0: shut
-[  
-[  528.825805] ehci-omap ehci-om
-[  528.825805] ehci-omap ehci
-[  528.825805] ehci-omap ehci-om
-[  528.825836] ehci-omap e
-[ 
-[  528.825866] ehci-omap ehci-omap.0: shutdown ur
-[  528.82586
-[  528.825866] ehci-omap ehci
-[  528.825897] ehci-omap ehci-om
-[  528.825897] ehci-omap ehci-omap.0: shutdown urb d
-[  528.82
-[  528.825927] ehci-omap ehci
-[  529.158966] rtw_pm_set_ips IP
-[  529.158996] rtw_sta_flush(wlan1)
-[  52
-[  529.159057] usb_r
-[  529.159057] usb_write_port_can
-[  529.159149] <=== rtw_dev_
-[  529.159149] rtw_usb_if1_dei
-[  529.
-[  529.159606] =====> rtl8192c_free_hal_
-[  529.159606] <===== rtl8192c_fre
-[
-[  529.159820] usb 1-2.2: usb_disable
-[  529.163940] usb 1-2.4: USB di
-[  52
-[  529.163970] usb 1-2.4: unregistering in
-[  529
-[  529.170745] pl2303 1-2.4:1.0: device disconnec
-[  529.1708
-[  529.171630] usb 1-2.6: USB d
-[  529.171661
-[  529.171661] usb 1-2.6: unregistering interface 1
-[  529.1775
-[  529.177581] ftdi_sio 1-2.6:1.0: device disconnected
-[  
-[  52
-[  529.178161] usb 1-2.7: unregistering de
-[  529.178192] usb 1-
-[  529.178375] usb 1-2.7: usb_disable_device nuking all URBs
-[  
-[  529.179321] usb 1-2: unregistering in
-[  529.179504] usb 1-2:
-[  529.179565] ehci-omap ehci-
-[  529.179656] usb 1-2:
-[  529.
-[  529.339324] hub 1-0:1.0: debounc
-[
-[  532.010589] hub 1-0:1
-[  532.010681] usb usb1: bus auto-s
-[  532.010711] ehci-o
-[  5
-dmesg
-~~
-halt
-/etc/init.d/keepalive-ping.sh stop
-halt
-/root/bin/run_cameras
-htop
-emacs today.text &
-/etc/init.d/keepalive-ping.sh stop
-dmesg
-halt
-lsmod
-lsusb
-modprobe -r usbserial
-rmmod usbserial
-lsusb
-rmmod -f usbserial
-lsusb
-reboot
-/etc/ini
-/etc/init.d/keepalive-ping.sh stop
-dmesg | tail
-dmesg
-root@vader-rover:~# dmesg
-[    0.000000] Booting Linux on physical CPU 0
-[    0.000000] Initializing cgroup subsys cpuset
-[    0.000000] Initializing cgroup subsys cpu
-[    0.000000] Linux version 3.5.0-2-linaro-omap (adam@pine) (gcc version 4.6.3 (Ubuntu/Linaro 4.6.3-1ubuntu5) ) #2~ci+1212101902
-[    0.000000] CPU: ARMv7 Processor [413fc082] revision 2 (ARMv7), cr=10c53c7d
-[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
-[    0.000000] Machine: Gumstix Overo
-[    0.000000] Reserving 12582912 bytes SDRAM for VRAM
-[    0.000000] Memory policy: ECC disabled, Data cache writeback
-[    0.000000] On node 0 totalpages: 127744
-[    0.000000] free_area_init_node: node 0, pgdat c070b85c, node_mem_map c07a7000
-[    0.000000]   Normal zone: 1024 pages used for memmap
-[    0.000000]   Normal zone: 0 pages reserved
-[    0.000000]   Normal zone: 126720 pages, LIFO batch:31
-[    0.000000] OMAP3630 ES1.2 (l2cache iva sgx neon isp 192mhz_clk )
-[    0.000000] Clocking rate (Crystal/Core/MPU): 26.0/332/600 MHz
-[    0.000000] pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
-[    0.000000] pcpu-alloc: [0] 0 
-[    0.000000] Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 126720
-[    0.000000] Kernel command line: console=tty0 console=ttyO2,115200n8 root=/dev/mmcblk0p2 rootwait ro earlyprintk mpurate=720 0
-[    0.000000] PID hash table entries: 2048 (order: 1, 8192 bytes)
-[    0.000000] Dentry cache hash table entries: 65536 (order: 6, 262144 bytes)
-[    0.000000] Inode-cache hash table entries: 32768 (order: 5, 131072 bytes)
-[    0.000000] allocated 1048576 bytes of page_cgroup
-[    0.000000] please try 'cgroup_disable=memory' option if you don't want memory cgroups
-[    0.000000] Memory: 499MB = 499MB total
-[    0.000000] Memory: 495808k/495808k available, 28480k reserved, 0K highmem
-[    0.000000] Virtual kernel memory layout:
-[    0.000000]     vector  : 0xffff0000 - 0xffff1000   (   4 kB)
-[    0.000000]     fixmap  : 0xfff00000 - 0xfffe0000   ( 896 kB)
-[    0.000000]     vmalloc : 0xe0800000 - 0xff000000   ( 488 MB)
-[    0.000000]     lowmem  : 0xc0000000 - 0xe0000000   ( 512 MB)
-[    0.000000]     pkmap   : 0xbfe00000 - 0xc0000000   (   2 MB)
-[    0.000000]     modules : 0xbf000000 - 0xbfe00000   (  14 MB)
-[    0.000000]       .text : 0xc0008000 - 0xc067abfc   (6603 kB)
-[    0.000000]       .init : 0xc067b000 - 0xc06b2000   ( 220 kB)
-[    0.000000]       .data : 0xc06b2000 - 0xc071b268   ( 421 kB)
-[    0.000000]        .bss : 0xc071b28c - 0xc07a6020   ( 556 kB)
-[    0.000000] NR_IRQS:474
-[    0.000000] IRQ: Found an INTC at 0xfa200000 (revision 4.0) with 96 interrupts
-[    0.000000] Total of 96 interrupts on 1 active controller
-[    0.000000] OMAP clockevent source: GPTIMER1 at 32768 Hz
-[    0.000000] sched_clock: 32 bits at 32kHz, resolution 30517ns, wraps every 131071999ms
-[    0.000000] OMAP clocksource: 32k_counter at 32768 Hz
-[    0.000000] Console: colour dummy device 80x30
-[    0.000000] console [tty0] enabled
-[    0.001007] Calibrating delay loop... 597.64 BogoMIPS (lpj=2334720)
-[    0.039123] pid_max: default: 32768 minimum: 301
-[    0.039337] Security Framework initialized
-[    0.039459] Mount-cache hash table entries: 512
-[    0.040252] Initializing cgroup subsys debug
-[    0.040313] Initializing cgroup subsys cpuacct
-[    0.040313] Initializing cgroup subsys memory
-[    0.040405] Initializing cgroup subsys devices
-[    0.040435] Initializing cgroup subsys freezer
-[    0.040435] Initializing cgroup subsys perf_event
-[    0.040588] CPU: Testing write buffer coherency: ok
-[    0.040924] Setting up static identity map for 0x8046ea98 - 0x8046eaf0
-[    0.046081] devtmpfs: initialized
-[    0.050903] dummy: 
-[    0.051300] NET: Registered protocol family 16
-[    0.051757] GPMC revision 5.0
-[    0.051818] gpmc: irq-20 could not claim: err -22
-[    0.053497] gpiochip_add: registered GPIOs 0 to 31 on device: gpio
-[    0.053588] OMAP GPIO hardware version 2.5
-[    0.053863] gpiochip_add: registered GPIOs 32 to 63 on device: gpio
-[    0.054138] gpiochip_add: registered GPIOs 64 to 95 on device: gpio
-[    0.054412] gpiochip_add: registered GPIOs 96 to 127 on device: gpio
-[    0.054687] gpiochip_add: registered GPIOs 128 to 159 on device: gpio
-[    0.055084] gpiochip_add: registered GPIOs 160 to 191 on device: gpio
-[    0.056030] omap_mux_init: Add partition: #1: core, flags: 0
-[    0.061035] _omap_mux_get_by_name: Could not find signal uart4_rx.uart4_rx
-[    0.066894] Reprogramming SDRC clock to 332000000 Hz
-[    0.066955] dpll3_m2_clk rate change failed: -22
-[    0.066986] Found NAND on CS0
-[    0.066986] Registering NAND on CS0
-[    0.068206]  usbhs_omap: alias fck already exists
-[    0.0757
-[    0.078796]  omap-mcbsp.2: alias fck alr
-[    0.079010]  omap-mcbsp.3: alias fck already exists
-[    0.080078] Switched to
-[    0.080291] OMAP DMA hardware revision 5.0
-[    0.087
-[    0.088012] fixed-dummy: 
-[    0.088134] re
-[    0.088317] vads7846: override min_uV, 1 -> 3300000
-[ 
-[    0.088348] vads7846: 3300 mV 
-[    0.088439] reg-fixed-voltage r
-[    0.089050] SCSI subsystem initialized
-[    0.089324] usbcore:
-[    0.089477] usbcore: registered new interface driver hub
-
-[    0.090118] omap_i2c omap_i2c.
-[    0.092651] twl 1-0048: PIH (irq 7) chaining IRQs 320..328
-[    0.092803] twl 1-0048: p
-[    0.093383] twl4030_gpio twl4030_gpio: gpio (irq 320) chaining IRQs 336..353
-[    0.093688] gpiochip_add: registered GPIOs 192
-[    0.094421] VUSB1V5: override min_uV, 1 -> 1500000
-[    0.09442
-[    0.094451] VUSB1V5: 1500 mV normal standby
-[    0.094909] VUSB1V8: overrid
-[    0.094909] VUSB1V8: override max_uV, 2147483647 -> 1800000
-[    0.094940]
-[    0.095336] VUSB3V1: override min_uV, 1 -> 3100000
-[    0.095336] VUSB3V1: override max_uV, 2147483647 -> 3100000
-[    0.095367] VUSB3V1: 31
-[    0.096801] twl4030_usb twl4030_usb: HW
-[    0.097015] twl4030_usb twl4030_usb: Initialized TWL4030 USB module
-[    0
-[    0.097900] vdd_core: 600 <--> 1450 mV no
-[    0.098388] VMMC1: 1850 <--> 3150 mV at 3000 mV normal standb
-[    0.098907] VDAC: 1800 mV normal standby
-[    0.099395] VDVI:
-[    0.099853] omap_i2c omap_i2c.3: bus 3 rev1.4.0 at 400 kHz
-[ 
-[    0.100799] Advanced Linux Sound Architecture Driver Version 
-[    0.101684] Switching to clocksource 32k_counter
-[    0.12619
-[    0.126953] NET: Registered protocol family 2
-[    0.127258] 
-[    0.127807] TCP established hash table entries: 16384 (order:
-[    0.128112] TCP bind hash table entries: 16384 (order: 4, 655
-[    0.128326] TCP: Hash tables configured (established 16384 bi
-[    0.128326] TCP: reno registered
-[    0.128356] UDP hash tabl
-[    0.128417] UDP-Lite ha
-[    0.128692] NET: Registered protocol family 1
-[    0.129211] RPC: Registered n
-[    0.129272] RPC: Registered udp transport module.
-[    0.
-[    0.129302] RPC: Registered tcp NFSv4.1 backchannel tran
-[    0.129577] Trying to unpack rootfs image as initramfs...
-[    0.274627] Freeing initr
-[    0.276947] audit: initializing netlink socket (disab
-[    0.277038] type=2000 audit(0.273:1): initiali
-[    0.278411] VFS: Disk quotas dquot
-[    0.278533] Dquot-cache hash table entries: 1024 (order 0, 4096 byt
-[    0.278869] NFS: Registering the id_resolver key
-[    0.278961] Key type id_resolver registere
-[    0.279418] jffs2: version 2.2. (NAND) (SUMMARY
-[    0.280059] fuse init (API version 7.19)
-[  
-[    0.282348] Block layer SCSI generic (bsg) dri
-[    0.282379] io scheduler noop registered
-[   
-[    0.283172] OMAP DSS rev 2.0
-[    0.286132] om
-[    0.286621] omap_uart.1: ttyO1 at MMIO 0x4806c
-[    0.287017] omap_uart.2: ttyO2 at MMIO 0x49020000
-[    0.988189] console [ttyO2] enabled
-[    0.992309] 
-[    1.007232] brd: module loaded
-[    1.014282] loop: module loaded
-[   
-[    1.027740] NAND device: Manufact
-[    1.052581] Creatin
-[    1.058349] 0x000000000000-0x000000080000 : "x
-[    1.065185] 0x000000080000-0x
-[    1.072540] 0x000000240000-0x000000280000 : "uboo
-[    1.079895] 0x000000280000-0x000000680000 : "linux"
-[    1.088775]
-[    1.447418] smsc911x: Driver version 2008-
-[    1.452575] smsc911x: Driver version 2008-10-21
-[    1.457824] usbc
-[    1.463623] usbcore: registered new interface driver cdc_ether
-[   
-[    1.476135] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driv
-[    1.483032] ehci_hcd: block sizes: qh 64 qtd 96 itd 160 sitd 96
-[    
-[    2.484649] ehci-omap ehci-omap.0: phy reset operation timed out
-[   
-[    2.484680] ehci-omap ehci-omap.0: reset hcc_params 0016 thr
-[    2.484710] ehci-omap ehci-omap.0: reset command 0080b02  park=3 ithresh=8
-[    2.484741] ehci-omap ehci-omap.0: OMAP-EHCI Host Co
-[    2.490997] ehci-omap ehci-omap.0: new USB bus r
-[    2.498870] ehci-omap ehci-om
-[    2.498931] ehci-omap ehci-omap.0: 
-[    2.504913] ehci-omap ehci-omap.0: init command 0
-[    2.5159
-[    2.522125] usb usb1: default language 0
-[    2.522186] usb usb1: udev 1, busnum 1, minor = 0
-[
-[    2.529357] usb usb1: N
-[    2.536956] usb usb1: Product: OMAP-EHCI H
-[    2.542
-[    2.549438] usb usb1: Ser
-[    2.554687] us
-[    2.554718] usb usb1: configuration #1 chosen from 
-[ 
-[    2.554901] hub 1-0:1.0: usb_p
-[    2.554931] hub 1-0:1.0: usb_pr
-[    2.554931] hub 1-0:1.0: USB hub found
-[    2.558929] hub 1-0:
-[    2.563171] hub 1-0:1.0: standalone hub
-[    2.563201] h
-[    2.563201] hub 1-0:1.0: indivi
-[    2.563232] hub 1-0:1.0: power on to power good time: 20ms
-[    2.563262] hub 1-0:1.0: 
-[    2.563262] hub 1-0:1.0: enabling power on all ports
-[    2.563568] ehci-oma
-[    2.594238] Initializing USB Mass Storage driv
-[    2.599517] usbcore: registered new interface driv
-[    2.60586
-[    2.610748] musb-hdrc: version 6.0, ?dma?, 
-[    2.622741] twl4030_usb twl4
-[    2.622985] musb-hdrc: ConfigData=0xde (UTMI-8, dyn FIFOs, 
-[    2.623016]
-[    2.623016] musb-hdrc: setup fifo_mode 4
-[    2.62
-[    2.623443] musb-hdrc musb-hdrc: USB OTG mode controller at
-[    2.633728] twl4030_usb
-[    2.634216] mousedev: PS/2 mouse device
-[    2.640747] twl_rtc twl_rtc: Enabling TWL-RTC
-[    2.647949] twl_rt
-[    2
-[    2.660278] voltdm_scale: No voltage scal
-[    2.667572] ehci-omap ehci-omap.0: GetStatus port:2 status 00
-[    2.667572] hub 1-0:1.0: port 2: status 
-[    2.667633] platf
-[    2.674346] cpuidle: using governor ladder
-[    2.678649] 
-[ 
-[    2.766021] hub 1-0:1.0: state 7 ports 3 chg 0004 evt 0000
-[ 
-[    2.828491] ehci-omap ehci-omap.0: port 2 reset 
-[    2.82852
-[    2.890960] usb 1-2: new high-speed USB devic
-[    2.953460] 
-[    2.953491] ehci-omap ehci-omap.0: GetStatus port:2 status 00
-[    3.047698] usb 1-2: default language 0x0409
-[    3.047851] u
-[    3.047851] usb 1-2: New USB device found, idVendor=050d, idP
-[    3.054931] usb 1-2: New USB dev
-[    3.062438] usb 1-2: Prod
-[    3.067718] omap_hsmmc 
-[    3.074493] usb 1-2: usb_probe_device
-[    3.
-[    3.074798] usb 1-2: adding 1
-[    3.074951] hub 1-2:1.0: usb_probe_interface
-[   
-[    3.
-[    3.081695] hub 1-2:1.0: 7 ports detected
-[    3.085937]
-[    3.085968] hub 1-2:1.0: ganged power switching
-[    3.08
-[    3.086181] hub 1-2:1.0: 
-[    3.086212] hub 1-2:1.0: TT requires at most 8 FS bit
-[    3.086212] hub 1-2:1.0: Port indicators are s
-[    3.086303] hub 1-2:1.0: power on 
-[    3.086578] hub 1-2:1.0: local power source is good
-[    3.086639] 
-[    3.125793] Registered led device: overo:red:gpi
-[    3.125915] Registered led device: overo:b
-[    3.126556] Registered led device: overo:blue:C
-[    3.128021] usbcore: registered new inte
-[  
-[    3.139099] usbcore: registered new interface 
-[    3.146881] overo SoC init
-[    3.149932
-[   
-[    3.188201] hub 1-2:1.0: por
-[    3.188568] hu
-[    3.188934] hub 1-2:1.0: port 6: status 0101 c
-[    3.189178] hub 1-2:1.0: port 7: status 0101 chan
-[    3.238311] twl4030-codec twl4030-c
-[    3.249420] 
-[    3.259460] oprofile: hardware
-[    3.264770] oprofile: using tim
-[   
-[    3.273223] NET: Registered proto
-[    3.278137] NET: Re
-[    3.283142] Key type dns_resolver registered
-[
-[    3.291107] hub 1-2:1.0: stat
-[    3.287933] VFP support v0.3: implementor 41 arch
-[    3.296295] hub 1-2:1.0: port 1, status 0101, chang
-[    3.300933]
-[    3.305664] sr_init: No PMIC hook to init 
-[    3.311431] smartreflex smartreflex.0: omap_sr_
-[    3.319976] smar
-[    3.335083] clock: disabling unused clocks to save power
-[    
-[   
-[    3.371582] Console: switching to colour frame buffer device 128x48
-
-[    3.397186] VDAC: incomplete constraints, leaving on
-[    3.405
-[    
-[    3.417602]   #0: overo
-[    3.420867] Freeing init memory: 220K
-[   
-[    3.508178] usb 1-2.1: udev 3, busnum 1, minor = 2
-[    3.50
-[    3.515594] usb 1-2.1: New USB device strings: Mfr=1, Product=2, SerialNum
-[    3.535522] usb 1-2.1: Product: USB 2.0 Digital Imag
-[    3.547729] usb 1-2.1: Manufacturer: Point Grey 
-[    3.558654] usb 1-2.1: Serial
-[    3.569610] usb 1-2.1: usb_probe_de
-[    3.569641] usb 1-2.1: configuration #1 chosen fr
-[    3.5700
-[    3.570953] hub 1-2:1.0: port 2, status 
-[    3.583343] mmc0: host does not support reading r
-[
-[    3.610565] udevd[78]: 
-[    3.638580] mmcblk0: mmc0:59b4       59.6 
-[    3.656
-[    3.670928]  mmcblk0: p1 
-[    3.735961] mm
-[    3.829864] usb 1-2.2: default language 0x0409
-[   
-[ 
-[    3.856994] usb 1-2.2: New USB
-[    3.895782] usb 1-2.2: Product:
-[    3.911956] usb 1-2.2: Manufacturer: R
-[    3.930114] usb 1-2.
-[    3.953033] usb 1-2.2: usb_probe_device
-[    3.953063] u
-[    3.953613] usb 1-2.2: adding 1
-[    3.954498] hub 1-2:1.0: port 4, status 0101, change 0000,
-[    4.039764] usb 1-2.4: ne
-[    4.173370] usb 1-2.4: default language 0x0409
-[    
-[    4.173889] usb 1-2.
-[    4.195404] usb 1-2.4: New USB device strings:
-[    4.217987] usb 1-2.4: Product: USB-Serial Control
-[    4.23690
-[    4.260589] usb 1-2.4: usb_probe_device
-[  
-[    4.261840] usb 1-2.4: addin
-[    4.264831] hub 1-2:1.0: port 6, status 0101, change 0000, 
-[    4.344360]
-[    4.476928] usb 1-2.6: ep0 maxpacket = 8
-[    4.47
-[    4.483886] usb 1-2.6: udev 6, busnum 1, minor = 5
-[    4.4
-[    4.508728] usb 1-2.6: 
-[    4.538208] usb 1-2.6: Product: FT232R 
-[    4.563842] usb 1-2.6: Manufacturer: FTDI
-[  
-[    4.615295] usb 1-
-[    4
-[    4.617736] usb 1-2.6: adding 1-2.6:1.0 (
-[    4.625061] hub 1-2:1.0: port 7, status 0101, change 0000, 12
-[    4.711761] usb 1-2.7: new high-speed US
-[    4.857360] usb 1
-[    4.865997] usb 1-2.7: udev 7, busnum 1, m
-[    4.866027] 
-[ 
-[    4.888641] usb 1-2.7: Product: USB 2.0 Digital Imaging Ca
-[ 
-[    4.908386] usb 1-2.7: SerialNumber: 00CAABB3
-[ 
-[    4.92013
-[    4.920715] usb 1-2.7: adding 1-2.7:1.0 (conf
-[    4.921234] 
-[    5.255920] init: ureadahead main process (164) terminated wi
-[    6.265380] udevd[243]: starting version 175
-[    6.291656] e
-[    6.301269] Buffer I/O error on device mtdblock0, logical blo
-[    6.416656] end_request: I/O err
-[    6.426239] Buffer I/O er
-[    6.516082] end_request
-[    6.525726] Buffer I/O error on devic
-[    6.
-[    6.608001] Buffer I/O error 
-[    6.707122] end_request: I/O error, dev mtdb
-[   
-[    6.
-[    6.826995] Buffer I/O error on device mt
-[    6.879119]
-[    6.888702] Buffer I/O error on device mtdblock
-[    6.93
-[    6.943878] Buffer I/O er
-[    6.989105] end_request: I/O error, dev mtdblock0, se
-[    6.998779] Buffer I/O error on device mtdbloc
-[    7.047424] end_request: I/O error
-[    7.057037] Buffer I/O error on device mtdblock0, l
-[    7.102386] 
-[    7.133453] end_request: I/O error, dev mtdblock
-[    7.144866] ads7846 spi1.0: touchscreen, i
-[    7.145111] ads7846 spi1.0: no device detected,
-[    7.162078] end_request: I/O error, dev 
-[  
-[    7.203216] Linux media interface: v0.10
-[    
-[    7.235504] end_request: I
-[    7.264831
-[   
-[    7.295288] end_request: I/O
-[    7.324035] en
-[    7.350738] end_request: I/O error, dev mtdblo
-[    7.379913] end_request: I/O error, dev mtdblock0
-[    7.408081] end_request: I/O error,
-[    7.438110] 
 [    7.455230] omap3isp omap3isp:
 [    7.455352] omap-iommu omap-iom
 [   
@@ -1998,3 +1509,492 @@ emacs today.text
 ls
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5-linux64.tgz
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5-linux64.tgz .
+emacs today.text
+htop
+updatedb
+locate librxtxSerial.so
+updatedb
+locate rt.jar
+locate tools.jar
+apt-get install sun-java6-jre
+apt-get install sun-java6-jdk
+apt-get install sun-java6-bin
+apt-get install sun-java6
+ls /usr/lib/librx*
+lla /usr/lib/librxtxSerial.so 
+rm /usr/lib/librxtxSerial.so 
+cd /usr/share/arduino/
+ls
+find
+find > rover-arduino-package.txt
+cp rover-arduino-package.txt ~/.
+lla
+lla a*
+tar -xvf arduino-1.0.5-linux64.tgz 
+rsync -avrz seykhl:~/Downloads/Teensy/49-teensy.rules /etc/udev/rules.d/
+ls /etc/udev/rules.d/
+rsync -avrz seykhl:~/Downloads/Teensy/teensyduino.64bit .
+./teensyduino.64bit 
+ls
+cd source/
+ls
+mkdir sketches
+cd /usr/lib
+ls
+cd jvm/java-7-openjdk-armhf/jre/lib/arm
+ls
+lla
+rm libjvm.so
+lla
+ln -s jamvm/libjvm.so .
+lla
+cd /usr/lib/jvm/
+ls
+cd java-7-openjdk-armhf/
+ls
+cd jre/lib/arm/
+lla
+rm libjvm.so 
+lla
+cd /usr/lib/jvm
+lla
+rmdir java-7-openjdk-armhf/
+rm -rf java-7-openjdk-armhf/
+lla
+java -version
+cd /root/arduino-1.0.5/java/lib
+ln -s /usr/lib/jvm/java-6-openjdk-armhf/jre/lib/rt.jar .
+lla
+dpkg-query -l | grep openjdk
+apt-get install openjdk-6-jdk
+apt-cache search openjdk
+apt-cache search openjdk-6
+apt-cache search openjdk-6-
+dpkg-query -l | grep openjdk-6-
+apt-get install openjdk-6-*
+apt-get reinstall openjdk-6-*
+apt-get install --reinstall openjdk-6-*
+cd /
+cd ~
+ls
+rm -rf arduino-1.0.5
+ls
+rm arduino-1.0.5-linux32.tgz 
+cd /
+locate AnalogReadSerial.ino
+cd /usr/share/doc/arduino-core/examples/
+ls
+cd ../../arduino
+ls
+locate BarometricPressureWebServer
+cd ../arduino-core/examples/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/examples/Teensy .
+cd /usr/share/arduino/
+ls
+lla examples
+cd hardware/
+ls
+cd arduino/bootloaders/atmega8/
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/atmega8/ATmegaBOOT.txt .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/atmega8/ATmegaBOOT-p* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/cater* .
+ls
+rm -rf cater*
+ls
+cd ..
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/cater* .
+ls
+cd stk500v2/
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/stk500v2/avr_* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/stk500v2/Li* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/stk500v2/Mega* .
+cd ../../
+cd cores/
+ls
+cd arduino/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/cores/arduino/avr-libc .
+cd ..
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/cores/robot .
+cd ../firmwares/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/firmwares/* .
+cd ../variants/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/variants/robot* .
+cd ../..
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/teensy .
+cd ../..
+ls
+cd arduino/
+ls
+cd hardware/
+ls
+cd tools/
+ls
+lls
+lla
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm* .
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/avr .
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/avrdude64 .
+lla
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/m* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/r* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/t* .
+lla
+cd ../../lib
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/lib/ard* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/lib/ec* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/lib/lib* .
+lla
+cd ../libraries/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/A* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/B* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/C* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/D* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Enc* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/En* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Es* .
+cd Ethernet/
+ls
+cd examples/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Ethernet/examples/WebClientRepeating .
+cd ../..
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Fas* .
+cd Firmata/examples/
+ls
+cd AnalogFirmata/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/AnalogFirmata/M* .
+cd ../EchoString/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/EchoString/M* .
+cd ../OldStandardFirmata/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/OldStandardFirmata/L* .
+cd ../ServoFirmata/
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/ServoFirmata/M* .
+cd ../SimpleAnalogFirmata/
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/SimpleAnalogFirmata/M* .
+cd ../SimpleDigitalFirmata/
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/SimpleDigitalFirmata/M* .
+cd ../StandardFirmata/
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/StandardFirmata/M* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/StandardFirmata/L* .
+cd ../..
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/L* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/r* .
+cd ..
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Fl* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Fr* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/G* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/I* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/K* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/k* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Le* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/LiquidCrystalFast .
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Low* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/M* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/N* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/O* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/P* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/R* .
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Sh* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/So* .
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/ST* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/T* .
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/U* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/V* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/WiFi .
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/X* .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/x* .
+ls
+cd ../lib
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/lib/teens* .
+cat teensyduino.txt 
+cd ..
+ls
+cd reference
+ls
+cd ..
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/src .
+cd tools/Mangler/
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/tools/Mangler/make.sh .
+lla t*
+./teensyduino.64bit 
+uname -m
+file /usr/bin/file
+lla ard*
+rm -rf arduino-1.0.5/
+rm arduino-1.0.5-linux64.tgz 
+rm teensyduino.64bit 
+rsync -avrz seykhl:~/Downloads/teensyduino.32bit .
+rsync -avrz seykhl:~/Downloads/arduino-1.0.5-linux32.tgz .
+tar -xvf arduino-1.0.5-linux32.tgz 
+ls
+rsync -avrz seykhl:~/Downloads/teensyduino.32bit .
+lla t*
+chmod a+x teensyduino.32bit 
+./teensyduino.32bit 
+lla tee*
+cd arduino-1.0.5
+ls
+./arduino 
+apt-get install arduino-core
+./arduino 
+cd ..
+./teensyduino.32bit 
+dpkg-query -l | grep jdk
+apt-get install openjdk-7-jre
+./teensyduino.32bit 
+cd arduino-1.0.5
+./arduino 
+java -verbose:jni
+apt-get install openjdk-7
+apt-get install openjdk-7*
+cd /usr/lib/jvm/
+ls j*
+cd java-7-openjdk-armhf/jre/lib/arm/
+ls
+ln -s jamvm/libjvm.so .
+lla
+cd ~/arduino-1.0.5
+./arduino 
+apt-get install openjdk-7-jdk
+./arduino 
+locate librxtxSerial
+./arduino 
+ls
+cd lib
+ls
+java
+java -version
+ls
+ln -s `pwd`/librxtxSerial.so /usr/lib/
+lla /usr/lib/librx*
+cd ..
+./arduino 
+apt-get install arduino
+arduino
+./arduino 
+which arduino
+locate arduino
+arduino
+cd ..
+./teensyduino.32bit 
+nautilus 
+java -version
+dpkg-query -l | grep ja
+update-alternatives --config java
+java -version
+apt-get purge openjdk-7-*
+arduino
+cd arduino-1.0.5
+./arduino 
+ls
+cd tools/
+ls
+cd ..
+ls libraries/
+cd ../lib
+ls
+cd ../arduino-1.0.5/lib
+ls
+feh about.jpg 
+cd ..
+ls
+cd hardware/
+ls
+cd ..
+java -version
+apt-get install openjdk-6-jre
+ls /usr/local/j*
+ls usr/local
+ls /usr/local
+ls /usr
+ls usr/share
+ls /usr/share
+ls /usr/share/java
+locate rt.jar
+locate tools.jar
+mkdir java
+cd java/
+mkdir lib
+ls /usr/lib/jvm
+ls /usr/lib/java-6-openjdk-armhf
+ls /usr/lib/jvm/java-6-openjdk-armhf/lib
+ls /usr/lib/jvm/java-6-openjdk-armhf
+ls /usr/lib/jvm/java-6-openjdk-armhf/jre
+ls /usr/lib/jvm/java-6-openjdk-armhf/jre/lib
+lla /usr/lib/jvm/java-6-openjdk-armhf/jre/lib
+cd ../
+$(dirname -- "$(readlink -f -- "${0}")" )
+dirname
+readlink
+readlink -f
+readlink --help
+dirname -- "$(readlink -f -- "${0}")"
+./arduino 
+cd ..
+wget http://udoo.org/download/files/arduino-1.5.4-hfp-for_UDOO.tar.gz
+tar -xzvf arduino-1.5.4-hfp-for_UDOO.tar.gz 
+lla *arduino*
+cat seykhl-arduino.txt | sort
+cd arduino-1.5.4
+./arduino 
+cd /
+arduino
+cd root
+ls
+cd razor-9dof-ahrs-Release-v1.4.2
+ls
+cd Arduino/
+ls
+cd Razor_AHRS/
+ls
+arduino Razor_AHRS.ino 
+htop
+cd arduino-1.0.5
+ls
+./arduino 
+cd 
+ls ar*
+cd arduino-1.5.4
+./arduino 
+ls /etc/udev/rules.d/
+cd /
+find arduino-1.0.5
+cd arduino-1.0.5
+cd ~/arduino-1.0.5
+find
+cd ../arduino-1.5.4
+find > rover-arduino-1.5.4.txt
+cp rover-arduino-1.5.4.txt ../
+cp rover-arduino-1.5.4.txt ~/.
+cd ..
+lla ro*
+lla rover*
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/*.txt .
+rm revisions.txt 
+lla *arduino*
+lla *arduino*.txt
+cd arduino-1.5.4
+ls
+./arduino 
+lla
+ls
+cd examples/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/examples/Teensy/ .
+ls
+rm -rf Tutorial*/*
+ls
+rmdir Tutorial*
+ls
+rm -rf USB_*
+ls
+rm -rf Serial
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/examples/Teensy .
+ls
+cd ../hardware/
+ls
+cd arduino/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/* .
+ls
+cd ..
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/teensy .
+cd tools/arm-none-eabi/arm-none-eabi/bin
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/bin/README.txt .
+ls
+cd ../include/
+ls
+cd c++/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/include/c++/4.7.2 .
+ls
+cd ../machine/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/include/machine/regdef.h .
+cd ..
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/include/process.h .
+cd rpc/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/include/rpc/ .
+cd ../../lib/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/lib/libarm_cortexM4l_math.a .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/lib/thumb2 .
+cd ../share/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/share/gcc-4.7.2 .
+cd ../../bin/
+ls
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/bin/arm-non-eabi-gcc-4.7.2 .
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/bin/arm-none-eabi-gcc-4.7.2 .
+cd ..
+ls
+cd lib
+ls
+cd ..
+rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/libexec .
+ls
+cd ..cd /
+cd /
+ls
+locate BitClear.html
+locate Base.java
+locate AvrdudeUploader.java
+arduino
+ls
+cd ro
+cd root
+ls
+lla ar*
+rm -rf arduino-1.5.4
+lla ar*
+mkdir arduino-stuff
+rsync -avrz seykhl:~/teensyduino/* ~/arduino-stuff/
+cd arduino-stuff/
+ls
+lsusb
+cd /
+ls
+cd root
+ls
+rsync -avrz seykhl:~/Downloads/razor* .
+ls
+lla raz*
+lla /dev/tty*
+lla /dev/ttyU*
+cd /
+git status
+ls
+top
+rebps -ef | grep ssh
+ps -ef | grep ssh
+kill -9 925
+ps -ef | grep ssh
+reboot
+lsusb
+reboot
