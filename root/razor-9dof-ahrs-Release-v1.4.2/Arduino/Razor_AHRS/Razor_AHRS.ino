@@ -1,5 +1,3 @@
-
-
 /***************************************************************************************************************
 * Razor AHRS Firmware v1.4.2
 * 9 Degree of Measurement Attitude and Heading Reference System

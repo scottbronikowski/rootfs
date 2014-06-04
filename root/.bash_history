@@ -1,135 +1,3 @@
-[    7.455230] omap3isp omap3isp:
-[    7.455352] omap-iommu omap-iom
-[   
-[    7.490112] end_request: I/O erro
-[    7.516174] end_req
-[    7.536621] end_request: I/O error, dev mtdb
-[
-[    7.590728] mt9v032 3-005c: P
-[    7.595550] lib80211: common routines for IEEE802
-[    7.595581] lib80211_crypt: registered algorithm 'N
-[    7.602081]
-[    7.626678] end_request: I/O error, dev mt
-[    7.650787] end_request: I/O error, dev mtdbloc
-[    7.679077] end_
-[    7.708099] end_request: I/O error, dev mtdblock0, secto
-[    
-[   
-[    7.790527] end_request: I/O error, dev mtdblock0, sector 8
-[    7.
-[    7.820739] end_request: I/O error, dev mtdblock0, se
-[    7.848
-[    
-[    7.901397] end_request
-[    7.925048] end_request: I/O error, d
-[   
-[    7.967315] libertas_sdio: Libertas SDIO driver
-[ 
-[    7.97
-[    7.998809] end_request: I/O error, dev mtdblock0, sector 0
-[    8.025329]
-[    8.047454] end_request: I/O error, dev mtdblock0, s
-[    8.063873] end_request: I/O error, dev mtdblock
-[    8.083221] end_request: I/O 
-[    8.097808] end_request: I/O error,
-[    8.117309] end_request: I/O error, dev mtdblock0
-[    8.1325
-[    8.162567] end_request: I/O error, dev 
-[    8.178405] end_request: I/O error, dev mtdblock0
-[
-[    8.254638] end_request
-[    8.288513] end_request: I/O error, dev mt
-[    8.318
-[    8.344909] end_request: 
-[    8.367736] en
-[    8.385986] end_request: I/O error, dev mtdblo
-[   
-[ 
-[    8.435852] end_request: I/O e
-[    8.452789] end_request: I/O er
-[    8.477142] end_request: I/O error, de
-[    8.491699] end_requ
-[    8.521820] end_request: I/O error, dev
-[    8.532379] e
-[    8.547454] end_request: I/O er
-[    8.567535] end_request: I/O error, dev mtdblock0, sector 
-[    8.583740] end_request: 
-[    8.590850] omap_i2c omap_i2c.3: controller ti
-[    
-[    8.619659] end_requ
-[    8.635284] end_request: I/O error, dev mtdblo
-[    8.654876] end_request: I/O error, dev mtdblock0,
-[    8.67117
-[    8.677978] end_request: I/O error, dev
-[  
-[    8.714172] end_request: I/O
-[    8.738342] end_request: I/O error, dev mtdblock0, sector 0
-[    8.758361]
-[    8.773956] end_request: I/O error, dev 
-[    8.78
-[    8.805206] end_request: I/O error, dev mtdblock0,
-[    8.8
-[    8.836547] end_request
-[    8.856323] end_request: I/O error, dev
-[    8.875518] end_request: I/O error, dev m
-[  
-[    9.223663] end_re
-[    9
-[    9.251708] end_request: I/O error, dev m
-[    9.271697] end_request: I/O error, dev mtdblock0, sector 0
-[
-[    9.298583] end_request: I/O error, dev 
-[    9.313079] end_r
-[    9.330871] end_request: I/O error, dev mt
-[    9.344909] 
-[ 
-[    9.379302] end_request: I/O error, dev mtdblock0, sector 
-[ 
-[    9.414611] end_request: I/O error, dev mtdbl
-[ 
-[    9.44470
-[    9.446533] usbcore: registered new interface
-[    9.448913] 
-[    9.448944] usbserial: USB Serial Driver core
-[    9.456756] 
-[    9.474884] end_request: I/O error, dev mtdb
-[    9.491699] e
-[    9.508361] end_request: I/O error, dev mtdblock0, sector 8
-[
-[    9.539581] end_request: I/O err
-[    9.550598] usbcore: regi
-[    9.552978] USB Serial 
-[    9.553100] pl2303 1-2.4:1.0: usb_pro
-[    9.
-[    9.553161] pl2303 1-2.4:1.0:
-[    9.556427] end_request: I/O error, dev mtdb
-[   
-[    9.
-[    9.604949] end_request: I/O error, dev m
-[    9.617706]
-[    9.625549] end_request: I/O error, dev mtdbloc
-[    9.64
-[    9.655670] end_request: 
-[    9.666778] usbcore: registered new interface driver 
-[    9.673278] end_request: I/O error, dev mtdblo
-[    9.681365] USB Serial support reg
-[    9.681671] ftdi_sio 1-2.6:1.0: usb_probe_interface
-[    9.681671] 
-[    9.681732] ftdi_sio 1-2.6:1.0: FTDI USB Serial 
-[    9.693267] end_request: I/O error, dev mt
-[    9.703643] end_request: I/O error, dev mtdbloc
-[    9.711669] usb 1-2.6: Detected FT232RL
-[  
-[    9.711730] usb 1-2.6: Endpoint 2 MaxPac
-[    
-[    9.719390] end_request: I
-[    9.742828
-[   
-[    9.765289] usb 1-2.6: FTDI 
-[    9.765472] ft
-[    9.766143] end_request: I/O error, dev mtdblo
-[    9.789703] end_request: I/O error, dev mtdblock0
-[    9.805236] end_request: I/O error,
 [    9.820861] 
 [    9.838378] end_request: I/O e
 [    9.853942] end_request: I/O er
@@ -1998,3 +1866,135 @@ ps -ef | grep ssh
 reboot
 lsusb
 reboot
+cat /dev/ttyUSB1
+cat /dev/ttyUSB1 | tail
+tail -f /dev/ttyUSB1
+which minicom
+which screen
+man screen
+screen /dev/ttyUSB1 57600
+screen /dev/ttyUSB1 115200
+screen /dev/ttyUSB1 57600
+cd razor-9dof-ahrs-Release-v1.4.2/
+ls
+cd Processing/Magnetometer_calibration/
+ls
+rsync seykhl:~/vader-rover/output2.txt .
+ls
+cat output2.txt 
+ls /dev/ttyUSB*
+screen /dev/ttyUSB1 57600
+exit
+htop
+exit
+cd razor-9dof-ahrs-Release-v1.4.2
+ls
+cd Processing/
+ls
+cd Magnetometer_calibration/
+ls
+rsync -avrz seykhl:~/vader-rover/output.txt .
+ls
+cd ../../Arduino/Razor_AHRS/
+ls
+arduino Razor_AHRS.ino 
+exit
+ping google.com
+emacs today.text &
+halt
+cd /dev
+ls
+lla R*
+tail -f RazorIMU 
+ls
+udevadm trigger
+ls
+lla RazorIMU 
+cat RazorIMU 
+ls
+udevadm trigger
+ls
+udevadm control --reload-rules
+ls
+udevadm trigger
+ls
+udevadm trigger
+ls
+udevadm control --reload-rules
+ls
+D[2~
+lla R*
+lla G*
+lla ttyUSB*
+exit
+screen /dev/ttyUSB1 57600
+ls /dev/ttyUSB*
+screen /dev/ttyUSB1 57600
+ls /dev/ttyUSB*
+screen /dev/ttyUSB1 57600
+screen /dev/ttyUSB0 57600
+screen /dev/ttyUSB1 4800
+screen /dev/GPS 4800
+screen /dev/RazorIMU 57600
+exit
+cd /dev
+ls
+lla
+cd /sys/devices
+ls
+find -name "ttyUSB1"
+cd /sys/class/tty
+ls
+readlink ttyUSB1
+lsusb
+cd `readlink ttyUSB1`
+ls
+cd ../..
+ls
+cd ../..
+ls
+cat idProduct 
+cat idVendor 
+cd /etc/udev
+ls
+cat udev.conf 
+cd rules.d/
+ls
+cat 40-pgr.rules 
+ls
+cd 70-persistent-
+cd 70-persistent-cd.rules 
+cat 70-persistent-cd.rules 
+cat 70-persistent-net.rules
+cat README 
+udevinfo
+apt-get install udevinfo
+udevadm
+udevadm info --query all -name /dev/ttyUSB* --attribute-walk
+udevadm info --query all -name /dev/ttyUSB0 --attribute-walk
+udevadm info --query all --name /dev/ttyUSB0 --attribute-walk
+udevadm info --query all --name /dev/ttyO0 --attribute-walk
+udevadm info --query all --name /dev/ttyUSB0 --attribute-walk
+ls
+ls /dev
+udevadm control --reload-rules
+ls /dev
+udevadm control --reload-rules
+ls /dev
+udevadm control --reload-rules
+ls /dev
+udevadm control --reload-rules
+ls /dev
+udevadm trigger
+ls /dev
+lla /dev/RazorIMU 
+screen /dev/RazorIMU 57600
+screen /dev/ttyUSB1 57600
+cat /dev/RazorIMU 
+tail -f /dev/RazorIMU 
+lsusb
+udevadm info --query all --name /dev/ttyUSB1 --attribute-walk
+lsusb
+ls /dev/ttyUSB*
+lsusb
+exit

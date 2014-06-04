@@ -1,41 +1,9 @@
-
-
-
-
-
-
-
-USE A SOCKET INSTEAD OF FILE DESCRIPTOR TO COMMUNICATE BETWEEN GPIO AND MONITOR!!!!  READ WILL BLOCK!!!
-
 Paper deadlines:
 AAAI: 10Sep14-abstract, 15Sep14-final paper (conference 25-29Jan15 Austin, TX)
 ICRA: 15Sep14-abstract, 12Feb15-final paper (conference 25-30May15, Seattle, WA) 
       (last conference 31May-5June14, paper deadline was 16Sep13)
 IROS: 18Feb15-abstract, 8Jul15-final paper (conference 28Sep-2Oct15, Hamburg, Germany)
       (last conference 14-18Sep14, paper deadline was 6Feb14)
-
-Buffers
-----------------------------------------
-.   install.sh            3106  Shell-script[bas  ~/realtek/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911/install.sh
-    output_of_install.t: 21807  Text		  ~/realtek/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911/output_of_install.text
-    Makefile|rtl8188C_8: 17292  GNUmakefile	  ~/realtek/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911/driver/rtl8188C_8192C_usb_linux_v4.0.2_9000.20130911/Makefile
-    today.text           24670  Text		  ~/today.text
-    Makefile|omap3-pwm|    364  GNUmakefile	  /omap3-pwm/Makefile
-    overo-source-me.txt    543  Text		  /omap3-pwm/overo-source-me.txt
-    servo-control.sh       630  Shell-script[bas  /etc/init.d/servo-control.sh
-    gpio-monitor.sh       1137  Shell-script[bas  /etc/init.d/gpio-monitor.sh
-    servo-control.sh       630  Shell-script[bas  /etc/init.d/servo-control.sh
-    g-multi.sh             531  Shell-script[bas  /etc/init.d/g-multi.sh
-    motor_control.h       4707  C++/l		  ~/source/motor_control/motor_control.h
-    emperor.cpp          10020  C++/l		  ~/source/emperor/emperor.cpp
-    emperor.h             1634  C++/l		  ~/source/emperor/emperor.h
-    motor_control_functi: 7126  C++/l		  ~/source/motor_control/motor_control_functions.cpp
-    Makefile              1514  GNUmakefile	  ~/source/emperor/Makefile
-    monitor.h             1161  C++/l		  ~/source/monitor/monitor.h
-    monitor.cpp           3064  C++/l		  ~/source/monitor/monitor.cpp
-    toollib-camera.h      3356  C++/l		  ~/source/camera/toollib-camera.h
-    toollib-camera.cpp   18914  C++/l		  ~/source/camera/toollib-camera.cpp
-    run_cameras.cpp       1640  C++/l		  ~/source/camera/run_cameras.cpp
 
 
 Old notes
@@ -355,4 +323,55 @@ After looking at the old and new boards.txt files, there is a significant differ
 	  const float magn_ellipsoid_transform[3][3] = {{0.926888, 0.0181419, 0.0232870}, {0.0181419, 0.979668, 0.0126558}, {0.0232870, 0.0126558, 0.971117}};
 Entered this into Razor_AHRS.ino and reprogrammed.
 --Mag update improved yaw/heading tracking when board was separated from rover, but still had erroneous results when mounted. Some experimentation showed that the errors seem to be due to the proximity of the IMU to the motors.  When mounted over the left middle motor, 1 cm above the deck, heading tracking was bad (a 90 degree turn of the robot showed little to no change in heading).  However, when the IMU was held at the approximate center of mass of the rover (adjacent to and behind the panoramic camera) and ~4 cm above the deck, heading tracking seemed accurate.  Taking the rover down to the machine shop to see if they can assist with remounting the IMU.
+---
+--Created /etc/udev/rules.d/41-my-devices.rules to make fixed aliases for the ttyUSB* assigned to the Razor IMU and GPS.  IMU is now '/dev/RazorIMU' and GPS is now '/dev/GPS'.  This will allow me to use these fixed aliases in my code when accessing the IMU or GPS.  Also discovered that GPS automatically puts out ASCII data at 4800 bps, so just need to read that node (and parse data format).
+--Need to think about creating my own data output format for the Razor in the *.ino code...All I should need would be the Yaw angle (heading) and the calibrated sensor data (3x3).
+
+5 Jun 14
+--Taking rover back down to machine shop first thing in the morning to do IMU mounting when machine shop personnel are available.
+
+
+
+
+***RANDOM NOTES
+--may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
+--LOOK AT C++ examples in Razor code
+
+..udev stuff to write new *.rules file lines to reference a device with a fixed alias
+  #udevadm info --query all --name /dev/ttyUSB1 --attribute-walk
+  --gives info about the device to make a udev rule
+  #udevadm control --reload-rules; udevadm trigger 
+  --reloads udev rules so newly written ones can take effect
+..USE A SOCKET INSTEAD OF FILE DESCRIPTOR TO COMMUNICATE BETWEEN GPIO AND MONITOR!!!!  READ WILL BLOCK!!!
+
+
+Buffers
+----------------------------------------
+    motor_control_functi: 7126  C++/l		  ~/source/motor_control/motor_control_functions.cpp
+    motor_control.h       4786  C++/l		  ~/source/motor_control/motor_control.h
+    motor_control.cpp     4333  C++/l		  ~/source/motor_control/motor_control.cpp
+    Razor_AHRS.ino       25907  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Razor_AHRS.ino
+    Output.ino            3799  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Output.ino
+    Sensors.ino           6483  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Sensors.ino
+    Math.ino              2187  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Math.ino
+    DCM.ino               4673  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/DCM.ino
+    Compass.ino            595  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Compass.ino
+.   RazorAHRS.cpp         9139  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.cpp
+    Example.cpp           4468  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/Example.cpp
+    RazorAHRS.h           4341  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.h
+    today.text           24670  Text		  ~/today.text
+    servo-control.sh       630  Shell-script[bas  /etc/init.d/servo-control.sh
+    gpio-monitor.sh       1137  Shell-script[bas  /etc/init.d/gpio-monitor.sh
+    servo-control.sh       630  Shell-script[bas  /etc/init.d/servo-control.sh
+    g-multi.sh             531  Shell-script[bas  /etc/init.d/g-multi.sh
+    emperor.cpp          10020  C++/l		  ~/source/emperor/emperor.cpp
+    emperor.h             1634  C++/l		  ~/source/emperor/emperor.h
+    Makefile              1514  GNUmakefile	  ~/source/emperor/Makefile
+    toollib-camera.h      3356  C++/l		  ~/source/camera/toollib-camera.h
+    toollib-camera.cpp   18914  C++/l		  ~/source/camera/toollib-camera.cpp
+-->aren't all below replaced by emperor????
+    monitor.h             1161  C++/l		  ~/source/monitor/monitor.h
+    monitor.cpp           3064  C++/l		  ~/source/monitor/monitor.cpp
+    run_cameras.cpp       1640  C++/l		  ~/source/camera/run_cameras.cpp
+
 
