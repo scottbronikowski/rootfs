@@ -1,56 +1,3 @@
-[    9.820861] 
-[    9.838378] end_request: I/O e
-[    9.853942] end_request: I/O er
-[   
-[    9.885406] end_request: I/O erro
-[    9.900421] end_req
-[    9.916595] end_request: I/O error, dev mtdb
-[
-[    9.951965] end_request: I/O 
-[    9.971221] end_request: I/O error, dev mtdblock0
-[    9.989654] end_request: I/O error, dev mtdblock0, 
-[   10.015655]
-[   10.031494] end_request: I/O error, dev mt
-[   10.053527] end_request: I/O error, dev mtdbloc
-[   10.071014] end_
-[   10.090057] end_request: I/O error, dev mtdblock0, secto
-[   1
-[   
-[   10.125549] build time: Mar 17 2014 16:15:36
-[   10.125671]
-[   10.
-[   10.125732] 
-[   10.125732] usb_endpoint_descriptor(0
-[   10.125
-[   1
-[   10.125732] bEndpointAd
-[   10.125732] wMaxPacketSize=200
-[   10
-[   
-[   10.125762] 
-[   10.125762] usb_endpoint_descri
-[ 
-[   10.12
-[   10.125793] bEndpointAddress=2
-[   10.125793] wMaxPacketSiz
-[   10.125793]
-[   10.125793] RT_usb_endpoint_is_bulk_out = 2
-[   10.1
-[   10.125823] usb_endpoint_descriptor(2):
-[   10.1
-[   10.125823] bDescriptorType=5
-[   10.125823] bEndpointAddress=3
-[   
-[   10.125854] bInterval=0
-[   10.125854] RT_usb_end
-[   10.1258
-[   10.125854] usb_endpoint_descriptor(3):
-[   10.125885] bDescriptorType=5
-[   10.125885] bEnd
-[
-[   10.125885] bInterval=1
-[   10.125885] RT_usb_endpoint_is_int_in = 4,
-[   10.125
 [   10.125915] 
 [   10.12591
 [   10.125976] CH
@@ -1998,3 +1945,56 @@ lsusb
 ls /dev/ttyUSB*
 lsusb
 exit
+cd razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/
+arduino Razor_AHRS.ino 
+exit
+htop
+exit
+emacs today.text &
+halt
+ls
+exit
+exit
+htop
+exit
+exit
+emacs today.text
+halt
+lsusb
+ls
+ls /dev
+ls /dev/G*
+ls /dev/R*
+lla /dev/R*
+AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
+ls
+pwd
+rebootreboot
+reboot
+lla /dev/R*
+emacs today.text 
+ls
+cd razor-9dof-ahrs-Release-v1.4.2/Processing/Magnetometer_calibration/
+ls
+rsync -avrz seykhl:~/vader-rover/output3.txt .
+ls
+cat output3.txt 
+arduino
+htop
+screen /dev/GPS 4800
+lla /dev/R*
+lla /dev/G*
+screen /dev/RazorIMU 57600
+exit
+exit
+exit
+arduino
+exit
+ATZ
+AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
+ls
+p;wd
+pwd
+ps
+ps -ef
+halt

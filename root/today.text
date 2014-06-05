@@ -328,9 +328,29 @@ Entered this into Razor_AHRS.ino and reprogrammed.
 --Need to think about creating my own data output format for the Razor in the *.ino code...All I should need would be the Yaw angle (heading) and the calibrated sensor data (3x3).
 
 5 Jun 14
---Taking rover back down to machine shop first thing in the morning to do IMU mounting when machine shop personnel are available.
-
-
+--Took rover to machine shop and got IMU remounted adjacent to the camera, ~4.5cm above the deck, in the position I tested yesterday that yielded minimal magnetic interference with heading readings.  Oriented the IMU so that the positive X axis is pointing forward, the positive Y axis to the right, and the positive Z axis down (so there should be no need to calculate an offset for heading).
+--Re-ran calibration routine with the IMU mounted and the rover on the floor (except for extended mag calibration procedure) and got the following:
+  accel:
+    x: max = 249, min = -283
+    y: max = 275, min = -254
+    z: max = 232, min = -292
+  gyro: (average values)
+    x = 30.37
+    y = 4.43
+    z = 17.26
+  mag: (OLD)
+    x: max = 530, min = -453
+    y: max = 518, min = -410
+    z: max = 152, min = -768
+--Calibration data from new magnetometer calibration procedure (saved in  ~/razor-9dof-ahrs-Release-v1.4.2/Processing/Magnetometer_calibration/output.txt):
+    #define CALIBRATION__MAGN_USE_EXTENDED true
+    const float magn_ellipsoid_center[3] = {45.1138, 41.8867, -296.532};
+    const float magn_ellipsoid_transform[3][3] = {{0.900928, 0.0229865, 0.0139737}, {0.0229865, 0.980335, -0.0228203}, {0.0139737, -0.0228203, 0.971285}};
+Accelerometer values were pretty similar to previous, but gyro and mag were very different.
+--Tested Yaw (heading) with new calibration and rover on the ground and got good results.  Turning the rover ~90 degrees yielded a ~90 degree change in yaw.  Measured against lensatic compass and found that yaw degrees were about 17 or 18 degrees less than true heading(yaw = 30, compass = 47).  Need to test more thoroughly to ensure that this offset is consistent before writing it into the code.
+--Shortened USB cable to IMU and plugged into the furthest forward port on the hub.
+--Copied *.ino files from ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS to ~/source/razor-imu/arduino/Razor_AHRS in order to consolidate this code with my other working code.
+--Have first version of my output format written into Razor_AHRS.ino (under ~/source).  Still need to tweak it and get offset correct.
 
 
 ***RANDOM NOTES
@@ -350,12 +370,14 @@ Buffers
     motor_control_functi: 7126  C++/l		  ~/source/motor_control/motor_control_functions.cpp
     motor_control.h       4786  C++/l		  ~/source/motor_control/motor_control.h
     motor_control.cpp     4333  C++/l		  ~/source/motor_control/motor_control.cpp
-    Razor_AHRS.ino       25907  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Razor_AHRS.ino
-    Output.ino            3799  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Output.ino
-    Sensors.ino           6483  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Sensors.ino
-    Math.ino              2187  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Math.ino
-    DCM.ino               4673  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/DCM.ino
-    Compass.ino            595  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Compass.ino
+.   Razor_AHRS.ino       27041  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
+    Compass.ino            595  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Compass.ino
+    DCM.ino               4673  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/DCM.ino
+    Math.ino              2187  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Math.ino
+    Sensors.ino           6483  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Sensors.ino
+    Output.ino            5191  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Output.ino
+
+
 .   RazorAHRS.cpp         9139  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.cpp
     Example.cpp           4468  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/Example.cpp
     RazorAHRS.h           4341  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.h
