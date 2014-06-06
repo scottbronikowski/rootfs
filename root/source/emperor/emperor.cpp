@@ -39,20 +39,22 @@ const char* cmd_servo = "servo";
 const char* pan_file = "/dev/pwm10";
 const char* tilt_file = "/dev/pwm9";
 const char* k_LogPort = "2001";
-const int k_LogBufSize = 100;
+const int k_LogBufSize = 256; //100;
 //for bump switch monitoring
 const int bump_move_time = 50000;
 const int bump_read_size = 24;
 const int bump_front = 185;
 const int bump_rear = 184;
 const char* gpio_file = "/dev/gpio-event";
+const char* imu_file = "/dev/RazorIMU";
+const char* gps_file = "/dev/GPS";
 
 //global variables
 int sockfd, log_sockfd;
 int cam_thread_should_die = TRUE; //cam thread not running
 int gpio_thread_should_die = TRUE; //gpio thread not running
 pthread_t cam_thread, gpio_thread;
-int pan_fd, tilt_fd, motor_fd, gpio_fd;
+int pan_fd, tilt_fd, motor_fd, gpio_fd, imu_fd, gps_fd;
 char motor_prev[k_maxBufSize];
 char pan_prev[k_maxBufSize];
 char tilt_prev[k_maxBufSize];
@@ -87,13 +89,15 @@ int main(int /*argc*/, char** /*argv*/)
     emperor_signal_handler(SIGTERM);
     return -1;
   }
-    gpio_fd = open(gpio_file, O_RDONLY);
+  gpio_fd = open(gpio_file, O_RDONLY);
   if (gpio_fd < 1)
   {
     perror("gpio:");
     emperor_signal_handler(SIGTERM);
     return -1;
   }
+  //open fd for RazorIMU
+  
   //start network stuff and wait for connection
   printf("Connecting to %s on port %s for commands...\n", k_Server, k_CommandPort);
   sockfd = -1;

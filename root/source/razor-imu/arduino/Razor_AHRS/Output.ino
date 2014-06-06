@@ -22,9 +22,9 @@ void output_mine()
   }
   else if (output_format == OUTPUT__FORMAT_TEXT)
   {
-    Serial.print("Yaw(no offset)="); Serial.print(TO_DEG(yaw)); Serial.print(",");
+    Serial.print("Yaw(raw)="); Serial.print(TO_DEG(yaw)); Serial.print(",");
     Serial.print("Yaw(offset)="); Serial.print(TO_DEG(my_yaw)); Serial.print(",");
-    Serial.print("MAG_Heading(no offset)=");
+    Serial.print("MAG_Heading(raw)=");
     Serial.print(TO_DEG(MAG_Heading)); Serial.print(",");
 
     Serial.print("Ax="); Serial.print(accel[0]); Serial.print(",");

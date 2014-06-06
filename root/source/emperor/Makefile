@@ -16,13 +16,16 @@ CAMDIR = ../camera
 CAMFILES = ${CAMDIR}/toollib-camera.cpp ${CAMDIR}/toollib-camera.h
 MOTORDIR = ../motor_control
 MOTORFILES = ${MOTORDIR}/motor_control_functions.cpp ${MOTORDIR}/motor_control.h
+IMUDIR = ../razor-imu
+IMUFILES = ${IMUDIR}/razor-imu.cpp ${IMUDIR}/razor-imu.h
 #MONDIR = ../monitor
 #MONFILES = ${MONDIR}/monitor.cpp ${MONDIR}/monitor.h
 
-OBJS = ${CAMDIR}/toollib-camera.o \
-       ${MOTORDIR}/motor_control_functions.o \
-       emperor.o
-	#${MONDIR}/monitor.o \
+OBJS = 	${CAMDIR}/toollib-camera.o \
+	${MOTORDIR}/motor_control_functions.o \
+	${IMUDIR}/razor-imu.o \
+	emperor.o
+#${MONDIR}/monitor.o \
 
 ${OUTPUTNAME}: ${OBJS}
 	${CC} -o ${OUTPUTNAME} ${OBJS} ${LIBS} ${COMMON_LIBS}
@@ -36,6 +39,9 @@ ${CAMDIR}/toollib-camera.o: ${CAMFILES}
 
 ${MOTORDIR}/motor_control_functions.o: ${MOTORFILES}
 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${MOTORDIR}/motor_control_functions.o
+
+${IMUDIR}/razor-imu.o: ${IMUFILES}
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${IMUDIR}/razor-imu.o
 
 # ${MONDIR}/monitor.o: ${MONFILES}
 # 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp

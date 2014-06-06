@@ -352,6 +352,10 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Copied *.ino files from ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS to ~/source/razor-imu/arduino/Razor_AHRS in order to consolidate this code with my other working code.
 --Have first version of my output format written into Razor_AHRS.ino (under ~/source).  Still need to tweak it and get offset correct.
 
+6 Jun 14
+--Started working on data flow of RazorIMU->rover(gumstix)->seykhl->log.  Have started building razor-imu.{cpp,h} for the IMU-specific functions that will need to be called from emperor.  I am borrowing heavily from the C++ code included by Peter Bartz in razor-9dof-ahrs-Release-v1.4.2/C++, although I'm trying to reduce the complexity--Bartz passes his data from the IMU to C++ in binary, but I think that I'm going to stick with passing text, since that is easier to send across the network and log-->I can read it back into binary from text later, on seykhl.  Integrated razor-imu.{cpp,h} with the emperor Makefile and built the function to open the serial port to the IMU.  It compiles into the emperor executable, but I haven't tested it yet.
+
+
 
 ***RANDOM NOTES
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
@@ -367,28 +371,28 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 Buffers
 ----------------------------------------
+.   today.text           39276  Text		  ~/today.text
     motor_control_functi: 7126  C++/l		  ~/source/motor_control/motor_control_functions.cpp
-    motor_control.h       4786  C++/l		  ~/source/motor_control/motor_control.h
-    motor_control.cpp     4333  C++/l		  ~/source/motor_control/motor_control.cpp
-.   Razor_AHRS.ino       27041  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
-    Compass.ino            595  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Compass.ino
-    DCM.ino               4673  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/DCM.ino
-    Math.ino              2187  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Math.ino
-    Sensors.ino           6483  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Sensors.ino
-    Output.ino            5191  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Output.ino
-
-
-.   RazorAHRS.cpp         9139  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.cpp
-    Example.cpp           4468  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/Example.cpp
+    razor-imu.h            601  C++/l		  ~/source/razor-imu/razor-imu.h
+    razor-imu.cpp         5782  C++/l		  ~/source/razor-imu/razor-imu.cpp
+    Makefile              1725  GNUmakefile	  ~/source/emperor/Makefile
     RazorAHRS.h           4341  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.h
-    today.text           24670  Text		  ~/today.text
+    RazorAHRS.cpp         9139  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.cpp
+    Example.cpp           4468  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/Example.cpp
+    motor_control.h       4786  C++/l		  ~/source/motor_control/motor_control.h
+    emperor.cpp          16338  C++/l		  ~/source/emperor/emperor.cpp
+    emperor.h             2131  C++/l		  ~/source/emperor/emperor.h
+    Output.ino            5494  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Output.ino
+    Razor_AHRS.ino       27041  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
+    Math.ino              2187  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Math.ino
+    DCM.ino               4673  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/DCM.ino
+    Compass.ino            595  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Compass.ino
+
+Older:
     servo-control.sh       630  Shell-script[bas  /etc/init.d/servo-control.sh
     gpio-monitor.sh       1137  Shell-script[bas  /etc/init.d/gpio-monitor.sh
     servo-control.sh       630  Shell-script[bas  /etc/init.d/servo-control.sh
     g-multi.sh             531  Shell-script[bas  /etc/init.d/g-multi.sh
-    emperor.cpp          10020  C++/l		  ~/source/emperor/emperor.cpp
-    emperor.h             1634  C++/l		  ~/source/emperor/emperor.h
-    Makefile              1514  GNUmakefile	  ~/source/emperor/Makefile
     toollib-camera.h      3356  C++/l		  ~/source/camera/toollib-camera.h
     toollib-camera.cpp   18914  C++/l		  ~/source/camera/toollib-camera.cpp
 -->aren't all below replaced by emperor????

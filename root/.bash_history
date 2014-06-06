@@ -1,41 +1,3 @@
-[   10.125915] 
-[   10.12591
-[   10.125976] CH
-[   10.126037] register rtw_netdev_ops to netdev_
-[   
-[ 
-[   10.141204] end_request: I/O e
-[   10.151550] EEPROM type is E-FU
-[   10.151580] ====> ReadAdapterInfo8192C
-[   10.152618] Boot fro
-[   10.159851] end_request: I/O error, dev
-[   10.182525] e
-[   10.202972] end_request: I/O er
-[   10.224151] end_request: I/O error, dev mtdblock0, sector 
-[   10.238067] end_request: 
-[   10.258819] end_request: I/O error, dev mtdblo
-[   1
-[   10.293121] end_requ
-[   10.313049] end_request: I/O error, dev mtdblo
-[   10.327209] end_request: I/O error, dev mtdblock0,
-[   10.34429
-[   10.361694] end_request: I/O error, dev
-[  
-[   10.396606] end_request: I/O
-[   10.413940] end_request: I/O error, dev mtdblock0, sector 0
-[   10.432067]
-[   10.447662] end_request: I/O error, dev 
-[   10.46
-[   10.482696] end_request: I/O error, dev mtdblock0,
-[   10.5
-[   10.522094] end_request
-[   10.538391] end_request: I/O error, dev
-[   10.558258] end_request: I/O error, dev m
-[  
-[   10.584411] end_re
-[   10
-[   10.625549] end_request: I/O error, dev m
-[   10.625854] end_request: I/O error, dev mtdblock0, sector 0
 [
 [   10.626190] end_request: I/O error, dev 
 [   10.626373] end_r
@@ -1997,4 +1959,42 @@ p;wd
 pwd
 ps
 ps -ef
+halt
+screen /dev/RazorIMU 57600
+cd source
+ls
+mkdir razor-imu
+cd razor-imu/
+ls
+mkdir arduino
+cd arduino/
+ls
+mv *.ino Razor_AHRS/
+ls
+lla /dev/R*
+exit
+cd razor-9dof-ahrs-Release-v1.4.2/Arduino/
+ls
+cd Razor_AHRS/
+ls
+htop
+exit
+screen /dev/RazorIMU 57600
+exit
+arduino
+exit
+emacs today.text
+exit
+lsusb
+dmesg -T | tail
+dmesg | tail
+halt
+screen /dev/RazorIMU 57600
+ls /dev/R*
+screen /dev/RazorIMU 57600
+exit
+lsmod
+ls
+exit
+ls
 halt
