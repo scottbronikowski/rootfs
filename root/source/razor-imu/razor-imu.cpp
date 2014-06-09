@@ -39,26 +39,21 @@ int razor_open_serial_port(const char* port)
       /* and also http://linux.die.net/man/3/tcsetattr */
       // basic raw/non-canonical setup
       cfmakeraw(&tio);
-  
       // enable reading and ignore control lines
       tio.c_cflag |= CREAD | CLOCAL;
-
       // set 8N1
       tio.c_cflag &= ~PARENB; // no parity bit
       tio.c_cflag &= ~CSTOPB; // only one stop bit
       tio.c_cflag &= ~CSIZE;  // clear data bit number
       tio.c_cflag |= CS8;     // set 8 data bits
-  
       // no hardware flow control
       tio.c_cflag &= ~CRTSCTS;
       // no software flow control  
       tio.c_iflag &= ~(IXON | IXOFF | IXANY);
-  
       // poll() is broken on OSX, so we set VTIME and use read(), which is ok since
       // we're reading only one port anyway
       tio.c_cc[VMIN]  = 0;
       tio.c_cc[VTIME] = 10; // 10 * 100ms = 1s
-  
       // set port speed
       if (cfsetispeed(&tio, razor_speed) != 0)
       {
@@ -76,8 +71,6 @@ int razor_open_serial_port(const char* port)
 	perror("razor_open_serial_port:tcsetattr");
 	return -1;
       }
-
- 
     }
   }
   else // something didn't work

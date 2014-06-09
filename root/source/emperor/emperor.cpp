@@ -96,7 +96,71 @@ int main(int /*argc*/, char** /*argv*/)
     emperor_signal_handler(SIGTERM);
     return -1;
   }
-  //open fd for RazorIMU
+  //open fd for RazorIMU 
+  imu_fd = razor_open_serial_port(imu_file);
+  if (imu_fd < 1)
+  {
+    perror("imu:");
+    emperor_signal_handler(SIGTERM);
+    return -1;
+  }
+  //test IMU
+  const char* initstring = "#o0#om";
+  int testretval = write(imu_fd, initstring, strlen(initstring));
+  //test if the write worked
+  if (testretval != (int)strlen(initstring))
+  {
+    if (testretval == -1)
+    {
+      perror("IMU test write initstring:");
+      emperor_signal_handler(SIGTERM);
+      return -1;
+    }
+    else
+    {
+      printf("Other IMU test write error, testretval = %d, "
+	     "strlen(initstring) = %d\n", testretval, strlen(initstring));
+      emperor_signal_handler(SIGTERM);
+      return -1;
+    }
+  }
+  //if we get here, initstring got written
+  printf("Wrote initstring to imu_fd\n");
+  //now try to write a #f to get a frame then read it
+  const char* framerequest = "#f";
+  testretval = write(imu_fd, framerequest, strlen(framerequest));
+  if (testretval != (int)strlen(framerequest))
+  {
+    printf("IMU error writing frame requests, testretval = %d\n", testretval);
+    emperor_signal_handler(SIGTERM);
+    return -1;
+  }
+  char imubuf[k_LogBufSize];
+  testretval = read(imu_fd, imubuf, k_LogBufSize);
+  if (testretval < 1)
+  {
+    perror("IMU test read:");
+    emperor_signal_handler(SIGTERM);
+    return -1;
+  }
+
+  //testretval = pread(imu_fd, imubuf, k_LogBufSize, 0); //used to read from start of file
+  // if (testretval < 1)
+  // {
+  //   perror("IMU test read pread:");
+  //   emperor_signal_handler(SIGTERM);
+  //   return -1;
+  // }
+  else
+  {
+    printf("bytes read = %d\n", testretval);
+    printf("data read: %s", imubuf);
+    printf("newline after, not before\n");
+  }
+  
+
+
+  //open fd for GPS
   
   //start network stuff and wait for connection
   printf("Connecting to %s on port %s for commands...\n", k_Server, k_CommandPort);

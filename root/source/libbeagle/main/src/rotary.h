@@ -23,14 +23,17 @@ private:
 	GPIO *A;
 	GPIO *B;
 
-	Rotary();
+  Rotary();
 
 	bool run_state;
 	pthread_t thread;
 	static void *monitor(void *arg);
-
+  int state;
+  int last;
 public:
 
+  long int loop_count;
+  //Rotary();
 	Rotary(int a, int b);
 	~Rotary();
 
@@ -41,6 +44,7 @@ public:
 
 	void run();
 	void stop();
+  void handler(int a);
 };
 
 #endif

@@ -355,7 +355,9 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 6 Jun 14
 --Started working on data flow of RazorIMU->rover(gumstix)->seykhl->log.  Have started building razor-imu.{cpp,h} for the IMU-specific functions that will need to be called from emperor.  I am borrowing heavily from the C++ code included by Peter Bartz in razor-9dof-ahrs-Release-v1.4.2/C++, although I'm trying to reduce the complexity--Bartz passes his data from the IMU to C++ in binary, but I think that I'm going to stick with passing text, since that is easier to send across the network and log-->I can read it back into binary from text later, on seykhl.  Integrated razor-imu.{cpp,h} with the emperor Makefile and built the function to open the serial port to the IMU.  It compiles into the emperor executable, but I haven't tested it yet.
 
-
+9 Jun 14
+--Started on IMU data passing testing.  Can get port open and set up fine, and sending request for data seems to work.  However, the reading of that data does not seem to work--should be reading up to 256 bytes, but instead stops after reading between 1 and 5 bytes.  Need to look at this more.  Changing VTIME value in razor-imu.cpp did not seem to have an effect.
+--Found that previous work on using SIGALRM in libbeagle/rotary for testing had gotten reverted in the 27 May debacle.  Manually downloaded 21 May versions and replaced them.
 
 ***RANDOM NOTES
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS

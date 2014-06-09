@@ -11,6 +11,7 @@
 #include "toollib-camera.h"
 #include "motor_control.h"
 //#include "monitor.h"
+#include "razor-imu.h"
 #include <csignal>
 
 //defines

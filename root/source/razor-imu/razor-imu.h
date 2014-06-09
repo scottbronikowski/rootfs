@@ -23,7 +23,6 @@
 //global constants
 extern const speed_t razor_speed;
 
-
 //prototypes
 int razor_open_serial_port(const char* port);
 
