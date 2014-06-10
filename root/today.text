@@ -359,6 +359,12 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Started on IMU data passing testing.  Can get port open and set up fine, and sending request for data seems to work.  However, the reading of that data does not seem to work--should be reading up to 256 bytes, but instead stops after reading between 1 and 5 bytes.  Need to look at this more.  Changing VTIME value in razor-imu.cpp did not seem to have an effect.
 --Found that previous work on using SIGALRM in libbeagle/rotary for testing had gotten reverted in the 27 May debacle.  Manually downloaded 21 May versions and replaced them.
 
+10 Jun 14
+--Got a full line of data (as text) read from IMU by changing the termios c_cc[VMIN] in razor-imu.cpp to 143 (this value sets the minimum number of bytes per read).  However, I don't think this is a workable permanent solution, as the number of bytes on a line will change as the values change.  I wasn't able to figure out a method to tell the read to continue until it hits a newline.
+--I think it's better to get the data from the IMU into emperor as binary (floats) and then deal with displaying/manipulating the data from there.  I think it will still be easier to send the data from the rover (emperor) to seykhl (and the log files) as text, since that's what I already have set up.
+--Have IMU outputting data as 12x floats.  Currently working on getting data into emperor in binary format, following closely with RazorAHRS.cpp.  Have imu_fd as global var opened in razor-imu.cpp, need to implement _input_pos similarly in order to get _read_token working.
+
+
 ***RANDOM NOTES
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
 --LOOK AT C++ examples in Razor code

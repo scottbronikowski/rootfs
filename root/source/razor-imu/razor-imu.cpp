@@ -9,31 +9,37 @@
 
 //global constants
 const speed_t razor_speed = B57600;
+const char* imu_file = "/dev/RazorIMU";
+const int razor_connect_timeout_ms = 5000;
 
-int razor_open_serial_port(const char* port)
+//global vars
+int imu_fd;
+
+
+bool razor_open_serial_port()
 {
-  int fd;
   // O_NDELAY allows open even with no carrier detect (e.g. needed for Razor)
-  if ((fd = open(port, O_RDWR | O_NOCTTY | O_NDELAY)) != -1)
-  {
+  if ((imu_fd = open(imu_file, O_RDWR | O_NOCTTY | O_NDELAY)) == -1)
+  { // something didn't work
+    perror("razor_open_serial_port:open");
+    return false;
+  }
+  else
+  { //we have a valid fd
     // make I/O blocking again
-    int flags;
-    // clear O_NDELAY to make I/O blocking again
-    // in fact this is semi-blocking, since we set VTIME on the port
-    if (((flags = fcntl(fd, F_GETFL, 0)) != -1) &&
-	(fcntl(fd, F_SETFL, flags & ~O_NDELAY)) == -1)
+    if (!razor_set_blocking_io())
     {//something went wrong
-      perror("razor_open_serial_port:fcntl");
-      return -1;
+      perror("razor_open_serial_port:razor_set_blocking_io");
+      return false;
     }
     else //blocking IO set, now set other attributes
     {
       // get port attributes
       struct termios tio;
-      if (tcgetattr(fd, &tio) != 0)
+      if (tcgetattr(imu_fd, &tio) != 0)
       {
 	perror("razor_open_serial_port:tcgetattr");
-	return -1;
+	return false;
       }
       /* see http://www.easysw.com/~mike/serial/serial.html */
       /* and also http://linux.die.net/man/3/tcsetattr */
@@ -52,34 +58,124 @@ int razor_open_serial_port(const char* port)
       tio.c_iflag &= ~(IXON | IXOFF | IXANY);
       // poll() is broken on OSX, so we set VTIME and use read(), which is ok since
       // we're reading only one port anyway
-      tio.c_cc[VMIN]  = 0;
+      tio.c_cc[VMIN]  = 143; //set minimum number of bytes per read
       tio.c_cc[VTIME] = 10; // 10 * 100ms = 1s
       // set port speed
       if (cfsetispeed(&tio, razor_speed) != 0)
       {
 	perror("razor_open_serial_port:cfsetispeed");
-	return -1;
+	return false;
       }
       if (cfsetospeed(&tio, razor_speed) != 0)
       {
 	perror("razor_open_serial_port:cfsetospeed");
+	return false;
       }
       // set port attributes
       // must be done after setting speed!
-      if (tcsetattr(fd, TCSANOW, &tio) != 0)
+      if (tcsetattr(imu_fd, TCSANOW, &tio) != 0)
       {
 	perror("razor_open_serial_port:tcsetattr");
-	return -1;
+	return false;
       }
+      return true; //if we get here, everything worked
     }
   }
-  else // something didn't work
-  {
-    perror("razor_open_serial_port:open");
-  }
-  return fd; //returns -1 on error
 }
 
+bool razor_init()
+{
+  char in;
+  int result;
+  struct timeval t0, t1, t2;
+  const std::string synch_token = "#SYNCH";
+  const std::string new_line = "\r\n";
+
+  // start time
+  gettimeofday(&t0, NULL);
+
+  // request synch token to see if Razor is really present
+  const std::string contact_synch_id = "00"; 
+  const std::string contact_synch_request = "#s" + contact_synch_id; 
+  const std::string contact_synch_reply = synch_token + contact_synch_id + new_line;
+  write(imu_fd, contact_synch_request.data(), contact_synch_request.length());
+  gettimeofday(&t1, NULL);
+ // set non-blocking I/O
+  if (!razor_set_nonblocking_io()) return false;
+
+  /* look for tracker */
+  while (true)
+  {
+    // try to read one byte from the port
+    result = read(imu_fd, &in, 1);
+    
+    // one byte read
+    if (result > 0)
+    {
+      // if (_read_token(contact_synch_reply, in))
+        break;
+    }
+    // no data available
+    else if (result == 0)
+      usleep(1000); // sleep 1ms
+    // error?
+    else
+    {
+      if (errno != EAGAIN && errno != EINTR)
+        throw std::runtime_error("Can not read from serial port (1).");
+    }
+    
+    // check timeout
+    gettimeofday(&t2, NULL);
+    if (razor_elapsed_ms(t1, t2) > 200)
+    {
+      // 200ms elapsed since last request and no answer -> request synch again
+      // (this happens when DTR is connected and Razor resets on connect)
+      write(imu_fd, contact_synch_request.data(), contact_synch_request.length());
+      t1 = t2;
+    }
+    if (razor_elapsed_ms(t0, t2) > razor_connect_timeout_ms)
+      // timeout -> tracker not present
+      throw std::runtime_error("Can not init: tracker does not answer.");
+  }
+
+
+  return true;
+}
+
+
+bool razor_set_blocking_io()
+{
+  int flags;
+  // clear O_NDELAY to make I/O blocking again
+  // in fact this is semi-blocking, since we set VTIME on the port
+  if (((flags = fcntl(imu_fd, F_GETFL, 0)) != -1) &&
+      (fcntl(imu_fd, F_SETFL, flags & ~O_NDELAY)) != -1)
+    return true;
+  else
+    return false;
+}
+
+bool razor_set_nonblocking_io()
+{
+  int flags;
+  // set O_NDELAY to make I/O non-blocking
+  if (((flags = fcntl(imu_fd, F_GETFL, 0)) != -1) &&
+      (fcntl(imu_fd, F_SETFL, flags | O_NDELAY)) != -1)
+    return true;
+  else
+    return false;
+}
+
+bool razor_is_io_blocking(int fd)
+{
+  return (fcntl(fd, F_GETFL, 0) & O_NDELAY);
+}
+
+long razor_elapsed_ms(struct timeval start, struct timeval end)
+{
+  return static_cast<long> ((end.tv_sec - start.tv_sec) * 1000 + (end.tv_usec - start.tv_usec) / 1000);
+}
 
 
 

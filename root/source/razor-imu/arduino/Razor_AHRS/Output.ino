@@ -12,13 +12,16 @@ void output_mine()
   }
   if (output_format == OUTPUT__FORMAT_BINARY)
   {
-    Serial.print("binary format for output_mine() not yet written");
-    Serial.println();
-    /* float ypr[3];   */
-    /* ypr[0] = TO_DEG(yaw); */
-    /* ypr[1] = TO_DEG(pitch); */
-    /* ypr[2] = TO_DEG(roll); */
-    /* Serial.write((byte*) ypr, 12);  // No new-line */
+    float headings[3];
+    headings[0] = TO_DEG(yaw);
+    headings[1] = TO_DEG(my_yaw);
+    headings[2] = TO_DEG(MAG_Heading);
+    Serial.write((byte*) headings, 12);  // No new-line
+    Serial.write((byte*) accel, 12);
+    Serial.write((byte*) magnetom, 12);
+    Serial.write((byte*) gyro, 12);
+    /* Serial.print("binary format for output_mine() not yet written"); */
+    /* Serial.println(); */
   }
   else if (output_format == OUTPUT__FORMAT_TEXT)
   {

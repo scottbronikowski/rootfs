@@ -556,7 +556,11 @@ void loop()
 	if (output_param == 'm') //select OUTPUT__MODE_MINE
 	{
 	  output_mode = OUTPUT__MODE_MINE;
-          output_format = OUTPUT__FORMAT_TEXT;
+	  char format_param = readChar();
+	  if (format_param == 't')
+	    output_format = OUTPUT__FORMAT_TEXT;
+	  else if (format_param == 'b')
+	    output_format = OUTPUT__FORMAT_BINARY;
 	}
         if (output_param == 'n')  // Calibrate _n_ext sensor
         {

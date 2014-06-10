@@ -46,7 +46,7 @@ const int bump_read_size = 24;
 const int bump_front = 185;
 const int bump_rear = 184;
 const char* gpio_file = "/dev/gpio-event";
-const char* imu_file = "/dev/RazorIMU";
+
 const char* gps_file = "/dev/GPS";
 
 //global variables
@@ -54,7 +54,7 @@ int sockfd, log_sockfd;
 int cam_thread_should_die = TRUE; //cam thread not running
 int gpio_thread_should_die = TRUE; //gpio thread not running
 pthread_t cam_thread, gpio_thread;
-int pan_fd, tilt_fd, motor_fd, gpio_fd, imu_fd, gps_fd;
+int pan_fd, tilt_fd, motor_fd, gpio_fd;//, imu_fd, gps_fd;
 char motor_prev[k_maxBufSize];
 char pan_prev[k_maxBufSize];
 char tilt_prev[k_maxBufSize];
@@ -97,15 +97,20 @@ int main(int /*argc*/, char** /*argv*/)
     return -1;
   }
   //open fd for RazorIMU 
-  imu_fd = razor_open_serial_port(imu_file);
-  if (imu_fd < 1)
+  //imu_fd = razor_open_serial_port();
+  if (!razor_open_serial_port())
   {
-    perror("imu:");
-    emperor_signal_handler(SIGTERM);
-    return -1;
+    printf("Error in razor_open_serial_port\n");
+    if (imu_fd < 1)
+    {
+      perror("imu:");
+      emperor_signal_handler(SIGTERM);
+      return -1;
+    }
   }
+  printf("imu_fd = %d\n", imu_fd);
   //test IMU
-  const char* initstring = "#o0#om";
+  const char* initstring = "#o0#omt"; //set for output on request, my format, binary
   int testretval = write(imu_fd, initstring, strlen(initstring));
   //test if the write worked
   if (testretval != (int)strlen(initstring))
