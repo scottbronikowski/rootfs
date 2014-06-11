@@ -43,21 +43,24 @@ const int k_LogBufSize = 256; //100;
 //for bump switch monitoring
 const int bump_move_time = 50000;
 const int bump_read_size = 24;
-const int bump_front = 185;
-const int bump_rear = 184;
+const int bump_front = 185; //gpio 185
+const int bump_rear = 184; //gpio 184
 const char* gpio_file = "/dev/gpio-event";
 
 const char* gps_file = "/dev/GPS";
 
 //global variables
+//extern'd
 int sockfd, log_sockfd;
 int cam_thread_should_die = TRUE; //cam thread not running
 int gpio_thread_should_die = TRUE; //gpio thread not running
 pthread_t cam_thread, gpio_thread;
-int pan_fd, tilt_fd, motor_fd, gpio_fd;//, imu_fd, gps_fd;
+int pan_fd, tilt_fd, motor_fd, gpio_fd;//, imu_fd, gps_fd; //gl_imu_fd declared in razor-imu.h
+//not extern'd
 char motor_prev[k_maxBufSize];
 char pan_prev[k_maxBufSize];
 char tilt_prev[k_maxBufSize];
+razor_data_t* imu_data;
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -96,22 +99,52 @@ int main(int /*argc*/, char** /*argv*/)
     emperor_signal_handler(SIGTERM);
     return -1;
   }
-  //open fd for RazorIMU 
+  //open fd for RazorIMU -- gl_imu_fd declared in razor-imu.h
   //imu_fd = razor_open_serial_port();
   if (!razor_open_serial_port())
   {
     printf("Error in razor_open_serial_port\n");
-    if (imu_fd < 1)
+    if (gl_imu_fd < 1)
     {
       perror("imu:");
       emperor_signal_handler(SIGTERM);
       return -1;
     }
   }
-  printf("imu_fd = %d\n", imu_fd);
+  //printf("gl_imu_fd = %d\n", gl_imu_fd);
+  if (!razor_init())
+  {
+    perror("razor_init failed");
+    emperor_signal_handler(SIGTERM);
+    return -1;
+  }
+  imu_data = new razor_data_t;
   //test IMU
-  const char* initstring = "#o0#omt"; //set for output on request, my format, binary
-  int testretval = write(imu_fd, initstring, strlen(initstring));
+  if (!razor_read_data(imu_data))
+  {
+    perror("razor_read_data failed");
+    emperor_signal_handler(SIGTERM);
+    return -1;
+  } 
+  else
+  {  //read succeeded, so print it out
+    printf("Yaw(raw) = %.2f, Yaw(adj) = %.2f, MAG_h = %.2f\n",
+	   imu_data->data[0], imu_data->data[1], imu_data->data[2]);
+	   //imu_data->heading[0], imu_data->heading[1], imu_data->heading[2]);
+    printf("Ax = %.2f, Ay = %.2f, Az = %.2f\n",
+	   imu_data->data[3], imu_data->data[4], imu_data->data[5]);
+           //imu_data->accel[0], imu_data->accel[1], imu_data->accel[2]);
+    printf("Mx = %.2f, My = %.2f, Mz = %.2f\n",
+	   imu_data->data[6], imu_data->data[7], imu_data->data[8]);
+	   //imu_data->mag[0], imu_data->mag[1], imu_data->mag[2]);
+    printf("Gx = %.2f, Gy = %.2f, Gz = %.2f\n",
+	   imu_data->data[9], imu_data->data[10], imu_data->data[11]);
+	   //imu_data->gyro[0], imu_data->gyro[1], imu_data->gyro[2]);
+  }
+
+  //now test in text to compare
+  const char* initstring = "#o0#omt"; //set for output on request, my format, text
+  int testretval = write(gl_imu_fd, initstring, strlen(initstring));
   //test if the write worked
   if (testretval != (int)strlen(initstring))
   {
@@ -124,16 +157,16 @@ int main(int /*argc*/, char** /*argv*/)
     else
     {
       printf("Other IMU test write error, testretval = %d, "
-	     "strlen(initstring) = %d\n", testretval, strlen(initstring));
+  	     "strlen(initstring) = %d\n", testretval, strlen(initstring));
       emperor_signal_handler(SIGTERM);
       return -1;
     }
   }
   //if we get here, initstring got written
-  printf("Wrote initstring to imu_fd\n");
+  printf("Wrote new initstring to gl_imu_fd\n");
   //now try to write a #f to get a frame then read it
   const char* framerequest = "#f";
-  testretval = write(imu_fd, framerequest, strlen(framerequest));
+  testretval = write(gl_imu_fd, framerequest, strlen(framerequest));
   if (testretval != (int)strlen(framerequest))
   {
     printf("IMU error writing frame requests, testretval = %d\n", testretval);
@@ -141,21 +174,13 @@ int main(int /*argc*/, char** /*argv*/)
     return -1;
   }
   char imubuf[k_LogBufSize];
-  testretval = read(imu_fd, imubuf, k_LogBufSize);
+  testretval = read(gl_imu_fd, imubuf, k_LogBufSize);
   if (testretval < 1)
   {
     perror("IMU test read:");
     emperor_signal_handler(SIGTERM);
     return -1;
   }
-
-  //testretval = pread(imu_fd, imubuf, k_LogBufSize, 0); //used to read from start of file
-  // if (testretval < 1)
-  // {
-  //   perror("IMU test read pread:");
-  //   emperor_signal_handler(SIGTERM);
-  //   return -1;
-  // }
   else
   {
     printf("bytes read = %d\n", testretval);
@@ -209,6 +234,9 @@ int main(int /*argc*/, char** /*argv*/)
   memset(motor_prev, 0, sizeof(motor_prev));
   memset(pan_prev, 0, sizeof(pan_prev));
   memset(tilt_prev, 0, sizeof(tilt_prev));
+
+  //***START IMU AND GPS THREAD(S) HERE***
+
   //int retval;
   //loop on listening for commands
   while(1)
@@ -256,6 +284,8 @@ void emperor_signal_handler(int signum)
   //kill bump switch thread
   gpio_thread_should_die = TRUE;
   pthread_join(gpio_thread, NULL);
+  //kill imu/gps thread
+  delete imu_data;
   //cleanup socket and file handles
   close(pan_fd);
   close(tilt_fd);

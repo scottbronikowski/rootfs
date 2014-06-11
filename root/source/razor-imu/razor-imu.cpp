@@ -13,13 +13,13 @@ const char* imu_file = "/dev/RazorIMU";
 const int razor_connect_timeout_ms = 5000;
 
 //global vars
-int imu_fd;
-
+int gl_imu_fd;
+size_t razor_input_pos;
 
 bool razor_open_serial_port()
 {
   // O_NDELAY allows open even with no carrier detect (e.g. needed for Razor)
-  if ((imu_fd = open(imu_file, O_RDWR | O_NOCTTY | O_NDELAY)) == -1)
+  if ((gl_imu_fd = open(imu_file, O_RDWR | O_NOCTTY | O_NDELAY)) == -1)
   { // something didn't work
     perror("razor_open_serial_port:open");
     return false;
@@ -36,7 +36,7 @@ bool razor_open_serial_port()
     {
       // get port attributes
       struct termios tio;
-      if (tcgetattr(imu_fd, &tio) != 0)
+      if (tcgetattr(gl_imu_fd, &tio) != 0)
       {
 	perror("razor_open_serial_port:tcgetattr");
 	return false;
@@ -73,7 +73,7 @@ bool razor_open_serial_port()
       }
       // set port attributes
       // must be done after setting speed!
-      if (tcsetattr(imu_fd, TCSANOW, &tio) != 0)
+      if (tcsetattr(gl_imu_fd, TCSANOW, &tio) != 0)
       {
 	perror("razor_open_serial_port:tcsetattr");
 	return false;
@@ -98,7 +98,13 @@ bool razor_init()
   const std::string contact_synch_id = "00"; 
   const std::string contact_synch_request = "#s" + contact_synch_id; 
   const std::string contact_synch_reply = synch_token + contact_synch_id + new_line;
-  write(imu_fd, contact_synch_request.data(), contact_synch_request.length());
+  if (write(gl_imu_fd, contact_synch_request.data(), 
+	    contact_synch_request.length()) != 
+      (ssize_t)contact_synch_request.length())
+  {
+    perror("razor_init:first synch");
+    return false;
+  }
   gettimeofday(&t1, NULL);
  // set non-blocking I/O
   if (!razor_set_nonblocking_io()) return false;
@@ -107,12 +113,12 @@ bool razor_init()
   while (true)
   {
     // try to read one byte from the port
-    result = read(imu_fd, &in, 1);
+    result = read(gl_imu_fd, &in, 1);
     
     // one byte read
     if (result > 0)
     {
-      // if (_read_token(contact_synch_reply, in))
+      if (razor_read_token(contact_synch_reply, in))
         break;
     }
     // no data available
@@ -131,7 +137,13 @@ bool razor_init()
     {
       // 200ms elapsed since last request and no answer -> request synch again
       // (this happens when DTR is connected and Razor resets on connect)
-      write(imu_fd, contact_synch_request.data(), contact_synch_request.length());
+      if (write(gl_imu_fd, contact_synch_request.data(), 
+		contact_synch_request.length()) !=
+	  (ssize_t)contact_synch_request.length())
+      {
+	perror("razor_init:second synch");
+	return false;
+      }
       t1 = t2;
     }
     if (razor_elapsed_ms(t0, t2) > razor_connect_timeout_ms)
@@ -139,6 +151,51 @@ bool razor_init()
       throw std::runtime_error("Can not init: tracker does not answer.");
   }
 
+  /* configure tracker */
+  // set correct binary output mode, disale continuous streaming, disable errors and
+  // request synch token. So we're good, no matter what state the tracker
+  // currently is in.
+  const std::string config_synch_id = "01";
+  const std::string config_synch_reply = synch_token + config_synch_id + new_line;
+
+  std::string config = "#o0#oe0#s" + config_synch_id;
+  config = "#omb" + config;
+  // if (_mode == YAW_PITCH_ROLL) config = "#ob" + config;
+  // else if (_mode == ACC_MAG_GYR_RAW) config = "#osrb" + config;
+  // else if (_mode == ACC_MAG_GYR_CALIBRATED) config = "#oscb" + config;
+  // else throw std::runtime_error("Can not init: unknown 'mode' parameter.");  
+  if (write(gl_imu_fd, config.data(), config.length()) != (ssize_t)config.length())
+  {
+    perror("razor_init:write init");
+    return false;
+  }
+  
+  // set blocking I/O
+  // (actually semi-blocking, because VTIME is set)
+  if (!razor_set_blocking_io()) return false;
+
+  while (true)
+  {    
+    // try to read one byte from the port
+    result = read(gl_imu_fd, &in, 1);
+    
+    // one byte read
+    if (result > 0)
+    {
+      if (razor_read_token(config_synch_reply, in))
+        break;  // alrighty
+    }
+    // error?
+    else
+    {
+      if (errno != EAGAIN && errno != EINTR)
+        throw std::runtime_error("Can not read from serial port (2).");
+    }
+  }
+  
+  // we keep using blocking I/O
+  //if (_set_blocking_io() == -1)
+  //  return false;
 
   return true;
 }
@@ -149,8 +206,8 @@ bool razor_set_blocking_io()
   int flags;
   // clear O_NDELAY to make I/O blocking again
   // in fact this is semi-blocking, since we set VTIME on the port
-  if (((flags = fcntl(imu_fd, F_GETFL, 0)) != -1) &&
-      (fcntl(imu_fd, F_SETFL, flags & ~O_NDELAY)) != -1)
+  if (((flags = fcntl(gl_imu_fd, F_GETFL, 0)) != -1) &&
+      (fcntl(gl_imu_fd, F_SETFL, flags & ~O_NDELAY)) != -1)
     return true;
   else
     return false;
@@ -160,8 +217,8 @@ bool razor_set_nonblocking_io()
 {
   int flags;
   // set O_NDELAY to make I/O non-blocking
-  if (((flags = fcntl(imu_fd, F_GETFL, 0)) != -1) &&
-      (fcntl(imu_fd, F_SETFL, flags | O_NDELAY)) != -1)
+  if (((flags = fcntl(gl_imu_fd, F_GETFL, 0)) != -1) &&
+      (fcntl(gl_imu_fd, F_SETFL, flags | O_NDELAY)) != -1)
     return true;
   else
     return false;
@@ -177,108 +234,162 @@ long razor_elapsed_ms(struct timeval start, struct timeval end)
   return static_cast<long> ((end.tv_sec - start.tv_sec) * 1000 + (end.tv_usec - start.tv_usec) / 1000);
 }
 
+bool razor_read_token(const std::string &token, char c)
+{
+  if (c == token[razor_input_pos++])
+  {
+    if (razor_input_pos == token.length())
+    {
+      // synch token found
+      razor_input_pos = 0;
+      return true;
+    }
+  }
+  else
+  {
+    razor_input_pos = 0;
+  }
+  return false;
+}
 
+bool razor_read_data(razor_data_t* data)
+{
+  int result;
+  char c;
+  //zero out data
 
-/*FROM ORIGINAL RAZORAHRS.CPP */
+  //send frame request
+  const char* framerequest = "#f";
+  int testretval = write(gl_imu_fd, framerequest, strlen(framerequest));
+  if (testretval != (int)strlen(framerequest))
+  {
+    printf("razor_read_data error writing frame requests, testretval = %d\n", testretval);
+    return false;
+  }
+  //read data
+  while (true)
+  {
+    if ((result = read(gl_imu_fd, &c, 1)) > 0)
+    { //read binary stream
+      // (type-punning: aliasing with char* is ok)
+      (reinterpret_cast<char*> (&data->data))[razor_input_pos++] = c;
+        if (razor_input_pos == 48) // we received a full frame
+        {
+          //reset position counter and return success
+          razor_input_pos = 0;
+	  return true;
+        }
+    }
+    else if (result < 0)
+    {
+      if (errno != EAGAIN && errno != EINTR)
+      {
+        perror("razor_read_data:cannot read from serial port");
+        return false; //failure
+      }
+    }
+    //else result is 0, so no data available (keep waiting)
+  }
 
-// RazorAHRS::RazorAHRS(const std::string &port, DataCallbackFunc data_func, ErrorCallbackFunc error_func,
-//     Mode mode, int connect_timeout_ms, speed_t speed)
-//     : _mode(mode)
-//     , _input_pos(0)
-//     , _connect_timeout_ms(connect_timeout_ms)
-//     , data(data_func)
-//     , error(error_func)
-//     , _thread_id(0)
-//     , _stop_thread(false)
-// {  
-//   // check data type sizes
-//   assert(sizeof(char) == 1);
-//   assert(sizeof(float) == 4);
+  //  return true;
+}
 
-//   // open serial port
-//   if (port == "")
-//     throw std::runtime_error("No port specified!");
-//   if (!_open_serial_port(port.c_str()))
-//     throw std::runtime_error("Could not open serial port!");  
+//From original RazorAHRS.cpp --> this does the reading of the data
+// void*
+// RazorAHRS::_thread(void *arg)
+// {
+//   char c;
+//   int result;
+  
+//   try
+//   {
+//     if (!_init_razor())
+//     {
+//       error("Tracker init failed.");
+//       return arg;
+//     }
+//   }
+//   catch(std::runtime_error& e)
+//   {
+//     error("Tracker init failed: " + std::string(e.what()));
+//     return arg;
+//   }
+  
+//   while (!_stop_thread)
+//   {
+//     if ((result = read(_serial_port, &c, 1)) > 0) // blocks only for VTIME before returning
+//     {
+//       // read binary stream
+//       // (type-punning: aliasing with char* is ok)
+//       (reinterpret_cast<char*> (&_input_buf))[_input_pos++] = c;
       
-//   // get port attributes
-//   struct termios tio;
-//   if (int errorID = tcgetattr(_serial_port, &tio))
-//     throw std::runtime_error("Could not get serial port attributes! Error # " + to_str(errorID));
-  
-//   /* see http://www.easysw.com/~mike/serial/serial.html */
-//   /* and also http://linux.die.net/man/3/tcsetattr */
-//   // basic raw/non-canonical setup
-//   cfmakeraw(&tio);
-  
-//   // enable reading and ignore control lines
-//   tio.c_cflag |= CREAD | CLOCAL;
-
-//   // set 8N1
-//   tio.c_cflag &= ~PARENB; // no parity bit
-//   tio.c_cflag &= ~CSTOPB; // only one stop bit
-//   tio.c_cflag &= ~CSIZE;  // clear data bit number
-//   tio.c_cflag |= CS8;     // set 8 data bits
-  
-//   // no hardware flow control
-//   tio.c_cflag &= ~CRTSCTS;
-//   // no software flow control  
-//   tio.c_iflag &= ~(IXON | IXOFF | IXANY);
-  
-//   // poll() is broken on OSX, so we set VTIME and use read(), which is ok since
-//   // we're reading only one port anyway
-//   tio.c_cc[VMIN]  = 0;
-//   tio.c_cc[VTIME] = 10; // 10 * 100ms = 1s
-  
-//   // set port speed
-//   if (int errorID = cfsetispeed(&tio, speed))
-//     throw std::runtime_error(" " + to_str(errorID)
-//         + ": Could not set new serial port input speed to "
-//         + to_str(speed) + ".");
-//   if (int errorID = cfsetospeed(&tio, speed))
-//     throw std::runtime_error(" " + to_str(errorID)
-//         + ": Could not set new serial port output speed to "
-//         + to_str(speed) + ".");
-
-//   // set port attributes
-//   // must be done after setting speed!
-//   if (int errorID = tcsetattr(_serial_port, TCSANOW, &tio))
-//   {
-//     throw std::runtime_error(" " + to_str(errorID)
-//         + ": Could not set new serial port attributes.");
+//       if (_mode == YAW_PITCH_ROLL) {  // 3 floats
+//         if (_input_pos == 12) // we received a full frame
+//         {
+//           // convert endianess if necessary
+//           if (_big_endian())
+//           {
+//             _swap_endianess(_input_buf.ypr, 3);
+//           }
+          
+//           // invoke callback
+//           data(_input_buf.ypr);
+          
+//           _input_pos = 0;
+//         }
+//       } else { // raw or calibrated sensor data (9 floats)
+//         if (_input_pos == 36) // we received a full frame
+//         {
+//           // convert endianess if necessary
+//           if (_big_endian())
+//           {
+//             _swap_endianess(_input_buf.amg, 9);
+//           }
+          
+//           // invoke callback
+//           data(_input_buf.amg);
+          
+//           _input_pos = 0;
+//         }
+//       }
+//     }
+//     // error?
+//     else if (result < 0)
+//     {
+//       if (errno != EAGAIN && errno != EINTR)
+//       {
+//         error("Can not read from serial port (3).");
+//         return arg;
+//       }
+//     }
+//     // else if result is 0, no data was available
 //   }
 
-//   // start input/output thread
-//   _start_io_thread();
+//   return arg;
 // }
 
-// bool
-// RazorAHRS::_open_serial_port(const char *port)
-// {
-//   // O_NDELAY allows open even with no carrier detect (e.g. needed for Razor)
-//   if ((_serial_port = open(port, O_RDWR | O_NOCTTY | O_NDELAY)) != -1)
-//   {
-//     // make I/O blocking again
-//     if (_set_blocking_io()) return true;
-//   }
-  
-//   // something didn't work
-//   close(_serial_port);
-//   return false;
-// }
 
-// bool
-// RazorAHRS::_set_blocking_io()
+//from Example.cpp
+
+// // Razor data callback handler
+// // Will be called from (and in) Razor background thread!
+// // 'data' depends on mode that was set when creating the RazorAHRS object. In this case 'data'
+// // holds 3 float values: yaw, pitch and roll.
+// void on_data(const float data[])
 // {
-//   int flags;
+//   cout << "  " << fixed << setprecision(1) 
+//   << "Yaw = " << setw(6) << data[0] << "      Pitch = " << setw(6) << data[1] << "      Roll = " << setw(6) << data[2] << endl;
+
+//   // NOTE: make a copy of the yaw/pitch/roll data if you want to save it or send it to another
+//   // thread. Do not save or pass the pointer itself, it will not be valid after this function
+//   // returns!
   
-//   // clear O_NDELAY to make I/O blocking again
-//   // in fact this is semi-blocking, since we set VTIME on the port
-//   if (((flags = fcntl(_serial_port, F_GETFL, 0)) != -1) &&
-//       (fcntl(_serial_port, F_SETFL, flags & ~O_NDELAY)) != -1)
-//   {
-//     return true;
-//   }
+//   // If you created the Razor object using RazorAHRS::ACC_MAG_GYR_RAW or RazorAHRS::ACC_MAG_GYR_CALIBRATED
+//   // instead of RazorAHRS::YAW_PITCH_ROLL, 'data' would contain 9 values that could be printed like this:
   
-//   return false;
+//   // cout << "  " << fixed << setprecision(1)
+//   // << "ACC = " << setw(6) << data[0] << ", " << setw(6) << data[1] << ", " << setw(6) << data[2]
+//   // << "        MAG = " << setw(7) << data[3] << ", " << setw(7) << data[4] << ", " << setw(7) << data[5]
+//   // << "        GYR = " << setw(7) << data[6] << ", " << setw(7) << data[7] << ", " << setw(7) << data[8] << endl;
+
 // }

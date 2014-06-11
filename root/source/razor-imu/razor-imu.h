@@ -19,6 +19,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <cstring>
 
 //global constants
 extern const speed_t razor_speed;
@@ -26,15 +27,28 @@ extern const char* imu_file;
 extern const int razor_connect_timeout_ms;
 
 //global vars
-extern int imu_fd;
+extern int gl_imu_fd;
+extern size_t razor_input_pos; //not used outsize of razor-imu.cpp
+
+//structures
+struct razor_data_t {
+  float data[12]; //raw yaw, adjusted yaw, mag_heading, accel x, accel y, accel z, mag x, mag y, mag z, gyro x, gyro y, gyro z
+  // float heading[3]; //raw yaw, adjusted yaw, mag_heading
+  // float accel[3]; //x, y, z
+  // float mag[3]; //x, y, z
+  // float gyro[3]; //x, y, z
+};
 
 //prototypes
+//external
 bool razor_open_serial_port(void);
 bool razor_init(void);
+bool razor_read_data(razor_data_t* data);
+//internal
 bool razor_set_blocking_io(void);
 bool razor_set_nonblocking_io(void);
 bool razor_is_io_blocking(void);
 long razor_elapsed_ms(struct timeval start, struct timeval end);
-
+bool razor_read_token(const std::string &token, char c);
 
 #endif //RAZORIMU_H

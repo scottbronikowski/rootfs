@@ -364,6 +364,8 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --I think it's better to get the data from the IMU into emperor as binary (floats) and then deal with displaying/manipulating the data from there.  I think it will still be easier to send the data from the rover (emperor) to seykhl (and the log files) as text, since that's what I already have set up.
 --Have IMU outputting data as 12x floats.  Currently working on getting data into emperor in binary format, following closely with RazorAHRS.cpp.  Have imu_fd as global var opened in razor-imu.cpp, need to implement _input_pos similarly in order to get _read_token working.
 
+11 Jun 14
+--Got first draft of razor-imu.cpp working with binary read into emperor.  Still need to clean it up and put in some initialization of the variables into razor_read_data().  Also need to implement the IMU reading as a thread on a timer (SIGALRM??) to read at about 10Hz.
 
 ***RANDOM NOTES
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
