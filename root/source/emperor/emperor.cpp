@@ -54,7 +54,8 @@ const char* gps_file = "/dev/GPS";
 int sockfd, log_sockfd;
 int cam_thread_should_die = TRUE; //cam thread not running
 int gpio_thread_should_die = TRUE; //gpio thread not running
-pthread_t cam_thread, gpio_thread;
+int imu_thread_should_die = TRUE; //imu thread not running
+pthread_t cam_thread, gpio_thread, imu_thread;
 int pan_fd, tilt_fd, motor_fd, gpio_fd;//, imu_fd, gps_fd; //gl_imu_fd declared in razor-imu.h
 //not extern'd
 char motor_prev[k_maxBufSize];
@@ -100,7 +101,6 @@ int main(int /*argc*/, char** /*argv*/)
     return -1;
   }
   //open fd for RazorIMU -- gl_imu_fd declared in razor-imu.h
-  //imu_fd = razor_open_serial_port();
   if (!razor_open_serial_port())
   {
     printf("Error in razor_open_serial_port\n");
@@ -111,7 +111,6 @@ int main(int /*argc*/, char** /*argv*/)
       return -1;
     }
   }
-  //printf("gl_imu_fd = %d\n", gl_imu_fd);
   if (!razor_init())
   {
     perror("razor_init failed");
@@ -119,6 +118,7 @@ int main(int /*argc*/, char** /*argv*/)
     return -1;
   }
   imu_data = new razor_data_t;
+
   //test IMU
   if (!razor_read_data(imu_data))
   {
@@ -142,51 +142,51 @@ int main(int /*argc*/, char** /*argv*/)
 	   //imu_data->gyro[0], imu_data->gyro[1], imu_data->gyro[2]);
   }
 
-  //now test in text to compare
-  const char* initstring = "#o0#omt"; //set for output on request, my format, text
-  int testretval = write(gl_imu_fd, initstring, strlen(initstring));
-  //test if the write worked
-  if (testretval != (int)strlen(initstring))
-  {
-    if (testretval == -1)
-    {
-      perror("IMU test write initstring:");
-      emperor_signal_handler(SIGTERM);
-      return -1;
-    }
-    else
-    {
-      printf("Other IMU test write error, testretval = %d, "
-  	     "strlen(initstring) = %d\n", testretval, strlen(initstring));
-      emperor_signal_handler(SIGTERM);
-      return -1;
-    }
-  }
-  //if we get here, initstring got written
-  printf("Wrote new initstring to gl_imu_fd\n");
-  //now try to write a #f to get a frame then read it
-  const char* framerequest = "#f";
-  testretval = write(gl_imu_fd, framerequest, strlen(framerequest));
-  if (testretval != (int)strlen(framerequest))
-  {
-    printf("IMU error writing frame requests, testretval = %d\n", testretval);
-    emperor_signal_handler(SIGTERM);
-    return -1;
-  }
-  char imubuf[k_LogBufSize];
-  testretval = read(gl_imu_fd, imubuf, k_LogBufSize);
-  if (testretval < 1)
-  {
-    perror("IMU test read:");
-    emperor_signal_handler(SIGTERM);
-    return -1;
-  }
-  else
-  {
-    printf("bytes read = %d\n", testretval);
-    printf("data read: %s", imubuf);
-    printf("newline after, not before\n");
-  }
+  // //now test in text to compare
+  // const char* initstring = "#o0#omt"; //set for output on request, my format, text
+  // int testretval = write(gl_imu_fd, initstring, strlen(initstring));
+  // //test if the write worked
+  // if (testretval != (int)strlen(initstring))
+  // {
+  //   if (testretval == -1)
+  //   {
+  //     perror("IMU test write initstring:");
+  //     emperor_signal_handler(SIGTERM);
+  //     return -1;
+  //   }
+  //   else
+  //   {
+  //     printf("Other IMU test write error, testretval = %d, "
+  // 	     "strlen(initstring) = %d\n", testretval, strlen(initstring));
+  //     emperor_signal_handler(SIGTERM);
+  //     return -1;
+  //   }
+  // }
+  // //if we get here, initstring got written
+  // printf("Wrote new initstring to gl_imu_fd\n");
+  // //now try to write a #f to get a frame then read it
+  // const char* framerequest = "#f";
+  // testretval = write(gl_imu_fd, framerequest, strlen(framerequest));
+  // if (testretval != (int)strlen(framerequest))
+  // {
+  //   printf("IMU error writing frame requests, testretval = %d\n", testretval);
+  //   emperor_signal_handler(SIGTERM);
+  //   return -1;
+  // }
+  // char imubuf[k_LogBufSize];
+  // testretval = read(gl_imu_fd, imubuf, k_LogBufSize);
+  // if (testretval < 1)
+  // {
+  //   perror("IMU test read:");
+  //   emperor_signal_handler(SIGTERM);
+  //   return -1;
+  // }
+  // else
+  // {
+  //   printf("bytes read = %d\n", testretval);
+  //   printf("data read: %s", imubuf);
+  //   printf("newline after, not before\n");
+  // }
   
 
 
@@ -222,6 +222,16 @@ int main(int /*argc*/, char** /*argv*/)
     printf("logging failed for \'%s\'\n", logbuf);
   pthread_attr_destroy(&attributes);
   printf("%s\n", logbuf);
+  //***START IMU AND GPS THREAD(S) HERE***
+  pthread_attr_init(&attributes);
+  pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
+  pthread_create(&imu_thread, &attributes, emperor_run_imu, NULL);
+  sprintf(logbuf, "IMU initialized and logging");
+  retval = emperor_log_data(logbuf);
+  if (retval != 0)
+    printf("logging failed for \'%s\'\n", logbuf);
+  pthread_attr_destroy(&attributes);
+  printf("%s\n", logbuf);
  
 
   //register signal handler for termination
@@ -235,7 +245,6 @@ int main(int /*argc*/, char** /*argv*/)
   memset(pan_prev, 0, sizeof(pan_prev));
   memset(tilt_prev, 0, sizeof(tilt_prev));
 
-  //***START IMU AND GPS THREAD(S) HERE***
 
   //int retval;
   //loop on listening for commands
@@ -285,12 +294,15 @@ void emperor_signal_handler(int signum)
   gpio_thread_should_die = TRUE;
   pthread_join(gpio_thread, NULL);
   //kill imu/gps thread
+  imu_thread_should_die = TRUE;
+  pthread_join(imu_thread, NULL);
   delete imu_data;
   //cleanup socket and file handles
   close(pan_fd);
   close(tilt_fd);
   close(motor_fd);
   close(gpio_fd);
+  close(gl_imu_fd);
   //usleep(100000);
   close(log_sockfd);
   printf("data logging socket closed\n");
@@ -599,4 +611,35 @@ double emperor_current_time(void)
   struct timeval time;
   if (gettimeofday(&time, NULL)!=0) printf("gettimeofday failed");
   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
+}
+
+void* emperor_run_imu(void* args)
+{
+  //int retval;
+  char logbuf[k_LogBufSize];
+ 
+  while (!imu_thread_should_die)
+  {
+    //PUT TIMER IN HERE
+
+    memset(logbuf, 0, sizeof(logbuf));  //clear buffer
+    if (razor_read_data(imu_data))
+    { //successful read, so put data into logbuf
+      sprintf(logbuf, "IMU:Yaw(r)=%.2f;Yaw(a)=%.2f;MAG_h=%.2f;"
+	      "Ax=%.2f;Ay=%.2f;Az=%.2f;Mx=%.2f;My=%.2f;Mz=%.2f;"
+	      "Gx=%.2f;Gy=%.2f;Gz=%.2f",
+	      imu_data->data[0], imu_data->data[1], imu_data->data[2],
+	      imu_data->data[3], imu_data->data[4], imu_data->data[5],
+	      imu_data->data[6], imu_data->data[7], imu_data->data[8],
+	      imu_data->data[9], imu_data->data[10], imu_data->data[11]);
+    }
+    else
+    { //read failed, so log the failure
+      sprintf(logbuf,"IMU data read failure");
+    }
+    emperor_log_data(logbuf);
+    //printf("logged: %s\n", logbuf);
+  }
+  printf("imu thread exiting\n");
+  pthread_exit(NULL);
 }

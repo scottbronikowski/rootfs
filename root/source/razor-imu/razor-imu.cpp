@@ -58,7 +58,7 @@ bool razor_open_serial_port()
       tio.c_iflag &= ~(IXON | IXOFF | IXANY);
       // poll() is broken on OSX, so we set VTIME and use read(), which is ok since
       // we're reading only one port anyway
-      tio.c_cc[VMIN]  = 143; //set minimum number of bytes per read
+      tio.c_cc[VMIN]  = 0;//143; //set minimum number of bytes per read
       tio.c_cc[VTIME] = 10; // 10 * 100ms = 1s
       // set port speed
       if (cfsetispeed(&tio, razor_speed) != 0)
@@ -257,13 +257,17 @@ bool razor_read_data(razor_data_t* data)
   int result;
   char c;
   //zero out data
-
+  for (int i = 0; i < 12; i++) //**HARDCODED to number of elements in array--need to change if array changes in razor-imu.h
+  {
+    data->data[i] = 0.0f;
+  }
   //send frame request
   const char* framerequest = "#f";
   int testretval = write(gl_imu_fd, framerequest, strlen(framerequest));
   if (testretval != (int)strlen(framerequest))
   {
-    printf("razor_read_data error writing frame requests, testretval = %d\n", testretval);
+    printf("razor_read_data error writing frame requests, testretval = %d\n", 
+	   testretval);
     return false;
   }
   //read data
@@ -274,7 +278,7 @@ bool razor_read_data(razor_data_t* data)
       // (type-punning: aliasing with char* is ok)
       (reinterpret_cast<char*> (&data->data))[razor_input_pos++] = c;
         if (razor_input_pos == 48) // we received a full frame
-        {
+        {                 //***HARDCODED for 12 data elements * 4 bytes each
           //reset position counter and return success
           razor_input_pos = 0;
 	  return true;

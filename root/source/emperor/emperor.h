@@ -71,6 +71,6 @@ int emperor_parse_and_execute(char* msgbuf);
 int emperor_log_data(char* databuf);
 double emperor_current_time(void);
 void* emperor_monitor_bump_switches(void* args);
-
+void* emperor_run_imu(void* args);
 #endif
 

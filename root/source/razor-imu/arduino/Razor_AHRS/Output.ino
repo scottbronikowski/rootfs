@@ -20,8 +20,6 @@ void output_mine()
     Serial.write((byte*) accel, 12);
     Serial.write((byte*) magnetom, 12);
     Serial.write((byte*) gyro, 12);
-    /* Serial.print("binary format for output_mine() not yet written"); */
-    /* Serial.println(); */
   }
   else if (output_format == OUTPUT__FORMAT_TEXT)
   {
