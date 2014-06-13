@@ -223,6 +223,7 @@ int main(int /*argc*/, char** /*argv*/)
   pthread_attr_destroy(&attributes);
   printf("%s\n", logbuf);
   //***START IMU AND GPS THREAD(S) HERE***
+  imu_thread_should_die = FALSE;
   pthread_attr_init(&attributes);
   pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
   pthread_create(&imu_thread, &attributes, emperor_run_imu, NULL);
@@ -617,7 +618,7 @@ void* emperor_run_imu(void* args)
 {
   //int retval;
   char logbuf[k_LogBufSize];
- 
+  //printf("In emperor_run_imu, imu_thread_should_die = %d\n", imu_thread_should_die);
   while (!imu_thread_should_die)
   {
     //PUT TIMER IN HERE
@@ -639,6 +640,7 @@ void* emperor_run_imu(void* args)
     }
     emperor_log_data(logbuf);
     //printf("logged: %s\n", logbuf);
+    usleep(80000); //tweaking this number to get ~10 updates/sec
   }
   printf("imu thread exiting\n");
   pthread_exit(NULL);

@@ -372,7 +372,16 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Did some reading/thinking about how to integrate accelerometer data to get velocity and position.  Would be ideal if this could be done on-board the IMU, but not sure if the processor is powerful enough.
 --Have emperor_run_imu thread implemented, but still need to implement a sleep or timer function to keep it from constantly polling the IMU and sending data to the log.  The first test (with the IMU read and send in a while loop) did not slow down the cameras (still ~13fps/cam), but the excessive logging created a 150MB log file that crashed gedit.  
 
+13 Jun 14
+--Debugged problems with getting IMU thread to run and log data back on seykhl.  Logging is now functional.
+--Added a usleep into the emperor_run_imu thread to get ~10 IMU updates/sec on seykhl.  Have the usleep set at 80000, which seems to be very close to where it needs to be for updates at 10 Hz.  Still may need to tweak this some more.
+--In addition to (or possibly instead of) using the usleep, I started looking into how to timestamp the data coming off the IMU.  Still trying to figure out if there is a real time clock on the IMU, and if so, how to access it.  If there isn't a RTC on the IMU, maybe I can timestamp it when it arrives on the Gumstix.
+--Did some more research into methods of turning the IMU data into position data.  I have a few more papers to read on this.  Right now I think I might be able to do at least the first integration (acceleration to velocity) on the IMU, and then finish on the Gumstix (which would allow me to also use the GPS data the Gumstix will get).
+
 ***RANDOM NOTES
+
+ **STILL NEED TO DO OUTDOOR CALIBRATION OF IMU***
+
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
 --LOOK AT C++ examples in Razor code
 

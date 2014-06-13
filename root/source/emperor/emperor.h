@@ -58,8 +58,8 @@ extern const char* gps_file;
 
 //global vars
 extern int sockfd, log_sockfd;
-extern int cam_thread_should_die, gpio_thread_should_die;
-extern pthread_t cam_thread, gpio_thread;
+extern int cam_thread_should_die, gpio_thread_should_die, imu_thread_should_die;
+extern pthread_t cam_thread, gpio_thread, imu_thread;
 extern int pan_fd, tilt_fd, motor_fd, gpio_fd;//, imu_fd, gps_fd;
 //extern char motor_prev[k_maxBufSize];
 //structures
