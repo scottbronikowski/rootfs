@@ -378,6 +378,10 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --In addition to (or possibly instead of) using the usleep, I started looking into how to timestamp the data coming off the IMU.  Still trying to figure out if there is a real time clock on the IMU, and if so, how to access it.  If there isn't a RTC on the IMU, maybe I can timestamp it when it arrives on the Gumstix.
 --Did some more research into methods of turning the IMU data into position data.  I have a few more papers to read on this.  Right now I think I might be able to do at least the first integration (acceleration to velocity) on the IMU, and then finish on the Gumstix (which would allow me to also use the GPS data the Gumstix will get).
 
+
+17 Jun 14
+--Ran new calibration for IMU outdoors (picnic table near south wing of EE building).  Added new calibration data to RazorAHRS.ino.  Observed through AHRS demo sketch that it appeared to be tracking horizontal rotation properly, whether on the desk or on the floor.  However, on the floor the yaw reading (i.e., compass heading) is off ~10-12 degrees to the left.  Incorporated offset of 11 in Output.ino.
+
 ***RANDOM NOTES
 
  **STILL NEED TO DO OUTDOOR CALIBRATION OF IMU***

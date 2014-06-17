@@ -1,300 +1,3 @@
-[
-[   10.626190] end_request: I/O error, dev 
-[   10.626373] end_r
-[   10.626525] end_request: I/O error, dev mt
-[   10.626708] 
-[ 
-[   11.027130] EEPROMPID = 0x8178
-[   11.027130] EEPROMCustom
-[ 
-[   11.027130] RT_CustomerID: 0x00
-[   11.027130
-[ 
-[   11.02716
-[   11.027160] BT Coexistance = disable
-[   11.0
-[   11.027191] 
-[   11.027191] ### PS params=>  power_mgnt(0),us
-[   11.027191] 
-[   11.027191] readAdapterInfo_8192CU(): REPLAC
-[   11.027191] <
-[   11.028289] rtw_macaddr_cfg MAC Address  = c0:4a:00:17:ff:5
-[
-[   11.041931] _rtw_drv_register_ne
-[   11.042358] usbcore: regi
-[   13.230499] NET: Regist
-[   13.859100] +871x_drv - drv_open, bup
-[   13.
-[   13.886322] FirmwareDownload9
-[   13.886322] fw_ver=v88, fw_subver=2, sig=0x8
-[   
-[   13.
-[   14.386016] libertas_sdio mmc1:0001:1: (u
-[   14.512512]
-[   14.536621] Path A IQK Success[   14.512512]
-[   14.545623]
-[   14.56
-[   14.571716] Path B IQK Su
-[   14.581848] IQK: final_candidate is 0
-[   14.581848] 
-[   14.581848]  Path A IQ Calibration Success !
-[
-[   14.712860] pdmpriv->TxPowerTrackC
-[   14.722839] rtl8192cu_hal_init in 867ms
-[   14.7464
-[   14.746978] 
-[   14.747283] IPv6: ADDRCONF(NETDEV_UP): wlan1: li
-[   14.749847] libertas_sdio mmc1:0001:1: wla
-[   14.761199] [rtw_wx_set_pmkid] IW_PMKSA_FLUSH!
-[   14.775146] hw_var_set_opmode()-4234 mo
-[  
-[   16.169891] survey done event(3f) band:0
-[   1
-[   16.174041] set_mode = IW_
-[   16.174468
-[   
-[   16.174499] 0x30 0x14 0x01 0
-[   16.174499] 0x
-[   16.174499] 0x00 0x0f 0xac 0x01 0x00 0x00 0x00
-[   16.175781] hw_var_set_opmode()-4234 mode = 2
-[  
-[   16.177368] =>rtw_wx_set_essid
-[   
-[   16.177429] 
-[   16.177429] [by_bssid:0][assoc
-[   16.177459] [by_bssid:0][assoc_
-[   
-[   16.177490] [by_bssid:0][assoc_ss
-[   16.177520] [by_bss
-[   16.177520] rtw_select_and_join_from_scanned
-[
-[   16.177581] <=rtw_wx_set_essi
-[   16.177795] start_join_set_ch_bw: ch=11, bwmode=0
-[   16.177886] Set BSSID under fw_state=0x00000088
-[  
-[   16.235809]
-[   16.235839] network.SupportedRates[0]=8C
-[
-[   16.235870] network.SupportedRates[2]=18
-[   16
-[   16.235870] netw
-[   16.235870] network.SupportedRates[5]=48
-[   16.235900] 
-[   1
-[   
-[   16.235931] declare supporting RX STBC
-[   1
-[   16.248718]
-[   16.
-[   16.248748] 
-[   16.248779] rtw_joinbss_update_stainf
-[   16.249
-[   1
-[   16.253875] WMM(0): 0, 
-[   16.254150] WMM(1): 0, a44f
-[ 
-[   16
-[   
-[   16.270812] 
-[   16.278289] update raid entry, 
-[ 
-[   16.28
-[   16.283782] Set RSVD page loca
-[   16.286224] =>mlmeext_joi
-[   16.454162]
-[   16.454193] [rtw_wx_set_pmkid] Use the new 
-[   16.4
-[   16.464172]  ~~~~stastakey:unicastkey
-[
-[   16.4
-[   16.470642] SetHwReg8192CU, 5
-[   25.893981] OnAction_back
-[   
-[   27.330841] init: fails
-[   28.018218]  gadget: u
-[   28.0182
-[   28.036621] usb0: MAC 3a:a9:fd:72:24:da
-[   28.044494]  gadget: Mass Sto
-[   28.044494]  gad
-[
-[   28.044616]  gadget: Mu
-[   28.044616]  gadget: userspace failed to p
-[   28.044
-[   28.071197] 
-[   28.07128
-[   28.071716] mu
-[   28.071746] musb-hdrc musb-hdrc: supports USB 
-[   
-[ 
-[   28.071899] usb usb2: New USB 
-[   28.071929] usb usb2: New USB d
-[   28.071929] usb usb2: Product: MUSB HD
-[   28.071929] usb usb2
-[   28.071960] usb usb2: SerialNumber: mus
-[   28.072418] u
-[   28.072448] usb usb2: configura
-[   28.072509] usb usb2: adding 2-0:1.0 (config #1, interface
-[   28.072662] hub 2-0:1.0: 
-[   28.072662] hub 2-0:1.0: usb_probe_interface -
-[   2
-[   28.072723] hub 2-0:
-[   28.072723] hub 2-0:1.0: standalone hub
-[   28
-[   28.072753] hub 2-0:1.0: no over-current protectio
-[   28.07278
-[   28.072784] hub 2-0:1.0: TT requires at
-[  
-[   28.072814] hub 2-0:1.0: 100
-[   28.072845] hub 2-0:1.0: local power source is good
-[   28.
-[   28.160888]
-[   28.172424] hub 2-0:1.0: state 7 ports 1
-[   28.37
-[   28.378356] twl4030_usb twl4030_usb: twl4030_phy_s
-[   28.7
-[   29.022949] pwm: freque
-[   30.172302] hub 2-0:1.0: hub_suspend
-[ 
-[   35.495361] init: lightdm main process (7
-[  
-[   47.468017] init: 
-[  255
-[  255.691345] issue_action_BA, category=3, 
-[  255.691406] BA_starting_seqctrl = 940 for TID=0
-[  255.6943
-[
-[  255.694427] agg_enable for TID=0
-[  305.
-[  305.524047] issue
-[  305.524047] BA_starting_seqctrl = 35 for T
-[  305.530487] 
-[ 
-[  305.530517] agg_enable for TID
-[  347.625427] hub 1-0:1.0:
-[ 
-[  347.625488] hub 1-0:1.0: port 2
-[  347.625518
-[ 
-[  347.64791
-[  347.647918] usb 1-2.1: USB disconnec
-[  347.6
-[  347.647949] 
-[  347.648132] ehci-omap ehci-omap.0: shutdown u
-[  347.648132] 
-[  347.648162] ehci-omap ehci-omap.0: shutdown 
-[  347.648162] e
-[  347.648193] ehci-omap ehci-omap.0: shutdown urb de3add40 ep
-[
-[  347.648193] ehci-omap ehci-omap.
-[  347.648223] ehci-omap ehc
-[  347.648223] ehci-omap e
-[  347.648223] ehci-omap ehci-omap.0: sh
-[  347.
-[  347.648254] ehci-omap ehci-om
-[  347.648254] ehci-omap ehci-omap.0: shutdown 
-[  3
-[  347.
-[  347.648284] ehci-omap ehci-omap.0: shutdo
-[  347.648315]
-[  347.648315] ehci-omap ehci-omap.
-[  347.648315]
-[  347.64
-[  347.648345] ehci-omap ehc
-[  347.648345] ehci-omap ehci-omap.0: sh
-[  347.648376] 
-[  347.648376] ehci-omap ehci-omap.0: shutdown 
-[
-[  347.648406] ehci-omap ehci-omap.0:
-[  347.648406] ehci-omap ehci-omap.0: shut
-[  347.6484
-[  347.648437] 
-[  347.648437] ehci-omap ehci-omap.0: shutdown urb 
-[  347.648468] ehci-omap ehci-omap.0: shutdow
-[  347.648468] ehci-omap ehci-omap.0: shutdown ur
-[  347.648498] ehci-omap ehci-omap.0: shut
-[  
-[  347.648529] ehci-omap ehci-omap.0: shutd
-[  34
-[  347.648559] ehci-omap ehci
-[  347.648559
-[  3
-[  347.648590] ehci-omap ehci-o
-[  347.648590] eh
-[  347.648590] ehci-omap ehci-omap.0: shutdown ur
-[  347.648620] ehci-omap ehci-omap.0: shutdown u
-[  
-[  347.648620] ehci-omap ehci-oma
-[  3
-[  347.648651] 
-[  347.648681] ehci-omap ehci-oma
-[  347.648681] ehci-omap ehci-omap
-[  3
-[  347.648712] ehci-omap ehci-omap.0
-[  347.648712] ehci-om
-[  347.648712] ehci-omap ehci-omap.0: shutdown 
-[
-[  347.648742] ehci-omap ehci-om
-[  347.648742] ehci-omap ehci-omap.0: shutdown urb d
-[  347.648773] ehci-omap ehci-omap.0: shutdown urb
-[  
-[  347.648803]
-[  347.648803] ehci-omap ehci-omap.0: shutd
-[
-[  347.648834] ehci-omap ehci-omap.0: shutd
-[  347
-[  347.648834] ehci
-[  347.648864] ehci-omap ehci-omap.0: shutd
-[  347.648864] 
-[  34
-[  3
-[  347.648895] ehci-omap ehci-omap.0: shu
-[  34
-[  347.648925]
-[  347.
-[  347.648956] 
-[  347.648956] ehci-omap ehci-omap.0: sh
-[  347.648
-[  34
-[  347.648986] ehci-omap e
-[  347.649017] ehci-omap ehci-
-[ 
-[  347
-[  3
-[  347.649047] 
-[  347.649078] ehci-omap ehci-omap
-[ 
-[  347.64
-[  347.649108] ehci-omap ehci-oma
-[  347.649108] ehci-omap ehc
-[  347.649139]
-[  347.649139] ehci-omap ehci-omap.0: shutdown
-[  347.6
-[  347.649169] ehci-omap ehci-omap.0: sh
-[
-[  347.6
-[  347.649200] ehci-omap ehci-om
-[  347.649200] ehci-omap ehc
-[  3
-[  347.649261] ehci-omap e
-[  347.649261] ehci-omap 
-[  347.6492
-[  347.649291] ehci-omap ehci-omap.0: shut
-[  347.649291] ehci-omap ehci-om
-[  347.649322] ehci
-[
-[  347.649353] ehci-omap e
-[  347.649353] ehci-omap ehci-omap.0: shutdow
-[  347.649
-[  347.649383] 
-[  347.64938
-[  347.649414] eh
-[  347.649414] ehci-omap ehci-omap.0: shutdown ur
-[  3
-[ 
-[  347.649444] ehci-omap ehci-oma
-[  347.649475] ehci-omap ehci-omap
-[  347.649475] ehci-omap ehci-omap.0: shu
-[  347.649475] ehci-oma
 [  347.649505] ehci-omap ehci-omap.0: shut
 [  347.649505] e
 [  347.649536] ehci-omap ehci-omap
@@ -1997,4 +1700,301 @@ lsmod
 ls
 exit
 ls
+halt
+cd source/libbeagle/
+ls
+grep -ri pread *
+cd ..
+ls
+cd razor-imu/
+ls
+lla
+rep -ri 57600 *
+grep -ri 57600 *
+cd ../emperor/
+make
+lla /dev/RazorIMU 
+cd ../razor-imu/arduino/Razor_AHRS/
+ls
+screen /dev/RazorIMU 57600
+cd ~/razor-9dof-ahrs-Release-v1.4.2
+ls
+cd C++
+ls
+make
+g++ RazorAHRS.cpp Example.cpp -o example
+g++ -lpthread -D_REENTRANT RazorAHRS.cpp Example.cpp -o example
+g++ -lpthread -D_REENTRANT -c RazorAHRS.cpp
+ls
+g++ -lpthread -D_REENTRANT -c Example.cpp 
+g++ -o example RazorAHRS.o Example.o -lpthread
+ls
+./example 
+touch Makefile
+make
+make clean
+make
+make clean
+make
+./example 
+screen /dev/RazorIMU 57600
+htop
+cd ~/
+ls
+cd source/razor-imu/arduino/Razor_AHRS/
+ls
+grep -i millis *
+screen /dev/RazorIMU 57600
+exit
+lla /dev/RazorIMU 
+cd source/
+ls
+grep -ri log_data *
+screen /dev/RazorIMU 57600
+lla /dev/GPS
+cd motor_control/
+ls
+cat Makefile 
+cd ..
+ls
+cd camera/
+ls
+cat Makefile 
+cd ..
+cd razor-imu/
+ls
+touch razor-imu.cpp
+touch razor-imu.h
+ls
+cd ../emperor/
+ls
+make
+screen /dev/RazorIMU 57600
+make
+cd ../../include/
+ls
+lla
+ln -s /root/source/razor-imu/razor-imu.h ./razor-imu.h
+lla
+cd ../source/emperor/
+ls
+make
+grep -ri pread *
+cd ..
+grep -ri pread *
+grep -ri SIGALRM *
+grep -ri ALRM *
+ls
+cd libbeagle/
+lla
+cd main/src/
+ls
+lla
+grep -ri SIGALRM *
+grep -ri sig *
+grep -ri sigalrm *
+cat makefile 
+cd ..
+grep -ri signal *
+grep -ri sig *
+grep -ri timer *
+cd ~
+ls
+grep -ri timer *
+grep -ri sigalrm *
+cd rotary-encoder/
+ls
+cd bgwz/
+ls
+cd BeagleBone/
+ls
+cd libbeagle/
+ls
+grep -ri SIGALRM *
+grep -ri sig *
+grep -ri timer *
+lla
+cd main/
+lla
+cd src/
+ls
+lla
+cd ../../
+ls
+cd ..
+ls
+cd libbeagle/
+cd examples/
+ls
+cd rotary/
+ls
+grep -ri sig *
+lla
+./rotary 
+./my_rotary 
+lla
+cd ~/source/libbeagle/
+ls
+cd examples/
+ls
+cd rotary/
+ls
+lla
+./rotary 
+lla
+grep -ri SIGALRM *
+grep -ri sig *
+cat rotary.cpp 
+cat my_rotary.cpp 
+cat makefile 
+cd ../..
+grep -ri sig *
+grep -ri timer *
+grep -ri action *
+grep -ri sigact
+grep -ri sigact *
+cd examples/rotary/
+ls
+cat rotary.cpp 
+lla
+ls
+rsync -avrz seykhl:~/Downloads/rotary/rotary.cpp .
+lla
+chown root:root rotary.cpp
+lla
+cd ../../main/src/
+ls
+rsync -avrz seykhl:~/Downloads/rotary/rotary.* .
+lla
+chown root:root rotary.*
+lla
+cd../../
+ls
+cd ../../examples/
+ls
+cd rotary/
+ls
+make
+make clean
+make
+cat makefile 
+cd ..
+cd main/
+ls
+cd src/
+ls
+cat makefile 
+make clean
+make
+cd ../../examples/rotary/
+ls
+make
+./rotary 
+cd ~/source/emperor/
+ls
+make
+make clean
+make
+make clean
+make
+cd ../razor-imu/arduino/Razor_AHRS/
+ls
+grep compensate *
+grep output_mine *
+grep Compass_Heading *
+grep Matrix_update() *
+grep Matrix_update *
+grep GRAVITY *
+cd ../../../emperor/
+ls
+lla
+ls ../../bin
+lla ../../bin
+make
+grep -ri log_data *
+cd ../
+grep -ri log_data *
+cd emperor/
+make
+exit
+screen /dev/RazorIMU 57600
+cd razor-9dof-ahrs-Release-v1.4.2/C++/
+ls
+cd ..
+ls
+cd Matlab/
+ls
+cd ..
+cd Android/
+ls
+cd RazorExampleApp/
+ls
+acd src/
+cd src/
+ls
+cd de/
+ls
+cd tuberlin/
+ls
+cd qu
+ls
+cat RazorExample.java 
+cd RazorExampleApp
+cd ~/source/bin
+ls
+cd ~/source/
+ls
+cd ../bin/
+ls
+./emperor 
+exit
+arduino
+screen /dev/RazorIMU 57600
+ls
+cd bin
+ls
+cd path
+ls
+cd scc 
+cd ~
+cd scheme2c-bgc/
+ls
+cat README 
+cd /home/abarbu
+cd /
+ls
+cd home
+ls
+cd ~
+ls
+cat notes28jan14.txt 
+cat notes10feb14.txt 
+cat notes28jan14.txt 
+cat notes4march.txt 
+cat notes7march.txt 
+ls
+cat open-files-13-feb.txt 
+cat open-files-14-feb.txt 
+cat open-files-17-feb.txt 
+cat open-files-24-feb.txt 
+cat open-files-25-feb.txt 
+cat open-files-26-feb.txt 
+ardunio
+arduino
+htop
+exit
+emacs today.text
+exit
+lsusb
+ATZ
+AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
+ATZ
+AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
+halt
+emacs today.text
+arduino
+exit
+˜ž`þž˜`þžf`
+
+
 halt

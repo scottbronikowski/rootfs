@@ -216,12 +216,12 @@ boolean output_errors = false;  // true or false
 // Put MIN/MAX and OFFSET readings for your board here!
 // Accelerometer
 // "accel x,y,z (min/max) = X_MIN/X_MAX  Y_MIN/Y_MAX  Z_MIN/Z_MAX"
-#define ACCEL_X_MIN ((float) -283) //-287) //-250)
-#define ACCEL_X_MAX ((float) 249) //254) //250)
-#define ACCEL_Y_MIN ((float) -254) //-257) //-250)
-#define ACCEL_Y_MAX ((float) 275) //282) //250)
-#define ACCEL_Z_MIN ((float) -292) //-293) //-250)
-#define ACCEL_Z_MAX ((float) 232) //240) //250)
+#define ACCEL_X_MIN ((float) -282) //-283) //-287) //-250)
+#define ACCEL_X_MAX ((float) 249) //249) //254) //250)
+#define ACCEL_Y_MIN ((float) -248) //-254) //-257) //-250)
+#define ACCEL_Y_MAX ((float) 277) //275) //282) //250)
+#define ACCEL_Z_MIN ((float) -292) //-292) //-293) //-250)
+#define ACCEL_Z_MAX ((float) 233) //232) //240) //250)
 
 // Magnetometer (standard calibration mode)
 // "magn x,y,z (min/max) = X_MIN/X_MAX  Y_MIN/Y_MAX  Z_MIN/Z_MAX"
@@ -243,15 +243,18 @@ boolean output_errors = false;  // true or false
 //#define CALIBRATION__MAGN_USE_EXTENDED true
 //const float magn_ellipsoid_center[3] = {150.519, -45.9270, -79.4291};
 //const float magn_ellipsoid_transform[3][3] = {{0.926888, 0.0181419, 0.0232870}, {0.0181419, 0.979668, 0.0126558}, {0.0232870, 0.0126558, 0.971117}};
+/* #define CALIBRATION__MAGN_USE_EXTENDED true */
+/* const float magn_ellipsoid_center[3] = {45.1138, 41.8867, -296.532}; */
+/* const float magn_ellipsoid_transform[3][3] = {{0.900928, 0.0229865, 0.0139737}, {0.0229865, 0.980335, -0.0228203}, {0.0139737, -0.0228203, 0.971285}}; */
 #define CALIBRATION__MAGN_USE_EXTENDED true
-const float magn_ellipsoid_center[3] = {45.1138, 41.8867, -296.532};
-const float magn_ellipsoid_transform[3][3] = {{0.900928, 0.0229865, 0.0139737}, {0.0229865, 0.980335, -0.0228203}, {0.0139737, -0.0228203, 0.971285}};
+const float magn_ellipsoid_center[3] = {41.7929, 45.1141, -293.570};
+const float magn_ellipsoid_transform[3][3] = {{0.918095, 0.0162227, 0.0191033}, {0.0162227, 0.977890, -0.0219726}, {0.0191033, -0.0219726, 0.978037}};
 
 // Gyroscope
 // "gyro x,y,z (current/average) = .../OFFSET_X  .../OFFSET_Y  .../OFFSET_Z
-#define GYRO_AVERAGE_OFFSET_X ((float) 30.37) //18.76) //0.0)
-#define GYRO_AVERAGE_OFFSET_Y ((float) 4.43) //15.96) //0.0)
-#define GYRO_AVERAGE_OFFSET_Z ((float) 17.26) //6.58) //0.0)
+#define GYRO_AVERAGE_OFFSET_X ((float) 13.50) //30.37) //18.76) //0.0)
+#define GYRO_AVERAGE_OFFSET_Y ((float) 13.06) //4.43) //15.96) //0.0)
+#define GYRO_AVERAGE_OFFSET_Z ((float) 8.87) //17.26) //6.58) //0.0)
 
 /*
 // Calibration example:

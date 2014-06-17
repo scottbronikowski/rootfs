@@ -3,7 +3,7 @@
 // Output mine: yaw (heading) {MAG_Heading as well, for now}, then sensor values
 void output_mine()
 {
-  float compass_offset = 0.0; //OFFSET for observed compass error (IN DEGREES) **STILL NEED TO MEASURE BETTER **ON BATTERIES** **ON FLOOR**, 17.0 might not be right***
+  float compass_offset = 11.0; //OFFSET for observed compass error (IN DEGREES) **STILL NEED TO MEASURE BETTER **ON BATTERIES** **ON FLOOR**, 17.0 might not be right***
   //have to account
   float my_yaw = yaw + TO_RAD(compass_offset); //since yaw is stored in radians
   if (my_yaw < 0)
