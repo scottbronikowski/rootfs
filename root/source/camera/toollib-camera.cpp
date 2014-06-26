@@ -361,14 +361,13 @@ int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCamera
     //   printf("Error in setting camera\n");
     //   return -1;
     // }
-    
+
     //this sets up for pano cam 640x480 greyscale
     if (PGR_SetCameraNEW(&PG[i]) != 0)
     {
       printf("Error in setting camera\n");
       return -1;
     }
-
     // PrintCameraInfo(&PG->cameraInfo);
     // PrintFormat7Capabilities(PG[i].format7Info);
     // printf("Image size: %d x %d\n", PG[i].imageSettings.width, 
@@ -376,7 +375,8 @@ int PGR_StartCameras(BusManager* busMgr, PointGrey_t* PG, unsigned int numCamera
     
     // Start capturing images
     CheckPGR(PG[i].camera.StartCapture());
-    
+    //PG[i].camera.StartCapture();
+
     // // Check frame rate property
     // Property frmRate;
     // frmRate.type = FRAME_RATE;

@@ -47,6 +47,7 @@ extern const char* cmd_servo;
 extern const char* pan_file;
 extern const char* tilt_file;
 extern const char* k_LogPort;
+extern const char* k_imuLogPort;
 extern const int k_LogBufSize;
 //for bump switch monitoring
 extern const int bump_move_time;
@@ -57,7 +58,7 @@ extern const char* gpio_file;
 extern const char* gps_file;
 
 //global vars
-extern int sockfd, log_sockfd;
+extern int sockfd, log_sockfd, log_imu_sockfd;
 extern int cam_thread_should_die, gpio_thread_should_die, imu_thread_should_die;
 extern pthread_t cam_thread, gpio_thread, imu_thread;
 extern int pan_fd, tilt_fd, motor_fd, gpio_fd;//, imu_fd, gps_fd;

@@ -39,6 +39,7 @@ const char* cmd_servo = "servo";
 const char* pan_file = "/dev/pwm10";
 const char* tilt_file = "/dev/pwm9";
 const char* k_LogPort = "2001";
+const char* k_imuLogPort = "2004";
 const int k_LogBufSize = 256; //100;
 //for bump switch monitoring
 const int bump_move_time = 50000;
@@ -51,7 +52,7 @@ const char* gps_file = "/dev/GPS";
 
 //global variables
 //extern'd
-int sockfd, log_sockfd;
+int sockfd, log_sockfd, log_imu_sockfd;
 int cam_thread_should_die = TRUE; //cam thread not running
 int gpio_thread_should_die = TRUE; //gpio thread not running
 int imu_thread_should_die = TRUE; //imu thread not running
@@ -210,6 +211,17 @@ int main(int /*argc*/, char** /*argv*/)
   sprintf(logbuf, "Logging started");
   emperor_log_data(logbuf);
   printf("success!\n");
+
+  printf("Connecting to %s on port %s for IMU logging...\n", k_Server, 
+	 k_imuLogPort);
+  log_imu_sockfd = -1;
+  while (log_imu_sockfd == -1)
+  {
+    log_imu_sockfd = ClientConnect(k_Server, k_imuLogPort);
+  }
+
+  //emperor_log_data(logbuf);
+  printf("success!\n");
   //start bump switch monitoring thread here
   gpio_thread_should_die = FALSE;
   pthread_attr_t attributes;
@@ -317,13 +329,17 @@ void* emperor_run_cameras(void* args)
 {
   BusManager busMgr;
   unsigned int numCameras = PGR_Init(&busMgr);
+  //printf("in emperor_run_cameras, cam_thread_should_die = %d\n",
+  //	 cam_thread_should_die);
   if ( numCameras < 1 )
   {
     printf( "Insufficient number of cameras... exiting\n" );
     //return NULL;
     pthread_exit(NULL);
   }
+  //printf("numCameras = %u\n", numCameras);
   PointGrey_t* PG = new PointGrey_t[numCameras];
+  //printf("PG got newed\n");
   if (PGR_StartCameras(&busMgr, PG, numCameras) != 0)
   {
     printf("Error starting cameras\n");
@@ -331,11 +347,12 @@ void* emperor_run_cameras(void* args)
     //return NULL;
     pthread_exit(NULL);
   }
+  //printf("PGR_StartCameras succeeded\n");
   if (Network_StartCameras(PG, numCameras) != 0)
   {
     printf("Error starting network\n"); //don't return here
   }
-  //setup completed
+    //setup completed
   printf("Rover: Image transfer commencing.\n");
 
   while(!cam_thread_should_die)
@@ -422,7 +439,7 @@ int emperor_parse_and_execute(char* msgbuf)
   int retval;
   if (strncmp(msgbuf, cmd_start_cameras, strlen(cmd_start_cameras)) == 0) 
   { //start cameras
-    // printf("Matched start_cameras command\n");
+    //printf("Matched start_cameras command\n");
     //do stuff
     if (cam_thread_should_die) //only start if not already running
     {
@@ -441,7 +458,7 @@ int emperor_parse_and_execute(char* msgbuf)
   }
   if (strncmp(msgbuf, cmd_stop_cameras, strlen(cmd_stop_cameras)) == 0)
   { //stop cameras
-    // printf("Matched stop_cameras command\n");
+    //printf("Matched stop_cameras command\n");
     //do stuff
     if (!cam_thread_should_die) //only stop if already running
     {
@@ -638,7 +655,9 @@ void* emperor_run_imu(void* args)
     { //read failed, so log the failure
       sprintf(logbuf,"IMU data read failure");
     }
-    emperor_log_data(logbuf);
+    //emperor_log_data(logbuf); **OLD**
+    //log to separate log file
+    
     //printf("logged: %s\n", logbuf);
     usleep(80000); //tweaking this number to get ~10 updates/sec
   }
