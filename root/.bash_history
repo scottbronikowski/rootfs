@@ -1,18 +1,3 @@
-[  347.649505] ehci-omap ehci-omap.0: shut
-[  347.649505] e
-[  347.649536] ehci-omap ehci-omap
-[  347.649536] ehci-omap ehci-omap.0: shutdown urb de25bc40 e
-[  347.649536] ehci-omap ehc
-[  347.649566] ehci-omap ehci-omap.0: shutdown ur
-[  34
-[  347.649597] ehci-oma
-[  347.649597] ehci-omap ehci-omap.0: shut
-[  347
-[  347.649627] ehci-omap ehci-omap.0: shutdown urb de
-[  347.64962
-[  347.649658] ehci-omap ehci-omap.0: shut
-[  
-[  347.649688] ehci-omap ehci-o
 [  347.649688] ehci-omap ehci-omap.0: shutdown urb de2
 [  347.
 [  347.649719]
@@ -1998,3 +1983,18 @@ exit
 
 
 halt
+emacs today.text
+cd bin
+./emperor 
+htop
+reboot
+cd bin
+ls
+./emperor 
+exit
+htop
+exit
+exit
+exit
+emacs today.text
+exit
