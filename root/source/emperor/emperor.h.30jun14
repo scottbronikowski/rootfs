@@ -10,7 +10,8 @@
 
 #include "toollib-camera.h"
 #include "motor_control.h"
-#include "monitor.h"
+//#include "monitor.h"
+#include "razor-imu.h"
 #include <csignal>
 
 //defines
@@ -45,19 +46,36 @@ extern const char* cmd_reverse_right_2;
 extern const char* cmd_servo;
 extern const char* pan_file;
 extern const char* tilt_file;
+extern const char* k_LogPort;
+extern const char* k_imuLogPort;
+extern const int k_LogBufSize;
+//for bump switch monitoring
+extern const int bump_move_time;
+extern const int bump_read_size;
+extern const int bump_front;
+extern const int bump_rear;
+extern const char* gpio_file;
+extern const char* gps_file;
+extern const int imu_rate;
 
 //global vars
-extern int sockfd;
-extern int cam_thread_should_die;
-extern pthread_t cam_thread;
-extern int pan_fd, tilt_fd;
-
+extern int sockfd, log_sockfd, log_imu_sockfd;
+extern int cam_thread_should_die, gpio_thread_should_die, imu_thread_should_die;
+extern pthread_t cam_thread, gpio_thread, imu_thread;
+extern int pan_fd, tilt_fd, motor_fd, gpio_fd;//, imu_fd, gps_fd;
+//extern char motor_prev[k_maxBufSize];
 //structures
 
 //prototypes
 void emperor_signal_handler(int signum);
 void* emperor_run_cameras(void* args);
 int emperor_parse_and_execute(char* msgbuf);
-
-
+int emperor_log_data(char* databuf, int log_fd);
+double emperor_current_time(void);
+void* emperor_monitor_bump_switches(void* args);
+void* emperor_run_imu(void* args);
+void emperor_imu_handler(int signum);
+void emperor_imu_sigaction(void);
+void emperor_imu_interrupt_on(int rate);
 #endif
+

@@ -387,7 +387,9 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 ----
 --Modified emperor.cpp to run the IMU data read as a signal handler (off of a SIGALRM timer) rather than a separate thread.  First tried the timer set at 50 Hz (the update rate of the IMU), but got weird results--cameras wouldn't start and IMU log file randomly had values that were way off from neighboring readings.  Tried dropping the rate to 20 Hz and everything seemed to work fine--camera frame rate was normal, camera looked normal, and IMU log had reasonable data throughout.  In regular data log, I did notice there were some extra newlines in random spots throughout the file.
 --Also tried the IMU update rate at 25 Hz (half the internal IMU rate). It seemed to cause some strange errors with the bump switch monitoring thread--the SIGALRM timer caused an "interrupted system call" error on the select that I'm using as a timeout on the read of the GPIO file for the bump switches, which seems to cause spurious reads.  Tried rates between 25 and 50 Hz and got the same type of errors (bump switch problems and IMU log file lines with data that was obviously incorrect). Rechecked at 20 Hz, and things went back to normal (except for the extra newlines in the data log file), so it appears that the fastest we'll be able to get data from the IMU is at a rate of 20 Hz.
+----
 --Fixed extra newlines in data log file on seykhl side (**see other log**)
+--Started working on run-imu.{cpp,h}, a standalone program to read IMU data as fast as possible, along with associated changes to emperor.{cpp,h} to remove IMU running from this program.
 
 ***RANDOM NOTES
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
