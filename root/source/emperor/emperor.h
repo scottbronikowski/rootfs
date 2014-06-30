@@ -56,6 +56,7 @@ extern const int bump_front;
 extern const int bump_rear;
 extern const char* gpio_file;
 extern const char* gps_file;
+extern const int imu_rate;
 
 //global vars
 extern int sockfd, log_sockfd, log_imu_sockfd;
@@ -73,5 +74,8 @@ int emperor_log_data(char* databuf, int log_fd);
 double emperor_current_time(void);
 void* emperor_monitor_bump_switches(void* args);
 void* emperor_run_imu(void* args);
+void emperor_imu_handler(int signum);
+void emperor_imu_sigaction(void);
+void emperor_imu_interrupt_on(int rate);
 #endif
 

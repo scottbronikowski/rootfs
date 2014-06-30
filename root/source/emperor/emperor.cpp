@@ -47,8 +47,8 @@ const int bump_read_size = 24;
 const int bump_front = 185; //gpio 185
 const int bump_rear = 184; //gpio 184
 const char* gpio_file = "/dev/gpio-event";
-
 const char* gps_file = "/dev/GPS";
+const int imu_rate = 20; //in Hz
 
 //global variables
 //extern'd
@@ -211,7 +211,7 @@ int main(int /*argc*/, char** /*argv*/)
   sprintf(logbuf, "Logging started");
   emperor_log_data(logbuf, log_sockfd);
   printf("success!\n");
-  printf("log_sockfd = %d\n", log_sockfd);
+  //printf("log_sockfd = %d\n", log_sockfd);
 
   printf("Connecting to %s on port %s for IMU logging...\n", k_Server, 
 	 k_imuLogPort);
@@ -223,7 +223,7 @@ int main(int /*argc*/, char** /*argv*/)
 
   emperor_log_data(logbuf, log_imu_sockfd);
   printf("success!\n");
-  printf("log_imu_sockfd = %d\n", log_imu_sockfd);
+  //printf("log_imu_sockfd = %d\n", log_imu_sockfd);
   //start bump switch monitoring thread here
   gpio_thread_should_die = FALSE;
   pthread_attr_t attributes;
@@ -237,10 +237,13 @@ int main(int /*argc*/, char** /*argv*/)
   pthread_attr_destroy(&attributes);
   printf("%s\n", logbuf);
   //***START IMU AND GPS THREAD(S) HERE***
-  imu_thread_should_die = FALSE;
-  pthread_attr_init(&attributes);
-  pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
-  pthread_create(&imu_thread, &attributes, emperor_run_imu, NULL);
+  //*Trying IMU as a sigaction instead of a thread
+  emperor_imu_sigaction();
+  emperor_imu_interrupt_on(imu_rate);
+  // imu_thread_should_die = FALSE;
+  // pthread_attr_init(&attributes);
+  // pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
+  // pthread_create(&imu_thread, &attributes, emperor_run_imu, NULL);
   sprintf(logbuf, "IMU initialized and logging");
   retval = emperor_log_data(logbuf, log_sockfd);
   if (retval != 0)
@@ -305,12 +308,23 @@ void emperor_signal_handler(int signum)
 {
   //emperor_log_data("Logging stopped", log_sockfd);
   //printf("received signal %d\n", signum);
+  if (!cam_thread_should_die) //only stop if already running
+    {
+      int retval;
+      cam_thread_should_die = TRUE;
+      pthread_join(cam_thread, NULL);
+      retval = emperor_log_data((char*)"Cameras stopped in emperor_signal_handler", 
+				log_sockfd);
+      if (retval != 0)
+	printf("logging failed for: ");
+      printf("Cameras stopped in emperor_signal_handler\n");
+    }
   //kill bump switch thread
   gpio_thread_should_die = TRUE;
   pthread_join(gpio_thread, NULL);
   //kill imu/gps thread
-  imu_thread_should_die = TRUE;
-  pthread_join(imu_thread, NULL);
+  // imu_thread_should_die = TRUE;
+  // pthread_join(imu_thread, NULL);
   delete imu_data;
   //cleanup socket and file handles
   close(pan_fd);
@@ -319,6 +333,8 @@ void emperor_signal_handler(int signum)
   close(gpio_fd);
   close(gl_imu_fd);
   //usleep(100000);
+  close(log_imu_sockfd);
+  printf("IMU logging socket closed\n");
   close(log_sockfd);
   printf("data logging socket closed\n");
   close(sockfd);
@@ -393,7 +409,16 @@ void* emperor_monitor_bump_switches(void* args)
     timeout.tv_usec = 1000 * 100; //100ms timeout
     retval = select(gpio_fd+1, &recv_set, NULL, NULL, &timeout);
     if (retval < 0)
-      printf("select error\n");
+    {
+      if (errno != EINTR) //sigalrm timer interrupts select
+      {
+	printf("emperor_monitor_bump_switches():select error, gpio_fd = %d\n",
+	       gpio_fd);
+	perror("emperor_monitor_bump_switches():select");
+      }
+      else
+      	continue;  //treat as a timeout if we got retval == 0 with errno == EINTR
+    }
     else if (retval == 0) //timeout
     {
       // printf("select timeout at %.6f, gpio_fd = %d, timeout = %ld.%06ld\n", 
@@ -667,4 +692,47 @@ void* emperor_run_imu(void* args)
   }
   printf("imu thread exiting\n");
   pthread_exit(NULL);
+}
+
+void emperor_imu_handler(int signum)
+{
+  char logbuf[k_LogBufSize];
+  memset(logbuf, 0, sizeof(logbuf));  //clear buffer
+  if (razor_read_data(imu_data))
+  { //successful read, so put data into logbuf
+    sprintf(logbuf, "IMU:Yaw(r)=%.2f;Yaw(a)=%.2f;MAG_h=%.2f;"
+	    "Ax=%.2f;Ay=%.2f;Az=%.2f;Mx=%.2f;My=%.2f;Mz=%.2f;"
+	    "Gx=%.2f;Gy=%.2f;Gz=%.2f",
+	    imu_data->data[0], imu_data->data[1], imu_data->data[2],
+	    imu_data->data[3], imu_data->data[4], imu_data->data[5],
+	    imu_data->data[6], imu_data->data[7], imu_data->data[8],
+	    imu_data->data[9], imu_data->data[10], imu_data->data[11]);
+  }
+  else
+  { //read failed, so log the failure
+    sprintf(logbuf,"IMU data read failure");
+  }
+  emperor_log_data(logbuf, log_imu_sockfd);
+}
+
+void emperor_imu_sigaction(void) 
+{ 
+  struct sigaction sigact;
+  sigact.sa_handler = emperor_imu_handler;
+  sigemptyset(&sigact.sa_mask);
+  sigact.sa_flags = SA_RESTART;
+  if (sigaction(SIGALRM, &sigact, NULL)) { 
+    perror("sigaction failed");
+    exit(-1);
+  }
+}
+
+void emperor_imu_interrupt_on(int rate) 
+{ 
+  struct itimerval itimerval;
+  itimerval.it_interval.tv_sec = 0;
+  itimerval.it_interval.tv_usec = 1000000/rate;
+  itimerval.it_value.tv_sec = 0;
+  itimerval.it_value.tv_usec = 1000000/rate;
+  setitimer(ITIMER_REAL, &itimerval, (struct itimerval *)0);
 }
