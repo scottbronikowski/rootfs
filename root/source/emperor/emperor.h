@@ -69,7 +69,7 @@ extern int pan_fd, tilt_fd, motor_fd, gpio_fd;//, imu_fd, gps_fd;
 void emperor_signal_handler(int signum);
 void* emperor_run_cameras(void* args);
 int emperor_parse_and_execute(char* msgbuf);
-int emperor_log_data(char* databuf);
+int emperor_log_data(char* databuf, int log_fd);
 double emperor_current_time(void);
 void* emperor_monitor_bump_switches(void* args);
 void* emperor_run_imu(void* args);

@@ -209,7 +209,7 @@ int main(int /*argc*/, char** /*argv*/)
     log_sockfd = ClientConnect(k_Server, k_LogPort);
   }
   sprintf(logbuf, "Logging started");
-  emperor_log_data(logbuf);
+  emperor_log_data(logbuf, log_sockfd);
   printf("success!\n");
   printf("log_sockfd = %d\n", log_sockfd);
 
@@ -221,7 +221,7 @@ int main(int /*argc*/, char** /*argv*/)
     log_imu_sockfd = ClientConnect(k_Server, k_imuLogPort);
   }
 
-  //emperor_log_data(logbuf);
+  emperor_log_data(logbuf, log_imu_sockfd);
   printf("success!\n");
   printf("log_imu_sockfd = %d\n", log_imu_sockfd);
   //start bump switch monitoring thread here
@@ -231,7 +231,7 @@ int main(int /*argc*/, char** /*argv*/)
   pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
   pthread_create(&gpio_thread, &attributes, emperor_monitor_bump_switches, NULL);
   sprintf(logbuf, "Bump switch monitoring active");
-  retval = emperor_log_data(logbuf);
+  retval = emperor_log_data(logbuf, log_sockfd);
   if (retval != 0)
     printf("logging failed for \'%s\'\n", logbuf);
   pthread_attr_destroy(&attributes);
@@ -242,7 +242,7 @@ int main(int /*argc*/, char** /*argv*/)
   pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
   pthread_create(&imu_thread, &attributes, emperor_run_imu, NULL);
   sprintf(logbuf, "IMU initialized and logging");
-  retval = emperor_log_data(logbuf);
+  retval = emperor_log_data(logbuf, log_sockfd);
   if (retval != 0)
     printf("logging failed for \'%s\'\n", logbuf);
   pthread_attr_destroy(&attributes);
@@ -303,7 +303,7 @@ int main(int /*argc*/, char** /*argv*/)
 
 void emperor_signal_handler(int signum)
 {
-  //emperor_log_data("Logging stopped");
+  //emperor_log_data("Logging stopped", log_sockfd);
   //printf("received signal %d\n", signum);
   //kill bump switch thread
   gpio_thread_should_die = TRUE;
@@ -417,7 +417,7 @@ void* emperor_monitor_bump_switches(void* args)
 	motor_stop(motor_fd);
 	//log it
 	sprintf(logbuf, "Rear bump activated, stopping");
-	emperor_log_data(logbuf);
+	emperor_log_data(logbuf, log_sockfd);
       }
       else if (gpio_num == bump_front)
       { // bumped front, so stop and go back
@@ -427,7 +427,7 @@ void* emperor_monitor_bump_switches(void* args)
 	motor_stop(motor_fd);
 	//log it
 	sprintf(logbuf, "Front bump activated, stopping");
-	emperor_log_data(logbuf);
+	emperor_log_data(logbuf, log_sockfd);
       }
     }
   }
@@ -451,7 +451,7 @@ int emperor_parse_and_execute(char* msgbuf)
       pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
       pthread_create(&cam_thread, &attributes, emperor_run_cameras, NULL);
       sprintf(logbuf, "executed: %s", msgbuf);
-      retval = emperor_log_data(logbuf);
+      retval = emperor_log_data(logbuf, log_sockfd);
       if (retval != 0)
 	printf("logging failed for \'%s\'\n", logbuf);
       pthread_attr_destroy(&attributes);
@@ -467,7 +467,7 @@ int emperor_parse_and_execute(char* msgbuf)
       cam_thread_should_die = TRUE;
       pthread_join(cam_thread, NULL);
       sprintf(logbuf, "executed: %s", msgbuf);
-      retval = emperor_log_data(logbuf);
+      retval = emperor_log_data(logbuf, log_sockfd);
       if (retval != 0)
 	printf("logging failed for \'%s\'\n", logbuf);
       printf("Cameras stopped\n");
@@ -514,7 +514,7 @@ int emperor_parse_and_execute(char* msgbuf)
       //printf("wrote pan\n");
       //now log pan & tilt
       sprintf(logbuf, "executed: pan_%s, tilt_%s", pan, tilt );
-      retval = emperor_log_data(logbuf);
+      retval = emperor_log_data(logbuf, log_sockfd);
       if (retval != 0)
 	printf("logging failed for \'%s\'\n", logbuf);
     }
@@ -582,7 +582,7 @@ int emperor_parse_and_execute(char* msgbuf)
 	motor_reverse_left_2(motor_fd);
       //now log the motor command
       sprintf(logbuf, "executed: motor_%s", motor);
-      retval = emperor_log_data(logbuf);
+      retval = emperor_log_data(logbuf, log_sockfd);
       if (retval != 0)
 	printf("logging failed for \'%s\'\n", logbuf);
     }
@@ -594,7 +594,8 @@ int emperor_parse_and_execute(char* msgbuf)
 }
 
 
-int emperor_log_data(char* databuf)
+//int emperor_log_data(char* databuf)
+int emperor_log_data(char* databuf, int log_fd)
 {
   double now = emperor_current_time(); 
   char sendbuf[k_LogBufSize];
@@ -615,7 +616,7 @@ int emperor_log_data(char* databuf)
   //if we get here, we have something to send in temp
   memset(sendbuf, 0, sizeof(sendbuf));
   strncpy(sendbuf, temp, sizeof(sendbuf));  //use this to pad buffer
-  retval = send(log_sockfd, sendbuf, sizeof(sendbuf), 0);
+  retval = send(log_fd, sendbuf, sizeof(sendbuf), 0);
   if (retval != k_LogBufSize)
   {
     printf("emperor_log_data: send failed\n");
@@ -659,7 +660,8 @@ void* emperor_run_imu(void* args)
     }
     //emperor_log_data(logbuf); **OLD**
     //log to separate log file
-    
+    emperor_log_data(logbuf, log_imu_sockfd);
+
     //printf("logged: %s\n", logbuf);
     usleep(80000); //tweaking this number to get ~10 updates/sec
   }

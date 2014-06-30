@@ -1,6 +1,3 @@
-[  347.649688] ehci-omap ehci-omap.0: shutdown urb de2
-[  347.
-[  347.649719]
 [  347.649719] ehci-omap ehci-omap.0: shutd
 [  347.64
 [  347.649749] ehci-omap ehci-omap.0: shutdown urb de
@@ -1997,4 +1994,7 @@ exit
 exit
 exit
 emacs today.text
+exit
+cd bin
+./emperor 
 exit

@@ -382,10 +382,12 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 17 Jun 14
 --Ran new calibration for IMU outdoors (picnic table near south wing of EE building).  Added new calibration data to RazorAHRS.ino.  Observed through AHRS demo sketch that it appeared to be tracking horizontal rotation properly, whether on the desk or on the floor.  However, on the floor the yaw reading (i.e., compass heading) is off ~10-12 degrees to the left.  Incorporated offset of 11 in Output.ino.
 
+30 Jun 14
+--Modified emperor_log_data() in emperor.cpp to take a socket as a second argument in order to allow logging to two separate files (regular data and IMU) on seykhl.  After the split everything seems to be functioning properly--still getting ~11-12 fps per camera.
+----
+
+
 ***RANDOM NOTES
-
-
-
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
 --LOOK AT C++ examples in Razor code
 
