@@ -160,8 +160,7 @@ bool razor_init()
   const std::string config_synch_id = "01";
   const std::string config_synch_reply = synch_token + config_synch_id + new_line;
 
-  //std::string config = "#o0#oe0#s" + config_synch_id; //frame requests
-  std::string config = "#o1#oe0#s" + config_synch_id; //constant output
+  std::string config = "#o0#oe0#s" + config_synch_id;
   config = "#omb" + config;
   // if (_mode == YAW_PITCH_ROLL) config = "#ob" + config;
   // else if (_mode == ACC_MAG_GYR_RAW) config = "#osrb" + config;
@@ -267,15 +266,15 @@ bool razor_read_data(razor_data_t* data)
     data->data[i] = 0.0f;
   }
   //data->timestamp = 0;
-  // //send frame request --NOT NEEDED FOR CONSTANT OUTPUT
-  // const char* framerequest = "#f";
-  // int testretval = write(gl_imu_fd, framerequest, strlen(framerequest));
-  // if (testretval != (int)strlen(framerequest))
-  // {
-  //   printf("razor_read_data error writing frame requests, testretval = %d\n", 
-  // 	   testretval);
-  //   return false;
-  // }
+  //send frame request
+  const char* framerequest = "#f";
+  int testretval = write(gl_imu_fd, framerequest, strlen(framerequest));
+  if (testretval != (int)strlen(framerequest))
+  {
+    printf("razor_read_data error writing frame requests, testretval = %d\n", 
+	   testretval);
+    return false;
+  }
   //read data
   while (true)
   {
