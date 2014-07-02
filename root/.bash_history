@@ -1,91 +1,3 @@
-[  
-[  347.649841] ehci-o
-[  347
-[  347.649871] ehci-omap ehci-omap.0: shutdo
-[  347.649871] ehci-omap ehci-omap.0: shutdown urb
-[  347.6499
-[
-[  347.649902] ehci-omap ehci-omap.
-[  347.
-[  347.665222] usb 1
-[  347.669952] usb 1-2.2: USB disconnect, dev
-[  347.669952] 
-[ 
-[  347.670288] ehci-omap ehci-oma
-[  347.670318] ehci-omap eh
-[ 
-[  347.670318] ehci-omap ehci-omap
-[  347.680816
-[ 
-[  347.68084
-[  347.680877] usb_read_port_complete()
-[  347.6
-[  347.681121] 
-[  347.681152] reg 0x6a4, usb write 2 fail, stat
-[  347.681182] 
-[  347.681182] reg 0x6a4, usb write 2 fail, sta
-[  347.681182] r
-[  347.681213] [dvobj:de0307c0][ERROR] continual_urb_error:5 >
-[
-[  347.681335] rtw_p2p_enable: bDri
-[  347.681365] -871x_drv - d
-[  347.684143] rtw_cmd_thr
-[  348.619079] ehci-omap ehci-omap.0: sh
-[  348.
-[  348.619171] ehci-omap ehci-om
-[  348.619201] ehci-omap ehci-omap.0: shutdown 
-[  3
-[  348.
-[  348.619293] ehci-omap ehci-omap.0: shutdo
-[  348.619323]
-[  348.619354] ehci-omap ehci-omap.
-[  348.619384]
-[  348.61
-[  348.619445] ehci-omap ehc
-[  348.619476] ehci-omap ehci-omap.0: sh
-[  348.619506] 
-[  348.619537] ehci-omap ehci-omap.0: shutdown 
-[
-[  348.619598] ehci-omap ehci-omap.0:
-[  348.619659] ehci-omap ehci-omap.0: shut
-[  348.6196
-[  348.619720] 
-halt
-ping google.com
-dmesg
-iwconfig
-ifdown wlan1
-ifup wlan1
-lsusb
-dmesg >> dmesg-rover-15apr-long-run-1.text
-iwconfig
-/etc/init/
-/etc/init.d/keepalive-ping.sh stop
-dmesg > dmesg-rover-15apr-long-run-2.text
-reboot
-/etc/init.d/ssh-tunnel.sh start
-reboot
-watch "dmesg | tail -20"
-watch dmesg
-dmesg | tail
-tail -f /var/log/dmesg
-watch "dmesg | tail -200"
-watch "dmesg | tail -50"
-watch "dmesg | tail -40"
-/etc/init.d/s
-/etc/init/
-/etc/init.d/keepalive-ping.sh stop
-dmesg
-dmesg > dmesg-rover-15apr-long-run-dan.text
-halt
-lsusb
-iwconfig
-ps -ef | grep run
-ls
-lsusb
-~
-lsusb
-/etc/init.d/keepalive-ping.sh stop
 dmesg > dmesg-rover-15apr-long-run-last-one.text
 reboot
 halt
@@ -1998,3 +1910,91 @@ cd bin
 reboot
 emacs today.text
 emacs today.text &
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ls
+top
+lsusb
+ps -ef | grep run-
+killall run-imu
+killall emperor
+ps -ef | grep ssh
+reboot
+emacs today.text
+cd source/razor-imu/arduino/Razor_AHRS/
+ls
+grep -ri millis *
+lla /dev/U*
+lla /dev/ttyU*
+cd ../
+cd ..
+make
+pkill run-imu
+make
+make clean
+make
+ls
+cd arduino/
+ls
+cd ..
+make
+ps -ef | grep screen
+kill -9 4036
+make
+make clean
+make
+cd bin
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+lla /dev/RazorIMU 
+screen /dev/RazorIMU 57600
+cd ../source/razor-imu/
+make
+cd ../../bin
+./run-imu 
+gdb
+gdb ./run-imu 
+./run-imu 
+screen /dev/RazorIMU 57600
+./run-imu 
+screen /dev/RazorIMU 57600
+./run-imu 
+screen /dev/RazorIMU 57600
+cd ..
+ls
+cd razor-9dof-ahrs-Release-v1.4.2
+ls
+cd C++
+ls
+cat RazorAHRS.cpp 
+cd ~/bin
+./run-imu 
+screen /dev/RazorIMU 57600
+./run-imu 
+screen /dev/RazorIMU 57600
+./run-imu 
+screen /dev/RazorIMU 57600
+./run-imu 
+screen /dev/RazorIMU 57600
+./run-imu 
+screen /dev/RazorIMU 57600
+./run-imu 
+screen /dev/RazorIMU 57600
+./run-imu 
+./run-emperor 
+./run-emperor start
+./run-imu 
+screen /dev/RazorIMU 57600
+./run-imu 
+screen /dev/RazorIMU 57600
+./run-imu 
+./run-emperor start
+htop
+emacs today.text
+cd bin
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+reboot

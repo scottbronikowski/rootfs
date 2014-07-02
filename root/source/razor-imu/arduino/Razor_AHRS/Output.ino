@@ -12,6 +12,8 @@ void output_mine()
   }
   if (output_format == OUTPUT__FORMAT_BINARY)
   {
+    unsigned char buf[4]; //can do this bc we know unsigned long is 32 bits
+    memcpy(buf, &reading_timestamp, 4);
     float headings[3];
     headings[0] = TO_DEG(yaw);
     headings[1] = TO_DEG(my_yaw);
@@ -21,11 +23,12 @@ void output_mine()
     Serial.write((byte*) magnetom, 12);
     Serial.write((byte*) gyro, 12);
     //Serial.write((byte*) reading_timestamp, 4); //this is a 32-bit int
+    Serial.write(buf, 4);
     //try to send reading_timestamp as 4 separate bytes, littlest byte first
-    Serial.write((reading_timestamp & 0xFF));
-    Serial.write((reading_timestamp >> 8));
-    Serial.write((reading_timestamp >> 16));
-    Serial.write((reading_timestamp >> 24));
+    /* Serial.write((reading_timestamp & 0xFF)); */
+    /* Serial.write((reading_timestamp >> 8)); */
+    /* Serial.write((reading_timestamp >> 16)); */
+    /* Serial.write((reading_timestamp >> 24)); */
   }
   else if (output_format == OUTPUT__FORMAT_TEXT)
   {

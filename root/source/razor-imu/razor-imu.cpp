@@ -259,6 +259,7 @@ bool razor_read_data(razor_data_t* data)
   int result;
   char c;
   unsigned long t = 0;
+  unsigned char buf[4];
   //zero out data
   for (int i = 0; i < 12; i++) //**HARDCODED to number of elements in array--need to change if array changes in razor-imu.h
   {
@@ -286,14 +287,18 @@ bool razor_read_data(razor_data_t* data)
 	  //got the floats, so now get the unsigned long int
 	  for (int i = 0; i < 4; i++)
 	  {
-	    if ((result = read(gl_imu_fd, &c, 1)) > 0)
+	    //if ((result = read(gl_imu_fd, &c, 1)) > 0)
+	    if ((result = read(gl_imu_fd, &buf[i], 1)) > 0)
 	    {
+	      //printf("buf[i] = %d\n", buf[i]);
+	      continue;
 	      //printf("c = %d\n", c);
-	      t += c * (unsigned long)pow(256.0,(float)i);
+	      //t += c * (unsigned long)pow(256.0,(float)i);
 	    }
 	    else if (result < 0)
 	      perror("razor_read_data:failed timestamp read");
 	  }
+	  memcpy(&t, buf, 4);
 	  //printf("t = %lu\n", t);
 	  data->timestamp = t;
 	  //printf("data->timestamp = %lu\n", data->timestamp);

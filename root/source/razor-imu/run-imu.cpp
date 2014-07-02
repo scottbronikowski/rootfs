@@ -11,7 +11,7 @@
 //global constants
 //k_Server declared in toollib-camera.h
 //k_imuLogPort, k_LogBufSize, imu_rate declared in emperor.h
-const int run_imu_rate = 50; //in Hz
+const int run_imu_rate = 10;//50; //in Hz
 const char* k_imuLogPort = "2004";
 const int k_LogBufSize = 256; //100;
 
