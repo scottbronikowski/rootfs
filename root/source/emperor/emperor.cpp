@@ -213,17 +213,18 @@ int main(int /*argc*/, char** /*argv*/)
   printf("success!\n");
   //printf("log_sockfd = %d\n", log_sockfd);
 
-  printf("Connecting to %s on port %s for IMU logging...\n", k_Server, 
-	 k_imuLogPort);
-  log_imu_sockfd = -1;
-  while (log_imu_sockfd == -1)
-  {
-    log_imu_sockfd = ClientConnect(k_Server, k_imuLogPort);
-  }
+  // printf("Connecting to %s on port %s for IMU logging...\n", k_Server, 
+  // 	 k_imuLogPort);
+  // log_imu_sockfd = -1;
+  // while (log_imu_sockfd == -1)
+  // {
+  //   log_imu_sockfd = ClientConnect(k_Server, k_imuLogPort);
+  // }
 
-  emperor_log_data(logbuf, log_imu_sockfd);
-  printf("success!\n");
-  //printf("log_imu_sockfd = %d\n", log_imu_sockfd);
+  // emperor_log_data(logbuf, log_imu_sockfd);
+  // printf("success!\n");
+  // //printf("log_imu_sockfd = %d\n", log_imu_sockfd);
+
   //start bump switch monitoring thread here
   gpio_thread_should_die = FALSE;
   pthread_attr_t attributes;
@@ -237,19 +238,21 @@ int main(int /*argc*/, char** /*argv*/)
   pthread_attr_destroy(&attributes);
   printf("%s\n", logbuf);
   //***START IMU AND GPS THREAD(S) HERE***
+  
   //*Trying IMU as a sigaction instead of a thread
-  emperor_imu_sigaction();
-  emperor_imu_interrupt_on(imu_rate);
+  // emperor_imu_sigaction();
+  // emperor_imu_interrupt_on(imu_rate);
+  
   // imu_thread_should_die = FALSE;
   // pthread_attr_init(&attributes);
   // pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
   // pthread_create(&imu_thread, &attributes, emperor_run_imu, NULL);
-  sprintf(logbuf, "IMU initialized and logging");
-  retval = emperor_log_data(logbuf, log_sockfd);
-  if (retval != 0)
-    printf("logging failed for \'%s\'\n", logbuf);
-  pthread_attr_destroy(&attributes);
-  printf("%s\n", logbuf);
+  // sprintf(logbuf, "IMU initialized and logging");
+  // retval = emperor_log_data(logbuf, log_sockfd);
+  // if (retval != 0)
+  //   printf("logging failed for \'%s\'\n", logbuf);
+  // //pthread_attr_destroy(&attributes);
+  // printf("%s\n", logbuf);
  
 
   //register signal handler for termination
@@ -331,10 +334,10 @@ void emperor_signal_handler(int signum)
   close(tilt_fd);
   close(motor_fd);
   close(gpio_fd);
-  close(gl_imu_fd);
-  //usleep(100000);
-  close(log_imu_sockfd);
-  printf("IMU logging socket closed\n");
+  //close(gl_imu_fd);
+  // //usleep(100000);
+  // close(log_imu_sockfd);
+  // printf("IMU logging socket closed\n");
   close(log_sockfd);
   printf("data logging socket closed\n");
   close(sockfd);
@@ -659,80 +662,80 @@ double emperor_current_time(void)
   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
 }
 
-void* emperor_run_imu(void* args)
-{
-  //int retval;
-  char logbuf[k_LogBufSize];
-  //printf("In emperor_run_imu, imu_thread_should_die = %d\n", imu_thread_should_die);
-  while (!imu_thread_should_die)
-  {
-    //PUT TIMER IN HERE
+// void* emperor_run_imu(void* args)
+// {
+//   //int retval;
+//   char logbuf[k_LogBufSize];
+//   //printf("In emperor_run_imu, imu_thread_should_die = %d\n", imu_thread_should_die);
+//   while (!imu_thread_should_die)
+//   {
+//     //PUT TIMER IN HERE
 
-    memset(logbuf, 0, sizeof(logbuf));  //clear buffer
-    if (razor_read_data(imu_data))
-    { //successful read, so put data into logbuf
-      sprintf(logbuf, "IMU:Yaw(r)=%.2f;Yaw(a)=%.2f;MAG_h=%.2f;"
-	      "Ax=%.2f;Ay=%.2f;Az=%.2f;Mx=%.2f;My=%.2f;Mz=%.2f;"
-	      "Gx=%.2f;Gy=%.2f;Gz=%.2f",
-	      imu_data->data[0], imu_data->data[1], imu_data->data[2],
-	      imu_data->data[3], imu_data->data[4], imu_data->data[5],
-	      imu_data->data[6], imu_data->data[7], imu_data->data[8],
-	      imu_data->data[9], imu_data->data[10], imu_data->data[11]);
-    }
-    else
-    { //read failed, so log the failure
-      sprintf(logbuf,"IMU data read failure");
-    }
-    //emperor_log_data(logbuf); **OLD**
-    //log to separate log file
-    emperor_log_data(logbuf, log_imu_sockfd);
+//     memset(logbuf, 0, sizeof(logbuf));  //clear buffer
+//     if (razor_read_data(imu_data))
+//     { //successful read, so put data into logbuf
+//       sprintf(logbuf, "IMU:Yaw(r)=%.2f;Yaw(a)=%.2f;MAG_h=%.2f;"
+// 	      "Ax=%.2f;Ay=%.2f;Az=%.2f;Mx=%.2f;My=%.2f;Mz=%.2f;"
+// 	      "Gx=%.2f;Gy=%.2f;Gz=%.2f",
+// 	      imu_data->data[0], imu_data->data[1], imu_data->data[2],
+// 	      imu_data->data[3], imu_data->data[4], imu_data->data[5],
+// 	      imu_data->data[6], imu_data->data[7], imu_data->data[8],
+// 	      imu_data->data[9], imu_data->data[10], imu_data->data[11]);
+//     }
+//     else
+//     { //read failed, so log the failure
+//       sprintf(logbuf,"IMU data read failure");
+//     }
+//     //emperor_log_data(logbuf); **OLD**
+//     //log to separate log file
+//     emperor_log_data(logbuf, log_imu_sockfd);
 
-    //printf("logged: %s\n", logbuf);
-    usleep(80000); //tweaking this number to get ~10 updates/sec
-  }
-  printf("imu thread exiting\n");
-  pthread_exit(NULL);
-}
+//     //printf("logged: %s\n", logbuf);
+//     usleep(80000); //tweaking this number to get ~10 updates/sec
+//   }
+//   printf("imu thread exiting\n");
+//   pthread_exit(NULL);
+// }
 
-void emperor_imu_handler(int signum)
-{
-  char logbuf[k_LogBufSize];
-  memset(logbuf, 0, sizeof(logbuf));  //clear buffer
-  if (razor_read_data(imu_data))
-  { //successful read, so put data into logbuf
-    sprintf(logbuf, "IMU:Yaw(r)=%.2f;Yaw(a)=%.2f;MAG_h=%.2f;"
-	    "Ax=%.2f;Ay=%.2f;Az=%.2f;Mx=%.2f;My=%.2f;Mz=%.2f;"
-	    "Gx=%.2f;Gy=%.2f;Gz=%.2f",
-	    imu_data->data[0], imu_data->data[1], imu_data->data[2],
-	    imu_data->data[3], imu_data->data[4], imu_data->data[5],
-	    imu_data->data[6], imu_data->data[7], imu_data->data[8],
-	    imu_data->data[9], imu_data->data[10], imu_data->data[11]);
-  }
-  else
-  { //read failed, so log the failure
-    sprintf(logbuf,"IMU data read failure");
-  }
-  emperor_log_data(logbuf, log_imu_sockfd);
-}
+// void emperor_imu_handler(int signum)
+// {
+//   char logbuf[k_LogBufSize];
+//   memset(logbuf, 0, sizeof(logbuf));  //clear buffer
+//   if (razor_read_data(imu_data))
+//   { //successful read, so put data into logbuf
+//     sprintf(logbuf, "IMU:Yaw(r)=%.2f;Yaw(a)=%.2f;MAG_h=%.2f;"
+// 	    "Ax=%.2f;Ay=%.2f;Az=%.2f;Mx=%.2f;My=%.2f;Mz=%.2f;"
+// 	    "Gx=%.2f;Gy=%.2f;Gz=%.2f",
+// 	    imu_data->data[0], imu_data->data[1], imu_data->data[2],
+// 	    imu_data->data[3], imu_data->data[4], imu_data->data[5],
+// 	    imu_data->data[6], imu_data->data[7], imu_data->data[8],
+// 	    imu_data->data[9], imu_data->data[10], imu_data->data[11]);
+//   }
+//   else
+//   { //read failed, so log the failure
+//     sprintf(logbuf,"IMU data read failure");
+//   }
+//   emperor_log_data(logbuf, log_imu_sockfd);
+// }
 
-void emperor_imu_sigaction(void) 
-{ 
-  struct sigaction sigact;
-  sigact.sa_handler = emperor_imu_handler;
-  sigemptyset(&sigact.sa_mask);
-  sigact.sa_flags = SA_RESTART;
-  if (sigaction(SIGALRM, &sigact, NULL)) { 
-    perror("sigaction failed");
-    exit(-1);
-  }
-}
+// void emperor_imu_sigaction(void) 
+// { 
+//   struct sigaction sigact;
+//   sigact.sa_handler = emperor_imu_handler;
+//   sigemptyset(&sigact.sa_mask);
+//   sigact.sa_flags = SA_RESTART;
+//   if (sigaction(SIGALRM, &sigact, NULL)) { 
+//     perror("sigaction failed");
+//     exit(-1);
+//   }
+// }
 
-void emperor_imu_interrupt_on(int rate) 
-{ 
-  struct itimerval itimerval;
-  itimerval.it_interval.tv_sec = 0;
-  itimerval.it_interval.tv_usec = 1000000/rate;
-  itimerval.it_value.tv_sec = 0;
-  itimerval.it_value.tv_usec = 1000000/rate;
-  setitimer(ITIMER_REAL, &itimerval, (struct itimerval *)0);
-}
+// void emperor_imu_interrupt_on(int rate) 
+// { 
+//   struct itimerval itimerval;
+//   itimerval.it_interval.tv_sec = 0;
+//   itimerval.it_interval.tv_usec = 1000000/rate;
+//   itimerval.it_value.tv_sec = 0;
+//   itimerval.it_value.tv_usec = 1000000/rate;
+//   setitimer(ITIMER_REAL, &itimerval, (struct itimerval *)0);
+// }

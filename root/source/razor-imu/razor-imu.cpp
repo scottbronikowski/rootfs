@@ -6,6 +6,8 @@
 */
 
 #include "razor-imu.h"
+#include <math.h>
+
 
 //global constants
 const speed_t razor_speed = B57600;
@@ -256,11 +258,13 @@ bool razor_read_data(razor_data_t* data)
 {
   int result;
   char c;
+  unsigned long t = 0;
   //zero out data
   for (int i = 0; i < 12; i++) //**HARDCODED to number of elements in array--need to change if array changes in razor-imu.h
   {
     data->data[i] = 0.0f;
   }
+  //data->timestamp = 0;
   //send frame request
   const char* framerequest = "#f";
   int testretval = write(gl_imu_fd, framerequest, strlen(framerequest));
@@ -279,6 +283,21 @@ bool razor_read_data(razor_data_t* data)
       (reinterpret_cast<char*> (&data->data))[razor_input_pos++] = c;
         if (razor_input_pos == 48) // we received a full frame
         {                 //***HARDCODED for 12 data elements * 4 bytes each
+	  //got the floats, so now get the unsigned long int
+	  for (int i = 0; i < 4; i++)
+	  {
+	    if ((result = read(gl_imu_fd, &c, 1)) > 0)
+	    {
+	      //printf("c = %d\n", c);
+	      t += c * (unsigned long)pow(256.0,(float)i);
+	    }
+	    else if (result < 0)
+	      perror("razor_read_data:failed timestamp read");
+	  }
+	  //printf("t = %lu\n", t);
+	  data->timestamp = t;
+	  //printf("data->timestamp = %lu\n", data->timestamp);
+	 
           //reset position counter and return success
           razor_input_pos = 0;
 	  return true;

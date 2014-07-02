@@ -16,13 +16,20 @@ void output_mine()
     headings[0] = TO_DEG(yaw);
     headings[1] = TO_DEG(my_yaw);
     headings[2] = TO_DEG(MAG_Heading);
-    Serial.write((byte*) headings, 12);  // No new-line
-    Serial.write((byte*) accel, 12);
+    Serial.write((byte*) headings, 12); //these 4 lines are 3xfloats
+    Serial.write((byte*) accel, 12);   // No new-line between
     Serial.write((byte*) magnetom, 12);
     Serial.write((byte*) gyro, 12);
+    //Serial.write((byte*) reading_timestamp, 4); //this is a 32-bit int
+    //try to send reading_timestamp as 4 separate bytes, littlest byte first
+    Serial.write((reading_timestamp & 0xFF));
+    Serial.write((reading_timestamp >> 8));
+    Serial.write((reading_timestamp >> 16));
+    Serial.write((reading_timestamp >> 24));
   }
   else if (output_format == OUTPUT__FORMAT_TEXT)
   {
+    Serial.print("millis()="); Serial.print(reading_timestamp); Serial.print(",");
     Serial.print("Yaw(raw)="); Serial.print(TO_DEG(yaw)); Serial.print(",");
     Serial.print("Yaw(offset)="); Serial.print(TO_DEG(my_yaw)); Serial.print(",");
     Serial.print("MAG_Heading(raw)=");

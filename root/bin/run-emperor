@@ -1,0 +1,28 @@
+#! /bin/bash
+
+
+start(){
+    /root/bin/emperor &
+    /root/bin/run-imu &
+}
+
+stop(){
+    echo "killing run-imu and emperor"
+    pkill run-imu
+    pkill emperor
+}
+
+case $1 in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    *)
+	echo "Usage: $0 {start|stop}"
+	RETVAL=1
+	;;
+esac
+exit 0
+

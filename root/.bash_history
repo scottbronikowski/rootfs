@@ -1,11 +1,3 @@
-[  347.649719] ehci-omap ehci-omap.0: shutd
-[  347.64
-[  347.649749] ehci-omap ehci-omap.0: shutdown urb de
-[  347.6
-[  347.649780] ehci-omap e
-[  347.649780] ehci-omap ehci-omap.0: s
-[ 
-[  347.649810] ehci-omap ehci-omap.0: shutdo
 [  
 [  347.649841] ehci-o
 [  347
@@ -1998,3 +1990,11 @@ exit
 cd bin
 ./emperor 
 exit
+reboot
+clear
+emacs today.text 
+cd bin
+./run-emperor start
+reboot
+emacs today.text
+emacs today.text &

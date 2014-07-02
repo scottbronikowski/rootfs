@@ -367,6 +367,8 @@ float gyro[3];
 float gyro_average[3];
 int gyro_num_samples = 0;
 
+unsigned long reading_timestamp; //for each data point
+
 // DCM variables
 float MAG_Heading;
 float Accel_Vector[3]= {0, 0, 0}; // Store the acceleration in a vector
@@ -666,6 +668,7 @@ void loop()
       Normalize();
       Drift_correction();
       Euler_angles();
+      reading_timestamp = millis(); //the time for this reading
       
       if (output_stream_on || output_single_on) output_mine();
     }
