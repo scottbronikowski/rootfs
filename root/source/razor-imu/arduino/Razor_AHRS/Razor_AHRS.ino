@@ -210,7 +210,7 @@ boolean output_errors = false;  // true or false
 #define OUTPUT__HAS_RN_BLUETOOTH false  // true or false
 
 
-// SENSOR CALIBRATION **LAST DONE: 5 Jun 14
+// SENSOR CALIBRATION **LAST DONE: 17 Jun 14
 /*****************************************************************/
 // How to calibrate? Read the tutorial at http://dev.qu.tu-berlin.de/projects/sf-razor-9dof-ahrs
 // Put MIN/MAX and OFFSET readings for your board here!
@@ -367,6 +367,9 @@ float gyro[3];
 float gyro_average[3];
 int gyro_num_samples = 0;
 
+//My added stuff--SAB
+#define CALIBRATION_SAMPLES 500 //take 10s of data to calibrate
+float gyro_bias[3];
 unsigned long reading_timestamp; //for each data point
 
 // DCM variables
@@ -401,6 +404,26 @@ boolean reset_calibration_session_flag = true;
 int num_accel_errors = 0;
 int num_magn_errors = 0;
 int num_gyro_errors = 0;
+
+//my added functions--SAB
+void calibrate_gyro()
+{
+  gyro[0] = 0.0f;
+  gyro[1] = 0.0f;
+  gyro[2] = 0.0f;
+  for (int i = 0; i < CALIBRATION_SAMPLES; i++)
+  { //accumulate readings
+    Read_Gyro();
+    gyro_bias[0] += gyro[0];
+    gyro_bias[1] += gyro[1];
+    gyro_bias[2] += gyro[2];
+  }
+  //average the readings
+  gyro_bias[0] /= CALIBRATION_SAMPLES;
+  gyro_bias[1] /= CALIBRATION_SAMPLES;
+  gyro_bias[2] /= CALIBRATION_SAMPLES;
+}
+//end my added stuff--SAB
 
 void read_sensors() {
   Read_Gyro(); // Read gyroscope
@@ -459,9 +482,13 @@ void compensate_sensor_errors() {
 #endif
 
     // Compensate gyroscope error
-    gyro[0] -= GYRO_AVERAGE_OFFSET_X;
+    gyro[0] -= GYRO_AVERAGE_OFFSET_X; 
     gyro[1] -= GYRO_AVERAGE_OFFSET_Y;
     gyro[2] -= GYRO_AVERAGE_OFFSET_Z;
+    //gyro[0] -= gyro_bias[0];
+    //gyro[1] -= gyro_bias[1];
+    //gyro[2] -= gyro_bias[2];
+
 }
 
 // Reset calibration session if reset_calibration_session_flag is set
@@ -519,7 +546,10 @@ void setup()
   Accel_Init();
   Magn_Init();
   Gyro_Init();
-  
+
+  //Do self-calibration here
+  //calibrate_gyro();
+
   // Read sensors, init DCM algorithm
   delay(20);  // Give sensors enough time to collect data
   reset_sensor_fusion();
@@ -668,6 +698,9 @@ void loop()
       Normalize();
       Drift_correction();
       Euler_angles();
+      //convert sensors to physical values here??
+      scale_sensors();
+
       reading_timestamp = millis(); //the time for this reading
       
       if (output_stream_on || output_single_on) output_mine();

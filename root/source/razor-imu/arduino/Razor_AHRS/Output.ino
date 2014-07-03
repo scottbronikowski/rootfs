@@ -1,5 +1,17 @@
 /* This file is part of the Razor AHRS Firmware */
 
+
+#define g0 980.665f //acceleration due to gravity in cm/s^2
+#define Accel_Scale(x) x*(g0/GRAVITY)
+
+//scale_sensors: convert numerical readings from sensors to physical values
+void scale_sensors()
+{
+  accel[0] = Accel_Scale(accel[0]);
+  accel[1] = Accel_Scale(accel[1]);
+  accel[2] = Accel_Scale(accel[2]);
+}
+
 // Output mine: yaw (heading) {MAG_Heading as well, for now}, then sensor values
 void output_mine()
 {
