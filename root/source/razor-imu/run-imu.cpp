@@ -62,18 +62,21 @@ int main (int /*argc*/, char** /*argv*/)
   {  //read succeeded, so print it out
     printf("IMU initialized in run-imu\n");
     printf("Timestamp = %lu\n", run_imu_data->timestamp);
-    printf("Yaw(raw) = %.2f, Yaw(adj) = %.2f, MAG_h = %.2f\n",
+    printf("Yaw = %.2f, Pitch = %.2f, Roll = %.2f\n",
 	   run_imu_data->data[0], run_imu_data->data[1], 
 	   run_imu_data->data[2]);
-    printf("Ax = %.2f, Ay = %.2f, Az = %.2f\n",
+    printf("Yaw(adj) = %.2f, MAG_H(adj) = %.2f, MAG_H(raw) = %.2f\n",
 	   run_imu_data->data[3], run_imu_data->data[4], 
 	   run_imu_data->data[5]);
-    printf("Mx = %.2f, My = %.2f, Mz = %.2f\n",
+    printf("Ax = %.2f, Ay = %.2f, Az = %.2f\n",
 	   run_imu_data->data[6], run_imu_data->data[7], 
 	   run_imu_data->data[8]);
-    printf("Gx = %.2f, Gy = %.2f, Gz = %.2f\n",
+    printf("Mx = %.2f, My = %.2f, Mz = %.2f\n",
 	   run_imu_data->data[9], run_imu_data->data[10], 
 	   run_imu_data->data[11]);
+    printf("Gx = %.2f, Gy = %.2f, Gz = %.2f\n",
+	   run_imu_data->data[12], run_imu_data->data[13], 
+	   run_imu_data->data[14]);
   }
 
   printf("Connecting to %s on port %s for IMU logging...\n",
@@ -161,7 +164,8 @@ void run_imu_handler(int signum)
   if (razor_read_data(run_imu_data))
   { //successful read, so put data into logbuf
     sprintf(logbuf, "IMU:time:%lu:"
-	    "Yaw(r):%.2f:Yaw(a):%.2f:MAG_h:%.2f:"
+	    "Yaw:%.2f:Pitch:%.2f:Roll%.2f:"
+	    "Yaw(a):%.2f:MAG_h(a):%.2f:MAG_h:%.2f:"
 	    "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
 	    "Gx:%.2f:Gy:%.2f:Gz:%.2f",
 	    run_imu_data->timestamp,
@@ -172,7 +176,9 @@ void run_imu_handler(int signum)
 	    run_imu_data->data[6], run_imu_data->data[7], 
 	    run_imu_data->data[8],
 	    run_imu_data->data[9], run_imu_data->data[10], 
-	    run_imu_data->data[11]);
+	    run_imu_data->data[11],
+	    run_imu_data->data[12], run_imu_data->data[13], 
+	    run_imu_data->data[14]);
   }
   else
   { //read failed, so log the failure

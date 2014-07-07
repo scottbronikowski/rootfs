@@ -262,7 +262,7 @@ bool razor_read_data(razor_data_t* data)
   unsigned long t = 0;
   unsigned char buf[4];
   //zero out data
-  for (int i = 0; i < 12; i++) //**HARDCODED to number of elements in array--need to change if array changes in razor-imu.h
+  for (int i = 0; i < 15; i++) //**HARDCODED to number of elements in array--need to change if array changes in razor-imu.h
   {
     data->data[i] = 0.0f;
   }
@@ -283,8 +283,8 @@ bool razor_read_data(razor_data_t* data)
     { //read binary stream
       // (type-punning: aliasing with char* is ok)
       (reinterpret_cast<char*> (&data->data))[razor_input_pos++] = c;
-        if (razor_input_pos == 48) // we received a full frame
-        {                 //***HARDCODED for 12 data elements * 4 bytes each
+        if (razor_input_pos == 60) // we received a full frame
+        {                 //***HARDCODED for 15 data elements * 4 bytes each
 	  //got the floats, so now get the unsigned long int
 	  for (int i = 0; i < 4; i++)
 	  {

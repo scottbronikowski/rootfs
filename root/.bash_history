@@ -1,53 +1,3 @@
-dmesg > dmesg-rover-15apr-long-run-last-one.text
-reboot
-halt
-ls dm*
-rsync -avrz dmesg* seykhl:~/vader-rover/
-cd /
-git status
-git add -A
-git commit -m "commit after drive testing...dmesg-rover-* files in ~/"
-git push
-emacs today.text &
-ls
-cd test_code/flycapture/bin
-./CustomImageEx 
-exit
-lla
-exit
-cd test_code/flycapture/bin
-./CustomImageEx 
-ifconfig
-ifup etho0
-ls /etc/ne*
-vi /etc/network/interfaces
-cat today.text | grep 4G
-cat today.text | grep 4g
-vi today.text
-ifconfig
-iwconfig
-dhclient eth0
-ifconfig
-ping google.com
-/etc/init.d/ssh-tunnel.sh start
-lsusb
-reboot
-ls
-lla
-vi /etc/network/interfaces
-reboot
-dhclient eth0
-/etc/init.d/ssh-tunnel.sh start
-lsusb
-iwconfig
-cat /etc/network/interfaces
-vi /etc/network/interfaces
-lsusb
-reboot
-ls
-iwconfig
-ifconfig
-vi /etc/network/interfaces
 lsusb
 ping google.com
 dmesg > dmesg-rover-16apr-1130.text
@@ -1998,3 +1948,53 @@ cd bin
 ./run-emperor stop
 ./run-emperor start
 reboot
+htop
+top
+htop
+exit
+cd bin
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-imu 
+exit
+cd source/razor-imu/
+make
+lla /dev/RazorIMU 
+screen /dev/RazorIMU 57600
+lla /dev/RazorIMU 
+cd arduino/Razor_AHRS/
+ls
+locate Razor_AHRS.cpp
+cd /
+locate Razor_AHRS.cpp
+screen /dev/RazorIMU 57600
+git status
+git add -A
+git commit -m "commit before starting to collect IMU data"
+git push
+screen /dev/RazorIMU 57600
+exit
+arduino
+exit
+emacs today.text
+exit
+halt
+screen /dev/RazorIMU 57600
+exit
+exit
+arduino
+cd bin
+ls
+./run-imu 
+exit
+cd source/razor-imu/
+ls
+make
+ls /dev/RazorIMU 
+lla /dev/RazorIMU 
+screen /dev/RazorIMU 57600
+make
+screen /dev/RazorIMU 57600
+exit

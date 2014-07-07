@@ -18,18 +18,25 @@ void output_mine()
   float compass_offset = 11.0; //OFFSET for observed compass error (IN DEGREES) **STILL NEED TO MEASURE BETTER **ON BATTERIES** **ON FLOOR**, 17.0 might not be right***
   //have to account
   float my_yaw = yaw + TO_RAD(compass_offset); //since yaw is stored in radians
+  float my_MAG = MAG_Heading + TO_RAD(compass_offset);
   if (my_yaw < 0)
   {
     my_yaw += 6.283185307; //2*pi
+    my_MAG += 6.283185307;
   }
+  float headings[3];
+  float ypr[3];  
+  ypr[0] = TO_DEG(yaw);
+  ypr[1] = TO_DEG(pitch);
+  ypr[2] = TO_DEG(roll);
+  headings[0] = TO_DEG(my_yaw);
+  headings[1] = TO_DEG(my_MAG);
+  headings[2] = TO_DEG(MAG_Heading);
   if (output_format == OUTPUT__FORMAT_BINARY)
   {
     unsigned char buf[4]; //can do this bc we know unsigned long is 32 bits
     memcpy(buf, &reading_timestamp, 4);
-    float headings[3];
-    headings[0] = TO_DEG(yaw);
-    headings[1] = TO_DEG(my_yaw);
-    headings[2] = TO_DEG(MAG_Heading);
+    Serial.write((byte*) ypr, 12);  // No new-line
     Serial.write((byte*) headings, 12); //these 4 lines are 3xfloats
     Serial.write((byte*) accel, 12);   // No new-line between
     Serial.write((byte*) magnetom, 12);
@@ -45,10 +52,13 @@ void output_mine()
   else if (output_format == OUTPUT__FORMAT_TEXT)
   {
     Serial.print("millis()="); Serial.print(reading_timestamp); Serial.print(",");
-    Serial.print("Yaw(raw)="); Serial.print(TO_DEG(yaw)); Serial.print(",");
-    Serial.print("Yaw(offset)="); Serial.print(TO_DEG(my_yaw)); Serial.print(",");
-    Serial.print("MAG_Heading(raw)=");
-    Serial.print(TO_DEG(MAG_Heading)); Serial.print(",");
+    Serial.print("Yaw="); Serial.print(ypr[0]); Serial.print(",");
+    Serial.print("Pitch="); Serial.print(ypr[1]); Serial.print(",");
+    Serial.print("Roll="); Serial.print(ypr[2]); Serial.print(",");
+
+    Serial.print("Yaw(offset)="); Serial.print(headings[0]); Serial.print(",");
+    Serial.print("MAG_H(offset)="); Serial.print(headings[1]); Serial.print(",");
+    Serial.print("MAG_H(raw)="); Serial.print(headings[2]); Serial.print(",");
 
     Serial.print("Ax="); Serial.print(accel[0]); Serial.print(",");
     Serial.print("Ay="); Serial.print(accel[1]); Serial.print(",");

@@ -419,9 +419,9 @@ void calibrate_gyro()
     gyro_bias[2] += gyro[2];
   }
   //average the readings
-  gyro_bias[0] /= CALIBRATION_SAMPLES;
-  gyro_bias[1] /= CALIBRATION_SAMPLES;
-  gyro_bias[2] /= CALIBRATION_SAMPLES;
+  gyro_bias[0] /= (float)CALIBRATION_SAMPLES;
+  gyro_bias[1] /= (float)CALIBRATION_SAMPLES;
+  gyro_bias[2] /= (float)CALIBRATION_SAMPLES;
   /* gyro_bias[0] = (float)((int)gyro_bias[0]>>10); //dividing by 1024 */
   /* gyro_bias[1] = (float)((int)gyro_bias[0]>>10); */
   /* gyro_bias[2] = (float)((int)gyro_bias[0]>>10); */
@@ -429,6 +429,10 @@ void calibrate_gyro()
   Serial.print("gyro_bias[0]="); Serial.print(gyro_bias[0]); Serial.print(",");
   Serial.print("gyro_bias[1]="); Serial.print(gyro_bias[1]); Serial.print(",");  
   Serial.print("gyro_bias[2]="); Serial.print(gyro_bias[2]); Serial.println();
+
+  Serial.print("GYRO_AVERAGE_OFFSET_X="); Serial.print(GYRO_AVERAGE_OFFSET_X); Serial.print(",");
+  Serial.print("GYRO_AVERAGE_OFFSET_Y="); Serial.print(GYRO_AVERAGE_OFFSET_Y); Serial.print(",");  
+  Serial.print("GYRO_AVERAGE_OFFSET_Z="); Serial.print(GYRO_AVERAGE_OFFSET_Z); Serial.println();
 }
 //end my added stuff--SAB
 
@@ -489,10 +493,10 @@ void compensate_sensor_errors() {
 #endif
 
     // Compensate gyroscope error
-    gyro[0] -= GYRO_AVERAGE_OFFSET_X;
+    gyro[0] -= GYRO_AVERAGE_OFFSET_X; //stock method
     gyro[1] -= GYRO_AVERAGE_OFFSET_Y;
     gyro[2] -= GYRO_AVERAGE_OFFSET_Z;
-    /* gyro[0] -= gyro_bias[0]; */
+    /* gyro[0] -= gyro_bias[0]; */ //my method--doesn't seem to work well
     /* gyro[1] -= gyro_bias[1]; */
     /* gyro[2] -= gyro_bias[2]; */
 
@@ -554,11 +558,11 @@ void setup()
   Magn_Init();
   Gyro_Init();
 
+  // Give sensors enough time to collect data
+  delay(20);  
   //Do self-calibration here
   //calibrate_gyro();
-
   // Read sensors, init DCM algorithm
-  delay(20);  // Give sensors enough time to collect data
   reset_sensor_fusion();
 
   // Init output
