@@ -368,7 +368,7 @@ float gyro_average[3];
 int gyro_num_samples = 0;
 
 //My added stuff--SAB
-#define CALIBRATION_SAMPLES 500 //take 10s of data to calibrate
+#define CALIBRATION_SAMPLES 1024 //take 1024 samples of data to calibrate
 float gyro_bias[3];
 unsigned long reading_timestamp; //for each data point
 
@@ -422,6 +422,13 @@ void calibrate_gyro()
   gyro_bias[0] /= CALIBRATION_SAMPLES;
   gyro_bias[1] /= CALIBRATION_SAMPLES;
   gyro_bias[2] /= CALIBRATION_SAMPLES;
+  /* gyro_bias[0] = (float)((int)gyro_bias[0]>>10); //dividing by 1024 */
+  /* gyro_bias[1] = (float)((int)gyro_bias[0]>>10); */
+  /* gyro_bias[2] = (float)((int)gyro_bias[0]>>10); */
+
+  Serial.print("gyro_bias[0]="); Serial.print(gyro_bias[0]); Serial.print(",");
+  Serial.print("gyro_bias[1]="); Serial.print(gyro_bias[1]); Serial.print(",");  
+  Serial.print("gyro_bias[2]="); Serial.print(gyro_bias[2]); Serial.println();
 }
 //end my added stuff--SAB
 
@@ -482,12 +489,12 @@ void compensate_sensor_errors() {
 #endif
 
     // Compensate gyroscope error
-    gyro[0] -= GYRO_AVERAGE_OFFSET_X; 
+    gyro[0] -= GYRO_AVERAGE_OFFSET_X;
     gyro[1] -= GYRO_AVERAGE_OFFSET_Y;
     gyro[2] -= GYRO_AVERAGE_OFFSET_Z;
-    //gyro[0] -= gyro_bias[0];
-    //gyro[1] -= gyro_bias[1];
-    //gyro[2] -= gyro_bias[2];
+    /* gyro[0] -= gyro_bias[0]; */
+    /* gyro[1] -= gyro_bias[1]; */
+    /* gyro[2] -= gyro_bias[2]; */
 
 }
 
