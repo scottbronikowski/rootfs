@@ -412,6 +412,12 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Experimented with tightening/loosening the IMU mounting screws while rover was on the ground and got at-rest accelerometer data that seemed to be closer to zero (at least in x-y plane).  Need to collect some data while driving and sitting still, then plot that data to see if it centers on 0--if so, I think that will be OK.
 --Changed IMU output data format (both on IMU and rover) to output the full yaw, pitch, and roll angles from DCM algorithm to my log file.  I think those angles will be useful in keeping track of the rover frame orientation with respect to the earth frame.  Even if I can't get an absolute earth frame reference, I think I can still use the starting frame of the rover as a reference frame (since the rover will always start from a stopped position).
 
+8 Jul 14
+--Modified scale_sensors() function in Output.ino to normalize the acceleration vector prior to scaling it to g0 in cm/s^2.  The normalized output now is a full 1G, where the previous non-normalized output was ~50 cm/s^2 short.  Will need to retake data taken yesterday, since the non-normalized data will probably be useless.
+--Started the process of mounting the Teensy and wiring the encoders to it.  Lots of redoing cable management and remounting small boards involved.  
+**TODO**
+Still need to shorted USB cable for Teensy, finalize Teensy mounting position, and bring encoder wires (signal and power) to Teensy.  Then need to work on software interface for Teensy (starting with udev rules to give it a fixed name, like 
+
 ***RANDOM NOTES
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
 --LOOK AT C++ examples in Razor code

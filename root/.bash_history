@@ -1,18 +1,3 @@
-lsusb
-ping google.com
-dmesg > dmesg-rover-16apr-1130.text
-ps -ef
-lsusb
-reboot
-htop
-rsync dmesg-rover-16apr-1130.text seykhl:~/vader-rover/
-ls
-lsusb
-reboot
-cd test_code/flycapture/bin
-./CustomImageEx 
-cd ~
-ls
 dmesg > dmesg-rover-16apr-1135.text
 rsync -avrz dmesg-rover-* seykhl:~/vader-rover/
 cd test_code/flycapture/bin
@@ -1998,3 +1983,18 @@ screen /dev/RazorIMU 57600
 make
 screen /dev/RazorIMU 57600
 exit
+arduino
+exit
+À
+emacs today.text
+halt
+cd /bin
+ls
+cd /root/bin
+./run-emperor 
+./run-emperor start
+exit
+screen /dev/RazorIMU 57600
+cd
+exit
+halt

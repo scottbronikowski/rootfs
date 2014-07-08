@@ -164,7 +164,7 @@ void run_imu_handler(int signum)
   if (razor_read_data(run_imu_data))
   { //successful read, so put data into logbuf
     sprintf(logbuf, "IMU:time:%lu:"
-	    "Yaw:%.2f:Pitch:%.2f:Roll%.2f:"
+	    "Yaw:%.2f:Pitch:%.2f:Roll:%.2f:"
 	    "Yaw(a):%.2f:MAG_h(a):%.2f:MAG_h:%.2f:"
 	    "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
 	    "Gx:%.2f:Gy:%.2f:Gz:%.2f",

@@ -7,9 +7,16 @@
 //scale_sensors: convert numerical readings from sensors to physical values
 void scale_sensors()
 {
-  accel[0] = Accel_Scale(accel[0]);
-  accel[1] = Accel_Scale(accel[1]);
-  accel[2] = Accel_Scale(accel[2]);
+  //first must normalize the acceleration vector
+  float length = sqrt(accel[0] * accel[0] + accel[1] * accel[1] + accel[2] * accel[2]);
+  accel[0] = (accel[0] / length) * g0;
+  accel[1] = (accel[1] / length) * g0;
+  accel[2] = (accel[2] / length) * g0;
+  //Accel_Scale not needed because of normalized accelerations 
+  /* accel[0] = Accel_Scale(accel[0]); */
+  /* accel[1] = Accel_Scale(accel[1]); */
+  /* accel[2] = Accel_Scale(accel[2]); */
+
 }
 
 // Output mine: yaw (heading) {MAG_Heading as well, for now}, then sensor values
