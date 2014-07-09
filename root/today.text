@@ -414,9 +414,18 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 8 Jul 14
 --Modified scale_sensors() function in Output.ino to normalize the acceleration vector prior to scaling it to g0 in cm/s^2.  The normalized output now is a full 1G, where the previous non-normalized output was ~50 cm/s^2 short.  Will need to retake data taken yesterday, since the non-normalized data will probably be useless.
---Started the process of mounting the Teensy and wiring the encoders to it.  Lots of redoing cable management and remounting small boards involved.  
+--Started the process of mounting the Teensy and wiring the encoders to it.  Lots of redoing cable management and remounting small boards involved.  Should finish tomorrow.
+
+9 Jul 14
+--Finished mounting Teensy on rover, near the left middle wheel.  All wires (power and signal from the encoders) shortened and connected to board.
+--Discovered that the Teensy board must be programmed from my Ubuntu laptop due to the Teensy loader program that actually uploads the hex files to the board (not available on ARM).  Shouldn't be much of an issue, since I don't anticipate needing to change the sketch on the Teensy once it is completed. **MUST REMEMBER TO COPY TEENSY SKETCH FILES TO EITHER SEYKHL OR ROVER IN ORDER TO HAVE THEM PUSHED TO GIT**
+--Ran a sample sketch for the Teensy (TwoKnobs.ino) that showed both encoders as functional.  It also confirmed that each rotation of the wheel is 12,000 ticks on the encoder (400 ticks/rev for encoder * 30:1 gear ratio on motor).
+--Implemented udev rules to give Teensy board the fixed alias of '/dev/Teensy'
+
+
 **TODO**
-Still need to shorted USB cable for Teensy, finalize Teensy mounting position, and bring encoder wires (signal and power) to Teensy.  Then need to work on software interface for Teensy (starting with udev rules to give it a fixed name, like 
+ *Need to shorten some USB cables (front camera, wifi adapter, USB hub to Gumstix) b/c cable organization looks a bit dicey.
+ *Would getting GPS data be a quick clone of run-imu.cpp?****
 
 ***RANDOM NOTES
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
