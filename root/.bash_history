@@ -1,66 +1,3 @@
-dmesg > dmesg-rover-16apr-1135.text
-rsync -avrz dmesg-rover-* seykhl:~/vader-rover/
-cd test_code/flycapture/bin
-./Cus
-./CustomImageEx 
-htop
-dmesg > dmesg-rover-16apr-1205-successful-lap.text
-rsync -avrz dmesg-rover-1* seykhl:~/vader-rover/
-halt
-iwconfig
-ifconfig
-iwconfig
-find / -name motor_control
-cd bin/
-ls
-./motor_control forward_1
-./motor_control stop
-./motor_control forward_1
-./motor_control stop
-ls
-echo 20000 > /dev/pwm9
-echo 10000 > /dev/pwm9
-echo 15000 > /dev/pwm9
-echo 10000 > /dev/pwm10
-echo 20000 > /dev/pwm10
-echo 15000 > /dev/pwm10
-ip link
-lsusb
-cat /etc/network/interfaces
-ifconfig wlan1
-ifconfig wlan3
-cat /etc/udev/rules.d/70-persistent-net.rules 
-cd /etc/udev/rules.d/
-ls 70-persistent-*
-cp 70-persistent-net.rules 70-persistent-net.rules.backup
-ls 70-persistent-*
-vi 70-persistent-net.rules
-cat /etc/network/interfaces
-vi 70-persistent-net.rules
-reboot
-iwconfig
-`w:`w:aw:aw: w:#w:
-exit
-lsusb
-emacs today.text &
-lsmod
-hwinfo
-hwinfo --usb
-man hwinfo
-sudo apt-get install hwinfo
-hwinfo
-hwinfo --usb
-iwconfig
-ifconfig
-iwconfig
-cd test_code/flycapture/bin
-./CustomImageEx 
-emacs today.text &
-cd ~
-emacs today.text &
-reboot
-clear
-iwconfig
 ip link
 iwconfig
 iwconfig
@@ -1998,3 +1935,66 @@ screen /dev/RazorIMU 57600
 cd
 exit
 halt
+screen /dev/RazorIMU 57600
+lla /dev/RazorIMU 
+screen /dev/RazorIMU 57600
+lla /dev/RazorIMU 
+screen /dev/RazorIMU 57600
+cat /etc/udev/rules.d/49-teensy.rules 
+ls /dev
+lla
+lla /dev/
+cd /dve
+cd /dev
+lla u*
+cd usbmon0
+cat usbmon0
+lla
+udevadm control --reload_rules
+udevadm control --reload-rules
+lla
+udevadm trigger
+ls
+lla Teensy 
+ar\\\
+udevadm info --query all -name /dev/bus/usb/001/056 --attribute-walk
+udevadm info --query all --name /dev/bus/usb/001/056 --attribute-walk
+ls ttyA*
+screen /dev/ttyACM0 57600
+udevadm info --query all --name /dev/ttyACM0 --attribute-walk
+udevadm control --reload-rules; udevadm trigger
+ls
+lla Teensy 
+screen /dev/Teensy 57600
+exit
+cd source/razor-imu/
+make
+exit
+exit
+arduino
+exit
+emacs today.text
+exit
+ping 
+reboot
+screen /dev/Teensy 57600
+lsusb
+reboot
+cd bin
+ls
+./run-emperor start
+lsusb
+exit
+htop
+exit
+screen /dev/Teensy 57600
+exit
+exit
+halt
+dmesg -tail
+tail dmesg
+killall ping
+dmesg
+;
+reboot
+htop

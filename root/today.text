@@ -422,9 +422,13 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Ran a sample sketch for the Teensy (TwoKnobs.ino) that showed both encoders as functional.  It also confirmed that each rotation of the wheel is 12,000 ticks on the encoder (400 ticks/rev for encoder * 30:1 gear ratio on motor).
 --Implemented udev rules to give Teensy board the fixed alias of '/dev/Teensy'
 
+10 Jul 14
+--Acquired 12V/12A power supply from ECE electronics shop for rover.  Connected output wire to a plug that matches the battery, so now I can power the entire rover from wall power just by unplugging the battery and plugging in the power supply (which lets me switch between wall and battery power without having to physically unplug the connections to the Gumstix and USB hub).
+--Tested the encoders by driving over a known distance and counting the ticks on that drive.  Plotted the data (ticks vs. distance) and found the data to be exceptionally linear, although each side was slightly different.  Determined that the left encoder has 328.192 ticks per cm traveled, and the right encoder has 325.209 ticks per cm traveled.  Did a common sense check--computed wheel circumference from (ticks/rotation)/(ticks/cm) and from pi*diameter--and got results that were very close.
 
 **TODO**
  *Need to shorten some USB cables (front camera, wifi adapter, USB hub to Gumstix) b/c cable organization looks a bit dicey.
+ *Custom sketch for Teensy to monitor encoders	 
  *Would getting GPS data be a quick clone of run-imu.cpp?****
 
 ***RANDOM NOTES
