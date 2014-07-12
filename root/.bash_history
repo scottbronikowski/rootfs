@@ -1,30 +1,3 @@
-ip link
-iwconfig
-iwconfig
-vi 70-persistent-net.rules
-iwconfig
-lsusb
-ping google.com
-top
-ifconfig
-clear
-ifconfig
-ping google.com
-dmesg -T > dmesg-rover-17apr-first-run.text
-reboot
-iwconfig
-dmesg -T | tail
-iwconfig
-time
-date
-iwconfig
-date
-iwconfig
-date
-iwconfig
-date
-htop
-emacs today.text &
 ls
 rsync -avrz dmesg-rover-1* seykhl:~/vader-rover/
 halt
@@ -1998,3 +1971,30 @@ dmesg
 ;
 reboot
 htop
+lsusb
+reboot
+emacs today.text
+exit
+emacs today.text
+exit
+halt
+reboot
+halt
+lsusb
+halt
+lsusb
+vi /etc/network/interfaces
+ifconfig
+ip link
+lsusb
+ip link
+cd /etc/udev/rules.d/
+ls
+cat 70-persistent-net.rules
+ip link
+vi 70-persistent-net.rules
+udevadm trigger
+ip link
+reboot
+lsusb
+exit
