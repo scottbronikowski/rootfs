@@ -1,3 +1,4 @@
+
 Paper deadlines:
 AAAI: 10Sep14-abstract, 15Sep14-final paper (conference 25-29Jan15 Austin, TX)
 ICRA: 15Sep14-abstract, 12Feb15-final paper (conference 25-30May15, Seattle, WA) 
@@ -328,10 +329,116 @@ Entered this into Razor_AHRS.ino and reprogrammed.
 --Need to think about creating my own data output format for the Razor in the *.ino code...All I should need would be the Yaw angle (heading) and the calibrated sensor data (3x3).
 
 5 Jun 14
---Taking rover back down to machine shop first thing in the morning to do IMU mounting when machine shop personnel are available.
+--Took rover to machine shop and got IMU remounted adjacent to the camera, ~4.5cm above the deck, in the position I tested yesterday that yielded minimal magnetic interference with heading readings.  Oriented the IMU so that the positive X axis is pointing forward, the positive Y axis to the right, and the positive Z axis down (so there should be no need to calculate an offset for heading).
+--Re-ran calibration routine with the IMU mounted and the rover on the floor (except for extended mag calibration procedure) and got the following:
+  accel:
+    x: max = 249, min = -283
+    y: max = 275, min = -254
+    z: max = 232, min = -292
+  gyro: (average values)
+    x = 30.37
+    y = 4.43
+    z = 17.26
+  mag: (OLD)
+    x: max = 530, min = -453
+    y: max = 518, min = -410
+    z: max = 152, min = -768
+--Calibration data from new magnetometer calibration procedure (saved in  ~/razor-9dof-ahrs-Release-v1.4.2/Processing/Magnetometer_calibration/output.txt):
+    #define CALIBRATION__MAGN_USE_EXTENDED true
+    const float magn_ellipsoid_center[3] = {45.1138, 41.8867, -296.532};
+    const float magn_ellipsoid_transform[3][3] = {{0.900928, 0.0229865, 0.0139737}, {0.0229865, 0.980335, -0.0228203}, {0.0139737, -0.0228203, 0.971285}};
+Accelerometer values were pretty similar to previous, but gyro and mag were very different.
+--Tested Yaw (heading) with new calibration and rover on the ground and got good results.  Turning the rover ~90 degrees yielded a ~90 degree change in yaw.  Measured against lensatic compass and found that yaw degrees were about 17 or 18 degrees less than true heading(yaw = 30, compass = 47).  Need to test more thoroughly to ensure that this offset is consistent before writing it into the code.
+--Shortened USB cable to IMU and plugged into the furthest forward port on the hub.
+--Copied *.ino files from ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS to ~/source/razor-imu/arduino/Razor_AHRS in order to consolidate this code with my other working code.
+--Have first version of my output format written into Razor_AHRS.ino (under ~/source).  Still need to tweak it and get offset correct.
+
+6 Jun 14
+--Started working on data flow of RazorIMU->rover(gumstix)->seykhl->log.  Have started building razor-imu.{cpp,h} for the IMU-specific functions that will need to be called from emperor.  I am borrowing heavily from the C++ code included by Peter Bartz in razor-9dof-ahrs-Release-v1.4.2/C++, although I'm trying to reduce the complexity--Bartz passes his data from the IMU to C++ in binary, but I think that I'm going to stick with passing text, since that is easier to send across the network and log-->I can read it back into binary from text later, on seykhl.  Integrated razor-imu.{cpp,h} with the emperor Makefile and built the function to open the serial port to the IMU.  It compiles into the emperor executable, but I haven't tested it yet.
+
+9 Jun 14
+--Started on IMU data passing testing.  Can get port open and set up fine, and sending request for data seems to work.  However, the reading of that data does not seem to work--should be reading up to 256 bytes, but instead stops after reading between 1 and 5 bytes.  Need to look at this more.  Changing VTIME value in razor-imu.cpp did not seem to have an effect.
+--Found that previous work on using SIGALRM in libbeagle/rotary for testing had gotten reverted in the 27 May debacle.  Manually downloaded 21 May versions and replaced them.
+
+10 Jun 14
+--Got a full line of data (as text) read from IMU by changing the termios c_cc[VMIN] in razor-imu.cpp to 143 (this value sets the minimum number of bytes per read).  However, I don't think this is a workable permanent solution, as the number of bytes on a line will change as the values change.  I wasn't able to figure out a method to tell the read to continue until it hits a newline.
+--I think it's better to get the data from the IMU into emperor as binary (floats) and then deal with displaying/manipulating the data from there.  I think it will still be easier to send the data from the rover (emperor) to seykhl (and the log files) as text, since that's what I already have set up.
+--Have IMU outputting data as 12x floats.  Currently working on getting data into emperor in binary format, following closely with RazorAHRS.cpp.  Have imu_fd as global var opened in razor-imu.cpp, need to implement _input_pos similarly in order to get _read_token working.
+
+11 Jun 14
+--Got first draft of razor-imu.cpp working with binary read into emperor.  Still need to clean it up and put in some initialization of the variables into razor_read_data().  Also need to implement the IMU reading as a thread on a timer (SIGALRM??) to read at about 10Hz.
+
+12 Jun 14
+--Finished up razor_read_data() in razor-imu.cpp
+--Did some reading/thinking about how to integrate accelerometer data to get velocity and position.  Would be ideal if this could be done on-board the IMU, but not sure if the processor is powerful enough.
+--Have emperor_run_imu thread implemented, but still need to implement a sleep or timer function to keep it from constantly polling the IMU and sending data to the log.  The first test (with the IMU read and send in a while loop) did not slow down the cameras (still ~13fps/cam), but the excessive logging created a 150MB log file that crashed gedit.  
+
+13 Jun 14
+--Debugged problems with getting IMU thread to run and log data back on seykhl.  Logging is now functional.
+--Added a usleep into the emperor_run_imu thread to get ~10 IMU updates/sec on seykhl.  Have the usleep set at 80000, which seems to be very close to where it needs to be for updates at 10 Hz.  Still may need to tweak this some more.
+--In addition to (or possibly instead of) using the usleep, I started looking into how to timestamp the data coming off the IMU.  Still trying to figure out if there is a real time clock on the IMU, and if so, how to access it.  If there isn't a RTC on the IMU, maybe I can timestamp it when it arrives on the Gumstix.
+--Did some more research into methods of turning the IMU data into position data.  I have a few more papers to read on this.  Right now I think I might be able to do at least the first integration (acceleration to velocity) on the IMU, and then finish on the Gumstix (which would allow me to also use the GPS data the Gumstix will get).
 
 
+17 Jun 14
+--Ran new calibration for IMU outdoors (picnic table near south wing of EE building).  Added new calibration data to RazorAHRS.ino.  Observed through AHRS demo sketch that it appeared to be tracking horizontal rotation properly, whether on the desk or on the floor.  However, on the floor the yaw reading (i.e., compass heading) is off ~10-12 degrees to the left.  Incorporated offset of 11 in Output.ino.
 
+30 Jun 14
+--Modified emperor_log_data() in emperor.cpp to take a socket as a second argument in order to allow logging to two separate files (regular data and IMU) on seykhl.  After the split everything seems to be functioning properly--still getting ~11-12 fps per camera.
+----
+--Modified emperor.cpp to run the IMU data read as a signal handler (off of a SIGALRM timer) rather than a separate thread.  First tried the timer set at 50 Hz (the update rate of the IMU), but got weird results--cameras wouldn't start and IMU log file randomly had values that were way off from neighboring readings.  Tried dropping the rate to 20 Hz and everything seemed to work fine--camera frame rate was normal, camera looked normal, and IMU log had reasonable data throughout.  In regular data log, I did notice there were some extra newlines in random spots throughout the file.
+--Also tried the IMU update rate at 25 Hz (half the internal IMU rate). It seemed to cause some strange errors with the bump switch monitoring thread--the SIGALRM timer caused an "interrupted system call" error on the select that I'm using as a timeout on the read of the GPIO file for the bump switches, which seems to cause spurious reads.  Tried rates between 25 and 50 Hz and got the same type of errors (bump switch problems and IMU log file lines with data that was obviously incorrect). Rechecked at 20 Hz, and things went back to normal (except for the extra newlines in the data log file), so it appears that the fastest we'll be able to get data from the IMU is at a rate of 20 Hz.
+----
+--Fixed extra newlines in data log file on seykhl side (**see other log**)
+--Started working on run-imu.{cpp,h}, a standalone program to read IMU data as fast as possible, along with associated changes to emperor.{cpp,h} to remove IMU running from this program.
+
+1 Jul 14
+--Finished first draft of run-imu and associated changes to emperor, as well as a script (run-emperor) to start and stop them together.  The programs seem to work fine together. IMU logging, set to 50 Hz in run-imu, has sped up, but not all the way to 50 Hz.  Based on timestamps in the log file, the average update is at about 37.2 Hz, with a standard deviation of about 11.5 Hz.  I think this might be caused by the fact that the code is written for the Gumstix to poll the IMU for data every time the SIGALRM timer (set to 50 Hz) goes off.  Could it be as easy as setting the timer for a higher rate?  Or would it be better to change the code so that the IMU is constantly outputting data as fast as it can, and the run-imu is constantly listening?  Or maybe its the inaccuracy of timestamping based off the Gumstix clock (i.e., when the data finishes transferring)--maybe use the millis() function on the IMU to measure time between data points.
+--Tried setting timer rate above 50 Hz and got bad results.  At both 60 and 55 Hz, observed intermittent slowdowns in frame rate (5-6 fps/camera in some seconds, with normal 11-12 fps/camera in others) as well as bogus data in the IMU log file (extra newlines, and lines that were cut off or missing the first part of the line).  Don't think this will work.  Next going to try adding a timestamp from the IMU.
+--After much experimentation and frustration, got the IMU timestamp passed to the Gumstix and on to seykhl.  Started by trying to use the method that the readings from the IMU use, but I couldn't get that to work.  The IMU data are floats, which get read into their array using type-punning to char*.  However, the timestamp is an unsigned long int (32-bit), and I couldn't figure out how to get a correct value out of type-punning that.  I ended up breaking up the 32-bit int into 4 8-bit ints on the IMU (using bit shifting/masking) and sending each individually, then reconstructing the int on the Gumstix after receipt.  IMU log now has IMU timestamp as well as original Gumstix timestamp (and I discovered upon analysis of my data that the interval between the two timers is indeed fixed).
+--Unfortunately, the extra computations on the IMU needed to break up the timestamp int seems to have slowed the IMU down--now I'm only getting updates at about 25 Hz, although the data is arriving at a much more consistent rate--the standard deviation dropped almost an order of magnitude to 1.5 Hz.  This actually might be helpful, since a consistent interval simplifies integration.  I'll spend a bit of time tomorrow seeing if I can find a faster way to send the IMU timestamp, and then I'll work on changing the IMU/Gumstix setup so that instead of the Gumstix polling the IMU at an interval, the Gumstix will merely listen while the IMU sends data as fast as it can.
+
+2 Jul 14
+--Got IMU to send the timestamp unsigned long int with a single Serial.write() call by using a memcpy to put the data into an unsigned char buf.  Modified the receiving side on the Gumstix accordingly and it works.  Unfortunately, it didn't seem to speed things up any--still getting a rate and standard deviation similar to yesterday (on a run of ~2 minutes, or ~2500 IMU samples).  It occasionally gets a single sample at 50 Hz, but the average rate is less than 1/10 of a standard deviation from the lowest rate observed.  Going to try some quick changes to slow down the rate at which the Gumstix is requesting data from the IMU to see if that makes things more uniform.
+--Tested setting the SIGALRM timer to 25, 20, and 10 Hz, and did not get results that were any better than set at 50 Hz.  In fact, the results at 50 Hz and 25 Hz were nearly identical, which leads me to believe that the fastest that we can poll the IMU using SIGALRM is 25 Hz.  At 20 Hz and 10 Hz, the results were actually less uniform--a higher standard deviation, and a larger range between max and min rates.  Now going to try to rebuild the run-imu program and IMU firmware to have the Gumstix just listen on the port and have the IMU pump out data as fast as it computes it.
+----
+--Changed run-imu.cpp (executable) and razor-imu.cpp (function libraries) to support running the IMU in continuous output mode and having the Gumstix loop on a listen.  This worked extremely well.  In two runs (~1100 and ~3000 IMU samples, respectively), I was able to measure (using the clock on the IMU) the interval between each sample was either 20 or 21 ms (50 or 47.6 Hz).  The average interval was 20.48 ms with a standard deviation of 0.50 ms.  I also observed that there was significant drift between the Gumstix clock and IMU clock (Gumstix measured intervals ranged between 9 and 31 ms, although the average was close, 20.72 ms), so this confirmed that using the IMU clock for the integration interval is the better way to go.  Wit the IMU clock, the interval nearly alternates between 20 and 21 ms, so I think it's safe to use 20.5 ms as a fixed integration time (realizing that to minimize my floating point multiplies, I'll probably need to multiply that interval by 10 and then just divide the result by 10 when reporting the data).
+
+3 July 14
+--Implemented conversion of accelerometer output to cm/s^2.  Conversion seems to work correctly, but when the rover appears to be at rest and level, I get small acceleration readings in the x and y directions, and a reading of less than 1G in the z direction.  Still need to think some more about this and how it will affect the data that I'm collecting from the IMU, as well as how to compensate for it.  A simple linear offset (based on data sampled at startup) might be the easiest way to compensate, but I'm not sure if it will be correct in all cases.
+--Started researching conversion factor for gyroscopes, but not convinced that it's fully necessary, since current DCM algorithm on IMU works without unit conversion.  Also started to think about a self-calibration function for the gyros, since I think it is a very safe assumption that when the rover starts up there will be no rotation about any axis.  Implemented a quick function that sampled the gyros for a fixed amount of time (tried both 1s and 10s), averaged that sample, and then subtracted that number from future gyro readings.  If the rover is at rest (rotationally), then all gyros should read 0.  When I tried my new function (under both time limits), I got readings on the gyros that were higher than the DCM algorithm's built-in gyro offset, which just takes a fixed number from an offline calibration routine and subtracts it from readings.  I think I might have some bug in my calibration routine, but I haven't been able to find it yet.
+
+7 Jul 14
+--Tried a few changes and still getting bogus data with my self-calibration routine on the gyros, so went back to static calibration that was built into the DCM algorithm.
+--Experimented with tightening/loosening the IMU mounting screws while rover was on the ground and got at-rest accelerometer data that seemed to be closer to zero (at least in x-y plane).  Need to collect some data while driving and sitting still, then plot that data to see if it centers on 0--if so, I think that will be OK.
+--Changed IMU output data format (both on IMU and rover) to output the full yaw, pitch, and roll angles from DCM algorithm to my log file.  I think those angles will be useful in keeping track of the rover frame orientation with respect to the earth frame.  Even if I can't get an absolute earth frame reference, I think I can still use the starting frame of the rover as a reference frame (since the rover will always start from a stopped position).
+
+8 Jul 14
+--Modified scale_sensors() function in Output.ino to normalize the acceleration vector prior to scaling it to g0 in cm/s^2.  The normalized output now is a full 1G, where the previous non-normalized output was ~50 cm/s^2 short.  Will need to retake data taken yesterday, since the non-normalized data will probably be useless.
+--Started the process of mounting the Teensy and wiring the encoders to it.  Lots of redoing cable management and remounting small boards involved.  Should finish tomorrow.
+
+9 Jul 14
+--Finished mounting Teensy on rover, near the left middle wheel.  All wires (power and signal from the encoders) shortened and connected to board.
+--Discovered that the Teensy board must be programmed from my Ubuntu laptop due to the Teensy loader program that actually uploads the hex files to the board (not available on ARM).  Shouldn't be much of an issue, since I don't anticipate needing to change the sketch on the Teensy once it is completed. **MUST REMEMBER TO COPY TEENSY SKETCH FILES TO EITHER SEYKHL OR ROVER IN ORDER TO HAVE THEM PUSHED TO GIT**
+--Ran a sample sketch for the Teensy (TwoKnobs.ino) that showed both encoders as functional.  It also confirmed that each rotation of the wheel is 12,000 ticks on the encoder (400 ticks/rev for encoder * 30:1 gear ratio on motor).
+--Implemented udev rules to give Teensy board the fixed alias of '/dev/Teensy'
+
+10 Jul 14
+--Acquired 12V/12A power supply from ECE electronics shop for rover.  Connected output wire to a plug that matches the battery, so now I can power the entire rover from wall power just by unplugging the battery and plugging in the power supply (which lets me switch between wall and battery power without having to physically unplug the connections to the Gumstix and USB hub).
+--Tested the encoders by driving over a known distance and counting the ticks on that drive.  Plotted the data (ticks vs. distance) and found the data to be exceptionally linear, although each side was slightly different.  Determined that the left encoder has 328.192 ticks per cm traveled, and the right encoder has 325.209 ticks per cm traveled.  Did a common sense check--computed wheel circumference from (ticks/rotation)/(ticks/cm) and from pi*diameter--and got results that were very close.
+
+12 Jul 14
+--Replaced broken Teensy with new device--working normally.
+--Replaced broken DC-DC adapter with new one--added insulation, better connectors, wire strain relief, and support padding to the bottom of auxiliary circuit boards.  Seems to be working fine now.
+--Replaced broken USB Wifi adapter with new one.  Had to change /etc/udev/rules.d/70-persistent-net.rules to remove old wlan1 (and unused wlan2) and replace it with new wlan1 since devices are given the 'wlan*' names based on MAC address.  Rebooted and network is back to working normally.
+
+15 Jul 14
+--Finished replacing broken components (GPS, Wifi, USB hub, Teensy, DC-DC converter).  All appear to be working normally.
+--Started working on run-gps.cpp (started from clone of run-imu.cpp)
+
+**TODO**
+  *Custom sketch for Teensy to monitor encoders	 
+ *Would getting GPS data be a quick clone of run-imu.cpp?****
 
 ***RANDOM NOTES
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
@@ -347,26 +454,53 @@ Entered this into Razor_AHRS.ino and reprogrammed.
 
 Buffers
 ----------------------------------------
-    motor_control_functi: 7126  C++/l		  ~/source/motor_control/motor_control_functions.cpp
-    motor_control.h       4786  C++/l		  ~/source/motor_control/motor_control.h
-    motor_control.cpp     4333  C++/l		  ~/source/motor_control/motor_control.cpp
-    Razor_AHRS.ino       25907  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Razor_AHRS.ino
-    Output.ino            3799  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Output.ino
-    Sensors.ino           6483  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Sensors.ino
-    Math.ino              2187  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Math.ino
-    DCM.ino               4673  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/DCM.ino
-    Compass.ino            595  C/l		  ~/razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/Compass.ino
-.   RazorAHRS.cpp         9139  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.cpp
-    Example.cpp           4468  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/Example.cpp
+.   Sensors.ino           6483  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Sensors.ino
+    Razor_AHRS.ino       28879  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
+  * *shell*<2>            2974  Shell:run	  ~/source/razor-imu/arduino/Razor_AHRS/
+  * *shell*              28383  Shell:run	  /
+    Output.ino            6445  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Output.ino
+    today.text           53112  Text		  ~/today.text
+    DCM.ino               4673  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/DCM.ino
+    Math.ino              2187  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Math.ino
+    Compass.ino            595  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Compass.ino
+    razor-imu.cpp        12379  C++/l		  ~/source/razor-imu/razor-imu.cpp
+    run-imu.cpp           5254  C++/l		  ~/source/razor-imu/run-imu.cpp
+
+---old----
+.   Razor_AHRS.ino       27176  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
+  * *shell*<2>            1178  Shell:run	  ~/source/razor-imu/arduino/Razor_AHRS/
+    DCM.ino               4673  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/DCM.ino
+  * *shell*              44096  Shell:run	  /
+    today.text           43493  Text		  ~/today.text
+    emperor.cpp          21021  C++/l		  ~/source/emperor/emperor.cpp
+    emperor.h             2197  C++/l		  ~/source/emperor/emperor.h
+    razor-imu.cpp        11560  C++/l		  ~/source/razor-imu/razor-imu.cpp
+    rotary.cpp|rotary     2813  C++/l		  ~/source/libbeagle/examples/rotary/rotary.cpp
+    rotary.h               975  C++/l		  ~/source/libbeagle/main/src/rotary.h
+    rotary.cpp|src        4049  C++/l		  ~/source/libbeagle/main/src/rotary.cpp
+    Compass.ino            595  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Compass.ino
+    Output.ino            5517  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Output.ino
+    razor-imu.h           1413  C++/l		  ~/source/razor-imu/razor-imu.h
+    RazorAHRS.cpp         9139  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.cpp
+    Example.cpp           4487  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/Example.cpp
+    toollib-camera.cpp   21748  C++/l		  ~/source/camera/toollib-camera.cpp
+    toollib-camera.h      3487  C++/l		  ~/source/camera/toollib-camera.h
     RazorAHRS.h           4341  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.h
-    today.text           24670  Text		  ~/today.text
+    motor_control_functi: 7126  C++/l		  ~/source/motor_control/motor_control_functions.cpp
+    Makefile              1725  GNUmakefile	  ~/source/emperor/Makefile
+    gpio.cpp              3953  C++/l		  ~/source/libbeagle/main/src/gpio.cpp
+    motor_control.h       4786  C++/l		  ~/source/motor_control/motor_control.h
+    Math.ino              2187  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Math.ino
+    *scratch*              191  Lisp Interaction
+  * *Messages*            3464  Fundamental
+
+
+
+Older:
     servo-control.sh       630  Shell-script[bas  /etc/init.d/servo-control.sh
     gpio-monitor.sh       1137  Shell-script[bas  /etc/init.d/gpio-monitor.sh
     servo-control.sh       630  Shell-script[bas  /etc/init.d/servo-control.sh
     g-multi.sh             531  Shell-script[bas  /etc/init.d/g-multi.sh
-    emperor.cpp          10020  C++/l		  ~/source/emperor/emperor.cpp
-    emperor.h             1634  C++/l		  ~/source/emperor/emperor.h
-    Makefile              1514  GNUmakefile	  ~/source/emperor/Makefile
     toollib-camera.h      3356  C++/l		  ~/source/camera/toollib-camera.h
     toollib-camera.cpp   18914  C++/l		  ~/source/camera/toollib-camera.cpp
 -->aren't all below replaced by emperor????

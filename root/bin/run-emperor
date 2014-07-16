@@ -4,10 +4,12 @@
 start(){
     /root/bin/emperor &
     /root/bin/run-imu &
+    /root/bin/run-gps &
 }
 
 stop(){
-    echo "killing run-imu and emperor"
+    echo "killing run-gps, run-imu, emperor"
+    pkill run-gps
     pkill run-imu
     pkill emperor
 }

@@ -1,3 +1,4 @@
+
 Paper deadlines:
 AAAI: 10Sep14-abstract, 15Sep14-final paper (conference 25-29Jan15 Austin, TX)
 ICRA: 15Sep14-abstract, 12Feb15-final paper (conference 25-30May15, Seattle, WA) 
@@ -431,9 +432,15 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Replaced broken DC-DC adapter with new one--added insulation, better connectors, wire strain relief, and support padding to the bottom of auxiliary circuit boards.  Seems to be working fine now.
 --Replaced broken USB Wifi adapter with new one.  Had to change /etc/udev/rules.d/70-persistent-net.rules to remove old wlan1 (and unused wlan2) and replace it with new wlan1 since devices are given the 'wlan*' names based on MAC address.  Rebooted and network is back to working normally.
 
+15 Jul 14
+--Finished replacing broken components (GPS, Wifi, USB hub, Teensy, DC-DC converter).  All appear to be working normally.
+--Started working on run-gps.cpp (started from clone of run-imu.cpp)
+
+16 Jul 14
+--Have first draft of run-gps.cpp running, sending raw NMEA sentences (of the GPRMC and GPGGA types) back to the imu-log.txt file on seykhl.  Also need to modify rover_server_log to allow multiple connections to the log_imu_sockfd port for logging (need 3: IMU, GPS, encoders).
+
 **TODO**
- *Need to shorten some USB cables (front camera, wifi adapter, USB hub to Gumstix) b/c cable organization looks a bit dicey.
- *Custom sketch for Teensy to monitor encoders	 
+  *Custom sketch for Teensy to monitor encoders	 
  *Would getting GPS data be a quick clone of run-imu.cpp?****
 
 ***RANDOM NOTES

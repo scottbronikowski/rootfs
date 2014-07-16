@@ -1,42 +1,3 @@
-ls
-rsync -avrz dmesg-rover-1* seykhl:~/vader-rover/
-halt
-emacs today.text &
-halt
-cd /etc/
-ls
-cd modprobe.d/
-ls
-cat blacklist.conf 
-emacs -nw
-reboot
-date
-iwconfig
-dmesg -T
-emacs today.text &
-dmesg -T
-dmesg -T > dmesg-rover-18apr-overnight.text
-rsync -avrz dmesg-rover-1* seykhl:~/vader-rover/
-ps -ef | grep run
-ifconfig
-ifconfig -a
-iwconfig
-iwconfig -a
-iwconfig wlan1
-cat /proc/net/wireless
-wavemon
-apt-get install wavemon
-wavemon
-halt
-htop
-iwconfig sens 50
-iwconfig sens
-iwconfig wlan1 sens
-iwconfig wlan1 sens 50
-iwconfig wlan1 sens -80
-iwconfig wlan1 sens 60
-iwconfig wlan1 sens high
-wpa_cli
 iptraf
 emacs today.text &
 reboot
@@ -1998,3 +1959,42 @@ ip link
 reboot
 lsusb
 exit
+emacs today.text
+exit
+halt
+lsusb
+halt
+ls
+sl
+ls
+halt
+pkill screen
+screen /dev/GPS 57600
+screen /dev/GPS 9600
+screen /dev/GPS 4800
+screen /dev/Teensy 57600
+screen /dev/GPS 4800
+emacs today.text
+screen /dev/GPS 4800
+ls
+screen /dev/GPS 4800 > gps.txt
+ls g*
+cat gps.txt 
+rm gps.txt 
+screen /dev/GPS 4800
+cd source/
+ls
+cd razor-imu/
+ls
+emacs razor-imu.cpp
+htop
+ls
+lsusb
+ls /dev/ttyU*
+lla /dev/GPS
+screen /dev/GPS 4800
+ls
+lsusb
+lla /dev/GPS 
+lsusb
+reboot
