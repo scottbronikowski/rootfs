@@ -82,7 +82,7 @@ int main (int /*argc*/, char** /*argv*/)
   printf("Connecting to %s on port %s for IMU logging...\n",
 	 k_Server, k_imuLogPort);
   log_imu_sockfd = -1;
-  sprintf(logbuf, "Logging started");
+  sprintf(logbuf, "IMU logging started");
   while (log_imu_sockfd == -1)
   {
     log_imu_sockfd = ClientConnect(k_Server, k_imuLogPort);
@@ -126,7 +126,7 @@ int run_imu_log_data(char* databuf, int log_fd)
   char temp[k_LogBufSize];
   int retval;
   memset(temp, 0, sizeof(temp));
-  retval = snprintf(temp, k_LogBufSize, "%.6f: %s", now, databuf);
+  retval = snprintf(temp, k_LogBufSize, "%.6f: IMU:%s", now, databuf);
   if (retval >= k_LogBufSize)
   {
     printf("run_imu_log_data: message truncated: %s\n  %s\n", databuf, temp);
@@ -163,7 +163,7 @@ void run_imu_handler(int signum)
   memset(logbuf, 0, sizeof(logbuf));  //clear buffer
   if (razor_read_data(run_imu_data))
   { //successful read, so put data into logbuf
-    sprintf(logbuf, "IMU:time:%lu:"
+    sprintf(logbuf, "time:%lu:"
 	    "Yaw:%.2f:Pitch:%.2f:Roll:%.2f:"
 	    "Yaw(a):%.2f:MAG_h(a):%.2f:MAG_h:%.2f:"
 	    "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"

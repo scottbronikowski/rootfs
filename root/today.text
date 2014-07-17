@@ -437,7 +437,10 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Started working on run-gps.cpp (started from clone of run-imu.cpp)
 
 16 Jul 14
---Have first draft of run-gps.cpp running, sending raw NMEA sentences (of the GPRMC and GPGGA types) back to the imu-log.txt file on seykhl.  Also need to modify rover_server_log to allow multiple connections to the log_imu_sockfd port for logging (need 3: IMU, GPS, encoders).
+--Have first draft of run-gps.cpp running, sending raw NMEA sentences (of the GPRMC and GPGGA types) back to the imu-log.txt file on seykhl.  Need to modify rover_server_log to allow multiple connections to the log_imu_sockfd port for logging, since now only one or the other of GPS and IMU (but not both) can log (need 3: IMU, GPS, encoders).
+
+17 Jul 14
+--Completed mods to allow GPS and IMU to log simultaneously--logging works well.  Noticed a slowdown on camera framerate--will try reboot to see if overall system slowness is the problem.
 
 **TODO**
   *Custom sketch for Teensy to monitor encoders	 
@@ -457,6 +460,16 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 Buffers
 ----------------------------------------
+.   run-imu.cpp           5524  C++/l		  ~/source/razor-imu/run-imu.cpp
+  * *shell*               4259  Shell:run	  ~/source/razor-imu/
+  * *shell*<2>           12810  Shell:run	  /
+    run-gps.cpp           7479  C++/l		  ~/source/gps/run-gps.cpp
+    today.text           58406  Text		  ~/today.text
+    run-emperor            327  Shell-script[bas  ~/bin/run-emperor
+    run-gps.h             1257  C++/l		  ~/source/gps/run-gps.h
+    run-imu.h              748  C++/l		  ~/source/razor-imu/run-imu.h
+
+
 .   Sensors.ino           6483  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Sensors.ino
     Razor_AHRS.ino       28879  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
   * *shell*<2>            2974  Shell:run	  ~/source/razor-imu/arduino/Razor_AHRS/
