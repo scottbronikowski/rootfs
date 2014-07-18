@@ -1,37 +1,3 @@
-iptraf
-emacs today.text &
-reboot
-wavemon
-htop
-clear
-ls dm*
-rsync -avrz dmesg-rover-18apr-* seykhl:~/vader-rover/
-exit
-emacs today.text &
-exit
-/etc/init.d/ssh-tunnel.sh start
-ls
-lsusb
-dmesg -T >dmesg-rover-18apr-run-1.text
-iwconfig
-ps -ef | grep ssh
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-ping google.com
-ifdown wlan1
-ifup wlan1
-ps -ef | grep ping
-ps -ef | grep ssh
-/etc/init.d/ssh-tunnel.sh start
-reboot
-iwconfig
-ping google.com
-ping bing.com
-vi /etc/network/interfaces
-reboot
-iwconfig
-ping google.com
-vi /etc/network/interfaces
 reboot
 emacs today.text &
 exit
@@ -1998,3 +1964,37 @@ lsusb
 lla /dev/GPS 
 lsusb
 reboot
+/etc/init.d/ssh-tunnel.sh start
+ls /etc/rc2.d/
+ps -ef | grep ssh
+kill -9 636
+/etc/init.d/ssh-tunnel.sh start
+emacs today.text 
+cd source/razor-imu/
+emacs razor-imu.cpp
+screen /dev/GPS 4800
+cd
+cd bin
+ls
+./run-emperor start
+clear
+./run-emperor start
+ls
+lla
+reboot
+./bin/run-emperor stop
+screen /dev/RazorIMU 57600
+htop
+exit
+emacs today.text
+exit
+lsusb
+halt
+screen /dev/Teensy 57600
+exit
+exit
+exit
+exit
+exit
+ls
+halt
