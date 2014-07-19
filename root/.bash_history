@@ -1,31 +1,3 @@
-reboot
-emacs today.text &
-exit
-ping google.com
-iwconfig
-ifconfig
-ping google.com
-/etc/init.d/ssh-tunnel.sh start
-reboot
-iwconfig
-ifconfig
-ping seykhl
-ping seykhl.ecn.purdue.edu
-cd /etc/init.d/
-vi ssh-tunnel.sh
-reboot
-ping seykhl.ecn.purdue.du
-ping seykhl.ecn.purdue.edu
-vi /etc/init.d/keepalive-ping.sh 
-reboot
-exit
-ps -ef | grep ping
-cd /etc/init.d/
-vi ssh-tunnel.sh
-ls ../rc2
-ls ../rc2.d/
-update-rc.d -f ssh-tunnel.sh remove
-cat ~/today.text | grep ssh-tunnel
 update-rc.d -f ssh-tunnel.sh defaults 26
 vi time-update.sh 
 reboot
@@ -1998,3 +1970,31 @@ exit
 exit
 ls
 halt
+exit
+cd /
+git status
+git add -A
+git commit -m "Friday commit"
+git push
+git status
+exit
+emacs today.text
+exit
+cd source/
+LS
+ls
+mkdir encoders
+cd razor-imu/
+ls
+cp Makefile ../encoders/
+cp run-imu.* ../encoders/
+cd ../
+cd encoders/
+ls
+rm *.o
+mv run-imu.cpp run-encoders.cpp
+mv run-imu.h run-encoders.h
+cp ../gps/run-gps.cpp ./run-encoders.cpp
+ls /dev/
+make
+exit

@@ -442,6 +442,10 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 17 Jul 14
 --Completed mods to allow GPS and IMU to log simultaneously--logging works well.  
 
+19 Jul 14
+--Started work on run-encoders.{cpp,h} to run on rover and read data from encoders (via Teensy) and send it back to seykhl to be logged.  Have all of the boilerplate stuff adapted from run-imu and run-gps, just need to write the functions to initialize the Teensy, listen for and read the data, and the handler function that runs in the main loop (which all should be fairly straightforward adaptations from razor-imu.cpp).  
+--Dan was in for a while today and we spoke about adapting his old Kalman filter code to my project.  It seems like it won't be too difficult to go from the data that I'm logging in my log file to a series of (x, y, orientation) positions, which will form the trace of the robot's path.
+
 **TODO**
   *Custom sketch for Teensy to monitor encoders	 
  
@@ -459,43 +463,34 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 Buffers
 ----------------------------------------
-.   run-imu.cpp           5524  C++/l		  ~/source/razor-imu/run-imu.cpp
+.   today.text           59668  Text		  ~/today.text
+    run-imu.h              748  C++/l		  ~/source/razor-imu/run-imu.h
+    run-encoders.h        1593  C++/l		  ~/source/encoders/run-encoders.h
+    razor-imu.h           1475  C++/l		  ~/source/razor-imu/razor-imu.h
+    run-imu.cpp           5524  C++/l		  ~/source/razor-imu/run-imu.cpp
+    run-encoders.cpp      8037  C++/l		  ~/source/encoders/run-encoders.cpp
+    razor-imu.cpp        12379  C++/l		  ~/source/razor-imu/razor-imu.cpp
+
   * *shell*               4259  Shell:run	  ~/source/razor-imu/
   * *shell*<2>           12810  Shell:run	  /
     run-gps.cpp           7479  C++/l		  ~/source/gps/run-gps.cpp
-    today.text           58406  Text		  ~/today.text
     run-emperor            327  Shell-script[bas  ~/bin/run-emperor
     run-gps.h             1257  C++/l		  ~/source/gps/run-gps.h
-    run-imu.h              748  C++/l		  ~/source/razor-imu/run-imu.h
 
-
+---old---
 .   Sensors.ino           6483  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Sensors.ino
     Razor_AHRS.ino       28879  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
-  * *shell*<2>            2974  Shell:run	  ~/source/razor-imu/arduino/Razor_AHRS/
-  * *shell*              28383  Shell:run	  /
     Output.ino            6445  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Output.ino
-    today.text           53112  Text		  ~/today.text
     DCM.ino               4673  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/DCM.ino
     Math.ino              2187  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Math.ino
     Compass.ino            595  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Compass.ino
-    razor-imu.cpp        12379  C++/l		  ~/source/razor-imu/razor-imu.cpp
-    run-imu.cpp           5254  C++/l		  ~/source/razor-imu/run-imu.cpp
 
 ---old----
-.   Razor_AHRS.ino       27176  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
-  * *shell*<2>            1178  Shell:run	  ~/source/razor-imu/arduino/Razor_AHRS/
-    DCM.ino               4673  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/DCM.ino
-  * *shell*              44096  Shell:run	  /
-    today.text           43493  Text		  ~/today.text
     emperor.cpp          21021  C++/l		  ~/source/emperor/emperor.cpp
     emperor.h             2197  C++/l		  ~/source/emperor/emperor.h
-    razor-imu.cpp        11560  C++/l		  ~/source/razor-imu/razor-imu.cpp
     rotary.cpp|rotary     2813  C++/l		  ~/source/libbeagle/examples/rotary/rotary.cpp
     rotary.h               975  C++/l		  ~/source/libbeagle/main/src/rotary.h
     rotary.cpp|src        4049  C++/l		  ~/source/libbeagle/main/src/rotary.cpp
-    Compass.ino            595  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Compass.ino
-    Output.ino            5517  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Output.ino
-    razor-imu.h           1413  C++/l		  ~/source/razor-imu/razor-imu.h
     RazorAHRS.cpp         9139  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.cpp
     Example.cpp           4487  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/Example.cpp
     toollib-camera.cpp   21748  C++/l		  ~/source/camera/toollib-camera.cpp
