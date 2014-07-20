@@ -5,10 +5,12 @@ start(){
     /root/bin/emperor &
     /root/bin/run-imu &
     /root/bin/run-gps &
+    /root/bin/run-encoders &
 }
 
 stop(){
     echo "killing run-gps, run-imu, emperor"
+    pkill run-encoders
     pkill run-gps
     pkill run-imu
     pkill emperor

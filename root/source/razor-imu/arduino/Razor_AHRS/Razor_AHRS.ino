@@ -370,7 +370,7 @@ int gyro_num_samples = 0;
 //My added stuff--SAB
 #define CALIBRATION_SAMPLES 1024 //take 1024 samples of data to calibrate
 float gyro_bias[3];
-unsigned long reading_timestamp; //for each data point
+//unsigned long reading_timestamp; //for each data point
 
 // DCM variables
 float MAG_Heading;
@@ -395,6 +395,7 @@ float roll;
 unsigned long timestamp;
 unsigned long timestamp_old;
 float G_Dt; // Integration time for DCM algorithm
+unsigned long dt;
 
 // More output-state variables
 boolean output_stream_on;
@@ -687,7 +688,10 @@ void loop()
     timestamp_old = timestamp;
     timestamp = millis();
     if (timestamp > timestamp_old)
-      G_Dt = (float) (timestamp - timestamp_old) / 1000.0f; // Real time of loop run. We use this on the DCM algorithm (gyro integration time)
+    {
+      dt = timestamp - timestamp_old;
+      G_Dt = (float) (dt) / 1000.0f; // Real time of loop run. We use this on the DCM algorithm (gyro integration time)
+    }
     else G_Dt = 0;
 
     // Update sensor readings
@@ -712,7 +716,7 @@ void loop()
       //convert sensors to physical values here??
       scale_sensors();
 
-      reading_timestamp = millis(); //the time for this reading
+      //reading_timestamp = millis(); //the time for this reading
       
       if (output_stream_on || output_single_on) output_mine();
     }

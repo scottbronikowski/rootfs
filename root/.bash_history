@@ -1,18 +1,3 @@
-update-rc.d -f ssh-tunnel.sh defaults 26
-vi time-update.sh 
-reboot
-lsusb
-reboot
-emacs today.text &
-wavemon
-lsusb
-halt
-lsusb
-reboot
-emacs today.text &
-wavemon
-halt
-/etc/init.d/ssh-tunnel.sh stop
 /etc/init.d/ssh-tunnel.sh start
 echo 20000 > /dev/pwm9
 echo 10000 > /dev/pwm9
@@ -1998,3 +1983,18 @@ cp ../gps/run-gps.cpp ./run-encoders.cpp
 ls /dev/
 make
 exit
+htop
+ls
+cd /
+git status
+git add -A
+git commit -m "--Started work on run-encoders.{cpp,h} to run on rover and read data from encoders (via Teensy) and send it back to seykhl to be logged.  Have all of the boilerplate stuff adapted from run-imu and run-gps, just need to write the functions to initialize the Teensy, listen for and read the data, and the handler function that runs in the main loop (which all should be fairly straightforward adaptations from razor-imu.cpp).  
+--Dan was in for a while today and we spoke about adapting his old Kalman filter code to my project.  It seems like it won't be too difficult to go from the data that I'm logging in my log file to a series of (x, y, orientation) positions, which will form the trace of the robot's path."
+git push
+ls
+exit
+ls
+emacs today.text
+reboot
+ls
+htop

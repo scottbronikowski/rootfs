@@ -12,16 +12,17 @@
 //k_Server declared in toollib-camera.h
 const speed_t encoders_speed = B57600;
 const char* encoders_file = "/dev/Teensy";
+const int encoders_connect_timeout_ms = 5000;
 //k_imuLogPort, k_LogBufSize, imu_rate declared in emperor.h (which we can't include here)
 const char* k_imuLogPort = "2004"; //using imu-log.txt as consolidated log for IMU, GPS, and encoders--not worth the effort to change the name in the code
 const int k_LogBufSize = 256; //100;
-
 
 //global variables
 //extern'd'
 int encoders_fd;
 int log_encoders_sockfd;
-FILE* encoders_file_ptr;
+size_t encoders_input_pos;
+//FILE* encoders_file_ptr;
 //not extern'd
 encoders_data_t* run_encoders_data;
 
@@ -43,12 +44,33 @@ int main (int /*argc*/, char** /*argv*/)
     }
   }
   //get file pointer from fd
-  encoders_file_ptr = fdopen(encoders_fd, "r"); //DO I NEED THIS? not using fgets()
+  //encoders_file_ptr = fdopen(encoders_fd, "r"); //DO I NEED THIS? not using fgets()
 
   //encoder init function (like razor_init)
+  if (!encoders_init())
+  {
+    perror("encoders_init failed");
+    run_encoders_terminator(SIGTERM);
+    return -1;
+  }
+  run_encoders_data = new encoders_data_t;
 
   //test encoder output
-
+  if (!encoders_read_data(run_encoders_data))
+  {
+    perror("encoders_read_data failed");
+    run_encoders_terminator(SIGTERM);
+    return -1;
+  }
+  else
+  { //read succeeded, so print it out
+    printf("Encoders initialized in run-encoders\n");
+    printf("Timestamp = %lu, dt = %lu, Left = %.3f cm, Right = %.3f cm\n",
+	    run_encoders_data->timestamp,
+	    run_encoders_data->dt,
+	    run_encoders_data->cm[0],
+	    run_encoders_data->cm[1]);
+  }    
   //connect to seykhl
   printf("Connecting to %s on port %s for encoder logging...\n",
 	 k_Server, k_imuLogPort);
@@ -70,35 +92,7 @@ int main (int /*argc*/, char** /*argv*/)
 
   while(1)
   { // main loop
-    memset(logbuf, 0, sizeof(logbuf)); //clear buffer
-    // if (fgets(logbuf, k_LogBufSize, gps_file_ptr) != NULL)
-    // {
-    //   retval = strlen(logbuf);
-    //   if (retval <= 0) //error
-    //   {
-    // 	perror("gps_main:read");
-    // 	printf("retval = %d\n", retval);
-    // 	//break;
-    // 	continue;
-    //   }
-    //   else 
-    //   { //message received, so check if it's one we want
-    // 	if ((strncmp(logbuf, GGA, strlen(GGA)) == 0) ||
-    // 	    (strncmp(logbuf, RMC, strlen(RMC)) == 0))
-    // 	{
-    // 	  //remove last character (always a newline)
-    // 	  logbuf[retval - 1] = 0;
-    // 	  //now send it
-    // 	  run_gps_log_data(logbuf, log_gps_sockfd);
-    // 	  //printf("Logged: %s\n", logbuf);
-    // 	}
-    // 	else //ignore other messages from GPS
-    // 	{
-    // 	  //printf("Ignored: %s\n", logbuf);
-    // 	  continue;
-    // 	}
-    //   }
-    // }
+    run_encoders_handler(1);
   }
 
   //cleanup done in run_gps_terminator
@@ -202,9 +196,10 @@ bool encoders_is_io_blocking(int fd)
 
 void run_encoders_terminator(int signum)
 {
-  fclose(encoders_file_ptr);
+  //fclose(encoders_file_ptr);
   close(encoders_fd);
   close(log_encoders_sockfd);
+  delete run_encoders_data;
   printf("Run-Encoders: Encoders logging socket closed\n");
   exit(signum);
 }
@@ -247,33 +242,216 @@ double run_encoders_current_time(void)
   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
 }
 
-// void run_imu_handler(int signum)
-// {
-//   char logbuf[k_LogBufSize];
-//   memset(logbuf, 0, sizeof(logbuf));  //clear buffer
-//   if (razor_read_data(run_imu_data))
-//   { //successful read, so put data into logbuf
-//     sprintf(logbuf, "IMU:time:%lu:"
-// 	    "Yaw:%.2f:Pitch:%.2f:Roll:%.2f:"
-// 	    "Yaw(a):%.2f:MAG_h(a):%.2f:MAG_h:%.2f:"
-// 	    "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
-// 	    "Gx:%.2f:Gy:%.2f:Gz:%.2f",
-// 	    run_imu_data->timestamp,
-// 	    run_imu_data->data[0], run_imu_data->data[1], 
-// 	    run_imu_data->data[2],
-// 	    run_imu_data->data[3], run_imu_data->data[4], 
-// 	    run_imu_data->data[5],
-// 	    run_imu_data->data[6], run_imu_data->data[7], 
-// 	    run_imu_data->data[8],
-// 	    run_imu_data->data[9], run_imu_data->data[10], 
-// 	    run_imu_data->data[11],
-// 	    run_imu_data->data[12], run_imu_data->data[13], 
-// 	    run_imu_data->data[14]);
-//   }
-//   else
-//   { //read failed, so log the failure
-//     sprintf(logbuf,"IMU data read failure");
-//   }
-//   run_imu_log_data(logbuf, log_imu_sockfd);
-// }
+void run_encoders_handler(int signum)
+{
+  char logbuf[k_LogBufSize];
+  memset(logbuf, 0, sizeof(logbuf));  //clear buffer
+  if (encoders_read_data(run_encoders_data))
+  { //successful read, so put data into logbuf
+    sprintf(logbuf,"time:%lu:dt:%lu:L:%.3f:R:%.3f",
+	    run_encoders_data->timestamp,
+	    run_encoders_data->dt,
+	    run_encoders_data->cm[0],
+	    run_encoders_data->cm[1]);
+  }
+  else
+  { //read failed, so log the failure
+    sprintf(logbuf,"Encoders data read failure");
+  }
+  run_encoders_log_data(logbuf, log_encoders_sockfd);
+}
 
+bool encoders_init(void)
+{
+  char in;
+  int result;
+  struct timeval t0, t1, t2;
+  const std::string synch_token = "#SYNCH";
+  const std::string new_line = "\r\n";
+
+  // start time
+  gettimeofday(&t0, NULL);
+
+  // request synch token to see if Teensy is really present
+  const std::string contact_synch_id = "00"; 
+  const std::string contact_synch_request = "#s" + contact_synch_id; 
+  const std::string contact_synch_reply = synch_token + contact_synch_id + new_line;
+  if (write(encoders_fd, contact_synch_request.data(), 
+	    contact_synch_request.length()) != 
+      (ssize_t)contact_synch_request.length())
+  {
+    perror("encoders_init:first synch");
+    return false;
+  }
+  gettimeofday(&t1, NULL);
+ // set non-blocking I/O
+  if (!encoders_set_nonblocking_io()) return false;
+
+  /* look for tracker */
+  while (true)
+  {
+    // try to read one byte from the port
+    result = read(encoders_fd, &in, 1);
+    
+    // one byte read
+    if (result > 0)
+    {
+      if (encoders_read_token(contact_synch_reply, in))
+        break;
+    }
+    // no data available
+    else if (result == 0)
+      usleep(1000); // sleep 1ms
+    // error?
+    else
+    {
+      if (errno != EAGAIN && errno != EINTR)
+        throw std::runtime_error("Can not read from serial port (1).");
+    }
+    
+    // check timeout
+    gettimeofday(&t2, NULL);
+    if (encoders_elapsed_ms(t1, t2) > 200)
+    {
+      // 200ms elapsed since last request and no answer -> request synch again
+      // (this happens when DTR is connected and Teensy resets on connect)
+      if (write(encoders_fd, contact_synch_request.data(), 
+		contact_synch_request.length()) !=
+	  (ssize_t)contact_synch_request.length())
+      {
+	perror("encoders_init:second synch");
+	return false;
+      }
+      t1 = t2;
+    }
+    if (encoders_elapsed_ms(t0, t2) > encoders_connect_timeout_ms)
+      // timeout -> tracker not present
+      throw std::runtime_error("Can not init: tracker does not answer.");
+  }
+
+  /* configure tracker */
+  // set correct binary output mode, disale continuous streaming, disable errors and
+  // request synch token. So we're good, no matter what state the tracker
+  // currently is in.
+  const std::string config_synch_id = "01";
+  const std::string config_synch_reply = synch_token + config_synch_id + new_line;
+
+  std::string config = "#o1#s" + config_synch_id; //constant output
+  config = "#ob" + config;
+  if (write(encoders_fd, config.data(), config.length()) != (ssize_t)config.length())
+  {
+    perror("encoders_init:write init");
+    return false;
+  }
+  
+  // set blocking I/O
+  // (actually semi-blocking, because VTIME is set)
+  if (!encoders_set_blocking_io()) return false;
+
+  while (true)
+  {    
+    // try to read one byte from the port
+    result = read(encoders_fd, &in, 1);
+    
+    // one byte read
+    if (result > 0)
+    {
+      if (encoders_read_token(config_synch_reply, in))
+        break;  // alrighty
+    }
+    // error?
+    else
+    {
+      if (errno != EAGAIN && errno != EINTR)
+        throw std::runtime_error("Can not read from serial port (2).");
+    }
+  }
+  
+  // we keep using blocking I/O
+  //if (_set_blocking_io() == -1)
+  //  return false;
+
+  return true;
+}
+
+long encoders_elapsed_ms(struct timeval start, struct timeval end)
+{
+  return static_cast<long> ((end.tv_sec - start.tv_sec) * 1000 + (end.tv_usec - start.tv_usec) / 1000);
+}
+
+bool encoders_read_token(const std::string &token, char c)
+{
+  if (c == token[encoders_input_pos++])
+  {
+    if (encoders_input_pos == token.length())
+    {
+      // synch token found
+      encoders_input_pos = 0;
+      return true;
+    }
+  }
+  else
+  {
+    encoders_input_pos = 0;
+  }
+  return false;
+}
+
+
+
+bool encoders_read_data(encoders_data_t* data)
+{
+  int result;
+  char c;
+  unsigned long t = 0;
+  unsigned char buf[4];
+  //zero out data;
+  data->timestamp = 0;
+  data->dt = 0;
+  for (int i = 0; i < 2; i++)
+    data->cm[i] = 0.0f;
+  //read new data
+  while (true)
+  {
+    //first get cm measurements (floats)
+    if ((result = read(encoders_fd, &c, 1)) > 0)
+    { //read binary stream
+      // (type-punning: aliasing with char* is ok)
+      (reinterpret_cast<char*> (&data->cm))[encoders_input_pos++] = c;
+      if (encoders_input_pos == 8) // we received both (2 data elements * 4 bytes each)
+      {                
+	//then get the two unsigned longs (timestamp and dt)
+	//got the floats, so now get the twounsigned long ints
+	for (int j = 0; j < 2; j++)
+	{
+	  for (int i = 0; i < 4; i++)
+	  {
+	    if ((result = read(encoders_fd, &buf[i], 1)) > 0)
+	      continue;
+	    else if (result < 0)
+	      perror("encoders_read_data:failed timestamp read");
+	  }
+	  memcpy(&t, buf, 4);
+	  if (j == 0)
+	    data->timestamp = t;
+	  else if (j == 1)
+	  {
+	    data->dt = t;
+	    //now we're done, so reset position counter and return success
+	    encoders_input_pos = 0;
+	    return true;
+	  }
+	}
+      }
+    }
+    else if (result < 0)
+    {
+      if (errno != EAGAIN && errno != EINTR)
+      {
+        perror("encoders_read_data:cannot read from serial port");
+        return false; //failure
+      }
+    }
+    //else result is 0, so no data available (keep waiting)
+  }
+}

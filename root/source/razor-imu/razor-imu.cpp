@@ -283,9 +283,11 @@ bool razor_read_data(razor_data_t* data)
     { //read binary stream
       // (type-punning: aliasing with char* is ok)
       (reinterpret_cast<char*> (&data->data))[razor_input_pos++] = c;
-        if (razor_input_pos == 60) // we received a full frame
-        {                 //***HARDCODED for 15 data elements * 4 bytes each
-	  //got the floats, so now get the unsigned long int
+      if (razor_input_pos == 60) // we received a full frame
+      {                 //***HARDCODED for 15 data elements * 4 bytes each
+	//got the floats, so now get the two unsigned longs (timestamp and dt)
+	for (int j = 0; j < 2; j++)
+	{
 	  for (int i = 0; i < 4; i++)
 	  {
 	    //if ((result = read(gl_imu_fd, &c, 1)) > 0)
@@ -300,14 +302,17 @@ bool razor_read_data(razor_data_t* data)
 	      perror("razor_read_data:failed timestamp read");
 	  }
 	  memcpy(&t, buf, 4);
-	  //printf("t = %lu\n", t);
-	  data->timestamp = t;
-	  //printf("data->timestamp = %lu\n", data->timestamp);
-	 
-          //reset position counter and return success
-          razor_input_pos = 0;
-	  return true;
-        }
+	  if (j == 0)
+	    data->timestamp = t;
+	  else if (j == 1)
+	  {
+	    data->dt = t;
+	    //done, so reset position counter and return success
+	    razor_input_pos = 0;
+	    return true;
+	  }
+	}
+      }
     }
     else if (result < 0)
     {

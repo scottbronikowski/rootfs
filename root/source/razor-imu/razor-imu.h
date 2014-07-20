@@ -34,6 +34,7 @@ extern size_t razor_input_pos; //not used outsize of razor-imu.cpp
 struct razor_data_t {
   float data[15]; //yaw, pitch, roll, adjusted yaw, adjusted mag_heading, raw mag_heading, accel x, accel y, accel z, mag x, mag y, mag z, gyro x, gyro y, gyro z
   unsigned long timestamp;
+  unsigned long dt;
   // float heading[3]; //raw yaw, adjusted yaw, mag_heading
   // float accel[3]; //x, y, z
   // float mag[3]; //x, y, z

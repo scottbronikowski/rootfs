@@ -62,6 +62,7 @@ int main (int /*argc*/, char** /*argv*/)
   {  //read succeeded, so print it out
     printf("IMU initialized in run-imu\n");
     printf("Timestamp = %lu\n", run_imu_data->timestamp);
+    printf("dt = %lu\n", run_imu_data->dt);
     printf("Yaw = %.2f, Pitch = %.2f, Roll = %.2f\n",
 	   run_imu_data->data[0], run_imu_data->data[1], 
 	   run_imu_data->data[2]);
@@ -163,12 +164,13 @@ void run_imu_handler(int signum)
   memset(logbuf, 0, sizeof(logbuf));  //clear buffer
   if (razor_read_data(run_imu_data))
   { //successful read, so put data into logbuf
-    sprintf(logbuf, "time:%lu:"
+    sprintf(logbuf, "time:%lu:dt:%lu:"
 	    "Yaw:%.2f:Pitch:%.2f:Roll:%.2f:"
 	    "Yaw(a):%.2f:MAG_h(a):%.2f:MAG_h:%.2f:"
 	    "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
 	    "Gx:%.2f:Gy:%.2f:Gz:%.2f",
 	    run_imu_data->timestamp,
+	    run_imu_data->dt,
 	    run_imu_data->data[0], run_imu_data->data[1], 
 	    run_imu_data->data[2],
 	    run_imu_data->data[3], run_imu_data->data[4], 

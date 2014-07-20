@@ -446,8 +446,12 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Started work on run-encoders.{cpp,h} to run on rover and read data from encoders (via Teensy) and send it back to seykhl to be logged.  Have all of the boilerplate stuff adapted from run-imu and run-gps, just need to write the functions to initialize the Teensy, listen for and read the data, and the handler function that runs in the main loop (which all should be fairly straightforward adaptations from razor-imu.cpp).  
 --Dan was in for a while today and we spoke about adapting his old Kalman filter code to my project.  It seems like it won't be too difficult to go from the data that I'm logging in my log file to a series of (x, y, orientation) positions, which will form the trace of the robot's path.
 
+20 Jul 14
+--Completed first draft of run-encoders.  Have binary data read of timestamp (ms), dt (ms), left distance (cm) and right distance (cm) from Teensy working.
+--Added another field to IMU data, dt, to record ms between readings.
+
 **TODO**
-  *Custom sketch for Teensy to monitor encoders	 
+  **Add dt output to IMU????
  
 ***RANDOM NOTES
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
@@ -455,7 +459,7 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 ..udev stuff to write new *.rules file lines to reference a device with a fixed alias
   #udevadm info --query all --name /dev/ttyUSB1 --attribute-walk
-  --gives info about the device to make a udev rule
+  --GIVES info about the device to make a udev rule
   #udevadm control --reload-rules; udevadm trigger 
   --reloads udev rules so newly written ones can take effect
 ..USE A SOCKET INSTEAD OF FILE DESCRIPTOR TO COMMUNICATE BETWEEN GPIO AND MONITOR!!!!  READ WILL BLOCK!!!
