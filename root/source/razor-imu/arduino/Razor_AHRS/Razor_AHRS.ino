@@ -175,6 +175,7 @@ Edited/Augmented by Scott Bronikowski, 5 Jun 2014
 // This may not work, if faster than 20ms (=50Hz)
 // Code is tuned for 20ms, so better leave it like that
 #define OUTPUT__DATA_INTERVAL 20  // in milliseconds
+//#define OUTPUT__DATA_INTERVAL 40  // in milliseconds
 
 // Output mode definitions (do not change)
 #define OUTPUT__MODE_CALIBRATE_SENSORS 0 // Outputs sensor min/max values as text for manual calibration
@@ -394,6 +395,9 @@ float roll;
 // DCM timing in the main loop
 unsigned long timestamp;
 unsigned long timestamp_old;
+unsigned long timestamp_micros;
+unsigned long elapsed_micros;
+boolean do_update;
 float G_Dt; // Integration time for DCM algorithm
 unsigned long dt;
 
@@ -683,16 +687,41 @@ void loop()
   }
 
   // Time to read the sensors again?
-  if((millis() - timestamp) >= OUTPUT__DATA_INTERVAL)
-  {
-    timestamp_old = timestamp;
-    timestamp = millis();
-    if (timestamp > timestamp_old)
+  do_update = false;
+  timestamp_micros = micros();
+  //need to handle the rollover case, since micros() rolls over every ~70 minutes.
+  if (timestamp_micros < (timestamp * 1000))
+  { //we have rolled over
+    elapsed_micros = timestamp_micros + (0xFFFFFFFF - (timestamp * 1000));
+                     //micros since rollover + micros before rollover
+    if (elapsed_micros >= (OUTPUT__DATA_INTERVAL * 1000))
     {
+      timestamp_old = timestamp;
+      timestamp = (elapsed_micros / 1000) + timestamp;
+      do_update = true;
+    }
+  }
+  else
+  { //no rollover
+    elapsed_micros = timestamp_micros - (timestamp * 1000);
+    if (elapsed_micros >= (OUTPUT__DATA_INTERVAL * 1000))
+    {
+      timestamp_old = timestamp;
+      timestamp = timestamp_micros / 1000;
+      do_update = true;
+    }
+  }
+
+  //  if(((timestamp_micros = millis()) - timestamp) >= OUTPUT__DATA_INTERVAL)
+  if(do_update) //elapsed_micros >= (OUTPUT__DATA_INTERVAL * 1000))
+  {
+    //timestamp = millis();
+    /* if (timestamp > timestamp_old) //not sure why we need this--timestamp always > timestamp_old */
+    /* { */
       dt = timestamp - timestamp_old;
       G_Dt = (float) (dt) / 1000.0f; // Real time of loop run. We use this on the DCM algorithm (gyro integration time)
-    }
-    else G_Dt = 0;
+    /* } */
+    /* else G_Dt = 0; */
 
     // Update sensor readings
     read_sensors();

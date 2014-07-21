@@ -451,6 +451,9 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Added another field to IMU data, dt, to record ms between readings.
 --Removed extra printfs from run-encoders and run-imu.
 
+21 Jul 14
+--Changed IMU update timing/logic to use microseconds (micros() function) instead of millis() to fix problem of updates not coming at exactly 20 ms each time.  Had to put in logic to deal with the micros() rollover case (every ~70 minutes).  Believe the logic is correct, but need to run a test for > 70 minutes to confirm.
+
 **TODO**
 
  
