@@ -101,6 +101,17 @@ int main (int /*argc*/, char** /*argv*/)
   signal(SIGINT, run_imu_terminator);
   signal(SIGTERM, run_imu_terminator);
 
+  //run a small loop here to clear messages backed up in serial buffer
+  struct timeval mark, now;
+  gettimeofday(&mark, NULL);
+  gettimeofday(&now, NULL);
+  while (razor_elapsed_ms(mark, now) < 200)
+  {
+    razor_read_data(run_imu_data); //read the data and do nothing
+    gettimeofday(&now, NULL);  //update time hack
+  }
+
+
   while(1)
   {//what to do here??
     //sleep(1);

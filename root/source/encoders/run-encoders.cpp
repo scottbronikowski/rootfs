@@ -90,6 +90,17 @@ int main (int /*argc*/, char** /*argv*/)
   signal(SIGINT, run_encoders_terminator);
   signal(SIGTERM, run_encoders_terminator);
 
+  //run a small loop here to clear messages backed up in serial buffer
+  struct timeval mark, now;
+  gettimeofday(&mark, NULL);
+  gettimeofday(&now, NULL);
+  while (encoders_elapsed_ms(mark, now) < 200)
+  {
+    encoders_read_data(run_encoders_data); //read the data and do nothing
+    gettimeofday(&now, NULL);  //update time hack
+  }
+  
+
   while(1)
   { // main loop
     run_encoders_handler(1);

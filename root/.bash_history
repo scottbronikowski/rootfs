@@ -1,8 +1,3 @@
-/etc/init.d/ssh-tunnel.sh start
-echo 20000 > /dev/pwm9
-echo 10000 > /dev/pwm9
-echo 15000 > /dev/pwm9
-lsusb
 reboot
 wavemon
 tail -f dmesg
@@ -1998,3 +1993,8 @@ emacs today.text
 reboot
 ls
 htop
+top
+htop
+exit
+htop
+exit

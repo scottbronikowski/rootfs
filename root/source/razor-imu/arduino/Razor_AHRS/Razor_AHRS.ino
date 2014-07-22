@@ -698,7 +698,7 @@ void loop()
   else //no rollover
     elapsed_micros = timestamp_micros - timestamp_micros_old;
   count += elapsed_micros;
-  if (count >= (1000 * OUTPUT__DATA_INTERVAL))
+  if (count >= (1000 * OUTPUT__DATA_INTERVAL)) //time to do update
   {
     do_update = true;
     dt = count / 1000;
@@ -706,31 +706,6 @@ void loop()
     count -= (1000 * OUTPUT__DATA_INTERVAL);
   }
 
-  
-
-  /* if (timestamp_micros < (timestamp * 1000)) */
-  /* { //we have rolled over */
-  /*   elapsed_micros = timestamp_micros + (0xFFFFFFFF - (timestamp * 1000)); */
-  /*                    //micros since rollover + micros before rollover */
-  /*   if (elapsed_micros >= (OUTPUT__DATA_INTERVAL * 1000)) */
-  /*   { */
-  /*     timestamp_old = timestamp; */
-  /*     timestamp = (elapsed_micros / 1000) + timestamp; */
-  /*     do_update = true; */
-  /*   } */
-  /* } */
-  /* else */
-  /* { //no rollover */
-  /*   elapsed_micros = timestamp_micros - (timestamp * 1000); */
-  /*   if (elapsed_micros >= (OUTPUT__DATA_INTERVAL * 1000)) */
-  /*   { */
-  /*     timestamp_old = timestamp; */
-  /*     timestamp = timestamp_micros / 1000; */
-  /*     do_update = true; */
-  /*   } */
-  /* } */
-
-  //  if(((timestamp_micros = millis()) - timestamp) >= OUTPUT__DATA_INTERVAL)
   if(do_update) //elapsed_micros >= (OUTPUT__DATA_INTERVAL * 1000))
   {
     //timestamp = millis();

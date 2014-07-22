@@ -455,6 +455,11 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Changed IMU update timing/logic in Razor_AHRS.ino to use microseconds (micros() function) instead of millis() to fix problem of updates not coming at exactly 20 ms each time.  Had to put in logic to deal with the micros() rollover case (every ~70 minutes).  Believe the logic is correct, but need to run a test for > 70 minutes to confirm.
 --Found logic error in first draft of rollover logic...testing fix.
 
+22 Jul 14
+--Fix appeared to work, no rollovers of IMU time and no nan's in YPR output.
+--Need to implement fixes in run-imu and run-encoders to ignore the first ~500 ms of output from the microcontrollers, since they are arriving at the Gumstix at an interval < 20 ms--looks like the serial buffer is just filling up once the connection is made.  Need to have a loop that runs for ~500 ms and just receives the messages and does nothing with them.
+--Having weird network/socket errors between sensor executables and log thread on seykhl.  Going to try to consolidate run-imu, run-encoders, and run-gps into a single program that polls each sensor on a schedule and then sends one consolidated message.
+
 **TODO**
 
  
