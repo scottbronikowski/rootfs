@@ -1,73 +1,3 @@
-reboot
-wavemon
-tail -f dmesg
-tail -f /var/log/dmesg
-ls
-tail -f /var/log/dmesg
-dmesg -T
-emacs -nw
-dmesg -T > dmesg-rover-18apr-run-2-failed-at-first-corner(wpa-roam).text
-dmesg -T > dmesg-rover-18apr-run-2-failed-at-first-corner-using-wpa-roam.text
-rsync -avrz dm* seykhl:~/vader-rover
-exit
-exit
-ls dm*
-exit
-lsusb
-i
-iwconfig
-ifconfig
-ifdown wlan1
-ifup wlan1
-ifconfig
-ping google.com
-ps -ef | grep run
-ps -ef | grep run_
-kill -9 1257
-/root/bin/run_cameras 
-reboot
-ifconfig
-iwconfig
-dhclient wlan1
-ifconfig
-vi /etc/network/interfaces
-reboot
-dmesg -T
-dmesg -T > dmesg-rover-18apr-run-3-all-the-way-jeff-following.text
-rsync -avrz dmesg-rover-1* seykhl:~/vader-rover/
-emacs today.text &
-exit
-wavemon 
-exit
-ps -ef | grep run_
-htop
-eit
-exit
-l
-ps -ef | grep ssh
-kill -9 1019
-ps -ef | grep ssh
-halt
-hatl
-halt
-cd bin/
-ls
-motor_control forward_1
-motor_control stop
-motor_control forward_1
-motor_control stop
-motor_control forward_1
-motor_control stop
-motor_control forward_2
-motor_control stop
-motor_control forward_2
-motor_control stop
-motor_control forward_3
-motor_control stop
-motor_control forward_3
-motor_control stop
-motor_control forward_4
-motor_control stop
 motor_control forward_4
 motor_control stop
 motor_control forward_4
@@ -1998,3 +1928,73 @@ htop
 exit
 htop
 exit
+cd bin
+./run-emperor start
+\
+./run-emperor start
+htop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+exit
+cd source/razor-imu/
+make
+cd 
+ls
+cd razor-9dof-ahrs-Release-v1.4.2
+ls
+cd Arduino/
+ls
+cd Razor_AHRS/
+lla
+exit
+cd source/encoders/
+ls
+make
+lla /dev/RazorIMU 
+make
+lla /dev/RazorIMU 
+htop
+make
+cd ../razor-imu/
+make
+cd ../encoders/
+make
+cd ..
+grep -ri ClientConnect *
+grep -ri bind *
+exit
+arduino
+exit
+emacs today.text
+exit
+lsusb
+halt

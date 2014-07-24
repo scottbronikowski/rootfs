@@ -3,17 +3,19 @@
 
 start(){
     /root/bin/emperor &
-    /root/bin/run-imu &
+    /root/bin/run-sensors &
     /root/bin/run-gps &
-    /root/bin/run-encoders &
+#    /root/bin/run-imu &
+ #   /root/bin/run-encoders &
 }
 
 stop(){
     echo "killing run-gps, run-imu, emperor"
-    pkill run-encoders
     pkill run-gps
-    pkill run-imu
+    pkill run-sensors
     pkill emperor
+  #  pkill run-encoders
+   # pkill run-imu
 }
 
 case $1 in
