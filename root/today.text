@@ -1,12 +1,3 @@
-
-Paper deadlines:
-AAAI: 10Sep14-abstract, 15Sep14-final paper (conference 25-29Jan15 Austin, TX)
-ICRA: 15Sep14-abstract, 12Feb15-final paper (conference 25-30May15, Seattle, WA) 
-      (last conference 31May-5June14, paper deadline was 16Sep13)
-IROS: 18Feb15-abstract, 8Jul15-final paper (conference 28Sep-2Oct15, Hamburg, Germany)
-      (last conference 14-18Sep14, paper deadline was 6Feb14)
-
-
 Old notes
 --------------------------
 13 Mar 14
@@ -463,6 +454,9 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 23 Jul 14
 --Consolidated run-imu and run-encoders into a single program, run-sensors.  This program reads from the IMU and the encoders sequentially and then packages both sensors' data into a single message.  I tested it and it seems to work well.  Still have run-gps as a separate program because the GPS runs at 1 Hz, while the IMU and encoders both update at 50 Hz.  Also, run-gps just sends the raw NMEA sentence back to seykhl, and I plan on parsing it into usable variables on seykhl.
 
+24 Jul 14
+--Added 'null' loop in run-sensors to clear out bogus data in serial buffers before transmitting data back to seykhl.  Loop runs for 200 ms.  No more bogus (dt != 20ms) data arriving in log.
+
 **TODO**
 
  
@@ -480,22 +474,23 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 Buffers
 ----------------------------------------
-.   today.text           60331  Text		  ~/today.text
-  * *shell*              18852  Shell:run	  /
-    run-imu.cpp           6015  C++/l		  ~/source/razor-imu/run-imu.cpp
-    toollib-camera.cpp   21774  C++/l		  ~/source/camera/toollib-camera.cpp
+.   today.text           61000  Text		  ~/today.text
+  * *shell*              11875  Shell:run	  /
+    run-sensors.h         2172  C++/l		  ~/source/sensors/run-sensors.h
     run-encoders.cpp     12873  C++/l		  ~/source/encoders/run-encoders.cpp
+    run-emperor            433  Shell-script[bas  ~/bin/run-emperor
+    run-sensors.cpp      16941  C++/l		  ~/source/sensors/run-sensors.cpp
+    run-imu.cpp           6015  C++/l		  ~/source/razor-imu/run-imu.cpp
+ %  *Help*                 505  Help
+    razor-imu.cpp        12404  C++/l		  ~/source/razor-imu/razor-imu.cpp
     razor-imu.h           1495  C++/l		  ~/source/razor-imu/razor-imu.h
+    run-imu.h              748  C++/l		  ~/source/razor-imu/run-imu.h
     run-encoders.h        1745  C++/l		  ~/source/encoders/run-encoders.h
-    Razor_AHRS.ino       30191  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
-
 
 ---old
-    run-imu.h              748  C++/l		  ~/source/razor-imu/run-imu.h
-    razor-imu.cpp        12379  C++/l		  ~/source/razor-imu/razor-imu.cpp
-  * *shell*               4259  Shell:run	  ~/source/razor-imu/
+    toollib-camera.cpp   21774  C++/l		  ~/source/camera/toollib-camera.cpp
+    Razor_AHRS.ino       30191  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
     run-gps.cpp           7479  C++/l		  ~/source/gps/run-gps.cpp
-    run-emperor            327  Shell-script[bas  ~/bin/run-emperor
     run-gps.h             1257  C++/l		  ~/source/gps/run-gps.h
 
 ---old---

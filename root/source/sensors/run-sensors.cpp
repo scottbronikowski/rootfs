@@ -97,6 +97,18 @@ int main (int /*argc*/, char** /*argv*/)
   // else
   //   printf("FAILURE: %s\n", g_logbuf);
 
+  //run null loop to clear serial buffer
+  struct timeval mark, now;
+  gettimeofday(&mark, NULL);
+  gettimeofday(&now, NULL);
+  while (sensors_elapsed_ms(mark, now) < 200)
+  {
+    imu_read_data(g_imu_data); //read the data and do nothing
+    encoders_read_data(g_encoders_data);
+    gettimeofday(&now, NULL);  //update time hack
+  }
+
+
   //main loop
   while (1)
   {

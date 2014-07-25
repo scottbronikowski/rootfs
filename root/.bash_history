@@ -1,41 +1,3 @@
-motor_control forward_4
-motor_control stop
-motor_control forward_4
-motor_control stop
-motor_control forward_4
-motor_control stop
-halt
-reboot
-htop
-exit
-ps -ef | grep cameras
-pkill run_cameras
-exit
-exit
-emacs today.text &
-cd bin
-ls
-./emperor 
-lsof
-lsof -i
-apt-get install lsof
-lsof
-lsof -c emp
-lsof -c /root/bin/emperor
-lsof -c emperor
-lsof -c ssh
-lsof -i
-netstat -ltpu
-./emperor 
-clear
-lla
-./emperor 
-exit
-ls
-cd source/
-ls
-mkdir emperor
-cd emperor
 touch emperor.cpp
 touch emperor.h
 touch Makefile
@@ -1998,3 +1960,41 @@ emacs today.text
 exit
 lsusb
 halt
+cd source/
+ls
+cd razor-imu/
+ls
+cat run-imu.cpp 
+cd ..
+ls
+mkdir sensors
+cp razor-imu/Makefile ./sensors/
+cd sensors/
+ls
+touch run-sensors.h
+touch run-sensors.cpp
+cd ..
+grep -ri file_ptr *.cpp
+grep -ri file_ptr *
+cd sensors/
+make
+exit
+exit
+emacs today.text
+halt
+cd bin
+ls
+./run-sensors 
+ls
+./emperor &
+./run-sensors &
+./run-gps 
+./run-emperor start
+exit
+halt
+reboot
+halt
+reboot
+halt
+reboot
+emacs today.text &
