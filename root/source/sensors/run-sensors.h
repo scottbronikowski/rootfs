@@ -40,6 +40,10 @@ struct imu_data_t {
 extern const speed_t sensors_speed;
 extern const char* encoders_file;
 extern const char* imu_file;
+extern const speed_t gps_speed;
+extern const char* gps_file;
+extern const char* GGA;
+extern const char* RMC;
 extern const char* k_imuLogPort;//using imu-log.txt as consolidated log for IMU, GPS, and encoders--not worth the effort to change the name in the code
 extern const int k_LogBufSize;
 extern const int sensors_connect_timeout_ms;
@@ -52,9 +56,11 @@ extern int encoders_fd;
 extern size_t encoders_input_pos;
 extern int imu_fd;
 extern size_t imu_input_pos;
+extern int gps_fd;
+extern FILE* gps_file_ptr;
 
 //prototypes
-bool sensors_open_serial_port(int &fd, const char* filename);
+bool sensors_open_serial_port(int &fd, const char* filename, const speed_t speed);
 bool sensors_set_blocking_io(int fd);
 bool sensors_set_nonblocking_io(int fd);
 bool sensors_is_io_blocking(int fd);
@@ -67,5 +73,6 @@ double sensors_current_time(void);
 int sensors_log_data(char* databuf);
 void sensors_terminator(int signum);
 bool sensors_handler(void);
+bool gps_read_data(char* logbuf, FILE* file_ptr);
 
 #endif //RUNENCODERS_H

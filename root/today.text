@@ -454,8 +454,12 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 23 Jul 14
 --Consolidated run-imu and run-encoders into a single program, run-sensors.  This program reads from the IMU and the encoders sequentially and then packages both sensors' data into a single message.  I tested it and it seems to work well.  Still have run-gps as a separate program because the GPS runs at 1 Hz, while the IMU and encoders both update at 50 Hz.  Also, run-gps just sends the raw NMEA sentence back to seykhl, and I plan on parsing it into usable variables on seykhl.
 
-24 Jul 14
+25 Jul 14
 --Added 'null' loop in run-sensors to clear out bogus data in serial buffers before transmitting data back to seykhl.  Loop runs for 200 ms.  No more bogus (dt != 20ms) data arriving in log.
+
+26 Jul 14
+--Started incorporating GPS reading into run-sensors.  Discovered that the fgets() I was using to read a full line (since NMEA sentences are terminated with a newline) from the GPS will block, so calling it after every encoder/IMU read (since I can't predict when a GPS sentence will be there to read) limits the encoder/IMU data to the GPS rate of 1Hz.  Going to have to find/write a function that does a normal read and just continues until it hits a newline, and then wrap that read in a select in order to not block.  Not sure how long of a timeout I can afford to give the select--maybe start with 10ms.
+
 
 **TODO**
 

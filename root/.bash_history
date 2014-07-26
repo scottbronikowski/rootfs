@@ -1,23 +1,3 @@
-touch emperor.cpp
-touch emperor.h
-touch Makefile
-cd ../../include/
-ls
-lla
-ln -s /root/source/camera/toollib-camera.h toollib-camera.h
-lla
-cd ../lib
-ls
-lla
-cd ../source/camera/
-cp Makefile ../emperor/
-cd ..
-lla
-cd camera/
-lla
-cd ../motor_control/
-lla
-cd ../monitor/
 lla
 cd ../emperor/
 ls
@@ -1998,3 +1978,23 @@ reboot
 halt
 reboot
 emacs today.text &
+cd /
+git status
+git add -A
+git commit -m "--Added 'null' loop in run-sensors to clear out bogus data in serial buffers before transmitting data back to seykhl.  Loop runs for 200 ms.  No more bogus (dt != 20ms) data arriving in log."
+git push
+exit
+emacs today.text
+exit
+halt
+reboot
+ls
+halt
+lsusb
+reboot
+cd source/sensors/
+make
+emacs today.text
+cd bin
+ls
+./run-emperor start

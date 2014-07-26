@@ -12,6 +12,10 @@
 const speed_t sensors_speed = B57600; //both sensors run at 57,600 baud
 const char* encoders_file = "/dev/Teensy";
 const char* imu_file = "/dev/RazorIMU";
+const speed_t gps_speed = B4800;
+const char* gps_file = "/dev/GPS";
+const char* GGA = "$GPGGA";
+const char* RMC = "$GPRMC";
 const char* k_imuLogPort = "2004";//using imu-log.txt as consolidated log for IMU, GPS, and encoders--not worth the effort to change the name in the code
 const int k_LogBufSize = 256;
 const int sensors_connect_timeout_ms = 5000;
@@ -24,10 +28,13 @@ int encoders_fd;
 size_t encoders_input_pos;
 int imu_fd;
 size_t imu_input_pos;
+int gps_fd;
+FILE* gps_file_ptr;
 //not extern
 encoders_data_t* g_encoders_data;
 imu_data_t* g_imu_data;
 char g_logbuf[k_LogBufSize];
+char g_gps_logbuf[k_LogBufSize];
 
 int main (int /*argc*/, char** /*argv*/)
 {
@@ -40,7 +47,7 @@ int main (int /*argc*/, char** /*argv*/)
   printf("Connecting to %s on port %s for IMU & encoder logging...\n",
   	 k_Server, k_imuLogPort);
   log_sensors_sockfd = -1;
-  sprintf(g_logbuf, "Encoders logging started");
+  sprintf(g_logbuf, "IMU, Encoders, and GPS logging started");
   while (log_sensors_sockfd == -1)
   {
     log_sensors_sockfd = ClientConnect(k_Server, k_imuLogPort);
@@ -62,19 +69,27 @@ int main (int /*argc*/, char** /*argv*/)
   g_imu_data = new imu_data_t;
 
   //open fd for imu
-  if (!sensors_open_serial_port(imu_fd, imu_file))
+  if (!sensors_open_serial_port(imu_fd, imu_file, sensors_speed))
   {
     perror("Error opening serial port for IMU:");
     sensors_terminator(SIGTERM);
     return -1;
   }
   //open fd for encoders
-  if (!sensors_open_serial_port(encoders_fd, encoders_file))
+  if (!sensors_open_serial_port(encoders_fd, encoders_file, sensors_speed))
   {
     perror("Error opening serial port for encoders:");
     sensors_terminator(SIGTERM);
     return -1;
   }
+  //open fd for GPS
+  if (!sensors_open_serial_port(gps_fd, gps_file, gps_speed))
+  {
+    perror("Error opening serial port for GPS:");
+    sensors_terminator(SIGTERM);
+    return -1;
+  }
+
   //printf("fds opened\n");
   //init imu
   if (!sensors_init(imu_fd, imu_init_string, imu_input_pos))
@@ -90,6 +105,9 @@ int main (int /*argc*/, char** /*argv*/)
     sensors_terminator(SIGTERM);
     return -1;
   }
+  //int GPS (just get file pointer from fd)
+  gps_file_ptr = fdopen(gps_fd, "r");
+
   //printf("init complete\n");
   // //test output from both -- ***DO WE NEED THIS??***
   // if (sensors_handler())
@@ -115,13 +133,15 @@ int main (int /*argc*/, char** /*argv*/)
     if(!sensors_handler())
       printf("ERROR: %s\n", g_logbuf);
     sensors_log_data(g_logbuf);
+    // if(gps_read_data(g_gps_logbuf, gps_file_ptr))
+    //   sensors_log_data("GPS message received");
   }
 
   //cleanup done in terminator
   return 0;
 }
 
-bool sensors_open_serial_port(int &fd, const char* filename)
+bool sensors_open_serial_port(int &fd, const char* filename, const speed_t speed)
 {
   // O_NDELAY allows open even with no carrier detect
   if ((fd = open(filename, O_RDWR | O_NOCTTY | O_NDELAY)) == -1)
@@ -169,13 +189,13 @@ bool sensors_open_serial_port(int &fd, const char* filename)
       tio.c_cc[VMIN]  = 0;//143; //set minimum number of bytes per read
       tio.c_cc[VTIME] = 10; // 10 * 100ms = 1s
       // set port speed
-      if (cfsetispeed(&tio, sensors_speed) != 0)
+      if (cfsetispeed(&tio, speed) != 0)
       {
 	perror("sensors_open_serial_port:cfsetispeed");
 	printf("with fd = %d, filename = %s\n", fd, filename);
 	return false;
       }
-      if (cfsetospeed(&tio, sensors_speed) != 0)
+      if (cfsetospeed(&tio, speed) != 0)
       {
 	perror("sensors_open_serial_port:cfsetospeed");
 	printf("with fd = %d, filename = %s\n", fd, filename);
@@ -519,6 +539,8 @@ int sensors_log_data(char* databuf)
 
 void sensors_terminator(int signum)
 {
+  fclose(gps_file_ptr);
+  close(gps_fd);
   close(imu_fd);
   close(encoders_fd);
   close(log_sensors_sockfd);
@@ -590,4 +612,16 @@ bool sensors_handler(void)
   strncat(g_logbuf, encbuf, strlen(encbuf));
   //printf("after strncat\n");
   return retval; //if neither read failed, retval will be true
+}
+
+bool gps_read_data(char* logbuf, FILE* file_ptr)
+{
+  memset(logbuf, 0, sizeof(logbuf));//clear buffer
+  if (fgets(logbuf, k_LogBufSize, file_ptr) != NULL)
+  {//got something from gps
+    //printf("received: %s", logbuf);
+    return true;
+  }
+  else //didn't get anything from gps
+    return false;
 }

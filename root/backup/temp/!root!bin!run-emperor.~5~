@@ -1,0 +1,34 @@
+#! /bin/bash
+
+
+start(){
+    /root/bin/emperor &
+    /root/bin/run-sensors &
+    /root/bin/run-gps &
+#    /root/bin/run-imu &
+ #   /root/bin/run-encoders &
+}
+
+stop(){
+    echo "killing run-gps, run-imu, emperor"
+    pkill run-gps
+    pkill run-sensors
+    pkill emperor
+  #  pkill run-encoders
+   # pkill run-imu
+}
+
+case $1 in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    *)
+	echo "Usage: $0 {start|stop}"
+	RETVAL=1
+	;;
+esac
+exit 0
+
