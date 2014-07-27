@@ -10,7 +10,7 @@ OPENCV_L =  `pkg-config opencv --cflags --libs`
 IMLIB_L = `imlib2-config --cflags --libs`
 LIBS = -L../../lib -L/usr/local/lib -lpthread -lflycapture${D} $(OPENCV_L) $(IMLIB_L) 
 CFLAGS = -D__STDC_CONSTANT_MACROS
-OPTFLAGS = -Ofast -march=native -flto #-fwhole-program
+OPTFLAGS = -Ofast -march=native -flto -fwhole-program
 OUTDIR = ../../bin
 CAMDIR = ../camera
 CAMFILES = ${CAMDIR}/toollib-camera.cpp ${CAMDIR}/toollib-camera.h
@@ -34,7 +34,6 @@ ${OUTPUTNAME}: ${OBJS}
 
 run-sensors.o: run-sensors.cpp run-sensors.h
 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
-#	${CC} -g ${INCLUDE} -Wall -c $*.cpp 
 
 # ${EMPDIR}/emperor.o: ${EMPFILES}
 # 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 

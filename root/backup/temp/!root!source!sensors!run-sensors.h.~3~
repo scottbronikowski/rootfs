@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include <cstring>
-#include <sys/types.h>
 
 #include "toollib-camera.h" //for network stuff
 #include <csignal>
@@ -61,8 +60,7 @@ extern int gps_fd;
 extern FILE* gps_file_ptr;
 
 //prototypes
-bool sensors_open_serial_port(int &fd, const char* filename, 
-			      const speed_t speed, const int bytes_per_read = 0);
+bool sensors_open_serial_port(int &fd, const char* filename, const speed_t speed);
 bool sensors_set_blocking_io(int fd);
 bool sensors_set_nonblocking_io(int fd);
 bool sensors_is_io_blocking(int fd);
@@ -72,10 +70,9 @@ bool sensors_read_token(const std::string &token, char c, size_t &input_pos);
 bool encoders_read_data(encoders_data_t* data); 
 bool imu_read_data(imu_data_t* data);
 double sensors_current_time(void);
-int sensors_log_data(char* databuf, const char* name);
+int sensors_log_data(char* databuf);
 void sensors_terminator(int signum);
 bool sensors_handler(void);
-bool gps_read_data(char* logbuf, int fd);
-ssize_t readLine(int fd, void *buffer, size_t n);
+bool gps_read_data(char* logbuf, FILE* file_ptr);
 
 #endif //RUNENCODERS_H

@@ -459,7 +459,10 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 26 Jul 14
 --Started incorporating GPS reading into run-sensors.  Discovered that the fgets() I was using to read a full line (since NMEA sentences are terminated with a newline) from the GPS will block, so calling it after every encoder/IMU read (since I can't predict when a GPS sentence will be there to read) limits the encoder/IMU data to the GPS rate of 1Hz.  Going to have to find/write a function that does a normal read and just continues until it hits a newline, and then wrap that read in a select in order to not block.  Not sure how long of a timeout I can afford to give the select--maybe start with 10ms.
-
+--Tried a readLine() function that I found that was reportedly supposed to continue to call read() until it reached a newline.  Could not get it to work--it kept returning after reading only 3 characters.  Instead tried using an fgets() call inside of a select()--basically a copy of what run-gps had done, put inside of a 10ms timeout--and it seemed to work.  
+--Then I started getting errors from the terminal saying '*** buffer overflow detected ***: /root/bin/run-sensors terminated'.  I might have been getting these errors yesterday as well, and just not noticing them because I was running the 'run-emperor' script (which starts emperor and run-sensors) from the button in the driver-viewer instead of from its own terminal window.  Upon looking at the log, it appears that near the end of the file, before run-sensors terminates, the Gumstix-timestamp interval between the combined IMU/encoder message lines decreases to <11 ms between messages (while the timestamps from the IMU are still at 20 ms intervals)--and this happens whether or not I'm trying to run the GPS at the same time. 
+--From the above, I think I may have a classic 'producer/consumer' problem--the messages are coming in from the serial buffer faster than the Gumstix can send them over the network, and eventually the buffer gets overflowed.  
+--I think the fix might be similar to what we did for the receiving of the camera images on seykhl--have one thread (or possibly two, one for the IMU/encoder lines and one for the GPS) put the messages to send into a large circular buffer, and then have a separate thread read the messages out of the buffer and send them.
 
 **TODO**
 

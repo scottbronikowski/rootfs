@@ -52,7 +52,7 @@ int main (int /*argc*/, char** /*argv*/)
   {
     log_sensors_sockfd = ClientConnect(k_Server, k_imuLogPort);
   }
-  retval = sensors_log_data(g_logbuf);
+  retval = sensors_log_data(g_logbuf, "ALL");
   if (retval != 0)
   {
     printf("connection failed, exiting.\n");
@@ -105,7 +105,7 @@ int main (int /*argc*/, char** /*argv*/)
     sensors_terminator(SIGTERM);
     return -1;
   }
-  //int GPS (just get file pointer from fd)
+  //init GPS (just get file pointer from fd)
   gps_file_ptr = fdopen(gps_fd, "r");
 
   //printf("init complete\n");
@@ -132,16 +132,17 @@ int main (int /*argc*/, char** /*argv*/)
   {
     if(!sensors_handler())
       printf("ERROR: %s\n", g_logbuf);
-    sensors_log_data(g_logbuf);
-    // if(gps_read_data(g_gps_logbuf, gps_file_ptr))
-    //   sensors_log_data("GPS message received");
+    sensors_log_data(g_logbuf, "EIS");
+    if(gps_read_data(g_gps_logbuf, gps_fd))
+      sensors_log_data(g_gps_logbuf, "GPS");
   }
 
   //cleanup done in terminator
   return 0;
 }
 
-bool sensors_open_serial_port(int &fd, const char* filename, const speed_t speed)
+bool sensors_open_serial_port(int &fd, const char* filename, 
+			      const speed_t speed, const int bytes_per_read)
 {
   // O_NDELAY allows open even with no carrier detect
   if ((fd = open(filename, O_RDWR | O_NOCTTY | O_NDELAY)) == -1)
@@ -184,9 +185,9 @@ bool sensors_open_serial_port(int &fd, const char* filename, const speed_t speed
       tio.c_cflag &= ~CRTSCTS;
       // no software flow control  
       tio.c_iflag &= ~(IXON | IXOFF | IXANY);
-      // poll() is broken on OSX, so we set VTIME and use read(), which is ok since
-      // we're reading only one port anyway
-      tio.c_cc[VMIN]  = 0;//143; //set minimum number of bytes per read
+      // // poll() is broken on OSX, so we set VTIME and use read(), which is ok since
+      // // we're reading only one port anyway
+      tio.c_cc[VMIN]  = bytes_per_read;//143; //set minimum number of bytes per read
       tio.c_cc[VTIME] = 10; // 10 * 100ms = 1s
       // set port speed
       if (cfsetispeed(&tio, speed) != 0)
@@ -208,6 +209,7 @@ bool sensors_open_serial_port(int &fd, const char* filename, const speed_t speed
 	perror("encoders_open_serial_port:tcsetattr");
 	return false;
       }
+      //printf("Opened %s with bytes_per_read = %d\n", filename, bytes_per_read);
       return true; //if we get here, everything worked
     }
   }
@@ -506,14 +508,14 @@ double sensors_current_time(void)
   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
 }
 
-int sensors_log_data(char* databuf)
+int sensors_log_data(char* databuf, const char* name)
 {
   double now = sensors_current_time(); 
   char sendbuf[k_LogBufSize];
   char temp[k_LogBufSize];
   int retval;
   memset(temp, 0, sizeof(temp));
-  retval = snprintf(temp, k_LogBufSize, "%.6f: EIS:%s", now, databuf);
+  retval = snprintf(temp, k_LogBufSize, "%.6f: %s:%s", now, name, databuf);
   if (retval >= k_LogBufSize)
   {
     printf("run_sensors_log_data: message truncated: %s\n  %s\n", databuf, temp);
@@ -539,7 +541,7 @@ int sensors_log_data(char* databuf)
 
 void sensors_terminator(int signum)
 {
-  fclose(gps_file_ptr);
+  //fclose(gps_file_ptr);
   close(gps_fd);
   close(imu_fd);
   close(encoders_fd);
@@ -614,14 +616,118 @@ bool sensors_handler(void)
   return retval; //if neither read failed, retval will be true
 }
 
-bool gps_read_data(char* logbuf, FILE* file_ptr)
+bool gps_read_data(char* logbuf, int fd)
 {
+  int retval;
+  fd_set recv_set;
+  struct timeval timeout;
   memset(logbuf, 0, sizeof(logbuf));//clear buffer
-  if (fgets(logbuf, k_LogBufSize, file_ptr) != NULL)
-  {//got something from gps
-    //printf("received: %s", logbuf);
-    return true;
-  }
-  else //didn't get anything from gps
+  FD_ZERO(&recv_set);
+  FD_SET(fd, &recv_set);
+  timeout.tv_sec = 0;
+  timeout.tv_usec = 1000 * 10; //10ms timeout
+  retval = select (fd + 1, &recv_set, NULL, NULL, &timeout);
+  if (retval < 0)
+  {
+    perror("gps_read_data--select()");
     return false;
+  }
+  else if (retval == 0) //timeout
+    return false;
+  else //retval >= 1-->we have data to receive
+  {
+    if (FD_ISSET(fd, &recv_set))
+    { //read the data
+      if (fgets(logbuf, k_LogBufSize, gps_file_ptr) != NULL)
+      {
+	retval = strlen(logbuf);
+	if (retval <= 0) //error
+	{
+	  perror("gps_read_data:");
+	  printf("retval = %d\n", retval);
+	  return false;
+	}
+	else 
+	{ //message received, so check if it's one we want
+	  if ((strncmp(logbuf, GGA, strlen(GGA)) == 0) ||
+	      (strncmp(logbuf, RMC, strlen(RMC)) == 0))
+	    logbuf[retval - 1] = 0;  //remove last character (always a newline)
+	  else //ignore other messages from GPS
+	    return false;
+	}
+      }
+      
+      //strcpy(logbuf, "GPS received");
+      //retval = readLine(fd, logbuf, sizeof(logbuf));
+      return true;
+    }
+    else //unknown fd
+      return false;
+  }
+
+  // if (fgets(logbuf, k_LogBufSize, file_ptr) != NULL)
+  // {//got something from gps
+  //   //printf("received: %s", logbuf);
+  //   return true;
+  // }
+  // else //didn't get anything from gps
+  //   return false;
 }
+
+//downloaded from http://man7.org/tlpi/code/online/diff/sockets/read_line.c.html on 26 Jul 14
+/* Read characters from 'fd' until a newline is encountered. If a newline
++  character is not encountered in the first (n - 1) bytes, then the excess
++  characters are discarded. The returned string placed in 'buf' is
++  null-terminated and includes the newline character if it was read in the
++  first (n - 1) bytes. The function return value is the number of bytes
++  placed in buffer (which includes the newline character if encountered,
++  but excludes the terminating null byte). */
+
+ ssize_t readLine(int fd, void *buffer, size_t n)
+ {
+     ssize_t numRead;                    /* # of bytes fetched by last read() */
+     size_t totRead;                     /* Total bytes read so far */
+     char *buf;
+     char ch;
+ 
+     if (n <= 0 || buffer == NULL) {
+         errno = EINVAL;
+         return -1;
+     }
+ 
+     buf = (char*)buffer;                       /* No pointer arithmetic on "void *" */
+ 
+     totRead = 0;
+     for (;;) {
+         numRead = read(fd, &ch, 1);
+ 
+         if (numRead == -1) {
+             if (errno == EINTR)         /* Interrupted --> restart read() */
+                 continue;
+             else
+                 return -1;              /* Some other error */
+ 
+         } else if (numRead == 0) {      /* EOF */
+             if (totRead == 0)           /* No bytes read; return 0 */
+                 return 0;
+             else                        /* Some bytes read; add '\0' */
+                 break;
+ 
+         } else {                        /* 'numRead' must be 1 if we get here */
+             if (totRead < n - 1) {      /* Discard > (n - 1) bytes */
+                 totRead++;
+                 *buf++ = ch;
+             }
+ 
+             if (ch == '\n')   //strip the newline here
+	     {
+	       ch = '\0';
+	       totRead--;
+	       break;
+	     }
+         }
+     }
+ 
+     *buf = '\0';
+     return totRead;
+ }
