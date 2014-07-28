@@ -470,6 +470,9 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Need to strip it back down to just reading the IMU, possibly putting the data in a buffer, and sending it to see if we can run fast enough.  Might need look at a way to have sync bytes on the IMU frame to ensure that we start reading at the beginning of the frame.
 --Probably going to need to build multiple threads to have multiple writers putting data into the message send buffer and then one thread sending the buffer--can't have GPS in same thread as IMU and encoder b/c it sends data at 4800 baud, while IMU and encoders run at 57600 baud.
 
+28 Jul 14
+--Started working on making run-sensors multi-threaded: 3 producer threads (IMU, encoders, GPS) that put messages into the send buffer, and 1 consumer thread that sends the buffer when it is full.  Stopped while working on run_sensors_setup() function.
+
 **TODO**
 
  

@@ -25,6 +25,8 @@
 #include "toollib-camera.h" //for network stuff
 #include <csignal>
 
+#include <pthread.h>
+
 //structures
 struct encoders_data_t {
   unsigned long timestamp;
@@ -51,10 +53,10 @@ extern const std::string encoders_init_string;
 extern const std::string imu_init_string;
 //need to define these here because of prototype for sensors_send_data
 extern const int k_LogBufSize = 256;
-extern const int k_messages_per_second = 52; //if it's working right, there should be 50
-                                             // IMU/encoder messages plus 2 GPS messages 
-                                             //every second
+extern const int k_messages_per_second = 102; 
+//if it's working right, there should be 50 IMU + 50 encoder + 2 GPS messages every second
 extern const int k_msg_buf_size = k_messages_per_second * 1;
+extern const int k_msg_buf_bytes = k_msg_buf_size * k_LogBufSize;
 
 //global variables
 extern int log_sensors_sockfd;
@@ -64,8 +66,17 @@ extern int imu_fd;
 extern size_t imu_input_pos;
 extern int gps_fd;
 extern FILE* gps_file_ptr;
+//for threading
+extern int msg_count;
+extern pthread_t producer_threads[3];
+extern pthread_t consumer_thread;
+extern bool producer_threads_should_die;
+extern bool consumer_thread_should_die;
+extern char g_msg_buf[k_msg_buf_bytes];
+extern pthread_mutex_t msg_buf_and_count_lock;
 
 //prototypes
+bool run_sensors_setup(void);
 bool sensors_open_serial_port(int &fd, const char* filename, 
 			      const speed_t speed, const int bytes_per_read = 1);
 bool sensors_set_blocking_io(int fd);
@@ -77,7 +88,8 @@ bool sensors_read_token(const std::string &token, char c, size_t &input_pos);
 bool encoders_read_data(encoders_data_t* data); 
 bool imu_read_data(imu_data_t* data);
 double sensors_current_time(void);
-int sensors_log_data(char* msgbuf, char* logbuf, const char* name);
+//int sensors_log_data(char* msgbuf, char* logbuf, const char* name);//old version, before g_msg_buf was global
+int sensors_log_data(char* logbuf, const char* name);
 void sensors_terminator(int signum);
 bool sensors_handler(void);
 bool gps_read_data(char* logbuf, int fd);
