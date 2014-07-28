@@ -577,10 +577,10 @@ int sensors_log_data(char* msgbuf, char* logbuf, const char* name)
 bool sensors_send_data(char msgbuf[k_msg_buf_size * k_LogBufSize])
 {
   int msgsize = k_msg_buf_size * k_LogBufSize;//sizeof(msgbuf);
-  for (int i = 0; i < k_msg_buf_size; i++)
-  {
-    printf("%s", msgbuf+(i*k_LogBufSize));
-  }
+  // for (int i = 0; i < k_msg_buf_size; i++)
+  // {
+  //   printf("%s", msgbuf+(i*k_LogBufSize));
+  // }
   int retval = send(log_sensors_sockfd, msgbuf, msgsize, 0);
   if (retval != msgsize)
   {
