@@ -17,10 +17,14 @@ const char* gps_file = "/dev/GPS";
 const char* GGA = "$GPGGA";
 const char* RMC = "$GPRMC";
 const char* k_imuLogPort = "2004";//using imu-log.txt as consolidated log for IMU, GPS, and encoders--not worth the effort to change the name in the code
-const int k_LogBufSize = 256;
 const int sensors_connect_timeout_ms = 5000;
 const std::string encoders_init_string = "#ob#o1#s";
-const std::string imu_init_string = "#omb#o1#oe0#s";
+const std::string imu_init_string = "#omb#o0#oe0#s"; //#o0 for POLLING
+//const int k_LogBufSize = 256;  DEFINED IN HEADER
+//const int k_messages_per_second = 52; //if it's working right, there should be 50 IMU/encoder
+                                      //messages plus 2 GPS messages every second
+//const int k_msg_buf_size = k_messages_per_second * 1;
+
 //global variables
 //extern
 int log_sensors_sockfd;
@@ -35,13 +39,16 @@ encoders_data_t* g_encoders_data;
 imu_data_t* g_imu_data;
 char g_logbuf[k_LogBufSize];
 char g_gps_logbuf[k_LogBufSize];
+char g_msg_buf[k_msg_buf_size * k_LogBufSize];
 
 int main (int /*argc*/, char** /*argv*/)
 {
   //  char logbuf[k_LogBufSize];
-  int retval;
+  int retval, msg_count;
   memset(g_logbuf, 0, sizeof(g_logbuf));
   printf("Starting Run-Sensors\n");
+
+  msg_count = 0;
 
   //connect to seykhl
   printf("Connecting to %s on port %s for IMU & encoder logging...\n",
@@ -52,7 +59,8 @@ int main (int /*argc*/, char** /*argv*/)
   {
     log_sensors_sockfd = ClientConnect(k_Server, k_imuLogPort);
   }
-  retval = sensors_log_data(g_logbuf, "ALL");
+  retval = sensors_log_data(&g_msg_buf[msg_count * k_LogBufSize], g_logbuf, "ALL");
+  ++msg_count;
   if (retval != 0)
   {
     printf("connection failed, exiting.\n");
@@ -126,17 +134,33 @@ int main (int /*argc*/, char** /*argv*/)
     gettimeofday(&now, NULL);  //update time hack
   }
 
-
+  
+  
   //main loop
   while (1)
   {
+    //printf("msg_count = %d\n", msg_count);
     if(!sensors_handler())
       printf("ERROR: %s\n", g_logbuf);
-    sensors_log_data(g_logbuf, "EIS");
-    if(gps_read_data(g_gps_logbuf, gps_fd))
-      sensors_log_data(g_gps_logbuf, "GPS");
+    sensors_log_data(&g_msg_buf[msg_count * k_LogBufSize], g_logbuf, "EIS");
+    ++msg_count;
+    if(gps_read_data(g_gps_logbuf, gps_fd) &&
+       (msg_count != k_msg_buf_size))
+    {
+      sensors_log_data(&g_msg_buf[msg_count * k_LogBufSize], g_gps_logbuf, "GPS");
+      ++msg_count;
+    }
+    if (msg_count >= k_msg_buf_size)
+    {
+      if (!sensors_send_data(g_msg_buf))
+      {
+      	printf("sensors_send_data failed\n");
+      	break;
+      }
+      else
+	msg_count = 0;
+    }
   }
-
   //cleanup done in terminator
   return 0;
 }
@@ -442,19 +466,19 @@ bool imu_read_data(imu_data_t* data)
     data->data[i] = 0.0f;
   }
   //data->timestamp = 0;
-  // //send frame request --NOT NEEDED FOR CONSTANT OUTPUT
-  // const char* framerequest = "#f";
-  // int testretval = write(gl_imu_fd, framerequest, strlen(framerequest));
-  // if (testretval != (int)strlen(framerequest))
-  // {
-  //   printf("razor_read_data error writing frame requests, testretval = %d\n", 
-  // 	   testretval);
-  //   return false;
-  // }
+  //send frame request --NOT NEEDED FOR CONSTANT OUTPUT
+  const char* framerequest = "#f";
+  int testretval = write(imu_fd, framerequest, strlen(framerequest));
+  if (testretval != (int)strlen(framerequest))
+  {
+    printf("razor_read_data error writing frame requests, testretval = %d\n", 
+  	   testretval);
+    return false;
+  }
   //read data
   while (true)
   {
-    if ((result = read(imu_fd, &c, 1)) > 0)
+    if ((result = read(imu_fd, &c, 1)) == 1)
     { //read binary stream
       // (type-punning: aliasing with char* is ok)
       (reinterpret_cast<char*> (&data->data))[imu_input_pos++] = c;
@@ -491,12 +515,15 @@ bool imu_read_data(imu_data_t* data)
     }
     else if (result < 0)
     {
+      printf("in imu_read_data: errno = %d\n", errno);
       if (errno != EAGAIN && errno != EINTR)
       {
         perror("imu_read_data:cannot read from serial port");
         return false; //failure
       }
     }
+    else
+      printf("read result was %d\n", result);
     //else result is 0, so no data available (keep waiting)
   }
 }
@@ -508,35 +535,63 @@ double sensors_current_time(void)
   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
 }
 
-int sensors_log_data(char* databuf, const char* name)
+int sensors_log_data(char* msgbuf, char* logbuf, const char* name)
 {
   double now = sensors_current_time(); 
-  char sendbuf[k_LogBufSize];
+  //  char sendbuf[k_LogBufSize];
   char temp[k_LogBufSize];
   int retval;
-  memset(temp, 0, sizeof(temp));
-  retval = snprintf(temp, k_LogBufSize, "%.6f: %s:%s", now, name, databuf);
+  memset(temp, 0, k_LogBufSize);
+  retval = snprintf(temp, k_LogBufSize, "%.6f: %s:%s\n", now, name, logbuf);
   if (retval >= k_LogBufSize)
   {
-    printf("run_sensors_log_data: message truncated: %s\n  %s\n", databuf, temp);
+    printf("sensors_log_data: message truncated: %s\n  %s\n", logbuf, temp);
     return -1;
   }
-  if (retval < 0)
+  else if (retval < 0)
   {
-    printf("run_sensors_log_data: encoding eror\n");
+    printf("sensors_log_data: encoding eror\n");
     return -1;
   }
-  //if we get here, we have something to send in temp
-  memset(sendbuf, 0, sizeof(sendbuf));
-  strncpy(sendbuf, temp, sizeof(sendbuf));  //use this to pad buffer
-  retval = send(log_sensors_sockfd, sendbuf, sizeof(sendbuf), 0);
-  if (retval != k_LogBufSize)
+  else 
+  { //if we get here, we've got something to write to the msgbuf
+    memset(msgbuf, 0, k_LogBufSize);//sizeof(msgbuf)); //clear out old data
+    strncpy(msgbuf, temp, k_LogBufSize);//sizeof(msgbuf)); //use this to pad buffer
+    //printf("logged: %s", msgbuf);
+    return 0; //success
+  }
+
+  // //if we get here, we have something to send in temp
+  // memset(sendbuf, 0, sizeof(sendbuf));
+  // strncpy(sendbuf, temp, sizeof(sendbuf));  //use this to pad buffer
+  // retval = send(log_sensors_sockfd, sendbuf, sizeof(sendbuf), 0);
+  // if (retval != k_LogBufSize)
+  // {
+  //   printf("run_sensors_log_data: send failed\n");
+  //   return -1;
+  // }
+  // else
+  //   return 0; //success
+}
+
+bool sensors_send_data(char msgbuf[k_msg_buf_size * k_LogBufSize])
+{
+  int msgsize = k_msg_buf_size * k_LogBufSize;//sizeof(msgbuf);
+  for (int i = 0; i < k_msg_buf_size; i++)
   {
-    printf("run_sensors_log_data: send failed\n");
-    return -1;
+    printf("%s", msgbuf+(i*k_LogBufSize));
+  }
+  int retval = send(log_sensors_sockfd, msgbuf, msgsize, 0);
+  if (retval != msgsize)
+  {
+    printf("sensors_send_data: send failed\n");
+    return false;
   }
   else
-    return 0; //success
+  {
+    printf("sensors_send_data: retval =%d, msgsize = %d\n", retval, msgsize);
+    return true; //success
+  }
 }
 
 void sensors_terminator(int signum)
@@ -557,6 +612,7 @@ bool sensors_handler(void)
   //  char logbuf[k_LogBufSize];  //made this global
   // printf("in sensors_handler\n");
   bool retval = true;
+  int r;
   char encbuf[50]; //estimated max size of encoder data
   char imubuf[k_LogBufSize-50];
   memset(g_logbuf, 0, sizeof(g_logbuf)); //clear buffers
@@ -576,18 +632,20 @@ bool sensors_handler(void)
     // 	    g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
     // 	    g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
     // 	    g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
-    sprintf(imubuf, "IMU:time:%lu:dt:%lu:"
-	    "Y:%.2f:P:%.2f:R:%.2f:"
-	    "Y(a):%.2f:M_h(a):%.2f:M_h:%.2f:"
-	    "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
-	    "Gx:%.2f:Gy:%.2f:Gz:%.2f",
-	    g_imu_data->timestamp,
-	    g_imu_data->dt,
-	    g_imu_data->data[0], g_imu_data->data[1], g_imu_data->data[2],
-	    g_imu_data->data[3], g_imu_data->data[4], g_imu_data->data[5],
-	    g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
-	    g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
-	    g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
+    r = snprintf(imubuf, (k_LogBufSize - 50), "IMU:time:%lu:dt:%lu:"
+		 "Y:%.2f:P:%.2f:R:%.2f:"
+		 "Y(a):%.2f:M_h(a):%.2f:M_h:%.2f:"
+		 "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
+		 "Gx:%.2f:Gy:%.2f:Gz:%.2f",
+		 g_imu_data->timestamp,
+		 g_imu_data->dt,
+		 g_imu_data->data[0], g_imu_data->data[1], g_imu_data->data[2],
+		 g_imu_data->data[3], g_imu_data->data[4], g_imu_data->data[5],
+		 g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
+		 g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
+		 g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
+    if (r > (k_LogBufSize - 50))
+      sprintf(imubuf,"IMU:BOGUS READING");
   }
   else
   { //read failed, so log failure and set retval false
@@ -651,6 +709,7 @@ bool gps_read_data(char* logbuf, int fd)
 	{ //message received, so check if it's one we want
 	  if ((strncmp(logbuf, GGA, strlen(GGA)) == 0) ||
 	      (strncmp(logbuf, RMC, strlen(RMC)) == 0))
+	    //***call mNMEAParser here????
 	    logbuf[retval - 1] = 0;  //remove last character (always a newline)
 	  else //ignore other messages from GPS
 	    return false;

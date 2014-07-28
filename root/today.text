@@ -464,6 +464,12 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --From the above, I think I may have a classic 'producer/consumer' problem--the messages are coming in from the serial buffer faster than the Gumstix can send them over the network, and eventually the buffer gets overflowed.  
 --I think the fix might be similar to what we did for the receiving of the camera images on seykhl--have one thread (or possibly two, one for the IMU/encoder lines and one for the GPS) put the messages to send into a large circular buffer, and then have a separate thread read the messages out of the buffer and send them.
 
+27 Jul 14
+--After an email exchange with Dan, decided to try to continue to have run-sensors operate single-threaded.  Created a buffer (sized with constant k_msg_buf_size) to have the IMU/encoder and gps reading functions write their data to, and then have a counter that calls a sending function when the counter reaches k_msg_buf_size.  This way we can send a buffer of k_msg_buf_size * 256-byte messages instead of sending every 256-byte message as soon as it's produced, saving k_msg_buf_size * TCP sending overhead (IIRC, ~40 bytes for a TCP packet).  Also added a sleep in the run-emperor script to make sure that run-sensors has a chance to send its buffer before being killed.
+--Discovered that the true problem was with the IMU getting out of sync with the reads; IMU would start reading bogus data and never recover.  Attempted a fix by changing the IMU output to single frame instead of streaming, and then polling it for one frame in imu_data_read().  With output to terminal, observed runs that did not have errors, but the interval between IMU reads is 40ms, while for the encoder it's 20ms (so the encoder is buffering data and we're getting out of sync).  Don't think this technique will work.  
+--Need to strip it back down to just reading the IMU, possibly putting the data in a buffer, and sending it to see if we can run fast enough.  Might need look at a way to have sync bytes on the IMU frame to ensure that we start reading at the beginning of the frame.
+--Probably going to need to build multiple threads to have multiple writers putting data into the message send buffer and then one thread sending the buffer--can't have GPS in same thread as IMU and encoder b/c it sends data at 4800 baud, while IMU and encoders run at 57600 baud.
+
 **TODO**
 
  

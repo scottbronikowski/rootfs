@@ -46,10 +46,15 @@ extern const char* gps_file;
 extern const char* GGA;
 extern const char* RMC;
 extern const char* k_imuLogPort;//using imu-log.txt as consolidated log for IMU, GPS, and encoders--not worth the effort to change the name in the code
-extern const int k_LogBufSize;
 extern const int sensors_connect_timeout_ms;
 extern const std::string encoders_init_string;
 extern const std::string imu_init_string;
+//need to define these here because of prototype for sensors_send_data
+extern const int k_LogBufSize = 256;
+extern const int k_messages_per_second = 52; //if it's working right, there should be 50
+                                             // IMU/encoder messages plus 2 GPS messages 
+                                             //every second
+extern const int k_msg_buf_size = k_messages_per_second * 1;
 
 //global variables
 extern int log_sensors_sockfd;
@@ -62,7 +67,7 @@ extern FILE* gps_file_ptr;
 
 //prototypes
 bool sensors_open_serial_port(int &fd, const char* filename, 
-			      const speed_t speed, const int bytes_per_read = 0);
+			      const speed_t speed, const int bytes_per_read = 1);
 bool sensors_set_blocking_io(int fd);
 bool sensors_set_nonblocking_io(int fd);
 bool sensors_is_io_blocking(int fd);
@@ -72,10 +77,10 @@ bool sensors_read_token(const std::string &token, char c, size_t &input_pos);
 bool encoders_read_data(encoders_data_t* data); 
 bool imu_read_data(imu_data_t* data);
 double sensors_current_time(void);
-int sensors_log_data(char* databuf, const char* name);
+int sensors_log_data(char* msgbuf, char* logbuf, const char* name);
 void sensors_terminator(int signum);
 bool sensors_handler(void);
 bool gps_read_data(char* logbuf, int fd);
 ssize_t readLine(int fd, void *buffer, size_t n);
-
+bool sensors_send_data(char msgbuf[k_msg_buf_size * k_LogBufSize]);
 #endif //RUNENCODERS_H
