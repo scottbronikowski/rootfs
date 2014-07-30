@@ -265,17 +265,20 @@ void* consumer(void* args)
 {
   //printf("in consumer\n");
   char sendbuf[k_msg_buf_bytes];
+  int num_messages;
+  int threshold = (int)(0.9 * k_msg_buf_size);
   memset(sendbuf, 0, k_msg_buf_bytes);
   while (!consumer_thread_should_die)
   {
     pthread_mutex_lock(&msg_buf_and_count_lock); //GRABBING THE LOCK
     //printf("consumer has lock\n");
-    if (msg_count == k_msg_buf_size)
+    if (msg_count >= threshold)
     {
-      memcpy(sendbuf, g_msg_buf, k_msg_buf_bytes); //copy the buffer
+      num_messages = msg_count; //copy message count
+      memcpy(sendbuf, g_msg_buf, (num_messages * k_LogBufSize)); //copy the buffer
       msg_count = 0; //reset msg_count
       pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
-      if (!sensors_send_data(sendbuf)) //sending the copy
+      if (!sensors_send_data(sendbuf, num_messages)) //sending the copy
       { //had an error in sensors_send_data
 	printf("THIS SHOULDN'T HAVE HAPPENED\n");
       }
@@ -727,28 +730,36 @@ int sensors_log_data(char* logbuf)
     { //buffer is full
       pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
       printf("sensors_log_data: buffer full, message discarded\n");
-      printf("%s\n", temp);
+      printf("%s", temp);
       return -1;
     }
   }
 }
 
-bool sensors_send_data(char msgbuf[k_msg_buf_size * k_LogBufSize])
+bool sensors_send_data(char* msgbuf, int num_messages)
 {
-  int msgsize = k_msg_buf_size * k_LogBufSize;//sizeof(msgbuf);
+  int msgsize = num_messages * k_LogBufSize;//sizeof(msgbuf);
   // for (int i = 0; i < k_msg_buf_size; i++)
   // {
   //   printf("%s", msgbuf+(i*k_LogBufSize));
   // }
+  //first send the number of messages
+  int r = send(log_sensors_sockfd, &num_messages, sizeof(num_messages), 0);
+  if (r != sizeof(num_messages))
+  {
+    printf("sensors_send_data: num_messages send failed\n");
+    return false;
+  }
+  //then send the buffer itself
   int retval = send(log_sensors_sockfd, msgbuf, msgsize, 0);
   if (retval != msgsize)
   {
-    printf("sensors_send_data: send failed\n");
+    printf("sensors_send_data: msgbuf send failed\n");
     return false;
   }
   else
   {
-    printf("sensors_send_data: retval =%d, msgsize = %d\n", retval, msgsize);
+    //printf("sensors_send_data: retval =%d, msgsize = %d\n", retval, msgsize);
     return true; //success
   }
 }

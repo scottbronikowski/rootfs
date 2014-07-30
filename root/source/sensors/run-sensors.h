@@ -98,5 +98,5 @@ int sensors_log_data(char* logbuf);
 void sensors_terminator(int signum);
 //bool sensors_handler(void);
 int gps_read_data(char* logbuf);
-bool sensors_send_data(char msgbuf[k_msg_buf_size * k_LogBufSize]);
+bool sensors_send_data(char* msgbuf, int num_messages);
 #endif //RUNENCODERS_H
