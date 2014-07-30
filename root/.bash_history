@@ -1,103 +1,3 @@
-lla
-cd ../emperor/
-ls
-make
-cd ../../bin
-./emperor 
-cd ../source/emperor/
-cd ..
-grep -ri get_in_addr *
-grep -ri startserver *
-grep -ri server *
-cd emperor/
-make
-ps -ef | grep run_
-pkill run_cameras
-ps -ef | grep run_
-make
-make clean
-make
-tree ../
-make clean
-tree ../
-ls
-rm *.o
-ls
-make
-grep -ri k_maxbufsize ../*
-cd ..
-grep -ri k_maxbufsize *
-cd emperor/
-make
-cd ..
-grep -ri pthread *
-cd emperor/
-make
-ps -ef | grep emperor
-make
-cd ../camera/
-make
-cd ../emperor/
-make
-cd ../camera/
-make
-cd ../emperor/
-make
-cd ../camera/
-make
-cd ../emperor/
-../camera/make
-sh ../camera/make
-cd ../camera/
-make
-htop
-cd bin
-ls
-exit
-cd bin
-./emperor 
-exit
-cd bin
-./emperor 
-exit
-cd bin
-./emperor 
-exit
-cd bin
-./emperor 
-exit
-cd bin
-./emperor 
-exit
-cd bin
-./emperor 
-gdb
-apt-get install gdb
-gdb ./emperor 
-./emperor 
-ls
-motor_control stop
-./emperor 
-exit
-cd bin
-cd ../source/emperor/fdas
-make
-ls /dev/pw*
-cat /dev/pwm9
-cat /dev/pwm10
-echo 12000 > /dev/pwm10
-cat /dev/pwm10
-echo 15000 > /dev/pwm10
-make
-make clean
-make
-exit
-exit
-echo 17000 > /dev/pwm9
-echo 18000 > /dev/pwm9
-echo 17500 > /dev/pwm9
-echo 17250 > /dev/pwm9
-echo 15000 > /dev/pwm9
 echo 17250 > /dev/pwm9
 echo 15000 > /dev/pwm9
 echo 17000 > /dev/pwm9
@@ -1998,3 +1898,103 @@ emacs today.text
 cd bin
 ls
 ./run-emperor start
+lsusb
+reboot
+emacs today.text
+cd source/sensors/
+make
+echo $PSRF100,0,9600,8,1,0*0C > /dev/GPS 
+echo $PSRF101,0,0,0,0,0,0,12,4*10
+echo "$PSRF101,0,0,0,0,0,0,12,4*10\r\n"
+$PSRF101,0,0,0,0,0,0,12,4*10
+make
+pkill run-sensors
+pkill emperor
+make
+ls
+make
+cd /
+git status
+git add -A
+git commit -m "--Started incorporating GPS reading into run-sensors.  Discovered that the fgets() I was using to read a full line (since NMEA sentences are terminated with a newline) from the GPS will block, so calling it after every encoder/IMU read (since I can't predict when a GPS sentence will be there to read) limits the encoder/IMU data to the GPS rate of 1Hz.  Going to have to find/write a function that does a normal read and just continues until it hits a newline, and then wrap that read in a select in order to not block.  Not sure how long of a timeout I can afford to give the select--maybe start with 10ms.
+--Tried a readLine() function that I found that was reportedly supposed to continue to call read() until it reached a newline.  Could not get it to work--it kept returning after reading only 3 characters.  Instead tried using an fgets() call inside of a select()--basically a copy of what run-gps had done, put inside of a 10ms timeout--and it seemed to work.  
+--Then I started getting errors from the terminal saying '*** buffer overflow detected ***: /root/bin/run-sensors terminated'.  I might have been getting these errors yesterday as well, and just not noticing them because I was running the 'run-emperor' script (which starts emperor and run-sensors) from the button in the driver-viewer instead of from its own terminal window.  Upon looking at the log, it appears that near the end of the file, before run-sensors terminates, the Gumstix-timestamp interval between the combined IMU/encoder message lines decreases to <11 ms between messages (while the timestamps from the IMU are still at 20 ms intervals)--and this happens whether or not I'm trying to run the GPS at the same time. 
+--From the above, I think I may have a classic 'producer/consumer' problem--the messages are coming in from the serial buffer faster than the Gumstix can send them over the network, and eventually the buffer gets overflowed.  
+--I think the fix might be similar to what we did for the receiving of the camera images on seykhl--have one thread (or possibly two, one for the IMU/encoder lines and one for the GPS) put the messages to send into a large circular buffer, and then have a separate thread read the messages out of the buffer and send them."
+git push
+htop
+cd /
+git status
+git add -A
+git commit -m "--Started incorporating GPS reading into run-sensors.  Discovered that the fgets() I was using to read a full line (since NMEA sentences are terminated with a newline) from the GPS will block, so calling it after every encoder/IMU read (since I can't predict when a GPS sentence will be there to read) limits the encoder/IMU data to the GPS rate of 1Hz.  Going to have to find/write a function that does a normal read and just continues until it hits a newline, and then wrap that read in a select in order to not block.  Not sure how long of a timeout I can afford to give the select--maybe start with 10ms."
+man gpsctl
+stty -F /dev/ttyUSB0 ispeed 4800 && cat < /dev/ttyUSB0
+screen /dev/GPS 4800
+minicom
+cd root/source/bin
+cd root
+cd bin
+./run-sensors 
+./run-emperor start
+gdb run-sensors 
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+screen /dev/GPS 4800
+./run-emperor start
+clear
+./run-emperor start
+clear
+./run-emperor start
+clear
+./run-emperor start
+clear
+./run-emperor start
+clear
+./run-emperor start
+
+clear
+./run-emperor stop
+./run-emperor start
+clear
+./run-emperor start
+clear
+./run-emperor start
+clear
+./run-emperor start
+clear
+./run-emperor start
+clera
+clear
+./run-emperor start
+clear
+./run-emperor start
+./run-sensors 
+./run-emperor start
+clear
+./run-emperor start
+cd /
+git status
+git add -A
+git commit -m "--After an email exchange with Dan, decided to try to continue to have run-sensors operate single-threaded.  Created a buffer (sized with constant k_msg_buf_size) to have the IMU/encoder and gps reading functions write their data to, and then have a counter that calls a sending function when the counter reaches k_msg_buf_size.  This way we can send a buffer of k_msg_buf_size * 256-byte messages instead of sending every 256-byte message as soon as it's produced, saving k_msg_buf_size * TCP sending overhead (IIRC, ~40 bytes for a TCP packet).  Also added a sleep in the run-emperor script to make sure that run-sensors has a chance to send its buffer before being killed.
+--Discovered that the true problem was with the IMU getting out of sync with the reads; IMU would start reading bogus data and never recover.  Attempted a fix by changing the IMU output to single frame instead of streaming, and then polling it for one frame in imu_data_read().  With output to terminal, observed runs that did not have errors, but the interval between IMU reads is 40ms, while for the encoder it's 20ms (so the encoder is buffering data and we're getting out of sync).  Don't think this technique will work.  
+--Need to strip it back down to just reading the IMU, possibly putting the data in a buffer, and sending it to see if we can run fast enough.  Might need look at a way to have sync bytes on the IMU frame to ensure that we start reading at the beginning of the frame.
+--Probably going to need to build multiple threads to have multiple writers putting data into the message send buffer and then one thread sending the buffer--can't have GPS in same thread as IMU and encoder b/c it sends data at 4800 baud, while IMU and encoders run at 57600 baud."
+git push
+git status
+git add -A
+git commit -m "Commit prior to trying to turn run-sensors into multithreaded"
+git push
+git status
+git add -A
+git commit -m "--Started working on making run-sensors multi-threaded: 3 producer threads (IMU, encoders, GPS) that put messages into the send buffer, and 1 consumer thread that sends the buffer when it is full.  Stopped while working on run_sensors_setup() function."
+git push
+git status
+git add -A
+git commit -m "--Got consumer thread and first producer thread (IMU) working, no problems so far.  Need to finish the encoder and GPS threads and then test."
+git push

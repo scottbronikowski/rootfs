@@ -97,6 +97,6 @@ double sensors_current_time(void);
 int sensors_log_data(char* logbuf);
 void sensors_terminator(int signum);
 //bool sensors_handler(void);
-bool gps_read_data(char* logbuf, int fd);
+int gps_read_data(char* logbuf);
 bool sensors_send_data(char msgbuf[k_msg_buf_size * k_LogBufSize]);
 #endif //RUNENCODERS_H

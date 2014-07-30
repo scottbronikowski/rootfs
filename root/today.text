@@ -476,6 +476,9 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 29 Jul 14
 --Got consumer thread and first producer thread (IMU) working, no problems so far.  Need to finish the encoder and GPS threads and then test.
 
+30 Jul 14
+--Finished multithreading encoder and GPS threads.  Having a small issue that occasionally a message gets dropped when buffer is full.  Looking to rework consumer and sensors_send_data (on rover) and rover_server_recv_and_print (on seykhl) to have consumer collect up data before buffer fills, and use the msg_count at that time to compute number of bytes to send.
+
 **TODO**
 
  

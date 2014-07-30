@@ -47,9 +47,9 @@ pthread_mutex_t msg_buf_and_count_lock;
 //not extern
 encoders_data_t* g_encoders_data;
 imu_data_t* g_imu_data;
-char g_imu_logbuf[k_LogBufSize];
-char g_enc_logbuf[k_LogBufSize];
-char g_gps_logbuf[k_LogBufSize];
+//char g_imu_logbuf[k_LogBufSize];
+//char g_enc_logbuf[k_LogBufSize];
+//char g_gps_logbuf[k_LogBufSize];
 char g_logbuf[k_LogBufSize]; //KILL THIS WHEN DONE--keeping it here to be able to compile
 
 
@@ -162,12 +162,14 @@ void run_sensors_start(void)
   pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
   //run null loop to clear serial buffer
   struct timeval mark, now;
+  //char dummybuf[k_LogBufSize];
   gettimeofday(&mark, NULL);
   gettimeofday(&now, NULL);
   while (sensors_elapsed_ms(mark, now) < 200)
   {
     imu_read_data(g_imu_data); //read the data and do nothing
     encoders_read_data(g_encoders_data);
+    //gps_read_data(dummybuf);
     gettimeofday(&now, NULL);  //update time hack
   }
   //start the threads
@@ -181,7 +183,7 @@ void run_sensors_start(void)
 
 void* producer_imu(void* args)
 {
-  printf("in producer_imu\n");
+  //printf("in producer_imu\n");
   int r;
   char imubuf[k_LogBufSize];
   while (!producer_threads_should_die)
@@ -204,32 +206,64 @@ void* producer_imu(void* args)
       if (r > k_LogBufSize)
 	sprintf(imubuf,"IMU:BOGUS READING");
     }
-    else
-    { //read failed, so log failure
-      sprintf(imubuf, "IMU data read failed");
-    }
+    else //read failed, so log failure
+      sprintf(imubuf, "IMU:IMU data read failed");
     //send the data to the message buffer
     if (sensors_log_data(imubuf) != 0)
-      ;//printf("producer_imu: sensors_log_data(imubuf) failed\n");
+      printf("producer_imu: sensors_log_data(imubuf) failed\n");
   }
   return NULL;
 }
 
 void* producer_encoders(void* args)
 {
-  printf("in producer_encoders\n");
+  //printf("in producer_encoders\n");
+  char encoderbuf[k_LogBufSize];
+  while (!producer_threads_should_die)
+  {
+    memset(encoderbuf, 0, k_LogBufSize);
+    if (encoders_read_data(g_encoders_data))
+    { //successful read, so put into encoderbuf
+      sprintf(encoderbuf,"ENC:time:%lu:dt:%lu:L:%.3f:R:%.3f",
+	      g_encoders_data->timestamp, g_encoders_data->dt,
+	      g_encoders_data->cm[0], g_encoders_data->cm[1]);
+    }
+    else  //read failed, so log failure
+      sprintf(encoderbuf, "ENC:Encoders data read failed");
+    //send the data to the message buffer
+    if (sensors_log_data(encoderbuf) != 0)
+      printf("producer_encoders: sensors_log_data(encoderbuf) failed\n");
+  }
   return NULL;
 }
 
 void* producer_gps(void* args)
 {
-  printf("in producer_gps\n");
+  //printf("in producer_gps\n");
+  int retval;
+  char gpsbuf[k_LogBufSize];
+  char tempbuf[k_LogBufSize];
+  while (!producer_threads_should_die)
+  {
+    memset(gpsbuf, 0, k_LogBufSize);
+    memset(tempbuf, 0, k_LogBufSize);
+    retval = gps_read_data(tempbuf);
+    if (retval == 0)
+    { //successful read, so send it
+      sprintf(gpsbuf, "GPS:%s", tempbuf);
+      if (sensors_log_data(gpsbuf) != 0)
+	printf("producer_gps: sensors_log_data(gpsbuf) failed\n");
+    }
+    else if (retval == -1)  //read failed, so log failure and try again
+      sprintf(gpsbuf, "GPS:GPS data read failed");
+    // else retval == 1, which is a no read, so try again
+  }
   return NULL;
 }
 
 void* consumer(void* args)
 {
-  printf("in consumer\n");
+  //printf("in consumer\n");
   char sendbuf[k_msg_buf_bytes];
   memset(sendbuf, 0, k_msg_buf_bytes);
   while (!consumer_thread_should_die)
@@ -250,7 +284,7 @@ void* consumer(void* args)
     else
     {//release lock and wait a bit before checking again
       pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
-      usleep(5000);  //might need to sleep longer here
+      usleep(1000);  //might need to sleep longer here
     }
   }
   return NULL;
@@ -693,6 +727,7 @@ int sensors_log_data(char* logbuf)
     { //buffer is full
       pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
       printf("sensors_log_data: buffer full, message discarded\n");
+      printf("%s\n", temp);
       return -1;
     }
   }
@@ -741,114 +776,90 @@ void sensors_terminator(int signum)
   exit(signum);
 }
 
-bool sensors_handler(void)
-{
-  //  char logbuf[k_LogBufSize];  //made this global
-  // printf("in sensors_handler\n");
-  bool retval = true;
-  int r;
-  char encbuf[50]; //estimated max size of encoder data
-  char imubuf[k_LogBufSize-50];
-  memset(g_logbuf, 0, sizeof(g_logbuf)); //clear buffers
-  memset(encbuf, 0, sizeof(encbuf));
-  memset(imubuf, 0, sizeof(imubuf));
-  if (imu_read_data(g_imu_data))
-  { //successful read, so put into imubuf
+// bool sensors_handler(void)
+// {
+//   //  char logbuf[k_LogBufSize];  //made this global
+//   // printf("in sensors_handler\n");
+//   bool retval = true;
+//   int r;
+//   char encbuf[50]; //estimated max size of encoder data
+//   char imubuf[k_LogBufSize-50];
+//   memset(g_logbuf, 0, sizeof(g_logbuf)); //clear buffers
+//   memset(encbuf, 0, sizeof(encbuf));
+//   memset(imubuf, 0, sizeof(imubuf));
+//   if (imu_read_data(g_imu_data))
+//   { //successful read, so put into imubuf
 
-    r = snprintf(imubuf, (k_LogBufSize - 50), "IMU:time:%lu:dt:%lu:"
-		 "Y:%.2f:P:%.2f:R:%.2f:"
-		 "Y(a):%.2f:M_h(a):%.2f:M_h:%.2f:"
-		 "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
-		 "Gx:%.2f:Gy:%.2f:Gz:%.2f",
-		 g_imu_data->timestamp,
-		 g_imu_data->dt,
-		 g_imu_data->data[0], g_imu_data->data[1], g_imu_data->data[2],
-		 g_imu_data->data[3], g_imu_data->data[4], g_imu_data->data[5],
-		 g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
-		 g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
-		 g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
-    if (r > (k_LogBufSize - 50))
-      sprintf(imubuf,"IMU:BOGUS READING");
-  }
-  else
-  { //read failed, so log failure and set retval false
-    sprintf(imubuf, "IMU data read failed");
-    retval = false;
-  }
-  //printf("after imu read\n");
-  memset(encbuf, 0, sizeof(encbuf));
-  if (encoders_read_data(g_encoders_data))
-  { //successful read, so put data into logbuf
-    sprintf(encbuf,":ENC:time:%lu:dt:%lu:L:%.3f:R:%.3f",
-	    g_encoders_data->timestamp, g_encoders_data->dt,
-	    g_encoders_data->cm[0], g_encoders_data->cm[1]);
+//     r = snprintf(imubuf, (k_LogBufSize - 50), "IMU:time:%lu:dt:%lu:"
+// 		 "Y:%.2f:P:%.2f:R:%.2f:"
+// 		 "Y(a):%.2f:M_h(a):%.2f:M_h:%.2f:"
+// 		 "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
+// 		 "Gx:%.2f:Gy:%.2f:Gz:%.2f",
+// 		 g_imu_data->timestamp,
+// 		 g_imu_data->dt,
+// 		 g_imu_data->data[0], g_imu_data->data[1], g_imu_data->data[2],
+// 		 g_imu_data->data[3], g_imu_data->data[4], g_imu_data->data[5],
+// 		 g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
+// 		 g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
+// 		 g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
+//     if (r > (k_LogBufSize - 50))
+//       sprintf(imubuf,"IMU:BOGUS READING");
+//   }
+//   else
+//   { //read failed, so log failure and set retval false
+//     sprintf(imubuf, "IMU data read failed");
+//     retval = false;
+//   }
+//   //printf("after imu read\n");
+//   memset(encbuf, 0, sizeof(encbuf));
+//   if (encoders_read_data(g_encoders_data))
+//   { //successful read, so put data into logbuf
+//     sprintf(encbuf,":ENC:time:%lu:dt:%lu:L:%.3f:R:%.3f",
+// 	    g_encoders_data->timestamp, g_encoders_data->dt,
+// 	    g_encoders_data->cm[0], g_encoders_data->cm[1]);
 
-  }
-  else
-  { //read failed, so log failure and set retval false
-    sprintf(encbuf, ":Encoders data read failed");
-    retval = false;
-  }
-  //printf("after encoder read\n");
-  strncpy(g_logbuf, imubuf, strlen(imubuf));
-  //printf("after strncpy\n");
-  strncat(g_logbuf, encbuf, strlen(encbuf));
-  //printf("after strncat\n");
-  return retval; //if neither read failed, retval will be true
-}
+//   }
+//   else
+//   { //read failed, so log failure and set retval false
+//     sprintf(encbuf, ":Encoders data read failed");
+//     retval = false;
+//   }
+//   //printf("after encoder read\n");
+//   strncpy(g_logbuf, imubuf, strlen(imubuf));
+//   //printf("after strncpy\n");
+//   strncat(g_logbuf, encbuf, strlen(encbuf));
+//   //printf("after strncat\n");
+//   return retval; //if neither read failed, retval will be true
+// }
 
-bool gps_read_data(char* logbuf, int fd)
+int gps_read_data(char* logbuf)
 {
   int retval;
-  fd_set recv_set;
-  struct timeval timeout;
-  memset(logbuf, 0, sizeof(logbuf));//clear buffer
-  FD_ZERO(&recv_set);
-  FD_SET(fd, &recv_set);
-  timeout.tv_sec = 0;
-  timeout.tv_usec = 1000 * 10; //10ms timeout
-  retval = select (fd + 1, &recv_set, NULL, NULL, &timeout);
-  if (retval < 0)
+  int success = 0;
+  int failure = -1;
+  int no_read = 1;
+  if (fgets(logbuf, k_LogBufSize, gps_file_ptr) != NULL)
   {
-    perror("gps_read_data--select()");
-    return false;
-  }
-  else if (retval == 0) //timeout
-    return false;
-  else //retval >= 1-->we have data to receive
-  {
-    if (FD_ISSET(fd, &recv_set))
-    { //read the data
-      if (fgets(logbuf, k_LogBufSize, gps_file_ptr) != NULL)
-      {
-	retval = strlen(logbuf);
-	if (retval <= 0) //error
-	{
-	  perror("gps_read_data:");
-	  printf("retval = %d\n", retval);
-	  return false;
-	}
-	else 
-	{ //message received, so check if it's one we want
-	  if ((strncmp(logbuf, GGA, strlen(GGA)) == 0) ||
-	      (strncmp(logbuf, RMC, strlen(RMC)) == 0))
-	    //***call mNMEAParser here????
-	    logbuf[retval - 1] = 0;  //remove last character (always a newline)
-	  else //ignore other messages from GPS
-	    return false;
-	}
-      }      
-      return true;
+    retval = strlen(logbuf);
+    if (retval <= 0) //error
+    {
+      perror("gps_read_data:");
+      printf("retval = %d\n", retval);
+      return failure;
     }
-    else //unknown fd
-      return false;
-  }
-
-  // if (fgets(logbuf, k_LogBufSize, file_ptr) != NULL)
-  // {//got something from gps
-  //   //printf("received: %s", logbuf);
-  //   return true;
-  // }
-  // else //didn't get anything from gps
-  //   return false;
+    else 
+    { //message received, so check if it's one we want
+      if ((strncmp(logbuf, GGA, strlen(GGA)) == 0) ||
+	  (strncmp(logbuf, RMC, strlen(RMC)) == 0))
+      {
+	//***call mNMEAParser here????
+	logbuf[retval - 1] = 0;  //remove last character (always a newline)
+	return success;
+      }
+      else //ignore other messages from GPS
+	return no_read;
+    }
+  }      
+  else
+    return no_read;
 }
