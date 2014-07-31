@@ -478,7 +478,10 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 30 Jul 14
 --Finished multithreading encoder and GPS threads.  Having a small issue that occasionally a message gets dropped when buffer is full.  
---Restructured consumer() and sensors_send_data() (on rover) and rover_server_recv_and_print() (on seykhl) to have consumer send buffer when it gets to be >= .9*max, and use the msg_count at that time to compute number of bytes to send.  Now sensors_send_data() takes the buffer and the num_messages int as arguments, and then sends the int first, then the buffer itself.  On the receive side, rover_server_recv_and_print() receives the int and then uses it to set the number of bytes to receive.  All appears to be working normally, no "buffer full" error messages seen.
+--Restructured consumer() and sensors_send_data() (on rover) and rover_server_recv_and_print() (on seykhl) to have consumer send buffer when it gets to be >= .9*max, and use the msg_count at that time to compute number of bytes to send.  Now sensors_send_data() takes the buffer and the num_messages int as arguments, and then sends the int first, then the buffer itself.  On the receive side, rover_server_recv_and_print() receives the int and then uses it to set the number of bytes to receive.  All appears to be working normally, no 'buffer full' error messages seen.
+
+31 Jul 14
+--Added nNMEAParser calls to gps_read_data() in order to output formatted strings for GPS data.  Had to do some tweaks to mGPSInfo and mNMEAParser to get them to work correctly.
 
 **TODO**
 
@@ -497,23 +500,25 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 Buffers
 ----------------------------------------
-.   today.text           61000  Text		  ~/today.text
-  * *shell*              11875  Shell:run	  /
-    run-sensors.h         2172  C++/l		  ~/source/sensors/run-sensors.h
-    run-encoders.cpp     12873  C++/l		  ~/source/encoders/run-encoders.cpp
+. * *shell*              11213  Shell:run	  /
+  * *shell*<2>             685  Shell:run	  ~/bin/
+    run-sensors.h         3468  C++/l		  ~/source/sensors/run-sensors.h
+    run-sensors.cpp      24787  C++/l		  ~/source/sensors/run-sensors.cpp
+  * today.text           66278  Text		  ~/today.text
+    Makefile              2182  GNUmakefile	  ~/source/sensors/Makefile
+    toollib-camera.cpp   21774  C++/l		  ~/source/camera/toollib-camera.cpp
+    emperor.cpp          24567  C++/l		  ~/source/emperor/emperor.cpp
+    run-gps.cpp           7479  C++/l		  ~/source/gps/run-gps.cpp
+
     run-emperor            433  Shell-script[bas  ~/bin/run-emperor
-    run-sensors.cpp      16941  C++/l		  ~/source/sensors/run-sensors.cpp
     run-imu.cpp           6015  C++/l		  ~/source/razor-imu/run-imu.cpp
- %  *Help*                 505  Help
     razor-imu.cpp        12404  C++/l		  ~/source/razor-imu/razor-imu.cpp
     razor-imu.h           1495  C++/l		  ~/source/razor-imu/razor-imu.h
     run-imu.h              748  C++/l		  ~/source/razor-imu/run-imu.h
     run-encoders.h        1745  C++/l		  ~/source/encoders/run-encoders.h
 
 ---old
-    toollib-camera.cpp   21774  C++/l		  ~/source/camera/toollib-camera.cpp
     Razor_AHRS.ino       30191  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
-    run-gps.cpp           7479  C++/l		  ~/source/gps/run-gps.cpp
     run-gps.h             1257  C++/l		  ~/source/gps/run-gps.h
 
 ---old---

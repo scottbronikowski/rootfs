@@ -51,7 +51,7 @@ imu_data_t* g_imu_data;
 //char g_enc_logbuf[k_LogBufSize];
 //char g_gps_logbuf[k_LogBufSize];
 char g_logbuf[k_LogBufSize]; //KILL THIS WHEN DONE--keeping it here to be able to compile
-
+NMEAParser g_parser;
 
 int main (int /*argc*/, char** /*argv*/)
 {
@@ -111,6 +111,7 @@ bool run_sensors_setup(void)
   consumer_thread_should_die = false;
   g_encoders_data = new encoders_data_t;
   g_imu_data = new imu_data_t;
+  g_parser = NMEAParser();
   //open fds for imu, encoders, GPS
   if (!sensors_open_serial_port(imu_fd, imu_file, sensors_speed))
   {
@@ -292,38 +293,6 @@ void* consumer(void* args)
   }
   return NULL;
 }
-
-// int old_main (int /*argc*/, char** /*argv*/)
-// {
-  
-//   //main loop
-//   while (1)
-//   {
-//     //printf("msg_count = %d\n", msg_count);
-//     if(!sensors_handler())
-//       printf("ERROR: %s\n", g_logbuf);
-//     sensors_log_data(&g_msg_buf[msg_count * k_LogBufSize], g_logbuf, "EIS");
-//     ++msg_count;
-//     if(gps_read_data(g_gps_logbuf, gps_fd) &&
-//        (msg_count != k_msg_buf_size))
-//     {
-//       sensors_log_data(&g_msg_buf[msg_count * k_LogBufSize], g_gps_logbuf, "GPS");
-//       ++msg_count;
-//     }
-//     if (msg_count >= k_msg_buf_size)
-//     {
-//       if (!sensors_send_data(g_msg_buf))
-//       {
-//       	printf("sensors_send_data failed\n");
-//       	break;
-//       }
-//       else
-// 	msg_count = 0;
-//     }
-//   }
-//   //cleanup done in terminator
-//   return 0;
-// }
 
 bool sensors_open_serial_port(int &fd, const char* filename, 
 			      const speed_t speed, const int bytes_per_read)
@@ -787,84 +756,59 @@ void sensors_terminator(int signum)
   exit(signum);
 }
 
-// bool sensors_handler(void)
-// {
-//   //  char logbuf[k_LogBufSize];  //made this global
-//   // printf("in sensors_handler\n");
-//   bool retval = true;
-//   int r;
-//   char encbuf[50]; //estimated max size of encoder data
-//   char imubuf[k_LogBufSize-50];
-//   memset(g_logbuf, 0, sizeof(g_logbuf)); //clear buffers
-//   memset(encbuf, 0, sizeof(encbuf));
-//   memset(imubuf, 0, sizeof(imubuf));
-//   if (imu_read_data(g_imu_data))
-//   { //successful read, so put into imubuf
-
-//     r = snprintf(imubuf, (k_LogBufSize - 50), "IMU:time:%lu:dt:%lu:"
-// 		 "Y:%.2f:P:%.2f:R:%.2f:"
-// 		 "Y(a):%.2f:M_h(a):%.2f:M_h:%.2f:"
-// 		 "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
-// 		 "Gx:%.2f:Gy:%.2f:Gz:%.2f",
-// 		 g_imu_data->timestamp,
-// 		 g_imu_data->dt,
-// 		 g_imu_data->data[0], g_imu_data->data[1], g_imu_data->data[2],
-// 		 g_imu_data->data[3], g_imu_data->data[4], g_imu_data->data[5],
-// 		 g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
-// 		 g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
-// 		 g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
-//     if (r > (k_LogBufSize - 50))
-//       sprintf(imubuf,"IMU:BOGUS READING");
-//   }
-//   else
-//   { //read failed, so log failure and set retval false
-//     sprintf(imubuf, "IMU data read failed");
-//     retval = false;
-//   }
-//   //printf("after imu read\n");
-//   memset(encbuf, 0, sizeof(encbuf));
-//   if (encoders_read_data(g_encoders_data))
-//   { //successful read, so put data into logbuf
-//     sprintf(encbuf,":ENC:time:%lu:dt:%lu:L:%.3f:R:%.3f",
-// 	    g_encoders_data->timestamp, g_encoders_data->dt,
-// 	    g_encoders_data->cm[0], g_encoders_data->cm[1]);
-
-//   }
-//   else
-//   { //read failed, so log failure and set retval false
-//     sprintf(encbuf, ":Encoders data read failed");
-//     retval = false;
-//   }
-//   //printf("after encoder read\n");
-//   strncpy(g_logbuf, imubuf, strlen(imubuf));
-//   //printf("after strncpy\n");
-//   strncat(g_logbuf, encbuf, strlen(encbuf));
-//   //printf("after strncat\n");
-//   return retval; //if neither read failed, retval will be true
-// }
-
 int gps_read_data(char* logbuf)
 {
-  int retval;
+  int retval, length;
   int success = 0;
   int failure = -1;
   int no_read = 1;
-  if (fgets(logbuf, k_LogBufSize, gps_file_ptr) != NULL)
+  char tempbuf[k_LogBufSize];
+  struct GPSInfo gpsinfo;
+  if (fgets(tempbuf, k_LogBufSize, gps_file_ptr) != NULL)
   {
-    retval = strlen(logbuf);
-    if (retval <= 0) //error
+    length = strlen(tempbuf);
+    if (length <= 0) //error
     {
       perror("gps_read_data:");
-      printf("retval = %d\n", retval);
+      printf("length = %d\n", length);
       return failure;
     }
     else 
     { //message received, so check if it's one we want
-      if ((strncmp(logbuf, GGA, strlen(GGA)) == 0) ||
-	  (strncmp(logbuf, RMC, strlen(RMC)) == 0))
-      {
-	//***call mNMEAParser here????
-	logbuf[retval - 1] = 0;  //remove last character (always a newline)
+      if (strncmp(tempbuf, GGA, strlen(GGA)) == 0)
+      { //process GGA info
+	g_parser.Parse(tempbuf, length);
+	gpsinfo = g_parser.GetActualGPSInfo();
+	retval = snprintf(logbuf, k_LogBufSize, "GGA:Lat:%.3f:Long:%.3f:Alt:%.1fm:"
+			  "HDOP:%.2f:Quality:%d:Time:%.2d:%.2d:%.2d",
+			  gpsinfo.m_latitude, gpsinfo.m_longitude, gpsinfo.m_altitude,
+			  gpsinfo.m_HDOP, gpsinfo.m_signalQuality, gpsinfo.m_hour,
+			  gpsinfo.m_minute, gpsinfo.m_second);
+	if (retval > k_LogBufSize)
+	  printf("GPS GGA too long, retval = %d\n", retval);
+	//logbuf now has a parsed and formatted GPS messages, so return success
+	return success;
+      }
+      else if (strncmp(tempbuf, RMC, strlen(RMC)) == 0)
+      { //process RMC info
+	g_parser.Parse(tempbuf, length);
+	gpsinfo = g_parser.GetActualGPSInfo();
+	if (!gpsinfo.m_trackValid)
+	{
+	  sprintf(logbuf, "RMC:Track Invalid");
+	}
+	else
+	{
+	  retval = snprintf(logbuf, k_LogBufSize, "RMC:Lat:%.3f:Long:%.3f:Heading:%.1f:"
+			    "MagVar:%.1f:Speed:%.1fkt:Date:%.4d-%.2d-%.2d:Time:%.2d:%.2d:%.2d",
+			    gpsinfo.m_latitude, gpsinfo.m_longitude, 
+			    gpsinfo.m_courseOverGround,gpsinfo.m_magneticVariation, 
+			    gpsinfo.m_groundSpeed, gpsinfo.m_year, gpsinfo.m_month, 
+			    gpsinfo.m_day, gpsinfo.m_hour, gpsinfo.m_minute, gpsinfo.m_second);
+	  if (retval > k_LogBufSize)
+	    printf("GPS RMC too long, retval = %d\n", retval);
+	}
+	//logbuf now has a parsed and formatted GPS messages, so return success
 	return success;
       }
       else //ignore other messages from GPS

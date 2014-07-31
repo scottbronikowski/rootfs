@@ -22,6 +22,8 @@ CAMFILES = ${CAMDIR}/toollib-camera.cpp ${CAMDIR}/toollib-camera.h
 # EMPFILES = ${EMPDIR}/emperor.cpp ${EMPDIR}/emperor.h
 
 OBJS =	${CAMDIR}/toollib-camera.o \
+	mGPSInfo.o \
+	mNMEAParser.o \
 	run-sensors.o
 #${IMUDIR}/razor-imu.o \
 #${EMPDIR}/emperor.o \
@@ -35,6 +37,12 @@ ${OUTPUTNAME}: ${OBJS}
 run-sensors.o: run-sensors.cpp run-sensors.h
 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
 #	${CC} -g ${INCLUDE} -Wall -c $*.cpp 
+
+mGPSInfo.o: mGPSInfo.cpp mGPSInfo.h
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
+
+mNMEAParser.o: mNMEAParser.cpp mNMEAParser.h
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
 
 # ${EMPDIR}/emperor.o: ${EMPFILES}
 # 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 

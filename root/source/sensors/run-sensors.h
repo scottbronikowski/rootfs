@@ -26,6 +26,7 @@
 #include <csignal>
 
 #include <pthread.h>
+#include "mNMEAParser.h"
 
 //structures
 struct encoders_data_t {
