@@ -1,56 +1,3 @@
-echo 17250 > /dev/pwm9
-echo 15000 > /dev/pwm9
-echo 17000 > /dev/pwm9
-echo 10000 > /dev/pwm9
-echo 11000 > /dev/pwm9
-echo 12000 > /dev/pwm9
-echo 11500 > /dev/pwm9
-echo 11000 > /dev/pwm9
-echo 12000 > /dev/pwm9
-echo 15000 > /dev/pwm9
-echo 10000 > /dev/pwm10
-echo 15000 > /dev/pwm10
-echo 20000 > /dev/pwm10
-echo 15000 > /dev/pwm10
-cd bin
-./emperor 
-emacs today.text &
-halt
-cd bin
-./emperor 
-exit
-iptraf
-exit
-htop
-exit
-emacs today.text
-halt
-cd bin
-./emperor 
-date +%s
-date
-date +%s
-./emperor 
-exit
-cd source/emperor/
-make
-cd ../monitor/
-ls
-cp monitor.cpp monitor-old.cpp
-cp monitor.h monitor-old.h
-cd ../emperor/
-make
-exit
-ps -ef | grep monitor
-/etc/init.d/monitor.sh stop
-htop
-exit
-emacs today.text 
-exit
-ATZ
-AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
-ls
-ps
 halt
 reboot
 emacs today.text &
@@ -1998,3 +1945,56 @@ git status
 git add -A
 git commit -m "--Got consumer thread and first producer thread (IMU) working, no problems so far.  Need to finish the encoder and GPS threads and then test."
 git push
+cd /
+htop
+screen /dev/GPS 4800
+exit
+cd bin
+./run-emperor start
+clear
+./run-emperor start
+clear
+./run-emperor start
+./run-emperor st
+./run-emperor stop
+./run-emperor st
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+./run-emperor start
+./run-emperor stop
+exit
+cd source/sensors/
+make
+cd ..
+grep -r OpenCV_SendFrame *
+cd sensors/
+make
+cd ..
+ls
+cd gps/
+ls
+cd ..
+cd sensors/
+ls
+make
+exit
+exit
+ls
+emacs today.text
+halt
+reboot
+halt
+cd bin
+./run-emperor start
+reboot

@@ -779,7 +779,7 @@ int gps_read_data(char* logbuf)
       { //process GGA info
 	g_parser.Parse(tempbuf, length);
 	gpsinfo = g_parser.GetActualGPSInfo();
-	retval = snprintf(logbuf, k_LogBufSize, "GGA:Lat:%.3f:Long:%.3f:Alt:%.1fm:"
+	retval = snprintf(logbuf, k_LogBufSize, "GGA:Lat:%.10f:Long:%.10f:Alt:%.1fm:"
 			  "HDOP:%.2f:Quality:%d:Time:%.2d:%.2d:%.2d",
 			  gpsinfo.m_latitude, gpsinfo.m_longitude, gpsinfo.m_altitude,
 			  gpsinfo.m_HDOP, gpsinfo.m_signalQuality, gpsinfo.m_hour,
@@ -799,8 +799,8 @@ int gps_read_data(char* logbuf)
 	}
 	else
 	{
-	  retval = snprintf(logbuf, k_LogBufSize, "RMC:Lat:%.3f:Long:%.3f:Heading:%.1f:"
-			    "MagVar:%.1f:Speed:%.1fkt:Date:%.4d-%.2d-%.2d:Time:%.2d:%.2d:%.2d",
+	  retval = snprintf(logbuf, k_LogBufSize, "RMC:Lat:%.10f:Long:%.10f:Heading:%.2f:"
+			    "MagVar:%.2f:Speed:%.2fkt:Date:%.4d-%.2d-%.2d:Time:%.2d:%.2d:%.2d",
 			    gpsinfo.m_latitude, gpsinfo.m_longitude, 
 			    gpsinfo.m_courseOverGround,gpsinfo.m_magneticVariation, 
 			    gpsinfo.m_groundSpeed, gpsinfo.m_year, gpsinfo.m_month, 
