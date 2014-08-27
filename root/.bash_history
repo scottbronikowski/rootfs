@@ -1,149 +1,3 @@
-halt
-reboot
-emacs today.text &
-cd bin
-ls
-./emperor 
-htop
-cd /
-git status
-git add -A
-git commit -m "Friday commit--no changes"
-git push
-reboot
-lsmod
-ls toda*
-diff today.text today.text.updated 
-emacs today.text
-emacs
-emacs today.text
-htop
-cd realtek/
-ls
-RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911/
-cd RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911
-ls
-cd driver/
-ls
-cd rtl8188C_8192C_usb_linux_v4.0.2_9000.20130911
-ls
-lla
-uname -m
-uname
-uname -a
-uname -s
-uname -n
-uname -r
-uname -v
-uname -m
-uname -p
-uname -i
-uname -o
-exit
-cd /lib/modules/
-ls
-cd 3.5.0-2-linaro-omap/
-ls
-cd kernel/
-ls
-cd drivers/
-ls
-mkdir omap3-pwm
-ls
-mkdir gpio-event
-lla
-cd omap3-pwm/
-lla
-rm pwm.ko 
-lla
-depmod -a
-modinfo pwm
-modinfo g_multi
-cd ../gpio
-cd ../gpio-event/
-ls
-lla
-depmod -a
-modinfo gpio-event-drv.ko 
-cd /
-ls
-cd omap3-pwm/
-ls
-cat Makefile 
-source overo-source-me.txt 
-make
-cat overo-source-me.txt 
-cd /root/build/linux-omap-3.5/drivers/omap3-pwm/
-ls
-cat overo-source-me.txt 
-cd /omap3-pwm/
-ls
-lla
-make ARCH=arm CROSS_COMPILE="" -c /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
-make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
-make ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=/ modules
-make ARCH=arm CROSS_COMPILE="" -C /lib/modules/3.5.0-2-linaro-omap/build M=/ modules
-make ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
-lla
-lla /root/build/linux-omap-3.5/drivers/omap3-pwm/
-/etc/init.d/servo-control.sh stop
-insmod pwm.ko servo=1 timers=8,9
-make clean
-make ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
-lla
-insmod pwm.ko servo=1 timers=8,9
-insmod pwm.ko servo=1 timers=9,10
-insmod pwm.ko
-dmesg -T | tail
-ln -s /omap3-pwm/pwm.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/pwm-new.ko
-make -march=armv7 ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
-make ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
-make clean
-make ARCH=arm CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
-ls
-cp overo-source-me.txt overo-source-me.txt.old
-source overo-source-me.txt
-make
-source overo-source-me.txt
-make
-ls
-make clean
-make
-lla
-modinfo pwm-new
-dempod -a
-depmod -a
-modinfo pwm-new
-lla
-ls -al /root/build/linux-omap-3.5/drivers/omap3-pwm/
-lla /root/build/linux-omap-3.5/drivers/omap3-pwm/
-modinfo 8192cu
-cd /
-ls
-cd root
-ls
-cd Downloads/
-ls
-cd ..
-cd /
-locate RTL8188C_8192C_USB*.zip
-locate today*
-cat /etc/modules 
-lla /etc/modules
-locate 8192cu.ko
-cd lib/modules/3.5.0-2-linaro-omap/kernel/drivers/net/wireless/
-ls
-cp 8192cu.ko 8192cu.ko.backup
-lla
-rm 8192cu.ko
-lla
-modinfo 8192cu
-depmod -a
-modinfo 8192cu
-cd /omap3-pwm/
-make ARCH=armv7l CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
-ls
-cp overo-source-me.txt overo-source-me.txt.changed
 cp overo-source-me.txt.old overo-source-me.txt
 make ARCH=armv7l CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
 make ARCH=armv7l CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
@@ -1997,4 +1851,150 @@ reboot
 halt
 cd bin
 ./run-emperor start
+reboot
+cd bin
+./run-emperor start
+exit
+screen /dev/GPS 4800
+exit
+exit
+time
+dtime
+date
+date +%s
+cd source/sensors/
+make
+exit
+exit
+emacs today.text
+cd /
+git status
+git add -A
+git commit -m "final commit before shutdown to analyze data taken 2014-07-31"
+git push
+halt
+reboot
+ps -ef | grep wpa
+killall wpa_supplicant
+iface wlan1 inet dhcp
+ifconfig -a
+iwconfig
+wpa_supplicant -Dwext -iwlan1 -c/etc/wpa_supplicant.conf -B
+ps -ef | grep wpa
+killall wpa_supplicant
+wpa_supplicant -iwlan1 -c/etc/wpa_supplicant.conf -B
+iwconfig
+ps -ef | grep wpa
+wpa_supplicant -iwlan1 -c/etc/wpa_supplicant.conf -B
+killall wpa_supplicant
+wpa_supplicant -iwlan1 -c/etc/wpa_supplicant.conf -B
+iwconfig
+ifconfig -a
+ping google.com
+iface
+ifdown wlan1
+ifconfig -a
+ifconfig wlan1 dhcp
+ifconfig --help
+ifconfig -v wlan1 inet dhcp
+ifconfig -v wlan1 inet
+ifconfig -a
+ping google.com
+ifconfig wlan0 down
+iwconfig wlan0 essid "PAL3.0"
+iwconfig wlan1 essid "PAL3.0"
+iwconfig
+ifconfig wlan1 down
+ifconfig wlan1 essid "PAL3.0"
+iwconfig wlan1 essid "PAL3.0"
+ifconfig wlan1 up
+iwconfig
+iwconfig wlan0 essid any
+iwconfig
+ifconfig
+ping google.com
+iwconfig
+reboot
+dmesg -tail
+tail dmesg
+dmesg -T | tail
+dmesg 
+wpa-cli
+wpa_cli
+wpa_cli list_networks
+cd /etc
+ls w*
+cat wpa_supplicant.conf
+ls /etc/ssl/certs/Add*
+vi /etc/wpa_supplicant.conf
+ifdown wlan1
+ifup wlan1
+ifconfig wlan1 down
+ifconfig wlan1 up
+iwconfig
+ifconfig
+ping google.com
+/etc/init.d/networking stop
+/etc/init.d/networking start
+ifconfig
+iwconfig
+dhcpd wlan1
+dhclient wlan1
+iwconfig
+ifconfig
+ping google.com
+vi wpa_supplicant.con
+vi wpa_supplicant.conf
+ifconfig wlan1 down
+ifconfig wlan1 up
+iwconfig
+ifconfig
+iwconfig
+dhclient wlan1
+vi wpa_supplicant.conf
+ifconfig wlan1 down
+iwconfig
+ifconfig
+ifconfig wlan1 up
+iwconfig
+iw dev
+ip link show wlan1
+ip link set wlan1 down
+ip link show wlan1
+ip link set wlan1 up
+ip link show wlan1
+iw wlan0 link
+iw wlan1 link
+iw wlan1 scan
+iwconfig
+killall wpa_supplicant
+wpa_supplicant -iwlan1 -c/etc/wpa_supplicant.conf -B
+dmesg | tail
+iwconfig
+ping google.com
+dhclient wlan1
+dhclient -nw wlan1
+ifconfig
+iwconfig
+ifconfig
+iwconfig
+ifconfig
+ps -ef | grep dhc
+reboot
+ping google.com
+hwclock
+ntpdate -s time.nist.gov
+ntpdate
+ntpdate -s time.nist.gov
+hwclock
+date
+service ntp stop
+ntpdate -s time.nist.gov
+date
+service ntp start
+hwclock
+hwclock --systohc
+hwclock
+date
+vi /etc/wpa_supplicant.conf
 reboot
