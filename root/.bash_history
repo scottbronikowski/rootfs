@@ -1,54 +1,3 @@
-cp overo-source-me.txt.old overo-source-me.txt
-make ARCH=armv7l CROSS_COMPILE="" -C /root/build/linux-omap-3.5 M=`pwd` modules
-make ARCH=armv7l CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
-lla
-make clean
-make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
-lla
-ln -s `pwd`/pwm.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/pwm-new.ko
-lla /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/
-depmod -a
-modinfo pwm-new
-modinfo pwm
-cd 
-ls
-mkdir gpio-event-temp
-ls
-cd gpio-event-temp/
-ls
-make clean
-ls
-make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
-ls
-ln -s `pwd`/gpio-event-drv.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/gpio-event-drv-new.ko
-lla /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/
-depmod -a
-lla
-modinfo gpio-event-drv-new
-exit
-cd build/linux-omap-3.5/
-ls vm*
-lla vm*
-lla
-cd drivers/
-ls
-lla
-cd usb/
-ls
-lla
-cd gadget/
-lla
-cat modules.builtin 
-cat modules.order 
-cd /
-locate g_multi.ko
-modinfo g_multi
-modinfo g_hid
-cd /lib/modules/3.5.0-2-linaro-omap/
-ls
-cd kernel/
-cd drivers/
-ls
 cd gpio/
 ls
 cd ..
@@ -1998,3 +1947,54 @@ hwclock
 date
 vi /etc/wpa_supplicant.conf
 reboot
+emacs today.text &
+date
+iwconfig wlan0 essid any
+ifup wlan0
+iwconfig
+ip link set wlan0 up
+ip link show wlan0
+iw wlan0 link
+iw wlan0 scan
+iwconfig wlan0 essid qobi-cccp
+dhclient wlan0
+iwconfig
+ifconfig
+dhclient -nw wlan0
+ifconfig wlan0
+ping google.com
+ifconfig wlan0
+ping google.com
+ls /etc/rc2.d/
+ls /etc/init.d *.lsh
+ls /etc/init.d/*.sh
+cat /etc/init.d/time-update.sh 
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ifconfig wlan1
+ifdown wlan1
+ifconfig wlan1 down
+ifconfig wlan1 up
+ifconfig wlan1
+iwconfig wlan1
+ifconfig wlan1
+dhclient -nw wlan1
+ps -ef | grep dhcli
+dmesg | tail
+ping google.com
+ifconfig wlan1
+iwconfig wlan1
+ifconfig wlan0
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ps -ef | grep ssh
+ifconfig
+/etc/init.d/ssh-tunnel.sh start
+date
+hwclock
+ps -ef | grep ping
+ping google.com
+reboot
+ifconfig
+iwconfig
