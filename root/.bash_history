@@ -1,197 +1,3 @@
-cd gpio/
-ls
-cd ..
-modinfo pwm.ko
-modinfo pwm
-dmesg -T | tail
-modinfo pwm
-dmesg -T | tail
-cd ~/build/linux-omap-3.5/drivers/omap3-pwm/
-cd
-ln -s ./pwm.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/omap3-pwm/
-ln -s ~/build/linux-omap-3.5/drivers/omap3-pwm/pwm.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/omap3-pwm/
-cd ../gpio-event/
-ls
-cd module/
-ls
-`pwd`
-pwd
-ln -s `pwd`/gpio-event-drv.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/gpio-event/
-cd /lib/modules/3.5.0-2-linaro-omap/
-ls
-cd ker
-cd kernel/
-ls
-cd drivers/
-ls
-lla
-depmod -a
-modinfo pwm-new
-modinfo pwm
-ls
-rm pwm-new.ko 
-lla
-modinfo pwm-new
-depmod -a
-modinfo pwm-new
-ln -s /omap3-pwm/pwm.ko ./pwm-new.ko
-lla
-depmod -a
-modinfo pwm-new
-cd 
-ls
-rsync -avrz seykhl:~/Downloads/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911\ \(3\).zip .
-rsync -avrz seykhl:~/Downloads/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911.zip .
-cd realtek/
-ls
-cd ..
-rm RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911.zip 
-cd realtek/
-ls
-lla
-cd rt8192cu/
-ls
-cd ../RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911
-ls
-./install.sh 
-modinfo 8192cu
-ls
-locate Makefile
-ls
-cd driver/
-ls
-ls | grep .tar.gz
-cd rtl8188C_8192C_usb_linux_v4.0.2_9000.20130911
-ls
-cd ..
-ls | grep -iv '.tar.gz'
-cd rtl8188C_8192C_usb_linux_v4.0.2_9000.20130911
-ls m*
-cd ../..
-cd ..
-locate make_drv
-cd 
-locate pwm.ko
-cd build/linux-omap-3.5/
-ls
-cd drivers/
-ls
-cd omap3-pwm/
-ls
-lla
-lla /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/omap3-pwm/
-cd ../gpio-event/
-ls
-cd module/
-ls
-rsync -avrz ./* ~/gpio-event-temp/
-modinfo gpio-event-drv
-lla
-cd ../..
-cd input/misc/
-ls
-make ARCH=arm CROSS_COMPILE= -C /lib/modules/3.5.0-2-linaro-omap/build M=`pwd` modules
-modinfo rotary_encoder
-depmod -a
-modinfo rotary_encoder
-lla r*
-lla /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/input/
-ln -s `pwd`/rotary_encoder.ko /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/input/rotary_encoder.ko
-lla /lib/modules/3.5.0-2-linaro-omap/kernel/drivers/input/
-depmod -a
-modinfo rotary_encoder
-modprobe rotary_encoder
-lsmod
-modprobe -r rotary_encoder
-lsmod
-exit
-cd /lib/modules/3.5.0-2-linaro-omap/build
-ls
-cd arch/
-ls
-lla
-cd
-emacs today.text
-exit
-ls
-ping google.com
-halt
-reboot
-emacs today.text
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5-linux64.tgz
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5-linux64.tgz .
-emacs today.text
-htop
-updatedb
-locate librxtxSerial.so
-updatedb
-locate rt.jar
-locate tools.jar
-apt-get install sun-java6-jre
-apt-get install sun-java6-jdk
-apt-get install sun-java6-bin
-apt-get install sun-java6
-ls /usr/lib/librx*
-lla /usr/lib/librxtxSerial.so 
-rm /usr/lib/librxtxSerial.so 
-cd /usr/share/arduino/
-ls
-find
-find > rover-arduino-package.txt
-cp rover-arduino-package.txt ~/.
-lla
-lla a*
-tar -xvf arduino-1.0.5-linux64.tgz 
-rsync -avrz seykhl:~/Downloads/Teensy/49-teensy.rules /etc/udev/rules.d/
-ls /etc/udev/rules.d/
-rsync -avrz seykhl:~/Downloads/Teensy/teensyduino.64bit .
-./teensyduino.64bit 
-ls
-cd source/
-ls
-mkdir sketches
-cd /usr/lib
-ls
-cd jvm/java-7-openjdk-armhf/jre/lib/arm
-ls
-lla
-rm libjvm.so
-lla
-ln -s jamvm/libjvm.so .
-lla
-cd /usr/lib/jvm/
-ls
-cd java-7-openjdk-armhf/
-ls
-cd jre/lib/arm/
-lla
-rm libjvm.so 
-lla
-cd /usr/lib/jvm
-lla
-rmdir java-7-openjdk-armhf/
-rm -rf java-7-openjdk-armhf/
-lla
-java -version
-cd /root/arduino-1.0.5/java/lib
-ln -s /usr/lib/jvm/java-6-openjdk-armhf/jre/lib/rt.jar .
-lla
-dpkg-query -l | grep openjdk
-apt-get install openjdk-6-jdk
-apt-cache search openjdk
-apt-cache search openjdk-6
-apt-cache search openjdk-6-
-dpkg-query -l | grep openjdk-6-
-apt-get install openjdk-6-*
-apt-get reinstall openjdk-6-*
-apt-get install --reinstall openjdk-6-*
-cd /
-cd ~
-ls
-rm -rf arduino-1.0.5
-ls
-rm arduino-1.0.5-linux32.tgz 
 cd /
 locate AnalogReadSerial.ino
 cd /usr/share/doc/arduino-core/examples/
@@ -1998,3 +1804,197 @@ ping google.com
 reboot
 ifconfig
 iwconfig
+top
+ssh -T git@github
+ssh -T git@github.com
+ssh-add ~/.ssh/id_rsa_github
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa_github
+ssh -T git@github.com
+exit
+ssh -T git@github.com
+ssh-agent -s
+ssh -T git@github.com
+ssh-add ~/.ssh/id_rsa_github
+exit
+ssh -T git@github.com
+exit
+ssh -T git@github.com
+exit
+ssh -T git@github.com
+exit
+cd /etc/ssl/certs
+ls
+ls ca*
+emacs ca-bundle.crt &
+cd /
+git status
+git add -A
+git commit -m "Added new ca-bundle.crt from purduelug.org wiki to /etc/ssl/certs and made change to /etc/wpa_supplicant.conf to see if this fixes PAL3.0 issue"
+git push
+ssh-agent -s
+ssh-add ~/.ssh/id_rsa_github
+killall ssh-agent
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa_github
+git push
+emacs ~/.bashrc
+exit
+date
+iwlist
+iwlist wlan0
+iwlist wlan1
+ifconfig
+iwconfig
+vi /etc/network/interfaces
+iwconfig
+ifconfig wlan0 down
+ifconfig wlan0 up
+ifconfig
+iwconfig
+ifconfig
+iwconfig wlan0 essid "qobi-cccp"
+dhclient -nw wlan0
+iwconfig
+ifconfig
+ping google.com
+vi /etc/network/interfaces
+ls /etc/rc5.d/
+/etc/init.d/keepalive-ping.sh start
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ssh-agent
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ls ./.ssh
+lla ./.ssh
+cd ./.ssh
+lla
+cat authorized_keys 
+/etc/init.d/ssh-tunnel.sh start
+lla
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ping google.com
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ping seykhl.ecn.purdue.edu
+cd /etc/ssl/certs
+ls
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+reboot
+iwconfig
+ifconfig
+iw list
+\
+ip addr
+ifconfig
+cd /etc/ssl/certs
+lla
+lla c*
+lla /usr/share/ca-certificates/mozilla/ePKI_Root_Certification_Authority.crt 
+rsync -avrz seykhl:~/Downloads/ca-bundle.crt .
+lla ca*
+chown root ca-bundle.crt 
+chgroup root ca-bundle.crt 
+chgrp root ca-bundle.crt 
+lla ca*
+exit
+emacs &
+e
+exit
+ifconfig
+iwconfig
+ifconfig
+iwconfig
+iwconfig wlan0 essid qobi-cccp
+dhclient -nw wlan0
+iwconfig
+ifconfig
+/etc/init.d/keepalive-ping.sh start
+/etc/init.d/ssh-tunnel.sh start
+iwconfig
+ifconfig
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+reboot
+dmesg
+lla d*
+cd /
+lla d*
+ls dm*
+cd 
+dmesg > dmesg-29aug.txt
+iwconfig
+ifconfig
+wpa-ifdown wlan1
+ifdown wlan1
+ifup wlan1
+iwconfig wlan1 down
+ifconfig wlan1 down
+ifconfig wlan1 up
+iwconfig
+ifconfig
+iwconfig
+iwconfig wlan1 down
+ifconfig wlan1 down
+iwconfig
+man iwconfig
+iwconfig wlan1 essid eduroam
+iwconfig
+dmesg | tail
+dmesg
+ifconfig wlan1 down
+iwconfig
+ifconfig wlan1 up
+exit
+emacs &
+exit
+ifdown wlan0
+ifup wlan0
+iwconfig
+iwconfig wlan0 essid qobi-cccp
+iwconfig
+dhclient -nw wlan0
+ifconfig
+ls /etc/init.d/
+lla /etc/rc5.d/
+/etc/init.d/keepalive-ping.sh start
+/etc/init.d/debian.noip2.sh start
+/etc/init.d/debian.noip2.sh stop
+/etc/init.d/debian.noip2.sh start
+/etc/init.d/ssh-tunnel.sh start
+reboot
+iwconfig
+ifconfig
+iwconfig wlan0 essid qobi-cccp
+dhclient -nw wlan0
+ifconfig
+iwconfig
+ifconfig
+ifconfig wlan0 down
+ifup wlan0
+lla /etc/network/interfaces
+lla /etc/wpa_supplicant.conf
+nano
+nano /etc/network/interfaces
+vi /etc/network/interfaces
+ifup wlan0
+ifconfig
+iwconfig
+ifconfig wlan0 up
+ifconfig
+lla /etc/ssl/certs/AddTrust_External_Root.pem 
+reboot
+iwconfig
+exit
+emacs /etc/wpa_supplicant.conf
+exit
+ifconfig
+reboot

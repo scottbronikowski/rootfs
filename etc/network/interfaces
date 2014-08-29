@@ -17,6 +17,10 @@ iface eth0 inet dhcp
 ### USB Wifi adapter
 allow-hotplug wlan1
 auto wlan1
+iface wlan1 inet dhcp 
+#new29aug
+      wpa-conf /etc/wpa_supplicant.conf 
+#new29aug
 ## NEW -- wpa-roam
 #iface wlan1 inet manual
 #     	#pre-up sh -c "sleep 5"
@@ -27,25 +31,25 @@ auto wlan1
 #iface pal3 inet dhcp
 
 # OLD
- iface wlan1 inet dhcp
+# iface wlan1 inet dhcp #commented out 29aug
 #	wpa-driver wext
 #	wpa-conf /etc/wpa_supplicant.conf
 #iface pal3 inet dhcp
 #      pre-up wpa_supplicant -Dwext -iwlan1 -c/etc/wpa_supplicant.conf -B
-       pre-up wpa_supplicant -iwlan1 -c/etc/wpa_supplicant.conf -B		
-       down killall wpa_supplicant
+#       pre-up wpa_supplicant -iwlan1 -c/etc/wpa_supplicant.conf -B	#commented out 29aug
+#       down killall wpa_supplicant #commented out 29aug
 ##	pre-up /sbin/iwconfig wlan0 essid qobi-cccp
 #	wireless-essid qobi-office
 #	wireless-mode managed
 
 ### built-in wifi adapter
 allow-hotplug wlan0
-auto wlan0 #uncommented 27aug14
-iface wlan0 inet dhcp #uncommented 27aug14
+#auto wlan0 #uncommented 27aug14
+#iface wlan0 inet dhcp #uncommented 27aug14
 ##      pre-up wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf -B
 #	pre-up wpa_supplicant -iwlan0 -c/etc/wpa_supplicant.conf -B		
 #      	down killall wpa_supplicant
-	pre-up /sbin/iwconfig wlan0 essid "qobi-cccp" #uncommented 27aug14
+#	pre-up /sbin/iwconfig wlan0 essid qobi-cccp #uncommented 27aug14
 ##	wireless-essid qobi-office
 ##	wireless-mode managed
 
