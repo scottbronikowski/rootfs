@@ -1,42 +1,3 @@
-cd /
-locate AnalogReadSerial.ino
-cd /usr/share/doc/arduino-core/examples/
-ls
-cd ../../arduino
-ls
-locate BarometricPressureWebServer
-cd ../arduino-core/examples/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/examples/Teensy .
-cd /usr/share/arduino/
-ls
-lla examples
-cd hardware/
-ls
-cd arduino/bootloaders/atmega8/
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/atmega8/ATmegaBOOT.txt .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/atmega8/ATmegaBOOT-p* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/cater* .
-ls
-rm -rf cater*
-ls
-cd ..
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/cater* .
-ls
-cd stk500v2/
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/stk500v2/avr_* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/stk500v2/Li* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/bootloaders/stk500v2/Mega* .
-cd ../../
-cd cores/
-ls
-cd arduino/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/cores/arduino/avr-libc .
-cd ..
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/cores/robot .
-cd ../firmwares/
 ls
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/firmwares/* .
 cd ../variants/
@@ -1997,4 +1958,43 @@ exit
 emacs /etc/wpa_supplicant.conf
 exit
 ifconfig
+reboot
+nano /etc/network/interfaces
+cd /
+git status
+git add -A
+git commit -m "--Changed my /etc/network/interfaces to drop the 'pre-up' and 'down' lines and replaced them with 'wpa-conf /etc/wpa_supplicant.conf' and now it works--I'm connected to PAL3.0.  Not sure why that made a difference."
+git push
+iwconfig
+ifconfig
+ls
+exit
+nano /etc/network/interfaces
+iwconfig
+ifconfig
+exit
+cd /etc/network
+ls
+cat interfaces
+cd ..
+ls wpa*
+nano wpa_supplicant.conf
+iwconfig
+ifconfig
+vi /etc/network/interfaces
+iwconfig
+ifconfig
+ATZ
+AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
+ls
+lla
+ATZ
+AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
+ls
+ping seykhkl
+ping seykhl.ecn.purdue.edu
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh start
+AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
+ls
 reboot
