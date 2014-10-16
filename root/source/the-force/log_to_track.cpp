@@ -1,35 +1,11 @@
 #include "opencv2/video/tracking.hpp"
 #include "opencv2/highgui/highgui.hpp"
-
 #include <stdio.h>
 #include <time.h>
-#include "Dstar.h"
 #include "cv.h"
-#include "mGPSInfo.h"
-#include "mNMEAParser.h"
 #include <unistd.h>
 
 #define pi (3.14159265359)
-#define METERS_PER_DEGREE_LAT (111043)//(111310.4035)
-#define METERS_PER_DEGREE_LONG (84857)
-#define METERS_PER_FOOT (0.3048)
-
-// These are the GPS latitude and longitude of the Left,Right,Top,and Bottom edges of the purdue image I use // I got these and the image with google earth
-//////Engr fountain
-// #define  MAPL (86.91629167)
-// #define  MAPR (86.91122778)
-// #define  MAPT (40.42976389)
-// #define  MAPB (40.42775556)
-//////Bogus map
-#define  MAPL (86.91649167)
-#define  MAPR (86.91610778)
-#define  MAPT (40.42999389)
-#define  MAPB (40.42960556)
-
-
-#define right_ticks_per_cm 323.709
-#define left_ticks_per_cm 328.288
-float avg_ticks_per_cm = (right_ticks_per_cm + left_ticks_per_cm) / 2;
 
 using namespace cv;
 
@@ -86,14 +62,6 @@ float beta = 1; // ????
 float rover_width = .45; //???? measure/calibrate this
 
 Point2d local_origin;
-
-
-Point2d GPS_to_pixel(Point2d gps,int width,int height);
-Point2d GPS_to_local(Point2d gps,Point2d GPS_of_origin);
-Point2d local_to_GPS(Point2d );
-Point2d local_to_pixel(Point2d local, Point2d GPS_origin,int width, int height);
-Point2d pixel_to_GPS(Point2d pixel, int width, int height);
-Point2d pixel_to_local(Point2d pixel,Point2d GPS_of_origin, int width, int height);
 
 int read_config_file(char* filename)
 {
@@ -166,8 +134,10 @@ int read_log_file(char* filename, Mat measurements[])
 	  Measurement.at<float>(1) = 0; //no gps for now
 	  Measurement.at<float>(2) = (-Yaw+90)*pi/180 ; //degrees north is 0 east is positive->(radians east 0 north positive)
 	  Measurement.at<float>(3) = -Gz*pi/180; // rotation around z in degrees/sec ->(radians/sec)
-	  Measurement.at<float>(4) = L/100.0/(((float)((int)encoder_dt))/1000.0)*(avg_ticks_per_cm)/(left_ticks_per_cm); // cm traveled in last time period -> (meters/sec)
-	  Measurement.at<float>(5) = R/100.0/(((float)((int)encoder_dt))/1000.0)*(avg_ticks_per_cm)/(right_ticks_per_cm); // cm traveled in last time period -> (meters/sec)
+	  Measurement.at<float>(4) = L/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(left_ticks_per_cm); 
+	  // cm traveled in last time period -> (meters/sec)
+	  Measurement.at<float>(5) = R/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(right_ticks_per_cm); 
+	  // cm traveled in last time period -> (meters/sec)
 
 	  Measurement.at<float>(6) = -(Ax-1)/100; // cm/s^2 -> (m/s^2)       // x forward y right
 	  measurements[n_measurements] = Measurement.clone();
@@ -181,61 +151,6 @@ int read_log_file(char* filename, Mat measurements[])
   return n_measurements;
 }
 
-Point2d GPS_to_pixel(Point2d point, int width, int height)
-{
-    Point2d pixelPoint;
-    double GPSx,GPSy,Pixelx,Pixely;
-    double dLat,dLong;
-    GPSx = point.x;
-    GPSy = point.y;
-    dLat = MAPT-MAPB;
-    dLong = MAPR-MAPL;
-    Pixelx = (GPSx-MAPL)/dLong*width;
-    Pixely = height-(GPSy-MAPB)/dLat*height;
-    pixelPoint.x=Pixelx;
-    pixelPoint.y=Pixely;
-    return pixelPoint;
-}
-Point2d GPS_to_local(Point2d GPS,Point2d GPS_of_origin)
-{
-    double dx = GPS_of_origin.x-GPS.x;
-    double dy = GPS.y-GPS_of_origin.y;
-    Point2d coord;
-    coord.x = dx*METERS_PER_DEGREE_LONG;
-    coord.y = dy*METERS_PER_DEGREE_LAT;
-    return coord;
-}
-Point2d local_to_GPS(Point2d local, Point2d GPS_of_origin)
-{
-    Point2d coord;
-
-    coord.x = GPS_of_origin.x - local.x/METERS_PER_DEGREE_LONG;
-    coord.y = GPS_of_origin.y + local.y/METERS_PER_DEGREE_LAT;
-    return coord;
-}
-Point2d local_to_pixel(Point2d local,Point2d GPS_of_origin,int width, int height)
-{
-    Point2d gps = local_to_GPS(local,GPS_of_origin);
-    Point2d pixel = GPS_to_pixel(gps,width,height);
-    return pixel;
-}
-
-Point2d pixel_to_local(Point2d pixel,Point2d GPS_of_origin, int width, int height)
-{
-    Point2d gps = pixel_to_GPS(pixel, width, height);
-    Point2d local = GPS_to_local(gps,GPS_of_origin);
-    return local;
-}
-
-Point2d pixel_to_GPS(Point2d pixel, int width, int height)
-{
-    double dLat = MAPT-MAPB;
-    double dLong = MAPR-MAPL;
-    Point2d gps;
-    gps.x =pixel.x*dLong/width+MAPL;
-    gps.y= -pixel.y*dLat/height+dLat+MAPB;
-    return gps;
-}
 
 Mat ComputeTransitionMatrix(Mat state,float dt)
 {
