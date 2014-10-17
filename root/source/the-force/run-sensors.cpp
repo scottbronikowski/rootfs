@@ -50,13 +50,13 @@ imu_data_t* g_imu_data;
 //char g_imu_logbuf[k_LogBufSize];
 //char g_enc_logbuf[k_LogBufSize];
 //char g_gps_logbuf[k_LogBufSize];
-char g_logbuf[k_LogBufSize]; //KILL THIS WHEN DONE--keeping it here to be able to compile
+//char g_logbuf[k_LogBufSize]; //KILL THIS WHEN DONE--keeping it here to be able to compile
 NMEAParser g_parser;
 
 int main (int /*argc*/, char** /*argv*/)
 {
   //int retval;
-  memset(g_logbuf, 0, k_LogBufSize);
+  //memset(g_logbuf, 0, k_LogBufSize);
   printf("Starting Run-Sensors\n");
   //call setup function
   if (!run_sensors_setup())

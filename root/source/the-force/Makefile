@@ -1,7 +1,7 @@
-#makefile for run-sensors (imu and encoders together)
+#makefile for the-force (emperor + run-sensors + kalman filter + autodrive)
 
 CC = g++
-# OUTPUTNAME = run-sensors${D}	
+OUTPUTNAME = the-force${D}	
 
 OPENCV_I = `pkg-config opencv --cflags`
 IMLIB_I = `imlib2-config --cflags`
@@ -14,50 +14,57 @@ OPTFLAGS = -Ofast -march=native -flto #-fwhole-program
 OUTDIR = ../../bin
 CAMDIR = ../camera
 CAMFILES = ${CAMDIR}/toollib-camera.cpp ${CAMDIR}/toollib-camera.h
-# MOTORDIR = ../motor_control
-# MOTORFILES = ${MOTORDIR}/motor_control_functions.cpp ${MOTORDIR}/motor_control.h
+MOTORDIR = ../motor_control
+MOTORFILES = ${MOTORDIR}/motor_control_functions.cpp ${MOTORDIR}/motor_control.h
+SENSORDIR = ../sensors
+GPSFILES = ${SENSORDIR}/mGPSInfo.cpp ${SENSORDIR}/mGPSInfo.h 
+NMEAFILES = ${SENSORDIR}/mNMEAParser.cpp ${SENSORDIR}/mNMEAParser.h
 # IMUDIR = ../razor-imu
 # IMUFILES = ${IMUDIR}/razor-imu.cpp ${IMUDIR}/razor-imu.h
 # EMPDIR = ../emperor
 # EMPFILES = ${EMPDIR}/emperor.cpp ${EMPDIR}/emperor.h
 
-# OBJS =	${CAMDIR}/toollib-camera.o \
-# 	mGPSInfo.o \
-# 	mNMEAParser.o \
+OBJS =	${CAMDIR}/toollib-camera.o \
+	${MOTORDIR}/motor_control_functions.o \
+	${SENSORDIR}/mGPSInfo.o \
+	${SENSORDIR}/mNMEAParser.o \
+	the-force.o
 # 	run-sensors.o
 # #${IMUDIR}/razor-imu.o \
 # #${EMPDIR}/emperor.o \
-# # ${MOTORDIR}/motor_control_functions.o \
 # #${MONDIR}/monitor.o \
 
-log-to-track: log_to_track.cpp 
-	# g++ `pkg-config --cflags --libs opencv` `pkg-config --cflags opencv`log_to_track.cpp -o log-to-track.out
-	${CC} ${CFLAGS} ${OPTFLAGS} log_to_track.cpp -o log-to-track.out ${INCLUDE} ${LIBS} ${COMMON_LIBS}
+# log-to-track: log_to_track.cpp 
+# 	# g++ `pkg-config --cflags --libs opencv` `pkg-config --cflags opencv`log_to_track.cpp -o log-to-track.out
+# 	${CC} ${CFLAGS} ${OPTFLAGS} log_to_track.cpp -o log-to-track.out ${INCLUDE} ${LIBS} ${COMMON_LIBS}
 
 
-# ${OUTPUTNAME}: ${OBJS}
-# 	${CC} -o ${OUTPUTNAME} ${OBJS} ${LIBS} ${COMMON_LIBS}
-# 	mv ${OUTPUTNAME} ${OUTDIR}
+${OUTPUTNAME}: ${OBJS}
+	${CC} -o ${OUTPUTNAME} ${OBJS} ${LIBS} ${COMMON_LIBS}
+	mv ${OUTPUTNAME} ${OUTDIR}
+
+the-force.o: the-force.cpp the-force.h
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
 
 # run-sensors.o: run-sensors.cpp run-sensors.h
 # 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
 # #	${CC} -g ${INCLUDE} -Wall -c $*.cpp 
 
-# mGPSInfo.o: mGPSInfo.cpp mGPSInfo.h
-# 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
+${SENSORDIR}mGPSInfo.o: ${GPSFILES}
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
 
-# mNMEAParser.o: mNMEAParser.cpp mNMEAParser.h
-# 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
+${SENSORDIR}mNMEAParser.o: ${NMEAFILES}
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
 
 # # ${EMPDIR}/emperor.o: ${EMPFILES}
 # # 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp 
 
-# ${CAMDIR}/toollib-camera.o: ${CAMFILES}
-# 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${CAMDIR}/toollib-camera.o
+${CAMDIR}/toollib-camera.o: ${CAMFILES}
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${CAMDIR}/toollib-camera.o
 
 
-# # ${MOTORDIR}/motor_control_functions.o: ${MOTORFILES}
-# # 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${MOTORDIR}/motor_control_functions.o
+${MOTORDIR}/motor_control_functions.o: ${MOTORFILES}
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${MOTORDIR}/motor_control_functions.o
 
 # # ${IMUDIR}/razor-imu.o: ${IMUFILES}
 # # 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${IMUDIR}/razor-imu.o
@@ -68,5 +75,5 @@ log-to-track: log_to_track.cpp
 .PHONY: clean
 
 clean:
-# 	rm -f ${OUTDIR}/${OUTPUTNAME} ${OBJS}	@echo "all cleaned up!"
-	rm -f log-to-track.out	@echo "all cleaned up!"
+	rm -f ${OUTDIR}/${OUTPUTNAME} ${OBJS}	@echo "all cleaned up!"
+#	rm -f log-to-track.out	@echo "all cleaned up!"

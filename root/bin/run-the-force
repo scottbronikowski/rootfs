@@ -1,0 +1,26 @@
+#! /bin/bash
+
+
+start(){
+    /root/bin/the-force &
+}
+
+stop(){
+    echo "killing the-force"
+    pkill the-force
+
+}
+
+case $1 in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    *)
+	echo "Usage: $0 {start|stop}"
+	RETVAL=1
+	;;
+esac
+exit 0

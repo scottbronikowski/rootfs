@@ -1,0 +1,85 @@
+/*
+
+  Header for main control program to run vader-rover for automated driving.
+  Started with a merge of the old emperor and run-sensors programs, along with Dan's code in log_to_track.cpp to do Kalman filter position finding from sensor data.
+  Then removed code dealing with listening for commands from game controller.
+  Replaced that section with code that listens for a trace (series of waypoints) and drives to those waypoints automatically.
+
+  Author: Scott Bronikowski
+  Date: 16 October 2014
+*/
+
+#ifndef THE_FORCE_H
+#define THE_FORCE_H
+
+//from emperor
+#include "toollib-camera.h"
+#include "motor_control.h"
+#include "razor-imu.h"
+#include <csignal>
+#include <pthread.h>
+
+//defines
+
+//global constants 
+//(from emperor)
+extern const int BACKLOG;
+extern const char* k_CommandPort;
+extern const int k_maxBufSize;
+extern const char* cmd_start_cameras;
+extern const char* cmd_stop_cameras;
+extern const char* cmd_forward_4;
+extern const char* cmd_forward_3;
+extern const char* cmd_forward_2;
+extern const char* cmd_forward_1;
+extern const char* cmd_stop;
+extern const char* cmd_reverse_1;
+extern const char* cmd_reverse_2;
+extern const char* cmd_reverse_3;
+extern const char* cmd_reverse_4;
+extern const char* cmd_forward_right_1;
+extern const char* cmd_forward_right_2;
+extern const char* cmd_forward_left_1;
+extern const char* cmd_forward_left_2;
+extern const char* cmd_pivot_left_1;
+extern const char* cmd_pivot_left_2;
+extern const char* cmd_pivot_right_1;
+extern const char* cmd_pivot_right_2;
+extern const char* cmd_reverse_left_1;
+extern const char* cmd_reverse_left_2;
+extern const char* cmd_reverse_right_1;
+extern const char* cmd_reverse_right_2;
+extern const char* cmd_servo;
+extern const char* pan_file;
+extern const char* tilt_file;
+extern const char* k_LogPort;
+extern const int k_LogBufSize;
+//for bump switch monitoring
+extern const int bump_move_time;
+extern const int bump_read_size;
+extern const int bump_front;
+extern const int bump_rear;
+extern const char* gpio_file;
+
+//global vars 
+//(from emperor)
+extern int sockfd, log_sockfd;
+extern int cam_thread_should_die, gpio_thread_should_die;
+extern pthread_t cam_thread, gpio_thread;
+extern int pan_fd, tilt_fd, motor_fd, gpio_fd;
+
+//structures
+
+//prototypes 
+//(from emperor)
+void emperor_signal_handler(int signum);
+void* emperor_run_cameras(void* args);
+void* emperor_monitor_bump_switches(void* args);
+int emperor_parse_and_execute(char* msgbuf);
+int emperor_log_data(char* databuf, int log_fd);
+double emperor_current_time(void);
+
+
+
+#endif
+

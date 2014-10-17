@@ -495,6 +495,11 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 16 Oct 14
 --Started merging emperor.{cpp,h}, run-sensors.{cpp,h}, and log_to_track.cpp all into the-force.{cpp,h}.  The idea is to have everything running out of a single executable b/c the different threads will be able to more easily communicate that way (probably through pipes/fifos, or shared memory as my threads had done before).  The threads reading sensor data will send readings to a new thread that will do the Kalman position calculation and then send that data to the motor control thread.  Motor control thread will also be able to send motor speed settings to Kalman thread in order to incorporate the control data into the Kalman calculation (current setup ignores this).  Immediate goal is to do the merge of emperor and run-sensors and get that to compile and run w/o issues before bringing in Kalman code.
 
+17 Oct 14
+--Got emperor functionality merged into the-force.  Everything seems to work correctly, except for the command logging function.  This is because the code in rover_server_log() on seykhl doesn't start doing any actual logging until both the command log and IMU log sockets are connected.  Need to get run-sensors integrated into the-force before this will work.
+--Have header and all functions from run-sensors integrated into the-force.  Have all files compiling without error.  Still need to combine the calls from run-sensors main() into the-force main() and then test functionality.
+
+
 **TODO**
 
  
@@ -512,6 +517,21 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 Buffers
 ----------------------------------------
+. * today.text           69637  Text		  ~/today.text
+    Makefile|the-force    2808  GNUmakefile	  ~/source/the-force/Makefile
+  * *shell*               6734  Shell:run	  ~/source/the-force/
+    run-sensors-Makefile  2182  GNUmakefile	  ~/source/the-force/run-sensors-Makefile
+    the-force.cpp        41209  C++/l		  ~/source/the-force/the-force.cpp
+    run-sensors.cpp      24795  C++/l		  ~/source/the-force/run-sensors.cpp
+    the-force.h           5591  C++/l		  ~/source/the-force/the-force.h
+    run-sensors.h         3468  C++/l		  ~/source/the-force/run-sensors.h
+  * *shell*<2>             472  Shell:run	  /
+    log_to_track.cpp     11420  C++/l		  ~/source/the-force/log_to_track.cpp
+    log_to_track-makefile  373  GNUmakefile	  ~/source/the-force/log_to_track-makefile
+    emperor-Makefile      1725  GNUmakefile	  ~/source/the-force/emperor-Makefile
+------
+
+
 . * *shell*              11213  Shell:run	  /
   * *shell*<2>             685  Shell:run	  ~/bin/
     run-sensors.h         3468  C++/l		  ~/source/sensors/run-sensors.h

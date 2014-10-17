@@ -1,21 +1,3 @@
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/firmwares/* .
-cd ../variants/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/variants/robot* .
-cd ../..
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/teensy .
-cd ../..
-ls
-cd arduino/
-ls
-cd hardware/
-ls
-cd tools/
-ls
-lls
-lla
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm* .
 ls
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/avr .
@@ -1998,3 +1980,21 @@ ps -ef | grep ssh
 AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
 ls
 reboot
+ping google.com
+iwconfig
+reboot
+ls
+lla tod*
+emacs today.text &
+cd bin
+lla
+cat run-imu 
+cat run-emperor 
+lla
+cd ../source/the-force/
+ls
+cd ../../bin
+ls
+lla
+./the-force 
+htop

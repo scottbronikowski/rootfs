@@ -1,9 +1,3 @@
-Paper deadlines:
-AAAI: 10Sep14-abstract, 15Sep14-final paper (conference 25-29Jan15 Austin, TX)
-ICRA: 15Sep14-abstract, 12Feb15-final paper (conference 25-30May15, Seattle, WA) 
-      (last conference 31May-5June14, paper deadline was 16Sep13)
-IROS: 18Feb15-abstract, 8Jul15-final paper (conference 28Sep-2Oct15, Hamburg, Germany)
-      (last conference 14-18Sep14, paper deadline was 6Feb14)
 
 
 Old notes
@@ -431,18 +425,86 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Replaced broken DC-DC adapter with new one--added insulation, better connectors, wire strain relief, and support padding to the bottom of auxiliary circuit boards.  Seems to be working fine now.
 --Replaced broken USB Wifi adapter with new one.  Had to change /etc/udev/rules.d/70-persistent-net.rules to remove old wlan1 (and unused wlan2) and replace it with new wlan1 since devices are given the 'wlan*' names based on MAC address.  Rebooted and network is back to working normally.
 
-**TODO**
- *Need to shorten some USB cables (front camera, wifi adapter, USB hub to Gumstix) b/c cable organization looks a bit dicey.
- *Custom sketch for Teensy to monitor encoders	 
- *Would getting GPS data be a quick clone of run-imu.cpp?****
+15 Jul 14
+--Finished replacing broken components (GPS, Wifi, USB hub, Teensy, DC-DC converter).  All appear to be working normally.
+--Started working on run-gps.cpp (started from clone of run-imu.cpp)
 
+16 Jul 14
+--Have first draft of run-gps.cpp running, sending raw NMEA sentences (of the GPRMC and GPGGA types) back to the imu-log.txt file on seykhl.  Need to modify rover_server_log to allow multiple connections to the log_imu_sockfd port for logging, since now only one or the other of GPS and IMU (but not both) can log (need 3: IMU, GPS, encoders).
+
+17 Jul 14
+--Completed mods to allow GPS and IMU to log simultaneously--logging works well.  
+
+19 Jul 14
+--Started work on run-encoders.{cpp,h} to run on rover and read data from encoders (via Teensy) and send it back to seykhl to be logged.  Have all of the boilerplate stuff adapted from run-imu and run-gps, just need to write the functions to initialize the Teensy, listen for and read the data, and the handler function that runs in the main loop (which all should be fairly straightforward adaptations from razor-imu.cpp).  
+--Dan was in for a while today and we spoke about adapting his old Kalman filter code to my project.  It seems like it won't be too difficult to go from the data that I'm logging in my log file to a series of (x, y, orientation) positions, which will form the trace of the robot's path.
+
+20 Jul 14
+--Completed first draft of run-encoders.  Have binary data read of timestamp (ms), dt (ms), left distance (cm) and right distance (cm) from Teensy working.
+--Added another field to IMU data, dt, to record ms between readings.
+--Removed extra printfs from run-encoders and run-imu.
+
+21 Jul 14
+--Changed IMU update timing/logic in Razor_AHRS.ino to use microseconds (micros() function) instead of millis() to fix problem of updates not coming at exactly 20 ms each time.  Had to put in logic to deal with the micros() rollover case (every ~70 minutes).  Believe the logic is correct, but need to run a test for > 70 minutes to confirm.
+--Found logic error in first draft of rollover logic...testing fix.
+
+22 Jul 14
+--Fix appeared to work, no rollovers of IMU time and no nan's in YPR output.
+--Need to implement fixes in run-imu and run-encoders to ignore the first ~500 ms of output from the microcontrollers, since they are arriving at the Gumstix at an interval < 20 ms--looks like the serial buffer is just filling up once the connection is made.  Need to have a loop that runs for ~500 ms and just receives the messages and does nothing with them.
+--Having weird network/socket errors between sensor executables and log thread on seykhl.  Going to try to consolidate run-imu, run-encoders, and run-gps into a single program that polls each sensor on a schedule and then sends one consolidated message.
+
+23 Jul 14
+--Consolidated run-imu and run-encoders into a single program, run-sensors.  This program reads from the IMU and the encoders sequentially and then packages both sensors' data into a single message.  I tested it and it seems to work well.  Still have run-gps as a separate program because the GPS runs at 1 Hz, while the IMU and encoders both update at 50 Hz.  Also, run-gps just sends the raw NMEA sentence back to seykhl, and I plan on parsing it into usable variables on seykhl.
+
+25 Jul 14
+--Added 'null' loop in run-sensors to clear out bogus data in serial buffers before transmitting data back to seykhl.  Loop runs for 200 ms.  No more bogus (dt != 20ms) data arriving in log.
+
+26 Jul 14
+--Started incorporating GPS reading into run-sensors.  Discovered that the fgets() I was using to read a full line (since NMEA sentences are terminated with a newline) from the GPS will block, so calling it after every encoder/IMU read (since I can't predict when a GPS sentence will be there to read) limits the encoder/IMU data to the GPS rate of 1Hz.  Going to have to find/write a function that does a normal read and just continues until it hits a newline, and then wrap that read in a select in order to not block.  Not sure how long of a timeout I can afford to give the select--maybe start with 10ms.
+--Tried a readLine() function that I found that was reportedly supposed to continue to call read() until it reached a newline.  Could not get it to work--it kept returning after reading only 3 characters.  Instead tried using an fgets() call inside of a select()--basically a copy of what run-gps had done, put inside of a 10ms timeout--and it seemed to work.  
+--Then I started getting errors from the terminal saying '*** buffer overflow detected ***: /root/bin/run-sensors terminated'.  I might have been getting these errors yesterday as well, and just not noticing them because I was running the 'run-emperor' script (which starts emperor and run-sensors) from the button in the driver-viewer instead of from its own terminal window.  Upon looking at the log, it appears that near the end of the file, before run-sensors terminates, the Gumstix-timestamp interval between the combined IMU/encoder message lines decreases to <11 ms between messages (while the timestamps from the IMU are still at 20 ms intervals)--and this happens whether or not I'm trying to run the GPS at the same time. 
+--From the above, I think I may have a classic 'producer/consumer' problem--the messages are coming in from the serial buffer faster than the Gumstix can send them over the network, and eventually the buffer gets overflowed.  
+--I think the fix might be similar to what we did for the receiving of the camera images on seykhl--have one thread (or possibly two, one for the IMU/encoder lines and one for the GPS) put the messages to send into a large circular buffer, and then have a separate thread read the messages out of the buffer and send them.
+
+27 Jul 14
+--After an email exchange with Dan, decided to try to continue to have run-sensors operate single-threaded.  Created a buffer (sized with constant k_msg_buf_size) to have the IMU/encoder and gps reading functions write their data to, and then have a counter that calls a sending function when the counter reaches k_msg_buf_size.  This way we can send a buffer of k_msg_buf_size * 256-byte messages instead of sending every 256-byte message as soon as it's produced, saving k_msg_buf_size * TCP sending overhead (IIRC, ~40 bytes for a TCP packet).  Also added a sleep in the run-emperor script to make sure that run-sensors has a chance to send its buffer before being killed.
+--Discovered that the true problem was with the IMU getting out of sync with the reads; IMU would start reading bogus data and never recover.  Attempted a fix by changing the IMU output to single frame instead of streaming, and then polling it for one frame in imu_data_read().  With output to terminal, observed runs that did not have errors, but the interval between IMU reads is 40ms, while for the encoder it's 20ms (so the encoder is buffering data and we're getting out of sync).  Don't think this technique will work.  
+--Need to strip it back down to just reading the IMU, possibly putting the data in a buffer, and sending it to see if we can run fast enough.  Might need look at a way to have sync bytes on the IMU frame to ensure that we start reading at the beginning of the frame.
+--Probably going to need to build multiple threads to have multiple writers putting data into the message send buffer and then one thread sending the buffer--can't have GPS in same thread as IMU and encoder b/c it sends data at 4800 baud, while IMU and encoders run at 57600 baud.
+
+28 Jul 14
+--Started working on making run-sensors multi-threaded: 3 producer threads (IMU, encoders, GPS) that put messages into the send buffer, and 1 consumer thread that sends the buffer when it is full.  Stopped while working on run_sensors_setup() function.
+
+29 Jul 14
+--Got consumer thread and first producer thread (IMU) working, no problems so far.  Need to finish the encoder and GPS threads and then test.
+
+30 Jul 14
+--Finished multithreading encoder and GPS threads.  Having a small issue that occasionally a message gets dropped when buffer is full.  
+--Restructured consumer() and sensors_send_data() (on rover) and rover_server_recv_and_print() (on seykhl) to have consumer send buffer when it gets to be >= .9*max, and use the msg_count at that time to compute number of bytes to send.  Now sensors_send_data() takes the buffer and the num_messages int as arguments, and then sends the int first, then the buffer itself.  On the receive side, rover_server_recv_and_print() receives the int and then uses it to set the number of bytes to receive.  All appears to be working normally, no 'buffer full' error messages seen.
+
+31 Jul 14
+--Added nNMEAParser calls to gps_read_data() in order to output formatted strings for GPS data.  Had to do some tweaks to mGPSInfo and mNMEAParser to get them to work correctly.
+
+27 Aug 14
+--Reprogrammed Teensy so that it is back to using separate ticks/cm for each encoder, instead of an average of the two as it had been using.
+--Modified /etc/network/interfaces to bring wlan0 up on qobi-cccp as backup until the wlan1/PAL3.0 issue is fixed
+
+15 Oct 14
+--Started to work on automatic driving.  Created ~/source/the-force which will be where I write the program.  The idea is to have Dan's log_to_track code running inside a modified version of run-sensors so that the sensors can output a position in real time.  Then I'll modify the emperor code to remove everything about waiting for commands and add waiting for a trace (as a series of x,y,theta points).  Modified emperor (aka, the-force) will then loop through the points and do the following: compare own position/heading to position of and heading to point, turn/drive as necessary, wait a certain amount of time, check again, if within a certain radius of point declare success, get next point.
+
+16 Oct 14
+--Started merging emperor.{cpp,h}, run-sensors.{cpp,h}, and log_to_track.cpp all into the-force.{cpp,h}.  The idea is to have everything running out of a single executable b/c the different threads will be able to more easily communicate that way (probably through pipes/fifos, or shared memory as my threads had done before).  The threads reading sensor data will send readings to a new thread that will do the Kalman position calculation and then send that data to the motor control thread.  Motor control thread will also be able to send motor speed settings to Kalman thread in order to incorporate the control data into the Kalman calculation (current setup ignores this).  Immediate goal is to do the merge of emperor and run-sensors and get that to compile and run w/o issues before bringing in Kalman code.
+
+**TODO**
+
+ 
 ***RANDOM NOTES
 --may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
 --LOOK AT C++ examples in Razor code
 
 ..udev stuff to write new *.rules file lines to reference a device with a fixed alias
   #udevadm info --query all --name /dev/ttyUSB1 --attribute-walk
-  --gives info about the device to make a udev rule
+  --GIVES info about the device to make a udev rule
   #udevadm control --reload-rules; udevadm trigger 
   --reloads udev rules so newly written ones can take effect
 ..USE A SOCKET INSTEAD OF FILE DESCRIPTOR TO COMMUNICATE BETWEEN GPIO AND MONITOR!!!!  READ WILL BLOCK!!!
@@ -450,33 +512,41 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 Buffers
 ----------------------------------------
+. * *shell*              11213  Shell:run	  /
+  * *shell*<2>             685  Shell:run	  ~/bin/
+    run-sensors.h         3468  C++/l		  ~/source/sensors/run-sensors.h
+    run-sensors.cpp      24787  C++/l		  ~/source/sensors/run-sensors.cpp
+  * today.text           66278  Text		  ~/today.text
+    Makefile              2182  GNUmakefile	  ~/source/sensors/Makefile
+    toollib-camera.cpp   21774  C++/l		  ~/source/camera/toollib-camera.cpp
+    emperor.cpp          24567  C++/l		  ~/source/emperor/emperor.cpp
+    run-gps.cpp           7479  C++/l		  ~/source/gps/run-gps.cpp
+
+    run-emperor            433  Shell-script[bas  ~/bin/run-emperor
+    run-imu.cpp           6015  C++/l		  ~/source/razor-imu/run-imu.cpp
+    razor-imu.cpp        12404  C++/l		  ~/source/razor-imu/razor-imu.cpp
+    razor-imu.h           1495  C++/l		  ~/source/razor-imu/razor-imu.h
+    run-imu.h              748  C++/l		  ~/source/razor-imu/run-imu.h
+    run-encoders.h        1745  C++/l		  ~/source/encoders/run-encoders.h
+
+---old
+    Razor_AHRS.ino       30191  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
+    run-gps.h             1257  C++/l		  ~/source/gps/run-gps.h
+
+---old---
 .   Sensors.ino           6483  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Sensors.ino
     Razor_AHRS.ino       28879  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
-  * *shell*<2>            2974  Shell:run	  ~/source/razor-imu/arduino/Razor_AHRS/
-  * *shell*              28383  Shell:run	  /
     Output.ino            6445  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Output.ino
-    today.text           53112  Text		  ~/today.text
     DCM.ino               4673  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/DCM.ino
     Math.ino              2187  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Math.ino
     Compass.ino            595  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Compass.ino
-    razor-imu.cpp        12379  C++/l		  ~/source/razor-imu/razor-imu.cpp
-    run-imu.cpp           5254  C++/l		  ~/source/razor-imu/run-imu.cpp
 
 ---old----
-.   Razor_AHRS.ino       27176  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Razor_AHRS.ino
-  * *shell*<2>            1178  Shell:run	  ~/source/razor-imu/arduino/Razor_AHRS/
-    DCM.ino               4673  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/DCM.ino
-  * *shell*              44096  Shell:run	  /
-    today.text           43493  Text		  ~/today.text
     emperor.cpp          21021  C++/l		  ~/source/emperor/emperor.cpp
     emperor.h             2197  C++/l		  ~/source/emperor/emperor.h
-    razor-imu.cpp        11560  C++/l		  ~/source/razor-imu/razor-imu.cpp
     rotary.cpp|rotary     2813  C++/l		  ~/source/libbeagle/examples/rotary/rotary.cpp
     rotary.h               975  C++/l		  ~/source/libbeagle/main/src/rotary.h
     rotary.cpp|src        4049  C++/l		  ~/source/libbeagle/main/src/rotary.cpp
-    Compass.ino            595  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Compass.ino
-    Output.ino            5517  C/l		  ~/source/razor-imu/arduino/Razor_AHRS/Output.ino
-    razor-imu.h           1413  C++/l		  ~/source/razor-imu/razor-imu.h
     RazorAHRS.cpp         9139  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/RazorAHRS.cpp
     Example.cpp           4487  C++/l		  ~/razor-9dof-ahrs-Release-v1.4.2/C++/Example.cpp
     toollib-camera.cpp   21748  C++/l		  ~/source/camera/toollib-camera.cpp
