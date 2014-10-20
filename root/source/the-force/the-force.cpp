@@ -93,7 +93,6 @@ char tilt_prev[k_maxBufSize];
 //(from run-sensors)
 encoders_data_t* g_encoders_data;
 imu_data_t* g_imu_data;
-char g_logbuf[k_LogBufSize]; //KILL THIS WHEN DONE--keeping it here to be able to compile
 NMEAParser g_parser;
 
 
@@ -111,28 +110,28 @@ int main(int /*argc*/, char** /*argv*/)
   if (pan_fd < 1)
   {
     perror("pan:");
-    emperor_signal_handler(SIGTERM);
+    the_force_terminator(SIGTERM);
     return -1;
   }
   tilt_fd = open(tilt_file, O_WRONLY);
   if (tilt_fd < 1)
   {
     perror("tilt:");
-    emperor_signal_handler(SIGTERM);
+    the_force_terminator(SIGTERM);
     return -1;
   }
   motor_fd = initport();
   if (motor_fd < 1)
   {
     perror("motor:");
-    emperor_signal_handler(SIGTERM);
+    the_force_terminator(SIGTERM);
     return -1;
   }
   gpio_fd = open(gpio_file, O_RDONLY);
   if (gpio_fd < 1)
   {
     perror("gpio:");
-    emperor_signal_handler(SIGTERM);
+    the_force_terminator(SIGTERM);
     return -1;
   }
   //start network stuff and wait for connection
@@ -168,11 +167,24 @@ int main(int /*argc*/, char** /*argv*/)
   pthread_attr_destroy(&attributes);
   printf("%s\n", logbuf);
 
+  //start the functions from run-sensors
+  printf("Starting sensors...");
+  //call setup function
+  if (!run_sensors_setup())
+  {
+    printf("run_sensors_setup() failed\n");
+    the_force_terminator(SIGTERM); 
+    return -1;
+  }
+  //call start function
+  run_sensors_start();
+  printf("sensors started successfully\n");
+  
   //***PROBABLY NEED TO START CAMERAS AUTOMATICALLY SOMEWHERE AROUND HERE****
-
+  // OR MAYBE only start them only when a route has been received
   //register signal handler for termination
-  signal(SIGINT, emperor_signal_handler);
-  signal(SIGTERM, emperor_signal_handler);
+  signal(SIGINT, the_force_terminator);
+  signal(SIGTERM, the_force_terminator);
 
   char msgbuf[k_maxBufSize];
   char prevmsgbuf[k_maxBufSize];
@@ -189,13 +201,13 @@ int main(int /*argc*/, char** /*argv*/)
     if (retval < 0)
     {
       printf("Error in recv\n");
-      emperor_signal_handler(SIGTERM);
+      the_force_terminator(SIGTERM);
       return -1;
     }
     if (retval == 0)
     {
       printf("Sender closed connection\n");
-      emperor_signal_handler(SIGTERM);
+      the_force_terminator(SIGTERM);
       return -1;
     }
     //if we get here, we have something useful in msgbuf, so do something with it
@@ -211,19 +223,23 @@ int main(int /*argc*/, char** /*argv*/)
     if (retval != 0)
     {
       printf("Error in emperor_parse_and_execute\n");
-      emperor_signal_handler(SIGTERM);
+      the_force_terminator(SIGTERM);
       return -1;
     }
   }
-  //cleanup done in signal handler
+  //cleanup done in terminator
   return 0;
 }
 
 
-void emperor_signal_handler(int signum)
+void the_force_terminator(int signum)
 {
 
   //***MIGHT WANT TO HAVE THE SHUTDOWN THREAD SEND A STOP FIRST, JUST IN CASE
+  motor_stop(motor_fd);
+  //stop sensors
+  sensors_terminator(SIGTERM);
+  
   //emperor_log_data("Logging stopped", log_sockfd);
   //printf("received signal %d\n", signum);
   if (!cam_thread_should_die) //only stop if already running
@@ -231,11 +247,11 @@ void emperor_signal_handler(int signum)
       int retval;
       cam_thread_should_die = TRUE;
       pthread_join(cam_thread, NULL);
-      retval = emperor_log_data((char*)"Cameras stopped in emperor_signal_handler", 
+      retval = emperor_log_data((char*)"Cameras stopped in the_force_terminator", 
 				log_sockfd);
       if (retval != 0)
 	printf("logging failed for: ");
-      printf("Cameras stopped in emperor_signal_handler\n");
+      printf("Cameras stopped in the_force_terminator\n");
     }
   //kill bump switch thread
   gpio_thread_should_die = TRUE;
@@ -556,7 +572,7 @@ int emperor_log_data(char* databuf, int log_fd)
   }
   else
   {
-    printf("sent: %s\n", sendbuf);
+    //printf("sent: %s\n", sendbuf);
     return 0; //success
   }
 }
@@ -631,13 +647,6 @@ bool run_sensors_setup(void)
   }
   //init GPS (just get file pointer from fd)
   gps_file_ptr = fdopen(gps_fd, "r");
-
-  //printf("init complete\n");
-  // //test output from both -- ***DO WE NEED THIS??***
-  // if (sensors_handler())
-  //   printf("SUCCESS: %s\n", g_logbuf);
-  // else
-  //   printf("FAILURE: %s\n", g_logbuf);
 
   //success if we get here
   printf("run_sensors_setup() succeeded\n");

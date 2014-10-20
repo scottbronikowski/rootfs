@@ -1,36 +1,3 @@
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm* .
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/avr .
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/avrdude64 .
-lla
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/m* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/r* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/t* .
-lla
-cd ../../lib
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/lib/ard* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/lib/ec* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/lib/lib* .
-lla
-cd ../libraries/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/A* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/B* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/C* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/D* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Enc* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/En* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Es* .
-cd Ethernet/
-ls
-cd examples/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Ethernet/examples/WebClientRepeating .
-cd ../..
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Fas* .
-cd Firmata/examples/
 ls
 cd AnalogFirmata/
 ls
@@ -1998,3 +1965,36 @@ ls
 lla
 ./the-force 
 htop
+i
+iwconfig
+ping purdue.edu
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+top
+reboot
+emacs today.text &
+pkill the-force
+cd bin/
+ls
+./the-force 
+ls
+./run-emperor 
+./run-emperor start
+./run-emperor stop
+ls
+./motor_control forward_1
+./motor_control stop
+cd ../source/
+ls
+cd sensors/
+ls
+cd ../../bin
+./run-the-force start
+lla
+chmod a+x run-the-force
+lla
+./run-the-force start
+./run-the-force stop
+exit

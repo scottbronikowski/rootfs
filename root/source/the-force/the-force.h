@@ -134,7 +134,8 @@ struct imu_data_t {
 
 //prototypes 
 //(from emperor)
-void emperor_signal_handler(int signum);
+//void emperor_signal_handler(int signum);
+void the_force_terminator(int signum);
 void* emperor_run_cameras(void* args);
 void* emperor_monitor_bump_switches(void* args);
 int emperor_parse_and_execute(char* msgbuf);
