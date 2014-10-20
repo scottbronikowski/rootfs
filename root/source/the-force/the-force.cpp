@@ -14,6 +14,8 @@
 const int BACKLOG = 5;
 const char* k_CommandPort = "1999";
 const int k_maxBufSize = 50;
+//used for buffer of trace points, replaces k_maxBufSize in send/receive
+const int k_traceBufSize = 1300; //max # of bytes in trace
 const char* cmd_start_cameras = "start_cameras";
 const char* cmd_stop_cameras = "stop_cameras";
 const char* cmd_forward_4 = "forward_4";
@@ -182,6 +184,7 @@ int main(int /*argc*/, char** /*argv*/)
   
   //***PROBABLY NEED TO START CAMERAS AUTOMATICALLY SOMEWHERE AROUND HERE****
   // OR MAYBE only start them only when a route has been received
+
   //register signal handler for termination
   signal(SIGINT, the_force_terminator);
   signal(SIGTERM, the_force_terminator);

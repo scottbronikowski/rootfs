@@ -502,7 +502,7 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 20 Oct 14
 --Combined run-sensors main() calls into the_force main().  Renamed emperor_signal_handler() to the_force_terminator() (i.e., the cleanup/shutdown function) and have it calling sensors_terminator() as its first line.  Ran initial test and logging appeared to work correctly.  Noticed camera framerate under the-force was ~8-9 fps per cam, and thought this was a bit low, but I ran unmodified emperor under the same conditions and got a similar framerate, so it doesn't appear to be an issue with the-force.
-
+--Started modifying the inner loop of emperor to work off of traces instead of explicit commands.  First step is to get the rover to receive a trace over the command port (instead of individual commands) and then parse that trace into a usable format for the rest of the loop.
 
 **TODO**
 
