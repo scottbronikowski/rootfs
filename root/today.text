@@ -505,7 +505,8 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Started modifying the inner loop of emperor to work off of traces instead of explicit commands.  First step is to get the rover to receive a trace over the command port (instead of individual commands) and then parse that trace into a usable format for the rest of the loop.
 
 21 Oct 14
---Have initial passing of 1300-byte text messages from driver window on seykhl to rover working
+--Have initial passing of 1300-byte text messages from driver window on seykhl to rover working.
+--Thinking about 1300-byte limit on string for list of points->don't think I need to put so low a limit on it...if it's bigger, TCP will just take care of parsing it into separate packets.  String parser done, seems to be working correctly.  Next need to work on point following.
 
 **TODO**
 

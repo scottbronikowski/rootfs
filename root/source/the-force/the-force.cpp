@@ -222,13 +222,14 @@ int main(int /*argc*/, char** /*argv*/)
     else //got a repeat of the last received command, so ignore it
       continue;
     //do stuff with commands received
-    // retval = emperor_parse_and_execute(msgbuf);
-    // if (retval != 0)
-    // {
-    //   printf("Error in emperor_parse_and_execute\n");
-    //   the_force_terminator(SIGTERM);
-    //   return -1;
-    // }
+    retval = the_force_parse_and_execute(msgbuf);
+    if (retval != 0)
+    {
+      printf("Error in the_force_parse_and_execute\n");
+      the_force_terminator(SIGTERM);
+      return -1;
+    }
+    printf("Trace following complete for: %s\n", msgbuf);
   }
   //cleanup done in terminator
   return 0;
@@ -386,161 +387,210 @@ void* emperor_monitor_bump_switches(void* args)
   pthread_exit(NULL);
 }
 
-int emperor_parse_and_execute(char* msgbuf)
+int the_force_parse_and_execute(char* msgbuf)
 {
   char logbuf[k_LogBufSize];
   int retval;
-  if (strncmp(msgbuf, cmd_start_cameras, strlen(cmd_start_cameras)) == 0) 
-  { //start cameras
-    //printf("Matched start_cameras command\n");
-    //do stuff
-    if (cam_thread_should_die) //only start if not already running
-    {
-      cam_thread_should_die = FALSE;
-      pthread_attr_t attributes;
-      pthread_attr_init(&attributes);
-      pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
-      pthread_create(&cam_thread, &attributes, emperor_run_cameras, NULL);
-      sprintf(logbuf, "executed: %s", msgbuf);
-      retval = emperor_log_data(logbuf, log_sockfd);
-      if (retval != 0)
-	printf("logging failed for \'%s\'\n", logbuf);
-      pthread_attr_destroy(&attributes);
-    }
-    return 0;
+  //parse raw route into x,y points. Format of string is:
+  //  n:x1,y1;x2,y2;...;xn,yn
+  char *str_num, *str_x, *str_y;
+  str_num = strtok(msgbuf, ":");
+  int num_points = atoi(str_num);
+  printf("num_points = %d\n",num_points);
+  location_t loc[num_points];
+  for (int i = 0; i < num_points; i++)
+  {
+    str_x = strtok(NULL, ",");
+    str_y = strtok(NULL, ";");
+    loc[i].x = atof(str_x);
+    loc[i].y = atof(str_y);
+    printf("loc[%d]: x = %f, y = %f\n", i, loc[i].x, loc[i].y);
   }
-  if (strncmp(msgbuf, cmd_stop_cameras, strlen(cmd_stop_cameras)) == 0)
-  { //stop cameras
-    //printf("Matched stop_cameras command\n");
-    //do stuff
-    if (!cam_thread_should_die) //only stop if already running
-    {
-      cam_thread_should_die = TRUE;
-      pthread_join(cam_thread, NULL);
-      sprintf(logbuf, "executed: %s", msgbuf);
-      retval = emperor_log_data(logbuf, log_sockfd);
-      if (retval != 0)
-	printf("logging failed for \'%s\'\n", logbuf);
-      printf("Cameras stopped\n");
-    }
-    return 0;
-  }  
-  if (strncmp(msgbuf, cmd_servo, strlen(cmd_servo)) == 0)
-  { //tilt & motor
-    // printf("Matched servo & motor command\n");
-    //do stuff
-    //parse the command
-    char *servo, *tilt, *pan, *motor;
-    servo = strtok(msgbuf, " :");
-    tilt = strtok(NULL, " :");
-    pan = strtok(NULL, " :");
-    motor = strtok(NULL, " :");
-    // printf("Parsed: servo = %s, tilt = %s, pan = %s, motor = %s\n", 
-    // 	   servo, tilt, pan, motor);
-    // printf("strlen: servo = %d, tilt = %d, tilt = %d, motor = %d\n", 
-    // 	   strlen(servo), strlen(tilt), strlen(pan), strlen(motor));
-   
-    //write commands to pan and tilt fds 
-    //  first check if command is duplicated
-    if ((strncmp(pan, pan_prev, strlen(pan)) !=0) ||
-	(strncmp(tilt, tilt_prev, strlen(tilt)) != 0)) //if either is different
-    {
-      memset(pan_prev, 0, sizeof(pan_prev));
-      strncpy(pan_prev, pan, strlen(pan));
-      memset(tilt_prev, 0, sizeof(tilt_prev));
-      strncpy(tilt_prev, tilt, strlen(tilt));
-      retval = write(tilt_fd, tilt, strlen(tilt));
-      if(retval < 0)
-      {
-	printf("error writing tilt\n");
-	return -1;
-      }
-      //printf("wrote tilt...");
-      retval = write(pan_fd, pan, strlen(pan));
-      if(retval < 0)
-      {
-	printf("error writing pan\n");
-	return -1;
-      }
-      //printf("wrote pan\n");
-      //now log pan & tilt
-      sprintf(logbuf, "executed: pan_%s, tilt_%s", pan, tilt );
-      retval = emperor_log_data(logbuf, log_sockfd);
-      if (retval != 0)
-	printf("logging failed for \'%s\'\n", logbuf);
-    }
-    //send motor command
-    //  first check if motor command is new -- no need to send repeats
-    if (strncmp(motor, motor_prev, strlen(motor)) != 0)
-    {
-      // printf("new motor command: motor_prev = %s, motor = %s\n", motor_prev, motor);
-      memset(motor_prev, 0, sizeof(motor_prev));
-      strncpy(motor_prev, motor, strlen(motor));
 
-      if (strncmp(motor, cmd_stop, strlen(cmd_stop)) == 0) //stop
- 	motor_stop(motor_fd);
-      else if (strncmp(motor, cmd_forward_1, strlen(cmd_forward_1)) == 0) //forward_1
-      	motor_forward_1(motor_fd);
-      else if (strncmp(motor, cmd_forward_2, strlen(cmd_forward_2)) == 0) //forward_2
-	motor_forward_2(motor_fd);
-      else if (strncmp(motor, cmd_forward_3, strlen(cmd_forward_3)) == 0) //forward_3
-	motor_forward_3(motor_fd);
-      else if (strncmp(motor, cmd_forward_4, strlen(cmd_forward_4)) == 0) //forward_4
-	motor_forward_4(motor_fd);
-      else if (strncmp(motor, cmd_reverse_1, strlen(cmd_reverse_1)) == 0) //reverse_1
-	motor_reverse_1(motor_fd);
-      else if (strncmp(motor, cmd_reverse_2, strlen(cmd_reverse_2)) == 0) //reverse_2
-	motor_reverse_2(motor_fd);
-      else if (strncmp(motor, cmd_reverse_3, strlen(cmd_reverse_3)) == 0) //reverse_3
-	motor_reverse_3(motor_fd);
-      else if (strncmp(motor, cmd_reverse_4, strlen(cmd_reverse_4)) == 0) //reverse_4
-	motor_reverse_4(motor_fd);
-      else if (strncmp(motor, cmd_forward_right_1, 
-		       strlen(cmd_forward_right_1)) == 0) //forward_right_1
-	motor_forward_right_1(motor_fd);
-      else if (strncmp(motor, cmd_forward_right_2, 
-		       strlen(cmd_forward_right_2)) == 0) //forward_right_2
-	motor_forward_right_2(motor_fd);
-      else if (strncmp(motor, cmd_forward_left_1, 
-		       strlen(cmd_forward_left_1)) == 0) //forward_left_1
-	motor_forward_left_1(motor_fd);
-      else if (strncmp(motor, cmd_forward_left_2, 
-		       strlen(cmd_forward_left_2)) == 0) //forward_left_2
-	motor_forward_left_2(motor_fd);
-      else if (strncmp(motor, cmd_pivot_left_1, 
-		       strlen(cmd_pivot_left_1)) == 0) //pivot_left_1
-	motor_pivot_left_1(motor_fd);
-      else if (strncmp(motor, cmd_pivot_left_2, 
-		       strlen(cmd_pivot_left_2)) == 0) //pivot_left_2
-	motor_pivot_left_2(motor_fd);
-      else if (strncmp(motor, cmd_pivot_right_1, 
-		       strlen(cmd_pivot_right_1)) == 0) //pivot_right_1
-	motor_pivot_right_1(motor_fd);
-      else if (strncmp(motor, cmd_pivot_right_2, 
-		       strlen(cmd_pivot_right_2)) == 0) //pivot_right_2
-	motor_pivot_right_2(motor_fd);
-      else if (strncmp(motor, cmd_reverse_right_1, 
-		       strlen(cmd_reverse_right_1)) == 0) //reverse_right_1
-	motor_reverse_right_1(motor_fd);
-      else if (strncmp(motor, cmd_reverse_right_2, 
-		       strlen(cmd_reverse_right_2)) == 0) //reverse_right_2
-	motor_reverse_right_2(motor_fd);
-      else if (strncmp(motor, cmd_reverse_left_1, 
-		       strlen(cmd_reverse_left_1)) == 0) //reverse_left_1
-	motor_reverse_left_1(motor_fd);
-      else if (strncmp(motor, cmd_reverse_left_2, 
-		       strlen(cmd_reverse_left_2)) == 0) //reverse_left_2
-	motor_reverse_left_2(motor_fd);
-      //now log the motor command
-      sprintf(logbuf, "executed: motor_%s", motor);
-      retval = emperor_log_data(logbuf, log_sockfd);
-      if (retval != 0)
-	printf("logging failed for \'%s\'\n", logbuf);
-    }
-    return 0;
+  //start cameras
+  if (cam_thread_should_die) //only start if not already running
+  {
+    cam_thread_should_die = FALSE;
+    pthread_attr_t attributes;
+    pthread_attr_init(&attributes);
+    pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
+    pthread_create(&cam_thread, &attributes, emperor_run_cameras, NULL);
+    sprintf(logbuf, "executed: %s", msgbuf);
+    retval = emperor_log_data(logbuf, log_sockfd);
+    if (retval != 0)
+      printf("logging failed for \'%s\'\n", logbuf);
+    pthread_attr_destroy(&attributes);
   }
+  //loop through points, going to each in turn
+
+  //stop cameras
+  if (!cam_thread_should_die) //only stop if already running
+  {
+    cam_thread_should_die = TRUE;
+    pthread_join(cam_thread, NULL);
+    sprintf(logbuf, "executed: %s", msgbuf);
+    retval = emperor_log_data(logbuf, log_sockfd);
+    if (retval != 0)
+      printf("logging failed for \'%s\'\n", logbuf);
+    printf("Cameras stopped\n");
+  }
+  //return
+  return 0;
+  
+  // if (strncmp(msgbuf, cmd_start_cameras, strlen(cmd_start_cameras)) == 0) 
+  // { //start cameras
+  //   //printf("Matched start_cameras command\n");
+  //   //do stuff
+  //   if (cam_thread_should_die) //only start if not already running
+  //   {
+  //     cam_thread_should_die = FALSE;
+  //     pthread_attr_t attributes;
+  //     pthread_attr_init(&attributes);
+  //     pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
+  //     pthread_create(&cam_thread, &attributes, emperor_run_cameras, NULL);
+  //     sprintf(logbuf, "executed: %s", msgbuf);
+  //     retval = emperor_log_data(logbuf, log_sockfd);
+  //     if (retval != 0)
+  // 	printf("logging failed for \'%s\'\n", logbuf);
+  //     pthread_attr_destroy(&attributes);
+  //   }
+  //   return 0;
+  // }
+  // if (strncmp(msgbuf, cmd_stop_cameras, strlen(cmd_stop_cameras)) == 0)
+  // { //stop cameras
+  //   //printf("Matched stop_cameras command\n");
+  //   //do stuff
+  //   if (!cam_thread_should_die) //only stop if already running
+  //   {
+  //     cam_thread_should_die = TRUE;
+  //     pthread_join(cam_thread, NULL);
+  //     sprintf(logbuf, "executed: %s", msgbuf);
+  //     retval = emperor_log_data(logbuf, log_sockfd);
+  //     if (retval != 0)
+  // 	printf("logging failed for \'%s\'\n", logbuf);
+  //     printf("Cameras stopped\n");
+  //   }
+  //   return 0;
+  // } 
+  
+  // if (strncmp(msgbuf, cmd_servo, strlen(cmd_servo)) == 0)
+  // { //tilt & motor
+  //   // printf("Matched servo & motor command\n");
+  //   //do stuff
+  //   //parse the command
+  //   char *servo, *tilt, *pan, *motor;
+  //   servo = strtok(msgbuf, " :");
+  //   tilt = strtok(NULL, " :");
+  //   pan = strtok(NULL, " :");
+  //   motor = strtok(NULL, " :");
+  //   // printf("Parsed: servo = %s, tilt = %s, pan = %s, motor = %s\n", 
+  //   // 	   servo, tilt, pan, motor);
+  //   // printf("strlen: servo = %d, tilt = %d, tilt = %d, motor = %d\n", 
+  //   // 	   strlen(servo), strlen(tilt), strlen(pan), strlen(motor));
+   
+  //   //write commands to pan and tilt fds 
+  //   //  first check if command is duplicated
+  //   if ((strncmp(pan, pan_prev, strlen(pan)) !=0) ||
+  // 	(strncmp(tilt, tilt_prev, strlen(tilt)) != 0)) //if either is different
+  //   {
+  //     memset(pan_prev, 0, sizeof(pan_prev));
+  //     strncpy(pan_prev, pan, strlen(pan));
+  //     memset(tilt_prev, 0, sizeof(tilt_prev));
+  //     strncpy(tilt_prev, tilt, strlen(tilt));
+  //     retval = write(tilt_fd, tilt, strlen(tilt));
+  //     if(retval < 0)
+  //     {
+  // 	printf("error writing tilt\n");
+  // 	return -1;
+  //     }
+  //     //printf("wrote tilt...");
+  //     retval = write(pan_fd, pan, strlen(pan));
+  //     if(retval < 0)
+  //     {
+  // 	printf("error writing pan\n");
+  // 	return -1;
+  //     }
+  //     //printf("wrote pan\n");
+  //     //now log pan & tilt
+  //     sprintf(logbuf, "executed: pan_%s, tilt_%s", pan, tilt );
+  //     retval = emperor_log_data(logbuf, log_sockfd);
+  //     if (retval != 0)
+  // 	printf("logging failed for \'%s\'\n", logbuf);
+  //   }
+  //   //send motor command
+  //   //  first check if motor command is new -- no need to send repeats
+  //   if (strncmp(motor, motor_prev, strlen(motor)) != 0)
+  //   {
+  //     // printf("new motor command: motor_prev = %s, motor = %s\n", motor_prev, motor);
+  //     memset(motor_prev, 0, sizeof(motor_prev));
+  //     strncpy(motor_prev, motor, strlen(motor));
+
+  //     if (strncmp(motor, cmd_stop, strlen(cmd_stop)) == 0) //stop
+  // 	motor_stop(motor_fd);
+  //     else if (strncmp(motor, cmd_forward_1, strlen(cmd_forward_1)) == 0) //forward_1
+  //     	motor_forward_1(motor_fd);
+  //     else if (strncmp(motor, cmd_forward_2, strlen(cmd_forward_2)) == 0) //forward_2
+  // 	motor_forward_2(motor_fd);
+  //     else if (strncmp(motor, cmd_forward_3, strlen(cmd_forward_3)) == 0) //forward_3
+  // 	motor_forward_3(motor_fd);
+  //     else if (strncmp(motor, cmd_forward_4, strlen(cmd_forward_4)) == 0) //forward_4
+  // 	motor_forward_4(motor_fd);
+  //     else if (strncmp(motor, cmd_reverse_1, strlen(cmd_reverse_1)) == 0) //reverse_1
+  // 	motor_reverse_1(motor_fd);
+  //     else if (strncmp(motor, cmd_reverse_2, strlen(cmd_reverse_2)) == 0) //reverse_2
+  // 	motor_reverse_2(motor_fd);
+  //     else if (strncmp(motor, cmd_reverse_3, strlen(cmd_reverse_3)) == 0) //reverse_3
+  // 	motor_reverse_3(motor_fd);
+  //     else if (strncmp(motor, cmd_reverse_4, strlen(cmd_reverse_4)) == 0) //reverse_4
+  // 	motor_reverse_4(motor_fd);
+  //     else if (strncmp(motor, cmd_forward_right_1, 
+  // 		       strlen(cmd_forward_right_1)) == 0) //forward_right_1
+  // 	motor_forward_right_1(motor_fd);
+  //     else if (strncmp(motor, cmd_forward_right_2, 
+  // 		       strlen(cmd_forward_right_2)) == 0) //forward_right_2
+  // 	motor_forward_right_2(motor_fd);
+  //     else if (strncmp(motor, cmd_forward_left_1, 
+  // 		       strlen(cmd_forward_left_1)) == 0) //forward_left_1
+  // 	motor_forward_left_1(motor_fd);
+  //     else if (strncmp(motor, cmd_forward_left_2, 
+  // 		       strlen(cmd_forward_left_2)) == 0) //forward_left_2
+  // 	motor_forward_left_2(motor_fd);
+  //     else if (strncmp(motor, cmd_pivot_left_1, 
+  // 		       strlen(cmd_pivot_left_1)) == 0) //pivot_left_1
+  // 	motor_pivot_left_1(motor_fd);
+  //     else if (strncmp(motor, cmd_pivot_left_2, 
+  // 		       strlen(cmd_pivot_left_2)) == 0) //pivot_left_2
+  // 	motor_pivot_left_2(motor_fd);
+  //     else if (strncmp(motor, cmd_pivot_right_1, 
+  // 		       strlen(cmd_pivot_right_1)) == 0) //pivot_right_1
+  // 	motor_pivot_right_1(motor_fd);
+  //     else if (strncmp(motor, cmd_pivot_right_2, 
+  // 		       strlen(cmd_pivot_right_2)) == 0) //pivot_right_2
+  // 	motor_pivot_right_2(motor_fd);
+  //     else if (strncmp(motor, cmd_reverse_right_1, 
+  // 		       strlen(cmd_reverse_right_1)) == 0) //reverse_right_1
+  // 	motor_reverse_right_1(motor_fd);
+  //     else if (strncmp(motor, cmd_reverse_right_2, 
+  // 		       strlen(cmd_reverse_right_2)) == 0) //reverse_right_2
+  // 	motor_reverse_right_2(motor_fd);
+  //     else if (strncmp(motor, cmd_reverse_left_1, 
+  // 		       strlen(cmd_reverse_left_1)) == 0) //reverse_left_1
+  // 	motor_reverse_left_1(motor_fd);
+  //     else if (strncmp(motor, cmd_reverse_left_2, 
+  // 		       strlen(cmd_reverse_left_2)) == 0) //reverse_left_2
+  // 	motor_reverse_left_2(motor_fd);
+  //     //now log the motor command
+  //     sprintf(logbuf, "executed: motor_%s", motor);
+  //     retval = emperor_log_data(logbuf, log_sockfd);
+  //     if (retval != 0)
+  // 	printf("logging failed for \'%s\'\n", logbuf);
+  //   }
+  //   return 0;
+  // }
+
+
   //if we get here without returning, it means we didn't match any commands
-  //printf("emperor_parse_and_execute error: no command matched msgbuf\n");
+  printf("the_force_parse_and_execute error: no command matched msgbuf\n");
   return -1;
 }
 

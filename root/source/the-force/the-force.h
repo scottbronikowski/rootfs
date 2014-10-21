@@ -133,6 +133,12 @@ struct imu_data_t {
   unsigned long timestamp;
   unsigned long dt;
 };
+//need struct for x,y points
+struct location_t {
+  double x;
+  double y;
+};
+
 
 //prototypes 
 //(from emperor)
@@ -140,7 +146,6 @@ struct imu_data_t {
 void the_force_terminator(int signum);
 void* emperor_run_cameras(void* args);
 void* emperor_monitor_bump_switches(void* args);
-int emperor_parse_and_execute(char* msgbuf);
 int emperor_log_data(char* databuf, int log_fd);
 double emperor_current_time(void);
 //(from run-sensors)
@@ -165,5 +170,7 @@ int sensors_log_data(char* logbuf);
 bool sensors_send_data(char* msgbuf, int num_messages);
 void sensors_terminator(int signum);
 int gps_read_data(char* logbuf);
+
+int the_force_parse_and_execute(char* msgbuf);
 #endif
 
