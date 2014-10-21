@@ -189,12 +189,12 @@ int main(int /*argc*/, char** /*argv*/)
   signal(SIGINT, the_force_terminator);
   signal(SIGTERM, the_force_terminator);
 
-  char msgbuf[k_maxBufSize];
-  char prevmsgbuf[k_maxBufSize];
+  char msgbuf[k_traceBufSize];
+  char prevmsgbuf[k_traceBufSize];
   memset(prevmsgbuf, 0, sizeof(prevmsgbuf));
-  memset(motor_prev, 0, sizeof(motor_prev));
-  memset(pan_prev, 0, sizeof(pan_prev));
-  memset(tilt_prev, 0, sizeof(tilt_prev));
+  // memset(motor_prev, 0, sizeof(motor_prev));
+  // memset(pan_prev, 0, sizeof(pan_prev));
+  // memset(tilt_prev, 0, sizeof(tilt_prev));
 
   //loop on listening for commands  **THIS IS WHERE THE CHANGES START***
   while(1)
@@ -216,19 +216,19 @@ int main(int /*argc*/, char** /*argv*/)
     //if we get here, we have something useful in msgbuf, so do something with it
     if (strncmp(msgbuf, prevmsgbuf, k_maxBufSize) != 0) //received new command
     {
-      // printf("Received %d bytes: %s\n", retval, msgbuf);
+      printf("Received %d bytes: %s\n", retval, msgbuf);
       strncpy(prevmsgbuf, msgbuf, k_maxBufSize);
     }
     else //got a repeat of the last received command, so ignore it
       continue;
     //do stuff with commands received
-    retval = emperor_parse_and_execute(msgbuf);
-    if (retval != 0)
-    {
-      printf("Error in emperor_parse_and_execute\n");
-      the_force_terminator(SIGTERM);
-      return -1;
-    }
+    // retval = emperor_parse_and_execute(msgbuf);
+    // if (retval != 0)
+    // {
+    //   printf("Error in emperor_parse_and_execute\n");
+    //   the_force_terminator(SIGTERM);
+    //   return -1;
+    // }
   }
   //cleanup done in terminator
   return 0;
