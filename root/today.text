@@ -508,6 +508,13 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Have initial passing of 1300-byte text messages from driver window on seykhl to rover working.
 --Thinking about 1300-byte limit on string for list of points->don't think I need to put so low a limit on it...if it's bigger, TCP will just take care of parsing it into separate packets.  String parser done, seems to be working correctly.  Next need to work on point following.
 
+22 Oct 14
+--Arbitrarily set limit for list of points to 5000 bytes.  Works fine in testing.  Can change to any value by changing k_traceBufSize in the-force.cpp (rover) and toollib-gamepad-c.c (seykhl).
+--Fixed logging of camera start and stop messages.  Also added 2-second sleeps after starting and before stopping cameras to allow the image stream to be fully functional during motion.
+--Established pipe to go from sensors to main thread for sensor data for Kalman filter.  Have flag marking it as open or closed to keep a bunch of useless data from piling up in the pipe before rover is ready to move.  Also modified sensors_log_data() to not write data to log unless pipe is open, and to send the data being written to the log into the pipe as well.
+--Have the-force structured so that the rover can execute multiple paths sequentially--the rover's own position is only initialized to (0,0,pi/2) once, and then at the end of the path following the position is preserved.
+--Now just need to put Kalman filter and driving logic into the_force_parse_and_execute().
+
 **TODO**
 
  

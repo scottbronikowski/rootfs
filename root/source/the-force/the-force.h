@@ -33,11 +33,14 @@
 #include <cstring>
 #include <sys/types.h>
 #include "mNMEAParser.h"
+//needed for Kalman filter
+#include <opencv2/video/tracking.hpp>
 
 
 //defines
 
 //global constants 
+extern const double k_PI;
 //(from emperor)
 extern const int BACKLOG;
 extern const char* k_CommandPort;
@@ -120,6 +123,9 @@ extern bool consumer_thread_should_die;
 extern char g_msg_buf[k_msg_buf_bytes];
 extern pthread_mutex_t msg_buf_and_count_lock;
 //**THIS IS PROBABLY WHERE I NEED TO DECLARE MY PIPE VARIABLES
+extern int sensor_pipe[2];  //pipe for sensor data to go to main thread
+                            //[0] is read end, [1] is write end
+extern bool sensor_pipe_open;  //use to declare the pipe open or closed
 
 //structures
 //(from run-sensors)
@@ -133,10 +139,16 @@ struct imu_data_t {
   unsigned long timestamp;
   unsigned long dt;
 };
-//need struct for x,y points
+//struct for x,y points (locations)
 struct location_t {
   double x;
   double y;
+};
+//struct for x,y,theta triples (robot poses)
+struct pose_t {
+  double x;
+  double y;
+  double theta;
 };
 
 

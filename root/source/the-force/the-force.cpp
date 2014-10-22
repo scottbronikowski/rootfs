@@ -10,12 +10,13 @@
 #include "the-force.h"
 
 //global constants
+const double k_PI = 3.1415926535897932384626433832795028841971693993751058;
 //(from emperor)
 const int BACKLOG = 5;
 const char* k_CommandPort = "1999";
 const int k_maxBufSize = 50;
 //used for buffer of trace points, replaces k_maxBufSize in send/receive
-const int k_traceBufSize = 1300; //max # of bytes in trace
+const int k_traceBufSize = 5000; //max # of bytes in trace
 const char* cmd_start_cameras = "start_cameras";
 const char* cmd_stop_cameras = "stop_cameras";
 const char* cmd_forward_4 = "forward_4";
@@ -87,7 +88,16 @@ bool producer_threads_should_die;
 bool consumer_thread_should_die;
 char g_msg_buf[k_msg_buf_bytes];
 pthread_mutex_t msg_buf_and_count_lock;
+
+//**THIS IS PROBABLY WHERE I NEED TO DECLARE MY PIPE VARIABLES
+int sensor_pipe[2];  //pipe for sensor data to go to main thread
+                     //[0] is read end, [1] is write end
+bool sensor_pipe_open = false;  //use to declare the pipe open or closed
+
+
 //not extern'd
+pose_t my_pose = {0.0,0.0,k_PI/2}; //robot's current location
+      //initialized to x=0, y=0, theta = pi/2 (due north in polar radians)
 //(from emperor)
 char motor_prev[k_maxBufSize];
 char pan_prev[k_maxBufSize];
@@ -169,6 +179,14 @@ int main(int /*argc*/, char** /*argv*/)
   pthread_attr_destroy(&attributes);
   printf("%s\n", logbuf);
 
+  //open pipe for sensors
+  if (pipe(sensor_pipe) == -1)
+  {
+    perror("pipe");
+    the_force_terminator(SIGTERM);
+    return -1;
+  }
+
   //start the functions from run-sensors
   printf("Starting sensors...");
   //call setup function
@@ -182,9 +200,6 @@ int main(int /*argc*/, char** /*argv*/)
   run_sensors_start();
   printf("sensors started successfully\n");
   
-  //***PROBABLY NEED TO START CAMERAS AUTOMATICALLY SOMEWHERE AROUND HERE****
-  // OR MAYBE only start them only when a route has been received
-
   //register signal handler for termination
   signal(SIGINT, the_force_terminator);
   signal(SIGTERM, the_force_terminator);
@@ -196,9 +211,11 @@ int main(int /*argc*/, char** /*argv*/)
   // memset(pan_prev, 0, sizeof(pan_prev));
   // memset(tilt_prev, 0, sizeof(tilt_prev));
 
+
   //loop on listening for commands  **THIS IS WHERE THE CHANGES START***
   while(1)
   {
+    //play "what is thy bidding" here
     memset(msgbuf, 0, sizeof(msgbuf)); //clear buffer
     retval = recv(sockfd, &msgbuf, sizeof(msgbuf), 0);
     if (retval < 0)
@@ -265,6 +282,8 @@ void the_force_terminator(int signum)
   close(tilt_fd);
   close(motor_fd);
   close(gpio_fd);
+  close(sensor_pipe[1]);
+  close(sensor_pipe[0]);
   close(log_sockfd);
   printf("data logging socket closed\n");
   close(sockfd);
@@ -397,6 +416,12 @@ int the_force_parse_and_execute(char* msgbuf)
   str_num = strtok(msgbuf, ":");
   int num_points = atoi(str_num);
   printf("num_points = %d\n",num_points);
+  if (num_points == 0) //bad string/no points, so must quit
+  {
+    printf("IMPROPERLY FORMATTED STRING passed to the_force_parse_and_execute, exiting\n");
+    //play error sound here?
+    return -1;
+  }
   location_t loc[num_points];
   for (int i = 0; i < num_points; i++)
   {
@@ -415,20 +440,34 @@ int the_force_parse_and_execute(char* msgbuf)
     pthread_attr_init(&attributes);
     pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
     pthread_create(&cam_thread, &attributes, emperor_run_cameras, NULL);
-    sprintf(logbuf, "executed: %s", msgbuf);
+    sprintf(logbuf, "executed: %s", cmd_start_cameras);
     retval = emperor_log_data(logbuf, log_sockfd);
     if (retval != 0)
       printf("logging failed for \'%s\'\n", logbuf);
     pthread_attr_destroy(&attributes);
+    sleep(2); //small sleep to allow cameras to get started before moving
   }
   //loop through points, going to each in turn
+  //first open sensor pipe to start getting data form sensors
+  sensor_pipe_open = true;
+  for (int i = 0; i < num_points; i++)
+  {
+    //read sensor data from pipe
+    //update current position
+    //compare current position to current point
+    //if d < some threshold, declare success and get next point
+    //else move 
+  }
+  //close sensor pipe
+  sensor_pipe_open = false;
 
   //stop cameras
   if (!cam_thread_should_die) //only stop if already running
   {
+    sleep(2); //small sleep to allow cameras to run a few seconds after reaching destination
     cam_thread_should_die = TRUE;
     pthread_join(cam_thread, NULL);
-    sprintf(logbuf, "executed: %s", msgbuf);
+    sprintf(logbuf, "executed: %s", cmd_stop_cameras);
     retval = emperor_log_data(logbuf, log_sockfd);
     if (retval != 0)
       printf("logging failed for \'%s\'\n", logbuf);
@@ -588,7 +627,7 @@ int the_force_parse_and_execute(char* msgbuf)
   //   return 0;
   // }
 
-
+  //**CAN'T GET HERE
   //if we get here without returning, it means we didn't match any commands
   printf("the_force_parse_and_execute error: no command matched msgbuf\n");
   return -1;
@@ -1233,25 +1272,33 @@ int sensors_log_data(char* logbuf)
   }
   else 
   { //if we get here, we've got something to write to g_msg_buf
-    pthread_mutex_lock(&msg_buf_and_count_lock); //GRABBING THE LOCK
-    //printf("producer has lock\n");
-    if (msg_count < k_msg_buf_size)
-    { //we have room in the buffer, so add the new message
-      memset(&g_msg_buf[msg_count * k_LogBufSize], 0, k_LogBufSize); //clear out old data
-      strncpy(&g_msg_buf[msg_count * k_LogBufSize], temp, k_LogBufSize); //use this to pad buffer
-      ++msg_count; //increment msg_count
-      pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
-      //printf("producer released lock after logging to buffer\n");
-      //printf("logged: %s", msgbuf);
-      return 0; //success
+    if (sensor_pipe_open) //only log if pipe is open
+    {
+      retval = write(sensor_pipe[1], temp, k_LogBufSize);
+      if (retval != k_LogBufSize)
+	printf("sensors_log_data: error writing to pipe, retval = %d, strlen(temp) = %d\n", retval, strlen(temp));
+      pthread_mutex_lock(&msg_buf_and_count_lock); //GRABBING THE LOCK
+      //printf("producer has lock\n");
+      if (msg_count < k_msg_buf_size)
+      { //we have room in the buffer, so add the new message
+	memset(&g_msg_buf[msg_count * k_LogBufSize], 0, k_LogBufSize); //clear out old data
+	strncpy(&g_msg_buf[msg_count * k_LogBufSize], temp, k_LogBufSize); //use this to pad buffer
+	++msg_count; //increment msg_count
+	pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
+	//printf("producer released lock after logging to buffer\n");
+	//printf("logged: %s", msgbuf);
+	return 0; //success
+      }
+      else
+      { //buffer is full
+	pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
+	printf("sensors_log_data: buffer full, message discarded\n");
+	printf("%s", temp);
+	return -1;
+      }
     }
     else
-    { //buffer is full
-      pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
-      printf("sensors_log_data: buffer full, message discarded\n");
-      printf("%s", temp);
-      return -1;
-    }
+      return 0;
   }
 }
 

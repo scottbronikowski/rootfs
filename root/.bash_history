@@ -1,20 +1,3 @@
-ls
-cd AnalogFirmata/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/AnalogFirmata/M* .
-cd ../EchoString/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/EchoString/M* .
-cd ../OldStandardFirmata/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/OldStandardFirmata/L* .
-cd ../ServoFirmata/
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/ServoFirmata/M* .
-cd ../SimpleAnalogFirmata/
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/SimpleAnalogFirmata/M* .
-cd ../SimpleDigitalFirmata/
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/SimpleDigitalFirmata/M* .
-cd ../StandardFirmata/
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/StandardFirmata/M* .
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/StandardFirmata/L* .
 cd ../..
@@ -1998,3 +1981,20 @@ lla
 ./run-the-force start
 ./run-the-force stop
 exit
+emacs today.text &
+cd bin
+./run-the-force start
+./run-the-force stop
+ls
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
