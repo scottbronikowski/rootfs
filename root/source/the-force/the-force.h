@@ -38,6 +38,7 @@
 
 
 //defines
+#define NEGATIVE_INFINITY (-1.0/0.0) //for my_exp
 
 //global constants 
 extern const double k_PI;
@@ -93,6 +94,12 @@ extern const char* k_imuLogPort;//using imu-log.txt as consolidated log for IMU,
 extern const int sensors_connect_timeout_ms;
 extern const std::string encoders_init_string;
 extern const std::string imu_init_string;
+
+//for driving logic
+extern const double k_distance_threshold;
+extern const double k_angle_threshold_1;
+extern const double k_angle_threshold_2;
+
 //need to define these here because of g_msg_buf
 extern const int k_LogBufSize = 256;
 extern const int k_messages_per_second = 102; 
@@ -184,5 +191,22 @@ void sensors_terminator(int signum);
 int gps_read_data(char* logbuf);
 
 int the_force_parse_and_execute(char* msgbuf);
+
+//(from data-analysis.cpp)
+double my_exp(double x);
+double sigmoid(double x, double a, double b);
+double normalize_orientation(double angle);
+double orientation_plus(double x, double y);
+double orientation_minus(double x, double y);
+double AngleBetween(pose_t robot, location_t point);
+// double Left(Point2d robot, Point2d obstacle);
+// double Right(Point2d robot, Point2d obstacle);
+// double Front(Point2d robot, Point2d obstacle);
+// double Behind(Point2d robot, Point2d obstacle);
+// double Between(Point2d robot, Point2d obstacle1, Point2d obstacle2);
+
+//new stuff
+double DistanceBetween(pose_t robot, location_t point);
+
 #endif
 

@@ -1,11 +1,3 @@
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/StandardFirmata/M* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/examples/StandardFirmata/L* .
-cd ../..
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/L* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Firmata/r* .
-cd ..
-ls
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Fl* .
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Fr* .
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/G* .
@@ -1998,3 +1990,11 @@ ls
 ./run-the-force stop
 ./run-the-force start
 ./run-the-force stop
+cd /
+git status
+git add -A
+git commit -m "--Fixed logging of camera start and stop messages.  Also added 2-second sleeps after starting and before stopping cameras to allow the image stream to be fully functional during motion.
+--Established pipe to go from sensors to main thread for sensor data for Kalman filter.  Have flag marking it as open or closed to keep a bunch of useless data from piling up in the pipe before rover is ready to move.  Also modified sensors_log_data() to not write data to log unless pipe is open, and to send the data being written to the log into the pipe as well.
+--Have the-force structured so that the rover can execute multiple paths sequentially--the rover's own position is only initialized to (0,0,pi/2) once, and then at the end of the path following the position is preserved.
+--Now just need to put Kalman filter and driving logic into the_force_parse_and_execute()."
+git commit --amend

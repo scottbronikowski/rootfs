@@ -63,6 +63,11 @@ const char* k_imuLogPort = "2004";//using imu-log.txt as consolidated log for IM
 const int sensors_connect_timeout_ms = 5000;
 const std::string encoders_init_string = "#ob#o1#s";
 const std::string imu_init_string = "#omb#o1#oe0#s"; //#o0 for POLLING #o1 for streaming
+//for driving logic
+const double k_distance_threshold = 0.15;  //in meters
+const double k_angle_threshold_1 = k_PI/4; //45 degrees in radians--for deciding whether to pivot or turn while going forward
+const double k_angle_threshold_2 = k_angle_threshold_1/3; //15 degrees in radians--for deciding whether to go straight or turn toward point
+
 
 //global variables
 //extern'd
@@ -448,15 +453,77 @@ int the_force_parse_and_execute(char* msgbuf)
     sleep(2); //small sleep to allow cameras to get started before moving
   }
   //loop through points, going to each in turn
-  //first open sensor pipe to start getting data form sensors
+  //first open sensor pipe to start getting data from sensors
   sensor_pipe_open = true;
+  char msg_buf[k_msg_buf_bytes];
+  char prev_logbuf[k_LogBufSize];
+  location_t the_point;
+  bool at_the_point;
+  double the_distance, the_angle, the_angle_diff;
+  pose_t the_robot;
   for (int i = 0; i < num_points; i++)
   {
-    //read sensor data from pipe
-    //update current position
-    //compare current position to current point
-    //if d < some threshold, declare success and get next point
-    //else move 
+    the_point = loc[i];
+    at_the_point = false;
+    while (!at_the_point)
+    {//***NEED AN INNER LOOP FOR READ/UPDATE/CHECK UNTIL POINT REACHED
+      char motor[k_maxBufSize]; //for logging motor command
+      //read sensor data from pipe
+      retval = read(sensor_pipe[0], &msg_buf, k_msg_buf_bytes);
+      if (retval < 0)
+      {
+	perror("read from sensor_pipe[0]:");
+	continue;
+      }
+      //***NEED code here to split read data into variables for Kalman
+      //**Do I need multiple reads to get data from all sensors (then how to deal with GPS at different rate?)
+      //update current position
+
+      memset(logbuf,0,k_LogBufSize); //will have new command to log
+      //compare current position to current point
+      the_distance = DistanceBetween(the_robot, the_point);
+      //if d < some threshold, declare success and get next point
+      if (the_distance <= k_distance_threshold)
+      {
+	motor_stop(motor_fd); //stop robot
+	//log command (no need to check if different from last here) b/c break is coming
+	sprintf(logbuf,"REACHED POINT %d, auto-executed: motor_%s", i+1, cmd_stop);
+	retval = emperor_log_data(logbuf, log_sockfd);
+	if (retval != 0)
+	  printf("logging failed for \'%s'\n", logbuf);
+	//copy stop into prev_logbuf
+	memset(prev_logbuf, 0, k_LogBufSize);
+	strncpy(prev_logbuf, logbuf, strlen(logbuf));
+	at_the_point = true; //not sure about this--gets reset at start of next loop, so it's more like a while(1) loop
+	break;
+      }
+      //else move 
+      the_angle = AngleBetween(the_robot, the_point);
+      the_angle_diff = the_angle - the_robot.theta;
+      if (fabs(the_angle_diff) < k_angle_threshold_2) //drive straight
+      {
+	motor_forward_2(motor_fd); //stay with speed 2 for now
+	strncpy(motor, cmd_forward_2, strlen(cmd_forward_2)); 
+      }
+      // else if ()
+      // {
+
+      // }
+      //log the command if different from last
+      sprintf(logbuf,"auto-executed: motor_%s", motor);
+      if (strncmp(logbuf, prev_logbuf, strlen(prev_logbuf)) != 0)
+      {
+	retval = emperor_log_data(logbuf,log_sockfd);
+	if (retval != 0)
+	  printf("logging failed for \'%s'\n", logbuf);
+	else
+	{ //copy logged command into prev_logbuf
+	  memset(prev_logbuf, 0, k_LogBufSize);
+	  strncpy(prev_logbuf, logbuf, strlen(logbuf));
+	}
+      }
+    }
+    //if we get here we've reached current_point, so restart loop with next point
   }
   //close sensor pipe
   sensor_pipe_open = false;
@@ -1411,3 +1478,80 @@ int gps_read_data(char* logbuf)
   else
     return no_read;
 }
+
+//copied from data-analysis.cpp
+double my_exp(double x){ 
+  if (x == NEGATIVE_INFINITY)
+    return 0.0;
+  return exp(x);
+}
+
+double sigmoid(double x, double a, double b){ //a is threshold, b is steepness
+  return 1.0 / (1 + my_exp(- b * (x - a)));
+}
+
+double normalize_orientation(double angle){
+  if (angle > k_PI) return normalize_orientation(angle - 2*k_PI);
+  else if (angle < -k_PI) return normalize_orientation(angle + 2*k_PI);
+  // if (angle > PI/2) return normalize_orientation(angle - PI);
+  // else if (angle < -PI/2) return normalize_orientation(angle + PI);
+  else return angle;
+}
+
+double orientation_plus(double x, double y){
+  return normalize_orientation(x+y);
+}
+
+double orientation_minus(double x, double y){
+  return normalize_orientation(x-y);
+}
+
+//gives the angle from robot to point (compare with theta)
+double AngleBetween(pose_t robot, location_t point)
+{
+  return atan2(point.y - robot.y, point.x - robot.x);
+} //always returns [-pi, pi)
+
+// //the prepositional functions below return a value based on the difference between
+// //the observed angle and the desired angle (divided by PI)
+// //this gives a value x between 0 (best) and -1 (worst), so taking 1 - x
+// //scales to [0,1) with higher still better
+// double Left(Point2d robot, Point2d obstacle){
+//   double angle = AngleBetween(robot,obstacle);
+//   return 1 - (fabs(fabs(angle) - PI)/PI);
+// }
+
+// double Right(Point2d robot, Point2d obstacle){
+//   double angle = AngleBetween(robot,obstacle);
+//   return 1 - (fabs(angle)/PI); //no need to normalize here b/c atan2 is always between +/-pi
+// }
+
+// double Front(Point2d robot, Point2d obstacle){
+//   double angle = AngleBetween(robot,obstacle);
+//   return 1-fabs(normalize_orientation(angle - (-PI/2)))/PI;
+// }
+
+// double Behind(Point2d robot, Point2d obstacle){
+//   double angle = AngleBetween(robot,obstacle);
+//   return 1 - (fabs(normalize_orientation(angle - PI/2))/PI);
+// }
+
+// double Between(Point2d robot, Point2d obstacle1, Point2d obstacle2){
+//   double angle1 = AngleBetween(robot,obstacle1);
+//   double angle2 = AngleBetween(robot,obstacle2);
+//   //is it necessary to compute the angle between the two obstacles?
+//   //or will the difference between the angles always be compared to pi?
+//   //return -fabs(PI - fabs(angle1 - angle2));
+//   return 1 - (fabs(PI - fabs(angle1 - angle2))/PI);
+// }
+
+//new stuff
+//gives the distance from the robot to the point
+double DistanceBetween(pose_t robot, location_t point)
+{
+  double x = robot.x - point.x;
+  double y = robot.y - point.y;
+  double dist = pow(x,2) + pow(y,2);
+  return sqrt(dist);
+}
+
