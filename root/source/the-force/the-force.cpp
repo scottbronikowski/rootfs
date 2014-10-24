@@ -9,6 +9,8 @@
 
 #include "the-force.h"
 
+using namespace cv;
+
 //global constants
 const double k_PI = 3.1415926535897932384626433832795028841971693993751058;
 //(from emperor)
@@ -64,7 +66,7 @@ const int sensors_connect_timeout_ms = 5000;
 const std::string encoders_init_string = "#ob#o1#s";
 const std::string imu_init_string = "#omb#o1#oe0#s"; //#o0 for POLLING #o1 for streaming
 //for driving logic
-const double k_distance_threshold = 0.15;  //in meters
+const double k_distance_threshold = 0.10;  //in meters
 const double k_angle_threshold_1 = k_PI/4; //45 degrees in radians--for deciding whether to pivot or turn while going forward
 const double k_angle_threshold_2 = k_angle_threshold_1/3; //15 degrees in radians--for deciding whether to go straight or turn toward point
 
@@ -103,14 +105,64 @@ bool sensor_pipe_open = false;  //use to declare the pipe open or closed
 //not extern'd
 pose_t my_pose = {0.0,0.0,k_PI/2}; //robot's current location
       //initialized to x=0, y=0, theta = pi/2 (due north in polar radians)
-//(from emperor)
-char motor_prev[k_maxBufSize];
-char pan_prev[k_maxBufSize];
-char tilt_prev[k_maxBufSize];
 //(from run-sensors)
 encoders_data_t* g_encoders_data;
 imu_data_t* g_imu_data;
 NMEAParser g_parser;
+//from Dan's log_to_track.cpp
+// state:
+// [x y theta dtheta sl sr dsl dsr]
+// x and y position
+// orientaion angle and derivative
+// left and right wheel speeds
+// left and right wheel speed derivatives
+
+// measured values:
+// x and y (gps)
+// theta (imu)
+// dtheta (gyro)
+// left and right wheel speeds (encoders)
+// acceleration of rover body (accelerometer)
+
+// arbitrarily eyeballed variance estimates which we may want to change:
+// I am assuming meters, meters/second, etc for the units
+
+// measurement noise variance:
+// there is actually a whole covariance matrix to specify, but i am assuming independence between them
+float mXN = 5.0; //  GPS X noise variance
+float mYN = 5.0; //  GPS Y noise variance
+float mThetaN = 1000000000 * (k_PI/180); //  orientation noise variance (radians)
+float mdThetaN = 1000000000000 * (k_PI/180); //  orientation derivative noise variance (radians)
+float mSLN = .01; //  left wheel speed noise variance
+float mSRN = .01; //  right wheel speed noise variance
+float mAN  = 100000000; //  acceleration noise variance
+
+// process noise variance
+// there is actually a whole covariance matrix to specify, but i am assuming independence between them
+float pXN = 1e-6; //  GPS X noise variance
+float pYN = 1e-6; //  GPS Y noise variance
+float pThetaN = 1 * (k_PI/180); //  orientation noise variance (radians)
+float pdThetaN = 1 * (k_PI/180); //  orientation derivative noise variance (radians)
+float pSLN = 1000000; //  left wheel speed noise variance
+float pSRN = 1000000; //  right wheel speed noise variance
+float pdSLN = 1000000; //  left wheel speed derivative noise variance
+float pdSRN = 1000000; //  right wheel speed derivative noise variance
+
+// parameters for simplified motor physics:
+// motor given 0-255 integer input I_m
+// assume that force F is linearly proportional to this number by constant a:
+// F = a*I_m
+// assume there is also a friction force linearly dependent on wheel speed S_m by constant b:
+//  F_f = -b*S_m
+// assume there is some fixed mass which we bake into the proportionality constants:
+// acceleration A = alpha*I_m - beta*S_m
+// need to specify alpha and beta (potentially for each motor separately):
+// we really should find these by computing stuff from measurements
+float alpha = 1; // ????
+float beta = 1; // ????
+float rover_width = .45; //???? measure/calibrate this
+
+
 
 
 int main(int /*argc*/, char** /*argv*/)
@@ -212,10 +264,6 @@ int main(int /*argc*/, char** /*argv*/)
   char msgbuf[k_traceBufSize];
   char prevmsgbuf[k_traceBufSize];
   memset(prevmsgbuf, 0, sizeof(prevmsgbuf));
-  // memset(motor_prev, 0, sizeof(motor_prev));
-  // memset(pan_prev, 0, sizeof(pan_prev));
-  // memset(tilt_prev, 0, sizeof(tilt_prev));
-
 
   //loop on listening for commands  **THIS IS WHERE THE CHANGES START***
   while(1)
@@ -415,12 +463,10 @@ int the_force_parse_and_execute(char* msgbuf)
 {
   char logbuf[k_LogBufSize];
   int retval;
-  //parse raw route into x,y points. Format of string is:
-  //  n:x1,y1;x2,y2;...;xn,yn
-  char *str_num, *str_x, *str_y;
-  str_num = strtok(msgbuf, ":");
+  char *str_num, *str_x, *str_y;   //parse raw route into x,y points. Format of string is:
+  str_num = strtok(msgbuf, ":");   // n:x1,y1;x2,y2;...;xn,yn
   int num_points = atoi(str_num);
-  printf("num_points = %d\n",num_points);
+  // printf("num_points = %d\n",num_points);
   if (num_points == 0) //bad string/no points, so must quit
   {
     printf("IMPROPERLY FORMATTED STRING passed to the_force_parse_and_execute, exiting\n");
@@ -428,13 +474,37 @@ int the_force_parse_and_execute(char* msgbuf)
     return -1;
   }
   location_t loc[num_points];
+  char msg_buf[k_msg_buf_bytes];
+  location_t the_point;
+  bool at_the_point;
+  double the_distance, phi, phi_theta_diff;
+  pose_t the_robot = my_pose; //copy in from global location variable
+  char motor[k_maxBufSize]; //for logging motor command
+  char motor_prev[k_maxBufSize]; //previous motor command
+  //for sensor reading
+  double encoder_logtime,imu_logtime,tmp_logtime,gps_logtime;
+  unsigned long encoder_time,encoder_dt,imu_time,imu_dt;
+  float L,R;
+  float Yaw,Pitch,Roll,Yawa,MAG_ha,MAG_h,Ax,Ay,Az,Mx,My,Mz,Gx,Gy,Gz;
+  float Lat, Long, Alt, HDOP, Quality, Heading, MagVar, Speed;
+  int year, month, day, hour, min, sec;
+  Mat Measurement = Mat::zeros(7,1,CV_32F);
+  int read_encoder=0,read_imu=0, read_gps_gga=0, read_gps_rmc=0;
+  int encoder_items, imu_items, gps_items_gga, gps_items_rmc;
+  Mat control = Mat::zeros(2,1,CV_32F);
+  Mat MeasurementModel = Mat::zeros(7,8,CV_32F);
+  Mat MeasurementModel_noGPS = Mat::zeros(7,8,CV_32F);
+  Mat TransitionModel =  Mat::zeros(8,8,CV_32F);
+  KalmanFilter KF(8, 7, 2); // 8 state variables, 7 measurements, 2 inputs
+
+  //finish parsing route into points
   for (int i = 0; i < num_points; i++)
   {
     str_x = strtok(NULL, ",");
     str_y = strtok(NULL, ";");
     loc[i].x = atof(str_x);
     loc[i].y = atof(str_y);
-    printf("loc[%d]: x = %f, y = %f\n", i, loc[i].x, loc[i].y);
+    //printf("loc[%d]: x = %f, y = %f\n", i, loc[i].x, loc[i].y);
   }
 
   //start cameras
@@ -452,17 +522,75 @@ int the_force_parse_and_execute(char* msgbuf)
     pthread_attr_destroy(&attributes);
     sleep(2); //small sleep to allow cameras to get started before moving
   }
+  //initialize Kalman Filter
+  KF.measurementNoiseCov = *(Mat_<float>(7,7) <<
+                             mXN, 0,   0,       0,        0,    0,    0,     
+                             0,   mYN, 0,       0,        0,    0,    0,     
+                             0,   0,   mThetaN, 0,        0,    0,    0,     
+                             0,   0,   0,       mdThetaN, 0,    0,    0,     
+                             0,   0,   0,       0,        mSLN, 0,    0,     
+                             0,   0,   0,       0,        0,    mSRN, 0,     
+                             0,   0,   0,       0,        0,    0,    mAN);
+
+  KF.processNoiseCov = *(Mat_<float>(8,8) <<
+			 pXN, 0,   0,       0,        0,    0,    0,     0,     
+			 0,   pYN, 0,       0,        0,    0,    0,     0,     
+			 0,   0,   pThetaN, 0,        0,    0,    0,     0,    
+			 0,   0,   0,       pdThetaN, 0,    0,    0,     0,     
+			 0,   0,   0,       0,        pSLN, 0,    0,     0,     
+			 0,   0,   0,       0,        0,    pSRN, 0,     0,    
+			 0,   0,   0,       0,        0,    0,    pdSLN, 0,
+			 0,   0,   0,       0,        0,    0,    0,     pdSRN);
+
+  KF.controlMatrix = *(Mat_<float>(8,2) <<
+		       0,     0,
+		       0,     0,
+		       0,     0,
+		       0,     0,
+		       0,     0,
+		       0,     0,
+		       alpha, 0,
+		       0,     alpha);
+
+  // measure x,y,theta,dtheta,sl,sr, and acceleration, which is avg of wheel accelerations
+  MeasurementModel = *(Mat_<float>(7,8) <<
+			 1, 0, 0, 0, 0, 0,  0,   0,
+			 0, 1, 0, 0, 0, 0,  0,   0,
+			 0, 0, 1, 0, 0, 0,  0,   0,
+			 0, 0, 0, 1, 0, 0,  0,   0,
+			 0, 0, 0, 0, 1, 0,  0,   0,
+			 0, 0, 0, 0, 0, 1,  0,   0,
+			 0, 0, 0, 0, 0, 0,  .5,  .5);
+
+  // measure theta,dtheta,sl,sr, and acceleration, which is avg of wheel accelerations        
+  MeasurementModel_noGPS = *(Mat_<float>(7,8) <<
+			       0, 0, 0, 0, 0, 0,  0,   0,
+			       0, 0, 0, 0, 0, 0,  0,   0,
+			       0, 0, 1, 0, 0, 0,  0,   0,
+			       0, 0, 0, 1, 0, 0,  0,   0,
+			       0, 0, 0, 0, 1, 0,  0,   0,
+			       0, 0, 0, 0, 0, 1,  0,   0,
+			       0, 0, 0, 0, 0, 0,  .5,   .5);
+  //initialize state to robot's current pose
+  KF.statePre.at<float>(0) = the_robot.x;
+  KF.statePost.at<float>(0) = the_robot.x;
+  KF.statePre.at<float>(1) = the_robot.y;
+  KF.statePost.at<float>(1) = the_robot.y;
+  KF.statePre.at<float>(2) = the_robot.theta; 
+  KF.statePost.at<float>(2) = the_robot.theta;
+  KF.statePre.at<float>(3) = 0; //dtheta
+  KF.statePost.at<float>(3) = 0;
+  KF.statePre.at<float>(4) = 0; //L wheel speed
+  KF.statePost.at<float>(4) = 0;
+  KF.statePre.at<float>(5) = 0; //R wheel speed
+  KF.statePost.at<float>(5) = 0;
+  KF.statePre.at<float>(6) = 0; //L wheel acceleration
+  KF.statePost.at<float>(6) = 0;
+  KF.statePre.at<float>(7) = 0; //R wheel acceleration
+  KF.statePost.at<float>(7) = 0;
+
   //loop through points, going to each in turn
-  //first open sensor pipe to start getting data from sensors
-  sensor_pipe_open = true;
-  char msg_buf[k_msg_buf_bytes];
-  //char prev_logbuf[k_LogBufSize];
-  location_t the_point;
-  bool at_the_point;
-  double the_distance, phi, phi_theta_diff;
-  pose_t the_robot;
-  char motor[k_maxBufSize]; //for logging motor command
-  char motor_prev[k_maxBufSize]; //previous motor command
+  sensor_pipe_open = true;  //first open sensor pipe to start getting data from sensors
   for (int i = 0; i < num_points; i++)
   {
     the_point = loc[i];
@@ -470,18 +598,126 @@ int the_force_parse_and_execute(char* msgbuf)
     memset(motor,0,k_maxBufSize); //reset motor and motor_prev buffers
     memset(motor_prev,0,k_maxBufSize);
     while (!at_the_point)
-    {//***NEED AN INNER LOOP FOR READ/UPDATE/CHECK UNTIL POINT REACHED
-      //read sensor data from pipe
-      retval = read(sensor_pipe[0], &msg_buf, k_msg_buf_bytes);
-      if (retval < 0)
-      {
-	perror("read from sensor_pipe[0]:");
-	continue; //try reading again
-      }
-      //***NEED code here to split read data into variables for Kalman
-      //**Do I need multiple reads to get data from all sensors (then how to deal with GPS at different rate?)
-      //update current position
-     
+    {//INNER LOOP FOR READ/UPDATE/CHECK UNTIL POINT REACHED
+      printf("Entering sensor read loop\n");
+      while (1)
+      {//inner inner loop that reads and parses sensor data into variables
+	//read sensor data from pipe
+	retval = read(sensor_pipe[0], &msg_buf, k_msg_buf_bytes);
+	if (retval < 0)
+	{
+	  perror("read from sensor_pipe[0]:");
+	  continue; //try reading again
+	}
+	//parse text back into variables
+	encoder_items = sscanf(msg_buf,"%lf:ENC:time:%lu:dt:%lu:L:%f:R:%f",
+			       &tmp_logtime,&encoder_time,&encoder_dt,&L,&R);
+	imu_items = sscanf(msg_buf,"%lf:IMU:time:%lu:dt:%lu:"
+			   "Y:%f:P:%f:R:%f:"
+			   "Y(a):%f:M_h(a):%f:M_h:%f:"
+			   "Ax:%f:Ay:%f:Az:%f:Mx:%f:My:%f:Mz:%f:"
+			   "Gx:%f:Gy:%f:Gz:%f",
+			   &tmp_logtime,&imu_time,&imu_dt,
+			   &Yaw,&Pitch,&Roll,
+			   &Yawa,&MAG_ha,&MAG_h,
+			   &Ax,&Ay,&Az,
+			   &Mx,&My,&Mz,
+			   &Gx,&Gy,&Gz);
+	gps_items_gga = sscanf(msg_buf,"%lf:GPS:GGA:Lat:%f:Long:%f:Alt:%f m:HDOP:%f:"
+			       "Quality:%f:Time:%d:%d:%d",
+			       &tmp_logtime, &Lat, &Long, &Alt, &HDOP, &Quality,
+			       &hour, &min, &sec);
+	gps_items_rmc = sscanf(msg_buf,"%lf:GPS:RMC:Lat:%f:Long:%f:Heading:%f:MagVar:%f:"
+			       "Speed:%f kt:Date:%d-%d-%d:Time:%d:%d:%d",
+			       &tmp_logtime, &Lat, &Long, &Heading, &MagVar, &Speed,
+			       &year, &month, &day, &hour, &min, &sec);
+	if (gps_items_rmc == 12)
+	{
+	  gps_logtime = tmp_logtime;
+	  read_gps_rmc = 1;
+	}
+	if (gps_items_gga == 9)
+	{
+	  gps_logtime = tmp_logtime;
+	  read_gps_gga = 1;
+	}
+	if (encoder_items == 5)
+      	{
+	  encoder_logtime=tmp_logtime;
+      	  read_encoder=1;
+      	}
+	if (imu_items == 18)
+      	{
+	  imu_logtime=tmp_logtime;
+	  read_imu=1;
+      	}
+	if ((read_imu==1 && read_encoder==1) && (read_gps_gga==1 || read_gps_rmc==1))
+	{ //update with GPS
+	  Measurement.at<float>(0) = Long;
+	  Measurement.at<float>(1) = Lat;
+	  Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
+	  //degrees north is 0 east is positive->(radians east 0 north positive)
+	  Measurement.at<float>(3) = -Gz*k_PI/180; 
+	  // rotation around z in degrees/sec ->(radians/sec)
+	  Measurement.at<float>(4) = L/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(left_ticks_per_cm); 
+	  // cm traveled in last time period -> (meters/sec)
+	  Measurement.at<float>(5) = R/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(right_ticks_per_cm); 
+	  // cm traveled in last time period -> (meters/sec)
+	  Measurement.at<float>(6) = -(Ax-1)/100; 
+	  // cm/s^2 -> (m/s^2)       // x forward y right
+	  read_gps_gga = 0;
+	  read_gps_rmc = 0;
+	  read_imu=0;
+	  read_encoder=0;
+	  break; //get out of the loop once Measurement is set
+	}
+	if (read_imu==1 && read_encoder==1)
+	{ //update without GPS
+	  Measurement.at<float>(0) = 0; //no gps for now
+	  Measurement.at<float>(1) = 0; //no gps for now
+	  Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
+	  //degrees north is 0 east is positive->(radians east 0 north positive)
+	  Measurement.at<float>(3) = -Gz*k_PI/180; 
+	  // rotation around z in degrees/sec ->(radians/sec)
+	  Measurement.at<float>(4) = L/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(left_ticks_per_cm); 
+	  // cm traveled in last time period -> (meters/sec)
+	  Measurement.at<float>(5) = R/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(right_ticks_per_cm); 
+	  // cm traveled in last time period -> (meters/sec)
+	  Measurement.at<float>(6) = -(Ax-1)/100; 
+	  // cm/s^2 -> (m/s^2)       // x forward y right
+	  read_imu=0;
+	  read_encoder=0;
+	  break; //get out of the loop once Measurement is set
+	}
+      } //if we get out of this loop, Measurement has a new reading
+      printf("Exited sensor read loop\n");
+      
+      //update current position via Kalman filter
+      TransitionModel = ComputeTransitionMatrix(KF.statePost, encoder_dt/1000.0);
+      //using encoder's dt for now
+
+      // NEEDS WORK: hard coded and ignores input to rover motors
+      float CL = 0;
+      float CR = 0;
+      control = *(Mat_<float>(2,1) << CL,CR);      
+
+      //fix possible loop-around in thetas
+      while (Measurement.at<float>(2) <= KF.statePost.at<float>(2) - k_PI)
+	Measurement.at<float>(2) += 2*k_PI;
+      while (Measurement.at<float>(2) >= KF.statePost.at<float>(2) + k_PI)
+	Measurement.at<float>(2) -= 2*k_PI;
+
+      // NEEDS WORK: we always ignore GPS
+      KF = execute_time_step(KF, TransitionModel,
+			     MeasurementModel_noGPS, KF.controlMatrix, Measurement,control);
+
+      //KF updated, write x, y, theta back into the_robot
+      the_robot.x = KF.statePost.at<float>(0);
+      the_robot.y = KF.statePost.at<float>(1);
+      the_robot.theta = KF.statePost.at<float>(2);
+
+      printf("I am at x = %f, y = %f, theta = %f\n", the_robot.x, the_robot.y, the_robot.theta);
+
 
       //compare current position to current point
       the_distance = DistanceBetween(the_robot, the_point);
@@ -491,16 +727,25 @@ int the_force_parse_and_execute(char* msgbuf)
 	motor_stop(motor_fd); //stop robot
 	//log command (no need to check if different from last here) b/c break is coming
 	sprintf(logbuf,"REACHED POINT %d, auto-executed: motor_%s", i+1, cmd_stop);
+	printf("%s\n",logbuf);
 	retval = emperor_log_data(logbuf, log_sockfd);
 	if (retval != 0)
 	  printf("logging failed for \'%s'\n", logbuf);
-	// don't need to copy stop into motor_prev b/c motor_prev gets reset at top of loop-->first command of next loop will always get executed
-	at_the_point = true; //not sure about this--gets reset at start of next loop, so it's more like a while(1) loop
+	// don't need to copy stop into motor_prev b/c motor_prev gets reset at top of loop
+	//-->first command of next loop will always get executed
+	at_the_point = true; //not sure about this
+	//gets reset at start of next loop, so it's more like a while(1) loop
 	break;
       }
       //else move 
-      //Steps: 1. Decide command 2. check against previous command-->send and log only if different
+      //Steps: 1. Decide command 
+      //       2. check against previous command-->send and log only if different
       phi = AngleBetween(the_robot, the_point);
+      //fix possible loop-around in thetas
+      while (phi <= the_robot.theta - k_PI)
+	phi += 2*k_PI;
+      while (phi >= the_robot.theta + k_PI)
+	phi -= 2*k_PI;
       phi_theta_diff = phi - the_robot.theta;
       memset(motor,0,k_maxBufSize); //clear for new command
       if (fabs(phi_theta_diff) < k_angle_threshold_2) //drive straight
@@ -526,6 +771,7 @@ int the_force_parse_and_execute(char* msgbuf)
 	    continue; //go back to top of position-checking loop
 	  else
 	  {
+	    motor_stop(motor_fd); //stop before turning in case coming out of a pivot
 	    motor_forward_right_2(motor_fd); //send command to motors
 	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
 	    strncpy(motor_prev, motor, strlen(motor));
@@ -538,6 +784,7 @@ int the_force_parse_and_execute(char* msgbuf)
 	    continue; //go back to top of position-checking loop
 	  else
 	  {
+	    motor_stop(motor_fd); //stop before pivoting
 	    motor_pivot_right_1(motor_fd); //send command to motors
 	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
 	    strncpy(motor_prev, motor, strlen(motor));
@@ -554,6 +801,7 @@ int the_force_parse_and_execute(char* msgbuf)
 	    continue; //go back to top of position-checking loop
 	  else
 	  {
+	    motor_stop(motor_fd); //stop before turning in case coming out of a pivot
 	    motor_forward_left_2(motor_fd); //send command to motors
 	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
 	    strncpy(motor_prev, motor, strlen(motor));
@@ -566,31 +814,30 @@ int the_force_parse_and_execute(char* msgbuf)
 	    continue; //go back to top of position-checking loop
 	  else
 	  {
+	    motor_stop(motor_fd); //stop before pivoting
 	    motor_pivot_left_1(motor_fd); //send command to motors
 	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
 	    strncpy(motor_prev, motor, strlen(motor));
 	  }
 	}
       }
-      //log the command if different from last (conintues will keep execution from getting here on repeated commands
+      //log the command if different from last 
+      //(conintues will keep execution from getting here on repeated commands
       memset(logbuf,0,k_LogBufSize);
       sprintf(logbuf,"auto-executed: motor_%s", motor);
-      // if (strncmp(logbuf, prev_logbuf, strlen(prev_logbuf)) != 0)
-      // {
+      printf("%s\n", logbuf);
       retval = emperor_log_data(logbuf,log_sockfd);
       if (retval != 0)
 	printf("logging failed for \'%s'\n", logbuf);
-      // 	else
-      // 	{ //copy logged command into prev_logbuf
-      // 	  memset(prev_logbuf, 0, k_LogBufSize);
-      // 	  strncpy(prev_logbuf, logbuf, strlen(logbuf));
-      // 	}
-      // }
     }
     //if we get here we've reached current_point, so restart loop with next point
   }
+  //save final pose_t into global pose_t variable--enables persistence of location over 
+  //multiple runs
+  my_pose = the_robot;
   //close sensor pipe
   sensor_pipe_open = false;
+  motor_stop(motor_fd); //an extra stop for good measure
 
   //stop cameras
   if (!cam_thread_should_die) //only stop if already running
@@ -607,157 +854,6 @@ int the_force_parse_and_execute(char* msgbuf)
   //return
   return 0;
   
-  // if (strncmp(msgbuf, cmd_start_cameras, strlen(cmd_start_cameras)) == 0) 
-  // { //start cameras
-  //   //printf("Matched start_cameras command\n");
-  //   //do stuff
-  //   if (cam_thread_should_die) //only start if not already running
-  //   {
-  //     cam_thread_should_die = FALSE;
-  //     pthread_attr_t attributes;
-  //     pthread_attr_init(&attributes);
-  //     pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
-  //     pthread_create(&cam_thread, &attributes, emperor_run_cameras, NULL);
-  //     sprintf(logbuf, "executed: %s", msgbuf);
-  //     retval = emperor_log_data(logbuf, log_sockfd);
-  //     if (retval != 0)
-  // 	printf("logging failed for \'%s\'\n", logbuf);
-  //     pthread_attr_destroy(&attributes);
-  //   }
-  //   return 0;
-  // }
-  // if (strncmp(msgbuf, cmd_stop_cameras, strlen(cmd_stop_cameras)) == 0)
-  // { //stop cameras
-  //   //printf("Matched stop_cameras command\n");
-  //   //do stuff
-  //   if (!cam_thread_should_die) //only stop if already running
-  //   {
-  //     cam_thread_should_die = TRUE;
-  //     pthread_join(cam_thread, NULL);
-  //     sprintf(logbuf, "executed: %s", msgbuf);
-  //     retval = emperor_log_data(logbuf, log_sockfd);
-  //     if (retval != 0)
-  // 	printf("logging failed for \'%s\'\n", logbuf);
-  //     printf("Cameras stopped\n");
-  //   }
-  //   return 0;
-  // } 
-  
-  // if (strncmp(msgbuf, cmd_servo, strlen(cmd_servo)) == 0)
-  // { //tilt & motor
-  //   // printf("Matched servo & motor command\n");
-  //   //do stuff
-  //   //parse the command
-  //   char *servo, *tilt, *pan, *motor;
-  //   servo = strtok(msgbuf, " :");
-  //   tilt = strtok(NULL, " :");
-  //   pan = strtok(NULL, " :");
-  //   motor = strtok(NULL, " :");
-  //   // printf("Parsed: servo = %s, tilt = %s, pan = %s, motor = %s\n", 
-  //   // 	   servo, tilt, pan, motor);
-  //   // printf("strlen: servo = %d, tilt = %d, tilt = %d, motor = %d\n", 
-  //   // 	   strlen(servo), strlen(tilt), strlen(pan), strlen(motor));
-   
-  //   //write commands to pan and tilt fds 
-  //   //  first check if command is duplicated
-  //   if ((strncmp(pan, pan_prev, strlen(pan)) !=0) ||
-  // 	(strncmp(tilt, tilt_prev, strlen(tilt)) != 0)) //if either is different
-  //   {
-  //     memset(pan_prev, 0, sizeof(pan_prev));
-  //     strncpy(pan_prev, pan, strlen(pan));
-  //     memset(tilt_prev, 0, sizeof(tilt_prev));
-  //     strncpy(tilt_prev, tilt, strlen(tilt));
-  //     retval = write(tilt_fd, tilt, strlen(tilt));
-  //     if(retval < 0)
-  //     {
-  // 	printf("error writing tilt\n");
-  // 	return -1;
-  //     }
-  //     //printf("wrote tilt...");
-  //     retval = write(pan_fd, pan, strlen(pan));
-  //     if(retval < 0)
-  //     {
-  // 	printf("error writing pan\n");
-  // 	return -1;
-  //     }
-  //     //printf("wrote pan\n");
-  //     //now log pan & tilt
-  //     sprintf(logbuf, "executed: pan_%s, tilt_%s", pan, tilt );
-  //     retval = emperor_log_data(logbuf, log_sockfd);
-  //     if (retval != 0)
-  // 	printf("logging failed for \'%s\'\n", logbuf);
-  //   }
-  //   //send motor command
-  //   //  first check if motor command is new -- no need to send repeats
-  //   if (strncmp(motor, motor_prev, strlen(motor)) != 0)
-  //   {
-  //     // printf("new motor command: motor_prev = %s, motor = %s\n", motor_prev, motor);
-  //     memset(motor_prev, 0, sizeof(motor_prev));
-  //     strncpy(motor_prev, motor, strlen(motor));
-
-  //     if (strncmp(motor, cmd_stop, strlen(cmd_stop)) == 0) //stop
-  // 	motor_stop(motor_fd);
-  //     else if (strncmp(motor, cmd_forward_1, strlen(cmd_forward_1)) == 0) //forward_1
-  //     	motor_forward_1(motor_fd);
-  //     else if (strncmp(motor, cmd_forward_2, strlen(cmd_forward_2)) == 0) //forward_2
-  // 	motor_forward_2(motor_fd);
-  //     else if (strncmp(motor, cmd_forward_3, strlen(cmd_forward_3)) == 0) //forward_3
-  // 	motor_forward_3(motor_fd);
-  //     else if (strncmp(motor, cmd_forward_4, strlen(cmd_forward_4)) == 0) //forward_4
-  // 	motor_forward_4(motor_fd);
-  //     else if (strncmp(motor, cmd_reverse_1, strlen(cmd_reverse_1)) == 0) //reverse_1
-  // 	motor_reverse_1(motor_fd);
-  //     else if (strncmp(motor, cmd_reverse_2, strlen(cmd_reverse_2)) == 0) //reverse_2
-  // 	motor_reverse_2(motor_fd);
-  //     else if (strncmp(motor, cmd_reverse_3, strlen(cmd_reverse_3)) == 0) //reverse_3
-  // 	motor_reverse_3(motor_fd);
-  //     else if (strncmp(motor, cmd_reverse_4, strlen(cmd_reverse_4)) == 0) //reverse_4
-  // 	motor_reverse_4(motor_fd);
-  //     else if (strncmp(motor, cmd_forward_right_1, 
-  // 		       strlen(cmd_forward_right_1)) == 0) //forward_right_1
-  // 	motor_forward_right_1(motor_fd);
-  //     else if (strncmp(motor, cmd_forward_right_2, 
-  // 		       strlen(cmd_forward_right_2)) == 0) //forward_right_2
-  // 	motor_forward_right_2(motor_fd);
-  //     else if (strncmp(motor, cmd_forward_left_1, 
-  // 		       strlen(cmd_forward_left_1)) == 0) //forward_left_1
-  // 	motor_forward_left_1(motor_fd);
-  //     else if (strncmp(motor, cmd_forward_left_2, 
-  // 		       strlen(cmd_forward_left_2)) == 0) //forward_left_2
-  // 	motor_forward_left_2(motor_fd);
-  //     else if (strncmp(motor, cmd_pivot_left_1, 
-  // 		       strlen(cmd_pivot_left_1)) == 0) //pivot_left_1
-  // 	motor_pivot_left_1(motor_fd);
-  //     else if (strncmp(motor, cmd_pivot_left_2, 
-  // 		       strlen(cmd_pivot_left_2)) == 0) //pivot_left_2
-  // 	motor_pivot_left_2(motor_fd);
-  //     else if (strncmp(motor, cmd_pivot_right_1, 
-  // 		       strlen(cmd_pivot_right_1)) == 0) //pivot_right_1
-  // 	motor_pivot_right_1(motor_fd);
-  //     else if (strncmp(motor, cmd_pivot_right_2, 
-  // 		       strlen(cmd_pivot_right_2)) == 0) //pivot_right_2
-  // 	motor_pivot_right_2(motor_fd);
-  //     else if (strncmp(motor, cmd_reverse_right_1, 
-  // 		       strlen(cmd_reverse_right_1)) == 0) //reverse_right_1
-  // 	motor_reverse_right_1(motor_fd);
-  //     else if (strncmp(motor, cmd_reverse_right_2, 
-  // 		       strlen(cmd_reverse_right_2)) == 0) //reverse_right_2
-  // 	motor_reverse_right_2(motor_fd);
-  //     else if (strncmp(motor, cmd_reverse_left_1, 
-  // 		       strlen(cmd_reverse_left_1)) == 0) //reverse_left_1
-  // 	motor_reverse_left_1(motor_fd);
-  //     else if (strncmp(motor, cmd_reverse_left_2, 
-  // 		       strlen(cmd_reverse_left_2)) == 0) //reverse_left_2
-  // 	motor_reverse_left_2(motor_fd);
-  //     //now log the motor command
-  //     sprintf(logbuf, "executed: motor_%s", motor);
-  //     retval = emperor_log_data(logbuf, log_sockfd);
-  //     if (retval != 0)
-  // 	printf("logging failed for \'%s\'\n", logbuf);
-  //   }
-  //   return 0;
-  // }
-
   //**CAN'T GET HERE
   //if we get here without returning, it means we didn't match any commands
   printf("the_force_parse_and_execute error: no command matched msgbuf\n");
@@ -1608,6 +1704,44 @@ double AngleBetween(pose_t robot, location_t point)
 //   //return -fabs(PI - fabs(angle1 - angle2));
 //   return 1 - (fabs(PI - fabs(angle1 - angle2))/PI);
 // }
+
+//from Dan's log_to_track.cpp
+Mat ComputeTransitionMatrix(Mat state,float dt)
+{
+  float theta = state.at<float>(2);
+  float sl =  state.at<float>(4);
+  float sr =  state.at<float>(5);
+  float r,dtheta_term;
+  Mat TransitionModel = Mat(8,8,CV_32F);
+  
+  TransitionModel = *(Mat_<float>(8,8) <<
+		      1, 0, 0, 0,  .5*cos(theta)*dt, .5*cos(theta)*dt, 0,  0,
+		      0, 1, 0, 0,  .5*sin(theta)*dt, .5*sin(theta)*dt, 0,  0,
+		      0, 0, 1, dt, 0,                0,                0,  0,
+		      0, 0, 0, 0,  -1/rover_width,   1/rover_width,    0,  0,
+		      0, 0, 0, 0,  1,                0,                dt, 0,
+		      0, 0, 0, 0,  0,                1,                0,  dt,
+		      0, 0, 0, 0, -beta,             0,                0,  0,
+		      0, 0, 0, 0,  0,               -beta,             0,  0);
+  return TransitionModel;
+}
+
+
+KalmanFilter execute_time_step(KalmanFilter KF,
+			      Mat TransitionModel,
+			      Mat MeasurementModel,
+			      Mat ControlModel,
+			      Mat measurement,
+			      Mat control)
+{
+  KF.transitionMatrix = TransitionModel;
+  KF.measurementMatrix = MeasurementModel;
+  KF.controlMatrix = ControlModel;
+  KF.predict(control);
+  KF.correct(measurement);
+  return KF;  
+}
+
 
 //new stuff
 //gives the distance from the robot to the point

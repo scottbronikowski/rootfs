@@ -226,7 +226,7 @@ int main(int args, char** argv)
   Mat TransitionModel =  Mat::zeros(8,8,CV_32F);
 
   KalmanFilter KF(8, 7, 2); // 8 state variables, 7 measurements, 2 inputs
-  //KalmanFilter simulation(8,7,2);
+  KalmanFilter simulation(8,7,2);
 
   KF.measurementNoiseCov = *(Mat_<float>(7,7) <<
                              mXN, 0,   0,       0,        0,    0,    0,     
@@ -277,10 +277,10 @@ int main(int args, char** argv)
 			       0, 0, 0, 0, 0, 1,  0,   0,
 			       0, 0, 0, 0, 0, 0,  .5,   .5);
 
-  // simulation.measurementNoiseCov = KF.measurementNoiseCov.clone();
-  // simulation.processNoiseCov = KF.processNoiseCov.clone();
-  // simulation.controlMatrix = KF.controlMatrix.clone();
-  // simulation.measurementMatrix = MeasurementModel_noGPS.clone();
+  simulation.measurementNoiseCov = KF.measurementNoiseCov.clone();
+  simulation.processNoiseCov = KF.processNoiseCov.clone();
+  simulation.controlMatrix = KF.controlMatrix.clone();
+  simulation.measurementMatrix = MeasurementModel_noGPS.clone();
 
   KF.statePre.at<float>(2) = pi/2; // needs work: hard coded
   KF.statePost.at<float>(2) = pi/2;

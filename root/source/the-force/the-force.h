@@ -36,6 +36,7 @@
 //needed for Kalman filter
 #include <opencv2/video/tracking.hpp>
 
+using namespace cv;
 
 //defines
 #define NEGATIVE_INFINITY (-1.0/0.0) //for my_exp
@@ -204,6 +205,16 @@ double AngleBetween(pose_t robot, location_t point);
 // double Front(Point2d robot, Point2d obstacle);
 // double Behind(Point2d robot, Point2d obstacle);
 // double Between(Point2d robot, Point2d obstacle1, Point2d obstacle2);
+
+//from Dan's log_to_track.cpp
+Mat ComputeTransitionMatrix(Mat state,float dt);
+
+KalmanFilter execute_time_step(KalmanFilter KF,
+			       Mat TransitionModel,
+			       Mat MeasurementModel,
+			       Mat ControlModel,
+			       Mat measurement,
+			       Mat control);
 
 //new stuff
 double DistanceBetween(pose_t robot, location_t point);
