@@ -456,30 +456,33 @@ int the_force_parse_and_execute(char* msgbuf)
   //first open sensor pipe to start getting data from sensors
   sensor_pipe_open = true;
   char msg_buf[k_msg_buf_bytes];
-  char prev_logbuf[k_LogBufSize];
+  //char prev_logbuf[k_LogBufSize];
   location_t the_point;
   bool at_the_point;
-  double the_distance, the_angle, the_angle_diff;
+  double the_distance, phi, phi_theta_diff;
   pose_t the_robot;
+  char motor[k_maxBufSize]; //for logging motor command
+  char motor_prev[k_maxBufSize]; //previous motor command
   for (int i = 0; i < num_points; i++)
   {
     the_point = loc[i];
     at_the_point = false;
+    memset(motor,0,k_maxBufSize); //reset motor and motor_prev buffers
+    memset(motor_prev,0,k_maxBufSize);
     while (!at_the_point)
     {//***NEED AN INNER LOOP FOR READ/UPDATE/CHECK UNTIL POINT REACHED
-      char motor[k_maxBufSize]; //for logging motor command
       //read sensor data from pipe
       retval = read(sensor_pipe[0], &msg_buf, k_msg_buf_bytes);
       if (retval < 0)
       {
 	perror("read from sensor_pipe[0]:");
-	continue;
+	continue; //try reading again
       }
       //***NEED code here to split read data into variables for Kalman
       //**Do I need multiple reads to get data from all sensors (then how to deal with GPS at different rate?)
       //update current position
+     
 
-      memset(logbuf,0,k_LogBufSize); //will have new command to log
       //compare current position to current point
       the_distance = DistanceBetween(the_robot, the_point);
       //if d < some threshold, declare success and get next point
@@ -491,37 +494,98 @@ int the_force_parse_and_execute(char* msgbuf)
 	retval = emperor_log_data(logbuf, log_sockfd);
 	if (retval != 0)
 	  printf("logging failed for \'%s'\n", logbuf);
-	//copy stop into prev_logbuf
-	memset(prev_logbuf, 0, k_LogBufSize);
-	strncpy(prev_logbuf, logbuf, strlen(logbuf));
+	// don't need to copy stop into motor_prev b/c motor_prev gets reset at top of loop-->first command of next loop will always get executed
 	at_the_point = true; //not sure about this--gets reset at start of next loop, so it's more like a while(1) loop
 	break;
       }
       //else move 
-      the_angle = AngleBetween(the_robot, the_point);
-      the_angle_diff = the_angle - the_robot.theta;
-      if (fabs(the_angle_diff) < k_angle_threshold_2) //drive straight
+      //Steps: 1. Decide command 2. check against previous command-->send and log only if different
+      phi = AngleBetween(the_robot, the_point);
+      phi_theta_diff = phi - the_robot.theta;
+      memset(motor,0,k_maxBufSize); //clear for new command
+      if (fabs(phi_theta_diff) < k_angle_threshold_2) //drive straight
       {
-	motor_forward_2(motor_fd); //stay with speed 2 for now
-	strncpy(motor, cmd_forward_2, strlen(cmd_forward_2)); 
-      }
-      // else if ()
-      // {
-
-      // }
-      //log the command if different from last
-      sprintf(logbuf,"auto-executed: motor_%s", motor);
-      if (strncmp(logbuf, prev_logbuf, strlen(prev_logbuf)) != 0)
-      {
-	retval = emperor_log_data(logbuf,log_sockfd);
-	if (retval != 0)
-	  printf("logging failed for \'%s'\n", logbuf);
+	strncpy(motor, cmd_forward_2, strlen(cmd_forward_2)); //stay with speed 2 for now
+	if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
+	  continue; //go back to top of position-checking loop
 	else
-	{ //copy logged command into prev_logbuf
-	  memset(prev_logbuf, 0, k_LogBufSize);
-	  strncpy(prev_logbuf, logbuf, strlen(logbuf));
+	{
+	  motor_forward_2(motor_fd); //send command to motors
+	  memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
+	  strncpy(motor_prev, motor, strlen(motor));
 	}
       }
+      else if (phi_theta_diff < 0) //need to turn or pivot right
+      {//***NEED TO INCLUDE STOPS WHEN COMING OUT OF/GOING INTO PIVOTS
+	//decide if pivot or turn
+	if (fabs(phi_theta_diff) < k_angle_threshold_1) //turn right
+	{
+	  strncpy(motor, cmd_forward_right_2, strlen(cmd_forward_right_2)); 
+	  //stay with speed 2 for now
+	  if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
+	    continue; //go back to top of position-checking loop
+	  else
+	  {
+	    motor_forward_right_2(motor_fd); //send command to motors
+	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
+	    strncpy(motor_prev, motor, strlen(motor));
+	  }
+	}
+	else //pivot right
+	{
+	  strncpy(motor, cmd_pivot_right_1, strlen(cmd_pivot_right_1)); 
+	  if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
+	    continue; //go back to top of position-checking loop
+	  else
+	  {
+	    motor_pivot_right_1(motor_fd); //send command to motors
+	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
+	    strncpy(motor_prev, motor, strlen(motor));
+	  }
+	}
+      }
+      else // phi_theta_diff > 0, so need to turn or pivot left
+      {
+	if (fabs(phi_theta_diff) < k_angle_threshold_1) //turn left
+	{
+	  strncpy(motor, cmd_forward_left_2, strlen(cmd_forward_left_2)); 
+	  //stay with speed 2 for now
+	  if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
+	    continue; //go back to top of position-checking loop
+	  else
+	  {
+	    motor_forward_left_2(motor_fd); //send command to motors
+	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
+	    strncpy(motor_prev, motor, strlen(motor));
+	  }
+	}
+	else //pivot left
+	{
+	  strncpy(motor, cmd_pivot_left_1, strlen(cmd_pivot_left_1)); 
+	  if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
+	    continue; //go back to top of position-checking loop
+	  else
+	  {
+	    motor_pivot_left_1(motor_fd); //send command to motors
+	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
+	    strncpy(motor_prev, motor, strlen(motor));
+	  }
+	}
+      }
+      //log the command if different from last (conintues will keep execution from getting here on repeated commands
+      memset(logbuf,0,k_LogBufSize);
+      sprintf(logbuf,"auto-executed: motor_%s", motor);
+      // if (strncmp(logbuf, prev_logbuf, strlen(prev_logbuf)) != 0)
+      // {
+      retval = emperor_log_data(logbuf,log_sockfd);
+      if (retval != 0)
+	printf("logging failed for \'%s'\n", logbuf);
+      // 	else
+      // 	{ //copy logged command into prev_logbuf
+      // 	  memset(prev_logbuf, 0, k_LogBufSize);
+      // 	  strncpy(prev_logbuf, logbuf, strlen(logbuf));
+      // 	}
+      // }
     }
     //if we get here we've reached current_point, so restart loop with next point
   }
