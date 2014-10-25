@@ -286,7 +286,7 @@ int main(int /*argc*/, char** /*argv*/)
     //if we get here, we have something useful in msgbuf, so do something with it
     if (strncmp(msgbuf, prevmsgbuf, k_maxBufSize) != 0) //received new command
     {
-      //printf("Received %d bytes: %s\n", retval, msgbuf);
+      printf("Received %d bytes: %s\n", retval, msgbuf);
       strncpy(prevmsgbuf, msgbuf, k_maxBufSize);
     }
     else //got a repeat of the last received command, so ignore it
@@ -599,7 +599,7 @@ int the_force_parse_and_execute(char* msgbuf)
     memset(motor_prev,0,k_maxBufSize);
     while (!at_the_point)
     {//INNER LOOP FOR READ/UPDATE/CHECK UNTIL POINT REACHED
-      //printf("Entering sensor read loop\n");
+      printf("Entering sensor read loop\n");
       while (1)
       {//inner inner loop that reads and parses sensor data into variables
 	//read sensor data from pipe
@@ -690,7 +690,7 @@ int the_force_parse_and_execute(char* msgbuf)
 	  break; //get out of the loop once Measurement is set
 	}
       } //if we get out of this loop, Measurement has a new reading
-      //printf("Exited sensor read loop\n");
+      printf("Exited sensor read loop\n");
       
       //update current position via Kalman filter
       TransitionModel = ComputeTransitionMatrix(KF.statePost, encoder_dt/1000.0);
@@ -716,7 +716,7 @@ int the_force_parse_and_execute(char* msgbuf)
       the_robot.y = KF.statePost.at<float>(1);
       the_robot.theta = KF.statePost.at<float>(2);
 
-      //printf("I am at x = %f, y = %f, theta = %f\n", the_robot.x, the_robot.y, the_robot.theta); 
+      printf("I am at x = %f, y = %f, theta = %f\n", the_robot.x, the_robot.y, the_robot.theta);
 
 
       //compare current position to current point
@@ -727,7 +727,7 @@ int the_force_parse_and_execute(char* msgbuf)
 	motor_stop(motor_fd); //stop robot
 	//log command (no need to check if different from last here) b/c break is coming
 	sprintf(logbuf,"REACHED POINT %d, auto-executed: motor_%s", i+1, cmd_stop);
-	//printf("%s\n",logbuf);
+	printf("%s\n",logbuf);
 	retval = emperor_log_data(logbuf, log_sockfd);
 	if (retval != 0)
 	  printf("logging failed for \'%s'\n", logbuf);
@@ -825,7 +825,7 @@ int the_force_parse_and_execute(char* msgbuf)
       //(conintues will keep execution from getting here on repeated commands
       memset(logbuf,0,k_LogBufSize);
       sprintf(logbuf,"auto-executed: motor_%s", motor);
-      //printf("%s\n", logbuf);
+      printf("%s\n", logbuf);
       retval = emperor_log_data(logbuf,log_sockfd);
       if (retval != 0)
 	printf("logging failed for \'%s'\n", logbuf);

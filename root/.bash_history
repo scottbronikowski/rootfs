@@ -1,50 +1,3 @@
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Fl* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Fr* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/G* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/I* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/K* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/k* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Le* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/LiquidCrystalFast .
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Low* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/M* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/N* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/O* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/P* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/R* .
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/Sh* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/So* .
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/ST* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/T* .
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/U* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/V* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/WiFi .
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/X* .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/libraries/x* .
-ls
-cd ../lib
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/lib/teens* .
-cat teensyduino.txt 
-cd ..
-ls
-cd reference
-ls
-cd ..
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/src .
-cd tools/Mangler/
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/tools/Mangler/make.sh .
-lla t*
-./teensyduino.64bit 
-uname -m
-file /usr/bin/file
-lla ard*
 rm -rf arduino-1.0.5/
 rm arduino-1.0.5-linux64.tgz 
 rm teensyduino.64bit 
@@ -1998,3 +1951,50 @@ git commit -m "--Fixed logging of camera start and stop messages.  Also added 2-
 --Have the-force structured so that the rover can execute multiple paths sequentially--the rover's own position is only initialized to (0,0,pi/2) once, and then at the end of the path following the position is preserved.
 --Now just need to put Kalman filter and driving logic into the_force_parse_and_execute()."
 git commit --amend
+cd bin
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+pkill the-force
+kill 10005
+ls
+lla
+cat run-emperor 
+lla
+./run-the-force start
+~
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+exit
+htop
+top
+htop
+top
+exit
+emacs today.text &
+git commit --amend
+git push
+halt
+cd source/the-force/
+make
+exit
+emacs source/the-force/the-force.cpp
+exit
+make
+cd source/the-force/
+make
+exit
+cd source/the-force/
+emacs the-force.cpp
+exit
+halt

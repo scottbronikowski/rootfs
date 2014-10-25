@@ -779,13 +779,13 @@ int the_force_parse_and_execute(char* msgbuf)
 	}
 	else //pivot right
 	{
-	  strncpy(motor, cmd_pivot_right_1, strlen(cmd_pivot_right_1)); 
+	  strncpy(motor, cmd_pivot_right_2, strlen(cmd_pivot_right_2)); 
 	  if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
 	    continue; //go back to top of position-checking loop
 	  else
 	  {
 	    motor_stop(motor_fd); //stop before pivoting
-	    motor_pivot_right_1(motor_fd); //send command to motors
+	    motor_pivot_right_2(motor_fd); //send command to motors
 	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
 	    strncpy(motor_prev, motor, strlen(motor));
 	  }
@@ -809,13 +809,13 @@ int the_force_parse_and_execute(char* msgbuf)
 	}
 	else //pivot left
 	{
-	  strncpy(motor, cmd_pivot_left_1, strlen(cmd_pivot_left_1)); 
+	  strncpy(motor, cmd_pivot_left_2, strlen(cmd_pivot_left_2)); 
 	  if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
 	    continue; //go back to top of position-checking loop
 	  else
 	  {
 	    motor_stop(motor_fd); //stop before pivoting
-	    motor_pivot_left_1(motor_fd); //send command to motors
+	    motor_pivot_left_2(motor_fd); //send command to motors
 	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
 	    strncpy(motor_prev, motor, strlen(motor));
 	  }
