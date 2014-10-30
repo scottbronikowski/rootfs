@@ -162,9 +162,6 @@ float alpha = 1; // ????
 float beta = 1; // ????
 float rover_width = .45; //???? measure/calibrate this
 
-float tau_L = 1/32828.8; //left side meters per tick
-float tau_R = 1/32370.9; //right side meters per tick
-
 
 
 
@@ -490,7 +487,7 @@ int the_force_parse_and_execute(char* msgbuf)
   float L,R;
   float Yaw,Pitch,Roll,Yawa,MAG_ha,MAG_h,Ax,Ay,Az,Mx,My,Mz,Gx,Gy,Gz;
   float Lat, Long, Alt, HDOP, Quality, Heading, MagVar, Speed;
-  int year, month, day, hour, min, sec, motor_cmd_L, motor_cmd_R;
+  int year, month, day, hour, min, sec;
   Mat Measurement = Mat::zeros(7,1,CV_32F);
   int read_encoder=0,read_imu=0, read_gps_gga=0, read_gps_rmc=0;
   int encoder_items, imu_items, gps_items_gga, gps_items_rmc;
@@ -613,9 +610,8 @@ int the_force_parse_and_execute(char* msgbuf)
 	  continue; //try reading again
 	}
 	//parse text back into variables
-	encoder_items = sscanf(msg_buf,"%lf:ENC:time:%lu:dt:%lu:L:%f:R:%f:MCL:%d:MCR:%d",
-			       &tmp_logtime,&encoder_time,&encoder_dt,&L,&R,
-			       &motor_cmd_L,&motor_cmd_R);
+	encoder_items = sscanf(msg_buf,"%lf:ENC:time:%lu:dt:%lu:L:%f:R:%f",
+			       &tmp_logtime,&encoder_time,&encoder_dt,&L,&R);
 	imu_items = sscanf(msg_buf,"%lf:IMU:time:%lu:dt:%lu:"
 			   "Y:%f:P:%f:R:%f:"
 			   "Y(a):%f:M_h(a):%f:M_h:%f:"
@@ -645,7 +641,7 @@ int the_force_parse_and_execute(char* msgbuf)
 	  gps_logtime = tmp_logtime;
 	  read_gps_gga = 1;
 	}
-	if (encoder_items == 7)
+	if (encoder_items == 5)
       	{
 	  encoder_logtime=tmp_logtime;
       	  read_encoder=1;
@@ -663,12 +659,9 @@ int the_force_parse_and_execute(char* msgbuf)
 	  //degrees north is 0 east is positive->(radians east 0 north positive)
 	  Measurement.at<float>(3) = -Gz*k_PI/180; 
 	  // rotation around z in degrees/sec ->(radians/sec)
-	  Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
-	  //ticks * meters/tick / sec = m/s
-//L/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(left_ticks_per_cm); 
+	  Measurement.at<float>(4) = L/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(left_ticks_per_cm); 
 	  // cm traveled in last time period -> (meters/sec)
-	  Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
-//R/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(right_ticks_per_cm); 
+	  Measurement.at<float>(5) = R/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(right_ticks_per_cm); 
 	  // cm traveled in last time period -> (meters/sec)
 	  Measurement.at<float>(6) = -(Ax-1)/100; 
 	  // cm/s^2 -> (m/s^2)       // x forward y right
@@ -686,13 +679,9 @@ int the_force_parse_and_execute(char* msgbuf)
 	  //degrees north is 0 east is positive->(radians east 0 north positive)
 	  Measurement.at<float>(3) = -Gz*k_PI/180; 
 	  // rotation around z in degrees/sec ->(radians/sec)
-	  Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
-	  //ticks * meters/tick / sec = m/s
-//L/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(left_ticks_per_cm); 
+	  Measurement.at<float>(4) = L/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(left_ticks_per_cm); 
 	  // cm traveled in last time period -> (meters/sec)
-	  Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
-	  //ticks * meters/tick / sec = m/s
-//R/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(right_ticks_per_cm); 
+	  Measurement.at<float>(5) = R/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(right_ticks_per_cm); 
 	  // cm traveled in last time period -> (meters/sec)
 	  Measurement.at<float>(6) = -(Ax-1)/100; 
 	  // cm/s^2 -> (m/s^2)       // x forward y right
@@ -1052,10 +1041,9 @@ void* producer_encoders(void* args)
     memset(encoderbuf, 0, k_LogBufSize);
     if (encoders_read_data(g_encoders_data))
     { //successful read, so put into encoderbuf
-      sprintf(encoderbuf,"ENC:time:%lu:dt:%lu:L:%.1f:R:%.1f:MCL:%d:MCR:%d",
+      sprintf(encoderbuf,"ENC:time:%lu:dt:%lu:L:%.3f:R:%.3f",
 	      g_encoders_data->timestamp, g_encoders_data->dt,
-	      g_encoders_data->ticks[0], g_encoders_data->ticks[1],
-	      g_motor_cmd_L, g_motor_cmd_R);
+	      g_encoders_data->cm[0], g_encoders_data->cm[1]);
     }
     else  //read failed, so log failure
       sprintf(encoderbuf, "ENC:Encoders data read failed");
@@ -1364,7 +1352,7 @@ bool encoders_read_data(encoders_data_t* data)
   data->timestamp = 0;
   data->dt = 0;
   for (int i = 0; i < 2; i++)
-    data->ticks[i] = 0.0f;
+    data->cm[i] = 0.0f;
   //read new data
   while (true)
   {
@@ -1372,7 +1360,7 @@ bool encoders_read_data(encoders_data_t* data)
     if ((result = read(encoders_fd, &c, 1)) > 0)
     { //read binary stream
       // (type-punning: aliasing with char* is ok)
-      (reinterpret_cast<char*> (&data->ticks))[encoders_input_pos++] = c;
+      (reinterpret_cast<char*> (&data->cm))[encoders_input_pos++] = c;
       if (encoders_input_pos == 8) // we received both (2 data elements * 4 bytes each)
       {                
 	//then get the two unsigned longs (timestamp and dt)

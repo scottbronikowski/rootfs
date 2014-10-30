@@ -523,6 +523,12 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --First draft of auto-drive complete.  Committing before testing.
 --Autodrive testing revealed that we need to do some tuning of the Kalman filter parameters, most likely the rover width parameter.
 
+30 Oct 14
+--Changed run-sensors/the-force producer_encoders() to send ticks instead of cm
+--Merged run-sensors into emperor in order to be able to send motor command values with encoder data
+--Have global vars with integer motor commands set in motor_write (inside motor_control_functions.cpp).  Have them read and written to imu-log in emperor and the-force.
+--Still need to modify code on seykhl to read in new data on encoder log line.
+
 
 **TODO**
 

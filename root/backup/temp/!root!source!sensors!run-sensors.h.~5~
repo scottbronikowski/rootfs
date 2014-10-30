@@ -32,8 +32,7 @@
 struct encoders_data_t {
   unsigned long timestamp;
   unsigned long dt;
-  float ticks[2]; //left ticks is ticks[0], right is ticks[1]
-  //float cm[2]; //left cm traveled is cm[0], right is cm[1]
+  float cm[2]; //left cm traveled is cm[0], right is cm[1]
 };
 struct imu_data_t {
   float data[15]; //yaw, pitch, roll, adjusted yaw, adjusted mag_heading, raw mag_heading, accel x, accel y, accel z, mag x, mag y, mag z, gyro x, gyro y, gyro z
@@ -54,11 +53,11 @@ extern const int sensors_connect_timeout_ms;
 extern const std::string encoders_init_string;
 extern const std::string imu_init_string;
 //need to define these here because of prototype for sensors_send_data
-const int k_LogBufSizeSensors = 256;
-const int k_messages_per_second = 102; 
+extern const int k_LogBufSize = 256;
+extern const int k_messages_per_second = 102; 
 //if it's working right, there should be 50 IMU + 50 encoder + 2 GPS messages every second
-const int k_msg_buf_size = k_messages_per_second * 1;
-const int k_msg_buf_bytes = k_msg_buf_size * k_LogBufSizeSensors;
+extern const int k_msg_buf_size = k_messages_per_second * 1;
+extern const int k_msg_buf_bytes = k_msg_buf_size * k_LogBufSize;
 
 //global variables
 extern int log_sensors_sockfd;
@@ -76,9 +75,6 @@ extern bool producer_threads_should_die;
 extern bool consumer_thread_should_die;
 extern char g_msg_buf[k_msg_buf_bytes];
 extern pthread_mutex_t msg_buf_and_count_lock;
-//for motor command sending
-extern int g_motor_cmd_L;
-extern int g_motor_cmd_R;
 
 //prototypes
 bool run_sensors_setup(void);
@@ -104,4 +100,4 @@ void sensors_terminator(int signum);
 //bool sensors_handler(void);
 int gps_read_data(char* logbuf);
 bool sensors_send_data(char* msgbuf, int num_messages);
-#endif //RUNSENSORS_H
+#endif //RUNENCODERS_H

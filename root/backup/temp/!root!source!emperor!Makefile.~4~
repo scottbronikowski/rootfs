@@ -16,22 +16,15 @@ CAMDIR = ../camera
 CAMFILES = ${CAMDIR}/toollib-camera.cpp ${CAMDIR}/toollib-camera.h
 MOTORDIR = ../motor_control
 MOTORFILES = ${MOTORDIR}/motor_control_functions.cpp ${MOTORDIR}/motor_control.h
-SENSORDIR = ../sensors
-SENSORFILES = ${SENSORDIR}/run-sensors.cpp ${SENSORDIR}/run-sensors.h
-GPSFILES = ${SENSORDIR}/mGPSInfo.cpp ${SENSORDIR}/mGPSInfo.h
-NMEAFILES = ${SENSORDIR}/mNMEAParser.cpp ${SENSORDIR}/mNMEAParser.h
-#IMUDIR = ../razor-imu
-#IMUFILES = ${IMUDIR}/razor-imu.cpp ${IMUDIR}/razor-imu.h
+IMUDIR = ../razor-imu
+IMUFILES = ${IMUDIR}/razor-imu.cpp ${IMUDIR}/razor-imu.h
 #MONDIR = ../monitor
 #MONFILES = ${MONDIR}/monitor.cpp ${MONDIR}/monitor.h
 
 OBJS = 	${CAMDIR}/toollib-camera.o \
 	${MOTORDIR}/motor_control_functions.o \
-	${SENSORDIR}/mGPSInfo.o \
-	${SENSORDIR}/mNMEAParser.o \
-	${SENSORDIR}/run-sensors.o \
+	${IMUDIR}/razor-imu.o \
 	emperor.o
-#	${IMUDIR}/razor-imu.o \
 #${MONDIR}/monitor.o \
 
 ${OUTPUTNAME}: ${OBJS}
@@ -47,18 +40,8 @@ ${CAMDIR}/toollib-camera.o: ${CAMFILES}
 ${MOTORDIR}/motor_control_functions.o: ${MOTORFILES}
 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${MOTORDIR}/motor_control_functions.o
 
-${SENSORDIR}/run-sensors.o: ${SENSORFILES}
-	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${SENSORDIR}/run-sensors.o
-#	${CC} -g ${INCLUDE} -Wall -c $*.cpp 
-
-${SENSORDIR}/mGPSInfo.o: ${GPSFILES}
-	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${SENSORDIR}/mGPSInfo.o
-
-${SENSORDIR}/mNMEAParser.o: ${NMEAFILES}
-	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${SENSORDIR}/mNMEAParser.o
-
-#${IMUDIR}/razor-imu.o: ${IMUFILES}
-#	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${IMUDIR}/razor-imu.o
+${IMUDIR}/razor-imu.o: ${IMUFILES}
+	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp -o ${IMUDIR}/razor-imu.o
 
 # ${MONDIR}/monitor.o: ${MONFILES}
 # 	${CC} ${OPTFLAGS} ${CFLAGS} ${INCLUDE} -Wall -c $*.cpp

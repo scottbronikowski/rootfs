@@ -24,7 +24,7 @@ const std::string imu_init_string = "#omb#o1#oe0#s"; //#o0 for POLLING #o1 for s
 //const int k_messages_per_second = 52; //if it's working right, there should be 50 IMU/encoder
                                       //messages plus 2 GPS messages every second
 //const int k_msg_buf_size = k_messages_per_second * 1;
-//const int k_msg_buf_bytes = k_msg_buf_bytes * k_LogBufSizeSensors;
+//const int k_msg_buf_bytes = k_msg_buf_bytes * k_LogBufSize;
 
 //global variables
 //extern
@@ -47,44 +47,44 @@ pthread_mutex_t msg_buf_and_count_lock;
 //not extern
 encoders_data_t* g_encoders_data;
 imu_data_t* g_imu_data;
-//char g_imu_logbuf[k_LogBufSizeSensors];
-//char g_enc_logbuf[k_LogBufSizeSensors];
-//char g_gps_logbuf[k_LogBufSizeSensors];
-char g_logbuf[k_LogBufSizeSensors]; //KILL THIS WHEN DONE--keeping it here to be able to compile
+//char g_imu_logbuf[k_LogBufSize];
+//char g_enc_logbuf[k_LogBufSize];
+//char g_gps_logbuf[k_LogBufSize];
+char g_logbuf[k_LogBufSize]; //KILL THIS WHEN DONE--keeping it here to be able to compile
 NMEAParser g_parser;
 
-// int main (int /*argc*/, char** /*argv*/)
-// {
-//   //int retval;
-//   memset(g_logbuf, 0, k_LogBufSizeSensors);
-//   printf("Starting Run-Sensors\n");
-//   //call setup function
-//   if (!run_sensors_setup())
-//   {
-//     printf("run_sensors_setup() failed\n");
-//     sensors_terminator(SIGTERM);
-//     return -1;
-//   }
-//   //call start function
-//   run_sensors_start();
+int main (int /*argc*/, char** /*argv*/)
+{
+  //int retval;
+  memset(g_logbuf, 0, k_LogBufSize);
+  printf("Starting Run-Sensors\n");
+  //call setup function
+  if (!run_sensors_setup())
+  {
+    printf("run_sensors_setup() failed\n");
+    sensors_terminator(SIGTERM);
+    return -1;
+  }
+  //call start function
+  run_sensors_start();
 
-//   //register signals for termination
-//   signal(SIGINT, sensors_terminator);
-//   signal(SIGTERM, sensors_terminator);
-//   //loop on a big sleep
-//   while(1)
-//   {
-//     sleep(1000);
-//   }
-//   //cleanup done in terminator
-//   return 0;  //we never get here
+  //register signals for termination
+  signal(SIGINT, sensors_terminator);
+  signal(SIGTERM, sensors_terminator);
+  //loop on a big sleep
+  while(1)
+  {
+    sleep(1000);
+  }
+  //cleanup done in terminator
+  return 0;  //we never get here
   
-// }
+}
 
 bool run_sensors_setup(void)
 {
   int retval;
-  char logbuf[k_LogBufSizeSensors];
+  char logbuf[k_LogBufSize];
   //initialize message buffer, count and their joint lock
   msg_count = 0;
   memset(g_msg_buf, 0, k_msg_buf_bytes);
@@ -163,7 +163,7 @@ void run_sensors_start(void)
   pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
   //run null loop to clear serial buffer
   struct timeval mark, now;
-  //char dummybuf[k_LogBufSizeSensors];
+  //char dummybuf[k_LogBufSize];
   gettimeofday(&mark, NULL);
   gettimeofday(&now, NULL);
   while (sensors_elapsed_ms(mark, now) < 200)
@@ -186,13 +186,13 @@ void* producer_imu(void* args)
 {
   //printf("in producer_imu\n");
   int r;
-  char imubuf[k_LogBufSizeSensors];
+  char imubuf[k_LogBufSize];
   while (!producer_threads_should_die)
   {
-    memset(imubuf, 0, k_LogBufSizeSensors);
+    memset(imubuf, 0, k_LogBufSize);
     if (imu_read_data(g_imu_data))
     { //successful read, so put into imubuf
-      r = snprintf(imubuf, k_LogBufSizeSensors, "IMU:time:%lu:dt:%lu:"
+      r = snprintf(imubuf, k_LogBufSize, "IMU:time:%lu:dt:%lu:"
 		   "Y:%.2f:P:%.2f:R:%.2f:"
 		   "Y(a):%.2f:M_h(a):%.2f:M_h:%.2f:"
 		   "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
@@ -204,7 +204,7 @@ void* producer_imu(void* args)
 		   g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
 		   g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
 		   g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
-      if (r > k_LogBufSizeSensors)
+      if (r > k_LogBufSize)
 	sprintf(imubuf,"IMU:BOGUS READING");
     }
     else //read failed, so log failure
@@ -219,16 +219,15 @@ void* producer_imu(void* args)
 void* producer_encoders(void* args)
 {
   //printf("in producer_encoders\n");
-  char encoderbuf[k_LogBufSizeSensors];
+  char encoderbuf[k_LogBufSize];
   while (!producer_threads_should_die)
   {
-    memset(encoderbuf, 0, k_LogBufSizeSensors);
+    memset(encoderbuf, 0, k_LogBufSize);
     if (encoders_read_data(g_encoders_data))
     { //successful read, so put into encoderbuf
-      sprintf(encoderbuf,"ENC:time:%lu:dt:%lu:L:%.1f:R:%.1f:MCL:%d:MCR:%d",
+      sprintf(encoderbuf,"ENC:time:%lu:dt:%lu:L:%.3f:R:%.3f",
 	      g_encoders_data->timestamp, g_encoders_data->dt,
-	      g_encoders_data->ticks[0], g_encoders_data->ticks[1],
-	      g_motor_cmd_L, g_motor_cmd_R);
+	      g_encoders_data->cm[0], g_encoders_data->cm[1]);
     }
     else  //read failed, so log failure
       sprintf(encoderbuf, "ENC:Encoders data read failed");
@@ -243,12 +242,12 @@ void* producer_gps(void* args)
 {
   //printf("in producer_gps\n");
   int retval;
-  char gpsbuf[k_LogBufSizeSensors];
-  char tempbuf[k_LogBufSizeSensors];
+  char gpsbuf[k_LogBufSize];
+  char tempbuf[k_LogBufSize];
   while (!producer_threads_should_die)
   {
-    memset(gpsbuf, 0, k_LogBufSizeSensors);
-    memset(tempbuf, 0, k_LogBufSizeSensors);
+    memset(gpsbuf, 0, k_LogBufSize);
+    memset(tempbuf, 0, k_LogBufSize);
     retval = gps_read_data(tempbuf);
     if (retval == 0)
     { //successful read, so send it
@@ -277,7 +276,7 @@ void* consumer(void* args)
     if (msg_count >= threshold)
     {
       num_messages = msg_count; //copy message count
-      memcpy(sendbuf, g_msg_buf, (num_messages * k_LogBufSizeSensors)); //copy the buffer
+      memcpy(sendbuf, g_msg_buf, (num_messages * k_LogBufSize)); //copy the buffer
       msg_count = 0; //reset msg_count
       pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
       if (!sensors_send_data(sendbuf, num_messages)) //sending the copy
@@ -537,15 +536,15 @@ bool encoders_read_data(encoders_data_t* data)
   data->timestamp = 0;
   data->dt = 0;
   for (int i = 0; i < 2; i++)
-    data->ticks[i] = 0.0f;
+    data->cm[i] = 0.0f;
   //read new data
   while (true)
   {
-    //first get tick measurements (floats)
+    //first get cm measurements (floats)
     if ((result = read(encoders_fd, &c, 1)) > 0)
     { //read binary stream
       // (type-punning: aliasing with char* is ok)
-      (reinterpret_cast<char*> (&data->ticks))[encoders_input_pos++] = c;
+      (reinterpret_cast<char*> (&data->cm))[encoders_input_pos++] = c;
       if (encoders_input_pos == 8) // we received both (2 data elements * 4 bytes each)
       {                
 	//then get the two unsigned longs (timestamp and dt)
@@ -668,11 +667,11 @@ double sensors_current_time(void)
 int sensors_log_data(char* logbuf)
 {
   double now = sensors_current_time(); 
-  char temp[k_LogBufSizeSensors];
+  char temp[k_LogBufSize];
   int retval;
-  memset(temp, 0, k_LogBufSizeSensors);
-  retval = snprintf(temp, k_LogBufSizeSensors, "%.6f:%s\n", now, logbuf);
-  if (retval >= k_LogBufSizeSensors)
+  memset(temp, 0, k_LogBufSize);
+  retval = snprintf(temp, k_LogBufSize, "%.6f:%s\n", now, logbuf);
+  if (retval >= k_LogBufSize)
   {
     printf("sensors_log_data: message truncated: %s\n  %s\n", logbuf, temp);
     return -1;
@@ -688,8 +687,8 @@ int sensors_log_data(char* logbuf)
     //printf("producer has lock\n");
     if (msg_count < k_msg_buf_size)
     { //we have room in the buffer, so add the new message
-      memset(&g_msg_buf[msg_count * k_LogBufSizeSensors], 0, k_LogBufSizeSensors); //clear out old data
-      strncpy(&g_msg_buf[msg_count * k_LogBufSizeSensors], temp, k_LogBufSizeSensors); //use this to pad buffer
+      memset(&g_msg_buf[msg_count * k_LogBufSize], 0, k_LogBufSize); //clear out old data
+      strncpy(&g_msg_buf[msg_count * k_LogBufSize], temp, k_LogBufSize); //use this to pad buffer
       ++msg_count; //increment msg_count
       pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
       //printf("producer released lock after logging to buffer\n");
@@ -708,10 +707,10 @@ int sensors_log_data(char* logbuf)
 
 bool sensors_send_data(char* msgbuf, int num_messages)
 {
-  int msgsize = num_messages * k_LogBufSizeSensors;//sizeof(msgbuf);
+  int msgsize = num_messages * k_LogBufSize;//sizeof(msgbuf);
   // for (int i = 0; i < k_msg_buf_size; i++)
   // {
-  //   printf("%s", msgbuf+(i*k_LogBufSizeSensors));
+  //   printf("%s", msgbuf+(i*k_LogBufSize));
   // }
   //first send the number of messages
   int r = send(log_sensors_sockfd, &num_messages, sizeof(num_messages), 0);
@@ -763,9 +762,9 @@ int gps_read_data(char* logbuf)
   int success = 0;
   int failure = -1;
   int no_read = 1;
-  char tempbuf[k_LogBufSizeSensors];
+  char tempbuf[k_LogBufSize];
   struct GPSInfo gpsinfo;
-  if (fgets(tempbuf, k_LogBufSizeSensors, gps_file_ptr) != NULL)
+  if (fgets(tempbuf, k_LogBufSize, gps_file_ptr) != NULL)
   {
     length = strlen(tempbuf);
     if (length <= 0) //error
@@ -780,12 +779,12 @@ int gps_read_data(char* logbuf)
       { //process GGA info
 	g_parser.Parse(tempbuf, length);
 	gpsinfo = g_parser.GetActualGPSInfo();
-	retval = snprintf(logbuf, k_LogBufSizeSensors, "GGA:Lat:%.10f:Long:%.10f:Alt:%.1fm:"
+	retval = snprintf(logbuf, k_LogBufSize, "GGA:Lat:%.10f:Long:%.10f:Alt:%.1fm:"
 			  "HDOP:%.2f:Quality:%d:Time:%.2d:%.2d:%.2d",
 			  gpsinfo.m_latitude, gpsinfo.m_longitude, gpsinfo.m_altitude,
 			  gpsinfo.m_HDOP, gpsinfo.m_signalQuality, gpsinfo.m_hour,
 			  gpsinfo.m_minute, gpsinfo.m_second);
-	if (retval > k_LogBufSizeSensors)
+	if (retval > k_LogBufSize)
 	  printf("GPS GGA too long, retval = %d\n", retval);
 	//logbuf now has a parsed and formatted GPS messages, so return success
 	return success;
@@ -800,13 +799,13 @@ int gps_read_data(char* logbuf)
 	}
 	else
 	{
-	  retval = snprintf(logbuf, k_LogBufSizeSensors, "RMC:Lat:%.10f:Long:%.10f:Heading:%.2f:"
+	  retval = snprintf(logbuf, k_LogBufSize, "RMC:Lat:%.10f:Long:%.10f:Heading:%.2f:"
 			    "MagVar:%.2f:Speed:%.2fkt:Date:%.4d-%.2d-%.2d:Time:%.2d:%.2d:%.2d",
 			    gpsinfo.m_latitude, gpsinfo.m_longitude, 
 			    gpsinfo.m_courseOverGround,gpsinfo.m_magneticVariation, 
 			    gpsinfo.m_groundSpeed, gpsinfo.m_year, gpsinfo.m_month, 
 			    gpsinfo.m_day, gpsinfo.m_hour, gpsinfo.m_minute, gpsinfo.m_second);
-	  if (retval > k_LogBufSizeSensors)
+	  if (retval > k_LogBufSize)
 	    printf("GPS RMC too long, retval = %d\n", retval);
 	}
 	//logbuf now has a parsed and formatted GPS messages, so return success

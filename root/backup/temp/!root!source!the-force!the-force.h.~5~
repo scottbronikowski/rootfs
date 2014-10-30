@@ -135,18 +135,12 @@ extern int sensor_pipe[2];  //pipe for sensor data to go to main thread
                             //[0] is read end, [1] is write end
 extern bool sensor_pipe_open;  //use to declare the pipe open or closed
 
-//for motor command sending (set in motor_control_functions.cpp)
-extern int g_motor_cmd_L;
-extern int g_motor_cmd_R;
-
-
 //structures
 //(from run-sensors)
 struct encoders_data_t {
   unsigned long timestamp;
   unsigned long dt;
-  float ticks[2]; //left ticks is ticks[0], right is ticks[1]
-  //float cm[2]; //left cm traveled is cm[0], right is cm[1]
+  float cm[2]; //left cm traveled is cm[0], right is cm[1]
 };
 struct imu_data_t {
   float data[15]; //yaw, pitch, roll, adjusted yaw, adjusted mag_heading, raw mag_heading, accel x, accel y, accel z, mag x, mag y, mag z, gyro x, gyro y, gyro z

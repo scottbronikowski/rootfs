@@ -1,27 +1,3 @@
-rm -rf arduino-1.0.5/
-rm arduino-1.0.5-linux64.tgz 
-rm teensyduino.64bit 
-rsync -avrz seykhl:~/Downloads/teensyduino.32bit .
-rsync -avrz seykhl:~/Downloads/arduino-1.0.5-linux32.tgz .
-tar -xvf arduino-1.0.5-linux32.tgz 
-ls
-rsync -avrz seykhl:~/Downloads/teensyduino.32bit .
-lla t*
-chmod a+x teensyduino.32bit 
-./teensyduino.32bit 
-lla tee*
-cd arduino-1.0.5
-ls
-./arduino 
-apt-get install arduino-core
-./arduino 
-cd ..
-./teensyduino.32bit 
-dpkg-query -l | grep jdk
-apt-get install openjdk-7-jre
-./teensyduino.32bit 
-cd arduino-1.0.5
-./arduino 
 java -verbose:jni
 apt-get install openjdk-7
 apt-get install openjdk-7*
@@ -1997,4 +1973,28 @@ exit
 cd source/the-force/
 emacs the-force.cpp
 exit
+halt
+top
+exit
+cd source/the-force/
+make
+cd ../..
+git status
+git add -A
+git commit -m "--Autodrive testing revealed that we need to do some tuning of the Kalman filter parameters, most likely the rover width parameter."
+git push
+exit
+cd source/motor_control/
+emacs motor_control_functions.cpp
+cd ../the-force/
+emacs the-force.cpp
+cd ..
+emacs today.text
+exit
+cd source/motor_control/
+nano motor_control_functions.cpp
+cd ..
+ls
+halt
+emacs today.text &
 halt
