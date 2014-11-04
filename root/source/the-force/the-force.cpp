@@ -846,8 +846,6 @@ int the_force_parse_and_execute(char* msgbuf)
   //save final pose_t into global pose_t variable--enables persistence of location over 
   //multiple runs
   my_pose = the_robot;
-  //close sensor pipe
-  sensor_pipe_open = false;
   motor_stop(motor_fd); //an extra stop for good measure
 
   //stop cameras
@@ -862,6 +860,9 @@ int the_force_parse_and_execute(char* msgbuf)
       printf("logging failed for \'%s\'\n", logbuf);
     printf("Cameras stopped\n");
   }
+  //close sensor pipe
+  sensor_pipe_open = false;
+
   //return
   return 0;
   
