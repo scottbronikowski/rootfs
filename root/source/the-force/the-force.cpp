@@ -742,6 +742,9 @@ int the_force_parse_and_execute(char* msgbuf)
 	retval = emperor_log_data(logbuf, log_sockfd);
 	if (retval != 0)
 	  printf("logging failed for \'%s'\n", logbuf);
+	//***LOG INTO IMU LOG AS WELL***
+	snprintf(logbuf, k_LogBufSize,"\n\nWAYPOINT w %f %f\n\n", the_point.x, the_point.y);
+	sensors_send_data(logbuf, 1);
 	// don't need to copy stop into motor_prev b/c motor_prev gets reset at top of loop
 	//-->first command of next loop will always get executed
 	at_the_point = true; //not sure about this
@@ -1731,7 +1734,8 @@ Mat ComputeTransitionMatrix(Mat state,float dt)
 		      1, 0, 0, 0,  .5*cos(theta)*dt, .5*cos(theta)*dt, 0,  0,
 		      0, 1, 0, 0,  .5*sin(theta)*dt, .5*sin(theta)*dt, 0,  0,
 		      0, 0, 1, dt, 0,                0,                0,  0,
-		      0, 0, 0, 0,  -1/rover_width,   1/rover_width,    0,  0,
+		      0, 0, 0,  0, 0,                0,                0,  0,
+		      //0, 0, 0, 0,  -1/rover_width,   1/rover_width,    0,  0,
 		      0, 0, 0, 0,  1,                0,                dt, 0,
 		      0, 0, 0, 0,  0,                1,                0,  dt,
 		      0, 0, 0, 0, -beta,             0,                0,  0,

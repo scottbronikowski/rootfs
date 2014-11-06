@@ -35,6 +35,7 @@
 #include "mNMEAParser.h"
 //needed for Kalman filter
 #include <opencv2/video/tracking.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 using namespace cv;
 

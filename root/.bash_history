@@ -1,7 +1,3 @@
-cd tools/
-ls
-cd ..
-ls libraries/
 cd ../lib
 ls
 cd ../arduino-1.0.5/lib
@@ -1997,4 +1993,8 @@ emacs today.text &
 halt
 ping google.com
 ls
+halt
+emacs today.text &
+top
+exit
 halt
