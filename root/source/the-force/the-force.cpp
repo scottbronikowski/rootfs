@@ -726,7 +726,11 @@ int the_force_parse_and_execute(char* msgbuf)
       the_robot.x = KF.statePost.at<float>(0);
       the_robot.y = KF.statePost.at<float>(1);
       the_robot.theta = KF.statePost.at<float>(2);
-
+      sprintf(logbuf,"ESTIMATE:X:%f:Y:%f:THETA:%f", 
+	      the_robot.x, the_robot.y, the_robot.theta);
+      retval = sensors_log_data(logbuf);
+      if (retval != 0)
+	printf("ERROR logging estimate\n");
       //printf("I am at x = %f, y = %f, theta = %f\n", the_robot.x, the_robot.y, the_robot.theta); 
 
 
@@ -743,8 +747,10 @@ int the_force_parse_and_execute(char* msgbuf)
 	if (retval != 0)
 	  printf("logging failed for \'%s'\n", logbuf);
 	//***LOG INTO IMU LOG AS WELL***
-	snprintf(logbuf, k_LogBufSize,"\n\nWAYPOINT w %f %f\n\n", the_point.x, the_point.y);
-	sensors_send_data(logbuf, 1);
+	sprintf(logbuf,"\nWAYPOINT w %f %f\n", the_point.x, the_point.y);
+	retval = sensors_log_data(logbuf);
+	if (retval != 0)//(!sensors_send_data(logbuf, 1))
+	   printf("ERROR logging waypoint\n");
 	// don't need to copy stop into motor_prev b/c motor_prev gets reset at top of loop
 	//-->first command of next loop will always get executed
 	at_the_point = true; //not sure about this

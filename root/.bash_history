@@ -1,5 +1,3 @@
-cd ../lib
-ls
 cd ../arduino-1.0.5/lib
 ls
 feh about.jpg 
@@ -1997,4 +1995,6 @@ halt
 emacs today.text &
 top
 exit
+halt
+emacs today.text
 halt
