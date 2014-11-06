@@ -1,17 +1,3 @@
-cd ../arduino-1.0.5/lib
-ls
-feh about.jpg 
-cd ..
-ls
-cd hardware/
-ls
-cd ..
-java -version
-apt-get install openjdk-6-jre
-ls /usr/local/j*
-ls usr/local
-ls /usr/local
-ls /usr
 ls usr/share
 ls /usr/share
 ls /usr/share/java
@@ -1997,4 +1983,18 @@ top
 exit
 halt
 emacs today.text
+halt
+emacs today.text &
+halt
+ping google.com
+halt
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ping google.com
+halt
+exit
+emacs today.text &
+exit
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
 halt

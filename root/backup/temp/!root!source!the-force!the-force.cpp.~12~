@@ -655,29 +655,29 @@ int the_force_parse_and_execute(char* msgbuf)
 	  imu_logtime=tmp_logtime;
 	  read_imu=1;
       	}
-// 	if ((read_imu==1 && read_encoder==1) && (read_gps_gga==1 || read_gps_rmc==1))
-// 	{ //update with GPS
-// 	  Measurement.at<float>(0) = Long;
-// 	  Measurement.at<float>(1) = Lat;
-// 	  Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
-// 	  //degrees north is 0 east is positive->(radians east 0 north positive)
-// 	  Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
-// 	  // rotation around z in degrees/sec ->(radians/sec)
-// 	  Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
-// 	  //ticks * meters/tick / sec = m/s
-// //L/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(left_ticks_per_cm); 
-// 	  // cm traveled in last time period -> (meters/sec)
-// 	  Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
-// //R/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(right_ticks_per_cm); 
-// 	  // cm traveled in last time period -> (meters/sec)
-// 	  Measurement.at<float>(6) = -(Ax-1)/100; 
-// 	  // cm/s^2 -> (m/s^2)       // x forward y right
-// 	  read_gps_gga = 0;
-// 	  read_gps_rmc = 0;
-// 	  read_imu=0;
-// 	  read_encoder=0;
-// 	  break; //get out of the loop once Measurement is set
-// 	}
+	if ((read_imu==1 && read_encoder==1) && (read_gps_gga==1 || read_gps_rmc==1))
+	{ //update with GPS
+	  Measurement.at<float>(0) = Long;
+	  Measurement.at<float>(1) = Lat;
+	  Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
+	  //degrees north is 0 east is positive->(radians east 0 north positive)
+	  Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
+	  // rotation around z in degrees/sec ->(radians/sec)
+	  Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
+	  //ticks * meters/tick / sec = m/s
+//L/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(left_ticks_per_cm); 
+	  // cm traveled in last time period -> (meters/sec)
+	  Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
+//R/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(right_ticks_per_cm); 
+	  // cm traveled in last time period -> (meters/sec)
+	  Measurement.at<float>(6) = -(Ax-1)/100; 
+	  // cm/s^2 -> (m/s^2)       // x forward y right
+	  read_gps_gga = 0;
+	  read_gps_rmc = 0;
+	  read_imu=0;
+	  read_encoder=0;
+	  break; //get out of the loop once Measurement is set
+	}
 	if (read_imu==1 && read_encoder==1)
 	{ //update without GPS
 	  Measurement.at<float>(0) = 0; //no gps for now
@@ -1523,10 +1523,10 @@ int sensors_log_data(char* logbuf)
   { //if we get here, we've got something to write to g_msg_buf
     if (sensor_pipe_open) //only log if pipe is open
     {
-      pthread_mutex_lock(&msg_buf_and_count_lock); //GRABBING THE LOCK
       retval = write(sensor_pipe[1], temp, k_LogBufSize);
       if (retval != k_LogBufSize)
 	printf("sensors_log_data: error writing to pipe, retval = %d, strlen(temp) = %d\n", retval, strlen(temp));
+      pthread_mutex_lock(&msg_buf_and_count_lock); //GRABBING THE LOCK
       //printf("producer has lock\n");
       if (msg_count < k_msg_buf_size)
       { //we have room in the buffer, so add the new message

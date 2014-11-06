@@ -1523,10 +1523,10 @@ int sensors_log_data(char* logbuf)
   { //if we get here, we've got something to write to g_msg_buf
     if (sensor_pipe_open) //only log if pipe is open
     {
-      pthread_mutex_lock(&msg_buf_and_count_lock); //GRABBING THE LOCK
       retval = write(sensor_pipe[1], temp, k_LogBufSize);
       if (retval != k_LogBufSize)
 	printf("sensors_log_data: error writing to pipe, retval = %d, strlen(temp) = %d\n", retval, strlen(temp));
+      pthread_mutex_lock(&msg_buf_and_count_lock); //GRABBING THE LOCK
       //printf("producer has lock\n");
       if (msg_count < k_msg_buf_size)
       { //we have room in the buffer, so add the new message
