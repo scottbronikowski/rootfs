@@ -132,7 +132,7 @@ NMEAParser g_parser;
 float mXN = 5.0; //  GPS X noise variance
 float mYN = 5.0; //  GPS Y noise variance
 float mThetaN = 1000000000 * (k_PI/180); //  orientation noise variance (radians)
-float mdThetaN = 1000000000000 * (k_PI/180); //  orientation derivative noise variance (radians)
+float mdThetaN = 0.0001; //  orientation derivative noise variance (radians)
 float mSLN = .01; //  left wheel speed noise variance
 float mSRN = .01; //  right wheel speed noise variance
 float mAN  = 100000000; //  acceleration noise variance
@@ -142,7 +142,7 @@ float mAN  = 100000000; //  acceleration noise variance
 float pXN = 1e-6; //  GPS X noise variance
 float pYN = 1e-6; //  GPS Y noise variance
 float pThetaN = 1 * (k_PI/180); //  orientation noise variance (radians)
-float pdThetaN = 1 * (k_PI/180); //  orientation derivative noise variance (radians)
+float pdThetaN = 1000000; //  orientation derivative noise variance (radians)
 float pSLN = 1000000; //  left wheel speed noise variance
 float pSRN = 1000000; //  right wheel speed noise variance
 float pdSLN = 1000000; //  left wheel speed derivative noise variance
@@ -160,12 +160,12 @@ float pdSRN = 1000000; //  right wheel speed derivative noise variance
 // we really should find these by computing stuff from measurements
 float alpha = 1; // ????
 float beta = 1; // ????
-float rover_width = .45; //???? measure/calibrate this
 
-float tau_L = 1/32828.8; //left side meters per tick
-float tau_R = 1/32370.9; //right side meters per tick
-
-
+float rover_width = .3110019808409256; 
+float tau_L = 3.048837255989942e-05; //left meters per tick
+float tau_R = 3.056925451030081e-05; //right meters per tick
+float gyro_offset = 14.98;
+float radians_per_gyro_unit = 2*k_PI/5.076295665184609e+03;
 
 
 int main(int /*argc*/, char** /*argv*/)
@@ -661,7 +661,7 @@ int the_force_parse_and_execute(char* msgbuf)
 	  Measurement.at<float>(1) = Lat;
 	  Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
 	  //degrees north is 0 east is positive->(radians east 0 north positive)
-	  Measurement.at<float>(3) = -Gz*k_PI/180; 
+	  Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
 	  // rotation around z in degrees/sec ->(radians/sec)
 	  Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
 	  //ticks * meters/tick / sec = m/s
@@ -684,7 +684,7 @@ int the_force_parse_and_execute(char* msgbuf)
 	  Measurement.at<float>(1) = 0; //no gps for now
 	  Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
 	  //degrees north is 0 east is positive->(radians east 0 north positive)
-	  Measurement.at<float>(3) = -Gz*k_PI/180; 
+	  Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
 	  // rotation around z in degrees/sec ->(radians/sec)
 	  Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
 	  //ticks * meters/tick / sec = m/s

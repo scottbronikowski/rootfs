@@ -1,46 +1,3 @@
-java -verbose:jni
-apt-get install openjdk-7
-apt-get install openjdk-7*
-cd /usr/lib/jvm/
-ls j*
-cd java-7-openjdk-armhf/jre/lib/arm/
-ls
-ln -s jamvm/libjvm.so .
-lla
-cd ~/arduino-1.0.5
-./arduino 
-apt-get install openjdk-7-jdk
-./arduino 
-locate librxtxSerial
-./arduino 
-ls
-cd lib
-ls
-java
-java -version
-ls
-ln -s `pwd`/librxtxSerial.so /usr/lib/
-lla /usr/lib/librx*
-cd ..
-./arduino 
-apt-get install arduino
-arduino
-./arduino 
-which arduino
-locate arduino
-arduino
-cd ..
-./teensyduino.32bit 
-nautilus 
-java -version
-dpkg-query -l | grep ja
-update-alternatives --config java
-java -version
-apt-get purge openjdk-7-*
-arduino
-cd arduino-1.0.5
-./arduino 
-ls
 cd tools/
 ls
 cd ..
@@ -1997,4 +1954,47 @@ cd ..
 ls
 halt
 emacs today.text &
+halt
+top
+htop
+exit
+cd sour
+cd source/
+ls
+cd sensors/
+ls
+cd ../camera/
+ls
+cd ../
+ls
+cd ..
+ls
+cd include/
+ls
+ln -s ../source/sensors/mNMEAParser.h ./mNMEAParser.h
+lla
+ln -s ../source/sensors/mGPSInfo.h ./mGPSInfo.h
+cd ../source/sensors/
+ls
+cd ../emperor/
+ls
+rm *.o
+ls
+cd ../sensors/
+ls
+cd ../../include/
+ln -s ../source/sensors/run-sensors.h ./run-sensors.h
+exit
+ls
+ping google.com
+emacs today.text &
+halt
+exit
+top
+exit
+ping google.com
+emacs today.text &
+halt
+ping google.com
+ls
 halt
