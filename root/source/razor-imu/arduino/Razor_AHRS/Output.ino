@@ -42,21 +42,23 @@ void output_mine()
   if (output_format == OUTPUT__FORMAT_BINARY)
   {
     unsigned char buf[4]; //can do this bc we know unsigned long is 32 bits
-    unsigned char buf2[4]; //for dt
-    memcpy(buf, &timestamp, 4);
-    memcpy(buf2, &dt, 4);
+    memcpy(buf, &reading_timestamp, 4);
     Serial.write((byte*) ypr, 12);  // No new-line
     Serial.write((byte*) headings, 12); //these 4 lines are 3xfloats
     Serial.write((byte*) accel, 12);   // No new-line between
     Serial.write((byte*) magnetom, 12);
     Serial.write((byte*) gyro, 12);
+    //Serial.write((byte*) reading_timestamp, 4); //this is a 32-bit int
     Serial.write(buf, 4);
-    Serial.write(buf2, 4);
+    //try to send reading_timestamp as 4 separate bytes, littlest byte first
+    /* Serial.write((reading_timestamp & 0xFF)); */
+    /* Serial.write((reading_timestamp >> 8)); */
+    /* Serial.write((reading_timestamp >> 16)); */
+    /* Serial.write((reading_timestamp >> 24)); */
   }
   else if (output_format == OUTPUT__FORMAT_TEXT)
   {
-    Serial.print("millis()="); Serial.print(timestamp); Serial.print(",");
-    Serial.print("dt="); Serial.print(dt); Serial.print(",");
+    Serial.print("millis()="); Serial.print(reading_timestamp); Serial.print(",");
     Serial.print("Yaw="); Serial.print(ypr[0]); Serial.print(",");
     Serial.print("Pitch="); Serial.print(ypr[1]); Serial.print(",");
     Serial.print("Roll="); Serial.print(ypr[2]); Serial.print(",");

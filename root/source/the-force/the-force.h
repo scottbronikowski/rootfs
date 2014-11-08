@@ -36,11 +36,36 @@
 //needed for Kalman filter
 #include <opencv2/video/tracking.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <stdlib.h>
 
 using namespace cv;
 
 //defines
 #define NEGATIVE_INFINITY (-1.0/0.0) //for my_exp
+#ifndef TRUE
+#define TRUE (0==0)
+#endif
+#ifndef FALSE
+#define FALSE (0!=0)
+#endif
+
+#define MAX_THREADS 4 //total number of barrier-ed threads
+
+//macros
+#define task_error(...) {				\
+    fprintf(stderr, "%s:%d: ", __FUNCTION__, __LINE__);	\
+    fprintf(stderr, __VA_ARGS__);			\
+    fprintf(stderr, "\n");				\
+    exit(EXIT_FAILURE); 				\
+  }
+
+#define BARRIER(t1, t2) {					\
+    int retval = pthread_barrier_wait(&barrier);                \
+    if (retval!=0&&retval!=PTHREAD_BARRIER_SERIAL_THREAD) {     \
+      task_error("%s %u can't wait on %s barrier", t1, id, t2); \
+    }                                                           \
+  }
+
 
 //global constants 
 extern const double k_PI;
@@ -77,6 +102,7 @@ extern const char* cmd_servo;
 extern const char* pan_file;
 extern const char* tilt_file;
 extern const char* k_LogPort;
+extern const int k_msg_buf_threshold;
 //extern const int k_LogBufSize;
 //for bump switch monitoring
 extern const int bump_move_time;
@@ -135,10 +161,22 @@ extern pthread_mutex_t msg_buf_and_count_lock;
 extern int sensor_pipe[2];  //pipe for sensor data to go to main thread
                             //[0] is read end, [1] is write end
 extern bool sensor_pipe_open;  //use to declare the pipe open or closed
-
 //for motor command sending (set in motor_control_functions.cpp)
 extern int g_motor_cmd_L;
 extern int g_motor_cmd_R;
+//for barriers
+extern unsigned int frame_number;
+extern int running, halt;
+extern unsigned int threads;
+extern void *((*task[MAX_THREADS])(void *));
+extern pthread_t thread[MAX_THREADS];
+extern struct task_args task_args[MAX_THREADS];
+extern pthread_mutex_t halt_mutex;
+extern pthread_barrier_t barrier;
+extern int time_threads;
+extern double fps;
+
+
 
 
 //structures
@@ -165,6 +203,10 @@ struct pose_t {
   double y;
   double theta;
 };
+//for barriers
+struct task_args {
+  unsigned int id;
+};
 
 
 //prototypes 
@@ -176,11 +218,11 @@ void* emperor_monitor_bump_switches(void* args);
 int emperor_log_data(char* databuf, int log_fd);
 double emperor_current_time(void);
 //(from run-sensors)
-bool run_sensors_setup(void);
-void run_sensors_start(void);
-void* producer_imu(void* args);
-void* producer_encoders(void* args);
-void* producer_gps(void* args);
+// bool run_sensors_setup(void);
+// void run_sensors_start(void);
+// void* producer_imu(void* args);
+// void* producer_encoders(void* args);
+// void* producer_gps(void* args);
 void* consumer(void* args);
 bool sensors_open_serial_port(int &fd, const char* filename, 
 			      const speed_t speed, const int bytes_per_read = 1);
@@ -193,12 +235,12 @@ bool sensors_read_token(const std::string &token, char c, size_t &input_pos);
 bool encoders_read_data(encoders_data_t* data); 
 bool imu_read_data(imu_data_t* data);
 double sensors_current_time(void);
-int sensors_log_data(char* logbuf);
+//int sensors_log_data(char* logbuf);
 bool sensors_send_data(char* msgbuf, int num_messages);
 void sensors_terminator(int signum);
 int gps_read_data(char* logbuf);
 
-int the_force_parse_and_execute(char* msgbuf);
+//int the_force_parse_and_execute(char* msgbuf);
 
 //(from data-analysis.cpp)
 double my_exp(double x);
@@ -225,6 +267,38 @@ KalmanFilter execute_time_step(KalmanFilter KF,
 
 //new stuff
 double DistanceBetween(pose_t robot, location_t point);
+
+//for barriers
+void *task_malloc(size_t size);
+// double current_time(void);	
+void start_barrier_threads(void);
+void stop_barrier_threads(void);
+
+void initialize_imu_encoders(unsigned int id);
+void write_imu_encoders(unsigned int id);
+void read_imu_encoders(unsigned int id);
+void finalize_imu_encoders(unsigned int id);
+void *imu_encoders_task(void *args);
+
+void initialize_gps(unsigned int id);
+void write_gps(unsigned int id);
+void read_gps(unsigned int id);
+void finalize_gps(unsigned int id);
+void *gps_task(void *args);
+
+void initialize_buffer_and_send(unsigned int id);
+void write_buffer_and_send(unsigned int id);
+void read_buffer_and_send(unsigned int id);
+void finalize_buffer_and_send(unsigned int id);
+void *buffer_and_send_task(void *args);
+
+//KF/move thread
+void initialize_estimate_and_move(unsigned int id);
+void write_estimate_and_move(unsigned int id);
+void read_estimate_and_move(unsigned int id);
+void finalize_estimate_and_move(unsigned int id);
+void *estimate_and_move_task(void *args);
+
 
 #endif
 

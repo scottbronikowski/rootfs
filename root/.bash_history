@@ -1,7 +1,3 @@
-ls usr/share
-ls /usr/share
-ls /usr/share/java
-locate rt.jar
 locate tools.jar
 mkdir java
 cd java/
@@ -1997,4 +1993,8 @@ emacs today.text &
 exit
 /etc/init.d/ssh-tunnel.sh stop
 /etc/init.d/ssh-tunnel.sh start
+halt
+emacs today.text &
+exit
+emacs today.text &
 halt
