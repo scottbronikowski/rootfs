@@ -539,6 +539,19 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Minor correction to autodrive localization.  Added waypoint logging to imu-log file.
 --Got waypoint logging in imu-log to work.  Also added robot's own location estimate to imu-log
 --put write to sensor_pipe  in sensors_log_data inside the lock for the buffer that the sensors write to and the consumer reads from-->trying to see if in-order message delivery to pipe is problem with on-board KF vs. workstation KF.
+
+7 Nov 14
+--Complete restructuring of the-force code to use BARRIERs with pthreads.
+--Still a couple of bugs to work out on autodrive.  
+--I think I have the barrier code working correctly, although I'm getting "**BAD LINE" occurring in my imu-log.txt occasionally.  Not sure where that is coming from, since I can't find that text anywhere in my code.
+--I found one bug in the way that I was pulling data from the encoders--the encoders were reporting a dt of 20ms, regardless of how long it had really been since the last data had been sent.  I fixed that in the encoders' Arduino code and got the rover to drive a simulated straight forward 1m and stop.  I was getting some pretty huge (>100ms) dt's between encoder readings, but it seemed to work ok.
+--Then I figured that there was a similar bug in the IMU Arduino code and tried to fix it in the same way.  I must have broken something in doing that, since now the-force will fire up, take a path, start the cameras, and then do nothing.  I need to spend some more time troubleshooting it.
+
+10 Nov 14
+--Rolled back IMU Arduino code to previous version from Git.  Saw that I had edited and overwritten with an older version that broke the output that the Gumstix was expecting.  Going to try running the recovered version before editing again.
+
+
+
 .%  *Ibuffer*              547  Ibuffer by recen
   * *Messages*            3187  Fundamental
   * *shell*              31669  Shell:run	  ~/source/the-force/

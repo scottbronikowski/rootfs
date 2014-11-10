@@ -175,6 +175,7 @@ Edited/Augmented by Scott Bronikowski, 5 Jun 2014
 // This may not work, if faster than 20ms (=50Hz)
 // Code is tuned for 20ms, so better leave it like that
 #define OUTPUT__DATA_INTERVAL 20  // in milliseconds
+//#define OUTPUT__DATA_INTERVAL 40  // in milliseconds
 
 // Output mode definitions (do not change)
 #define OUTPUT__MODE_CALIBRATE_SENSORS 0 // Outputs sensor min/max values as text for manual calibration
@@ -370,7 +371,7 @@ int gyro_num_samples = 0;
 //My added stuff--SAB
 #define CALIBRATION_SAMPLES 1024 //take 1024 samples of data to calibrate
 float gyro_bias[3];
-unsigned long reading_timestamp; //for each data point
+//unsigned long reading_timestamp; //for each data point
 
 // DCM variables
 float MAG_Heading;
@@ -394,7 +395,13 @@ float roll;
 // DCM timing in the main loop
 unsigned long timestamp;
 unsigned long timestamp_old;
+unsigned long timestamp_micros;
+unsigned long timestamp_micros_old;
+unsigned long elapsed_micros;
+unsigned long count = 0;
+boolean do_update;
 float G_Dt; // Integration time for DCM algorithm
+unsigned long dt;
 
 // More output-state variables
 boolean output_stream_on;
@@ -682,15 +689,32 @@ void loop()
   }
 
   // Time to read the sensors again?
-  if //((output_single_on) ||
-    //((output_stream_on) &&
-    ((millis() - timestamp) >= OUTPUT__DATA_INTERVAL)//))
+  do_update = false;
+  timestamp_micros_old = timestamp_micros;
+  timestamp_micros = micros();
+  //need to handle the rollover case, since micros() rolls over every ~70 minutes.
+  if (timestamp_micros_old > timestamp_micros)  //we have rolled over
+    elapsed_micros = timestamp_micros + (0xFFFFFFFF - timestamp_micros_old);
+  else //no rollover
+    elapsed_micros = timestamp_micros - timestamp_micros_old;
+  count += elapsed_micros;
+  if (count >= (1000 * OUTPUT__DATA_INTERVAL)) //time to do update
   {
-    timestamp_old = timestamp;
-    timestamp = millis();
-    if (timestamp > timestamp_old)
-      G_Dt = (float) (timestamp - timestamp_old) / 1000.0f; // Real time of loop run. We use this on the DCM algorithm (gyro integration time)
-    else G_Dt = 0;
+    do_update = true;
+    dt = count / 1000;
+    timestamp += dt;
+    count -= (1000 * OUTPUT__DATA_INTERVAL);
+  }
+
+  if(do_update) //elapsed_micros >= (OUTPUT__DATA_INTERVAL * 1000))
+  {
+    //timestamp = millis();
+    /* if (timestamp > timestamp_old) //not sure why we need this--timestamp always > timestamp_old */
+    /* { */
+    //dt = timestamp - timestamp_old;
+      G_Dt = (float) (dt) / 1000.0f; // Real time of loop run. We use this on the DCM algorithm (gyro integration time)
+    /* } */
+    /* else G_Dt = 0; */
 
     // Update sensor readings
     read_sensors();
@@ -714,7 +738,7 @@ void loop()
       //convert sensors to physical values here??
       scale_sensors();
 
-      reading_timestamp = millis(); //the time for this reading
+      //reading_timestamp = millis(); //the time for this reading
       
       if (output_stream_on || output_single_on) output_mine();
     }
