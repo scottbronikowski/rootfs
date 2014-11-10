@@ -114,8 +114,8 @@ pthread_t thread[MAX_THREADS];
 struct task_args task_args[MAX_THREADS];
 pthread_mutex_t halt_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_barrier_t barrier;
-int time_threads = FALSE;
-double fps = 50.0;
+int time_threads = TRUE;//FALSE;
+double fps = 10;
 bool route_complete = FALSE;
 
 
@@ -1986,11 +1986,11 @@ void *imu_encoders_task(void *args) {
       if (halt) running = FALSE;
       pthread_mutex_unlock(&halt_mutex);
     }
-    double last = emperor_current_time();
     BARRIER("imu_encoders", "before pipeline");
     if (!running) break;
     write_imu_encoders(id);
     BARRIER("imu_encoders", "after pipeline");
+    double last = emperor_current_time();
     read_imu_encoders(id);
     double now = emperor_current_time();
     /* This intentionally ignores the time for the two barriers, the
@@ -2006,19 +2006,6 @@ void *imu_encoders_task(void *args) {
       printf("unused imu_encoders %u thread time in frame %u: %lf\n",
 	     id, frame_number, fraction_remaining);
     }
-    // {
-    //   /* This block only needs to be in one thread */
-    //   /* spin to sync to frame rate */
-    //   while (TRUE) {
-    //     double now = current_time();
-    //     if (now-last>=1.0/fps) {
-    //       last = now;
-    //       break;
-    //     }
-    //     if (usleep(QUANTUM)) task_error("Call to usleep failed");
-    //   }
-    // }
-    printf("imu_encoders_task time: %f\n", now-last);
   }
   BARRIER("imu_encoders", "finalize");
   finalize_imu_encoders(id);
@@ -2027,21 +2014,21 @@ void *imu_encoders_task(void *args) {
 
 //for GPS
 void initialize_gps(unsigned int id){
-  // char logbuf[k_LogBufSize];
-  // char sendbuf[k_LogBufSize];
-  // int num_messages = 1;
-  // sprintf(logbuf, "%.6f:ALL: GPS logging started\n", sensors_current_time());
-  // strncpy(sendbuf, logbuf, k_LogBufSize);
-  // while (log_sensors_sockfd < 0)
-  // {
-  //   usleep(1000*1000); //not sure if this will work
-  // }
-  // if (!sensors_send_data(sendbuf, num_messages)) {
-  //   printf("GPS connection failed, exiting.\n");
-  //   //return;
-  // }
-  // else
-  //   printf("GPS success!\n");
+  char logbuf[k_LogBufSize];
+  char sendbuf[k_LogBufSize];
+  int num_messages = 1;
+  sprintf(logbuf, "%.6f:ALL: GPS logging started\n", sensors_current_time());
+  strncpy(sendbuf, logbuf, k_LogBufSize);
+  while (log_sensors_sockfd < 0)
+  {
+    usleep(1000*1000); //not sure if this will work
+  }
+  if (!sensors_send_data(sendbuf, num_messages)) {
+    printf("GPS connection failed, exiting.\n");
+    //return;
+  }
+  else
+    printf("GPS success!\n");
   //initialize variables
   g_parser = NMEAParser();
   g_gps_new_data = -1;
@@ -2406,65 +2393,64 @@ void read_estimate_and_move(unsigned int id) {
   unsigned long encoder_dt = g_encoders_data->dt;
   float L = g_encoders_data->ticks[0];
   float R = g_encoders_data->ticks[1];
-  // //if new GPS data, parse it
-  // if (g_gps_new_data == 0) {
-  //   int gps_items = sscanf(g_gps_buf,"GGA:Lat:%f:Long:%f:Alt:%f m:HDOP:%f:"
-  // 			   "Quality:%f:Time:%d:%d:%d",
-  // 			   &Lat, &Long, &Alt, &HDOP, &Quality,
-  // 			   &hour, &min, &sec);
-  //   if (gps_items != 8){
-  //     gps_items = sscanf(g_gps_buf,"RMC:Lat:%f:Long:%f:Heading:%f:MagVar:%f:"
-  // 			 "Speed:%f kt:Date:%d-%d-%d:Time:%d:%d:%d",
-  // 			 &Lat, &Long, &Heading, &MagVar, &Speed,
-  // 			 &year, &month, &day, &hour, &min, &sec);
-  //   }
-  //   //update with GPS
-  //   Measurement.at<float>(0) = Long;
-  //   Measurement.at<float>(1) = Lat;
-  //   Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
-  //   //degrees north is 0 east is positive->(radians east 0 north positive)
-  //   Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
-  //   // rotation around z in degrees/sec ->(radians/sec)
-  //   Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
-  //   Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
-  //   Measurement.at<float>(6) = -(Ax-1)/100; 
-  // }
-  // else {//update without GPS
-  //   Measurement.at<float>(0) = 0; //no gps for now
-  //   Measurement.at<float>(1) = 0; //no gps for now
-  //   Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
-  //   //degrees north is 0 east is positive->(radians east 0 north positive)
-  //   Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
-  //   // rotation around z in degrees/sec ->(radians/sec)
-  //   Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
-  //   Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
-  //   Measurement.at<float>(6) = -(Ax-1)/100; 
-  // }
-  // //update current position via Kalman filter
-  // g_TransitionModel = ComputeTransitionMatrix(g_KF.statePost, encoder_dt/1000.0);
-  // //using encoder's dt for now
+  //if new GPS data, parse it
+  if (g_gps_new_data == 0) {
+    int gps_items = sscanf(g_gps_buf,"GGA:Lat:%f:Long:%f:Alt:%f m:HDOP:%f:"
+			   "Quality:%f:Time:%d:%d:%d",
+			   &Lat, &Long, &Alt, &HDOP, &Quality,
+			   &hour, &min, &sec);
+    if (gps_items != 8){
+      gps_items = sscanf(g_gps_buf,"RMC:Lat:%f:Long:%f:Heading:%f:MagVar:%f:"
+			 "Speed:%f kt:Date:%d-%d-%d:Time:%d:%d:%d",
+			 &Lat, &Long, &Heading, &MagVar, &Speed,
+			 &year, &month, &day, &hour, &min, &sec);
+    }
+    //update with GPS
+    Measurement.at<float>(0) = Long;
+    Measurement.at<float>(1) = Lat;
+    Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
+    //degrees north is 0 east is positive->(radians east 0 north positive)
+    Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
+    // rotation around z in degrees/sec ->(radians/sec)
+    Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
+    Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
+    Measurement.at<float>(6) = -(Ax-1)/100; 
+  }
+  else {//update without GPS
+    Measurement.at<float>(0) = 0; //no gps for now
+    Measurement.at<float>(1) = 0; //no gps for now
+    Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
+    //degrees north is 0 east is positive->(radians east 0 north positive)
+    Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
+    // rotation around z in degrees/sec ->(radians/sec)
+    Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
+    Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
+    Measurement.at<float>(6) = -(Ax-1)/100; 
+  }
+  //update current position via Kalman filter
+  g_TransitionModel = ComputeTransitionMatrix(g_KF.statePost, encoder_dt/1000.0);
+  //using encoder's dt for now
 
-  // // NEEDS WORK: hard coded and ignores input to rover motors
-  // float CL = 0; //g_motor_cmd_L;
-  // float CR = 0; //g_motor_cmd_R;
-  // control = *(Mat_<float>(2,1) << CL,CR);      
+  // NEEDS WORK: hard coded and ignores input to rover motors
+  float CL = 0; //g_motor_cmd_L;
+  float CR = 0; //g_motor_cmd_R;
+  control = *(Mat_<float>(2,1) << CL,CR);      
 
-  // //fix possible loop-around in thetas
-  // while (Measurement.at<float>(2) <= g_KF.statePost.at<float>(2) - k_PI)
-  //   Measurement.at<float>(2) += 2*k_PI;
-  // while (Measurement.at<float>(2) >= g_KF.statePost.at<float>(2) + k_PI)
-  //   Measurement.at<float>(2) -= 2*k_PI;
+  //fix possible loop-around in thetas
+  while (Measurement.at<float>(2) <= g_KF.statePost.at<float>(2) - k_PI)
+    Measurement.at<float>(2) += 2*k_PI;
+  while (Measurement.at<float>(2) >= g_KF.statePost.at<float>(2) + k_PI)
+    Measurement.at<float>(2) -= 2*k_PI;
   
-  // // NEEDS WORK: we always ignore GPS
-  // g_KF = execute_time_step(g_KF, g_TransitionModel,
-  // 			   g_MeasurementModel_noGPS, g_KF.controlMatrix, 
-  // 			   Measurement, control);
+  // NEEDS WORK: we always ignore GPS
+  g_KF = execute_time_step(g_KF, g_TransitionModel,
+			   g_MeasurementModel_noGPS, g_KF.controlMatrix, 
+			   Measurement, control);
 
-  // //KF updated, write x, y, theta back into the_robot
-  // g_my_pose.x = g_KF.statePost.at<float>(0);
-  // g_my_pose.y = g_KF.statePost.at<float>(1);
-  // g_my_pose.theta = g_KF.statePost.at<float>(2);
-  g_my_pose.y = g_my_pose.y + 0.01;
+  //KF updated, write x, y, theta back into the_robot
+  g_my_pose.x = g_KF.statePost.at<float>(0);
+  g_my_pose.y = g_KF.statePost.at<float>(1);
+  g_my_pose.theta = g_KF.statePost.at<float>(2);
   sprintf(tempbuf,"ESTIMATE:X:%f:Y:%f:THETA:%f\n", 
 	  g_my_pose.x, g_my_pose.y, g_my_pose.theta);
   strncpy(local_estimate_buf, tempbuf, k_LogBufSize);

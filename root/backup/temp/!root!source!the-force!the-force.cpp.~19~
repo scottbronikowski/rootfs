@@ -114,7 +114,7 @@ pthread_t thread[MAX_THREADS];
 struct task_args task_args[MAX_THREADS];
 pthread_mutex_t halt_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_barrier_t barrier;
-int time_threads = FALSE;
+int time_threads = TRUE;//FALSE;
 double fps = 50.0;
 bool route_complete = FALSE;
 
@@ -1986,11 +1986,11 @@ void *imu_encoders_task(void *args) {
       if (halt) running = FALSE;
       pthread_mutex_unlock(&halt_mutex);
     }
-    double last = emperor_current_time();
     BARRIER("imu_encoders", "before pipeline");
     if (!running) break;
     write_imu_encoders(id);
     BARRIER("imu_encoders", "after pipeline");
+    double last = emperor_current_time();
     read_imu_encoders(id);
     double now = emperor_current_time();
     /* This intentionally ignores the time for the two barriers, the
@@ -2006,19 +2006,19 @@ void *imu_encoders_task(void *args) {
       printf("unused imu_encoders %u thread time in frame %u: %lf\n",
 	     id, frame_number, fraction_remaining);
     }
-    // {
-    //   /* This block only needs to be in one thread */
-    //   /* spin to sync to frame rate */
-    //   while (TRUE) {
-    //     double now = current_time();
-    //     if (now-last>=1.0/fps) {
-    //       last = now;
-    //       break;
-    //     }
-    //     if (usleep(QUANTUM)) task_error("Call to usleep failed");
-    //   }
-    // }
-    printf("imu_encoders_task time: %f\n", now-last);
+    {
+      /* This block only needs to be in one thread */
+      /* spin to sync to frame rate */
+      while (TRUE) {
+        double now = current_time();
+        if (now-last>=1.0/fps) {
+          last = now;
+          break;
+        }
+        if (usleep(QUANTUM)) task_error("Call to usleep failed");
+      }
+    }
+
   }
   BARRIER("imu_encoders", "finalize");
   finalize_imu_encoders(id);

@@ -51,8 +51,6 @@ using namespace cv;
 
 #define MAX_THREADS 4 //total number of barrier-ed threads
 
-#define QUANTUM 1000
-
 //macros
 #define task_error(...) {				\
     fprintf(stderr, "%s:%d: ", __FUNCTION__, __LINE__);	\
@@ -159,10 +157,10 @@ extern bool producer_threads_should_die;
 extern bool consumer_thread_should_die;
 extern char g_msg_buf[k_msg_buf_bytes];
 extern pthread_mutex_t msg_buf_and_count_lock;
-// //**THIS IS PROBABLY WHERE I NEED TO DECLARE MY PIPE VARIABLES
-// extern int sensor_pipe[2];  //pipe for sensor data to go to main thread
-//                             //[0] is read end, [1] is write end
-// extern bool sensor_pipe_open;  //use to declare the pipe open or closed
+//**THIS IS PROBABLY WHERE I NEED TO DECLARE MY PIPE VARIABLES
+extern int sensor_pipe[2];  //pipe for sensor data to go to main thread
+                            //[0] is read end, [1] is write end
+extern bool sensor_pipe_open;  //use to declare the pipe open or closed
 //for motor command sending (set in motor_control_functions.cpp)
 extern int g_motor_cmd_L;
 extern int g_motor_cmd_R;
@@ -177,7 +175,6 @@ extern pthread_mutex_t halt_mutex;
 extern pthread_barrier_t barrier;
 extern int time_threads;
 extern double fps;
-extern bool route_complete;
 
 
 

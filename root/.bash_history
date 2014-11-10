@@ -1,65 +1,3 @@
-locate tools.jar
-mkdir java
-cd java/
-mkdir lib
-ls /usr/lib/jvm
-ls /usr/lib/java-6-openjdk-armhf
-ls /usr/lib/jvm/java-6-openjdk-armhf/lib
-ls /usr/lib/jvm/java-6-openjdk-armhf
-ls /usr/lib/jvm/java-6-openjdk-armhf/jre
-ls /usr/lib/jvm/java-6-openjdk-armhf/jre/lib
-lla /usr/lib/jvm/java-6-openjdk-armhf/jre/lib
-cd ../
-$(dirname -- "$(readlink -f -- "${0}")" )
-dirname
-readlink
-readlink -f
-readlink --help
-dirname -- "$(readlink -f -- "${0}")"
-./arduino 
-cd ..
-wget http://udoo.org/download/files/arduino-1.5.4-hfp-for_UDOO.tar.gz
-tar -xzvf arduino-1.5.4-hfp-for_UDOO.tar.gz 
-lla *arduino*
-cat seykhl-arduino.txt | sort
-cd arduino-1.5.4
-./arduino 
-cd /
-arduino
-cd root
-ls
-cd razor-9dof-ahrs-Release-v1.4.2
-ls
-cd Arduino/
-ls
-cd Razor_AHRS/
-ls
-arduino Razor_AHRS.ino 
-htop
-cd arduino-1.0.5
-ls
-./arduino 
-cd 
-ls ar*
-cd arduino-1.5.4
-./arduino 
-ls /etc/udev/rules.d/
-cd /
-find arduino-1.0.5
-cd arduino-1.0.5
-cd ~/arduino-1.0.5
-find
-cd ../arduino-1.5.4
-find > rover-arduino-1.5.4.txt
-cp rover-arduino-1.5.4.txt ../
-cp rover-arduino-1.5.4.txt ~/.
-cd ..
-lla ro*
-lla rover*
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/*.txt .
-rm revisions.txt 
-lla *arduino*
-lla *arduino*.txt
 cd arduino-1.5.4
 ls
 ./arduino 
@@ -1998,3 +1936,65 @@ emacs today.text &
 exit
 emacs today.text &
 halt
+arduino
+ls
+cd bin
+ls
+./run-the-force 
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+cd bin
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+(Ex
+./run-the-force start
+clear
+./run-the-force start
+clear
+./run-the-force start
+./run-the-force stop
+clear
+./run-the-force start
+clear
+./run-the-force start
+./run-the-force stop
+clear
+./run-the-force start
+./run-the-force stop
+ps
+ps -ef
+exit
+top
+cd source/razor-imu/
+ls
+cd arduino/
+ls
+cd Razor_AHRS/
+ls
+lla
+rsync -avrz seykhl:~/vader-rover/Razor_old/* .
+lla
+lla /dev/R*
+cd ../../../the-force/
+ls
+make
+htop
+top
+make
+nano the-force.cpp 
+make
+top
+make
+top
+make
+exit
+emacs today.text &
+exit
