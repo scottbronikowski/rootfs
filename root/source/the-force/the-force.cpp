@@ -71,6 +71,8 @@ const double k_distance_threshold = 0.10;  //in meters
 const double k_angle_threshold_1 = k_PI/12; //15 degrees in radians--for deciding whether to pivot or turn while going forward
 const double k_angle_threshold_2 = k_PI/36; //5 degrees in radians--for deciding whether to go straight or turn toward point
 
+const int k_gpsWorkingBufSize = 100; //???
+
 
 //global variables
 //extern'd
@@ -115,7 +117,7 @@ struct task_args task_args[MAX_THREADS];
 pthread_mutex_t halt_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_barrier_t barrier;
 int time_threads = FALSE;
-double fps = 50.0;
+double fps = 20.0;
 bool route_complete = FALSE;
 
 
@@ -138,7 +140,8 @@ KalmanFilter g_KF(8, 7, 2); // 8 state variables, 7 measurements, 2 inputs
 char g_motor_prev[k_maxBufSize]; //previous motor command
 char global_estimate_buf[k_LogBufSize];
 char local_estimate_buf[k_LogBufSize];
-
+char g_gps_working_buf[k_gpsWorkingBufSize];
+int g_gps_working_buf_index = 0;
 
 //from Dan's log_to_track.cpp
 // state:
@@ -336,9 +339,9 @@ int main(int /*argc*/, char** /*argv*/)
     // }
     while (!route_complete) {
       usleep(2*1000*1000);
-      printf("Main sleeping\n");
+      //printf("Main sleeping\n");
     }
-    printf("Main no longer sleeping, calling stop_barrier_threads\n");
+    //printf("Main no longer sleeping, calling stop_barrier_threads\n");
     stop_barrier_threads();
     printf("Trace following complete for: %s\n", g_routebuf);
   }
@@ -1654,14 +1657,59 @@ int gps_read_data(char* logbuf)
   int success = 0;
   int failure = -1;
   int no_read = 1;
-  char tempbuf[k_LogBufSize];
+  //char tempbuf[k_LogBufSize];
   struct GPSInfo gpsinfo;
-  if (fgets(tempbuf, k_LogBufSize, gps_file_ptr) != NULL)
+  fd_set recv_set;
+  struct timeval timeout;
+  
+  FD_ZERO(&recv_set);
+  FD_SET(gps_fd, &recv_set);
+  timeout.tv_sec = 0;
+  timeout.tv_usec = 2*1000; //2ms timeout
+  retval = select(gps_fd+1, &recv_set, NULL, NULL, &timeout);
+  if (retval < 0) //error
   {
+    perror("gps_read_data select:");
+    return failure;
+  }
+  else if (retval == 0) //timeout
+  {
+    return no_read;
+  }
+  else //retval >= 1, so there is data to receive
+  // if (fgets(tempbuf, k_LogBufSize, gps_file_ptr) != NULL) //fgets may be too slow
+  {
+    double start = emperor_current_time();
+    //retval = pread(gps_fd, tempbuf, k_LogBufSize, 0);
+    //retval = readLine(gps_fd, tempbuf, k_LogBufSize);
+
+    //read up to buffer-length bytes
+    retval = read(gps_fd, &g_gps_working_buf[g_gps_working_buf_index], 
+		  k_gpsWorkingBufSize-g_gps_working_buf_index);
+
+    double end = emperor_current_time();
+    printf("read time: %f\n", end-start);
+
+    //if read less, return a no_read (do I need to zero out logbuf???)
+
+    //else scan for \n (keep position with g_gps_working_buf_index)
+
+    //copy from $ to \n into a parsing buffer
+
+    //move remaining data to beginning of g_gps_working_buf
+
+    //parse the completed sentence
+
+    if (retval < 0 ) //error
+    {
+      perror("gps_read_data read:");
+      return failure;
+    }
+    printf("gps_read_data got: %s\n", tempbuf);
     length = strlen(tempbuf);
     if (length <= 0) //error
     {
-      perror("gps_read_data:");
+      perror("gps_read_data length:");
       printf("length = %d\n", length);
       return failure;
     }
@@ -1707,8 +1755,8 @@ int gps_read_data(char* logbuf)
 	return no_read;
     }
   }      
-  else
-    return no_read;
+  // else
+  //   return no_read;
 }
 
 //copied from data-analysis.cpp
@@ -1863,24 +1911,24 @@ void start_barrier_threads(void) {
 
 void stop_barrier_threads(void) {
   /* needs work: Technically, can't access running here without a mutex. */
-  printf("in stop_barrier_threads\n");
+  //printf("in stop_barrier_threads\n");
   if (running&&!halt) {
-    printf("inside if (running&&!halt)\n");
+    //printf("inside if (running&&!halt)\n");
     pthread_mutex_lock(&halt_mutex);
     halt = TRUE;
     pthread_mutex_unlock(&halt_mutex);
-    printf("halt set to TRUE\n");
+    //printf("halt set to TRUE\n");
     for (unsigned int id = 0; id<threads; id++) {
       if (pthread_join(thread[id], NULL)!=0) {
-	printf("Can't join thread %u\n", id);
+	//printf("Can't join thread %u\n", id);
 	task_error("Can't join thread %u", id);
       }
-      printf("joined thread %u\n", id);
+      //printf("joined thread %u\n", id);
     }
     pthread_barrier_destroy(&barrier);
     halt = FALSE;
   }
-  printf("at end of stop_barrier_threads\n");
+  //printf("at end of stop_barrier_threads\n");
 }
 // Tasks communicate through global variables.
 // Each global variable is written by at most one task.
@@ -1986,13 +2034,21 @@ void *imu_encoders_task(void *args) {
       if (halt) running = FALSE;
       pthread_mutex_unlock(&halt_mutex);
     }
-    double last = emperor_current_time();
     BARRIER("imu_encoders", "before pipeline");
     if (!running) break;
+    double last1 = emperor_current_time();
     write_imu_encoders(id);
+    double now1 = emperor_current_time();
+    printf("write_imu_encoders time: %f\n", now1-last1);
+    if (now1-last1 > 0.1)
+      printf("**********************************\n");
     BARRIER("imu_encoders", "after pipeline");
+    double last = emperor_current_time();
     read_imu_encoders(id);
     double now = emperor_current_time();
+    // printf("read_imu_encoders time: %f\n", now-last);
+    // if (now-last > 0.1)
+    //   printf("**********************************\n");
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
@@ -2018,7 +2074,7 @@ void *imu_encoders_task(void *args) {
     //     if (usleep(QUANTUM)) task_error("Call to usleep failed");
     //   }
     // }
-    printf("imu_encoders_task time: %f\n", now-last);
+    //printf("imu_encoders_task time: %f\n", now-last);
   }
   BARRIER("imu_encoders", "finalize");
   finalize_imu_encoders(id);
@@ -2064,6 +2120,7 @@ void initialize_gps(unsigned int id){
 
 void write_gps(unsigned int id) {
   g_gps_new_data = gps_read_data(g_gps_buf);
+  //rintf("write_gps returned %d\n", g_gps_new_data);
   //printf("write_gps, task %u\n", id);
 }
 
@@ -2087,11 +2144,19 @@ void *gps_task(void *args){
   while (TRUE) {
     BARRIER("gps", "before pipeline");
     if (!running) break;
+    double last1 = emperor_current_time();
     write_gps(id);
+    double now1 = emperor_current_time();
+    printf("write_gps time: %f\n", now1-last1);
+    if (now1-last1 > 0.1)
+      printf("**********************************\n");
     BARRIER("gps", "after pipeline");
     double last = emperor_current_time();
     read_gps(id);
     double now = emperor_current_time();
+    // printf("read_gps time: %f\n", now-last);
+    // if (now-last > 0.1)
+    //   printf("**********************************\n");
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
@@ -2226,11 +2291,19 @@ void *buffer_and_send_task(void *args) {
   while (TRUE) {
     BARRIER("buffer_and_send", "before pipeline");
     if (!running) break;
+    // double last1 = emperor_current_time();
     write_buffer_and_send(id);
+    // double now1 = emperor_current_time();
+    // printf("write_buffer_and_send time: %f\n", now1-last1);
+    // if (now1-last1 > 0.1)
+    //   printf("**********************************\n");
     BARRIER("buffer_and_send", "after pipeline");
     double last = emperor_current_time();
     read_buffer_and_send(id);
     double now = emperor_current_time();
+    // printf("read_buffer_and_send time: %f\n", now-last);
+    // if (now-last > 0.1)
+    //   printf("**********************************\n");
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
@@ -2406,65 +2479,68 @@ void read_estimate_and_move(unsigned int id) {
   unsigned long encoder_dt = g_encoders_data->dt;
   float L = g_encoders_data->ticks[0];
   float R = g_encoders_data->ticks[1];
-  // //if new GPS data, parse it
-  // if (g_gps_new_data == 0) {
-  //   int gps_items = sscanf(g_gps_buf,"GGA:Lat:%f:Long:%f:Alt:%f m:HDOP:%f:"
-  // 			   "Quality:%f:Time:%d:%d:%d",
-  // 			   &Lat, &Long, &Alt, &HDOP, &Quality,
-  // 			   &hour, &min, &sec);
-  //   if (gps_items != 8){
-  //     gps_items = sscanf(g_gps_buf,"RMC:Lat:%f:Long:%f:Heading:%f:MagVar:%f:"
-  // 			 "Speed:%f kt:Date:%d-%d-%d:Time:%d:%d:%d",
-  // 			 &Lat, &Long, &Heading, &MagVar, &Speed,
-  // 			 &year, &month, &day, &hour, &min, &sec);
-  //   }
-  //   //update with GPS
-  //   Measurement.at<float>(0) = Long;
-  //   Measurement.at<float>(1) = Lat;
-  //   Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
-  //   //degrees north is 0 east is positive->(radians east 0 north positive)
-  //   Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
-  //   // rotation around z in degrees/sec ->(radians/sec)
-  //   Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
-  //   Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
-  //   Measurement.at<float>(6) = -(Ax-1)/100; 
-  // }
-  // else {//update without GPS
-  //   Measurement.at<float>(0) = 0; //no gps for now
-  //   Measurement.at<float>(1) = 0; //no gps for now
-  //   Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
-  //   //degrees north is 0 east is positive->(radians east 0 north positive)
-  //   Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
-  //   // rotation around z in degrees/sec ->(radians/sec)
-  //   Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
-  //   Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
-  //   Measurement.at<float>(6) = -(Ax-1)/100; 
-  // }
-  // //update current position via Kalman filter
-  // g_TransitionModel = ComputeTransitionMatrix(g_KF.statePost, encoder_dt/1000.0);
-  // //using encoder's dt for now
+  //if new GPS data, parse it
+  if (g_gps_new_data == 0) {
+    int gps_items = sscanf(g_gps_buf,"GGA:Lat:%f:Long:%f:Alt:%f m:HDOP:%f:"
+  			   "Quality:%f:Time:%d:%d:%d",
+  			   &Lat, &Long, &Alt, &HDOP, &Quality,
+  			   &hour, &min, &sec);
+    if (gps_items != 8){
+      gps_items = sscanf(g_gps_buf,"RMC:Lat:%f:Long:%f:Heading:%f:MagVar:%f:"
+  			 "Speed:%f kt:Date:%d-%d-%d:Time:%d:%d:%d",
+  			 &Lat, &Long, &Heading, &MagVar, &Speed,
+  			 &year, &month, &day, &hour, &min, &sec);
+    }
+    //update with GPS
+    Measurement.at<float>(0) = Long;
+    Measurement.at<float>(1) = Lat;
+    Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
+    //degrees north is 0 east is positive->(radians east 0 north positive)
+    Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
+    // rotation around z in degrees/sec ->(radians/sec)
+    Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
+    Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
+    Measurement.at<float>(6) = -(Ax-1)/100; 
+  }
+  else {//update without GPS
+    Measurement.at<float>(0) = 0; //no gps for now
+    Measurement.at<float>(1) = 0; //no gps for now
+    Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
+    //degrees north is 0 east is positive->(radians east 0 north positive)
+    Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
+    // rotation around z in degrees/sec ->(radians/sec)
+    Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
+    Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
+    Measurement.at<float>(6) = -(Ax-1)/100; 
+  }
+  //update current position via Kalman filter
+  g_TransitionModel = ComputeTransitionMatrix(g_KF.statePost, encoder_dt/1000.0);
+  //using encoder's dt for now
 
-  // // NEEDS WORK: hard coded and ignores input to rover motors
-  // float CL = 0; //g_motor_cmd_L;
-  // float CR = 0; //g_motor_cmd_R;
-  // control = *(Mat_<float>(2,1) << CL,CR);      
+  // NEEDS WORK: hard coded and ignores input to rover motors
+  float CL = 0; //g_motor_cmd_L;
+  float CR = 0; //g_motor_cmd_R;
+  control = *(Mat_<float>(2,1) << CL,CR);      
 
-  // //fix possible loop-around in thetas
-  // while (Measurement.at<float>(2) <= g_KF.statePost.at<float>(2) - k_PI)
-  //   Measurement.at<float>(2) += 2*k_PI;
-  // while (Measurement.at<float>(2) >= g_KF.statePost.at<float>(2) + k_PI)
-  //   Measurement.at<float>(2) -= 2*k_PI;
+  //fix possible loop-around in thetas
+  while (Measurement.at<float>(2) <= g_KF.statePost.at<float>(2) - k_PI)
+    Measurement.at<float>(2) += 2*k_PI;
+  while (Measurement.at<float>(2) >= g_KF.statePost.at<float>(2) + k_PI)
+    Measurement.at<float>(2) -= 2*k_PI;
   
-  // // NEEDS WORK: we always ignore GPS
-  // g_KF = execute_time_step(g_KF, g_TransitionModel,
-  // 			   g_MeasurementModel_noGPS, g_KF.controlMatrix, 
-  // 			   Measurement, control);
+  // NEEDS WORK: we always ignore GPS
+  g_KF = execute_time_step(g_KF, g_TransitionModel,
+  			   g_MeasurementModel_noGPS, g_KF.controlMatrix, 
+  			   Measurement, control);
 
-  // //KF updated, write x, y, theta back into the_robot
-  // g_my_pose.x = g_KF.statePost.at<float>(0);
-  // g_my_pose.y = g_KF.statePost.at<float>(1);
-  // g_my_pose.theta = g_KF.statePost.at<float>(2);
-  g_my_pose.y = g_my_pose.y + 0.01;
+  //KF updated, write x, y, theta back into the_robot
+  g_my_pose.x = g_KF.statePost.at<float>(0);
+  g_my_pose.y = g_KF.statePost.at<float>(1);
+  g_my_pose.theta = g_KF.statePost.at<float>(2);
+  
+  // //dummy increment for testing
+  // g_my_pose.y = g_my_pose.y + 0.01;
+  
   sprintf(tempbuf,"ESTIMATE:X:%f:Y:%f:THETA:%f\n", 
 	  g_my_pose.x, g_my_pose.y, g_my_pose.theta);
   strncpy(local_estimate_buf, tempbuf, k_LogBufSize);
@@ -2484,7 +2560,7 @@ void read_estimate_and_move(unsigned int id) {
     int retval = emperor_log_data(logbuf, log_sockfd);
     if (retval != 0)
       printf("logging failed for \'%s'\n", logbuf);
-    //***LOG INTO IMU LOG AS WELL***
+    //***LOG INTO IMU LOG AS WELL***  FIXME--NEEDS TO GO INTO BUFFER, NOT STRAIGHT TO LOG
     sprintf(tempbuf,"\nWAYPOINT w %f %f\n", g_my_pose.x, g_my_pose.y);
     strncpy(logbuf, tempbuf, k_maxBufSize);
     if (!sensors_send_data(logbuf, num_messages))
@@ -2523,6 +2599,7 @@ void read_estimate_and_move(unsigned int id) {
 	strncpy(g_motor_prev, motor, strlen(motor));
       }
     }
+    //********************NEED SOMETHING HERE TO BACK UP IF PAST POINT (FABS(PHI_THETA_DIF) CLOSE TO PI)
     else if (phi_theta_diff < 0) //need to turn or pivot right
     {//***NEED TO INCLUDE STOPS WHEN COMING OUT OF/GOING INTO PIVOTS
       //decide if pivot or turn
@@ -2622,11 +2699,19 @@ void *estimate_and_move_task(void *args){
   while (TRUE) {
     BARRIER("estimate_and_move", "before pipeline");
     if (!running) break;
+    // double last1 = emperor_current_time();
     write_estimate_and_move(id);
+    // double now1 = emperor_current_time();
+    // printf("write_estimate_and_move time: %f\n", now1-last1);
+    // if (now1-last1 > 0.1)
+    //   printf("**********************************\n");
     BARRIER("estimate_and_move", "after pipeline");
     double last = emperor_current_time();
     read_estimate_and_move(id);
     double now = emperor_current_time();
+    printf("read_estimate_and_move time: %f\n", now-last);
+    if (now-last > 0.1)
+      printf("**********************************\n");
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
@@ -2645,3 +2730,62 @@ void *estimate_and_move_task(void *args){
   finalize_estimate_and_move(id);
   return NULL;
 }
+
+//downloaded from http://man7.org/tlpi/code/online/diff/sockets/read_line.c.html on 26 Jul 14
+/* Read characters from 'fd' until a newline is encountered. If a newline
++  character is not encountered in the first (n - 1) bytes, then the excess
++  characters are discarded. The returned string placed in 'buf' is
++  null-terminated and includes the newline character if it was read in the
++  first (n - 1) bytes. The function return value is the number of bytes
++  placed in buffer (which includes the newline character if encountered,
++  but excludes the terminating null byte). */
+
+ ssize_t readLine(int fd, void *buffer, size_t n)
+ {
+     ssize_t numRead;                    /* # of bytes fetched by last read() */
+     size_t totRead;                     /* Total bytes read so far */
+     char *buf;
+     char ch;
+ 
+     if (n <= 0 || buffer == NULL) {
+         errno = EINVAL;
+         return -1;
+     }
+ 
+     buf = (char*)buffer;                       /* No pointer arithmetic on "void *" */
+ 
+     totRead = 0;
+     for (;;) {
+         numRead = read(fd, &ch, 1);
+ 
+         if (numRead == -1) {
+             if (errno == EINTR)         /* Interrupted --> restart read() */
+                 continue;
+             else
+                 return -1;              /* Some other error */
+ 
+         } else if (numRead == 0) {      /* EOF */
+             if (totRead == 0)           /* No bytes read; return 0 */
+                 return 0;
+             else                        /* Some bytes read; add '\0' */
+                 break;
+ 
+         } else {                        /* 'numRead' must be 1 if we get here */
+             if (totRead < n - 1) {      /* Discard > (n - 1) bytes */
+                 totRead++;
+                 *buf++ = ch;
+             }
+ 
+             if (ch == '\n')   //strip the newline here
+	     {
+	       ch = '\0';
+	       totRead--;
+	       break;
+	     }
+         }
+     }
+ 
+     *buf = '\0';
+     return totRead;
+ }
+

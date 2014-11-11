@@ -1,5 +1,3 @@
-
-
 Old notes
 --------------------------
 13 Mar 14
@@ -550,6 +548,15 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 10 Nov 14
 --Rolled back IMU Arduino code to previous version from Git.  Saw that I had edited and overwritten with an older version that broke the output that the Gumstix was expecting.  Going to try running the recovered version before editing again.
 --Working on getting barriers working correctly--having variable amount of time between loop executions, and can't figure out why.  Need to look at each task's read and write parts individually to see what is taking up so much time.
+
+11 Nov 14
+--Traced slowdown of >100ms to write_gps() function, which only calls gps_read_data().  Starting to look into that function to see what is taking so long to return.
+--Also saw that write_imu_encoders() is consistently taking 30-45ms to run.  Once I have the GPS problem fixed I need to look into that, although that delay will still allow us to run the sensors at 20Hz, which may be OK.
+--Started working on my own GPS reader/parser to keep up with loop speed--fgets and readLine run too slow.
+
+**MAYBE Need to move gps_task outside of barriers
+**--need to put reverse when past point code into read_estimate_and_move
+**--Need to fix waypoint logging into IMU log--currently sends straight to log, needs to go to buffer
 
 
 .%  *Ibuffer*              547  Ibuffer by recen

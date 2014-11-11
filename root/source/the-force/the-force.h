@@ -137,6 +137,8 @@ extern const int k_messages_per_second = 102;
 extern const int k_msg_buf_size = k_messages_per_second * 1;
 extern const int k_msg_buf_bytes = k_msg_buf_size * k_LogBufSize;
 
+extern const int k_gpsWorkingBufSize;
+
 //global vars 
 //(from emperor)
 extern int sockfd, log_sockfd;
@@ -301,7 +303,7 @@ void write_estimate_and_move(unsigned int id);
 void read_estimate_and_move(unsigned int id);
 void finalize_estimate_and_move(unsigned int id);
 void *estimate_and_move_task(void *args);
-
+ssize_t readLine(int fd, void *buffer, size_t n);
 
 #endif
 

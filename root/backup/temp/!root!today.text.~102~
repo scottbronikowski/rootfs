@@ -1,3 +1,5 @@
+
+
 Old notes
 --------------------------
 13 Mar 14
@@ -483,11 +485,101 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 31 Jul 14
 --Added nNMEAParser calls to gps_read_data() in order to output formatted strings for GPS data.  Had to do some tweaks to mGPSInfo and mNMEAParser to get them to work correctly.
 
+27 Aug 14
+--Reprogrammed Teensy so that it is back to using separate ticks/cm for each encoder, instead of an average of the two as it had been using.
+--Modified /etc/network/interfaces to bring wlan0 up on qobi-cccp as backup until the wlan1/PAL3.0 issue is fixed
+
+15 Oct 14
+--Started to work on automatic driving.  Created ~/source/the-force which will be where I write the program.  The idea is to have Dan's log_to_track code running inside a modified version of run-sensors so that the sensors can output a position in real time.  Then I'll modify the emperor code to remove everything about waiting for commands and add waiting for a trace (as a series of x,y,theta points).  Modified emperor (aka, the-force) will then loop through the points and do the following: compare own position/heading to position of and heading to point, turn/drive as necessary, wait a certain amount of time, check again, if within a certain radius of point declare success, get next point.
+
+16 Oct 14
+--Started merging emperor.{cpp,h}, run-sensors.{cpp,h}, and log_to_track.cpp all into the-force.{cpp,h}.  The idea is to have everything running out of a single executable b/c the different threads will be able to more easily communicate that way (probably through pipes/fifos, or shared memory as my threads had done before).  The threads reading sensor data will send readings to a new thread that will do the Kalman position calculation and then send that data to the motor control thread.  Motor control thread will also be able to send motor speed settings to Kalman thread in order to incorporate the control data into the Kalman calculation (current setup ignores this).  Immediate goal is to do the merge of emperor and run-sensors and get that to compile and run w/o issues before bringing in Kalman code.
+--After talking with Dan, thinking about doing all the Kalman stuff in the main motor control thread, instead of its own thread.
+
+17 Oct 14
+--Got emperor functionality merged into the-force.  Everything seems to work correctly, except for the command logging function.  This is because the code in rover_server_log() on seykhl doesn't start doing any actual logging until both the command log and IMU log sockets are connected.  Need to get run-sensors integrated into the-force before this will work.
+--Have header and all functions from run-sensors integrated into the-force.  Have all files compiling without error.  Still need to combine the calls from run-sensors main() into the-force main() and then test functionality.
+
+20 Oct 14
+--Combined run-sensors main() calls into the_force main().  Renamed emperor_signal_handler() to the_force_terminator() (i.e., the cleanup/shutdown function) and have it calling sensors_terminator() as its first line.  Ran initial test and logging appeared to work correctly.  Noticed camera framerate under the-force was ~8-9 fps per cam, and thought this was a bit low, but I ran unmodified emperor under the same conditions and got a similar framerate, so it doesn't appear to be an issue with the-force.
+--Started modifying the inner loop of emperor to work off of traces instead of explicit commands.  First step is to get the rover to receive a trace over the command port (instead of individual commands) and then parse that trace into a usable format for the rest of the loop.
+
+21 Oct 14
+--Have initial passing of 1300-byte text messages from driver window on seykhl to rover working.
+--Thinking about 1300-byte limit on string for list of points->don't think I need to put so low a limit on it...if it's bigger, TCP will just take care of parsing it into separate packets.  String parser done, seems to be working correctly.  Next need to work on point following.
+
+22 Oct 14
+--Arbitrarily set limit for list of points to 5000 bytes.  Works fine in testing.  Can change to any value by changing k_traceBufSize in the-force.cpp (rover) and toollib-gamepad-c.c (seykhl).
+--Fixed logging of camera start and stop messages.  Also added 2-second sleeps after starting and before stopping cameras to allow the image stream to be fully functional during motion.
+--Established pipe to go from sensors to main thread for sensor data for Kalman filter.  Have flag marking it as open or closed to keep a bunch of useless data from piling up in the pipe before rover is ready to move.  Also modified sensors_log_data() to not write data to log unless pipe is open, and to send the data being written to the log into the pipe as well.
+--Have the-force structured so that the rover can execute multiple paths sequentially--the rover's own position is only initialized to (0,0,pi/2) once, and then at the end of the path following the position is preserved.
+--Now just need to put Kalman filter and driving logic into the_force_parse_and_execute().
+
+23 Oct 14
+--Got most of driving logic done, as well as logging of the commands executed.  Need to finish up driving logic, then do sensor reading and sensed location from Kalman
+
+24 Oct 14
+--First draft of auto-driving logic complete.  Committing before cleaning up old comments and adding Kalman code into the-force.
+--First draft of auto-drive complete.  Committing before testing.
+--Autodrive testing revealed that we need to do some tuning of the Kalman filter parameters, most likely the rover width parameter.
+
+30 Oct 14
+--Changed run-sensors/the-force producer_encoders() to send ticks instead of cm
+--Merged run-sensors into emperor in order to be able to send motor command values with encoder data
+--Have global vars with integer motor commands set in motor_write (inside motor_control_functions.cpp).  Have them read and written to imu-log in emperor and the-force.
+--Still need to modify code on seykhl to read in new data on encoder log line.
+
+4 Nov 14
+--commit before gyro test
+
+5 Nov 14
+--modifications to autodrive in the-force.cpp.  Plugged in optimized odometry parameters and parameter to go from gyro units (whatever they are) to radians.  Using gyro z-axis to determine turns/pivots.  Getting good results on trace.  Need to improve autodriving logic.
+
+6 Nov 14
+--Minor correction to autodrive localization.  Added waypoint logging to imu-log file.
+--Got waypoint logging in imu-log to work.  Also added robot's own location estimate to imu-log
+--put write to sensor_pipe  in sensors_log_data inside the lock for the buffer that the sensors write to and the consumer reads from-->trying to see if in-order message delivery to pipe is problem with on-board KF vs. workstation KF.
+
+7 Nov 14
+--Complete restructuring of the-force code to use BARRIERs with pthreads.
+--Still a couple of bugs to work out on autodrive.  
+--I think I have the barrier code working correctly, although I'm getting "**BAD LINE" occurring in my imu-log.txt occasionally.  Not sure where that is coming from, since I can't find that text anywhere in my code.
+--I found one bug in the way that I was pulling data from the encoders--the encoders were reporting a dt of 20ms, regardless of how long it had really been since the last data had been sent.  I fixed that in the encoders' Arduino code and got the rover to drive a simulated straight forward 1m and stop.  I was getting some pretty huge (>100ms) dt's between encoder readings, but it seemed to work ok.
+--Then I figured that there was a similar bug in the IMU Arduino code and tried to fix it in the same way.  I must have broken something in doing that, since now the-force will fire up, take a path, start the cameras, and then do nothing.  I need to spend some more time troubleshooting it.
+
+10 Nov 14
+--Rolled back IMU Arduino code to previous version from Git.  Saw that I had edited and overwritten with an older version that broke the output that the Gumstix was expecting.  Going to try running the recovered version before editing again.
+--Working on getting barriers working correctly--having variable amount of time between loop executions, and can't figure out why.  Need to look at each task's read and write parts individually to see what is taking up so much time.
+
+11 Nov 14
+--need to put reverse when past point code into read_estimate_and_move
+--Need to fix waypoint logging into IMU log--currently sends straight to log, needs to go to buffer
+--Traced slowdown of >100ms to write_gps() function, which only calls gps_read_data().  Starting to look into that function to see what is taking so long to return.
+--Also saw that write_imu_encoders() is consistently taking 30-45ms to run.  Once I have the GPS problem fixed I need to look into that, although that delay will still allow us to run the sensors at 20Hz, which may be OK.
+
+.%  *Ibuffer*              547  Ibuffer by recen
+  * *Messages*            3187  Fundamental
+  * *shell*              31669  Shell:run	  ~/source/the-force/
+  * *shell*<2>           14061  Shell:run	  ~/
+    the-force.cpp        58787  C++/l		  ~/source/the-force/the-force.cpp
+    today.text           74295  Text		  ~/today.text
+    run-sensors.cpp      25176  C++/l		  ~/source/sensors/run-sensors.cpp
+    run-sensors.h         3597  C++/l		  ~/source/sensors/run-sensors.h
+    the-force.h           7528  C++/l		  ~/source/the-force/the-force.h
+    motor_control_functi: 7327  C++/l		  ~/source/motor_control/motor_control_functions.cpp
+    motor_control.h       4877  C++/l		  ~/source/motor_control/motor_control.h
+    emperor.cpp          18368  C++/l		  ~/source/emperor/emperor.cpp
+    run-emperor            571  Shell-script[bas  ~/bin/run-emperor
+    emperor.h             2429  C++/l		  ~/source/emperor/emperor.h
+    Makefile|emperor      2457  GNUmakefile	  ~/source/emperor/Makefile
+    Makefile|sensors      2182  GNUmakefile	  ~/source/sensors/Makefile
+    *scratch*              191  Lisp Interaction
+
+
 **TODO**
 
  
 ***RANDOM NOTES
---may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
 --LOOK AT C++ examples in Razor code
 
 ..udev stuff to write new *.rules file lines to reference a device with a fixed alias
@@ -500,6 +592,45 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 Buffers
 ----------------------------------------
+.   the-force.cpp        58226  C++/l		  ~/source/the-force/the-force.cpp
+  * *shell*              47358  Shell:run	  ~/source/the-force/
+    motor_control_functi: 7183  C++/l		  ~/source/motor_control/motor_control_functions.cpp
+    log_to_track.cpp     11434  C++/l		  ~/source/the-force/log_to_track.cpp
+    the-force.h           7345  C++/l		  ~/source/the-force/the-force.h
+  * *scratch*              392  Lisp Interaction
+ %  *Ibuffer*             1589  Ibuffer by recen
+    today.text           72336  Text		  ~/today.text
+  * *shell*<2>            3869  Shell:run	  /
+  * *Messages*            3296  Fundamental
+    toollib-camera.h      3487  C++/l		  ~/source/camera/toollib-camera.h
+    Makefile              2808  GNUmakefile	  ~/source/the-force/Makefile
+    log_to_track-makefile  373  GNUmakefile	  ~/source/the-force/log_to_track-makefile
+    emperor.h             2398  C++/l		  ~/source/the-force/emperor.h
+    emperor.cpp          24567  C++/l		  ~/source/the-force/emperor.cpp
+    emperor-Makefile      1725  GNUmakefile	  ~/source/the-force/emperor-Makefile
+    run-sensors.cpp      24795  C++/l		  ~/source/the-force/run-sensors.cpp
+    run-sensors.h         3468  C++/l		  ~/source/the-force/run-sensors.h
+    run-sensors-Makefile  2182  GNUmakefile	  ~/source/the-force/run-sensors-Makefile
+
+
+
+
+
+.   today.text           70222  Text		  ~/today.text
+  * *shell*               9379  Shell:run	  ~/source/the-force/
+    the-force.h           5632  C++/l		  ~/source/the-force/the-force.h
+  * *shell*<2>           10225  Shell:run	  /
+    the-force.cpp        41555  C++/l		  ~/source/the-force/the-force.cpp
+    run-sensors.cpp      24795  C++/l		  ~/source/the-force/run-sensors.cpp
+    emperor-Makefile      1725  GNUmakefile	  ~/source/the-force/emperor-Makefile
+    log_to_track.cpp     11420  C++/l		  ~/source/the-force/log_to_track.cpp
+    log_to_track-makefile  373  GNUmakefile	  ~/source/the-force/log_to_track-makefile
+    run-sensors.h         3468  C++/l		  ~/source/the-force/run-sensors.h
+    run-sensors-Makefile  2182  GNUmakefile	  ~/source/the-force/run-sensors-Makefile
+    Makefile|the-force    2808  GNUmakefile	  ~/source/the-force/Makefile
+------
+
+
 . * *shell*              11213  Shell:run	  /
   * *shell*<2>             685  Shell:run	  ~/bin/
     run-sensors.h         3468  C++/l		  ~/source/sensors/run-sensors.h
