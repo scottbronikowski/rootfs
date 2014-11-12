@@ -1,37 +1,3 @@
-cd arduino-1.5.4
-ls
-./arduino 
-lla
-ls
-cd examples/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/examples/Teensy/ .
-ls
-rm -rf Tutorial*/*
-ls
-rmdir Tutorial*
-ls
-rm -rf USB_*
-ls
-rm -rf Serial
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/examples/Teensy .
-ls
-cd ../hardware/
-ls
-cd arduino/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/arduino/* .
-ls
-cd ..
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/teensy .
-cd tools/arm-none-eabi/arm-none-eabi/bin
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/bin/README.txt .
-ls
-cd ../include/
-ls
 cd c++/
 ls
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/include/c++/4.7.2 .
@@ -1997,4 +1963,38 @@ top
 make
 exit
 emacs today.text &
+exit
+cd bin
+./run-the-force start
+./run-the-force stop
+clear
+./run-the-force start
+./run-the-force stop
+clear
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+top
+ps -ef
+ps -ef | grep for
+ps -ef | grep force
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
 exit

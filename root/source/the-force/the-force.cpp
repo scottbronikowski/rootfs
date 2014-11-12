@@ -117,8 +117,9 @@ struct task_args task_args[MAX_THREADS];
 pthread_mutex_t halt_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_barrier_t barrier;
 int time_threads = FALSE;
-double fps = 20.0;
-bool route_complete = FALSE;
+double fps = 10.0;
+bool route_complete = false;
+bool last_send = false;
 
 
 //not extern'd
@@ -127,7 +128,7 @@ pose_t g_my_pose = {0.0,0.0,k_PI/2}; //robot's current location
 //(from run-sensors)
 encoders_data_t* g_encoders_data;
 imu_data_t* g_imu_data;
-//NMEAParser g_parser;
+NMEAParser g_parser;
 int g_gps_new_data;
 char g_gps_buf[k_LogBufSize];
 char g_routebuf[k_traceBufSize];
@@ -142,6 +143,9 @@ char global_estimate_buf[k_LogBufSize];
 char local_estimate_buf[k_LogBufSize];
 char g_gps_working_buf[k_gpsWorkingBufSize];
 int g_gps_working_buf_index = 0;
+char global_waypoint_buf[k_LogBufSize];
+bool global_waypoint_flag = false;
+char local_waypoint_buf[k_LogBufSize];
 
 //from Dan's log_to_track.cpp
 // state:
@@ -338,7 +342,7 @@ int main(int /*argc*/, char** /*argv*/)
     //   return -1;
     // }
     while (!route_complete) {
-      usleep(2*1000*1000);
+      usleep(1*1000*1000);
       //printf("Main sleeping\n");
     }
     //printf("Main no longer sleeping, calling stop_barrier_threads\n");
@@ -1681,56 +1685,38 @@ int gps_read_data(char* logbuf)
   }
   else //retval >= 1, so there is data to receive
   {
-    // if (g_gps_working_buf_index != 0)
-    //   ++g_gps_working_buf_index;
-
     int bytes_available = k_gpsWorkingBufSize - g_gps_working_buf_index;
-    printf("bytes_available = %d\n", bytes_available);
-
-    //double start = emperor_current_time();
-    //retval = pread(gps_fd, tempbuf, k_LogBufSize, 0);
-    //retval = readLine(gps_fd, tempbuf, k_LogBufSize);
+    //printf("bytes_available = %d\n", bytes_available);
 
     //read up to available buffer-length bytes
     retval = read(gps_fd, &g_gps_working_buf[g_gps_working_buf_index], bytes_available);
-    printf("retval = %d\n", retval);
-
-    //double end = emperor_current_time();
-    //printf("read time: %f\n", end-start);
+    //printf("retval = %d\n", retval);
 
     if (retval < 0 ) //error
     {
       perror("gps_read_data read:");
       return failure;
     }
-    printf("gps_read_data has: %s\n", g_gps_working_buf);
+    //printf("gps_read_data has: %s\n", g_gps_working_buf);
     
     //update index with bytes read
     g_gps_working_buf_index = g_gps_working_buf_index + retval; 
     
-    // //if read less, update buffer index and return a no_read 
-    // if (retval < bytes_available) {
-    //   printf("BUFFER NOT FILLED\n");
-    //   g_gps_working_buf_index = g_gps_working_buf_index + retval; 
-    //   //can't go past end of buffer b/c retval < bytes available
-    //   return no_read;
-    // }
-    //else scan for starting $ and ending \n (keep position with g_gps_working_buf_index)
-    // else {
+    //scan for starting $ and ending \n (keep position with g_gps_working_buf_index)
     char* begin = strchr(&g_gps_working_buf[0], '$');
     unsigned int begin_ind = strcspn(&g_gps_working_buf[0], "$");
     if (begin == NULL) { //no starting $ in buffer, so flush it all and return failure
-      printf("NO STARTING $ FOUND\n");
+      //printf("NO STARTING $ FOUND\n");
       memset(g_gps_working_buf, 0, sizeof(g_gps_working_buf));
       g_gps_working_buf_index = 0;
       return failure;
     }
-    printf("begin: %s\n", begin);
+    //printf("begin: %s\n", begin);
     unsigned int end = strcspn(begin, "\n");//g_gps_working_buf, "\n");
     //if (g_gps_working_buf[end] != '\n') {
     if (strncmp(&begin[end], "\n", 1) != 0) {
       //reached end of read buffer w/o finding \n, so update the index and return no read
-      printf("NO ENDING NEWLINE FOUND\n");
+      //printf("NO ENDING NEWLINE FOUND\n");
       g_gps_working_buf_index = end+1;
       return no_read;
     }
@@ -1738,11 +1724,12 @@ int gps_read_data(char* logbuf)
     //copy from $ to \n into a parsing buffer
     char tempbuf[k_gpsWorkingBufSize];
     memset(tempbuf, 0, k_gpsWorkingBufSize);
-    printf("end = %d, begin_ind = %d\n", end, begin_ind);
+    //printf("end = %d, begin_ind = %d\n", end, begin_ind);
     //printf("before tempbuf copy, end-begin_ind = %d\n", end-begin_ind);
     strncpy(tempbuf, begin, end);
 
-    printf("gps_read_data sending to parser: %s\n", tempbuf);
+    //printf("gps_read_data sending to parser: %s\n", tempbuf);
+    
     //update position index
     g_gps_working_buf_index = g_gps_working_buf_index - (begin_ind + end);
     
@@ -1750,14 +1737,7 @@ int gps_read_data(char* logbuf)
     memmove(g_gps_working_buf, g_gps_working_buf+end+begin_ind, g_gps_working_buf_index);
     memset(g_gps_working_buf+g_gps_working_buf_index+1, 0, 
 	   k_gpsWorkingBufSize - g_gps_working_buf_index - 1);
-    printf("g_gps_working_buf after move: %s\n", g_gps_working_buf);
-
-
-    //parse the completed sentence
-    // }
-
-
-    //NEED TO FIX FROM HERE DOWN
+    //printf("g_gps_working_buf after move: %s\n", g_gps_working_buf);
 
     length = strlen(tempbuf);
     if (length <= 0) //error
@@ -1770,9 +1750,9 @@ int gps_read_data(char* logbuf)
     { //message received, so check if it's one we want
       if (strncmp(tempbuf, GGA, strlen(GGA)) == 0)
       { //process GGA info
-	NMEAParser parser;
-	parser.Parse(tempbuf, length);
-	gpsinfo = parser.GetActualGPSInfo();
+	//NMEAParser parser;
+	g_parser.Parse(tempbuf, length);
+	gpsinfo = g_parser.GetActualGPSInfo();
 	retval = snprintf(logbuf, k_LogBufSize, "GGA:Lat:%.10f:Long:%.10f:Alt:%.1fm:"
 			  "HDOP:%.2f:Quality:%d:Time:%.2d:%.2d:%.2d",
 			  gpsinfo.m_latitude, gpsinfo.m_longitude, gpsinfo.m_altitude,
@@ -1781,14 +1761,14 @@ int gps_read_data(char* logbuf)
 	if (retval > k_LogBufSize)
 	  printf("GPS GGA too long, retval = %d\n", retval);
 	//logbuf now has a parsed and formatted GPS messages, so return success
-	printf("**PARSED: %s\n", logbuf);
+	//printf("**PARSED: %s\n", logbuf);
 	return success;
       }
       else if (strncmp(tempbuf, RMC, strlen(RMC)) == 0)
       { //process RMC info
-	NMEAParser parser;
-	parser.Parse(tempbuf, length);
-	gpsinfo = parser.GetActualGPSInfo();
+	//NMEAParser parser;
+	g_parser.Parse(tempbuf, length);
+	gpsinfo = g_parser.GetActualGPSInfo();
 	if (!gpsinfo.m_trackValid)
 	{
 	  sprintf(logbuf, "RMC:Track Invalid");
@@ -1805,11 +1785,11 @@ int gps_read_data(char* logbuf)
 	    printf("GPS RMC too long, retval = %d\n", retval);
 	}
 	//logbuf now has a parsed and formatted GPS messages, so return success
-	printf("**PARSED: %s\n", logbuf);
+	//printf("**PARSED: %s\n", logbuf);
 	return success;
       }
       else //ignore other messages from GPS
-	printf("**NO PARSE\n");
+	//printf("**NO PARSE\n");
 	return no_read;
     }
   }      
@@ -2156,7 +2136,7 @@ void initialize_gps(unsigned int id){
   //   printf("GPS success!\n");
 
   //initialize variables
-  //g_parser = NMEAParser();
+  g_parser = NMEAParser();
   g_gps_new_data = -1;
   memset(g_gps_buf, 0, k_LogBufSize);
   //open fd for GPS
@@ -2177,7 +2157,7 @@ void initialize_gps(unsigned int id){
 
 void write_gps(unsigned int id) {
   g_gps_new_data = gps_read_data(g_gps_buf);
-  printf("write_gps returned %d:%s\n", g_gps_new_data,g_gps_buf);
+  //printf("write_gps returned %d:%s\n", g_gps_new_data,g_gps_buf);
   //printf("write_gps, task %u\n", id);
 }
 
@@ -2253,82 +2233,99 @@ void read_buffer_and_send(unsigned int id) {
   char imubuf[k_LogBufSize];
   char encoderbuf[k_LogBufSize];
   char gpsbuf[k_LogBufSize];
-  //read g_imu_data and parse into text
-  r = snprintf(imubuf, k_LogBufSize, "%.6f:IMU:time:%lu:dt:%lu:"
-	       "Y:%.2f:P:%.2f:R:%.2f:"
-	       "Y(a):%.2f:M_h(a):%.2f:M_h:%.2f:"
-	       "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
-	       "Gx:%.2f:Gy:%.2f:Gz:%.2f\n",
-	       sensors_current_time(),
-	       g_imu_data->timestamp, g_imu_data->dt,
-	       g_imu_data->data[0], g_imu_data->data[1], g_imu_data->data[2],
-	       g_imu_data->data[3], g_imu_data->data[4], g_imu_data->data[5],
-	       g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
-	       g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
-	       g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
-  if (r > k_LogBufSize)
-    sprintf(imubuf,"IMU:BOGUS READING");
-  //write text to g_msg_buf
-  if (msg_count < k_msg_buf_size) {//buffer has room
-    strncpy(&g_msg_buf[msg_count * k_LogBufSize], imubuf, k_LogBufSize); //pad buffer   
-    ++msg_count; //increment msg_count
-  }
-  else { //buffer is full
-    printf("ERROR in read_buffer_and_send: buffer full on imu write\n");
-    return;
-  }
-  //read g_encoders_data and parse into text
-  r =  snprintf(encoderbuf,k_LogBufSize,
-		"%.6f:ENC:time:%lu:dt:%lu:L:%.1f:R:%.1f:MCL:%d:MCR:%d\n",
-	       sensors_current_time(),
-	       g_encoders_data->timestamp, g_encoders_data->dt,
-	       g_encoders_data->ticks[0], g_encoders_data->ticks[1],
-	       g_motor_cmd_L, g_motor_cmd_R);
-  if (r > k_LogBufSize)
-    sprintf(encoderbuf, "ENC:BOGUS READING");
-  //write text to g_msg_buf
-  if (msg_count < k_msg_buf_size) {//buffer has room
-    strncpy(&g_msg_buf[msg_count * k_LogBufSize], encoderbuf, k_LogBufSize); //pad buffer   
-    ++msg_count; //increment msg_count
-  }
-  else { //buffer is full
-    printf("ERROR in read_buffer_and_send: buffer full on encoder write\n");
-    return;
-  }
-  if (g_gps_new_data == 0) {//if new GPS data
-    //write g_gps_buf to g_msg_buf
-    r = snprintf(gpsbuf,k_LogBufSize, "%.6f:GPS:%s\n", sensors_current_time(), g_gps_buf);
+  if (!last_send) {
+    //check route complete and if true, set last send
+    if (route_complete)
+      last_send = true;
+    //read g_imu_data and parse into text
+    r = snprintf(imubuf, k_LogBufSize, "%.6f:IMU:time:%lu:dt:%lu:"
+		 "Y:%.2f:P:%.2f:R:%.2f:"
+		 "Y(a):%.2f:M_h(a):%.2f:M_h:%.2f:"
+		 "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
+		 "Gx:%.2f:Gy:%.2f:Gz:%.2f\n",
+		 sensors_current_time(),
+		 g_imu_data->timestamp, g_imu_data->dt,
+		 g_imu_data->data[0], g_imu_data->data[1], g_imu_data->data[2],
+		 g_imu_data->data[3], g_imu_data->data[4], g_imu_data->data[5],
+		 g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
+		 g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
+		 g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
     if (r > k_LogBufSize)
-      sprintf(gpsbuf, "GPS:BOGUS READING");
+      sprintf(imubuf,"IMU:BOGUS READING");
+    //write text to g_msg_buf
     if (msg_count < k_msg_buf_size) {//buffer has room
-      strncpy(&g_msg_buf[msg_count * k_LogBufSize], gpsbuf, k_LogBufSize); //pad buffer   
+      strncpy(&g_msg_buf[msg_count * k_LogBufSize], imubuf, k_LogBufSize); //pad buffer   
       ++msg_count; //increment msg_count
     }
     else { //buffer is full
-      printf("ERROR in read_buffer_and_send: buffer full on gps write\n");
+      printf("ERROR in read_buffer_and_send: buffer full on imu write\n");
       return;
-    } 
-  }
-  //write estimate to buffer
-  if (msg_count < k_msg_buf_size) {//buffer has room
-    strncpy(&g_msg_buf[msg_count * k_LogBufSize], global_estimate_buf, k_LogBufSize); 
-    ++msg_count; //increment msg_count
-  }
-  else { //buffer is full
-    printf("ERROR in read_buffer_and_send: buffer full on estimate write\n");
+    }
+    //read g_encoders_data and parse into text
+    r =  snprintf(encoderbuf,k_LogBufSize,
+		  "%.6f:ENC:time:%lu:dt:%lu:L:%.1f:R:%.1f:MCL:%d:MCR:%d\n",
+		  sensors_current_time(),
+		  g_encoders_data->timestamp, g_encoders_data->dt,
+		  g_encoders_data->ticks[0], g_encoders_data->ticks[1],
+		  g_motor_cmd_L, g_motor_cmd_R);
+    if (r > k_LogBufSize)
+      sprintf(encoderbuf, "ENC:BOGUS READING");
+    //write text to g_msg_buf
+    if (msg_count < k_msg_buf_size) {//buffer has room
+      strncpy(&g_msg_buf[msg_count * k_LogBufSize], encoderbuf, k_LogBufSize); //pad buffer   
+      ++msg_count; //increment msg_count
+    }
+    else { //buffer is full
+      printf("ERROR in read_buffer_and_send: buffer full on encoder write\n");
+      return;
+    }
+    if (g_gps_new_data == 0) {//if new GPS data
+      //write g_gps_buf to g_msg_buf
+      r = snprintf(gpsbuf,k_LogBufSize, "%.6f:GPS:%s\n", sensors_current_time(), g_gps_buf);
+      if (r > k_LogBufSize)
+	sprintf(gpsbuf, "GPS:BOGUS READING");
+      if (msg_count < k_msg_buf_size) {//buffer has room
+	strncpy(&g_msg_buf[msg_count * k_LogBufSize], gpsbuf, k_LogBufSize); //pad buffer   
+	++msg_count; //increment msg_count
+      }
+      else { //buffer is full
+	printf("ERROR in read_buffer_and_send: buffer full on gps write\n");
+	return;
+      } 
+    }
+    //write estimate to buffer
+    if (msg_count < k_msg_buf_size) {//buffer has room
+      strncpy(&g_msg_buf[msg_count * k_LogBufSize], global_estimate_buf, k_LogBufSize); 
+      ++msg_count; //increment msg_count
+    }
+    else { //buffer is full
+      printf("ERROR in read_buffer_and_send: buffer full on estimate write\n");
+      return;
+    }
+    //write waypoint to buffer
+    if (global_waypoint_flag) {
+      if (msg_count < k_msg_buf_size) {//buffer has room
+	strncpy(&g_msg_buf[msg_count * k_LogBufSize], global_waypoint_buf, k_LogBufSize); 
+	++msg_count; //increment msg_count
+	global_waypoint_flag = false; //reset flag
+      }
+      else { //buffer is full
+	printf("ERROR in read_buffer_and_send: buffer full on waypoint write\n");
+	return;
+      }
+    }
+    //check msg_count
+    if ((msg_count >= k_msg_buf_threshold) || halt) { //send data
+      if (!sensors_send_data(g_msg_buf, msg_count))
+	printf("ERROR sending buffer in read_buffer_and_send\n");
+      //clear buffer
+      memset(g_msg_buf, 0, k_msg_buf_bytes);
+      //reset msg_count
+      msg_count = 0;
+    } //else just return
+    //printf("read_buffer_and_send, task %u\n", id);
     return;
   }
-  //check msg_count
-  if ((msg_count >= k_msg_buf_threshold) || halt) { //send data
-    if (!sensors_send_data(g_msg_buf, msg_count))
-      printf("ERROR sending buffer in read_buffer_and_send\n");
-    //clear buffer
-    memset(g_msg_buf, 0, k_msg_buf_bytes);
-    //reset msg_count
-    msg_count = 0;
-  } //else just return
-  //printf("read_buffer_and_send, task %u\n", id);
-  return;
 }
 
 void finalize_buffer_and_send(unsigned int id) {
@@ -2502,6 +2499,11 @@ void initialize_estimate_and_move(unsigned int id){
 void write_estimate_and_move(unsigned int id) {
   //copy local estimate to global
   strncpy(global_estimate_buf, local_estimate_buf, k_LogBufSize);
+  //if new waypoint, write it and set flag
+  if (strlen(local_waypoint_buf) > 0) {
+    strncpy(global_waypoint_buf, local_waypoint_buf, k_LogBufSize);
+    global_waypoint_flag = true;
+  }
   //printf("write_estimate_and_move, task %u\n", id);
   return;} 
 
@@ -2601,7 +2603,7 @@ void read_estimate_and_move(unsigned int id) {
   sprintf(tempbuf,"ESTIMATE:X:%f:Y:%f:THETA:%f\n", 
 	  g_my_pose.x, g_my_pose.y, g_my_pose.theta);
   strncpy(local_estimate_buf, tempbuf, k_LogBufSize);
-  int num_messages = 1;
+  //  int num_messages = 1;
   // if (!sensors_send_data(logbuf, num_messages))
   //   printf("ERROR logging estimate\n");
   //printf("I am at x = %f, y = %f, theta = %f\n", g_my_pose.x, g_my_pose.y, g_my_pose.theta);
@@ -2617,24 +2619,27 @@ void read_estimate_and_move(unsigned int id) {
     int retval = emperor_log_data(logbuf, log_sockfd);
     if (retval != 0)
       printf("logging failed for \'%s'\n", logbuf);
-    //***LOG INTO IMU LOG AS WELL***  FIXME--NEEDS TO GO INTO BUFFER, NOT STRAIGHT TO LOG
+    //***LOG INTO IMU LOG AS WELL***  
     sprintf(tempbuf,"\nWAYPOINT w %f %f\n", g_my_pose.x, g_my_pose.y);
-    strncpy(logbuf, tempbuf, k_maxBufSize);
-    if (!sensors_send_data(logbuf, num_messages))
-      printf("ERROR logging waypoint\n");
+    strncpy(local_waypoint_buf, tempbuf, k_LogBufSize);
     //clear g_motor_prev and increment g_waypoint_index
     memset(g_motor_prev, 0, k_maxBufSize);
     ++g_waypoint_index;
-    //if at last point, stop threads
-    if (g_waypoint_index == g_num_waypoints)
+    //if at last point, stop motors and stop threads
+    if (g_waypoint_index == g_num_waypoints) {
+      motor_stop(motor_fd); //stop robot
       route_complete = true;
       //stop_barrier_threads(); //we're done!
+      return;
+    }
     else
       return;
   }
-  else {  //move 
+  else if (!route_complete) {  //move 
     //Steps: 1. Decide command 
     //       2. check against previous command-->send and log only if different
+    //clear local waypoint buffer
+    memset(local_waypoint_buf, 0, k_LogBufSize);
     double phi = AngleBetween(g_my_pose, g_waypoints[g_waypoint_index]);
     //fix possible loop-around in thetas
     while (phi <= g_my_pose.theta - k_PI)
@@ -2727,6 +2732,7 @@ void read_estimate_and_move(unsigned int id) {
     if (retval != 0)
       printf("logging failed for \'%s'\n", logbuf);
   }
+  return;
 }
 
 void finalize_estimate_and_move(unsigned int id) {
@@ -2764,7 +2770,8 @@ void *estimate_and_move_task(void *args){
     //   printf("**********************************\n");
     BARRIER("estimate_and_move", "after pipeline");
     double last = emperor_current_time();
-    read_estimate_and_move(id);
+    if (!route_complete)
+      read_estimate_and_move(id);
     double now = emperor_current_time();
     printf("read_estimate_and_move time: %f\n", now-last);
     if (now-last > 0.1)
