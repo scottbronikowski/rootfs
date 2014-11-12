@@ -1,11 +1,3 @@
-cd c++/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/include/c++/4.7.2 .
-ls
-cd ../machine/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/include/machine/regdef.h .
-cd ..
 rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/include/process.h .
 cd rpc/
 ls
@@ -1991,6 +1983,14 @@ ps -ef | grep force
 ./run-the-force stop
 ./run-the-force start
 ./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+exit
+cd bin
 ./run-the-force start
 ./run-the-force stop
 ./run-the-force start

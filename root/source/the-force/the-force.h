@@ -49,7 +49,7 @@ using namespace cv;
 #define FALSE (0!=0)
 #endif
 
-#define MAX_THREADS 4 //total number of barrier-ed threads
+#define MAX_THREADS 5 //total number of barrier-ed threads
 
 #define QUANTUM 1000
 
@@ -279,11 +279,18 @@ void *task_malloc(size_t size);
 void start_barrier_threads(void);
 void stop_barrier_threads(void);
 
-void initialize_imu_encoders(unsigned int id);
-void write_imu_encoders(unsigned int id);
-void read_imu_encoders(unsigned int id);
-void finalize_imu_encoders(unsigned int id);
-void *imu_encoders_task(void *args);
+void initialize_imu(unsigned int id);
+void write_imu(unsigned int id);
+void read_imu(unsigned int id);
+void finalize_imu(unsigned int id);
+void *imu_task(void *args);
+
+void initialize_encoders(unsigned int id);
+void write_encoders(unsigned int id);
+void read_encoders(unsigned int id);
+void finalize_encoders(unsigned int id);
+void *encoders_task(void *args);
+
 
 void initialize_gps(unsigned int id);
 void write_gps(unsigned int id);

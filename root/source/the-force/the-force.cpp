@@ -108,7 +108,8 @@ pthread_mutex_t msg_buf_and_count_lock;
 unsigned int frame_number;
 int running = FALSE, halt = FALSE;
 unsigned int threads = MAX_THREADS;
-void *((*task[MAX_THREADS])(void *)) = {&imu_encoders_task, 
+void *((*task[MAX_THREADS])(void *)) = {&imu_task, 
+					&encoders_task,
 					&gps_task,
 					&buffer_and_send_task,
 					&estimate_and_move_task};
@@ -1973,8 +1974,8 @@ void stop_barrier_threads(void) {
 // No other task can read other task's global variables in write_TASK().
 // They can only read variables in read_TASK().
 
-//for imu and encoders (run together, polling)
-void initialize_imu_encoders(unsigned int id) {
+//for imu  (polling)
+void initialize_imu(unsigned int id) {
   char logbuf[k_LogBufSize];
   char sendbuf[k_LogBufSize];
   int num_messages = 1;
@@ -1982,7 +1983,8 @@ void initialize_imu_encoders(unsigned int id) {
   printf("Connecting to %s on port %s for IMU, Encoder, and GPS logging...\n",
   	 k_Server, k_imuLogPort);
   log_sensors_sockfd = -1;
-  sprintf(logbuf, "%.6f:ALL:IMU and Encoders logging started\n", sensors_current_time());
+  sprintf(logbuf, "%.6f:ALL:IMU, Encoders, and GPS logging started\n", 
+	  sensors_current_time());
   strncpy(sendbuf, logbuf, k_LogBufSize);
   while (log_sensors_sockfd == -1)
   {
@@ -1996,7 +1998,6 @@ void initialize_imu_encoders(unsigned int id) {
     printf("success!\n");
   
   //initialize variables
-  g_encoders_data = new encoders_data_t;
   g_imu_data = new imu_data_t;
 
   //open fds for imu, encoders
@@ -2005,6 +2006,25 @@ void initialize_imu_encoders(unsigned int id) {
     perror("Error opening serial port for IMU:");
     return;
   }
+  //printf("fds opened\n");
+
+  //init imu 
+  if (!sensors_init(imu_fd, imu_init_string, imu_input_pos))
+  {
+    perror("Error in IMU init:");
+    return;
+  }
+  //success if we get here
+  printf("initialize_imu() succeeded\n");
+  return;
+}
+
+//for encoders (polling)
+void initialize_encoders(unsigned int id) {
+  //initialize variables
+  g_encoders_data = new encoders_data_t;
+
+  //open fd for encoders
   if (!sensors_open_serial_port(encoders_fd, encoders_file, sensors_speed))
   {
     perror("Error opening serial port for encoders:");
@@ -2012,57 +2032,68 @@ void initialize_imu_encoders(unsigned int id) {
   }
   //printf("fds opened\n");
 
-  //init imu & encoders
-  if (!sensors_init(imu_fd, imu_init_string, imu_input_pos))
-  {
-    perror("Error in IMU init:");
-    return;
-  }
+  //init encoders
   if (!sensors_init(encoders_fd, encoders_init_string, encoders_input_pos))
   {
     perror("Error in encoders init:");
     return;
   }
   //success if we get here
-  printf("initialize_imu_encoders() succeeded\n");
+  printf("initialize_encoders() succeeded\n");
   return;
 }
 
 
-void write_imu_encoders(unsigned int id) {
+void write_imu(unsigned int id) {
   if (!imu_read_data(g_imu_data))
     printf("error getting imu data in write_imu_encoders\n");
+  //printf("write_imu, task %u\n", id);
+  return;
+}
+
+void write_encoders(unsigned int id) {
   if (!encoders_read_data(g_encoders_data))
     printf("error getting encoders data in write_imu_encoders\n");
-  //printf("write_imu_encoders, task %u\n", id);
+  //printf("write_encoders, task %u\n", id);
   return;
 }
 
-void read_imu_encoders(unsigned int id) { 
-  //printf("read_imu_encoders, task %u\n", id);
+void read_imu(unsigned int id) { 
+  //printf("read_imu, task %u\n", id);
   return;} //nothing to do here????
 
-void finalize_imu_encoders(unsigned int id) {
+void read_encoders(unsigned int id) { 
+  //printf("read_encoders, task %u\n", id);
+  return;} //nothing to do here????
+
+void finalize_imu(unsigned int id) {
   //close fds
   close(imu_fd);
-  close(encoders_fd);
   close(log_sensors_sockfd);
   //clean up memory
-  delete g_encoders_data;
   delete g_imu_data;
-  printf("finalize_imu_encoders complete\n");
+  printf("finalize_imu complete\n");
   return;
 }
 
-void *imu_encoders_task(void *args) {
+void finalize_encoders(unsigned int id) {
+  //close fds
+  close(encoders_fd);
+  //clean up memory
+  delete g_encoders_data;
+  printf("finalize_encoders complete\n");
+  return;
+}
+
+void *imu_task(void *args) {
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
   {
     /* This block only needs to be in one thread */
     frame_number = 0;
   }
-  initialize_imu_encoders(id);
-  BARRIER("imu_encoders", "initialize");
+  initialize_imu(id);
+  BARRIER("imu", "initialize");
   while (TRUE) {
     {
       /* This block only needs to be in one thread */
@@ -2070,19 +2101,19 @@ void *imu_encoders_task(void *args) {
       if (halt) running = FALSE;
       pthread_mutex_unlock(&halt_mutex);
     }
-    BARRIER("imu_encoders", "before pipeline");
+    BARRIER("imu", "before pipeline");
     if (!running) break;
     double last1 = emperor_current_time();
-    write_imu_encoders(id);
+    write_imu(id);
     double now1 = emperor_current_time();
-    printf("write_imu_encoders time: %f\n", now1-last1);
+    printf("write_imu time: %f\n", now1-last1);
     if (now1-last1 > 0.1)
       printf("**********************************\n");
-    BARRIER("imu_encoders", "after pipeline");
+    BARRIER("imu", "after pipeline");
     double last = emperor_current_time();
-    read_imu_encoders(id);
+    read_imu(id);
     double now = emperor_current_time();
-    // printf("read_imu_encoders time: %f\n", now-last);
+    // printf("read_imu time: %f\n", now-last);
     // if (now-last > 0.1)
     //   printf("**********************************\n");
     /* This intentionally ignores the time for the two barriers, the
@@ -2091,11 +2122,11 @@ void *imu_encoders_task(void *args) {
        timings become entangled with other threads. */
     double fraction_remaining = 1.0-fps*(now-last);
     if (fraction_remaining<0.0) {
-      printf("imu_encoders %u can't keep up in frame %u, overused: %lf\n",
+      printf("imu %u can't keep up in frame %u, overused: %lf\n",
 	     id, frame_number, -fraction_remaining);
     }
     else if (time_threads) {
-      printf("unused imu_encoders %u thread time in frame %u: %lf\n",
+      printf("unused imu %u thread time in frame %u: %lf\n",
 	     id, frame_number, fraction_remaining);
     }
     // {
@@ -2110,10 +2141,51 @@ void *imu_encoders_task(void *args) {
     //     if (usleep(QUANTUM)) task_error("Call to usleep failed");
     //   }
     // }
-    //printf("imu_encoders_task time: %f\n", now-last);
+    //printf("imu_task time: %f\n", now-last);
   }
-  BARRIER("imu_encoders", "finalize");
-  finalize_imu_encoders(id);
+  BARRIER("imu", "finalize");
+  finalize_imu(id);
+  return NULL;
+}
+
+void *encoders_task(void *args) {
+  struct task_args *task_args = (struct task_args *)args;
+  unsigned int id = task_args->id;
+  initialize_encoders(id);
+  BARRIER("encoders", "initialize");
+  while (TRUE) {
+    BARRIER("encoders", "before pipeline");
+    if (!running) break;
+    double last1 = emperor_current_time();
+    write_encoders(id);
+    double now1 = emperor_current_time();
+    printf("write_encoders time: %f\n", now1-last1);
+    if (now1-last1 > 0.1)
+      printf("**********************************\n");
+    BARRIER("encoders", "after pipeline");
+    double last = emperor_current_time();
+    read_encoders(id);
+    double now = emperor_current_time();
+    // printf("read_encoders time: %f\n", now-last);
+    // if (now-last > 0.1)
+    //   printf("**********************************\n");
+    /* This intentionally ignores the time for the two barriers, the
+       conditional break, the conditional printfs, and the loop. And it does
+       two calls to current_time() instead of one. Because otherwise the
+       timings become entangled with other threads. */
+    double fraction_remaining = 1.0-fps*(now-last);
+    if (fraction_remaining<0.0) {
+      printf("encoders %u can't keep up in frame %u, overused: %lf\n",
+	     id, frame_number, -fraction_remaining);
+    }
+    else if (time_threads) {
+      printf("unused encoders %u thread time in frame %u: %lf\n",
+	     id, frame_number, fraction_remaining);
+    }
+    //printf("encoders_task time: %f\n", now-last);
+  }
+  BARRIER("encoders", "finalize");
+  finalize_encoders(id);
   return NULL;
 }
 
