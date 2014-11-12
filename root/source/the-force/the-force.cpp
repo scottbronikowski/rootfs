@@ -71,7 +71,7 @@ const double k_distance_threshold = 0.10;  //in meters
 const double k_angle_threshold_1 = k_PI/12; //15 degrees in radians--for deciding whether to pivot or turn while going forward
 const double k_angle_threshold_2 = k_PI/36; //5 degrees in radians--for deciding whether to go straight or turn toward point
 
-const int k_gpsWorkingBufSize = 100; //???
+const int k_gpsWorkingBufSize = 256; //???
 
 
 //global variables
@@ -127,7 +127,7 @@ pose_t g_my_pose = {0.0,0.0,k_PI/2}; //robot's current location
 //(from run-sensors)
 encoders_data_t* g_encoders_data;
 imu_data_t* g_imu_data;
-NMEAParser g_parser;
+//NMEAParser g_parser;
 int g_gps_new_data;
 char g_gps_buf[k_LogBufSize];
 char g_routebuf[k_traceBufSize];
@@ -1662,6 +1662,9 @@ int gps_read_data(char* logbuf)
   fd_set recv_set;
   struct timeval timeout;
   
+  //clear logbuf
+  memset(logbuf, 0, sizeof(logbuf));
+  //set up select
   FD_ZERO(&recv_set);
   FD_SET(gps_fd, &recv_set);
   timeout.tv_sec = 0;
@@ -1677,35 +1680,85 @@ int gps_read_data(char* logbuf)
     return no_read;
   }
   else //retval >= 1, so there is data to receive
-  // if (fgets(tempbuf, k_LogBufSize, gps_file_ptr) != NULL) //fgets may be too slow
   {
-    double start = emperor_current_time();
+    // if (g_gps_working_buf_index != 0)
+    //   ++g_gps_working_buf_index;
+
+    int bytes_available = k_gpsWorkingBufSize - g_gps_working_buf_index;
+    printf("bytes_available = %d\n", bytes_available);
+
+    //double start = emperor_current_time();
     //retval = pread(gps_fd, tempbuf, k_LogBufSize, 0);
     //retval = readLine(gps_fd, tempbuf, k_LogBufSize);
 
-    //read up to buffer-length bytes
-    retval = read(gps_fd, &g_gps_working_buf[g_gps_working_buf_index], 
-		  k_gpsWorkingBufSize-g_gps_working_buf_index);
+    //read up to available buffer-length bytes
+    retval = read(gps_fd, &g_gps_working_buf[g_gps_working_buf_index], bytes_available);
+    printf("retval = %d\n", retval);
 
-    double end = emperor_current_time();
-    printf("read time: %f\n", end-start);
-
-    //if read less, return a no_read (do I need to zero out logbuf???)
-
-    //else scan for \n (keep position with g_gps_working_buf_index)
-
-    //copy from $ to \n into a parsing buffer
-
-    //move remaining data to beginning of g_gps_working_buf
-
-    //parse the completed sentence
+    //double end = emperor_current_time();
+    //printf("read time: %f\n", end-start);
 
     if (retval < 0 ) //error
     {
       perror("gps_read_data read:");
       return failure;
     }
-    printf("gps_read_data got: %s\n", tempbuf);
+    printf("gps_read_data has: %s\n", g_gps_working_buf);
+    
+    //update index with bytes read
+    g_gps_working_buf_index = g_gps_working_buf_index + retval; 
+    
+    // //if read less, update buffer index and return a no_read 
+    // if (retval < bytes_available) {
+    //   printf("BUFFER NOT FILLED\n");
+    //   g_gps_working_buf_index = g_gps_working_buf_index + retval; 
+    //   //can't go past end of buffer b/c retval < bytes available
+    //   return no_read;
+    // }
+    //else scan for starting $ and ending \n (keep position with g_gps_working_buf_index)
+    // else {
+    char* begin = strchr(&g_gps_working_buf[0], '$');
+    unsigned int begin_ind = strcspn(&g_gps_working_buf[0], "$");
+    if (begin == NULL) { //no starting $ in buffer, so flush it all and return failure
+      printf("NO STARTING $ FOUND\n");
+      memset(g_gps_working_buf, 0, sizeof(g_gps_working_buf));
+      g_gps_working_buf_index = 0;
+      return failure;
+    }
+    printf("begin: %s\n", begin);
+    unsigned int end = strcspn(begin, "\n");//g_gps_working_buf, "\n");
+    //if (g_gps_working_buf[end] != '\n') {
+    if (strncmp(&begin[end], "\n", 1) != 0) {
+      //reached end of read buffer w/o finding \n, so update the index and return no read
+      printf("NO ENDING NEWLINE FOUND\n");
+      g_gps_working_buf_index = end+1;
+      return no_read;
+    }
+    //if we get here w/o returning, we have found $ and \n
+    //copy from $ to \n into a parsing buffer
+    char tempbuf[k_gpsWorkingBufSize];
+    memset(tempbuf, 0, k_gpsWorkingBufSize);
+    printf("end = %d, begin_ind = %d\n", end, begin_ind);
+    //printf("before tempbuf copy, end-begin_ind = %d\n", end-begin_ind);
+    strncpy(tempbuf, begin, end);
+
+    printf("gps_read_data sending to parser: %s\n", tempbuf);
+    //update position index
+    g_gps_working_buf_index = g_gps_working_buf_index - (begin_ind + end);
+    
+    //move remaining data to beginning of g_gps_working_buf
+    memmove(g_gps_working_buf, g_gps_working_buf+end+begin_ind, g_gps_working_buf_index);
+    memset(g_gps_working_buf+g_gps_working_buf_index+1, 0, 
+	   k_gpsWorkingBufSize - g_gps_working_buf_index - 1);
+    printf("g_gps_working_buf after move: %s\n", g_gps_working_buf);
+
+
+    //parse the completed sentence
+    // }
+
+
+    //NEED TO FIX FROM HERE DOWN
+
     length = strlen(tempbuf);
     if (length <= 0) //error
     {
@@ -1717,8 +1770,9 @@ int gps_read_data(char* logbuf)
     { //message received, so check if it's one we want
       if (strncmp(tempbuf, GGA, strlen(GGA)) == 0)
       { //process GGA info
-	g_parser.Parse(tempbuf, length);
-	gpsinfo = g_parser.GetActualGPSInfo();
+	NMEAParser parser;
+	parser.Parse(tempbuf, length);
+	gpsinfo = parser.GetActualGPSInfo();
 	retval = snprintf(logbuf, k_LogBufSize, "GGA:Lat:%.10f:Long:%.10f:Alt:%.1fm:"
 			  "HDOP:%.2f:Quality:%d:Time:%.2d:%.2d:%.2d",
 			  gpsinfo.m_latitude, gpsinfo.m_longitude, gpsinfo.m_altitude,
@@ -1727,12 +1781,14 @@ int gps_read_data(char* logbuf)
 	if (retval > k_LogBufSize)
 	  printf("GPS GGA too long, retval = %d\n", retval);
 	//logbuf now has a parsed and formatted GPS messages, so return success
+	printf("**PARSED: %s\n", logbuf);
 	return success;
       }
       else if (strncmp(tempbuf, RMC, strlen(RMC)) == 0)
       { //process RMC info
-	g_parser.Parse(tempbuf, length);
-	gpsinfo = g_parser.GetActualGPSInfo();
+	NMEAParser parser;
+	parser.Parse(tempbuf, length);
+	gpsinfo = parser.GetActualGPSInfo();
 	if (!gpsinfo.m_trackValid)
 	{
 	  sprintf(logbuf, "RMC:Track Invalid");
@@ -1749,14 +1805,14 @@ int gps_read_data(char* logbuf)
 	    printf("GPS RMC too long, retval = %d\n", retval);
 	}
 	//logbuf now has a parsed and formatted GPS messages, so return success
+	printf("**PARSED: %s\n", logbuf);
 	return success;
       }
       else //ignore other messages from GPS
+	printf("**NO PARSE\n");
 	return no_read;
     }
   }      
-  // else
-  //   return no_read;
 }
 
 //copied from data-analysis.cpp
@@ -2098,8 +2154,9 @@ void initialize_gps(unsigned int id){
   // }
   // else
   //   printf("GPS success!\n");
+
   //initialize variables
-  g_parser = NMEAParser();
+  //g_parser = NMEAParser();
   g_gps_new_data = -1;
   memset(g_gps_buf, 0, k_LogBufSize);
   //open fd for GPS
@@ -2120,7 +2177,7 @@ void initialize_gps(unsigned int id){
 
 void write_gps(unsigned int id) {
   g_gps_new_data = gps_read_data(g_gps_buf);
-  //rintf("write_gps returned %d\n", g_gps_new_data);
+  printf("write_gps returned %d:%s\n", g_gps_new_data,g_gps_buf);
   //printf("write_gps, task %u\n", id);
 }
 

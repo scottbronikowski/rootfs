@@ -554,6 +554,9 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Also saw that write_imu_encoders() is consistently taking 30-45ms to run.  Once I have the GPS problem fixed I need to look into that, although that delay will still allow us to run the sensors at 20Hz, which may be OK.
 --Started working on my own GPS reader/parser to keep up with loop speed--fgets and readLine run too slow.
 
+12 Nov 14
+--First working version of GPS reader/parser.  Works, but takes ~11-21ms to parse a GPS line.  Committing before trying a few things to speed the process up.
+
 **MAYBE Need to move gps_task outside of barriers
 **--need to put reverse when past point code into read_estimate_and_move
 **--Need to fix waypoint logging into IMU log--currently sends straight to log, needs to go to buffer
