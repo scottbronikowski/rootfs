@@ -1,73 +1,3 @@
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/include/process.h .
-cd rpc/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/include/rpc/ .
-cd ../../lib/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/lib/libarm_cortexM4l_math.a .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/lib/thumb2 .
-cd ../share/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/arm-none-eabi/share/gcc-4.7.2 .
-cd ../../bin/
-ls
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/bin/arm-non-eabi-gcc-4.7.2 .
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/bin/arm-none-eabi-gcc-4.7.2 .
-cd ..
-ls
-cd lib
-ls
-cd ..
-rsync -avrz seykhl:~/Downloads/Teensy/arduino-1.0.5/hardware/tools/arm-none-eabi/libexec .
-ls
-cd ..cd /
-cd /
-ls
-locate BitClear.html
-locate Base.java
-locate AvrdudeUploader.java
-arduino
-ls
-cd ro
-cd root
-ls
-lla ar*
-rm -rf arduino-1.5.4
-lla ar*
-mkdir arduino-stuff
-rsync -avrz seykhl:~/teensyduino/* ~/arduino-stuff/
-cd arduino-stuff/
-ls
-lsusb
-cd /
-ls
-cd root
-ls
-rsync -avrz seykhl:~/Downloads/razor* .
-ls
-lla raz*
-lla /dev/tty*
-lla /dev/ttyU*
-cd /
-git status
-ls
-top
-rebps -ef | grep ssh
-ps -ef | grep ssh
-kill -9 925
-ps -ef | grep ssh
-reboot
-lsusb
-reboot
-cat /dev/ttyUSB1
-cat /dev/ttyUSB1 | tail
-tail -f /dev/ttyUSB1
-which minicom
-which screen
-man screen
-screen /dev/ttyUSB1 57600
-screen /dev/ttyUSB1 115200
-screen /dev/ttyUSB1 57600
 cd razor-9dof-ahrs-Release-v1.4.2/
 ls
 cd Processing/Magnetometer_calibration/
@@ -1995,6 +1925,76 @@ cd bin
 ./run-the-force stop
 ./run-the-force start
 ./run-the-force stop
+./run-the-force start
+./run-the-force stop
+exit
+cd bin
+./run-the-force start
+man top
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./motor_control stop
+./run-the-force start
+./motor_control stop
+./run-the-force start
+./motor_control stop
+./run-the-force start
+./motor_control stop
+./run-the-force start
+./motor_control stop
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+exit
+cd bin/
+./run-the-force start
+./run-the-force stop
+clear
+./run-the-force start
+./run-the-force stop
+clear
+./run-the-force start
+./run-the-force stop
+clear
+./run-the-force start
+./run-the-force stop
+clear
+./run-the-force start
+./run-the-force stop
+clear
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+./run-the-force stop
+./run-the-force start
+clear
 ./run-the-force start
 ./run-the-force stop
 exit

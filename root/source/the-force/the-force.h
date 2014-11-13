@@ -238,7 +238,7 @@ long sensors_elapsed_ms(struct timeval start, struct timeval end);
 bool sensors_init(int fd, const std::string init_string, size_t &input_pos);
 bool sensors_read_token(const std::string &token, char c, size_t &input_pos);
 bool encoders_read_data(encoders_data_t* data); 
-bool imu_read_data(imu_data_t* data);
+bool imu_read_data(imu_data_t* out_data);
 double sensors_current_time(void);
 //int sensors_log_data(char* logbuf);
 bool sensors_send_data(char* msgbuf, int num_messages);
@@ -311,6 +311,8 @@ void read_estimate_and_move(unsigned int id);
 void finalize_estimate_and_move(unsigned int id);
 void *estimate_and_move_task(void *args);
 ssize_t readLine(int fd, void *buffer, size_t n);
+int fd_set_blocking(int fd, int blocking);
+
 
 #endif
 

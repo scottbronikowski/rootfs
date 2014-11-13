@@ -65,7 +65,7 @@ const char* RMC = "$GPRMC";
 const char* k_imuLogPort = "2004";//using imu-log.txt as consolidated log for IMU, GPS, and encoders--not worth the effort to change the name in the code
 const int sensors_connect_timeout_ms = 5000;
 const std::string encoders_init_string = "#ob#o0#s";
-const std::string imu_init_string = "#omb#o0#oe0#s"; //#o0 for POLLING #o1 for streaming
+const std::string imu_init_string = "#omb#o1#oe0#s"; //#o0 for POLLING #o1 for streaming
 //for driving logic
 const double k_distance_threshold = 0.10;  //in meters
 const double k_angle_threshold_1 = k_PI/12; //15 degrees in radians--for deciding whether to pivot or turn while going forward
@@ -118,7 +118,7 @@ struct task_args task_args[MAX_THREADS];
 pthread_mutex_t halt_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_barrier_t barrier;
 int time_threads = FALSE;
-double fps = 10.0;
+double fps = 50.0;
 bool route_complete = false;
 bool last_send = false;
 
@@ -1424,13 +1424,15 @@ bool encoders_read_data(encoders_data_t* data)
   for (int i = 0; i < 2; i++)
     data->ticks[i] = 0.0f;
   //send frame request --NOT NEEDED FOR CONSTANT OUTPUT
-  const char* framerequest = "#f";
-  int testretval = write(encoders_fd, framerequest, strlen(framerequest));
-  if (testretval != (int)strlen(framerequest))
-  {
-    printf("encoders_read_data error writing frame requests, testretval = %d\n", 
-  	   testretval);
-    return false;
+  if (strcmp(encoders_init_string.c_str(), "#ob#o0#s") == 0) {
+    const char* framerequest = "#f";
+    int testretval = write(encoders_fd, framerequest, strlen(framerequest));
+    if (testretval != (int)strlen(framerequest))
+    {
+      printf("encoders_read_data error writing frame requests, testretval = %d\n", 
+	     testretval);
+      return false;
+    }
   }
   //read new data
   while (true)
@@ -1489,15 +1491,17 @@ bool imu_read_data(imu_data_t* data)
   {
     data->data[i] = 0.0f;
   }
-  //data->timestamp = 0;
+  data->timestamp = 0;
   //send frame request --NOT NEEDED FOR CONSTANT OUTPUT
-  const char* framerequest = "#f";
-  int testretval = write(imu_fd, framerequest, strlen(framerequest));
-  if (testretval != (int)strlen(framerequest))
-  {
-    printf("imu_read_data error writing frame requests, testretval = %d\n", 
-  	   testretval);
-    return false;
+  if (strcmp(imu_init_string.c_str(), "#omb#o0#oe0#s") == 0) {
+    const char* framerequest = "#f";
+    int testretval = write(imu_fd, framerequest, strlen(framerequest));
+    if (testretval != (int)strlen(framerequest))
+    {
+      printf("imu_read_data error writing frame requests, testretval = %d\n", 
+	     testretval);
+      return false;
+    }
   }
   //read data
   while (true)
@@ -1530,7 +1534,7 @@ bool imu_read_data(imu_data_t* data)
 	  else if (j == 1)
 	  {
 	    data->dt = t;
-	    //done, so reset position counter and return success
+	    //done, so reset position counter and copy completed data to output 
 	    imu_input_pos = 0;
 	    return true;
 	  }
@@ -1974,7 +1978,7 @@ void stop_barrier_threads(void) {
 // No other task can read other task's global variables in write_TASK().
 // They can only read variables in read_TASK().
 
-//for imu  (polling)
+//for imu  (streaming)
 void initialize_imu(unsigned int id) {
   char logbuf[k_LogBufSize];
   char sendbuf[k_LogBufSize];
@@ -2014,6 +2018,30 @@ void initialize_imu(unsigned int id) {
     perror("Error in IMU init:");
     return;
   }
+  // //set imu_fd to nonblocking
+  // if (fd_set_blocking(imu_fd, 0))
+  //   printf("IMU set to non-blocking\n");
+  // else
+  //   printf("ERROR setting IMU to non-blocking\n");
+
+  //clear junk data
+  // fd_set recv_set;
+  // struct timeval timeout;
+  // FD_ZERO(&recv_set);
+  // FD_SET(imu_fd, &recv_set);
+  // timeout.tv_sec = 0;
+  // timeout.tv_usec = 5*1000; //5ms timeout
+  // while (select(imu_fd+1, &recv_set, NULL, NULL, &timeout) > 0) {
+  //   imu_read_data(g_imu_data);
+  // }
+  struct timeval mark, now;
+  gettimeofday(&mark, NULL);
+  gettimeofday(&now, NULL);
+  while (sensors_elapsed_ms(mark,now) < 200) {
+    imu_read_data(g_imu_data);
+    gettimeofday(&now, NULL);
+  }
+  
   //success if we get here
   printf("initialize_imu() succeeded\n");
   return;
@@ -2038,6 +2066,14 @@ void initialize_encoders(unsigned int id) {
     perror("Error in encoders init:");
     return;
   }
+  //clear junk data
+  struct timeval mark, now;
+  gettimeofday(&mark, NULL);
+  gettimeofday(&now, NULL);
+  while (sensors_elapsed_ms(mark,now) < 200) {
+    encoders_read_data(g_encoders_data);
+    gettimeofday(&now, NULL);
+  }
   //success if we get here
   printf("initialize_encoders() succeeded\n");
   return;
@@ -2045,15 +2081,25 @@ void initialize_encoders(unsigned int id) {
 
 
 void write_imu(unsigned int id) {
-  if (!imu_read_data(g_imu_data))
-    printf("error getting imu data in write_imu_encoders\n");
+  fd_set recv_set;
+  struct timeval timeout;
+  FD_ZERO(&recv_set);
+  FD_SET(imu_fd, &recv_set);
+  timeout.tv_sec = 0;
+  timeout.tv_usec = 1*1000; //1ms timeout
+  while (select(imu_fd+1, &recv_set, NULL, NULL, &timeout) > 0) {
+    imu_read_data(g_imu_data);
+  }
+
+  // if (!imu_read_data(g_imu_data))
+  //   printf("error getting imu data in write_imu\n");
   //printf("write_imu, task %u\n", id);
   return;
 }
 
 void write_encoders(unsigned int id) {
   if (!encoders_read_data(g_encoders_data))
-    printf("error getting encoders data in write_imu_encoders\n");
+    printf("error getting encoders data in write_encoders\n");
   //printf("write_encoders, task %u\n", id);
   return;
 }
@@ -2100,15 +2146,16 @@ void *imu_task(void *args) {
       pthread_mutex_lock(&halt_mutex);
       if (halt) running = FALSE;
       pthread_mutex_unlock(&halt_mutex);
+      frame_number++;
     }
     BARRIER("imu", "before pipeline");
     if (!running) break;
     double last1 = emperor_current_time();
     write_imu(id);
-    double now1 = emperor_current_time();
-    printf("write_imu time: %f\n", now1-last1);
-    if (now1-last1 > 0.1)
-      printf("**********************************\n");
+    //double now1 = emperor_current_time();
+    // printf("write_imu time: %f\n", now1-last1);
+    // if (now1-last1 > 0.1)
+    //   printf("**********************************\n");
     BARRIER("imu", "after pipeline");
     double last = emperor_current_time();
     read_imu(id);
@@ -2129,18 +2176,18 @@ void *imu_task(void *args) {
       printf("unused imu %u thread time in frame %u: %lf\n",
 	     id, frame_number, fraction_remaining);
     }
-    // {
-    //   /* This block only needs to be in one thread */
-    //   /* spin to sync to frame rate */
-    //   while (TRUE) {
-    //     double now = current_time();
-    //     if (now-last>=1.0/fps) {
-    //       last = now;
-    //       break;
-    //     }
-    //     if (usleep(QUANTUM)) task_error("Call to usleep failed");
-    //   }
-    // }
+    {
+      /* This block only needs to be in one thread */
+      /* spin to sync to frame rate */
+      while (TRUE) {
+        double now = current_time();
+        if (now-last1>=1.0/fps) {
+          last1 = now;
+          break;
+        }
+        if (usleep(QUANTUM)) task_error("Call to usleep failed");
+      }
+    }
     //printf("imu_task time: %f\n", now-last);
   }
   BARRIER("imu", "finalize");
@@ -2156,12 +2203,12 @@ void *encoders_task(void *args) {
   while (TRUE) {
     BARRIER("encoders", "before pipeline");
     if (!running) break;
-    double last1 = emperor_current_time();
+    //double last1 = emperor_current_time();
     write_encoders(id);
-    double now1 = emperor_current_time();
-    printf("write_encoders time: %f\n", now1-last1);
-    if (now1-last1 > 0.1)
-      printf("**********************************\n");
+    //double now1 = emperor_current_time();
+    // printf("write_encoders time: %f\n", now1-last1);
+    // if (now1-last1 > 0.1)
+    //   printf("**********************************\n");
     BARRIER("encoders", "after pipeline");
     double last = emperor_current_time();
     read_encoders(id);
@@ -2182,6 +2229,19 @@ void *encoders_task(void *args) {
       printf("unused encoders %u thread time in frame %u: %lf\n",
 	     id, frame_number, fraction_remaining);
     }
+    // {
+    //   /* This block only needs to be in one thread */
+    //   /* spin to sync to frame rate */
+    //   while (TRUE) {
+    //     double now = current_time();
+    //     if (now-last>=1.0/fps) {
+    //       last = now;
+    //       break;
+    //     }
+    //     if (usleep(QUANTUM)) task_error("Call to usleep failed");
+    //   }
+    // }
+
     //printf("encoders_task time: %f\n", now-last);
   }
   BARRIER("encoders", "finalize");
@@ -2253,12 +2313,12 @@ void *gps_task(void *args){
   while (TRUE) {
     BARRIER("gps", "before pipeline");
     if (!running) break;
-    double last1 = emperor_current_time();
+    //double last1 = emperor_current_time();
     write_gps(id);
-    double now1 = emperor_current_time();
-    printf("write_gps time: %f\n", now1-last1);
-    if (now1-last1 > 0.1)
-      printf("**********************************\n");
+    //double now1 = emperor_current_time();
+    // printf("write_gps time: %f\n", now1-last1);
+    // if (now1-last1 > 0.1)
+    //   printf("**********************************\n");
     BARRIER("gps", "after pipeline");
     double last = emperor_current_time();
     read_gps(id);
@@ -2845,9 +2905,9 @@ void *estimate_and_move_task(void *args){
     if (!route_complete)
       read_estimate_and_move(id);
     double now = emperor_current_time();
-    printf("read_estimate_and_move time: %f\n", now-last);
-    if (now-last > 0.1)
-      printf("**********************************\n");
+    // printf("read_estimate_and_move time: %f\n", now-last);
+    // if (now-last > 0.1)
+    //   printf("**********************************\n");
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
@@ -2925,3 +2985,25 @@ void *estimate_and_move_task(void *args){
      return totRead;
  }
 
+/** 
+ * Set a file descriptor to blocking or non-blocking mode.
+ *
+ * @param fd The file descriptor
+ * @param blocking 0:non-blocking mode, 1:blocking mode
+ *
+ * @return 1:success, 0:failure.
+
+ * downloaded from http://code.activestate.com/recipes/577384-setting-a-file-descriptor-to-blocking-or-non-block/ on 12Nov14
+ **/
+int fd_set_blocking(int fd, int blocking) {
+    /* Save the current flags */
+    int flags = fcntl(fd, F_GETFL, 0);
+    if (flags == -1)
+        return 0;
+
+    if (blocking)
+        flags &= ~O_NONBLOCK;
+    else
+        flags |= O_NONBLOCK;
+    return fcntl(fd, F_SETFL, flags) != -1;
+}

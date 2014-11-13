@@ -558,6 +558,7 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --First working version of GPS reader/parser.  Works, but takes ~11-21ms to parse a GPS line.  Committing before trying a few things to speed the process up.
 --Speedup of GPS reader/parser seems to work...now clocking in under 7ms.  Fixed waypoint logging to go to log buffer instead of directly to socket (keeps messages in order).  Also fixed problem with motors and log still running after last point is reached.  Used a couple of flags to ensure that read_estimate_and_move doesn't run if the route is complete and to keep read_buffer_and_send from continuing to send the same data until the thread is joined.
 --Split imu_encoders_task into two separate tasks that can barrier separately.  Didn't seem to help--IMU task is taking ~35ms by itself.  Will look into turning that into streaming so that we don't have to wait for it to poll.
+--Set IMU to streaming and have encoders being polled at 50Hz.  Have imu_read_data() wrapped in a select() with a 1ms timeout to ensure that data reads are up to date.  Seems to be working.
 
 
 **--need to put reverse when past point code into read_estimate_and_move
