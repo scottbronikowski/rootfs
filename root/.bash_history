@@ -1,23 +1,3 @@
-cd razor-9dof-ahrs-Release-v1.4.2/
-ls
-cd Processing/Magnetometer_calibration/
-ls
-rsync seykhl:~/vader-rover/output2.txt .
-ls
-cat output2.txt 
-ls /dev/ttyUSB*
-screen /dev/ttyUSB1 57600
-exit
-htop
-exit
-cd razor-9dof-ahrs-Release-v1.4.2
-ls
-cd Processing/
-ls
-cd Magnetometer_calibration/
-ls
-rsync -avrz seykhl:~/vader-rover/output.txt .
-ls
 cd ../../Arduino/Razor_AHRS/
 ls
 arduino Razor_AHRS.ino 
@@ -1997,4 +1977,24 @@ clear
 clear
 ./run-the-force start
 ./run-the-force stop
+exit
+cd bin
+./run-the-force start
+./run-the-force stop
+clear
+./run-the-force start
+./run-the-force stop
+clear
+./run-the-force start
+./run-the-force stop
+./motor_control stop
+top
+exit
+cd source/the-force/
+exit
+emacs today.text &
+exit
+halt
+exit
+emacs source/the-force/the-force.cpp
 exit
