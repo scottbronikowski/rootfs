@@ -1,17 +1,3 @@
-cd ../../Arduino/Razor_AHRS/
-ls
-arduino Razor_AHRS.ino 
-exit
-ping google.com
-emacs today.text &
-halt
-cd /dev
-ls
-lla R*
-tail -f RazorIMU 
-ls
-udevadm trigger
-ls
 lla RazorIMU 
 cat RazorIMU 
 ls
@@ -1998,3 +1984,17 @@ halt
 exit
 emacs source/the-force/the-force.cpp
 exit
+ps -ef | grep ssh
+ps -ef | grep emp
+cd /
+git status
+git add -A
+git commit -m "--changed distance threshold to 5cm"
+git push
+halt
+exit
+reboot
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+halt
+\

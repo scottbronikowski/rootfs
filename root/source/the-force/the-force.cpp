@@ -2752,7 +2752,8 @@ void read_estimate_and_move(unsigned int id) {
     if (retval != 0)
       printf("logging failed for \'%s'\n", logbuf);
     //***LOG INTO IMU LOG AS WELL***  
-    sprintf(tempbuf,"\nWAYPOINT w %f %f\n", g_my_pose.x, g_my_pose.y);
+    sprintf(tempbuf,"\nWAYPOINT %d %f %f\n",g_waypoint_index+1, 
+	    g_waypoints[g_waypoint_index].x, g_waypoints[g_waypoint_index].y);
     strncpy(local_waypoint_buf, tempbuf, k_LogBufSize);
     //clear g_motor_prev and increment g_waypoint_index
     memset(g_motor_prev, 0, k_maxBufSize);
