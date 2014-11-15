@@ -1,13 +1,3 @@
-apt-get install udevinfo
-udevadm
-udevadm info --query all -name /dev/ttyUSB* --attribute-walk
-udevadm info --query all -name /dev/ttyUSB0 --attribute-walk
-udevadm info --query all --name /dev/ttyUSB0 --attribute-walk
-udevadm info --query all --name /dev/ttyO0 --attribute-walk
-udevadm info --query all --name /dev/ttyUSB0 --attribute-walk
-ls
-ls /dev
-udevadm control --reload-rules
 ls /dev
 udevadm control --reload-rules
 ls /dev
@@ -1998,3 +1988,13 @@ reboot
 exit
 /etc/init.d/ssh-tunnel.sh start
 halt
+git status
+git add -A
+git commit -m "--Changed configuration so that rover can be controlled from laptop instead of seykhl.  Need to verify that server address in /etc/init.d/ssh-tunnel.sh and ~/source/camera/toollib-camera.cpp is correct each time.  Also need to MAKE emepror and the-force if changed in source.
+"
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ifconfig
+/etc/init.d/ssh-tunnel.sh start
+ps -ef | grep ssh
+reboot
