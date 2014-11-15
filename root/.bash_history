@@ -1,62 +1,3 @@
-lla RazorIMU 
-cat RazorIMU 
-ls
-udevadm trigger
-ls
-udevadm control --reload-rules
-ls
-udevadm trigger
-ls
-udevadm trigger
-ls
-udevadm control --reload-rules
-ls
-D[2~
-lla R*
-lla G*
-lla ttyUSB*
-exit
-screen /dev/ttyUSB1 57600
-ls /dev/ttyUSB*
-screen /dev/ttyUSB1 57600
-ls /dev/ttyUSB*
-screen /dev/ttyUSB1 57600
-screen /dev/ttyUSB0 57600
-screen /dev/ttyUSB1 4800
-screen /dev/GPS 4800
-screen /dev/RazorIMU 57600
-exit
-cd /dev
-ls
-lla
-cd /sys/devices
-ls
-find -name "ttyUSB1"
-cd /sys/class/tty
-ls
-readlink ttyUSB1
-lsusb
-cd `readlink ttyUSB1`
-ls
-cd ../..
-ls
-cd ../..
-ls
-cat idProduct 
-cat idVendor 
-cd /etc/udev
-ls
-cat udev.conf 
-cd rules.d/
-ls
-cat 40-pgr.rules 
-ls
-cd 70-persistent-
-cd 70-persistent-cd.rules 
-cat 70-persistent-cd.rules 
-cat 70-persistent-net.rules
-cat README 
-udevinfo
 apt-get install udevinfo
 udevadm
 udevadm info --query all -name /dev/ttyUSB* --attribute-walk
@@ -1998,3 +1939,62 @@ reboot
 /etc/init.d/ssh-tunnel.sh start
 halt
 \
+ls
+reboot
+emacs today.text &
+top
+exit
+AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
+ls
+cd source/
+vi camera/toollib-camera.cpp
+reboot
+cd source/
+grep -ri seykhl *
+ps -ef |grep ssh
+vi /etc/init.d/ssh-tunnel.sh
+reboot
+ls
+exit
+emacs today.text &
+cd bin
+ls
+./run-emperor start
+ps -ef | grep noip
+pkill noip2
+/usr/local/bin/noip2 -C
+/usr/local/bin/noip2
+exit
+ps -ef | grep ping
+ps -ef | grep ssh
+ifconfig
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh start
+ssh 10.184.174.241
+ssh sbroniko@10.184.174.241
+cat /etc/init.d/ssh-tunnel.sh
+ssh sbroniko@10.184.174.241
+/etc/init.d/ssh-tunnel.sh start
+ps -ef | grep emp
+ps -ef 
+ps -ef | grep emp
+cd /bin/
+ls
+cd ~/bin
+ls
+./run-emperor start
+ifconfig
+/usr/local/bin/noip2 -C
+/usr/local/bin/noip2
+pkill noip2
+/usr/local/bin/noip2 -C
+/usr/local/bin/noip2 
+ifconfig
+halt
+exit
+ifconfig
+vi /etc/init.d/ssh-tunnel.sh
+reboot
+exit
+/etc/init.d/ssh-tunnel.sh start
+halt

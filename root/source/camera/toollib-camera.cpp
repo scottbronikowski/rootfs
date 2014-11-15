@@ -32,7 +32,7 @@ const int k_BlueBalance = 800;
 const unsigned int k_ImageHeight = 480;
 const unsigned int k_ImageWidth = 640;
 /*network stuff */
-const char* k_Server = "seykhl.ecn.purdue.edu";
+const char* k_Server = "10.184.174.241";
 const char* k_FrontCamPort = "3601";
 const char* k_PanoCamPort = "3602";
 /*for OpenCV*/
