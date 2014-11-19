@@ -1,72 +1,3 @@
-ls /dev
-udevadm control --reload-rules
-ls /dev
-udevadm control --reload-rules
-ls /dev
-udevadm control --reload-rules
-ls /dev
-udevadm trigger
-ls /dev
-lla /dev/RazorIMU 
-screen /dev/RazorIMU 57600
-screen /dev/ttyUSB1 57600
-cat /dev/RazorIMU 
-tail -f /dev/RazorIMU 
-lsusb
-udevadm info --query all --name /dev/ttyUSB1 --attribute-walk
-lsusb
-ls /dev/ttyUSB*
-lsusb
-exit
-cd razor-9dof-ahrs-Release-v1.4.2/Arduino/Razor_AHRS/
-arduino Razor_AHRS.ino 
-exit
-htop
-exit
-emacs today.text &
-halt
-ls
-exit
-exit
-htop
-exit
-exit
-emacs today.text
-halt
-lsusb
-ls
-ls /dev
-ls /dev/G*
-ls /dev/R*
-lla /dev/R*
-AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
-ls
-pwd
-rebootreboot
-reboot
-lla /dev/R*
-emacs today.text 
-ls
-cd razor-9dof-ahrs-Release-v1.4.2/Processing/Magnetometer_calibration/
-ls
-rsync -avrz seykhl:~/vader-rover/output3.txt .
-ls
-cat output3.txt 
-arduino
-htop
-screen /dev/GPS 4800
-lla /dev/R*
-lla /dev/G*
-screen /dev/RazorIMU 57600
-exit
-exit
-exit
-arduino
-exit
-ATZ
-AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
-ls
-p;wd
 pwd
 ps
 ps -ef
@@ -1998,3 +1929,72 @@ ifconfig
 /etc/init.d/ssh-tunnel.sh start
 ps -ef | grep ssh
 reboot
+vi /etc/init.d/ssh-tunnel.sh
+/etc/init.d/ssh-tunnel.sh start
+vi source/camera/toollib-camera.cpp 
+cd source/emperor/
+make
+cd ../the-force/
+make
+halt
+cd /
+git status
+git add -A
+git commit -m "--Modified infrastructure so that rover connects to laptop instead of seykhl.  Seems to be working OK.  When moving laptop, need to check its IP address.  If IP has changed, need to change the IP address on the rover in /etc/init.d/ssh-tunnel.sh and ~/source/camera/toollib-camera.cpp.  Also need to MAKE emperor and the-force if toollib-camera.cpp is changed."
+git push
+vi /etc/init.d/ssh-tunnel.sh
+vi source/camera/toollib-camera.cpp 
+cd source/emperor/
+make
+cd ../the-force/
+make
+reboot
+[
+exit
+ssh sbroniko@10.184.165.253
+/etc/init.d/ssh-tunnel.sh start
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+halt
+ls
+ps -ef | grep emp
+halt
+exit
+cd bin
+./motor_control stop
+exit
+./motor_control stop
+cd bin
+./motor_control stop
+exit
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh start
+halt
+exit
+eixt
+exit
+ping google.com
+reboot
+exit
+ps -ef | grep emp
+ps -ef 
+exit
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+halt
+ls
+ping google.com
+reboot
+ro
+ls
+ps -ef 
+top
+cd bin
+./run-the-force start
+./run-emperor start
+./run-the-force start
+exit
+emacs ./source/the-force/the-force.cpp
+exit
+halt
+exit

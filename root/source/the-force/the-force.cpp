@@ -326,10 +326,10 @@ int main(int /*argc*/, char** /*argv*/)
       return -1;
     }
     //if we get here, we have something useful in msgbuf, so do something with it
-    if (strncmp(g_routebuf, prevmsgbuf, k_maxBufSize) != 0) //received new command
+    if (strncmp(g_routebuf, prevmsgbuf, k_traceBufSize) != 0) //received new command
     {
       //printf("Received %d bytes: %s\n", retval, msgbuf);
-      strncpy(prevmsgbuf, g_routebuf, k_maxBufSize);
+      strncpy(prevmsgbuf, g_routebuf, k_traceBufSize);
     }
     else //got a repeat of the last received command, so ignore it
       continue;
@@ -2513,8 +2513,8 @@ void *buffer_and_send_task(void *args) {
 void initialize_estimate_and_move(unsigned int id){
   //parse route into array of points (global)
   char *str_num, *str_x, *str_y;   //parse raw route into x,y points. Format of string is:
-  char msgbuf[k_maxBufSize];
-  strncpy(msgbuf, g_routebuf, k_maxBufSize);
+  char msgbuf[k_traceBufSize];
+  strncpy(msgbuf, g_routebuf, k_traceBufSize);
   str_num = strtok(msgbuf, ":");   // n:x1,y1;x2,y2;...;xn,yn
   g_num_waypoints = atoi(str_num);
   // printf("g_num_waypoints = %d\n",g_num_waypoints);
