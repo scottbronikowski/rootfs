@@ -1,31 +1,3 @@
-pwd
-ps
-ps -ef
-halt
-screen /dev/RazorIMU 57600
-cd source
-ls
-mkdir razor-imu
-cd razor-imu/
-ls
-mkdir arduino
-cd arduino/
-ls
-mv *.ino Razor_AHRS/
-ls
-lla /dev/R*
-exit
-cd razor-9dof-ahrs-Release-v1.4.2/Arduino/
-ls
-cd Razor_AHRS/
-ls
-htop
-exit
-screen /dev/RazorIMU 57600
-exit
-arduino
-exit
-emacs today.text
 exit
 lsusb
 dmesg -T | tail
@@ -1998,3 +1970,31 @@ emacs ./source/the-force/the-force.cpp
 exit
 halt
 exit
+reboot
+cd /
+git status
+git add -A
+git commit -m "--Fixed bugs in the-force with trace-buffer size.  Autodrive now works from laptop"
+git push
+ps -ef | grep the-
+top
+/etc/init.d/ssh-tunnel.sh start
+ps
+ps -ef
+cd bin
+./run-emperor start
+reboot
+cd bin
+./run-emperor start
+./run-emperor stop
+exit
+
+halt
+exit
+reboot
+exit
+/etc/init.d/ssh-tunnel.sh start
+halt
+ps
+top
+halt

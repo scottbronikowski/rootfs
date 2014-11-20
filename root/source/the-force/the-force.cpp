@@ -510,426 +510,6 @@ void* emperor_monitor_bump_switches(void* args)
   pthread_exit(NULL);
 }
 
-// int the_force_parse_and_execute(char* msgbuf)
-// {
-//   char logbuf[k_LogBufSize];
-//   int retval;
-//   char *str_num, *str_x, *str_y;   //parse raw route into x,y points. Format of string is:
-//   str_num = strtok(msgbuf, ":");   // n:x1,y1;x2,y2;...;xn,yn
-//   int num_points = atoi(str_num);
-//   // printf("num_points = %d\n",num_points);
-//   if (num_points == 0) //bad string/no points, so must quit
-//   {
-//     printf("IMPROPERLY FORMATTED STRING passed to the_force_parse_and_execute, exiting\n");
-//     //play error sound here?
-//     return -1;
-//   }
-//   location_t loc[num_points];
-//   char msg_buf[k_msg_buf_bytes];
-//   location_t the_point;
-//   bool at_the_point;
-//   double the_distance, phi, phi_theta_diff;
-//   pose_t the_robot = g_my_pose; //copy in from global location variable
-//   char motor[k_maxBufSize]; //for logging motor command
-//   char motor_prev[k_maxBufSize]; //previous motor command
-//   //for sensor reading
-//   double encoder_logtime,imu_logtime,tmp_logtime,gps_logtime;
-//   unsigned long encoder_time,encoder_dt,imu_time,imu_dt;
-//   float L,R;
-//   float Yaw,Pitch,Roll,Yawa,MAG_ha,MAG_h,Ax,Ay,Az,Mx,My,Mz,Gx,Gy,Gz;
-//   float Lat, Long, Alt, HDOP, Quality, Heading, MagVar, Speed;
-//   int year, month, day, hour, min, sec, motor_cmd_L, motor_cmd_R;
-//   Mat Measurement = Mat::zeros(7,1,CV_32F);
-//   int read_encoder=0,read_imu=0, read_gps_gga=0, read_gps_rmc=0;
-//   int encoder_items, imu_items, gps_items_gga, gps_items_rmc;
-//   Mat control = Mat::zeros(2,1,CV_32F);
-//   Mat MeasurementModel = Mat::zeros(7,8,CV_32F);
-//   Mat MeasurementModel_noGPS = Mat::zeros(7,8,CV_32F);
-//   Mat TransitionModel =  Mat::zeros(8,8,CV_32F);
-//   KalmanFilter KF(8, 7, 2); // 8 state variables, 7 measurements, 2 inputs
-
-//   //finish parsing route into points
-//   for (int i = 0; i < num_points; i++)
-//   {
-//     str_x = strtok(NULL, ",");
-//     str_y = strtok(NULL, ";");
-//     loc[i].x = atof(str_x);
-//     loc[i].y = atof(str_y);
-//     //printf("loc[%d]: x = %f, y = %f\n", i, loc[i].x, loc[i].y);
-//   }
-
-//   //start cameras
-//   if (cam_thread_should_die) //only start if not already running
-//   {
-//     cam_thread_should_die = FALSE;
-//     pthread_attr_t attributes;
-//     pthread_attr_init(&attributes);
-//     pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
-//     pthread_create(&cam_thread, &attributes, emperor_run_cameras, NULL);
-//     sprintf(logbuf, "executed: %s", cmd_start_cameras);
-//     retval = emperor_log_data(logbuf, log_sockfd);
-//     if (retval != 0)
-//       printf("logging failed for \'%s\'\n", logbuf);
-//     pthread_attr_destroy(&attributes);
-//     sleep(2); //small sleep to allow cameras to get started before moving
-//   }
-//   //initialize Kalman Filter
-//   KF.measurementNoiseCov = *(Mat_<float>(7,7) <<
-//                              mXN, 0,   0,       0,        0,    0,    0,     
-//                              0,   mYN, 0,       0,        0,    0,    0,     
-//                              0,   0,   mThetaN, 0,        0,    0,    0,     
-//                              0,   0,   0,       mdThetaN, 0,    0,    0,     
-//                              0,   0,   0,       0,        mSLN, 0,    0,     
-//                              0,   0,   0,       0,        0,    mSRN, 0,     
-//                              0,   0,   0,       0,        0,    0,    mAN);
-
-//   KF.processNoiseCov = *(Mat_<float>(8,8) <<
-// 			 pXN, 0,   0,       0,        0,    0,    0,     0,     
-// 			 0,   pYN, 0,       0,        0,    0,    0,     0,     
-// 			 0,   0,   pThetaN, 0,        0,    0,    0,     0,    
-// 			 0,   0,   0,       pdThetaN, 0,    0,    0,     0,     
-// 			 0,   0,   0,       0,        pSLN, 0,    0,     0,     
-// 			 0,   0,   0,       0,        0,    pSRN, 0,     0,    
-// 			 0,   0,   0,       0,        0,    0,    pdSLN, 0,
-// 			 0,   0,   0,       0,        0,    0,    0,     pdSRN);
-
-//   KF.controlMatrix = *(Mat_<float>(8,2) <<
-// 		       0,     0,
-// 		       0,     0,
-// 		       0,     0,
-// 		       0,     0,
-// 		       0,     0,
-// 		       0,     0,
-// 		       alpha, 0,
-// 		       0,     alpha);
-
-//   // measure x,y,theta,dtheta,sl,sr, and acceleration, which is avg of wheel accelerations
-//   MeasurementModel = *(Mat_<float>(7,8) <<
-// 			 1, 0, 0, 0, 0, 0,  0,   0,
-// 			 0, 1, 0, 0, 0, 0,  0,   0,
-// 			 0, 0, 1, 0, 0, 0,  0,   0,
-// 			 0, 0, 0, 1, 0, 0,  0,   0,
-// 			 0, 0, 0, 0, 1, 0,  0,   0,
-// 			 0, 0, 0, 0, 0, 1,  0,   0,
-// 			 0, 0, 0, 0, 0, 0,  .5,  .5);
-
-//   // measure theta,dtheta,sl,sr, and acceleration, which is avg of wheel accelerations        
-//   MeasurementModel_noGPS = *(Mat_<float>(7,8) <<
-// 			       0, 0, 0, 0, 0, 0,  0,   0,
-// 			       0, 0, 0, 0, 0, 0,  0,   0,
-// 			       0, 0, 1, 0, 0, 0,  0,   0,
-// 			       0, 0, 0, 1, 0, 0,  0,   0,
-// 			       0, 0, 0, 0, 1, 0,  0,   0,
-// 			       0, 0, 0, 0, 0, 1,  0,   0,
-// 			       0, 0, 0, 0, 0, 0,  .5,   .5);
-//   //initialize state to robot's current pose
-//   KF.statePre.at<float>(0) = the_robot.x;
-//   KF.statePost.at<float>(0) = the_robot.x;
-//   KF.statePre.at<float>(1) = the_robot.y;
-//   KF.statePost.at<float>(1) = the_robot.y;
-//   KF.statePre.at<float>(2) = the_robot.theta; 
-//   KF.statePost.at<float>(2) = the_robot.theta;
-//   KF.statePre.at<float>(3) = 0; //dtheta
-//   KF.statePost.at<float>(3) = 0;
-//   KF.statePre.at<float>(4) = 0; //L wheel speed
-//   KF.statePost.at<float>(4) = 0;
-//   KF.statePre.at<float>(5) = 0; //R wheel speed
-//   KF.statePost.at<float>(5) = 0;
-//   KF.statePre.at<float>(6) = 0; //L wheel acceleration
-//   KF.statePost.at<float>(6) = 0;
-//   KF.statePre.at<float>(7) = 0; //R wheel acceleration
-//   KF.statePost.at<float>(7) = 0;
-
-//   //loop through points, going to each in turn
-//   sensor_pipe_open = true;  //first open sensor pipe to start getting data from sensors
-//   for (int i = 0; i < num_points; i++)
-//   {
-//     the_point = loc[i];
-//     at_the_point = false;
-//     memset(motor,0,k_maxBufSize); //reset motor and motor_prev buffers
-//     memset(motor_prev,0,k_maxBufSize);
-//     while (!at_the_point)
-//     {//INNER LOOP FOR READ/UPDATE/CHECK UNTIL POINT REACHED
-//       //printf("Entering sensor read loop\n");
-//       while (1)
-//       {//inner inner loop that reads and parses sensor data into variables
-// 	//read sensor data from pipe
-// 	retval = read(sensor_pipe[0], &msg_buf, k_msg_buf_bytes);
-// 	if (retval < 0)
-// 	{
-// 	  perror("read from sensor_pipe[0]:");
-// 	  continue; //try reading again
-// 	}
-// 	//parse text back into variables
-// 	encoder_items = sscanf(msg_buf,"%lf:ENC:time:%lu:dt:%lu:L:%f:R:%f:MCL:%d:MCR:%d",
-// 			       &tmp_logtime,&encoder_time,&encoder_dt,&L,&R,
-// 			       &motor_cmd_L,&motor_cmd_R);
-// 	imu_items = sscanf(msg_buf,"%lf:IMU:time:%lu:dt:%lu:"
-// 			   "Y:%f:P:%f:R:%f:"
-// 			   "Y(a):%f:M_h(a):%f:M_h:%f:"
-// 			   "Ax:%f:Ay:%f:Az:%f:Mx:%f:My:%f:Mz:%f:"
-// 			   "Gx:%f:Gy:%f:Gz:%f",
-// 			   &tmp_logtime,&imu_time,&imu_dt,
-// 			   &Yaw,&Pitch,&Roll,
-// 			   &Yawa,&MAG_ha,&MAG_h,
-// 			   &Ax,&Ay,&Az,
-// 			   &Mx,&My,&Mz,
-// 			   &Gx,&Gy,&Gz);
-// 	gps_items_gga = sscanf(msg_buf,"%lf:GPS:GGA:Lat:%f:Long:%f:Alt:%f m:HDOP:%f:"
-// 			       "Quality:%f:Time:%d:%d:%d",
-// 			       &tmp_logtime, &Lat, &Long, &Alt, &HDOP, &Quality,
-// 			       &hour, &min, &sec);
-// 	gps_items_rmc = sscanf(msg_buf,"%lf:GPS:RMC:Lat:%f:Long:%f:Heading:%f:MagVar:%f:"
-// 			       "Speed:%f kt:Date:%d-%d-%d:Time:%d:%d:%d",
-// 			       &tmp_logtime, &Lat, &Long, &Heading, &MagVar, &Speed,
-// 			       &year, &month, &day, &hour, &min, &sec);
-// 	if (gps_items_rmc == 12)
-// 	{
-// 	  gps_logtime = tmp_logtime;
-// 	  read_gps_rmc = 1;
-// 	}
-// 	if (gps_items_gga == 9)
-// 	{
-// 	  gps_logtime = tmp_logtime;
-// 	  read_gps_gga = 1;
-// 	}
-// 	if (encoder_items == 7)
-//       	{
-// 	  encoder_logtime=tmp_logtime;
-//       	  read_encoder=1;
-//       	}
-// 	if (imu_items == 18)
-//       	{
-// 	  imu_logtime=tmp_logtime;
-// 	  read_imu=1;
-//       	}
-// // 	if ((read_imu==1 && read_encoder==1) && (read_gps_gga==1 || read_gps_rmc==1))
-// // 	{ //update with GPS
-// // 	  Measurement.at<float>(0) = Long;
-// // 	  Measurement.at<float>(1) = Lat;
-// // 	  Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
-// // 	  //degrees north is 0 east is positive->(radians east 0 north positive)
-// // 	  Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
-// // 	  // rotation around z in degrees/sec ->(radians/sec)
-// // 	  Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
-// // 	  //ticks * meters/tick / sec = m/s
-// // //L/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(left_ticks_per_cm); 
-// // 	  // cm traveled in last time period -> (meters/sec)
-// // 	  Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
-// // //R/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(right_ticks_per_cm); 
-// // 	  // cm traveled in last time period -> (meters/sec)
-// // 	  Measurement.at<float>(6) = -(Ax-1)/100; 
-// // 	  // cm/s^2 -> (m/s^2)       // x forward y right
-// // 	  read_gps_gga = 0;
-// // 	  read_gps_rmc = 0;
-// // 	  read_imu=0;
-// // 	  read_encoder=0;
-// // 	  break; //get out of the loop once Measurement is set
-// // 	}
-// 	if (read_imu==1 && read_encoder==1)
-// 	{ //update without GPS
-// 	  Measurement.at<float>(0) = 0; //no gps for now
-// 	  Measurement.at<float>(1) = 0; //no gps for now
-// 	  Measurement.at<float>(2) = (-Yaw+90)*k_PI/180 ; 
-// 	  //degrees north is 0 east is positive->(radians east 0 north positive)
-// 	  Measurement.at<float>(3) = -(Gz-gyro_offset)*radians_per_gyro_unit;
-// 	  // rotation around z in degrees/sec ->(radians/sec)
-// 	  Measurement.at<float>(4) = L*tau_L/(((float)((int)encoder_dt))/1000.0);
-// 	  //ticks * meters/tick / sec = m/s
-// //L/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(left_ticks_per_cm); 
-// 	  // cm traveled in last time period -> (meters/sec)
-// 	  Measurement.at<float>(5) = R*tau_R/(((float)((int)encoder_dt))/1000.0);
-// 	  //ticks * meters/tick / sec = m/s
-// //R/100.0/(((float)((int)encoder_dt))/1000.0);//*(avg_ticks_per_cm)/(right_ticks_per_cm); 
-// 	  // cm traveled in last time period -> (meters/sec)
-// 	  Measurement.at<float>(6) = -(Ax-1)/100; 
-// 	  // cm/s^2 -> (m/s^2)       // x forward y right
-// 	  read_imu=0;
-// 	  read_encoder=0;
-// 	  break; //get out of the loop once Measurement is set
-// 	}
-//       } //if we get out of this loop, Measurement has a new reading
-//       //printf("Exited sensor read loop\n");
-      
-//       //update current position via Kalman filter
-//       TransitionModel = ComputeTransitionMatrix(KF.statePost, encoder_dt/1000.0);
-//       //using encoder's dt for now
-
-//       // NEEDS WORK: hard coded and ignores input to rover motors
-//       float CL = 0;
-//       float CR = 0;
-//       control = *(Mat_<float>(2,1) << CL,CR);      
-
-//       //fix possible loop-around in thetas
-//       while (Measurement.at<float>(2) <= KF.statePost.at<float>(2) - k_PI)
-// 	Measurement.at<float>(2) += 2*k_PI;
-//       while (Measurement.at<float>(2) >= KF.statePost.at<float>(2) + k_PI)
-// 	Measurement.at<float>(2) -= 2*k_PI;
-
-//       // NEEDS WORK: we always ignore GPS
-//       KF = execute_time_step(KF, TransitionModel,
-// 			     MeasurementModel_noGPS, KF.controlMatrix, Measurement,control);
-
-//       //KF updated, write x, y, theta back into the_robot
-//       the_robot.x = KF.statePost.at<float>(0);
-//       the_robot.y = KF.statePost.at<float>(1);
-//       the_robot.theta = KF.statePost.at<float>(2);
-//       sprintf(logbuf,"ESTIMATE:X:%f:Y:%f:THETA:%f", 
-// 	      the_robot.x, the_robot.y, the_robot.theta);
-//       retval = sensors_log_data(logbuf);
-//       if (retval != 0)
-// 	printf("ERROR logging estimate\n");
-//       //printf("I am at x = %f, y = %f, theta = %f\n", the_robot.x, the_robot.y, the_robot.theta); 
-
-
-//       //compare current position to current point
-//       the_distance = DistanceBetween(the_robot, the_point);
-//       //if d < some threshold, declare success and get next point
-//       if (the_distance <= k_distance_threshold)
-//       {
-// 	motor_stop(motor_fd); //stop robot
-// 	//log command (no need to check if different from last here) b/c break is coming
-// 	sprintf(logbuf,"REACHED POINT %d, auto-executed: motor_%s", i+1, cmd_stop);
-// 	//printf("%s\n",logbuf);
-// 	retval = emperor_log_data(logbuf, log_sockfd);
-// 	if (retval != 0)
-// 	  printf("logging failed for \'%s'\n", logbuf);
-// 	//***LOG INTO IMU LOG AS WELL***
-// 	sprintf(logbuf,"\nWAYPOINT w %f %f\n", the_point.x, the_point.y);
-// 	retval = sensors_log_data(logbuf);
-// 	if (retval != 0)//(!sensors_send_data(logbuf, 1))
-// 	   printf("ERROR logging waypoint\n");
-// 	// don't need to copy stop into motor_prev b/c motor_prev gets reset at top of loop
-// 	//-->first command of next loop will always get executed
-// 	at_the_point = true; //not sure about this
-// 	//gets reset at start of next loop, so it's more like a while(1) loop
-// 	break;
-//       }
-//       //else move 
-//       //Steps: 1. Decide command 
-//       //       2. check against previous command-->send and log only if different
-//       phi = AngleBetween(the_robot, the_point);
-//       //fix possible loop-around in thetas
-//       while (phi <= the_robot.theta - k_PI)
-// 	phi += 2*k_PI;
-//       while (phi >= the_robot.theta + k_PI)
-// 	phi -= 2*k_PI;
-//       phi_theta_diff = phi - the_robot.theta;
-//       memset(motor,0,k_maxBufSize); //clear for new command
-//       if (fabs(phi_theta_diff) < k_angle_threshold_2) //drive straight
-//       {
-// 	strncpy(motor, cmd_forward_2, strlen(cmd_forward_2)); //stay with speed 2 for now
-// 	if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
-// 	  continue; //go back to top of position-checking loop
-// 	else
-// 	{
-// 	  motor_forward_2(motor_fd); //send command to motors
-// 	  memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
-// 	  strncpy(motor_prev, motor, strlen(motor));
-// 	}
-//       }
-//       else if (phi_theta_diff < 0) //need to turn or pivot right
-//       {//***NEED TO INCLUDE STOPS WHEN COMING OUT OF/GOING INTO PIVOTS
-// 	//decide if pivot or turn
-// 	if (fabs(phi_theta_diff) < k_angle_threshold_1) //turn right
-// 	{
-// 	  strncpy(motor, cmd_forward_right_2, strlen(cmd_forward_right_2)); 
-// 	  //stay with speed 2 for now
-// 	  if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
-// 	    continue; //go back to top of position-checking loop
-// 	  else
-// 	  {
-// 	    motor_stop(motor_fd); //stop before turning in case coming out of a pivot
-// 	    motor_forward_right_2(motor_fd); //send command to motors
-// 	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
-// 	    strncpy(motor_prev, motor, strlen(motor));
-// 	  }
-// 	}
-// 	else //pivot right
-// 	{
-// 	  strncpy(motor, cmd_pivot_right_1, strlen(cmd_pivot_right_1)); 
-// 	  if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
-// 	    continue; //go back to top of position-checking loop
-// 	  else
-// 	  {
-// 	    motor_stop(motor_fd); //stop before pivoting
-// 	    motor_pivot_right_1(motor_fd); //send command to motors
-// 	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
-// 	    strncpy(motor_prev, motor, strlen(motor));
-// 	  }
-// 	}
-//       }
-//       else // phi_theta_diff > 0, so need to turn or pivot left
-//       {
-// 	if (fabs(phi_theta_diff) < k_angle_threshold_1) //turn left
-// 	{
-// 	  strncpy(motor, cmd_forward_left_2, strlen(cmd_forward_left_2)); 
-// 	  //stay with speed 2 for now
-// 	  if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
-// 	    continue; //go back to top of position-checking loop
-// 	  else
-// 	  {
-// 	    motor_stop(motor_fd); //stop before turning in case coming out of a pivot
-// 	    motor_forward_left_2(motor_fd); //send command to motors
-// 	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
-// 	    strncpy(motor_prev, motor, strlen(motor));
-// 	  }
-// 	}
-// 	else //pivot left
-// 	{
-// 	  strncpy(motor, cmd_pivot_left_1, strlen(cmd_pivot_left_1)); 
-// 	  if (strncmp(motor_prev, motor, k_maxBufSize) == 0) //repeated command
-// 	    continue; //go back to top of position-checking loop
-// 	  else
-// 	  {
-// 	    motor_stop(motor_fd); //stop before pivoting
-// 	    motor_pivot_left_1(motor_fd); //send command to motors
-// 	    memset(motor_prev,0,k_maxBufSize); //copy motor to motor_prev
-// 	    strncpy(motor_prev, motor, strlen(motor));
-// 	  }
-// 	}
-//       }
-//       //log the command if different from last 
-//       //(conintues will keep execution from getting here on repeated commands
-//       memset(logbuf,0,k_LogBufSize);
-//       sprintf(logbuf,"auto-executed: motor_%s", motor);
-//       //printf("%s\n", logbuf);
-//       retval = emperor_log_data(logbuf,log_sockfd);
-//       if (retval != 0)
-// 	printf("logging failed for \'%s'\n", logbuf);
-//     }
-//     //if we get here we've reached current_point, so restart loop with next point
-//   }
-//   //save final pose_t into global pose_t variable--enables persistence of location over 
-//   //multiple runs
-//   g_my_pose = the_robot;
-//   motor_stop(motor_fd); //an extra stop for good measure
-
-//   //stop cameras
-//   if (!cam_thread_should_die) //only stop if already running
-//   {
-//     sleep(2); //small sleep to allow cameras to run a few seconds after reaching destination
-//     cam_thread_should_die = TRUE;
-//     pthread_join(cam_thread, NULL);
-//     sprintf(logbuf, "executed: %s", cmd_stop_cameras);
-//     retval = emperor_log_data(logbuf, log_sockfd);
-//     if (retval != 0)
-//       printf("logging failed for \'%s\'\n", logbuf);
-//     printf("Cameras stopped\n");
-//   }
-//   //close sensor pipe
-//   sensor_pipe_open = false;
-
-//   //return
-//   return 0;
-  
-//   //**CAN'T GET HERE
-//   //if we get here without returning, it means we didn't match any commands
-//   printf("the_force_parse_and_execute error: no command matched msgbuf\n");
-//   return -1;
-// }
-
-
 //int emperor_log_data(char* databuf)
 int emperor_log_data(char* databuf, int log_fd)
 {
@@ -972,213 +552,37 @@ double emperor_current_time(void)
   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
 }
 
-//(from run-sensors)
-// bool run_sensors_setup(void)
+// void* consumer(void* args)
 // {
-//   int retval;
-//   char logbuf[k_LogBufSize];
-//   //initialize message buffer, count and their joint lock
-//   msg_count = 0;
-//   memset(g_msg_buf, 0, k_msg_buf_bytes);
-//   pthread_mutex_init(&msg_buf_and_count_lock, NULL);
-//   //connect to seykhl
-//   printf("Connecting to %s on port %s for IMU, Encoder, and GPS logging...\n",
-//   	 k_Server, k_imuLogPort);
-//   log_sensors_sockfd = -1;
-//   sprintf(logbuf, "ALL:IMU, Encoders, and GPS logging started");
-//   while (log_sensors_sockfd == -1)
+//   //printf("in consumer\n");
+//   char sendbuf[k_msg_buf_bytes];
+//   int num_messages;
+//   int threshold = (int)(0.9 * k_msg_buf_size);
+//   memset(sendbuf, 0, k_msg_buf_bytes);
+//   while (!consumer_thread_should_die)
 //   {
-//     log_sensors_sockfd = ClientConnect(k_Server, k_imuLogPort);
-//   }
-//   retval = sensors_log_data(logbuf); //LOCKING DONE INTERNALLY in sensors_log_data
-//   if (retval != 0)
-//   {
-//     printf("connection failed, exiting.\n");
-//     return false;
-//   }
-//   else
-//     printf("success!\n");
-//   //initialize variables
-//   producer_threads_should_die = false;
-//   consumer_thread_should_die = false;
-//   g_encoders_data = new encoders_data_t;
-//   g_imu_data = new imu_data_t;
-//   g_parser = NMEAParser();
-//   //open fds for imu, encoders, GPS
-//   if (!sensors_open_serial_port(imu_fd, imu_file, sensors_speed))
-//   {
-//     perror("Error opening serial port for IMU:");
-//     return false;
-//   }
-//   if (!sensors_open_serial_port(encoders_fd, encoders_file, sensors_speed))
-//   {
-//     perror("Error opening serial port for encoders:");
-//     return false;
-//   }
-//   if (!sensors_open_serial_port(gps_fd, gps_file, gps_speed))
-//   {
-//     perror("Error opening serial port for GPS:");
-//     return false;
-//   }
-//   //printf("fds opened\n");
-
-//   //init imu & encoders
-//   if (!sensors_init(imu_fd, imu_init_string, imu_input_pos))
-//   {
-//     perror("Error in IMU init:");
-//     return false;
-//   }
-//   if (!sensors_init(encoders_fd, encoders_init_string, encoders_input_pos))
-//   {
-//     perror("Error in encoders init:");
-//     return false;
-//   }
-//   //init GPS (just get file pointer from fd)
-//   gps_file_ptr = fdopen(gps_fd, "r");
-
-//   //success if we get here
-//   printf("run_sensors_setup() succeeded\n");
-//   return true;
-// }
-
-// void run_sensors_start(void)
-// {
-//   pthread_attr_t attributes;
-//   pthread_attr_init(&attributes);
-//   pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
-//   //run null loop to clear serial buffer
-//   struct timeval mark, now;
-//   //char dummybuf[k_LogBufSize];
-//   gettimeofday(&mark, NULL);
-//   gettimeofday(&now, NULL);
-//   while (sensors_elapsed_ms(mark, now) < 200)
-//   {
-//     imu_read_data(g_imu_data); //read the data and do nothing
-//     encoders_read_data(g_encoders_data);
-//     //gps_read_data(dummybuf);
-//     gettimeofday(&now, NULL);  //update time hack
-//   }
-//   //start the threads
-//   pthread_create(&producer_threads[0], &attributes, producer_imu, NULL);
-//   pthread_create(&producer_threads[1], &attributes, producer_encoders, NULL);
-//   pthread_create(&producer_threads[2], &attributes, producer_gps, NULL);
-//   pthread_create(&consumer_thread, &attributes, consumer, NULL);
-//   pthread_attr_destroy(&attributes); //done with this
-//   printf("run_sensors_start() complete\n");
-// }
-
-// void* producer_imu(void* args)
-// {
-//   //printf("in producer_imu\n");
-//   int r;
-//   char imubuf[k_LogBufSize];
-//   while (!producer_threads_should_die)
-//   {
-//     memset(imubuf, 0, k_LogBufSize);
-//     if (imu_read_data(g_imu_data))
-//     { //successful read, so put into imubuf
-//       r = snprintf(imubuf, k_LogBufSize, "IMU:time:%lu:dt:%lu:"
-// 		   "Y:%.2f:P:%.2f:R:%.2f:"
-// 		   "Y(a):%.2f:M_h(a):%.2f:M_h:%.2f:"
-// 		   "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
-// 		   "Gx:%.2f:Gy:%.2f:Gz:%.2f",
-// 		   g_imu_data->timestamp,
-// 		   g_imu_data->dt,
-// 		   g_imu_data->data[0], g_imu_data->data[1], g_imu_data->data[2],
-// 		   g_imu_data->data[3], g_imu_data->data[4], g_imu_data->data[5],
-// 		   g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
-// 		   g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
-// 		   g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
-//       if (r > k_LogBufSize)
-// 	sprintf(imubuf,"IMU:BOGUS READING");
+//     pthread_mutex_lock(&msg_buf_and_count_lock); //GRABBING THE LOCK
+//     //printf("consumer has lock\n");
+//     if (msg_count >= threshold)
+//     {
+//       num_messages = msg_count; //copy message count
+//       memcpy(sendbuf, g_msg_buf, (num_messages * k_LogBufSize)); //copy the buffer
+//       msg_count = 0; //reset msg_count
+//       pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
+//       if (!sensors_send_data(sendbuf, num_messages)) //sending the copy
+//       { //had an error in sensors_send_data
+// 	printf("THIS SHOULDN'T HAVE HAPPENED\n");
+//       }
+//       memset(sendbuf, 0, k_msg_buf_bytes);
 //     }
-//     else //read failed, so log failure
-//       sprintf(imubuf, "IMU:IMU data read failed");
-//     //send the data to the message buffer
-//     if (sensors_log_data(imubuf) != 0)
-//       printf("producer_imu: sensors_log_data(imubuf) failed\n");
+//     else
+//     {//release lock and wait a bit before checking again
+//       pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
+//       usleep(1000);  //might need to sleep longer here
+//     }
 //   }
 //   return NULL;
 // }
-
-// void* producer_encoders(void* args)
-// {
-//   //printf("in producer_encoders\n");
-//   char encoderbuf[k_LogBufSize];
-//   while (!producer_threads_should_die)
-//   {
-//     memset(encoderbuf, 0, k_LogBufSize);
-//     if (encoders_read_data(g_encoders_data))
-//     { //successful read, so put into encoderbuf
-//       sprintf(encoderbuf,"ENC:time:%lu:dt:%lu:L:%.1f:R:%.1f:MCL:%d:MCR:%d",
-// 	      g_encoders_data->timestamp, g_encoders_data->dt,
-// 	      g_encoders_data->ticks[0], g_encoders_data->ticks[1],
-// 	      g_motor_cmd_L, g_motor_cmd_R);
-//     }
-//     else  //read failed, so log failure
-//       sprintf(encoderbuf, "ENC:Encoders data read failed");
-//     //send the data to the message buffer
-//     if (sensors_log_data(encoderbuf) != 0)
-//       printf("producer_encoders: sensors_log_data(encoderbuf) failed\n");
-//   }
-//   return NULL;
-// }
-
-// void* producer_gps(void* args)
-// {
-//   //printf("in producer_gps\n");
-//   int retval;
-//   char gpsbuf[k_LogBufSize];
-//   char tempbuf[k_LogBufSize];
-//   while (!producer_threads_should_die)
-//   {
-//     memset(gpsbuf, 0, k_LogBufSize);
-//     memset(tempbuf, 0, k_LogBufSize);
-//     retval = gps_read_data(tempbuf);
-//     if (retval == 0)
-//     { //successful read, so send it
-//       sprintf(gpsbuf, "GPS:%s", tempbuf);
-//       if (sensors_log_data(gpsbuf) != 0)
-// 	printf("producer_gps: sensors_log_data(gpsbuf) failed\n");
-//     }
-//     else if (retval == -1)  //read failed, so log failure and try again
-//       sprintf(gpsbuf, "GPS:GPS data read failed");
-//     // else retval == 1, which is a no read, so try again
-//   }
-//   return NULL;
-// }
-
-void* consumer(void* args)
-{
-  //printf("in consumer\n");
-  char sendbuf[k_msg_buf_bytes];
-  int num_messages;
-  int threshold = (int)(0.9 * k_msg_buf_size);
-  memset(sendbuf, 0, k_msg_buf_bytes);
-  while (!consumer_thread_should_die)
-  {
-    pthread_mutex_lock(&msg_buf_and_count_lock); //GRABBING THE LOCK
-    //printf("consumer has lock\n");
-    if (msg_count >= threshold)
-    {
-      num_messages = msg_count; //copy message count
-      memcpy(sendbuf, g_msg_buf, (num_messages * k_LogBufSize)); //copy the buffer
-      msg_count = 0; //reset msg_count
-      pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
-      if (!sensors_send_data(sendbuf, num_messages)) //sending the copy
-      { //had an error in sensors_send_data
-	printf("THIS SHOULDN'T HAVE HAPPENED\n");
-      }
-      memset(sendbuf, 0, k_msg_buf_bytes);
-    }
-    else
-    {//release lock and wait a bit before checking again
-      pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
-      usleep(1000);  //might need to sleep longer here
-    }
-  }
-  return NULL;
-}
 
 bool sensors_open_serial_port(int &fd, const char* filename, 
 			      const speed_t speed, const int bytes_per_read)
@@ -1562,55 +966,6 @@ double sensors_current_time(void)
   if (gettimeofday(&time, NULL)!=0) printf("gettimeofday failed");
   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
 }
-
-// int sensors_log_data(char* logbuf)
-// {
-//   double now = sensors_current_time(); 
-//   char temp[k_LogBufSize];
-//   int retval;
-//   memset(temp, 0, k_LogBufSize);
-//   retval = snprintf(temp, k_LogBufSize, "%.6f:%s\n", now, logbuf);
-//   if (retval >= k_LogBufSize)
-//   {
-//     printf("sensors_log_data: message truncated: %s\n  %s\n", logbuf, temp);
-//     return -1;
-//   }
-//   else if (retval < 0)
-//   {
-//     printf("sensors_log_data: encoding eror\n");
-//     return -1;
-//   }
-//   else 
-//   { //if we get here, we've got something to write to g_msg_buf
-//     if (sensor_pipe_open) //only log if pipe is open
-//     {
-//       pthread_mutex_lock(&msg_buf_and_count_lock); //GRABBING THE LOCK
-//       retval = write(sensor_pipe[1], temp, k_LogBufSize);
-//       if (retval != k_LogBufSize)
-// 	printf("sensors_log_data: error writing to pipe, retval = %d, strlen(temp) = %d\n", retval, strlen(temp));
-//       //printf("producer has lock\n");
-//       if (msg_count < k_msg_buf_size)
-//       { //we have room in the buffer, so add the new message
-// 	memset(&g_msg_buf[msg_count * k_LogBufSize], 0, k_LogBufSize); //clear out old data
-// 	strncpy(&g_msg_buf[msg_count * k_LogBufSize], temp, k_LogBufSize); //use this to pad buffer
-// 	++msg_count; //increment msg_count
-// 	pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
-// 	//printf("producer released lock after logging to buffer\n");
-// 	//printf("logged: %s", msgbuf);
-// 	return 0; //success
-//       }
-//       else
-//       { //buffer is full
-// 	pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
-// 	printf("sensors_log_data: buffer full, message discarded\n");
-// 	printf("%s", temp);
-// 	return -1;
-//       }
-//     }
-//     else
-//       return 0;
-//   }
-// }
 
 bool sensors_send_data(char* msgbuf, int num_messages)
 {
@@ -2806,7 +2161,7 @@ void read_estimate_and_move(unsigned int id) {
 	  return; //go back to top of position-checking loop
 	else
 	{
-	  motor_stop(motor_fd); //stop before turning in case coming out of a pivot
+	  //motor_stop(motor_fd); //stop before turning in case coming out of a pivot
 	  motor_forward_right_2(motor_fd); //send command to motors
 	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
 	  strncpy(g_motor_prev, motor, strlen(motor));
@@ -2814,13 +2169,13 @@ void read_estimate_and_move(unsigned int id) {
       }
       else //pivot right
       {
-	strncpy(motor, cmd_pivot_right_1, strlen(cmd_pivot_right_1)); 
+	strncpy(motor, cmd_pivot_right_2, strlen(cmd_pivot_right_2)); 
 	if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
 	  return; //go back to top of position-checking loop
 	else
 	{
-	  motor_stop(motor_fd); //stop before pivoting
-	  motor_pivot_right_1(motor_fd); //send command to motors
+	  //motor_stop(motor_fd); //stop before pivoting
+	  motor_pivot_right_2(motor_fd); //send command to motors
 	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
 	  strncpy(g_motor_prev, motor, strlen(motor));
 	}
@@ -2836,7 +2191,7 @@ void read_estimate_and_move(unsigned int id) {
 	  return; //go back to top of position-checking loop
 	else
 	{
-	  motor_stop(motor_fd); //stop before turning in case coming out of a pivot
+	  //motor_stop(motor_fd); //stop before turning in case coming out of a pivot
 	  motor_forward_left_2(motor_fd); //send command to motors
 	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
 	  strncpy(g_motor_prev, motor, strlen(motor));
@@ -2844,13 +2199,13 @@ void read_estimate_and_move(unsigned int id) {
       }
       else //pivot left
       {
-	strncpy(motor, cmd_pivot_left_1, strlen(cmd_pivot_left_1)); 
+	strncpy(motor, cmd_pivot_left_2, strlen(cmd_pivot_left_2)); 
 	if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
 	  return; //go back to top of position-checking loop
 	else
 	{
-	  motor_stop(motor_fd); //stop before pivoting
-	  motor_pivot_left_1(motor_fd); //send command to motors
+	  //motor_stop(motor_fd); //stop before pivoting
+	  motor_pivot_left_2(motor_fd); //send command to motors
 	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
 	  strncpy(g_motor_prev, motor, strlen(motor));
 	}
