@@ -1,20 +1,3 @@
-exit
-lsusb
-dmesg -T | tail
-dmesg | tail
-halt
-screen /dev/RazorIMU 57600
-ls /dev/R*
-screen /dev/RazorIMU 57600
-exit
-lsmod
-ls
-exit
-ls
-halt
-cd source/libbeagle/
-ls
-grep -ri pread *
 cd ..
 ls
 cd razor-imu/
@@ -1997,4 +1980,21 @@ exit
 halt
 ps
 top
+halt
+cd source/the-force/
+ls
+emacs the-force.cpp &
+exit
+ls
+ping google.com
+reboot
+exit
+cd source/the-force/
+emacs the-force.cpp &
+make
+exit
+/etc/init.d/ssh-tunnel.sh start
+halt
+reboot
+exit
 halt
