@@ -10,19 +10,19 @@
 ### END INIT INFO
 
 start(){
-#    echo "before:"
-#    echo " date: "
-#    date
+    echo "before:"
+    echo " date: "
+    date
 #    echo " hwclock: "
 #    hwclock
-#    ntpdate -uvb ntp.ubuntu.com us.pool.ntp.org
-#    echo "Updated time"
-#     sleep 15
-#    echo "date : " 
-#    date
-     hwclock -w
-     echo "hwclock : "
-     hwclock
+    ntpdate -uvb 192.168.2.2 #ntp.ubuntu.com us.pool.ntp.org
+    echo "Updated time"
+    sleep 5
+    echo "date : " 
+    date
+    hwclock -w
+#    echo "hwclock : "
+#    hwclock
 #    echo "date again: "
 #    date
    }

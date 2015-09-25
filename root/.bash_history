@@ -1,356 +1,3 @@
-cd ..
-ls
-cd razor-imu/
-ls
-lla
-rep -ri 57600 *
-grep -ri 57600 *
-cd ../emperor/
-make
-lla /dev/RazorIMU 
-cd ../razor-imu/arduino/Razor_AHRS/
-ls
-screen /dev/RazorIMU 57600
-cd ~/razor-9dof-ahrs-Release-v1.4.2
-ls
-cd C++
-ls
-make
-g++ RazorAHRS.cpp Example.cpp -o example
-g++ -lpthread -D_REENTRANT RazorAHRS.cpp Example.cpp -o example
-g++ -lpthread -D_REENTRANT -c RazorAHRS.cpp
-ls
-g++ -lpthread -D_REENTRANT -c Example.cpp 
-g++ -o example RazorAHRS.o Example.o -lpthread
-ls
-./example 
-touch Makefile
-make
-make clean
-make
-make clean
-make
-./example 
-screen /dev/RazorIMU 57600
-htop
-cd ~/
-ls
-cd source/razor-imu/arduino/Razor_AHRS/
-ls
-grep -i millis *
-screen /dev/RazorIMU 57600
-exit
-lla /dev/RazorIMU 
-cd source/
-ls
-grep -ri log_data *
-screen /dev/RazorIMU 57600
-lla /dev/GPS
-cd motor_control/
-ls
-cat Makefile 
-cd ..
-ls
-cd camera/
-ls
-cat Makefile 
-cd ..
-cd razor-imu/
-ls
-touch razor-imu.cpp
-touch razor-imu.h
-ls
-cd ../emperor/
-ls
-make
-screen /dev/RazorIMU 57600
-make
-cd ../../include/
-ls
-lla
-ln -s /root/source/razor-imu/razor-imu.h ./razor-imu.h
-lla
-cd ../source/emperor/
-ls
-make
-grep -ri pread *
-cd ..
-grep -ri pread *
-grep -ri SIGALRM *
-grep -ri ALRM *
-ls
-cd libbeagle/
-lla
-cd main/src/
-ls
-lla
-grep -ri SIGALRM *
-grep -ri sig *
-grep -ri sigalrm *
-cat makefile 
-cd ..
-grep -ri signal *
-grep -ri sig *
-grep -ri timer *
-cd ~
-ls
-grep -ri timer *
-grep -ri sigalrm *
-cd rotary-encoder/
-ls
-cd bgwz/
-ls
-cd BeagleBone/
-ls
-cd libbeagle/
-ls
-grep -ri SIGALRM *
-grep -ri sig *
-grep -ri timer *
-lla
-cd main/
-lla
-cd src/
-ls
-lla
-cd ../../
-ls
-cd ..
-ls
-cd libbeagle/
-cd examples/
-ls
-cd rotary/
-ls
-grep -ri sig *
-lla
-./rotary 
-./my_rotary 
-lla
-cd ~/source/libbeagle/
-ls
-cd examples/
-ls
-cd rotary/
-ls
-lla
-./rotary 
-lla
-grep -ri SIGALRM *
-grep -ri sig *
-cat rotary.cpp 
-cat my_rotary.cpp 
-cat makefile 
-cd ../..
-grep -ri sig *
-grep -ri timer *
-grep -ri action *
-grep -ri sigact
-grep -ri sigact *
-cd examples/rotary/
-ls
-cat rotary.cpp 
-lla
-ls
-rsync -avrz seykhl:~/Downloads/rotary/rotary.cpp .
-lla
-chown root:root rotary.cpp
-lla
-cd ../../main/src/
-ls
-rsync -avrz seykhl:~/Downloads/rotary/rotary.* .
-lla
-chown root:root rotary.*
-lla
-cd../../
-ls
-cd ../../examples/
-ls
-cd rotary/
-ls
-make
-make clean
-make
-cat makefile 
-cd ..
-cd main/
-ls
-cd src/
-ls
-cat makefile 
-make clean
-make
-cd ../../examples/rotary/
-ls
-make
-./rotary 
-cd ~/source/emperor/
-ls
-make
-make clean
-make
-make clean
-make
-cd ../razor-imu/arduino/Razor_AHRS/
-ls
-grep compensate *
-grep output_mine *
-grep Compass_Heading *
-grep Matrix_update() *
-grep Matrix_update *
-grep GRAVITY *
-cd ../../../emperor/
-ls
-lla
-ls ../../bin
-lla ../../bin
-make
-grep -ri log_data *
-cd ../
-grep -ri log_data *
-cd emperor/
-make
-exit
-screen /dev/RazorIMU 57600
-cd razor-9dof-ahrs-Release-v1.4.2/C++/
-ls
-cd ..
-ls
-cd Matlab/
-ls
-cd ..
-cd Android/
-ls
-cd RazorExampleApp/
-ls
-acd src/
-cd src/
-ls
-cd de/
-ls
-cd tuberlin/
-ls
-cd qu
-ls
-cat RazorExample.java 
-cd RazorExampleApp
-cd ~/source/bin
-ls
-cd ~/source/
-ls
-cd ../bin/
-ls
-./emperor 
-exit
-arduino
-screen /dev/RazorIMU 57600
-ls
-cd bin
-ls
-cd path
-ls
-cd scc 
-cd ~
-cd scheme2c-bgc/
-ls
-cat README 
-cd /home/abarbu
-cd /
-ls
-cd home
-ls
-cd ~
-ls
-cat notes28jan14.txt 
-cat notes10feb14.txt 
-cat notes28jan14.txt 
-cat notes4march.txt 
-cat notes7march.txt 
-ls
-cat open-files-13-feb.txt 
-cat open-files-14-feb.txt 
-cat open-files-17-feb.txt 
-cat open-files-24-feb.txt 
-cat open-files-25-feb.txt 
-cat open-files-26-feb.txt 
-ardunio
-arduino
-htop
-exit
-emacs today.text
-exit
-lsusb
-ATZ
-AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
-ATZ
-AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0
-halt
-emacs today.text
-arduino
-exit
-˜ž`þž˜`þžf`
-
-
-halt
-emacs today.text
-cd bin
-./emperor 
-htop
-reboot
-cd bin
-ls
-./emperor 
-exit
-htop
-exit
-exit
-exit
-emacs today.text
-exit
-cd bin
-./emperor 
-exit
-reboot
-clear
-emacs today.text 
-cd bin
-./run-emperor start
-reboot
-emacs today.text
-emacs today.text &
-/etc/init.d/ssh-tunnel.sh stop
-/etc/init.d/ssh-tunnel.sh start
-ls
-top
-lsusb
-ps -ef | grep run-
-killall run-imu
-killall emperor
-ps -ef | grep ssh
-reboot
-emacs today.text
-cd source/razor-imu/arduino/Razor_AHRS/
-ls
-grep -ri millis *
-lla /dev/U*
-lla /dev/ttyU*
-cd ../
-cd ..
-make
-pkill run-imu
-make
-make clean
-make
-ls
-cd arduino/
-ls
-cd ..
-make
-ps -ef | grep screen
-kill -9 4036
-make
-make clean
-make
 cd bin
 ./run-emperor start
 ./run-emperor stop
@@ -1998,3 +1645,356 @@ halt
 reboot
 exit
 halt
+cd /
+git status
+git add -A
+git commit -m "--Changed k_distance_threshold in the-force.cpp to 10 cm (was 5 cm).  This commit represents the software used in collecting the msee-1-auto-drive and msee-1-generation datasets on 20-21nov2014"
+git push
+exit
+reboot
+exit
+top
+exit
+/etc/init.d/ssh-tunnel.sh start
+halt
+exit
+reboot
+exit
+ping google.com
+/etc/init.d/ssh-tunnel.sh start
+alt
+halt
+iwconfig
+cd /etc/network
+ls
+cat interfaces
+cd ../
+ls wp*
+cat wpa_supplicant.conf
+cd init.d/
+ls
+cat ssh-tunnel.sh
+vi ssh-tunnel.sh
+cd 
+cd source/camera/
+ls
+vi toollib-camera.cpp
+ls
+cd ../emperor/
+make
+date
+reboot
+dmesg
+date
+date -s "8 JAN 2014 14:41:00"
+date
+hwclock -w
+hwclock
+reboot
+cd source/
+ls
+grep -ri command *
+cd ../bin
+ls
+./run-emperor start
+cd ../source/
+cd camera/
+vi toollib-camera.cpp
+cd ..
+grep -ri k_Server *
+grep -ri 253 *
+cd camera/
+ls
+make clean
+make
+cd ..
+cd emperor/
+ls
+cat Makefile 
+make
+cd ..
+grep -ri 253 *
+grep -ri .253 *
+cd the-force/
+make
+cd ../../bin/
+ls
+./run-emperor start
+./run-emperor stop
+exit
+date
+hwclock
+hwclock -w
+hwclock
+ping google.com
+cat /etc/init.d/ssh-tunnel.sh
+ssh sbroniko@10.184.161.62
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ls
+cd source/emperor/
+ls
+make
+cd ../the-force/
+make
+cd ..
+grep -ri "waiting for command connection"
+grep -ri "waiting for command connection" *
+grep -ri command *.cpp
+grep -ri command *
+grep -ri connection *
+grep -ri server *
+grep -ri waiting *
+ls
+cd /etc
+ls
+cat wpa_supplicant.conf
+vi wpa_supplicant.conf
+ls
+ping google.com
+reboot
+emacs source/camera/toollib-camera.cpp &
+cd source/the-force/
+make
+cd ../emperor/
+make
+date
+ps -ef | grep ssh
+ping google.com
+cd /etc/init.d/ssh-tunnel.sh
+vi /etc/init.d/ssh-tunnel.sh
+/etc/init.d/ssh-tunnel.sh start
+ping google.com
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh start
+iwconfig
+ifconfig
+vi /etc/init.d/ssh-tunnel.sh
+/etc/init.d/ssh-tunnel.sh start
+cd source/camera/
+ls
+vi toollib-camera.cpp
+cd ../emperor/
+make
+cd ../the-force/
+make
+halt
+hatl
+halt
+ls
+l
+ls
+ls -al
+ls
+ping google.com
+iwconfig
+ifconfig
+vi /etc/init.d/ssh-tunnel.sh
+cd source/camera/
+vi toollib-camera.cpp 
+cd ../emperor/
+make
+cd ../the-force/
+make
+reboot
+halt
+ls
+date
+hwclock
+date -s "Tue May 12 10:49:22 EDT 2015
+date -s "May 12 10:49:50 EDT 2015"
+date
+hwclock -w
+hwclock
+reboot
+exit
+ls
+exit
+emacs source/camera/toollib-camera.cpp &
+cd source/emperor/
+ls
+make
+cd ../the-force/
+make
+exit
+cd bin
+./emperor 
+exit
+ls
+/etc/init.d/ssh-tunnel.sh stop
+cat /etc/init.d/ssh-tunnel.sh
+/etc/init.d/ssh-tunnel.sh start
+vi /root/.ssh/known_hosts 
+ssh sbroniko@10.184.167.1
+/etc/init.d/ssh-tunnel.sh start
+cd source/camera/
+vi toollib-camera.cpp
+reboot
+exit
+\ls
+ping google.com
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh start
+halt
+exti
+exit
+ls
+reboot
+exit
+exec env ENV='' PROMPT_COMMAND='' PS1=\#\$\  PS2='' PS3='' /bin/sh
+ifconfig
+ps -ef | grep ssh
+kill -9 926
+/etc/init.d/ssh-tunnel.sh start
+[A
+halt
+exit
+lsusb
+reboot
+exit
+halt
+exit
+halt
+ps -ef | grep the-
+ps -ef | grep emp*
+pkill emperor
+ps -ef | grep emp*
+exit
+ps -ef | grep the
+kill -9 1937
+ps -ef | grep the
+kill -9 2009
+ls
+halt
+exit
+pwd
+halt
+htop
+ps -ef | grep the
+ps -ef | grep emper
+reboot
+exit
+ps -ef
+htop
+exit
+halt
+exit
+reboot
+exit
+halt
+ps -ef | grep the-
+exit
+halt
+reboot
+ipconfig
+man ficonfig
+reboot
+halt
+date
+dmesg -tail
+dmesg | tail
+dmesg
+iwconfig
+date
+ls
+cd /etc/
+ls
+cd init.d/
+ls
+./time-update.sh 
+./time-update.sh start
+cat time-update.sh 
+ntpdate -uvb ntp.ubuntu.com us.pool.ntp.org
+ntpdate -u us.pool.ntp.org
+ping google.com
+iwconfig
+ifconfig
+ifconfig wlan1 down
+ifconfig wlan1 up
+ifconfig
+iwconfig
+reboot
+dmesg
+lsusb -v
+lsusb
+ip link
+ip link set wlan1 down
+ip link
+ip link set wlan1 up
+ip link
+iw dev wlan1 link
+ifconfig
+iw dev wlan1 scan
+iw devn wlan1 link
+iw dev wlan1 link
+iw dev
+dmesg | grep wlan
+ip link
+ifconfig
+iwconfig
+sudo dhclient
+iwconfig
+ifconfig
+dhclient -r wlan1
+dhclient wlan1
+ifconfig
+iwconfig
+reboot
+date
+date -s '2015-09-24 16:15:00'
+date
+hwclock
+hwclock -w
+hwclock
+reboot
+date
+date -s '2015-09-24 16:18:00'
+hwclock -w
+hwclock
+date
+ifconfig
+iwconfig
+dhclient -r wlan1
+dhclient wlan1
+dmesg | grep iwlwifi
+dmesg | grep firmware
+ip link set wlan1 down
+iwconfig
+ip link set wlan1 up
+iwconfig
+ifconfig
+ip addr
+ls /etc/init.d
+ls /etc/network
+cat /etc/network/interfaces
+cat /etc/wpa_supplicant.conf
+date
+reboot
+vi /etc/wpa_supplicant.conf
+reboot
+emacs &
+exit
+emacs &
+exit
+ssh -Y vader-rover
+exit
+emacs &
+ntp -u us.pool.ntp.org
+ntpdate -u us.pool.ntp.org
+date
+hwclock -w
+cd /etc/
+ls
+cat ntp.conf
+ls
+ntpq -d
+ntpq -p
+ntpdate -u 192.168.2.2
+exit
+ping google.com
+ifconfig
+iwconfig
+vi /etc/init.d/ssh-tunnel.sh
+/etc/init.d/ssh-tunnel.sh start
+date
+reboot

@@ -14,8 +14,8 @@ start(){
     #ifup wlan0
     #ntpdate -s -u us.pool.ntp.org
     #echo "Updated time with us.pool.ntp.org"
-    ssh -f -N -Y -R 22222:localhost:22 10.184.165.253
-    echo "Started reverse SSH tunnel to seykhl.ecn.purdue.edu"
+    ssh -f -N -Y -R 22222:localhost:22 sbroniko@192.168.2.2
+    echo "Started reverse SSH tunnel to laptop on rover-wifi"
 }
 
 stop(){
