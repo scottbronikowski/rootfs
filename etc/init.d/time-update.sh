@@ -15,7 +15,10 @@ start(){
     date
 #    echo " hwclock: "
 #    hwclock
+    sleep 5
     ntpdate -uvb 192.168.2.2 #ntp.ubuntu.com us.pool.ntp.org
+    sleep 5
+    ntpdate -uvb 192.168.2.2
     echo "Updated time"
     sleep 5
     echo "date : " 

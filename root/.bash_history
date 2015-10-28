@@ -1,61 +1,3 @@
-cd bin
-./run-emperor start
-./run-emperor stop
-./run-emperor start
-./run-emperor stop
-lla /dev/RazorIMU 
-screen /dev/RazorIMU 57600
-cd ../source/razor-imu/
-make
-cd ../../bin
-./run-imu 
-gdb
-gdb ./run-imu 
-./run-imu 
-screen /dev/RazorIMU 57600
-./run-imu 
-screen /dev/RazorIMU 57600
-./run-imu 
-screen /dev/RazorIMU 57600
-cd ..
-ls
-cd razor-9dof-ahrs-Release-v1.4.2
-ls
-cd C++
-ls
-cat RazorAHRS.cpp 
-cd ~/bin
-./run-imu 
-screen /dev/RazorIMU 57600
-./run-imu 
-screen /dev/RazorIMU 57600
-./run-imu 
-screen /dev/RazorIMU 57600
-./run-imu 
-screen /dev/RazorIMU 57600
-./run-imu 
-screen /dev/RazorIMU 57600
-./run-imu 
-screen /dev/RazorIMU 57600
-./run-imu 
-./run-emperor 
-./run-emperor start
-./run-imu 
-screen /dev/RazorIMU 57600
-./run-imu 
-screen /dev/RazorIMU 57600
-./run-imu 
-./run-emperor start
-htop
-emacs today.text
-cd bin
-./run-emperor start
-./run-emperor stop
-./run-emperor start
-reboot
-htop
-top
-htop
 exit
 cd bin
 ./run-emperor start
@@ -1998,3 +1940,61 @@ vi /etc/init.d/ssh-tunnel.sh
 /etc/init.d/ssh-tunnel.sh start
 date
 reboot
+date
+ntpq -p
+emacs /etc/ntp.conf &
+ntpdc -c sysinfo
+date
+cd /
+git status
+emacs ~/today.text &
+htop
+top
+htop
+exit
+shutdown
+halt
+killall ping
+s
+ls
+reboot
+ls
+cd bin/
+ls
+./emperor 
+ls
+exit
+ls
+ps -ef | grep ssh
+/etc/init.d/ssh-tunnel.sh stop
+/etc/init.d/ssh-tunnel.sh start
+ls
+halt
+emacs &
+ping 192.168.2.2
+ifconfig
+exit
+date
+emacs &
+exit
+date
+reboot
+ls /etc/init.d/
+cd /etc/init.d/
+ls ti*
+lla tim*
+lla keep*
+update-rc.d ./keepalive-ping.sh remove
+cp keepalive-ping.sh keepalive-ping-OLD.sh
+rm keepalive-ping.sh 
+exit
+ps -ef | grep ping
+reboot
+emacs today.text &
+exit
+emacs today.text &
+exit
+exit
+xclock
+exit
+emacs today.text &
