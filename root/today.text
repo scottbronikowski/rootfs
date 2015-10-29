@@ -724,3 +724,25 @@ Older:
   how GPS works, since it is at a different rate than the others.
 --Copied the-force.{cpp,h} to the-force-before-cam-barriers.{cpp,h} to
   have known working copies on hand.
+
+-----------git commit 7b9c3ca----------------
+
+29 Oct 15
+
+--Working on cleaning up the-force.{h,cpp} and implementing new
+  barrier.  Will have to have a second barrier that is always checked
+  by the camera thread, but is only checked once every 5 times by the
+  other threads.  Need also to be careful with the number of threads
+  each barrier waits for
+
+**THOUGHT**-->look at how individual images are stitched into a
+  video...do I set the framerate of 10.5 fps there?  If so, need to
+  change that.
+
+--Deleted some commented-out 'prepositional functions' in
+  the-force.cpp.  Not sure if these were important or not, or even
+  what my thinking was behind writing them.  Might need to look them
+  up in the future, so go back to previous commit or
+  the-force-before-cam-barriers.cpp.
+--Almost complete with cleanup, then need to build structure for new
+  barriers. 

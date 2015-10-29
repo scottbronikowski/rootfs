@@ -7,6 +7,8 @@
 
   Author: Scott Bronikowski
   Date: 16 October 2014
+
+  Edited beginning on 28 October 2015 to add a second barrier to control the camera thread and ensure that this thread executes at exactly 10 Hz while the other threads execute at 50 Hz.
 */
 
 #ifndef THE_FORCE_H
@@ -105,7 +107,6 @@ extern const char* pan_file;
 extern const char* tilt_file;
 extern const char* k_LogPort;
 extern const int k_msg_buf_threshold;
-//extern const int k_LogBufSize;
 //for bump switch monitoring
 extern const int bump_move_time;
 extern const int bump_read_size;
@@ -155,16 +156,8 @@ extern int gps_fd;
 extern FILE* gps_file_ptr;
 //for threading
 extern int msg_count;
-extern pthread_t producer_threads[3];
-extern pthread_t consumer_thread;
-extern bool producer_threads_should_die;
-extern bool consumer_thread_should_die;
 extern char g_msg_buf[k_msg_buf_bytes];
 extern pthread_mutex_t msg_buf_and_count_lock;
-// //**THIS IS PROBABLY WHERE I NEED TO DECLARE MY PIPE VARIABLES
-// extern int sensor_pipe[2];  //pipe for sensor data to go to main thread
-//                             //[0] is read end, [1] is write end
-// extern bool sensor_pipe_open;  //use to declare the pipe open or closed
 //for motor command sending (set in motor_control_functions.cpp)
 extern int g_motor_cmd_L;
 extern int g_motor_cmd_R;
@@ -181,16 +174,12 @@ extern int time_threads;
 extern double fps;
 extern bool route_complete;
 
-
-
-
 //structures
 //(from run-sensors)
 struct encoders_data_t {
   unsigned long timestamp;
   unsigned long dt;
-  float ticks[2]; //left ticks is ticks[0], right is ticks[1]
-  //float cm[2]; //left cm traveled is cm[0], right is cm[1]
+  float ticks[2]; //left ticks is ticks[0], right is ticks[
 };
 struct imu_data_t {
   float data[15]; //yaw, pitch, roll, adjusted yaw, adjusted mag_heading, raw mag_heading, accel x, accel y, accel z, mag x, mag y, mag z, gyro x, gyro y, gyro z
@@ -213,22 +202,14 @@ struct task_args {
   unsigned int id;
 };
 
-
 //prototypes 
 //(from emperor)
-//void emperor_signal_handler(int signum);
 void the_force_terminator(int signum);
 void* emperor_run_cameras(void* args);
 void* emperor_monitor_bump_switches(void* args);
 int emperor_log_data(char* databuf, int log_fd);
 double emperor_current_time(void);
 //(from run-sensors)
-// bool run_sensors_setup(void);
-// void run_sensors_start(void);
-// void* producer_imu(void* args);
-// void* producer_encoders(void* args);
-// void* producer_gps(void* args);
-void* consumer(void* args);
 bool sensors_open_serial_port(int &fd, const char* filename, 
 			      const speed_t speed, const int bytes_per_read = 1);
 bool sensors_set_blocking_io(int fd);
@@ -240,12 +221,8 @@ bool sensors_read_token(const std::string &token, char c, size_t &input_pos);
 bool encoders_read_data(encoders_data_t* data); 
 bool imu_read_data(imu_data_t* out_data);
 double sensors_current_time(void);
-//int sensors_log_data(char* logbuf);
 bool sensors_send_data(char* msgbuf, int num_messages);
-void sensors_terminator(int signum);
 int gps_read_data(char* logbuf);
-
-//int the_force_parse_and_execute(char* msgbuf);
 
 //(from data-analysis.cpp)
 double my_exp(double x);
@@ -254,11 +231,6 @@ double normalize_orientation(double angle);
 double orientation_plus(double x, double y);
 double orientation_minus(double x, double y);
 double AngleBetween(pose_t robot, location_t point);
-// double Left(Point2d robot, Point2d obstacle);
-// double Right(Point2d robot, Point2d obstacle);
-// double Front(Point2d robot, Point2d obstacle);
-// double Behind(Point2d robot, Point2d obstacle);
-// double Between(Point2d robot, Point2d obstacle1, Point2d obstacle2);
 
 //from Dan's log_to_track.cpp
 Mat ComputeTransitionMatrix(Mat state,float dt);
@@ -275,7 +247,6 @@ double DistanceBetween(pose_t robot, location_t point);
 
 //for barriers
 void *task_malloc(size_t size);
-// double current_time(void);	
 void start_barrier_threads(void);
 void stop_barrier_threads(void);
 
@@ -315,4 +286,3 @@ int fd_set_blocking(int fd, int blocking);
 
 
 #endif
-

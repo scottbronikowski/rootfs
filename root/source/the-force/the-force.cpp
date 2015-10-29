@@ -5,6 +5,8 @@
 
   Author: Scott Bronikowski
   Date: 16 October 2014
+
+  Edited beginning on 28 October 2015 to add a second barrier to control the camera thread and ensure that this thread executes at exactly 10 Hz while the other threads execute at 50 Hz.
 */
 
 #include "the-force.h"
@@ -46,9 +48,8 @@ const char* cmd_servo = "servo";
 const char* pan_file = "/dev/pwm10";
 const char* tilt_file = "/dev/pwm9";
 const char* k_LogPort = "2001";
-//const int k_LogBufSize = 256; //defined in header
 const int k_msg_buf_threshold = (int)(0.85 * k_msg_buf_size); //for buffer_and_send
-     //for bump switch monitoring
+//for bump switch monitoring
 const int bump_move_time = 50000;
 const int bump_read_size = 24;
 const int bump_front = 185; //gpio 185
@@ -70,12 +71,11 @@ const std::string imu_init_string = "#omb#o1#oe0#s"; //#o0 for POLLING #o1 for s
 const double k_distance_threshold = 0.1;  //in meters
 const double k_angle_threshold_1 = k_PI/12; //15 degrees in radians--for deciding whether to pivot or turn while going forward
 const double k_angle_threshold_2 = k_PI/36; //5 degrees in radians--for deciding whether to go straight or turn toward point
-
-const int k_gpsWorkingBufSize = 256; //???
+const int k_gpsWorkingBufSize = 256;
 
 
 //global variables
-//extern'd
+//extern'd in header file
 //(from emperor)
 int sockfd, log_sockfd;
 int cam_thread_should_die = TRUE; //cam thread not running
@@ -90,21 +90,11 @@ int imu_fd;
 size_t imu_input_pos;
 int gps_fd;
 FILE* gps_file_ptr;
-   //for threading
+//for threading
 int msg_count;
-pthread_t producer_threads[3];
-pthread_t consumer_thread;
-bool producer_threads_should_die;
-bool consumer_thread_should_die;
 char g_msg_buf[k_msg_buf_bytes];
 pthread_mutex_t msg_buf_and_count_lock;
-
-// //**THIS IS PROBABLY WHERE I NEED TO DECLARE MY PIPE VARIABLES
-// int sensor_pipe[2];  //pipe for sensor data to go to main thread
-//                      //[0] is read end, [1] is write end
-// bool sensor_pipe_open = false;  //use to declare the pipe open or closed
-
-//for barriers
+//for barriers  FIXME--need some changes here
 unsigned int frame_number;
 int running = FALSE, halt = FALSE;
 unsigned int threads = MAX_THREADS;
@@ -212,9 +202,6 @@ int main(int /*argc*/, char** /*argv*/)
   char logbuf[k_LogBufSize];
   int retval;
   printf("Starting The Force\n");
-  //printf("sizeof(long long int) = %d\n", sizeof(long long int));
-  //printf("sizeof(double) = %d\n", sizeof(double));
-  //printf("timestamp: %.6f\n", emperor_current_time()); //6 decimal places is microseconds
   printf("Please ensure that driver-gui.sc (viewer '()) is running on %s\n", k_Server);
   //open local fds
   pan_fd = open(pan_file, O_WRONLY);
@@ -277,33 +264,11 @@ int main(int /*argc*/, char** /*argv*/)
     printf("logging failed for \'%s\'\n", logbuf);
   pthread_attr_destroy(&attributes);
   printf("%s\n", logbuf);
-
-  // //open pipe for sensors
-  // if (pipe(sensor_pipe) == -1)
-  // {
-  //   perror("pipe");
-  //   the_force_terminator(SIGTERM);
-  //   return -1;
-  // }
-
-  // //start the functions from run-sensors
-  // printf("Starting sensors...");
-  // //call setup function
-  // if (!run_sensors_setup())
-  // {
-  //   printf("run_sensors_setup() failed\n");
-  //   the_force_terminator(SIGTERM); 
-  //   return -1;
-  // }
-  // //call start function
-  // run_sensors_start();
-  // printf("sensors started successfully\n");
-  
+ 
   //register signal handler for termination
   signal(SIGINT, the_force_terminator);
   signal(SIGTERM, the_force_terminator);
 
-  //char msgbuf[k_traceBufSize];
   char prevmsgbuf[k_traceBufSize];
   memset(prevmsgbuf, 0, sizeof(prevmsgbuf));
 
@@ -328,25 +293,15 @@ int main(int /*argc*/, char** /*argv*/)
     //if we get here, we have something useful in msgbuf, so do something with it
     if (strncmp(g_routebuf, prevmsgbuf, k_traceBufSize) != 0) //received new command
     {
-      //printf("Received %d bytes: %s\n", retval, msgbuf);
       strncpy(prevmsgbuf, g_routebuf, k_traceBufSize);
     }
     else //got a repeat of the last received command, so ignore it
       continue;
     //do stuff with commands received
     start_barrier_threads();
-    // retval = the_force_parse_and_execute(msgbuf);
-    // if (retval != 0)
-    // {
-    //   printf("Error in the_force_parse_and_execute\n");
-    //   the_force_terminator(SIGTERM);
-    //   return -1;
-    // }
     while (!route_complete) {
-      usleep(1*1000*1000);
-      //printf("Main sleeping\n");
+      usleep(1*1000*1000);//sleep while waiting for route_complete
     }
-    //printf("Main no longer sleeping, calling stop_barrier_threads\n");
     stop_barrier_threads();
     printf("Trace following complete for: %s\n", g_routebuf);
   }
@@ -359,14 +314,11 @@ void the_force_terminator(int signum)
 {
   //***MIGHT WANT TO HAVE THE SHUTDOWN THREAD SEND A STOP FIRST, JUST IN CASE
   motor_stop(motor_fd);
-  // //stop sensors
-  // sensors_terminator(SIGTERM);
 
   //stop barrier-ed threads
   stop_barrier_threads();
 
-  //emperor_log_data("Logging stopped", log_sockfd);
-  //printf("received signal %d\n", signum);
+  //FIXME
   if (!cam_thread_should_die) //only stop if already running
     {
       int retval;
@@ -381,13 +333,11 @@ void the_force_terminator(int signum)
   //kill bump switch thread
   gpio_thread_should_die = TRUE;
   pthread_join(gpio_thread, NULL);
-   //cleanup socket and file handles
+  //cleanup socket and file handles
   close(pan_fd);
   close(tilt_fd);
   close(motor_fd);
   close(gpio_fd);
-  // close(sensor_pipe[1]);
-  // close(sensor_pipe[0]);
   close(log_sockfd);
   printf("data logging socket closed\n");
   close(sockfd);
@@ -397,26 +347,21 @@ void the_force_terminator(int signum)
 
 
 void* emperor_run_cameras(void* args)
-{
+{ //FIXME--make like sensor tasks
   BusManager busMgr;
   unsigned int numCameras = PGR_Init(&busMgr);
-  //printf("in emperor_run_cameras, cam_thread_should_die = %d\n",
-  //	 cam_thread_should_die);
   if ( numCameras < 1 )
   {
     printf( "Insufficient number of cameras... exiting\n" );
     pthread_exit(NULL);
   }
-  //printf("numCameras = %u\n", numCameras);
   PointGrey_t* PG = new PointGrey_t[numCameras];
-  //printf("PG got newed\n");
   if (PGR_StartCameras(&busMgr, PG, numCameras) != 0)
   {
     printf("Error starting cameras\n");
     PGR_StopAndCleanup(PG, numCameras);
     pthread_exit(NULL);
   }
-  //printf("PGR_StartCameras succeeded\n");
   if (Network_StartCameras(PG, numCameras) != 0)
   {
     printf("Error starting network\n"); //don't return here
@@ -425,7 +370,7 @@ void* emperor_run_cameras(void* args)
   printf("Rover: Image transfer commencing.\n");
 
   while(!cam_thread_should_die)
-  {
+  {//FIXME--this is the part that should wait on the barrier
     for (unsigned int i = 0; i < numCameras; i++)
     {
       PGR_GetFrame(&PG[i]);
@@ -471,8 +416,6 @@ void* emperor_monitor_bump_switches(void* args)
     }
     else if (retval == 0) //timeout
     {
-      // printf("select timeout at %.6f, gpio_fd = %d, timeout = %ld.%06ld\n", 
-      // 	     emperor_current_time(), gpio_fd, timeout.tv_sec, timeout.tv_usec);
       continue; //go back to the top of the loop and recheck gpio_thread_should_die
     }
     else //retval >= 1-->we have data to receive
@@ -504,13 +447,13 @@ void* emperor_monitor_bump_switches(void* args)
 	sprintf(logbuf, "Front bump activated, stopping");
 	emperor_log_data(logbuf, log_sockfd);
       }
+      //NEEDSWORK: here we may want to do something to let viewer know about the bump so that a change in the route can be calculated and resent--basically, recovery from this error
     }
   }
   printf("gpio thread exiting\n");
   pthread_exit(NULL);
 }
 
-//int emperor_log_data(char* databuf)
 int emperor_log_data(char* databuf, int log_fd)
 {
   double now = emperor_current_time(); 
@@ -539,10 +482,7 @@ int emperor_log_data(char* databuf, int log_fd)
     return -1;
   }
   else
-  {
-    //printf("sent: %s\n", sendbuf);
     return 0; //success
-  }
 }
 
 double emperor_current_time(void) 
@@ -551,38 +491,6 @@ double emperor_current_time(void)
   if (gettimeofday(&time, NULL)!=0) printf("gettimeofday failed");
   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
 }
-
-// void* consumer(void* args)
-// {
-//   //printf("in consumer\n");
-//   char sendbuf[k_msg_buf_bytes];
-//   int num_messages;
-//   int threshold = (int)(0.9 * k_msg_buf_size);
-//   memset(sendbuf, 0, k_msg_buf_bytes);
-//   while (!consumer_thread_should_die)
-//   {
-//     pthread_mutex_lock(&msg_buf_and_count_lock); //GRABBING THE LOCK
-//     //printf("consumer has lock\n");
-//     if (msg_count >= threshold)
-//     {
-//       num_messages = msg_count; //copy message count
-//       memcpy(sendbuf, g_msg_buf, (num_messages * k_LogBufSize)); //copy the buffer
-//       msg_count = 0; //reset msg_count
-//       pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
-//       if (!sensors_send_data(sendbuf, num_messages)) //sending the copy
-//       { //had an error in sensors_send_data
-// 	printf("THIS SHOULDN'T HAVE HAPPENED\n");
-//       }
-//       memset(sendbuf, 0, k_msg_buf_bytes);
-//     }
-//     else
-//     {//release lock and wait a bit before checking again
-//       pthread_mutex_unlock(&msg_buf_and_count_lock); //RELEASING THE LOCK
-//       usleep(1000);  //might need to sleep longer here
-//     }
-//   }
-//   return NULL;
-// }
 
 bool sensors_open_serial_port(int &fd, const char* filename, 
 			      const speed_t speed, const int bytes_per_read)
@@ -652,7 +560,6 @@ bool sensors_open_serial_port(int &fd, const char* filename,
 	perror("encoders_open_serial_port:tcsetattr");
 	return false;
       }
-      //printf("Opened %s with bytes_per_read = %d\n", filename, bytes_per_read);
       return true; //if we get here, everything worked
     }
   }
@@ -689,7 +596,7 @@ long sensors_elapsed_ms(struct timeval start, struct timeval end)
 }
 
 bool sensors_init(int fd, const std::string init_string, size_t &input_pos)
-{
+{//this initializes the imu and encoders (or any other sensor running similar code)
   char in;
   int result;
   struct timeval t0, t1, t2;
@@ -698,7 +605,6 @@ bool sensors_init(int fd, const std::string init_string, size_t &input_pos)
 
   // start time
   gettimeofday(&t0, NULL);
-
   // request synch token to see if device is really present
   const std::string contact_synch_id = "00"; 
   const std::string contact_synch_request = "#s" + contact_synch_id; 
@@ -712,13 +618,11 @@ bool sensors_init(int fd, const std::string init_string, size_t &input_pos)
   gettimeofday(&t1, NULL);
  // set non-blocking I/O
   if (!sensors_set_nonblocking_io(fd)) return false;
-
   /* look for tracker */
   while (true)
   {
     // try to read one byte from the port
     result = read(fd, &in, 1);
-    
     // one byte read
     if (result > 0)
     {
@@ -734,7 +638,6 @@ bool sensors_init(int fd, const std::string init_string, size_t &input_pos)
       if (errno != EAGAIN && errno != EINTR)
         throw std::runtime_error("Can not read from serial port (1).");
     }
-    
     // check timeout
     gettimeofday(&t2, NULL);
     if (sensors_elapsed_ms(t1, t2) > 200)
@@ -753,21 +656,18 @@ bool sensors_init(int fd, const std::string init_string, size_t &input_pos)
       // timeout -> tracker not present
       throw std::runtime_error("Can not init: tracker does not answer.");
   }
-
   /* configure tracker */
-  // set correct binary output mode, disale continuous streaming, disable errors and
+  // set correct binary output mode, disable continuous streaming, disable errors and
   // request synch token. So we're good, no matter what state the tracker
   // currently is in.
   const std::string config_synch_id = "01";
   const std::string config_synch_reply = synch_token + config_synch_id + new_line;
-
   std::string config = init_string + config_synch_id; //constant output
   if (write(fd, config.data(), config.length()) != (ssize_t)config.length())
   {
     perror("sensors_init:write init");
     return false;
   }
-  
   // set blocking I/O
   // (actually semi-blocking, because VTIME is set)
   if (!sensors_set_blocking_io(fd)) return false;
@@ -776,12 +676,11 @@ bool sensors_init(int fd, const std::string init_string, size_t &input_pos)
   {    
     // try to read one byte from the port
     result = read(fd, &in, 1);
-    
     // one byte read
     if (result > 0)
     {
       if (sensors_read_token(config_synch_reply, in, input_pos))
-        break;  // alrighty
+        break;  // alrighty, it worked
     }
     // error?
     else
@@ -790,12 +689,7 @@ bool sensors_init(int fd, const std::string init_string, size_t &input_pos)
         throw std::runtime_error("Can not read from serial port (2).");
     }
   }
-  
-  // we keep using blocking I/O
-  //if (_set_blocking_io() == -1)
-  //  return false;
-
-  return true;
+  return true;  //if we get here, everything worked
 }
 
 bool sensors_read_token(const std::string &token, char c, size_t &input_pos)
@@ -810,9 +704,7 @@ bool sensors_read_token(const std::string &token, char c, size_t &input_pos)
     }
   }
   else
-  {
     input_pos = 0;
-  }
   return false;
 }
 
@@ -921,14 +813,8 @@ bool imu_read_data(imu_data_t* data)
 	{
 	  for (int i = 0; i < 4; i++)
 	  {
-	    //if ((result = read(gl_imu_fd, &c, 1)) > 0)
 	    if ((result = read(imu_fd, &buf[i], 1)) > 0)
-	    {
-	      //printf("buf[i] = %d\n", buf[i]);
 	      continue;
-	      //printf("c = %d\n", c);
-	      //t += c * (unsigned long)pow(256.0,(float)i);
-	    }
 	    else if (result < 0)
 	      perror("imu_read_data:failed timestamp read");
 	  }
@@ -992,36 +878,12 @@ bool sensors_send_data(char* msgbuf, int num_messages)
   }
 }
 
-void sensors_terminator(int signum)
-{
-  usleep(1000000);  //sleep for 1 sec to ensure data gets out of buffer
-  producer_threads_should_die = true;
-  consumer_thread_should_die = true;
-  //join threads
-  pthread_join(producer_threads[0], NULL);
-  pthread_join(producer_threads[1], NULL);
-  pthread_join(producer_threads[2], NULL);
-  pthread_join(consumer_thread, NULL);
-  //close fds/file
-  close(gps_fd);
-  fclose(gps_file_ptr);
-  close(imu_fd);
-  close(encoders_fd);
-  close(log_sensors_sockfd);
-  //clean up memory
-  delete g_encoders_data;
-  delete g_imu_data;
-  printf("the-force: sensors cleanup complete\n");
-  exit(signum);
-}
-
 int gps_read_data(char* logbuf)
 {
   int retval, length;
   int success = 0;
   int failure = -1;
   int no_read = 1;
-  //char tempbuf[k_LogBufSize];
   struct GPSInfo gpsinfo;
   fd_set recv_set;
   struct timeval timeout;
@@ -1046,37 +908,26 @@ int gps_read_data(char* logbuf)
   else //retval >= 1, so there is data to receive
   {
     int bytes_available = k_gpsWorkingBufSize - g_gps_working_buf_index;
-    //printf("bytes_available = %d\n", bytes_available);
-
     //read up to available buffer-length bytes
     retval = read(gps_fd, &g_gps_working_buf[g_gps_working_buf_index], bytes_available);
-    //printf("retval = %d\n", retval);
-
     if (retval < 0 ) //error
     {
       perror("gps_read_data read:");
       return failure;
     }
-    //printf("gps_read_data has: %s\n", g_gps_working_buf);
-    
     //update index with bytes read
     g_gps_working_buf_index = g_gps_working_buf_index + retval; 
-    
     //scan for starting $ and ending \n (keep position with g_gps_working_buf_index)
     char* begin = strchr(&g_gps_working_buf[0], '$');
     unsigned int begin_ind = strcspn(&g_gps_working_buf[0], "$");
     if (begin == NULL) { //no starting $ in buffer, so flush it all and return failure
-      //printf("NO STARTING $ FOUND\n");
       memset(g_gps_working_buf, 0, sizeof(g_gps_working_buf));
       g_gps_working_buf_index = 0;
       return failure;
     }
-    //printf("begin: %s\n", begin);
-    unsigned int end = strcspn(begin, "\n");//g_gps_working_buf, "\n");
-    //if (g_gps_working_buf[end] != '\n') {
+    unsigned int end = strcspn(begin, "\n");
     if (strncmp(&begin[end], "\n", 1) != 0) {
       //reached end of read buffer w/o finding \n, so update the index and return no read
-      //printf("NO ENDING NEWLINE FOUND\n");
       g_gps_working_buf_index = end+1;
       return no_read;
     }
@@ -1084,20 +935,13 @@ int gps_read_data(char* logbuf)
     //copy from $ to \n into a parsing buffer
     char tempbuf[k_gpsWorkingBufSize];
     memset(tempbuf, 0, k_gpsWorkingBufSize);
-    //printf("end = %d, begin_ind = %d\n", end, begin_ind);
-    //printf("before tempbuf copy, end-begin_ind = %d\n", end-begin_ind);
     strncpy(tempbuf, begin, end);
-
-    //printf("gps_read_data sending to parser: %s\n", tempbuf);
-    
     //update position index
     g_gps_working_buf_index = g_gps_working_buf_index - (begin_ind + end);
-    
     //move remaining data to beginning of g_gps_working_buf
     memmove(g_gps_working_buf, g_gps_working_buf+end+begin_ind, g_gps_working_buf_index);
     memset(g_gps_working_buf+g_gps_working_buf_index+1, 0, 
 	   k_gpsWorkingBufSize - g_gps_working_buf_index - 1);
-    //printf("g_gps_working_buf after move: %s\n", g_gps_working_buf);
 
     length = strlen(tempbuf);
     if (length <= 0) //error
@@ -1110,7 +954,6 @@ int gps_read_data(char* logbuf)
     { //message received, so check if it's one we want
       if (strncmp(tempbuf, GGA, strlen(GGA)) == 0)
       { //process GGA info
-	//NMEAParser parser;
 	g_parser.Parse(tempbuf, length);
 	gpsinfo = g_parser.GetActualGPSInfo();
 	retval = snprintf(logbuf, k_LogBufSize, "GGA:Lat:%.10f:Long:%.10f:Alt:%.1fm:"
@@ -1121,12 +964,10 @@ int gps_read_data(char* logbuf)
 	if (retval > k_LogBufSize)
 	  printf("GPS GGA too long, retval = %d\n", retval);
 	//logbuf now has a parsed and formatted GPS messages, so return success
-	//printf("**PARSED: %s\n", logbuf);
 	return success;
       }
       else if (strncmp(tempbuf, RMC, strlen(RMC)) == 0)
       { //process RMC info
-	//NMEAParser parser;
 	g_parser.Parse(tempbuf, length);
 	gpsinfo = g_parser.GetActualGPSInfo();
 	if (!gpsinfo.m_trackValid)
@@ -1145,11 +986,9 @@ int gps_read_data(char* logbuf)
 	    printf("GPS RMC too long, retval = %d\n", retval);
 	}
 	//logbuf now has a parsed and formatted GPS messages, so return success
-	//printf("**PARSED: %s\n", logbuf);
 	return success;
       }
       else //ignore other messages from GPS
-	//printf("**NO PARSE\n");
 	return no_read;
     }
   }      
@@ -1174,52 +1013,15 @@ double normalize_orientation(double angle){
   else return angle;
 }
 
-double orientation_plus(double x, double y){
-  return normalize_orientation(x+y);
-}
+double orientation_plus(double x, double y){ return normalize_orientation(x+y); }
 
-double orientation_minus(double x, double y){
-  return normalize_orientation(x-y);
-}
+double orientation_minus(double x, double y){ return normalize_orientation(x-y); }
 
 //gives the angle from robot to point (compare with theta)
 double AngleBetween(pose_t robot, location_t point)
 {
   return atan2(point.y - robot.y, point.x - robot.x);
 } //always returns [-pi, pi)
-
-// //the prepositional functions below return a value based on the difference between
-// //the observed angle and the desired angle (divided by PI)
-// //this gives a value x between 0 (best) and -1 (worst), so taking 1 - x
-// //scales to [0,1) with higher still better
-// double Left(Point2d robot, Point2d obstacle){
-//   double angle = AngleBetween(robot,obstacle);
-//   return 1 - (fabs(fabs(angle) - PI)/PI);
-// }
-
-// double Right(Point2d robot, Point2d obstacle){
-//   double angle = AngleBetween(robot,obstacle);
-//   return 1 - (fabs(angle)/PI); //no need to normalize here b/c atan2 is always between +/-pi
-// }
-
-// double Front(Point2d robot, Point2d obstacle){
-//   double angle = AngleBetween(robot,obstacle);
-//   return 1-fabs(normalize_orientation(angle - (-PI/2)))/PI;
-// }
-
-// double Behind(Point2d robot, Point2d obstacle){
-//   double angle = AngleBetween(robot,obstacle);
-//   return 1 - (fabs(normalize_orientation(angle - PI/2))/PI);
-// }
-
-// double Between(Point2d robot, Point2d obstacle1, Point2d obstacle2){
-//   double angle1 = AngleBetween(robot,obstacle1);
-//   double angle2 = AngleBetween(robot,obstacle2);
-//   //is it necessary to compute the angle between the two obstacles?
-//   //or will the difference between the angles always be compared to pi?
-//   //return -fabs(PI - fabs(angle1 - angle2));
-//   return 1 - (fabs(PI - fabs(angle1 - angle2))/PI);
-// }
 
 //from Dan's log_to_track.cpp
 Mat ComputeTransitionMatrix(Mat state,float dt)
@@ -1243,7 +1045,6 @@ Mat ComputeTransitionMatrix(Mat state,float dt)
   return TransitionModel;
 }
 
-
 KalmanFilter execute_time_step(KalmanFilter KF,
 			      Mat TransitionModel,
 			      Mat MeasurementModel,
@@ -1259,7 +1060,6 @@ KalmanFilter execute_time_step(KalmanFilter KF,
   return KF;  
 }
 
-
 //new stuff
 //gives the distance from the robot to the point
 double DistanceBetween(pose_t robot, location_t point)
@@ -1270,7 +1070,6 @@ double DistanceBetween(pose_t robot, location_t point)
   return sqrt(dist);
 }
 
-
 //for barriers
 void *task_malloc(size_t size) {
   void *p = malloc(size);
@@ -1278,19 +1077,12 @@ void *task_malloc(size_t size) {
   return p;
 }
 
-// double current_time(void) {
-//   struct timeval time;
-//   if (gettimeofday(&time, NULL)!=0) task_error("gettimeofday failed");
-//   /* needs work: Will it convert division into multiplication? */
-//   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
-// }
-
-
 void start_barrier_threads(void) {
   if (running) task_error("threads already running");
   if (pthread_barrier_init(&barrier, NULL, threads)) {
     task_error("Can't create a barrier");
   }
+  //FIXME--need the second barrier init'ed here, and much below changed
   running = TRUE;
   for (unsigned int id = 0; id<threads; id++) task_args[id].id = id;
   pthread_attr_t attributes;
@@ -1307,24 +1099,18 @@ void start_barrier_threads(void) {
 
 void stop_barrier_threads(void) {
   /* needs work: Technically, can't access running here without a mutex. */
-  //printf("in stop_barrier_threads\n");
   if (running&&!halt) {
-    //printf("inside if (running&&!halt)\n");
     pthread_mutex_lock(&halt_mutex);
     halt = TRUE;
     pthread_mutex_unlock(&halt_mutex);
-    //printf("halt set to TRUE\n");
-    for (unsigned int id = 0; id<threads; id++) {
+    for (unsigned int id = 0; id<threads; id++) { //FIXME--need to stop new thread too
       if (pthread_join(thread[id], NULL)!=0) {
-	//printf("Can't join thread %u\n", id);
 	task_error("Can't join thread %u", id);
       }
-      //printf("joined thread %u\n", id);
     }
-    pthread_barrier_destroy(&barrier);
+    pthread_barrier_destroy(&barrier); //FIXME--need to destroy second barrier
     halt = FALSE;
   }
-  //printf("at end of stop_barrier_threads\n");
 }
 // Tasks communicate through global variables.
 // Each global variable is written by at most one task.
@@ -1338,7 +1124,7 @@ void initialize_imu(unsigned int id) {
   char logbuf[k_LogBufSize];
   char sendbuf[k_LogBufSize];
   int num_messages = 1;
-  //connect to seykhl
+  //connect to server
   printf("Connecting to %s on port %s for IMU, Encoder, and GPS logging...\n",
   	 k_Server, k_imuLogPort);
   log_sensors_sockfd = -1;
@@ -1355,48 +1141,28 @@ void initialize_imu(unsigned int id) {
       }
   else
     printf("success!\n");
-  
   //initialize variables
   g_imu_data = new imu_data_t;
-
   //open fds for imu, encoders
   if (!sensors_open_serial_port(imu_fd, imu_file, sensors_speed))
   {
     perror("Error opening serial port for IMU:");
     return;
   }
-  //printf("fds opened\n");
-
   //init imu 
   if (!sensors_init(imu_fd, imu_init_string, imu_input_pos))
   {
     perror("Error in IMU init:");
     return;
   }
-  // //set imu_fd to nonblocking
-  // if (fd_set_blocking(imu_fd, 0))
-  //   printf("IMU set to non-blocking\n");
-  // else
-  //   printf("ERROR setting IMU to non-blocking\n");
-
   //clear junk data
-  // fd_set recv_set;
-  // struct timeval timeout;
-  // FD_ZERO(&recv_set);
-  // FD_SET(imu_fd, &recv_set);
-  // timeout.tv_sec = 0;
-  // timeout.tv_usec = 5*1000; //5ms timeout
-  // while (select(imu_fd+1, &recv_set, NULL, NULL, &timeout) > 0) {
-  //   imu_read_data(g_imu_data);
-  // }
   struct timeval mark, now;
   gettimeofday(&mark, NULL);
   gettimeofday(&now, NULL);
   while (sensors_elapsed_ms(mark,now) < 200) {
     imu_read_data(g_imu_data);
     gettimeofday(&now, NULL);
-  }
-  
+  }  
   //success if we get here
   printf("initialize_imu() succeeded\n");
   return;
@@ -1406,15 +1172,12 @@ void initialize_imu(unsigned int id) {
 void initialize_encoders(unsigned int id) {
   //initialize variables
   g_encoders_data = new encoders_data_t;
-
   //open fd for encoders
   if (!sensors_open_serial_port(encoders_fd, encoders_file, sensors_speed))
   {
     perror("Error opening serial port for encoders:");
     return;
   }
-  //printf("fds opened\n");
-
   //init encoders
   if (!sensors_init(encoders_fd, encoders_init_string, encoders_input_pos))
   {
@@ -1445,27 +1208,18 @@ void write_imu(unsigned int id) {
   while (select(imu_fd+1, &recv_set, NULL, NULL, &timeout) > 0) {
     imu_read_data(g_imu_data);
   }
-
-  // if (!imu_read_data(g_imu_data))
-  //   printf("error getting imu data in write_imu\n");
-  //printf("write_imu, task %u\n", id);
   return;
 }
 
 void write_encoders(unsigned int id) {
   if (!encoders_read_data(g_encoders_data))
     printf("error getting encoders data in write_encoders\n");
-  //printf("write_encoders, task %u\n", id);
   return;
 }
 
-void read_imu(unsigned int id) { 
-  //printf("read_imu, task %u\n", id);
-  return;} //nothing to do here????
+void read_imu(unsigned int id) {return;} //nothing to do here
 
-void read_encoders(unsigned int id) { 
-  //printf("read_encoders, task %u\n", id);
-  return;} //nothing to do here????
+void read_encoders(unsigned int id) {return;} //nothing to do here
 
 void finalize_imu(unsigned int id) {
   //close fds
@@ -1495,7 +1249,8 @@ void *imu_task(void *args) {
   }
   initialize_imu(id);
   BARRIER("imu", "initialize");
-  while (TRUE) {
+  while (TRUE) 
+  {
     {
       /* This block only needs to be in one thread */
       pthread_mutex_lock(&halt_mutex);
@@ -1503,25 +1258,24 @@ void *imu_task(void *args) {
       pthread_mutex_unlock(&halt_mutex);
       frame_number++;
     }
+
     BARRIER("imu", "before pipeline");
+
     if (!running) break;
     double last1 = emperor_current_time();
     write_imu(id);
-    //double now1 = emperor_current_time();
-    // printf("write_imu time: %f\n", now1-last1);
-    // if (now1-last1 > 0.1)
-    //   printf("**********************************\n");
+
     BARRIER("imu", "after pipeline");
+
     double last = emperor_current_time();
     read_imu(id);
     double now = emperor_current_time();
-    // printf("read_imu time: %f\n", now-last);
-    // if (now-last > 0.1)
-    //   printf("**********************************\n");
+
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
        timings become entangled with other threads. */
+    //I think this timing might be wrong, but not sure it matters
     double fraction_remaining = 1.0-fps*(now-last);
     if (fraction_remaining<0.0) {
       printf("imu %u can't keep up in frame %u, overused: %lf\n",
@@ -1543,9 +1297,10 @@ void *imu_task(void *args) {
         if (usleep(QUANTUM)) task_error("Call to usleep failed");
       }
     }
-    //printf("imu_task time: %f\n", now-last);
   }
+
   BARRIER("imu", "finalize");
+
   finalize_imu(id);
   return NULL;
 }
@@ -1554,23 +1309,22 @@ void *encoders_task(void *args) {
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
   initialize_encoders(id);
+
   BARRIER("encoders", "initialize");
-  while (TRUE) {
+
+  while (TRUE) 
+  {
     BARRIER("encoders", "before pipeline");
+
     if (!running) break;
-    //double last1 = emperor_current_time();
     write_encoders(id);
-    //double now1 = emperor_current_time();
-    // printf("write_encoders time: %f\n", now1-last1);
-    // if (now1-last1 > 0.1)
-    //   printf("**********************************\n");
+
     BARRIER("encoders", "after pipeline");
+
     double last = emperor_current_time();
     read_encoders(id);
     double now = emperor_current_time();
-    // printf("read_encoders time: %f\n", now-last);
-    // if (now-last > 0.1)
-    //   printf("**********************************\n");
+   
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
@@ -1584,44 +1338,16 @@ void *encoders_task(void *args) {
       printf("unused encoders %u thread time in frame %u: %lf\n",
 	     id, frame_number, fraction_remaining);
     }
-    // {
-    //   /* This block only needs to be in one thread */
-    //   /* spin to sync to frame rate */
-    //   while (TRUE) {
-    //     double now = current_time();
-    //     if (now-last>=1.0/fps) {
-    //       last = now;
-    //       break;
-    //     }
-    //     if (usleep(QUANTUM)) task_error("Call to usleep failed");
-    //   }
-    // }
-
-    //printf("encoders_task time: %f\n", now-last);
   }
+
   BARRIER("encoders", "finalize");
+
   finalize_encoders(id);
   return NULL;
 }
 
 //for GPS
 void initialize_gps(unsigned int id){
-  // char logbuf[k_LogBufSize];
-  // char sendbuf[k_LogBufSize];
-  // int num_messages = 1;
-  // sprintf(logbuf, "%.6f:ALL: GPS logging started\n", sensors_current_time());
-  // strncpy(sendbuf, logbuf, k_LogBufSize);
-  // while (log_sensors_sockfd < 0)
-  // {
-  //   usleep(1000*1000); //not sure if this will work
-  // }
-  // if (!sensors_send_data(sendbuf, num_messages)) {
-  //   printf("GPS connection failed, exiting.\n");
-  //   //return;
-  // }
-  // else
-  //   printf("GPS success!\n");
-
   //initialize variables
   g_parser = NMEAParser();
   g_gps_new_data = -1;
@@ -1632,11 +1358,8 @@ void initialize_gps(unsigned int id){
     perror("Error opening serial port for GPS:");
     return;
   }
-  //printf("fds opened\n");
-
   //init GPS (just get file pointer from fd)
   gps_file_ptr = fdopen(gps_fd, "r");
-
   //success if we get here
   printf("initialize_gps() succeeded\n");
   return;
@@ -1644,13 +1367,10 @@ void initialize_gps(unsigned int id){
 
 void write_gps(unsigned int id) {
   g_gps_new_data = gps_read_data(g_gps_buf);
-  //printf("write_gps returned %d:%s\n", g_gps_new_data,g_gps_buf);
-  //printf("write_gps, task %u\n", id);
+  return;
 }
 
-void read_gps(unsigned int id) { 
-  //printf("read_gps, task %u\n", id);
-  return;} //nothing to do here???
+void read_gps(unsigned int id) {return;} //nothing to do here
 
 void finalize_gps(unsigned int id){
   //close fds/file
@@ -1664,23 +1384,22 @@ void *gps_task(void *args){
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
   initialize_gps(id);
+
   BARRIER("gps", "initialize");
-  while (TRUE) {
+
+  while (TRUE) 
+  {
     BARRIER("gps", "before pipeline");
+   
     if (!running) break;
-    //double last1 = emperor_current_time();
     write_gps(id);
-    //double now1 = emperor_current_time();
-    // printf("write_gps time: %f\n", now1-last1);
-    // if (now1-last1 > 0.1)
-    //   printf("**********************************\n");
+
     BARRIER("gps", "after pipeline");
+
     double last = emperor_current_time();
     read_gps(id);
     double now = emperor_current_time();
-    // printf("read_gps time: %f\n", now-last);
-    // if (now-last > 0.1)
-    //   printf("**********************************\n");
+
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
@@ -1695,7 +1414,8 @@ void *gps_task(void *args){
 	     id, frame_number, fraction_remaining);
     }
   }
-  BARRIER("gps", "finalize");
+  
+  BARRIER("gps", "finalize");  
   finalize_gps(id);
   return NULL;
 }
@@ -1710,9 +1430,7 @@ void initialize_buffer_and_send(unsigned int id) {
   return;
 }
 
-void write_buffer_and_send(unsigned int id) {
-  //printf("write_buffer_and_send, task %u\n", id);
-  return;} 
+void write_buffer_and_send(unsigned int id) {return;} 
 //nothing to do here--no other threads read from or write to msg_count and g_msg_buf
 
 void read_buffer_and_send(unsigned int id) {
@@ -1720,8 +1438,8 @@ void read_buffer_and_send(unsigned int id) {
   char imubuf[k_LogBufSize];
   char encoderbuf[k_LogBufSize];
   char gpsbuf[k_LogBufSize];
-  if (!last_send) {
-    //check route complete and if true, set last send
+  if (!last_send) 
+  { //check route complete and if true, set last send
     if (route_complete)
       last_send = true;
     //read g_imu_data and parse into text
@@ -1759,7 +1477,7 @@ void read_buffer_and_send(unsigned int id) {
       sprintf(encoderbuf, "ENC:BOGUS READING");
     //write text to g_msg_buf
     if (msg_count < k_msg_buf_size) {//buffer has room
-      strncpy(&g_msg_buf[msg_count * k_LogBufSize], encoderbuf, k_LogBufSize); //pad buffer   
+      strncpy(&g_msg_buf[msg_count * k_LogBufSize], encoderbuf, k_LogBufSize); //pad buffer
       ++msg_count; //increment msg_count
     }
     else { //buffer is full
@@ -1810,7 +1528,6 @@ void read_buffer_and_send(unsigned int id) {
       //reset msg_count
       msg_count = 0;
     } //else just return
-    //printf("read_buffer_and_send, task %u\n", id);
     return;
   }
 }
@@ -1828,23 +1545,22 @@ void *buffer_and_send_task(void *args) {
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
   initialize_buffer_and_send(id);
+
   BARRIER("buffer_and_send", "initialize");
-  while (TRUE) {
+
+  while (TRUE) 
+  {
     BARRIER("buffer_and_send", "before pipeline");
+  
     if (!running) break;
-    // double last1 = emperor_current_time();
     write_buffer_and_send(id);
-    // double now1 = emperor_current_time();
-    // printf("write_buffer_and_send time: %f\n", now1-last1);
-    // if (now1-last1 > 0.1)
-    //   printf("**********************************\n");
+    
     BARRIER("buffer_and_send", "after pipeline");
+    
     double last = emperor_current_time();
     read_buffer_and_send(id);
     double now = emperor_current_time();
-    // printf("read_buffer_and_send time: %f\n", now-last);
-    // if (now-last > 0.1)
-    //   printf("**********************************\n");
+    
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
@@ -1859,10 +1575,13 @@ void *buffer_and_send_task(void *args) {
 	     id, frame_number, fraction_remaining);
     }
   }
+
   BARRIER("buffer_and_send", "finalize");
   finalize_buffer_and_send(id);
   return NULL;
 }
+
+//START CLEANUP HERE
 
 //KF/move thread
 void initialize_estimate_and_move(unsigned int id){
@@ -1872,10 +1591,9 @@ void initialize_estimate_and_move(unsigned int id){
   strncpy(msgbuf, g_routebuf, k_traceBufSize);
   str_num = strtok(msgbuf, ":");   // n:x1,y1;x2,y2;...;xn,yn
   g_num_waypoints = atoi(str_num);
-  // printf("g_num_waypoints = %d\n",g_num_waypoints);
   if (g_num_waypoints == 0) //bad string/no points, so must quit
   {
-    printf("IMPROPERLY FORMATTED STRING passed to the_force_parse_and_execute, exiting\n");
+    printf("IMPROPERLY FORMATTED STRING passed to initialize_estimate_and_move, exiting\n");
     //play error sound here?
     route_complete = true;
     //stop_barrier_threads();
@@ -1958,6 +1676,7 @@ void initialize_estimate_and_move(unsigned int id){
   g_KF.statePre.at<float>(7) = 0; //R wheel acceleration
   g_KF.statePost.at<float>(7) = 0;
 
+  //FIXME--starting camera thread should not be here
   //start cameras
   if (cam_thread_should_die) //only start if not already running
   {
