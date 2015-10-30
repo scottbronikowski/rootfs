@@ -70,6 +70,14 @@ using namespace cv;
     }                                                           \
   }
 
+#define BARRIER10HZ(t1, t2) {					\
+    int retval = pthread_barrier_wait(&barrier10hz);            \
+    if (retval!=0&&retval!=PTHREAD_BARRIER_SERIAL_THREAD) {     \
+      task_error("%s %u can't wait on %s barrier10hz", t1, id, t2); \
+    }                                                           \
+  }
+
+
 
 //global constants 
 extern const double k_PI;
@@ -162,16 +170,19 @@ extern pthread_mutex_t msg_buf_and_count_lock;
 extern int g_motor_cmd_L;
 extern int g_motor_cmd_R;
 //for barriers
-extern unsigned int frame_number;
+extern unsigned long int frame_number;
+extern unsigned long int frame_number_cameras;
 extern int running, halt;
 extern unsigned int threads;
-extern void *((*task[MAX_THREADS])(void *));
-extern pthread_t thread[MAX_THREADS];
-extern struct task_args task_args[MAX_THREADS];
+extern void *((*task[MAX_THREADS+1])(void *));
+extern pthread_t thread[MAX_THREADS+1];
+extern struct task_args task_args[MAX_THREADS+1];
 extern pthread_mutex_t halt_mutex;
 extern pthread_barrier_t barrier;
+extern pthread_barrier_t barrier10hz;
 extern int time_threads;
 extern double fps;
+extern double fps2;
 extern bool route_complete;
 
 //structures
@@ -179,7 +190,7 @@ extern bool route_complete;
 struct encoders_data_t {
   unsigned long timestamp;
   unsigned long dt;
-  float ticks[2]; //left ticks is ticks[0], right is ticks[
+  float ticks[2]; //left ticks is ticks[0], right is ticks[1]
 };
 struct imu_data_t {
   float data[15]; //yaw, pitch, roll, adjusted yaw, adjusted mag_heading, raw mag_heading, accel x, accel y, accel z, mag x, mag y, mag z, gyro x, gyro y, gyro z
@@ -205,7 +216,7 @@ struct task_args {
 //prototypes 
 //(from emperor)
 void the_force_terminator(int signum);
-void* emperor_run_cameras(void* args);
+//void* emperor_run_cameras(void* args);
 void* emperor_monitor_bump_switches(void* args);
 int emperor_log_data(char* databuf, int log_fd);
 double emperor_current_time(void);
@@ -281,6 +292,15 @@ void write_estimate_and_move(unsigned int id);
 void read_estimate_and_move(unsigned int id);
 void finalize_estimate_and_move(unsigned int id);
 void *estimate_and_move_task(void *args);
+
+//new camera thread 30Oct15
+void initialize_cameras(unsigned int id);
+void write_cameras(unsigned int id);
+void read_cameras(unsigned int id);
+void finalize_cameras(unsigned int id);
+void *cameras_task(void *args);
+
+
 ssize_t readLine(int fd, void *buffer, size_t n);
 int fd_set_blocking(int fd, int blocking);
 

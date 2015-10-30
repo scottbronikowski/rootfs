@@ -1,81 +1,3 @@
-exit
-cd bin
-./run-emperor start
-./run-emperor stop
-./run-emperor start
-./run-emperor stop
-./run-imu 
-exit
-cd source/razor-imu/
-make
-lla /dev/RazorIMU 
-screen /dev/RazorIMU 57600
-lla /dev/RazorIMU 
-cd arduino/Razor_AHRS/
-ls
-locate Razor_AHRS.cpp
-cd /
-locate Razor_AHRS.cpp
-screen /dev/RazorIMU 57600
-git status
-git add -A
-git commit -m "commit before starting to collect IMU data"
-git push
-screen /dev/RazorIMU 57600
-exit
-arduino
-exit
-emacs today.text
-exit
-halt
-screen /dev/RazorIMU 57600
-exit
-exit
-arduino
-cd bin
-ls
-./run-imu 
-exit
-cd source/razor-imu/
-ls
-make
-ls /dev/RazorIMU 
-lla /dev/RazorIMU 
-screen /dev/RazorIMU 57600
-make
-screen /dev/RazorIMU 57600
-exit
-arduino
-exit
-À
-emacs today.text
-halt
-cd /bin
-ls
-cd /root/bin
-./run-emperor 
-./run-emperor start
-exit
-screen /dev/RazorIMU 57600
-cd
-exit
-halt
-screen /dev/RazorIMU 57600
-lla /dev/RazorIMU 
-screen /dev/RazorIMU 57600
-lla /dev/RazorIMU 
-screen /dev/RazorIMU 57600
-cat /etc/udev/rules.d/49-teensy.rules 
-ls /dev
-lla
-lla /dev/
-cd /dve
-cd /dev
-lla u*
-cd usbmon0
-cat usbmon0
-lla
-udevadm control --reload_rules
 udevadm control --reload-rules
 lla
 udevadm trigger
@@ -1998,3 +1920,81 @@ exit
 xclock
 exit
 emacs today.text &
+cat /etc/init.d/time-update.sh 
+cat /etc/ntp.conf
+ntpdate -vd
+ntpdate -vd 192.168.2.2
+ntpdate -vd ntp.ubuntu.com
+ntpdate -vd 192.168.2.2
+cat /etc/ntp.conf
+ntpq
+nano /etc/ntp.conf
+ntpq
+nano /etc/ntp.conf
+ntpq
+/etc/init.d/ntp restart
+ntpq -d
+ntpdate -uvb 192.168.2.2
+exit
+cat /root/bin/run-the-force 
+exit
+cd /
+git status
+git add -A
+git commit -m "30 Oct 15
+
+--Finished cleanup and implemented new barrier structure.  Testing
+  shows that it achieves a steady 10fps camera rate within 1-2s of
+  starting, so declaring that a success.
+--**TO DOs**:
+       1. Clean up commented out code in the-force
+       2. Look at putting bump switches within barrier framework
+       3. Look at code on laptop that stitches images into movies--do
+          we need to reset the frame rate there?
+       4. Port barrier structure back to emperor.  Probably easiest
+          way to do it is to copy the-force and then replace the
+	  automatic move section with the code from emperor that reads
+	  and executes commands from the controller--PUT THIS INTO
+  	  BARRIERS TOOgit commit -m "30 Oct 15
+
+--Finished cleanup and implemented new barrier structure.  Testing
+  shows that it achieves a steady 10fps camera rate within 1-2s of
+  starting, so declaring that a success.
+--**TO DOs**:
+       1. Clean up commented out code in the-force
+       2. Look at putting bump switches within barrier framework
+       3. Look at code on laptop that stitches images into movies--do
+          we need to reset the frame rate there?
+       4. Port barrier structure back to emperor.  Probably easiest
+          way to do it is to copy the-force and then replace the
+	  automatic move section with the code from emperor that reads
+	  and executes commands from the controller--PUT THIS INTO"
+git commit -m "30 Oct 15
+
+--Finished cleanup and implemented new barrier structure.  Testing
+  shows that it achieves a steady 10fps camera rate within 1-2s of
+  starting, so declaring that a success.
+--**TO DOs**:
+       1. Clean up commented out code in the-force
+       2. Look at putting bump switches within barrier framework
+       3. Look at code on laptop that stitches images into movies--do
+          we need to reset the frame rate there?
+       4. Port barrier structure back to emperor.  Probably easiest
+          way to do it is to copy the-force and then replace the
+	  automatic move section with the code from emperor that reads
+	  and executes commands from the controller--PUT THIS INTO
+  	  BARRIERS TOOgit commit -m "30 Oct 15
+
+--Finished cleanup and implemented new barrier structure.  Testing
+  shows that it achieves a steady 10fps camera rate within 1-2s of
+  starting, so declaring that a success.
+--**TO DOs**:
+       1. Clean up commented out code in the-force
+       2. Look at putting bump switches within barrier framework
+       3. Look at code on laptop that stitches images into movies--do
+          we need to reset the frame rate there?
+       4. Port barrier structure back to emperor.  Probably easiest
+          way to do it is to copy the-force and then replace the
+	  automatic move section with the code from emperor that reads
+	  and executes commands from the controller--PUT THIS INTO"
+exit

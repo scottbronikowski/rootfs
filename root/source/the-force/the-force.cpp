@@ -94,21 +94,25 @@ FILE* gps_file_ptr;
 int msg_count;
 char g_msg_buf[k_msg_buf_bytes];
 pthread_mutex_t msg_buf_and_count_lock;
-//for barriers  FIXME--need some changes here
-unsigned int frame_number;
+//for barriers  
+unsigned long int frame_number;
+unsigned long int frame_number_cameras;
 int running = FALSE, halt = FALSE;
 unsigned int threads = MAX_THREADS;
-void *((*task[MAX_THREADS])(void *)) = {&imu_task, 
-					&encoders_task,
-					&gps_task,
-					&buffer_and_send_task,
-					&estimate_and_move_task};
-pthread_t thread[MAX_THREADS];
-struct task_args task_args[MAX_THREADS];
+void *((*task[MAX_THREADS+1])(void *)) = {&imu_task, 
+					  &encoders_task,
+					  &gps_task,
+					  &buffer_and_send_task,
+					  &estimate_and_move_task,
+					  &cameras_task};
+pthread_t thread[MAX_THREADS+1];
+struct task_args task_args[MAX_THREADS+1];
 pthread_mutex_t halt_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_barrier_t barrier;
+pthread_barrier_t barrier10hz;
 int time_threads = FALSE;
 double fps = 50.0;
+double fps2 = 10.0;
 bool route_complete = false;
 bool last_send = false;
 
@@ -137,6 +141,10 @@ int g_gps_working_buf_index = 0;
 char global_waypoint_buf[k_LogBufSize];
 bool global_waypoint_flag = false;
 char local_waypoint_buf[k_LogBufSize];
+//for cameras (new 30Oct15)
+BusManager g_busMgr;
+unsigned int g_numCameras = 0;
+PointGrey_t* g_PG;
 
 //from Dan's log_to_track.cpp
 // state:
@@ -305,7 +313,7 @@ int main(int /*argc*/, char** /*argv*/)
     stop_barrier_threads();
     printf("Trace following complete for: %s\n", g_routebuf);
   }
-  //cleanup done in terminator
+  //cleanup done in terminator (called automatically when program terminates)
   return 0;
 }
 
@@ -318,18 +326,18 @@ void the_force_terminator(int signum)
   //stop barrier-ed threads
   stop_barrier_threads();
 
-  //FIXME
-  if (!cam_thread_should_die) //only stop if already running
-    {
-      int retval;
-      cam_thread_should_die = TRUE;
-      pthread_join(cam_thread, NULL);
-      retval = emperor_log_data((char*)"Cameras stopped in the_force_terminator", 
-				log_sockfd);
-      if (retval != 0)
-	printf("logging failed for: ");
-      printf("Cameras stopped in the_force_terminator\n");
-    }
+  // //FIXME
+  // if (!cam_thread_should_die) //only stop if already running
+  //   {
+  //     int retval;
+  //     cam_thread_should_die = TRUE;
+  //     pthread_join(cam_thread, NULL);
+  //     retval = emperor_log_data((char*)"Cameras stopped in the_force_terminator", 
+  // 				log_sockfd);
+  //     if (retval != 0)
+  // 	printf("logging failed for: ");
+  //     printf("Cameras stopped in the_force_terminator\n");
+  //   }
   //kill bump switch thread
   gpio_thread_should_die = TRUE;
   pthread_join(gpio_thread, NULL);
@@ -346,43 +354,43 @@ void the_force_terminator(int signum)
 }
 
 
-void* emperor_run_cameras(void* args)
-{ //FIXME--make like sensor tasks
-  BusManager busMgr;
-  unsigned int numCameras = PGR_Init(&busMgr);
-  if ( numCameras < 1 )
-  {
-    printf( "Insufficient number of cameras... exiting\n" );
-    pthread_exit(NULL);
-  }
-  PointGrey_t* PG = new PointGrey_t[numCameras];
-  if (PGR_StartCameras(&busMgr, PG, numCameras) != 0)
-  {
-    printf("Error starting cameras\n");
-    PGR_StopAndCleanup(PG, numCameras);
-    pthread_exit(NULL);
-  }
-  if (Network_StartCameras(PG, numCameras) != 0)
-  {
-    printf("Error starting network\n"); //don't return here
-  }
-  //setup completed
-  printf("Rover: Image transfer commencing.\n");
+// void* emperor_run_cameras(void* args)
+// { //FIXME--make like sensor tasks
+//   BusManager busMgr;
+//   unsigned int numCameras = PGR_Init(&busMgr);
+//   if ( numCameras < 1 )
+//   {
+//     printf( "Insufficient number of cameras... exiting\n" );
+//     pthread_exit(NULL);
+//   }
+//   PointGrey_t* PG = new PointGrey_t[numCameras];
+//   if (PGR_StartCameras(&busMgr, PG, numCameras) != 0)
+//   {
+//     printf("Error starting cameras\n");
+//     PGR_StopAndCleanup(PG, numCameras);
+//     pthread_exit(NULL);
+//   }
+//   if (Network_StartCameras(PG, numCameras) != 0)
+//   {
+//     printf("Error starting network\n"); //don't return here
+//   }
+//   //setup completed
+//   printf("Rover: Image transfer commencing.\n");
 
-  while(!cam_thread_should_die)
-  {//FIXME--this is the part that should wait on the barrier
-    for (unsigned int i = 0; i < numCameras; i++)
-    {
-      PGR_GetFrame(&PG[i]);
-      OpenCV_CompressFrame(&PG[i]);
-      OpenCV_SendFrame(&PG[i]);
-    }
-  }
-  //cleanup 
-  PGR_StopAndCleanup(PG, numCameras);
-  printf( "Cam thread done!\n" );
-  pthread_exit(NULL);
-}
+//   while(!cam_thread_should_die)
+//   {//FIXME--this is the part that should wait on the barrier
+//     for (unsigned int i = 0; i < numCameras; i++)
+//     {
+//       PGR_GetFrame(&PG[i]);
+//       OpenCV_CompressFrame(&PG[i]);
+//       OpenCV_SendFrame(&PG[i]);
+//     }
+//   }
+//   //cleanup 
+//   PGR_StopAndCleanup(PG, numCameras);
+//   printf( "Cam thread done!\n" );
+//   pthread_exit(NULL);
+// }
 
 void* emperor_monitor_bump_switches(void* args)
 {
@@ -1082,13 +1090,15 @@ void start_barrier_threads(void) {
   if (pthread_barrier_init(&barrier, NULL, threads)) {
     task_error("Can't create a barrier");
   }
-  //FIXME--need the second barrier init'ed here, and much below changed
+  if (pthread_barrier_init(&barrier10hz, NULL, threads+1)) { //this one waits on 6 threads
+    task_error("Can't create barrier10hz");
+  }
   running = TRUE;
-  for (unsigned int id = 0; id<threads; id++) task_args[id].id = id;
+  for (unsigned int id = 0; id<threads+1; id++) task_args[id].id = id;
   pthread_attr_t attributes;
   pthread_attr_init(&attributes);
   pthread_attr_setstacksize(&attributes, 10*1024*1024); /* hardwired 10MB */
-  for (unsigned int id = 0; id<threads; id++) {
+  for (unsigned int id = 0; id<threads+1; id++) {
     if (pthread_create(&thread[id], &attributes, task[id],
 		       (void *)&task_args[id])) {
       task_error("Can't start thread %u", id);
@@ -1097,18 +1107,23 @@ void start_barrier_threads(void) {
   pthread_attr_destroy(&attributes);
 }
 
-void stop_barrier_threads(void) {
+void stop_barrier_threads(void) 
+{
+  //***MIGHT WANT TO HAVE THE SHUTDOWN THREAD SEND A STOP FIRST, JUST IN CASE
+  motor_stop(motor_fd);
+
   /* needs work: Technically, can't access running here without a mutex. */
   if (running&&!halt) {
     pthread_mutex_lock(&halt_mutex);
     halt = TRUE;
     pthread_mutex_unlock(&halt_mutex);
-    for (unsigned int id = 0; id<threads; id++) { //FIXME--need to stop new thread too
-      if (pthread_join(thread[id], NULL)!=0) {
+    for (unsigned int id = 0; id<threads+1; id++) 
+    {
+      if (pthread_join(thread[id], NULL)!=0) 
 	task_error("Can't join thread %u", id);
-      }
     }
-    pthread_barrier_destroy(&barrier); //FIXME--need to destroy second barrier
+    pthread_barrier_destroy(&barrier); 
+    pthread_barrier_destroy(&barrier10hz);
     halt = FALSE;
   }
 }
@@ -1243,12 +1258,13 @@ void finalize_encoders(unsigned int id) {
 void *imu_task(void *args) {
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
+  unsigned long int rep_count = 1;
   {
     /* This block only needs to be in one thread */
     frame_number = 0;
   }
   initialize_imu(id);
-  BARRIER("imu", "initialize");
+  BARRIER10HZ("imu", "initialize");
   while (TRUE) 
   {
     {
@@ -1258,14 +1274,18 @@ void *imu_task(void *args) {
       pthread_mutex_unlock(&halt_mutex);
       frame_number++;
     }
-
+    // if ((rep_count % 5) == 0) {BARRIER10HZ("imu","before pipeline");}
+    // else {BARRIER("imu", "before pipeline");}
     BARRIER("imu", "before pipeline");
 
     if (!running) break;
     double last1 = emperor_current_time();
     write_imu(id);
 
-    BARRIER("imu", "after pipeline");
+    if ((rep_count % 5) == 0) {BARRIER10HZ("imu","after pipeline");}
+    else {BARRIER("imu", "after pipeline");}
+
+    rep_count++;
 
     double last = emperor_current_time();
     read_imu(id);
@@ -1278,11 +1298,11 @@ void *imu_task(void *args) {
     //I think this timing might be wrong, but not sure it matters
     double fraction_remaining = 1.0-fps*(now-last);
     if (fraction_remaining<0.0) {
-      printf("imu %u can't keep up in frame %u, overused: %lf\n",
+      printf("imu %u can't keep up in frame %lu, overused: %lf\n",
 	     id, frame_number, -fraction_remaining);
     }
     else if (time_threads) {
-      printf("unused imu %u thread time in frame %u: %lf\n",
+      printf("unused imu %u thread time in frame %lu: %lf\n",
 	     id, frame_number, fraction_remaining);
     }
     {
@@ -1299,7 +1319,7 @@ void *imu_task(void *args) {
     }
   }
 
-  BARRIER("imu", "finalize");
+  BARRIER10HZ("imu", "finalize");
 
   finalize_imu(id);
   return NULL;
@@ -1308,18 +1328,24 @@ void *imu_task(void *args) {
 void *encoders_task(void *args) {
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
+  unsigned long int rep_count = 1;
   initialize_encoders(id);
 
-  BARRIER("encoders", "initialize");
+  BARRIER10HZ("encoders", "initialize");
 
   while (TRUE) 
   {
+    // if ((rep_count % 5) == 0) {BARRIER10HZ("encoders","before pipeline");}
+    // else {BARRIER("encoders", "before pipeline");}
     BARRIER("encoders", "before pipeline");
 
     if (!running) break;
     write_encoders(id);
 
-    BARRIER("encoders", "after pipeline");
+    if ((rep_count % 5) == 0) {BARRIER10HZ("encoders","after pipeline");}
+    else {BARRIER("encoders", "after pipeline");}
+
+    rep_count++;
 
     double last = emperor_current_time();
     read_encoders(id);
@@ -1331,16 +1357,16 @@ void *encoders_task(void *args) {
        timings become entangled with other threads. */
     double fraction_remaining = 1.0-fps*(now-last);
     if (fraction_remaining<0.0) {
-      printf("encoders %u can't keep up in frame %u, overused: %lf\n",
+      printf("encoders %u can't keep up in frame %lu, overused: %lf\n",
 	     id, frame_number, -fraction_remaining);
     }
     else if (time_threads) {
-      printf("unused encoders %u thread time in frame %u: %lf\n",
+      printf("unused encoders %u thread time in frame %lu: %lf\n",
 	     id, frame_number, fraction_remaining);
     }
   }
 
-  BARRIER("encoders", "finalize");
+  BARRIER10HZ("encoders", "finalize");
 
   finalize_encoders(id);
   return NULL;
@@ -1383,18 +1409,23 @@ void finalize_gps(unsigned int id){
 void *gps_task(void *args){
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
+  unsigned long int rep_count = 1;
   initialize_gps(id);
 
-  BARRIER("gps", "initialize");
+  BARRIER10HZ("gps", "initialize");
 
   while (TRUE) 
   {
-    BARRIER("gps", "before pipeline");
-   
+    // if ((rep_count % 5) == 0) {BARRIER10HZ("gps","before pipeline");}
+    // else {BARRIER("gps", "before pipeline");}
+    BARRIER("gps", "before pipeline");   
     if (!running) break;
     write_gps(id);
 
-    BARRIER("gps", "after pipeline");
+    if ((rep_count % 5) == 0) {BARRIER10HZ("gps","after pipeline");}
+    else {BARRIER("gps", "after pipeline");}
+
+    rep_count++;
 
     double last = emperor_current_time();
     read_gps(id);
@@ -1406,16 +1437,16 @@ void *gps_task(void *args){
        timings become entangled with other threads. */
     double fraction_remaining = 1.0-fps*(now-last);
     if (fraction_remaining<0.0) {
-      printf("gps %u can't keep up in frame %u, overused: %lf\n",
+      printf("gps %u can't keep up in frame %lu, overused: %lf\n",
 	     id, frame_number, -fraction_remaining);
     }
     else if (time_threads) {
-      printf("unused gps %u thread time in frame %u: %lf\n",
+      printf("unused gps %u thread time in frame %lu: %lf\n",
 	     id, frame_number, fraction_remaining);
     }
   }
   
-  BARRIER("gps", "finalize");  
+  BARRIER10HZ("gps", "finalize");  
   finalize_gps(id);
   return NULL;
 }
@@ -1544,18 +1575,23 @@ void finalize_buffer_and_send(unsigned int id) {
 void *buffer_and_send_task(void *args) {
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
+  unsigned long int rep_count = 1;
   initialize_buffer_and_send(id);
 
-  BARRIER("buffer_and_send", "initialize");
+  BARRIER10HZ("buffer_and_send", "initialize");
 
   while (TRUE) 
   {
-    BARRIER("buffer_and_send", "before pipeline");
-  
+    // if ((rep_count % 5) == 0) {BARRIER10HZ("buffer_and_send","before pipeline");}
+    // else {BARRIER("buffer_and_send", "before pipeline");}
+    BARRIER("buffer_and_send", "before pipeline");  
     if (!running) break;
     write_buffer_and_send(id);
-    
-    BARRIER("buffer_and_send", "after pipeline");
+
+    if ((rep_count % 5) == 0) {BARRIER10HZ("buffer_and_send","after pipeline");}
+    else {BARRIER("buffer_and_send", "after pipeline");}
+
+    rep_count++;
     
     double last = emperor_current_time();
     read_buffer_and_send(id);
@@ -1567,21 +1603,19 @@ void *buffer_and_send_task(void *args) {
        timings become entangled with other threads. */
     double fraction_remaining = 1.0-fps*(now-last);
     if (fraction_remaining<0.0) {
-      printf("buffer_and_send %u can't keep up in frame %u, overused: %lf\n",
+      printf("buffer_and_send %u can't keep up in frame %lu, overused: %lf\n",
 	     id, frame_number, -fraction_remaining);
     }
     else if (time_threads) {
-      printf("unused buffer_and_send %u thread time in frame %u: %lf\n",
+      printf("unused buffer_and_send %u thread time in frame %lu: %lf\n",
 	     id, frame_number, fraction_remaining);
     }
   }
 
-  BARRIER("buffer_and_send", "finalize");
+  BARRIER10HZ("buffer_and_send", "finalize");
   finalize_buffer_and_send(id);
   return NULL;
 }
-
-//START CLEANUP HERE
 
 //KF/move thread
 void initialize_estimate_and_move(unsigned int id){
@@ -1676,23 +1710,23 @@ void initialize_estimate_and_move(unsigned int id){
   g_KF.statePre.at<float>(7) = 0; //R wheel acceleration
   g_KF.statePost.at<float>(7) = 0;
 
-  //FIXME--starting camera thread should not be here
-  //start cameras
-  if (cam_thread_should_die) //only start if not already running
-  {
-    char logbuf[k_LogBufSize];
-    cam_thread_should_die = FALSE;
-    pthread_attr_t attributes;
-    pthread_attr_init(&attributes);
-    pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
-    pthread_create(&cam_thread, &attributes, emperor_run_cameras, NULL);
-    sprintf(logbuf, "executed: %s", cmd_start_cameras);
-    int retval = emperor_log_data(logbuf, log_sockfd);
-    if (retval != 0)
-      printf("logging failed for \'%s\'\n", logbuf);
-    pthread_attr_destroy(&attributes);
-    sleep(2); //small sleep to allow cameras to get started before moving
-  }
+  // //FIXME--starting camera thread should not be here
+  // //start cameras
+  // if (cam_thread_should_die) //only start if not already running
+  // {
+  //   char logbuf[k_LogBufSize];
+  //   cam_thread_should_die = FALSE;
+  //   pthread_attr_t attributes;
+  //   pthread_attr_init(&attributes);
+  //   pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
+  //   pthread_create(&cam_thread, &attributes, emperor_run_cameras, NULL);
+  //   sprintf(logbuf, "executed: %s", cmd_start_cameras);
+  //   int retval = emperor_log_data(logbuf, log_sockfd);
+  //   if (retval != 0)
+  //     printf("logging failed for \'%s\'\n", logbuf);
+  //   pthread_attr_destroy(&attributes);
+  //   sleep(2); //small sleep to allow cameras to get started before moving
+  // }
   //write first location estimate to global_estimate_buf
   char tempbuf[k_LogBufSize];
   sprintf(tempbuf,"ESTIMATE:X:%f:Y:%f:THETA:%f\n", 
@@ -1803,25 +1837,22 @@ void read_estimate_and_move(unsigned int id) {
   g_my_pose.y = g_KF.statePost.at<float>(1);
   g_my_pose.theta = g_KF.statePost.at<float>(2);
   
-  // //dummy increment for testing
-  // g_my_pose.y = g_my_pose.y + 0.01;
-  
+  //write out estimate
   sprintf(tempbuf,"ESTIMATE:X:%f:Y:%f:THETA:%f\n", 
 	  g_my_pose.x, g_my_pose.y, g_my_pose.theta);
   strncpy(local_estimate_buf, tempbuf, k_LogBufSize);
-  //  int num_messages = 1;
-  // if (!sensors_send_data(logbuf, num_messages))
-  //   printf("ERROR logging estimate\n");
-  //printf("I am at x = %f, y = %f, theta = %f\n", g_my_pose.x, g_my_pose.y, g_my_pose.theta);
+
+  //delay here to let cameras get going before the robot moves
+  if (frame_number < 50) return;
       
   //check distance between robot and point
   double the_distance = DistanceBetween(g_my_pose, g_waypoints[g_waypoint_index]);
   //if d < some threshold, declare at point and increment global point index
-  if (the_distance <= k_distance_threshold) {
+  if (the_distance <= k_distance_threshold) 
+  {
     motor_stop(motor_fd); //stop robot
     //log command (no need to check if different from last here) b/c break is coming
     sprintf(logbuf,"REACHED POINT %d, auto-executed: motor_%s", g_waypoint_index+1, cmd_stop);
-    //printf("%s\n",logbuf);
     int retval = emperor_log_data(logbuf, log_sockfd);
     if (retval != 0)
       printf("logging failed for \'%s'\n", logbuf);
@@ -1944,19 +1975,19 @@ void read_estimate_and_move(unsigned int id) {
 
 void finalize_estimate_and_move(unsigned int id) {
   motor_stop(motor_fd); //extra stop just for good measure
-  //stop cameras
-  if (!cam_thread_should_die) //only stop if already running
-  {
-    char logbuf[k_LogBufSize];
-    sleep(2); //small sleep to allow cameras to run a few seconds after reaching destination
-    cam_thread_should_die = TRUE;
-    pthread_join(cam_thread, NULL);
-    sprintf(logbuf, "executed: %s", cmd_stop_cameras);
-    int retval = emperor_log_data(logbuf, log_sockfd);
-    if (retval != 0)
-      printf("logging failed for \'%s\'\n", logbuf);
-    printf("Cameras stopped\n");
-  }
+  // //stop cameras //FIXME--cam stuff shouldn't be here
+  // if (!cam_thread_should_die) //only stop if already running
+  // {
+  //   char logbuf[k_LogBufSize];
+  //   sleep(2); //small sleep to allow cameras to run a few seconds after reaching destination
+  //   cam_thread_should_die = TRUE;
+  //   pthread_join(cam_thread, NULL);
+  //   sprintf(logbuf, "executed: %s", cmd_stop_cameras);
+  //   int retval = emperor_log_data(logbuf, log_sockfd);
+  //   if (retval != 0)
+  //     printf("logging failed for \'%s\'\n", logbuf);
+  //   printf("Cameras stopped\n");
+  // }
   printf("finalize_estimate_and_move complete\n");
   return;
 }
@@ -1964,43 +1995,174 @@ void finalize_estimate_and_move(unsigned int id) {
 void *estimate_and_move_task(void *args){
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
+  unsigned long int rep_count = 1;
   initialize_estimate_and_move(id);
-  BARRIER("estimate_and_move", "initialize");
-  while (TRUE) {
+
+  BARRIER10HZ("estimate_and_move", "initialize");
+
+  while (TRUE) 
+  {
+    // if ((rep_count % 5) == 0) {BARRIER10HZ("estimate_and_move","before pipeline");}
+    // else {BARRIER("estimate_and_move", "before pipeline");}
     BARRIER("estimate_and_move", "before pipeline");
     if (!running) break;
-    // double last1 = emperor_current_time();
     write_estimate_and_move(id);
-    // double now1 = emperor_current_time();
-    // printf("write_estimate_and_move time: %f\n", now1-last1);
-    // if (now1-last1 > 0.1)
-    //   printf("**********************************\n");
-    BARRIER("estimate_and_move", "after pipeline");
+
+    if ((rep_count % 5) == 0) {BARRIER10HZ("estimate_and_move","after pipeline");}
+    else {BARRIER("estimate_and_move", "after pipeline");}
+    
+    rep_count++;
+    
     double last = emperor_current_time();
     if (!route_complete)
       read_estimate_and_move(id);
     double now = emperor_current_time();
-    // printf("read_estimate_and_move time: %f\n", now-last);
-    // if (now-last > 0.1)
-    //   printf("**********************************\n");
+    double fraction_remaining = 1.0-fps*(now-last);
+    if (fraction_remaining<0.0) {
+      printf("estimate_and_move %u can't keep up in frame %lu, overused: %lf\n",
+	     id, frame_number, -fraction_remaining);
+    }
+    else if (time_threads) {
+      printf("unused estimate_and_move %u thread time in frame %lu: %lf\n",
+	     id, frame_number, fraction_remaining);
+    }
+  }
+
+  BARRIER10HZ("estimate_and_move", "finalize");
+  finalize_estimate_and_move(id);
+  return NULL;
+}
+
+
+//new camera thread 30Oct15
+void initialize_cameras(unsigned int id)
+{
+    g_numCameras = PGR_Init(&g_busMgr);
+    if ( g_numCameras < 1 )
+    {
+      perror("Insufficient number of cameras in initialize_cameras:");
+      return;
+    }
+    g_PG = new PointGrey_t[g_numCameras];
+    if (PGR_StartCameras(&g_busMgr, g_PG, g_numCameras) != 0)
+    {
+      perror("Error starting cameras:");
+      PGR_StopAndCleanup(g_PG, g_numCameras);
+      return;
+    }
+    if (Network_StartCameras(g_PG, g_numCameras) != 0)
+    {
+      printf("Error starting network\n"); //don't return here (not sure why??)
+    }
+    char logbuf[k_LogBufSize];
+    sprintf(logbuf, "executed: %s", cmd_start_cameras);
+    int retval = emperor_log_data(logbuf, log_sockfd);
+    if (retval != 0)
+      printf("logging failed for \'%s\'\n", logbuf);
+    sleep(1);//small sleep to allow cameras to get started before moving
+    //setup completed
+    printf("initialize_cameras() succeeded\n");
+    return;
+}
+
+void write_cameras(unsigned int id)
+{
+  for (unsigned int i = 0; i < g_numCameras; i++)
+  {
+    PGR_GetFrame(&g_PG[i]);
+    OpenCV_CompressFrame(&g_PG[i]);
+    OpenCV_SendFrame(&g_PG[i]);
+  }
+}
+
+void read_cameras(unsigned int id){return;} //nothing to do here
+
+void finalize_cameras(unsigned int id)
+{
+  sleep(2); //small sleep to allow cameras to run a few seconds after reaching destination
+  char logbuf[k_LogBufSize];
+  sprintf(logbuf, "executed: %s", cmd_stop_cameras);
+  int retval = emperor_log_data(logbuf, log_sockfd);
+  if (retval != 0)
+    printf("logging failed for \'%s\'\n", logbuf);
+  printf("Cameras stopped\n");
+  //cleanup 
+  PGR_StopAndCleanup(g_PG, g_numCameras);
+  delete g_PG;
+  printf("finalize_cameras complete\n" );
+  return;
+}
+
+void *cameras_task(void *args)
+{
+  struct task_args *task_args = (struct task_args *)args;
+  unsigned int id = task_args->id;
+  {
+    /* This block only needs to be in one thread */
+    frame_number_cameras = 0;
+  }
+  initialize_cameras(id);
+
+  BARRIER10HZ("cameras", "initialize");
+
+  while (TRUE) 
+  {
+  //   {
+  //     /* This block only needs to be in one thread */
+  //     pthread_mutex_lock(&halt_mutex);
+  //     if (halt) running = FALSE;
+  //     pthread_mutex_unlock(&halt_mutex);
+  //     frame_number_cameras++;
+  //   }
+
+    //BARRIER10HZ("cameras", "before pipeline");
+
+    double last = emperor_current_time();
+    write_cameras(id);
+    double now = emperor_current_time();
+
+    if (!running) break; 
+    //need to do this right before the barrier to prevent a race condition / hang
+    BARRIER10HZ("cameras", "after pipeline");
+
+    //double last = emperor_current_time();
+    read_cameras(id);
+    //double now = emperor_current_time();
+
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
        timings become entangled with other threads. */
-    double fraction_remaining = 1.0-fps*(now-last);
+    //I think this timing might be wrong, but not sure it matters
+    double fraction_remaining = 1.0-fps2*(now-last);
     if (fraction_remaining<0.0) {
-      printf("estimate_and_move %u can't keep up in frame %u, overused: %lf\n",
-	     id, frame_number, -fraction_remaining);
+      printf("imu %u can't keep up in frame %lu, overused: %lf\n",
+  	     id, frame_number_cameras, -fraction_remaining);
     }
     else if (time_threads) {
-      printf("unused estimate_and_move %u thread time in frame %u: %lf\n",
-	     id, frame_number, fraction_remaining);
+      printf("unused imu %u thread time in frame %lu: %lf\n",
+  	     id, frame_number_cameras, fraction_remaining);
     }
+    // {
+    //   /* This block only needs to be in one thread */
+    //   /* spin to sync to frame rate */
+    //   while (TRUE) {
+    //     double now = current_time();
+    //     if (now-last1>=1.0/fps2) {
+    //       last1 = now;
+    //       break;
+    //     }
+    //     if (usleep(QUANTUM)) task_error("Call to usleep failed");
+    //   }
+    // }
   }
-  BARRIER("estimate_and_move", "finalize");
-  finalize_estimate_and_move(id);
+
+  BARRIER10HZ("cameras", "finalize");
+
+  finalize_cameras(id);
   return NULL;
 }
+
 
 //downloaded from http://man7.org/tlpi/code/online/diff/sockets/read_line.c.html on 26 Jul 14
 /* Read characters from 'fd' until a newline is encountered. If a newline
