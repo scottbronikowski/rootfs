@@ -765,6 +765,37 @@ Older:
 	  and executes commands from the controller--PUT THIS INTO
   	  BARRIERS TOO!!       
  
------------git commit ----------------
+-----------git commit dda155b----------------
 
+2 Nov 15
 
+--Thinking about playing with the-force to see if we can get more than
+  10fps.  Need to first clean up the structure and get rid of the hard
+  coding of the ratios between frames and sensor readings--put these
+  as consts/vars at the beginning of the code.
+
+--Made changes to code and compiled--no issues.  Need to play with
+  numbers and test.
+
+3 Nov 15
+
+--Found and fixed cv::VideoWriter object in toollib-rover.cpp on
+  laptop.  Was hard-coded at 10.5 fps, now frame_rate variable
+  controls output avi frame rate.  AUTHORITATIVE COPIES of all
+  dsci-related stuff on laptop is in
+  ~/vader-rover/dsci-on-latop/ideas.  Output of that compilation
+  (x86...) is symlinked to ~/vader-rover/dsci-on-latop
+
+--Now playing around with camera frame rate using sensor_cam_ratio in
+  the-force.cpp.  Don't think it's possible in this framework to
+  decouple the sensor rate from the camera rate, so we are limited to
+  integer divisors of 50 Hz (10 Hz, 12.5 Hz, 16.67 Hz, 25 Hz).  COULD
+  play with sensor rate, but since the IMU is set for streaming at
+  50Hz, would have to modify that arduino code (ASIDE--is
+  arduino/teensy environment set up on laptop???)
+
+--Tried running cameras at 12.5 fps, but got lots of overused errors.
+  Seem to still get 10 fps OK, so might have to stick with that.  Want
+  to try moving the compress and send functions to after the barrier
+  (probably put in camera_read vice camera_write).  If that doesn't
+  work, going to have to stick with 10 fps.

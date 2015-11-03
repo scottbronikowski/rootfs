@@ -1,5 +1,3 @@
-
-
 Old notes
 --------------------------
 13 Mar 14
@@ -508,11 +506,89 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 --Have initial passing of 1300-byte text messages from driver window on seykhl to rover working.
 --Thinking about 1300-byte limit on string for list of points->don't think I need to put so low a limit on it...if it's bigger, TCP will just take care of parsing it into separate packets.  String parser done, seems to be working correctly.  Next need to work on point following.
 
+22 Oct 14
+--Arbitrarily set limit for list of points to 5000 bytes.  Works fine in testing.  Can change to any value by changing k_traceBufSize in the-force.cpp (rover) and toollib-gamepad-c.c (seykhl).
+--Fixed logging of camera start and stop messages.  Also added 2-second sleeps after starting and before stopping cameras to allow the image stream to be fully functional during motion.
+--Established pipe to go from sensors to main thread for sensor data for Kalman filter.  Have flag marking it as open or closed to keep a bunch of useless data from piling up in the pipe before rover is ready to move.  Also modified sensors_log_data() to not write data to log unless pipe is open, and to send the data being written to the log into the pipe as well.
+--Have the-force structured so that the rover can execute multiple paths sequentially--the rover's own position is only initialized to (0,0,pi/2) once, and then at the end of the path following the position is preserved.
+--Now just need to put Kalman filter and driving logic into the_force_parse_and_execute().
+
+23 Oct 14
+--Got most of driving logic done, as well as logging of the commands executed.  Need to finish up driving logic, then do sensor reading and sensed location from Kalman
+
+24 Oct 14
+--First draft of auto-driving logic complete.  Committing before cleaning up old comments and adding Kalman code into the-force.
+--First draft of auto-drive complete.  Committing before testing.
+--Autodrive testing revealed that we need to do some tuning of the Kalman filter parameters, most likely the rover width parameter.
+
+30 Oct 14
+--Changed run-sensors/the-force producer_encoders() to send ticks instead of cm
+--Merged run-sensors into emperor in order to be able to send motor command values with encoder data
+--Have global vars with integer motor commands set in motor_write (inside motor_control_functions.cpp).  Have them read and written to imu-log in emperor and the-force.
+--Still need to modify code on seykhl to read in new data on encoder log line.
+
+4 Nov 14
+--commit before gyro test
+
+5 Nov 14
+--modifications to autodrive in the-force.cpp.  Plugged in optimized odometry parameters and parameter to go from gyro units (whatever they are) to radians.  Using gyro z-axis to determine turns/pivots.  Getting good results on trace.  Need to improve autodriving logic.
+
+6 Nov 14
+--Minor correction to autodrive localization.  Added waypoint logging to imu-log file.
+--Got waypoint logging in imu-log to work.  Also added robot's own location estimate to imu-log
+--put write to sensor_pipe  in sensors_log_data inside the lock for the buffer that the sensors write to and the consumer reads from-->trying to see if in-order message delivery to pipe is problem with on-board KF vs. workstation KF.
+
+7 Nov 14
+--Complete restructuring of the-force code to use BARRIERs with pthreads.
+--Still a couple of bugs to work out on autodrive.  
+--I think I have the barrier code working correctly, although I'm getting "**BAD LINE" occurring in my imu-log.txt occasionally.  Not sure where that is coming from, since I can't find that text anywhere in my code.
+--I found one bug in the way that I was pulling data from the encoders--the encoders were reporting a dt of 20ms, regardless of how long it had really been since the last data had been sent.  I fixed that in the encoders' Arduino code and got the rover to drive a simulated straight forward 1m and stop.  I was getting some pretty huge (>100ms) dt's between encoder readings, but it seemed to work ok.
+--Then I figured that there was a similar bug in the IMU Arduino code and tried to fix it in the same way.  I must have broken something in doing that, since now the-force will fire up, take a path, start the cameras, and then do nothing.  I need to spend some more time troubleshooting it.
+
+10 Nov 14
+--Rolled back IMU Arduino code to previous version from Git.  Saw that I had edited and overwritten with an older version that broke the output that the Gumstix was expecting.  Going to try running the recovered version before editing again.
+--Working on getting barriers working correctly--having variable amount of time between loop executions, and can't figure out why.  Need to look at each task's read and write parts individually to see what is taking up so much time.
+
+11 Nov 14
+--Traced slowdown of >100ms to write_gps() function, which only calls gps_read_data().  Starting to look into that function to see what is taking so long to return.
+--Also saw that write_imu_encoders() is consistently taking 30-45ms to run.  Once I have the GPS problem fixed I need to look into that, although that delay will still allow us to run the sensors at 20Hz, which may be OK.
+--Started working on my own GPS reader/parser to keep up with loop speed--fgets and readLine run too slow.
+
+12 Nov 14
+--First working version of GPS reader/parser.  Works, but takes ~11-21ms to parse a GPS line.  Committing before trying a few things to speed the process up.
+--Speedup of GPS reader/parser seems to work...now clocking in under 7ms.  Fixed waypoint logging to go to log buffer instead of directly to socket (keeps messages in order).  Also fixed problem with motors and log still running after last point is reached.  Used a couple of flags to ensure that read_estimate_and_move doesn't run if the route is complete and to keep read_buffer_and_send from continuing to send the same data until the thread is joined.
+--Split imu_encoders_task into two separate tasks that can barrier separately.  Didn't seem to help--IMU task is taking ~35ms by itself.  Will look into turning that into streaming so that we don't have to wait for it to poll.
+--Set IMU to streaming and have encoders being polled at 50Hz.  Have imu_read_data() wrapped in a select() with a 1ms timeout to ensure that data reads are up to date.  Seems to be working.
+
+13 Nov 14
+--First autodrive route test successful.  Found error in logging of waypoints, recorded estimate instead of point itself.  Fixed.  Measured MSE and distance error, mean MSE over 6 runs was 0.66cm, mean distance error over 6 runs was 3.84cm.
+
+
+**--need to put reverse when past point code into read_estimate_and_move
+
+.%  *Ibuffer*              547  Ibuffer by recen
+  * *Messages*            3187  Fundamental
+  * *shell*              31669  Shell:run	  ~/source/the-force/
+  * *shell*<2>           14061  Shell:run	  ~/
+    the-force.cpp        58787  C++/l		  ~/source/the-force/the-force.cpp
+    today.text           74295  Text		  ~/today.text
+    run-sensors.cpp      25176  C++/l		  ~/source/sensors/run-sensors.cpp
+    run-sensors.h         3597  C++/l		  ~/source/sensors/run-sensors.h
+    the-force.h           7528  C++/l		  ~/source/the-force/the-force.h
+    motor_control_functi: 7327  C++/l		  ~/source/motor_control/motor_control_functions.cpp
+    motor_control.h       4877  C++/l		  ~/source/motor_control/motor_control.h
+    emperor.cpp          18368  C++/l		  ~/source/emperor/emperor.cpp
+    run-emperor            571  Shell-script[bas  ~/bin/run-emperor
+    emperor.h             2429  C++/l		  ~/source/emperor/emperor.h
+    Makefile|emperor      2457  GNUmakefile	  ~/source/emperor/Makefile
+    Makefile|sensors      2182  GNUmakefile	  ~/source/sensors/Makefile
+    *scratch*              191  Lisp Interaction
+
+
 **TODO**
 
  
 ***RANDOM NOTES
---may need to use a function similar to initport() in motor_control_functions.cpp in order to initialize fd used to read from and write to IMU and GPS
 --LOOK AT C++ examples in Razor code
 
 ..udev stuff to write new *.rules file lines to reference a device with a fixed alias
@@ -525,6 +601,30 @@ Accelerometer values were pretty similar to previous, but gyro and mag were very
 
 Buffers
 ----------------------------------------
+.   the-force.cpp        58226  C++/l		  ~/source/the-force/the-force.cpp
+  * *shell*              47358  Shell:run	  ~/source/the-force/
+    motor_control_functi: 7183  C++/l		  ~/source/motor_control/motor_control_functions.cpp
+    log_to_track.cpp     11434  C++/l		  ~/source/the-force/log_to_track.cpp
+    the-force.h           7345  C++/l		  ~/source/the-force/the-force.h
+  * *scratch*              392  Lisp Interaction
+ %  *Ibuffer*             1589  Ibuffer by recen
+    today.text           72336  Text		  ~/today.text
+  * *shell*<2>            3869  Shell:run	  /
+  * *Messages*            3296  Fundamental
+    toollib-camera.h      3487  C++/l		  ~/source/camera/toollib-camera.h
+    Makefile              2808  GNUmakefile	  ~/source/the-force/Makefile
+    log_to_track-makefile  373  GNUmakefile	  ~/source/the-force/log_to_track-makefile
+    emperor.h             2398  C++/l		  ~/source/the-force/emperor.h
+    emperor.cpp          24567  C++/l		  ~/source/the-force/emperor.cpp
+    emperor-Makefile      1725  GNUmakefile	  ~/source/the-force/emperor-Makefile
+    run-sensors.cpp      24795  C++/l		  ~/source/the-force/run-sensors.cpp
+    run-sensors.h         3468  C++/l		  ~/source/the-force/run-sensors.h
+    run-sensors-Makefile  2182  GNUmakefile	  ~/source/the-force/run-sensors-Makefile
+
+
+
+
+
 .   today.text           70222  Text		  ~/today.text
   * *shell*               9379  Shell:run	  ~/source/the-force/
     the-force.h           5632  C++/l		  ~/source/the-force/the-force.h
@@ -603,3 +703,93 @@ Older:
     run_cameras.cpp       1640  C++/l		  ~/source/camera/run_cameras.cpp
 
 
+***NEW NOTES 25SEP15***
+
+25 Sep 15 
+
+--Changed network config around to use rover-wifi router instead of
+  PAL3.0 for future experiments.
+--Laptop is now at 192.168.2.2 (reserved in router).  Changed script
+  and source code accordingly (ssh-tunnel.sh and toollib-camera.cpp)
+--Started NTP server on laptop for rover to sync with--appears to be
+  working. 
+
+-----------git commit 12e9658----------------
+
+28 Oct 15
+
+--Starting work on putting barriers around image-capturing part of
+  camera thread--need to figure out how to do the barriers at two
+  separate rates (10Hz for cam vs. 50Hz for other sensors)-->look at
+  how GPS works, since it is at a different rate than the others.
+--Copied the-force.{cpp,h} to the-force-before-cam-barriers.{cpp,h} to
+  have known working copies on hand.
+
+-----------git commit 7b9c3ca----------------
+
+29 Oct 15
+
+--Working on cleaning up the-force.{h,cpp} and implementing new
+  barrier.  Will have to have a second barrier that is always checked
+  by the camera thread, but is only checked once every 5 times by the
+  other threads.  Need also to be careful with the number of threads
+  each barrier waits for
+
+**THOUGHT**-->look at how individual images are stitched into a
+  video...do I set the framerate of 10.5 fps there?  If so, need to
+  change that.
+
+--Deleted some commented-out 'prepositional functions' in
+  the-force.cpp.  Not sure if these were important or not, or even
+  what my thinking was behind writing them.  Might need to look them
+  up in the future, so go back to previous commit or
+  the-force-before-cam-barriers.cpp.
+--Almost complete with cleanup, then need to build structure for new
+  barriers. 
+
+-----------git commit f188e07----------------
+
+30 Oct 15
+
+--Finished cleanup and implemented new barrier structure.  Testing
+  shows that it achieves a steady 10fps camera rate within 1-2s of
+  starting, so declaring that a success.
+--**TO DOs**:
+       1. Clean up commented out code in the-force
+       2. Look at putting bump switches within barrier framework
+       3. Look at code on laptop that stitches images into movies--do
+          we need to reset the frame rate there?
+       4. Port barrier structure back to emperor.  Probably easiest
+          way to do it is to copy the-force and then replace the
+	  automatic move section with the code from emperor that reads
+	  and executes commands from the controller--PUT THIS INTO
+  	  BARRIERS TOO!!       
+ 
+-----------git commit dda155b----------------
+
+2 Nov 15
+
+--Thinking about playing with the-force to see if we can get more than
+  10fps.  Need to first clean up the structure and get rid of the hard
+  coding of the ratios between frames and sensor readings--put these
+  as consts/vars at the beginning of the code.
+
+--Made changes to code and compiled--no issues.  Need to play with
+  numbers and test.
+
+3 Nov 15
+
+--Found and fixed cv::VideoWriter object in toollib-rover.cpp on
+  laptop.  Was hard-coded at 10.5 fps, now frame_rate variable
+  controls output avi frame rate.  AUTHORITATIVE COPIES of all
+  dsci-related stuff on laptop is in
+  ~/vader-rover/dsci-on-latop/ideas.  Output of that compilation
+  (x86...) is symlinked to ~/vader-rover/dsci-on-latop
+
+--Now playing around with camera frame rate using sensor_cam_ratio in
+  the-force.cpp.  Don't think it's possible in this framework to
+  decouple the sensor rate from the camera rate, so we are limited to
+  integer divisors of 50 Hz (10 Hz, 12.5 Hz, 16.67 Hz, 25 Hz).  COULD
+  play with sensor rate, but since the IMU is set for streaming at
+  50Hz, would have to modify that arduino code (ASIDE--is
+  arduino/teensy environment set up on laptop???)

@@ -70,10 +70,10 @@ using namespace cv;
     }                                                           \
   }
 
-#define BARRIER10HZ(t1, t2) {					\
-    int retval = pthread_barrier_wait(&barrier10hz);            \
+#define BARRIER2(t1, t2) {					\
+    int retval = pthread_barrier_wait(&barrier2);            \
     if (retval!=0&&retval!=PTHREAD_BARRIER_SERIAL_THREAD) {     \
-      task_error("%s %u can't wait on %s barrier10hz", t1, id, t2); \
+      task_error("%s %u can't wait on %s barrier2", t1, id, t2); \
     }                                                           \
   }
 
@@ -179,9 +179,10 @@ extern pthread_t thread[MAX_THREADS+1];
 extern struct task_args task_args[MAX_THREADS+1];
 extern pthread_mutex_t halt_mutex;
 extern pthread_barrier_t barrier;
-extern pthread_barrier_t barrier10hz;
+extern pthread_barrier_t barrier2;
 extern int time_threads;
 extern double fps;
+extern int sensor_cam_ratio;
 extern double fps2;
 extern bool route_complete;
 

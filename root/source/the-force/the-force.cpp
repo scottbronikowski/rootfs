@@ -95,8 +95,8 @@ int msg_count;
 char g_msg_buf[k_msg_buf_bytes];
 pthread_mutex_t msg_buf_and_count_lock;
 //for barriers  
-unsigned long int frame_number;
-unsigned long int frame_number_cameras;
+unsigned long int frame_number =  0;
+unsigned long int frame_number_cameras = 0;
 int running = FALSE, halt = FALSE;
 unsigned int threads = MAX_THREADS;
 void *((*task[MAX_THREADS+1])(void *)) = {&imu_task, 
@@ -109,10 +109,11 @@ pthread_t thread[MAX_THREADS+1];
 struct task_args task_args[MAX_THREADS+1];
 pthread_mutex_t halt_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_barrier_t barrier;
-pthread_barrier_t barrier10hz;
+pthread_barrier_t barrier2;
 int time_threads = FALSE;
-double fps = 50.0;
-double fps2 = 10.0;
+double fps = 50.0; //sensor readings per sec (Hz)
+int sensor_cam_ratio = 4; //number of sensor readings per camera frame
+double fps2 = fps / sensor_cam_ratio; //camera fps
 bool route_complete = false;
 bool last_send = false;
 
@@ -1090,8 +1091,8 @@ void start_barrier_threads(void) {
   if (pthread_barrier_init(&barrier, NULL, threads)) {
     task_error("Can't create a barrier");
   }
-  if (pthread_barrier_init(&barrier10hz, NULL, threads+1)) { //this one waits on 6 threads
-    task_error("Can't create barrier10hz");
+  if (pthread_barrier_init(&barrier2, NULL, threads+1)) { //this one waits on 6 threads
+    task_error("Can't create barrier2");
   }
   running = TRUE;
   for (unsigned int id = 0; id<threads+1; id++) task_args[id].id = id;
@@ -1123,7 +1124,7 @@ void stop_barrier_threads(void)
 	task_error("Can't join thread %u", id);
     }
     pthread_barrier_destroy(&barrier); 
-    pthread_barrier_destroy(&barrier10hz);
+    pthread_barrier_destroy(&barrier2);
     halt = FALSE;
   }
 }
@@ -1259,22 +1260,23 @@ void *imu_task(void *args) {
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
   unsigned long int rep_count = 1;
-  {
-    /* This block only needs to be in one thread */
-    frame_number = 0;
-  }
+  // {
+  //   /* This block only needs to be in one thread */
+  //   frame_number = 0;
+  // }
   initialize_imu(id);
-  BARRIER10HZ("imu", "initialize");
+  BARRIER2("imu", "initialize");
   while (TRUE) 
   {
-    {
-      /* This block only needs to be in one thread */
-      pthread_mutex_lock(&halt_mutex);
-      if (halt) running = FALSE;
-      pthread_mutex_unlock(&halt_mutex);
-      frame_number++;
-    }
-    // if ((rep_count % 5) == 0) {BARRIER10HZ("imu","before pipeline");}
+    //    {
+    /* This block only needs to be in one thread */
+    pthread_mutex_lock(&halt_mutex);
+    if (halt) running = FALSE;
+    pthread_mutex_unlock(&halt_mutex);
+    frame_number++;
+      //    }
+    /* end block */  
+    // if ((rep_count % 5) == 0) {BARRIER2("imu","before pipeline");}
     // else {BARRIER("imu", "before pipeline");}
     BARRIER("imu", "before pipeline");
 
@@ -1282,7 +1284,7 @@ void *imu_task(void *args) {
     double last1 = emperor_current_time();
     write_imu(id);
 
-    if ((rep_count % 5) == 0) {BARRIER10HZ("imu","after pipeline");}
+    if ((rep_count % 5) == 0) {BARRIER2("imu","after pipeline");}
     else {BARRIER("imu", "after pipeline");}
 
     rep_count++;
@@ -1319,7 +1321,7 @@ void *imu_task(void *args) {
     }
   }
 
-  BARRIER10HZ("imu", "finalize");
+  BARRIER2("imu", "finalize");
 
   finalize_imu(id);
   return NULL;
@@ -1331,18 +1333,18 @@ void *encoders_task(void *args) {
   unsigned long int rep_count = 1;
   initialize_encoders(id);
 
-  BARRIER10HZ("encoders", "initialize");
+  BARRIER2("encoders", "initialize");
 
   while (TRUE) 
   {
-    // if ((rep_count % 5) == 0) {BARRIER10HZ("encoders","before pipeline");}
+    // if ((rep_count % 5) == 0) {BARRIER2("encoders","before pipeline");}
     // else {BARRIER("encoders", "before pipeline");}
     BARRIER("encoders", "before pipeline");
 
     if (!running) break;
     write_encoders(id);
 
-    if ((rep_count % 5) == 0) {BARRIER10HZ("encoders","after pipeline");}
+    if ((rep_count % 5) == 0) {BARRIER2("encoders","after pipeline");}
     else {BARRIER("encoders", "after pipeline");}
 
     rep_count++;
@@ -1366,7 +1368,7 @@ void *encoders_task(void *args) {
     }
   }
 
-  BARRIER10HZ("encoders", "finalize");
+  BARRIER2("encoders", "finalize");
 
   finalize_encoders(id);
   return NULL;
@@ -1412,17 +1414,17 @@ void *gps_task(void *args){
   unsigned long int rep_count = 1;
   initialize_gps(id);
 
-  BARRIER10HZ("gps", "initialize");
+  BARRIER2("gps", "initialize");
 
   while (TRUE) 
   {
-    // if ((rep_count % 5) == 0) {BARRIER10HZ("gps","before pipeline");}
+    // if ((rep_count % 5) == 0) {BARRIER2("gps","before pipeline");}
     // else {BARRIER("gps", "before pipeline");}
     BARRIER("gps", "before pipeline");   
     if (!running) break;
     write_gps(id);
 
-    if ((rep_count % 5) == 0) {BARRIER10HZ("gps","after pipeline");}
+    if ((rep_count % 5) == 0) {BARRIER2("gps","after pipeline");}
     else {BARRIER("gps", "after pipeline");}
 
     rep_count++;
@@ -1446,7 +1448,7 @@ void *gps_task(void *args){
     }
   }
   
-  BARRIER10HZ("gps", "finalize");  
+  BARRIER2("gps", "finalize");  
   finalize_gps(id);
   return NULL;
 }
@@ -1578,17 +1580,17 @@ void *buffer_and_send_task(void *args) {
   unsigned long int rep_count = 1;
   initialize_buffer_and_send(id);
 
-  BARRIER10HZ("buffer_and_send", "initialize");
+  BARRIER2("buffer_and_send", "initialize");
 
   while (TRUE) 
   {
-    // if ((rep_count % 5) == 0) {BARRIER10HZ("buffer_and_send","before pipeline");}
+    // if ((rep_count % 5) == 0) {BARRIER2("buffer_and_send","before pipeline");}
     // else {BARRIER("buffer_and_send", "before pipeline");}
     BARRIER("buffer_and_send", "before pipeline");  
     if (!running) break;
     write_buffer_and_send(id);
 
-    if ((rep_count % 5) == 0) {BARRIER10HZ("buffer_and_send","after pipeline");}
+    if ((rep_count % 5) == 0) {BARRIER2("buffer_and_send","after pipeline");}
     else {BARRIER("buffer_and_send", "after pipeline");}
 
     rep_count++;
@@ -1612,7 +1614,7 @@ void *buffer_and_send_task(void *args) {
     }
   }
 
-  BARRIER10HZ("buffer_and_send", "finalize");
+  BARRIER2("buffer_and_send", "finalize");
   finalize_buffer_and_send(id);
   return NULL;
 }
@@ -1998,17 +2000,17 @@ void *estimate_and_move_task(void *args){
   unsigned long int rep_count = 1;
   initialize_estimate_and_move(id);
 
-  BARRIER10HZ("estimate_and_move", "initialize");
+  BARRIER2("estimate_and_move", "initialize");
 
   while (TRUE) 
   {
-    // if ((rep_count % 5) == 0) {BARRIER10HZ("estimate_and_move","before pipeline");}
+    // if ((rep_count % 5) == 0) {BARRIER2("estimate_and_move","before pipeline");}
     // else {BARRIER("estimate_and_move", "before pipeline");}
     BARRIER("estimate_and_move", "before pipeline");
     if (!running) break;
     write_estimate_and_move(id);
 
-    if ((rep_count % 5) == 0) {BARRIER10HZ("estimate_and_move","after pipeline");}
+    if ((rep_count % 5) == 0) {BARRIER2("estimate_and_move","after pipeline");}
     else {BARRIER("estimate_and_move", "after pipeline");}
     
     rep_count++;
@@ -2028,7 +2030,7 @@ void *estimate_and_move_task(void *args){
     }
   }
 
-  BARRIER10HZ("estimate_and_move", "finalize");
+  BARRIER2("estimate_and_move", "finalize");
   finalize_estimate_and_move(id);
   return NULL;
 }
@@ -2097,25 +2099,26 @@ void *cameras_task(void *args)
 {
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
-  {
-    /* This block only needs to be in one thread */
-    frame_number_cameras = 0;
-  }
+  // {
+  //   /* This block only needs to be in one thread */
+  //   frame_number_cameras = 0;
+  // }
   initialize_cameras(id);
 
-  BARRIER10HZ("cameras", "initialize");
+  BARRIER2("cameras", "initialize");
 
   while (TRUE) 
   {
-  //   {
-  //     /* This block only needs to be in one thread */
-  //     pthread_mutex_lock(&halt_mutex);
-  //     if (halt) running = FALSE;
-  //     pthread_mutex_unlock(&halt_mutex);
-  //     frame_number_cameras++;
-  //   }
+    //    {
+    /* This block only needs to be in one thread */
+    pthread_mutex_lock(&halt_mutex);
+    if (halt) running = FALSE;
+    pthread_mutex_unlock(&halt_mutex);
+    frame_number_cameras++;
+    /* end block */
+    //}
 
-    //BARRIER10HZ("cameras", "before pipeline");
+    //BARRIER2("cameras", "before pipeline");
 
     double last = emperor_current_time();
     write_cameras(id);
@@ -2123,7 +2126,7 @@ void *cameras_task(void *args)
 
     if (!running) break; 
     //need to do this right before the barrier to prevent a race condition / hang
-    BARRIER10HZ("cameras", "after pipeline");
+    BARRIER2("cameras", "after pipeline");
 
     //double last = emperor_current_time();
     read_cameras(id);
@@ -2136,11 +2139,11 @@ void *cameras_task(void *args)
     //I think this timing might be wrong, but not sure it matters
     double fraction_remaining = 1.0-fps2*(now-last);
     if (fraction_remaining<0.0) {
-      printf("imu %u can't keep up in frame %lu, overused: %lf\n",
+      printf("camera %u can't keep up in frame %lu, overused: %lf\n",
   	     id, frame_number_cameras, -fraction_remaining);
     }
     else if (time_threads) {
-      printf("unused imu %u thread time in frame %lu: %lf\n",
+      printf("unused camera %u thread time in frame %lu: %lf\n",
   	     id, frame_number_cameras, fraction_remaining);
     }
     // {
@@ -2157,7 +2160,7 @@ void *cameras_task(void *args)
     // }
   }
 
-  BARRIER10HZ("cameras", "finalize");
+  BARRIER2("cameras", "finalize");
 
   finalize_cameras(id);
   return NULL;
