@@ -799,3 +799,31 @@ Older:
   to try moving the compress and send functions to after the barrier
   (probably put in camera_read vice camera_write).  If that doesn't
   work, going to have to stick with 10 fps.
+
+-----------git commit 7f83a08----------------
+
+4 Nov 15
+
+--Discovered that I hadn't actually replaced the % 5 with %
+  sensor_cam_ratio in the actual tasks, so that is why it was always
+  doing 10 fps during testing.  Change made.
+
+--Tested the-force with sensor_cam_ratio = 3 (16.67 fps); in
+  imu_log.txt there was a consistent pattern of 2 ENC dts with the
+  correct (~20) reading, followed by a 3rd dt in the 56-60
+  range and cam_*.txt was showing ~11 frames in a 1 sec
+  period-->system cannot keep up with this rate. 
+
+--Tested the-force with sensor_cam_ratio = 4 (12.5 fps); in
+  imu_log.txt there was a consistent pattern of 3 ENC dts with the
+  correct (~20) reading, followed by a 3rd dt in the 33-45
+  range and cam_*.txt was showing ~11 frames in a 1 sec
+  period-->system cannot keep up with this rate. 
+
+--Tested the-force with sensor_cam_ratio = 5 (10 fps); imu_log.txt had
+  ENC dts consistently < 22 with the occasional 26-28; camera_*.txt
+  consistently showed 10 frames in a 1 sec period --> system CAN keep
+  up with this rate.
+
+--Committing before leaning up extraneous comments in the-force.* in
+  preparation for porting barrier framework back to emperor.

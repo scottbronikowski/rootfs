@@ -112,7 +112,7 @@ pthread_barrier_t barrier;
 pthread_barrier_t barrier2;
 int time_threads = FALSE;
 double fps = 50.0; //sensor readings per sec (Hz)
-int sensor_cam_ratio = 4; //number of sensor readings per camera frame
+int sensor_cam_ratio = 5; //number of sensor readings per camera frame
 double fps2 = fps / sensor_cam_ratio; //camera fps
 bool route_complete = false;
 bool last_send = false;
@@ -1276,20 +1276,20 @@ void *imu_task(void *args) {
     frame_number++;
       //    }
     /* end block */  
-    // if ((rep_count % 5) == 0) {BARRIER2("imu","before pipeline");}
+    // if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("imu","before pipeline");}
     // else {BARRIER("imu", "before pipeline");}
     BARRIER("imu", "before pipeline");
 
     if (!running) break;
-    double last1 = emperor_current_time();
+    double last = emperor_current_time();
     write_imu(id);
 
-    if ((rep_count % 5) == 0) {BARRIER2("imu","after pipeline");}
+    if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("imu","after pipeline");}
     else {BARRIER("imu", "after pipeline");}
 
     rep_count++;
 
-    double last = emperor_current_time();
+    //double last = emperor_current_time();
     read_imu(id);
     double now = emperor_current_time();
 
@@ -1312,8 +1312,8 @@ void *imu_task(void *args) {
       /* spin to sync to frame rate */
       while (TRUE) {
         double now = current_time();
-        if (now-last1>=1.0/fps) {
-          last1 = now;
+        if (now-last>=1.0/fps) {
+          last = now;
           break;
         }
         if (usleep(QUANTUM)) task_error("Call to usleep failed");
@@ -1337,19 +1337,20 @@ void *encoders_task(void *args) {
 
   while (TRUE) 
   {
-    // if ((rep_count % 5) == 0) {BARRIER2("encoders","before pipeline");}
+    // if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("encoders","before pipeline");}
     // else {BARRIER("encoders", "before pipeline");}
     BARRIER("encoders", "before pipeline");
 
     if (!running) break;
+    double last = emperor_current_time();
     write_encoders(id);
 
-    if ((rep_count % 5) == 0) {BARRIER2("encoders","after pipeline");}
+    if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("encoders","after pipeline");}
     else {BARRIER("encoders", "after pipeline");}
 
     rep_count++;
 
-    double last = emperor_current_time();
+    //  double last = emperor_current_time();
     read_encoders(id);
     double now = emperor_current_time();
    
@@ -1418,18 +1419,19 @@ void *gps_task(void *args){
 
   while (TRUE) 
   {
-    // if ((rep_count % 5) == 0) {BARRIER2("gps","before pipeline");}
+    // if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("gps","before pipeline");}
     // else {BARRIER("gps", "before pipeline");}
     BARRIER("gps", "before pipeline");   
     if (!running) break;
+    double last = emperor_current_time();
     write_gps(id);
 
-    if ((rep_count % 5) == 0) {BARRIER2("gps","after pipeline");}
+    if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("gps","after pipeline");}
     else {BARRIER("gps", "after pipeline");}
 
     rep_count++;
 
-    double last = emperor_current_time();
+    //  double last = emperor_current_time();
     read_gps(id);
     double now = emperor_current_time();
 
@@ -1584,18 +1586,19 @@ void *buffer_and_send_task(void *args) {
 
   while (TRUE) 
   {
-    // if ((rep_count % 5) == 0) {BARRIER2("buffer_and_send","before pipeline");}
+    // if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("buffer_and_send","before pipeline");}
     // else {BARRIER("buffer_and_send", "before pipeline");}
     BARRIER("buffer_and_send", "before pipeline");  
     if (!running) break;
+    double last = emperor_current_time();
     write_buffer_and_send(id);
 
-    if ((rep_count % 5) == 0) {BARRIER2("buffer_and_send","after pipeline");}
+    if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("buffer_and_send","after pipeline");}
     else {BARRIER("buffer_and_send", "after pipeline");}
 
     rep_count++;
     
-    double last = emperor_current_time();
+    //  double last = emperor_current_time();
     read_buffer_and_send(id);
     double now = emperor_current_time();
     
@@ -2004,18 +2007,19 @@ void *estimate_and_move_task(void *args){
 
   while (TRUE) 
   {
-    // if ((rep_count % 5) == 0) {BARRIER2("estimate_and_move","before pipeline");}
+    // if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("estimate_and_move","before pipeline");}
     // else {BARRIER("estimate_and_move", "before pipeline");}
     BARRIER("estimate_and_move", "before pipeline");
     if (!running) break;
+    double last = emperor_current_time();
     write_estimate_and_move(id);
 
-    if ((rep_count % 5) == 0) {BARRIER2("estimate_and_move","after pipeline");}
+    if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("estimate_and_move","after pipeline");}
     else {BARRIER("estimate_and_move", "after pipeline");}
     
     rep_count++;
     
-    double last = emperor_current_time();
+    //  double last = emperor_current_time();
     if (!route_complete)
       read_estimate_and_move(id);
     double now = emperor_current_time();
@@ -2072,12 +2076,21 @@ void write_cameras(unsigned int id)
   for (unsigned int i = 0; i < g_numCameras; i++)
   {
     PGR_GetFrame(&g_PG[i]);
+    // OpenCV_CompressFrame(&g_PG[i]);
+    // OpenCV_SendFrame(&g_PG[i]);
+  }
+}
+
+void read_cameras(unsigned int id)//{return;} //nothing to do here
+{
+  for (unsigned int i = 0; i < g_numCameras; i++)
+  {
+    //   PGR_GetFrame(&g_PG[i]);
     OpenCV_CompressFrame(&g_PG[i]);
     OpenCV_SendFrame(&g_PG[i]);
   }
 }
 
-void read_cameras(unsigned int id){return;} //nothing to do here
 
 void finalize_cameras(unsigned int id)
 {
@@ -2111,18 +2124,18 @@ void *cameras_task(void *args)
   {
     //    {
     /* This block only needs to be in one thread */
-    pthread_mutex_lock(&halt_mutex);
-    if (halt) running = FALSE;
-    pthread_mutex_unlock(&halt_mutex);
-    frame_number_cameras++;
+    // pthread_mutex_lock(&halt_mutex);
+    // if (halt) running = FALSE;
+    // pthread_mutex_unlock(&halt_mutex);
     /* end block */
     //}
+    frame_number_cameras++;
 
     //BARRIER2("cameras", "before pipeline");
 
     double last = emperor_current_time();
     write_cameras(id);
-    double now = emperor_current_time();
+    //double now = emperor_current_time();
 
     if (!running) break; 
     //need to do this right before the barrier to prevent a race condition / hang
@@ -2130,7 +2143,7 @@ void *cameras_task(void *args)
 
     //double last = emperor_current_time();
     read_cameras(id);
-    //double now = emperor_current_time();
+    double now = emperor_current_time();
 
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
