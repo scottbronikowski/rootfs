@@ -1,5 +1,3 @@
-udevadm control --reload-rules
-lla
 udevadm trigger
 ls
 lla Teensy 
@@ -1997,4 +1995,6 @@ git commit -m "30 Oct 15
           way to do it is to copy the-force and then replace the
 	  automatic move section with the code from emperor that reads
 	  and executes commands from the controller--PUT THIS INTO"
+exit
+ls
 exit

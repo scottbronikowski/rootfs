@@ -78,9 +78,8 @@ const int k_gpsWorkingBufSize = 256;
 //extern'd in header file
 //(from emperor)
 int sockfd, log_sockfd;
-int cam_thread_should_die = TRUE; //cam thread not running
 int gpio_thread_should_die = TRUE; //gpio thread not running
-pthread_t cam_thread, gpio_thread;
+pthread_t gpio_thread;
 int pan_fd, tilt_fd, motor_fd, gpio_fd;
 //(from run-sensors)
 int log_sensors_sockfd;
@@ -256,7 +255,7 @@ int main(int /*argc*/, char** /*argv*/)
   {
     log_sockfd = ClientConnect(k_Server, k_LogPort);
   }
-  sprintf(logbuf, "Logging started");
+  sprintf(logbuf, "Logging started in AUTOMATIC (the-force) mode");
   emperor_log_data(logbuf, log_sockfd);
   printf("success!\n");
   printf("log_sockfd = %d\n", log_sockfd);
@@ -321,24 +320,10 @@ int main(int /*argc*/, char** /*argv*/)
 
 void the_force_terminator(int signum)
 {
-  //***MIGHT WANT TO HAVE THE SHUTDOWN THREAD SEND A STOP FIRST, JUST IN CASE
+  //SEND A STOP FIRST, JUST IN CASE
   motor_stop(motor_fd);
-
   //stop barrier-ed threads
   stop_barrier_threads();
-
-  // //FIXME
-  // if (!cam_thread_should_die) //only stop if already running
-  //   {
-  //     int retval;
-  //     cam_thread_should_die = TRUE;
-  //     pthread_join(cam_thread, NULL);
-  //     retval = emperor_log_data((char*)"Cameras stopped in the_force_terminator", 
-  // 				log_sockfd);
-  //     if (retval != 0)
-  // 	printf("logging failed for: ");
-  //     printf("Cameras stopped in the_force_terminator\n");
-  //   }
   //kill bump switch thread
   gpio_thread_should_die = TRUE;
   pthread_join(gpio_thread, NULL);
@@ -353,45 +338,6 @@ void the_force_terminator(int signum)
   printf("command socket closed, exiting\n");
   exit(signum);
 }
-
-
-// void* emperor_run_cameras(void* args)
-// { //FIXME--make like sensor tasks
-//   BusManager busMgr;
-//   unsigned int numCameras = PGR_Init(&busMgr);
-//   if ( numCameras < 1 )
-//   {
-//     printf( "Insufficient number of cameras... exiting\n" );
-//     pthread_exit(NULL);
-//   }
-//   PointGrey_t* PG = new PointGrey_t[numCameras];
-//   if (PGR_StartCameras(&busMgr, PG, numCameras) != 0)
-//   {
-//     printf("Error starting cameras\n");
-//     PGR_StopAndCleanup(PG, numCameras);
-//     pthread_exit(NULL);
-//   }
-//   if (Network_StartCameras(PG, numCameras) != 0)
-//   {
-//     printf("Error starting network\n"); //don't return here
-//   }
-//   //setup completed
-//   printf("Rover: Image transfer commencing.\n");
-
-//   while(!cam_thread_should_die)
-//   {//FIXME--this is the part that should wait on the barrier
-//     for (unsigned int i = 0; i < numCameras; i++)
-//     {
-//       PGR_GetFrame(&PG[i]);
-//       OpenCV_CompressFrame(&PG[i]);
-//       OpenCV_SendFrame(&PG[i]);
-//     }
-//   }
-//   //cleanup 
-//   PGR_StopAndCleanup(PG, numCameras);
-//   printf( "Cam thread done!\n" );
-//   pthread_exit(NULL);
-// }
 
 void* emperor_monitor_bump_switches(void* args)
 {
@@ -495,7 +441,7 @@ int emperor_log_data(char* databuf, int log_fd)
 }
 
 double emperor_current_time(void) 
-{
+{//returns time in seconds 
   struct timeval time;
   if (gettimeofday(&time, NULL)!=0) printf("gettimeofday failed");
   return ((double)time.tv_sec)+((double)time.tv_usec)/1e6;
@@ -881,10 +827,7 @@ bool sensors_send_data(char* msgbuf, int num_messages)
     return false;
   }
   else
-  {
-    //printf("sensors_send_data: retval =%d, msgsize = %d\n", retval, msgsize);
     return true; //success
-  }
 }
 
 int gps_read_data(char* logbuf)
@@ -1112,7 +1055,6 @@ void stop_barrier_threads(void)
 {
   //***MIGHT WANT TO HAVE THE SHUTDOWN THREAD SEND A STOP FIRST, JUST IN CASE
   motor_stop(motor_fd);
-
   /* needs work: Technically, can't access running here without a mutex. */
   if (running&&!halt) {
     pthread_mutex_lock(&halt_mutex);
@@ -1144,7 +1086,7 @@ void initialize_imu(unsigned int id) {
   printf("Connecting to %s on port %s for IMU, Encoder, and GPS logging...\n",
   	 k_Server, k_imuLogPort);
   log_sensors_sockfd = -1;
-  sprintf(logbuf, "%.6f:ALL:IMU, Encoders, and GPS logging started\n", 
+  sprintf(logbuf, "%.6f:ALL:IMU, Encoders, and GPS logging started in AUTOMATIC (the-force) mode\n", 
 	  sensors_current_time());
   strncpy(sendbuf, logbuf, k_LogBufSize);
   while (log_sensors_sockfd == -1)
@@ -1159,7 +1101,7 @@ void initialize_imu(unsigned int id) {
     printf("success!\n");
   //initialize variables
   g_imu_data = new imu_data_t;
-  //open fds for imu, encoders
+  //open fd  for imu
   if (!sensors_open_serial_port(imu_fd, imu_file, sensors_speed))
   {
     perror("Error opening serial port for IMU:");
@@ -1268,16 +1210,13 @@ void *imu_task(void *args) {
   BARRIER2("imu", "initialize");
   while (TRUE) 
   {
-    //    {
     /* This block only needs to be in one thread */
     pthread_mutex_lock(&halt_mutex);
     if (halt) running = FALSE;
     pthread_mutex_unlock(&halt_mutex);
     frame_number++;
-      //    }
     /* end block */  
-    // if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("imu","before pipeline");}
-    // else {BARRIER("imu", "before pipeline");}
+
     BARRIER("imu", "before pipeline");
 
     if (!running) break;
@@ -1289,7 +1228,6 @@ void *imu_task(void *args) {
 
     rep_count++;
 
-    //double last = emperor_current_time();
     read_imu(id);
     double now = emperor_current_time();
 
@@ -1307,18 +1245,19 @@ void *imu_task(void *args) {
       printf("unused imu %u thread time in frame %lu: %lf\n",
 	     id, frame_number, fraction_remaining);
     }
+    /* This block only needs to be in one thread */
+    /* spin to sync to frame rate */
+    while (TRUE) 
     {
-      /* This block only needs to be in one thread */
-      /* spin to sync to frame rate */
-      while (TRUE) {
-        double now = current_time();
-        if (now-last>=1.0/fps) {
-          last = now;
-          break;
-        }
-        if (usleep(QUANTUM)) task_error("Call to usleep failed");
+      double now = current_time();
+      if (now-last>=1.0/fps) 
+      {
+	last = now;
+	break;
       }
+      if (usleep(QUANTUM)) task_error("Call to usleep failed");
     }
+    /* end block */
   }
 
   BARRIER2("imu", "finalize");
@@ -1337,8 +1276,6 @@ void *encoders_task(void *args) {
 
   while (TRUE) 
   {
-    // if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("encoders","before pipeline");}
-    // else {BARRIER("encoders", "before pipeline");}
     BARRIER("encoders", "before pipeline");
 
     if (!running) break;
@@ -1350,7 +1287,6 @@ void *encoders_task(void *args) {
 
     rep_count++;
 
-    //  double last = emperor_current_time();
     read_encoders(id);
     double now = emperor_current_time();
    
@@ -1419,9 +1355,8 @@ void *gps_task(void *args){
 
   while (TRUE) 
   {
-    // if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("gps","before pipeline");}
-    // else {BARRIER("gps", "before pipeline");}
     BARRIER("gps", "before pipeline");   
+
     if (!running) break;
     double last = emperor_current_time();
     write_gps(id);
@@ -1431,7 +1366,6 @@ void *gps_task(void *args){
 
     rep_count++;
 
-    //  double last = emperor_current_time();
     read_gps(id);
     double now = emperor_current_time();
 
@@ -1586,9 +1520,8 @@ void *buffer_and_send_task(void *args) {
 
   while (TRUE) 
   {
-    // if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("buffer_and_send","before pipeline");}
-    // else {BARRIER("buffer_and_send", "before pipeline");}
     BARRIER("buffer_and_send", "before pipeline");  
+
     if (!running) break;
     double last = emperor_current_time();
     write_buffer_and_send(id);
@@ -1598,7 +1531,6 @@ void *buffer_and_send_task(void *args) {
 
     rep_count++;
     
-    //  double last = emperor_current_time();
     read_buffer_and_send(id);
     double now = emperor_current_time();
     
@@ -1625,7 +1557,7 @@ void *buffer_and_send_task(void *args) {
 //KF/move thread
 void initialize_estimate_and_move(unsigned int id){
   //parse route into array of points (global)
-  char *str_num, *str_x, *str_y;   //parse raw route into x,y points. Format of string is:
+  char *str_num, *str_x, *str_y;   //parse raw route into x,y points. Format of string is: n:x1,y1;x2,y2;...;xn,yn
   char msgbuf[k_traceBufSize];
   strncpy(msgbuf, g_routebuf, k_traceBufSize);
   str_num = strtok(msgbuf, ":");   // n:x1,y1;x2,y2;...;xn,yn
@@ -1635,7 +1567,6 @@ void initialize_estimate_and_move(unsigned int id){
     printf("IMPROPERLY FORMATTED STRING passed to initialize_estimate_and_move, exiting\n");
     //play error sound here?
     route_complete = true;
-    //stop_barrier_threads();
     return;
   }
   //finish parsing route into points
@@ -1715,23 +1646,6 @@ void initialize_estimate_and_move(unsigned int id){
   g_KF.statePre.at<float>(7) = 0; //R wheel acceleration
   g_KF.statePost.at<float>(7) = 0;
 
-  // //FIXME--starting camera thread should not be here
-  // //start cameras
-  // if (cam_thread_should_die) //only start if not already running
-  // {
-  //   char logbuf[k_LogBufSize];
-  //   cam_thread_should_die = FALSE;
-  //   pthread_attr_t attributes;
-  //   pthread_attr_init(&attributes);
-  //   pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
-  //   pthread_create(&cam_thread, &attributes, emperor_run_cameras, NULL);
-  //   sprintf(logbuf, "executed: %s", cmd_start_cameras);
-  //   int retval = emperor_log_data(logbuf, log_sockfd);
-  //   if (retval != 0)
-  //     printf("logging failed for \'%s\'\n", logbuf);
-  //   pthread_attr_destroy(&attributes);
-  //   sleep(2); //small sleep to allow cameras to get started before moving
-  // }
   //write first location estimate to global_estimate_buf
   char tempbuf[k_LogBufSize];
   sprintf(tempbuf,"ESTIMATE:X:%f:Y:%f:THETA:%f\n", 
@@ -1978,26 +1892,15 @@ void read_estimate_and_move(unsigned int id) {
   return;
 }
 
-void finalize_estimate_and_move(unsigned int id) {
+void finalize_estimate_and_move(unsigned int id) 
+{
   motor_stop(motor_fd); //extra stop just for good measure
-  // //stop cameras //FIXME--cam stuff shouldn't be here
-  // if (!cam_thread_should_die) //only stop if already running
-  // {
-  //   char logbuf[k_LogBufSize];
-  //   sleep(2); //small sleep to allow cameras to run a few seconds after reaching destination
-  //   cam_thread_should_die = TRUE;
-  //   pthread_join(cam_thread, NULL);
-  //   sprintf(logbuf, "executed: %s", cmd_stop_cameras);
-  //   int retval = emperor_log_data(logbuf, log_sockfd);
-  //   if (retval != 0)
-  //     printf("logging failed for \'%s\'\n", logbuf);
-  //   printf("Cameras stopped\n");
-  // }
   printf("finalize_estimate_and_move complete\n");
   return;
 }
 
-void *estimate_and_move_task(void *args){
+void *estimate_and_move_task(void *args)
+{
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
   unsigned long int rep_count = 1;
@@ -2007,9 +1910,8 @@ void *estimate_and_move_task(void *args){
 
   while (TRUE) 
   {
-    // if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("estimate_and_move","before pipeline");}
-    // else {BARRIER("estimate_and_move", "before pipeline");}
     BARRIER("estimate_and_move", "before pipeline");
+
     if (!running) break;
     double last = emperor_current_time();
     write_estimate_and_move(id);
@@ -2019,9 +1921,9 @@ void *estimate_and_move_task(void *args){
     
     rep_count++;
     
-    //  double last = emperor_current_time();
     if (!route_complete)
       read_estimate_and_move(id);
+
     double now = emperor_current_time();
     double fraction_remaining = 1.0-fps*(now-last);
     if (fraction_remaining<0.0) {
@@ -2074,18 +1976,12 @@ void initialize_cameras(unsigned int id)
 void write_cameras(unsigned int id)
 {
   for (unsigned int i = 0; i < g_numCameras; i++)
-  {
     PGR_GetFrame(&g_PG[i]);
-    // OpenCV_CompressFrame(&g_PG[i]);
-    // OpenCV_SendFrame(&g_PG[i]);
-  }
 }
-
 void read_cameras(unsigned int id)//{return;} //nothing to do here
 {
   for (unsigned int i = 0; i < g_numCameras; i++)
   {
-    //   PGR_GetFrame(&g_PG[i]);
     OpenCV_CompressFrame(&g_PG[i]);
     OpenCV_SendFrame(&g_PG[i]);
   }
@@ -2112,36 +2008,22 @@ void *cameras_task(void *args)
 {
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
-  // {
-  //   /* This block only needs to be in one thread */
-  //   frame_number_cameras = 0;
-  // }
+
   initialize_cameras(id);
 
   BARRIER2("cameras", "initialize");
 
   while (TRUE) 
   {
-    //    {
-    /* This block only needs to be in one thread */
-    // pthread_mutex_lock(&halt_mutex);
-    // if (halt) running = FALSE;
-    // pthread_mutex_unlock(&halt_mutex);
-    /* end block */
-    //}
     frame_number_cameras++;
-
-    //BARRIER2("cameras", "before pipeline");
 
     double last = emperor_current_time();
     write_cameras(id);
-    //double now = emperor_current_time();
 
     if (!running) break; 
     //need to do this right before the barrier to prevent a race condition / hang
     BARRIER2("cameras", "after pipeline");
 
-    //double last = emperor_current_time();
     read_cameras(id);
     double now = emperor_current_time();
 
@@ -2159,18 +2041,6 @@ void *cameras_task(void *args)
       printf("unused camera %u thread time in frame %lu: %lf\n",
   	     id, frame_number_cameras, fraction_remaining);
     }
-    // {
-    //   /* This block only needs to be in one thread */
-    //   /* spin to sync to frame rate */
-    //   while (TRUE) {
-    //     double now = current_time();
-    //     if (now-last1>=1.0/fps2) {
-    //       last1 = now;
-    //       break;
-    //     }
-    //     if (usleep(QUANTUM)) task_error("Call to usleep failed");
-    //   }
-    // }
   }
 
   BARRIER2("cameras", "finalize");

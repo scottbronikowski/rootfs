@@ -51,7 +51,7 @@ using namespace cv;
 #define FALSE (0!=0)
 #endif
 
-#define MAX_THREADS 5 //total number of barrier-ed threads (not including camera)
+#define MAX_THREADS 5 //total number of barrier-ed threads
 
 #define QUANTUM 1000
 
@@ -151,8 +151,8 @@ extern const int k_gpsWorkingBufSize;
 //global vars 
 //(from emperor)
 extern int sockfd, log_sockfd;
-extern int gpio_thread_should_die;
-extern pthread_t gpio_thread;
+extern int cam_thread_should_die, gpio_thread_should_die;
+extern pthread_t cam_thread, gpio_thread;
 extern int pan_fd, tilt_fd, motor_fd, gpio_fd;
 //(from run-sensors)
 extern int log_sensors_sockfd;
@@ -174,7 +174,7 @@ extern unsigned long int frame_number;
 extern unsigned long int frame_number_cameras;
 extern int running, halt;
 extern unsigned int threads;
-extern void *((*task[MAX_THREADS+1])(void *)); //+1 is for addition of camera thread
+extern void *((*task[MAX_THREADS+1])(void *));
 extern pthread_t thread[MAX_THREADS+1];
 extern struct task_args task_args[MAX_THREADS+1];
 extern pthread_mutex_t halt_mutex;
@@ -217,6 +217,7 @@ struct task_args {
 //prototypes 
 //(from emperor)
 void the_force_terminator(int signum);
+//void* emperor_run_cameras(void* args);
 void* emperor_monitor_bump_switches(void* args);
 int emperor_log_data(char* databuf, int log_fd);
 double emperor_current_time(void);
