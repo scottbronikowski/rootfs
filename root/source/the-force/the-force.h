@@ -51,7 +51,8 @@ using namespace cv;
 #define FALSE (0!=0)
 #endif
 
-#define MAX_THREADS 5 //total number of barrier-ed threads (not including camera)
+#define MAX_THREADS 6//5 //changed to 6 b/c of bump switch thread 
+//total number of barrier-ed threads (not including camera)
 
 #define QUANTUM 1000
 
@@ -151,8 +152,6 @@ extern const int k_gpsWorkingBufSize;
 //global vars 
 //(from emperor)
 extern int sockfd, log_sockfd;
-extern int gpio_thread_should_die;
-extern pthread_t gpio_thread;
 extern int pan_fd, tilt_fd, motor_fd, gpio_fd;
 //(from run-sensors)
 extern int log_sensors_sockfd;
@@ -217,7 +216,7 @@ struct task_args {
 //prototypes 
 //(from emperor)
 void the_force_terminator(int signum);
-void* emperor_monitor_bump_switches(void* args);
+
 int emperor_log_data(char* databuf, int log_fd);
 double emperor_current_time(void);
 //(from run-sensors)
@@ -299,6 +298,13 @@ void write_cameras(unsigned int id);
 void read_cameras(unsigned int id);
 void finalize_cameras(unsigned int id);
 void *cameras_task(void *args);
+
+//new bump switch thread 5Nov15
+void initialize_bump_switches(unsigned int id);
+void write_bump_switches(unsigned int id);
+void read_bump_switches(unsigned int id);
+void finalize_bump_switches(unsigned int id);
+void *bump_switches_task(void *args);
 
 
 ssize_t readLine(int fd, void *buffer, size_t n);

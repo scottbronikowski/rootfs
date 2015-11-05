@@ -78,8 +78,6 @@ const int k_gpsWorkingBufSize = 256;
 //extern'd in header file
 //(from emperor)
 int sockfd, log_sockfd;
-int gpio_thread_should_die = TRUE; //gpio thread not running
-pthread_t gpio_thread;
 int pan_fd, tilt_fd, motor_fd, gpio_fd;
 //(from run-sensors)
 int log_sensors_sockfd;
@@ -103,6 +101,7 @@ void *((*task[MAX_THREADS+1])(void *)) = {&imu_task,
 					  &gps_task,
 					  &buffer_and_send_task,
 					  &estimate_and_move_task,
+					  &bump_switches_task,
 					  &cameras_task};
 pthread_t thread[MAX_THREADS+1];
 struct task_args task_args[MAX_THREADS+1];
@@ -145,6 +144,12 @@ char local_waypoint_buf[k_LogBufSize];
 BusManager g_busMgr;
 unsigned int g_numCameras = 0;
 PointGrey_t* g_PG;
+//for bump switches (new 5Nov15)
+int g_bump_retval, g_bump_gpio_num;
+char g_bump_readbuffer[bump_read_size];
+char g_bump_logbuf[k_LogBufSize];
+fd_set g_bump_recv_set;
+struct timeval g_bump_timeout;
 
 //from Dan's log_to_track.cpp
 // state:
@@ -259,19 +264,6 @@ int main(int /*argc*/, char** /*argv*/)
   emperor_log_data(logbuf, log_sockfd);
   printf("success!\n");
   printf("log_sockfd = %d\n", log_sockfd);
-
-  //start bump switch monitoring thread here
-  gpio_thread_should_die = FALSE;
-  pthread_attr_t attributes;
-  pthread_attr_init(&attributes);
-  pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_JOINABLE);
-  pthread_create(&gpio_thread, &attributes, emperor_monitor_bump_switches, NULL);
-  sprintf(logbuf, "Bump switch monitoring active");
-  retval = emperor_log_data(logbuf, log_sockfd);
-  if (retval != 0)
-    printf("logging failed for \'%s\'\n", logbuf);
-  pthread_attr_destroy(&attributes);
-  printf("%s\n", logbuf);
  
   //register signal handler for termination
   signal(SIGINT, the_force_terminator);
@@ -324,89 +316,15 @@ void the_force_terminator(int signum)
   motor_stop(motor_fd);
   //stop barrier-ed threads
   stop_barrier_threads();
-  //kill bump switch thread
-  gpio_thread_should_die = TRUE;
-  pthread_join(gpio_thread, NULL);
   //cleanup socket and file handles
   close(pan_fd);
   close(tilt_fd);
   close(motor_fd);
-  close(gpio_fd);
   close(log_sockfd);
   printf("data logging socket closed\n");
   close(sockfd);
   printf("command socket closed, exiting\n");
   exit(signum);
-}
-
-void* emperor_monitor_bump_switches(void* args)
-{
-  int retval, gpio_num;
-  char readbuffer[bump_read_size];
-  char logbuf[k_LogBufSize];
-  fd_set recv_set;
-  struct timeval timeout;
- 
-  while (!gpio_thread_should_die)
-  {
-    memset(logbuf, 0, sizeof(logbuf));  //clear buffer
-    //wrapping recv in a select here to ensure loop checks 
-    //gpio_thread_should_die every timeout
-    FD_ZERO(&recv_set);
-    FD_SET(gpio_fd, &recv_set);
-    //reset timeout inside loop to ensure it gets reset every time
-    timeout.tv_sec = 0;
-    timeout.tv_usec = 1000 * 100; //100ms timeout
-    retval = select(gpio_fd+1, &recv_set, NULL, NULL, &timeout);
-    if (retval < 0)
-    {
-      if (errno != EINTR) //sigalrm timer interrupts select
-      {
-	printf("emperor_monitor_bump_switches():select error, gpio_fd = %d\n",
-	       gpio_fd);
-	perror("emperor_monitor_bump_switches():select");
-      }
-      else
-      	continue;  //treat as a timeout if we got retval == 0 with errno == EINTR
-    }
-    else if (retval == 0) //timeout
-    {
-      continue; //go back to the top of the loop and recheck gpio_thread_should_die
-    }
-    else //retval >= 1-->we have data to receive
-    {
-      retval = read(gpio_fd, readbuffer, bump_read_size);
-      if (retval <= 0)
-      { //what error handling to do here??
-	printf("emperor_monitor_bump_switches read retval = %d\n", retval);
-	break;
-      }
-      gpio_num = atoi(strtok(readbuffer," "));
-      if (gpio_num == bump_rear)
-      { // bumped rear, so stop and go forward
-	motor_stop(motor_fd);
-	motor_forward_4(motor_fd);
-	usleep(bump_move_time);
-	motor_stop(motor_fd);
-	//log it
-	sprintf(logbuf, "Rear bump activated, stopping");
-	emperor_log_data(logbuf, log_sockfd);
-      }
-      else if (gpio_num == bump_front)
-      { // bumped front, so stop and go back
-	motor_stop(motor_fd);
-	motor_reverse_4(motor_fd);
-	usleep(bump_move_time);
-	motor_stop(motor_fd);
-	//log it
-	sprintf(logbuf, "Front bump activated, stopping");
-	emperor_log_data(logbuf, log_sockfd);
-      }
-      //NEEDSWORK: here we may want to do something to let viewer know about the bump so that a change in the route can be calculated and resent--basically, recovery from this error
-    }
-  }
-  printf("gpio thread exiting\n");
-  pthread_exit(NULL);
 }
 
 int emperor_log_data(char* databuf, int log_fd)
@@ -1202,12 +1120,11 @@ void *imu_task(void *args) {
   struct task_args *task_args = (struct task_args *)args;
   unsigned int id = task_args->id;
   unsigned long int rep_count = 1;
-  // {
-  //   /* This block only needs to be in one thread */
-  //   frame_number = 0;
-  // }
+
   initialize_imu(id);
+
   BARRIER2("imu", "initialize");
+
   while (TRUE) 
   {
     /* This block only needs to be in one thread */
@@ -1279,7 +1196,6 @@ void *encoders_task(void *args) {
     BARRIER("encoders", "before pipeline");
 
     if (!running) break;
-    double last = emperor_current_time();
     write_encoders(id);
 
     if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("encoders","after pipeline");}
@@ -1287,8 +1203,13 @@ void *encoders_task(void *args) {
 
     rep_count++;
 
+    double last = emperor_current_time();
     read_encoders(id);
     double now = emperor_current_time();
+    /* SAB: I know this timing is bogus, but I don't think I need to worry 
+       about it.  The sensors and cameras all run at the proper speeds. 
+       If I really cared, I could duplicate this timing on the write task 
+       above the barrier. */
    
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
@@ -1358,7 +1279,6 @@ void *gps_task(void *args){
     BARRIER("gps", "before pipeline");   
 
     if (!running) break;
-    double last = emperor_current_time();
     write_gps(id);
 
     if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("gps","after pipeline");}
@@ -1366,8 +1286,13 @@ void *gps_task(void *args){
 
     rep_count++;
 
+    double last = emperor_current_time();
     read_gps(id);
     double now = emperor_current_time();
+    /* SAB: I know this timing is bogus, but I don't think I need to worry 
+       about it.  The sensors and cameras all run at the proper speeds. 
+       If I really cared, I could duplicate this timing on the write task 
+       above the barrier. */
 
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
@@ -1523,7 +1448,6 @@ void *buffer_and_send_task(void *args) {
     BARRIER("buffer_and_send", "before pipeline");  
 
     if (!running) break;
-    double last = emperor_current_time();
     write_buffer_and_send(id);
 
     if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("buffer_and_send","after pipeline");}
@@ -1531,8 +1455,13 @@ void *buffer_and_send_task(void *args) {
 
     rep_count++;
     
+    double last = emperor_current_time();
     read_buffer_and_send(id);
     double now = emperor_current_time();
+    /* SAB: I know this timing is bogus, but I don't think I need to worry 
+       about it.  The sensors and cameras all run at the proper speeds. 
+       If I really cared, I could duplicate this timing on the write task 
+       above the barrier. */
     
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
@@ -1913,7 +1842,6 @@ void *estimate_and_move_task(void *args)
     BARRIER("estimate_and_move", "before pipeline");
 
     if (!running) break;
-    double last = emperor_current_time();
     write_estimate_and_move(id);
 
     if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("estimate_and_move","after pipeline");}
@@ -1921,10 +1849,15 @@ void *estimate_and_move_task(void *args)
     
     rep_count++;
     
+    double last = emperor_current_time();
     if (!route_complete)
       read_estimate_and_move(id);
 
     double now = emperor_current_time();
+    /* SAB: I know this timing is bogus, but I don't think I need to worry 
+       about it.  The sensors and cameras all run at the proper speeds. 
+       If I really cared, I could duplicate this timing on the write task 
+       above the barrier. */
     double fraction_remaining = 1.0-fps*(now-last);
     if (fraction_remaining<0.0) {
       printf("estimate_and_move %u can't keep up in frame %lu, overused: %lf\n",
@@ -2017,15 +1950,19 @@ void *cameras_task(void *args)
   {
     frame_number_cameras++;
 
-    double last = emperor_current_time();
     write_cameras(id);
 
     if (!running) break; 
     //need to do this right before the barrier to prevent a race condition / hang
     BARRIER2("cameras", "after pipeline");
 
+    double last = emperor_current_time();
     read_cameras(id);
     double now = emperor_current_time();
+    /* SAB: I know this timing is bogus, but I don't think I need to worry 
+       about it.  The sensors and cameras all run at the proper speeds. 
+       If I really cared, I could duplicate this timing on the write task 
+       above the barrier. */
 
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
@@ -2046,6 +1983,139 @@ void *cameras_task(void *args)
   BARRIER2("cameras", "finalize");
 
   finalize_cameras(id);
+  return NULL;
+}
+
+//new bump switch thread 5Nov15
+void initialize_bump_switches(unsigned int id){
+  //initialize variables
+  g_bump_retval = 0;
+  g_bump_gpio_num = 0;
+  memset(g_bump_readbuffer,0,bump_read_size);
+  memset(g_bump_logbuf,0,k_LogBufSize);
+  FD_ZERO(&g_bump_recv_set);
+  //write in log
+  sprintf(g_bump_logbuf, "Bump switch monitoring active");
+  g_bump_retval = emperor_log_data(g_bump_logbuf, log_sockfd);
+  if (g_bump_retval != 0)
+    printf("logging failed for \'%s\'\n", g_bump_logbuf);
+  return;
+}
+
+void write_bump_switches(unsigned int id)
+{
+  memset(g_bump_logbuf, 0, sizeof(g_bump_logbuf));  //clear buffer
+  //wrapping recv in a select here to ensure recv doesn't hang
+  FD_ZERO(&g_bump_recv_set);
+  FD_SET(gpio_fd, &g_bump_recv_set);
+  //reset timeout here to ensure it gets reset every time
+  g_bump_timeout.tv_sec = 0;
+  g_bump_timeout.tv_usec = 1000 * 2; //2ms timeout
+  g_bump_retval = select(gpio_fd+1, &g_bump_recv_set, NULL, NULL, &g_bump_timeout);
+  if (g_bump_retval < 0)
+  {
+    if (errno != EINTR) //sigalrm timer interrupts select
+    {
+      printf("write_bump_switches():select error, gpio_fd = %d\n",
+	     gpio_fd);
+      perror("write_bump_switches():select");
+    }
+    else
+      return;  //treat as a timeout if we got retval < 0 with errno == EINTR
+  }
+  else if (g_bump_retval == 0) //timeout
+    return; //done with this iteration
+  else //g_bump_retval >= 1-->we have data to receive
+  {
+    g_bump_retval = read(gpio_fd, g_bump_readbuffer, bump_read_size);
+    if (g_bump_retval <= 0)
+    { //what error handling to do here??
+      printf("write_bump_switches read retval = %d\n", g_bump_retval);
+      return;//exit here
+    }
+    g_bump_gpio_num = atoi(strtok(g_bump_readbuffer," "));
+    if (g_bump_gpio_num == bump_rear)
+    { // bumped rear, so stop and go forward
+      motor_stop(motor_fd);
+      motor_forward_4(motor_fd);
+      usleep(bump_move_time);
+      motor_stop(motor_fd);
+      //log it
+      sprintf(g_bump_logbuf, "Rear bump activated, stopping");
+      emperor_log_data(g_bump_logbuf, log_sockfd);
+    }
+    else if (g_bump_gpio_num == bump_front)
+    { // bumped front, so stop and go back
+      motor_stop(motor_fd);
+      motor_reverse_4(motor_fd);
+      usleep(bump_move_time);
+      motor_stop(motor_fd);
+      //log it
+      sprintf(g_bump_logbuf, "Front bump activated, stopping");
+      emperor_log_data(g_bump_logbuf, log_sockfd);
+    }
+    //NEEDSWORK: here we may want to do something to let viewer know about the bump so that a change in the route can be calculated and resent--basically, recovery from this error
+  }
+  return;
+}
+
+void read_bump_switches(unsigned int id) {return;} //nothing to do here
+
+void finalize_bump_switches(unsigned int id){
+  //close fd
+  close(gpio_fd);
+  printf("finalize_bump_switches complete\n");
+  return;
+}
+
+void *bump_switches_task(void *args)
+{
+  struct task_args *task_args = (struct task_args *)args;
+  unsigned int id = task_args->id;
+  unsigned long int rep_count = 1;
+  initialize_bump_switches(id);
+
+  BARRIER2("bump_switches", "initialize");
+
+  while (TRUE) 
+  {
+    BARRIER("bump_switches", "before pipeline");   
+
+    if (!running) break;
+    //    double last = emperor_current_time();
+    write_bump_switches(id);
+
+    if ((rep_count % sensor_cam_ratio) == 0) {
+      BARRIER2("bump_switches","after pipeline");}
+    else 
+      BARRIER("bump_switches", "after pipeline");
+
+    rep_count++;
+    double last = emperor_current_time();
+    read_bump_switches(id);
+    double now = emperor_current_time();
+    /* SAB: I know this timing is bogus, but I don't think I need to worry 
+       about it.  The sensors and cameras all run at the proper speeds. 
+       If I really cared, I could duplicate this timing on the write task 
+       above the barrier. */
+
+    /* This intentionally ignores the time for the two barriers, the
+       conditional break, the conditional printfs, and the loop. And it does
+       two calls to current_time() instead of one. Because otherwise the
+       timings become entangled with other threads. */
+    double fraction_remaining = 1.0-fps*(now-last);
+    if (fraction_remaining<0.0) {
+      printf("bump_switches %u can't keep up in frame %lu, overused: %lf\n",
+	     id, frame_number, -fraction_remaining);
+    }
+    else if (time_threads) {
+      printf("unused bump_switches %u thread time in frame %lu: %lf\n",
+	     id, frame_number, fraction_remaining);
+    }
+  }
+  
+  BARRIER2("bump_switches", "finalize");  
+  finalize_bump_switches(id);
   return NULL;
 }
 
