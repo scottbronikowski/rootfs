@@ -1,12 +1,17 @@
 /*
 
-  Implementation for main control program to run vader-rover for automated driving.
+  Implementation for main control program to run vader-rover for MANUAL driving.
+
+  **THIS IS BUILT FROM A MERGE OF THE-FORCE AND EMPEROR-BEFORE-BARRIERS**
+
   Basically a merge of the old emperor and run-sensors programs, along with Dan's code in log_to_track.cpp to do Kalman filter position finding from sensor data
 
   Author: Scott Bronikowski
   Date: 16 October 2014
 
   Edited beginning on 28 October 2015 to add a second barrier to control the camera thread and ensure that this thread executes at exactly 10 Hz while the other threads execute at 50 Hz.
+
+  CONVERTED starting 5 Nov 15 to put manual driving back in while keeping most other stuff the same.
 */
 
 #include "emperor.h"
@@ -112,11 +117,15 @@ int time_threads = FALSE;
 double fps = 50.0; //sensor readings per sec (Hz)
 int sensor_cam_ratio = 5; //number of sensor readings per camera frame
 double fps2 = fps / sensor_cam_ratio; //camera fps
-bool route_complete = false;
-bool last_send = false;
+//bool route_complete = false;
+//bool last_send = false;
 
 
 //not extern'd
+char motor_prev[k_maxBufSize];
+char pan_prev[k_maxBufSize];
+char tilt_prev[k_maxBufSize];
+
 pose_t g_my_pose = {0.0,0.0,k_PI/2}; //robot's current location
       //initialized to x=0, y=0, theta = pi/2 (due north in polar radians)
 //(from run-sensors)
@@ -126,20 +135,21 @@ NMEAParser g_parser;
 int g_gps_new_data;
 char g_gps_buf[k_LogBufSize];
 char g_routebuf[k_traceBufSize];
-location_t g_waypoints[200];  //HARDCODED limit of 200 waypoints in a route
-int g_num_waypoints, g_waypoint_index;
+//location_t g_waypoints[200];  //HARDCODED limit of 200 waypoints in a route
+//int g_num_waypoints, g_waypoint_index;
 Mat g_MeasurementModel = Mat::zeros(7,8,CV_32F);
 Mat g_MeasurementModel_noGPS = Mat::zeros(7,8,CV_32F);
 Mat g_TransitionModel =  Mat::zeros(8,8,CV_32F);
 KalmanFilter g_KF(8, 7, 2); // 8 state variables, 7 measurements, 2 inputs
-char g_motor_prev[k_maxBufSize]; //previous motor command
+//char g_motor_prev[k_maxBufSize]; //previous motor command
 char global_estimate_buf[k_LogBufSize];
 char local_estimate_buf[k_LogBufSize];
 char g_gps_working_buf[k_gpsWorkingBufSize];
 int g_gps_working_buf_index = 0;
-char global_waypoint_buf[k_LogBufSize];
-bool global_waypoint_flag = false;
-char local_waypoint_buf[k_LogBufSize];
+//char global_waypoint_buf[k_LogBufSize];
+//bool global_waypoint_flag = false;
+//char local_waypoint_buf[k_LogBufSize];
+
 //for cameras (new 30Oct15)
 BusManager g_busMgr;
 unsigned int g_numCameras = 0;
@@ -214,35 +224,35 @@ int main(int /*argc*/, char** /*argv*/)
 {
   char logbuf[k_LogBufSize];
   int retval;
-  printf("Starting The Force\n");
+  printf("Starting Emperor\n");
   printf("Please ensure that driver-gui.sc (viewer '()) is running on %s\n", k_Server);
   //open local fds
   pan_fd = open(pan_file, O_WRONLY);
   if (pan_fd < 1)
   {
     perror("pan:");
-    the_force_terminator(SIGTERM);
+    emperor_terminator(SIGTERM);
     return -1;
   }
   tilt_fd = open(tilt_file, O_WRONLY);
   if (tilt_fd < 1)
   {
     perror("tilt:");
-    the_force_terminator(SIGTERM);
+    emperor_terminator(SIGTERM);
     return -1;
   }
   motor_fd = initport();
   if (motor_fd < 1)
   {
     perror("motor:");
-    the_force_terminator(SIGTERM);
+    emperor_terminator(SIGTERM);
     return -1;
   }
   gpio_fd = open(gpio_file, O_RDONLY);
   if (gpio_fd < 1)
   {
     perror("gpio:");
-    the_force_terminator(SIGTERM);
+    emperor_terminator(SIGTERM);
     return -1;
   }
   //start network stuff and wait for connection
@@ -260,57 +270,101 @@ int main(int /*argc*/, char** /*argv*/)
   {
     log_sockfd = ClientConnect(k_Server, k_LogPort);
   }
-  sprintf(logbuf, "Logging started in AUTOMATIC (the-force) mode");
+  sprintf(logbuf, "Logging started in MANUAL (emperor) mode");
   emperor_log_data(logbuf, log_sockfd);
   printf("success!\n");
   printf("log_sockfd = %d\n", log_sockfd);
  
   //register signal handler for termination
-  signal(SIGINT, the_force_terminator);
-  signal(SIGTERM, the_force_terminator);
+  signal(SIGINT, emperor_terminator);
+  signal(SIGTERM, emperor_terminator);
 
-  char prevmsgbuf[k_traceBufSize];
+  char msgbuf[k_maxBufSize];
+  char prevmsgbuf[k_maxBufSize];
   memset(prevmsgbuf, 0, sizeof(prevmsgbuf));
+  memset(motor_prev, 0, sizeof(motor_prev));
+  memset(pan_prev, 0, sizeof(pan_prev));
+  memset(tilt_prev, 0, sizeof(tilt_prev));
+
+  //start barrier threads
+  start_barrier_threads();
+
+  //small sleep to let cameras get going
+  sleep(1);
 
   //loop on listening for commands 
-  //play "what is thy bidding" here (or maybe inside loop)
   while(1)
   {
-    memset(g_routebuf, 0, sizeof(g_routebuf)); //clear buffer **THIS MIGHT CAUSE PROBLEMS**
-    retval = recv(sockfd, &g_routebuf, sizeof(g_routebuf), 0);
+    memset(msgbuf, 0, sizeof(msgbuf)); //clear buffer
+    retval = recv(sockfd, &msgbuf, sizeof(msgbuf), 0);
     if (retval < 0)
     {
       printf("Error in recv\n");
-      the_force_terminator(SIGTERM);
+      emperor_terminator(SIGTERM);
       return -1;
     }
     if (retval == 0)
     {
       printf("Sender closed connection\n");
-      the_force_terminator(SIGTERM);
+      emperor_terminator(SIGTERM);
       return -1;
     }
     //if we get here, we have something useful in msgbuf, so do something with it
-    if (strncmp(g_routebuf, prevmsgbuf, k_traceBufSize) != 0) //received new command
+    if (strncmp(msgbuf, prevmsgbuf, k_maxBufSize) != 0) //received new command
     {
-      strncpy(prevmsgbuf, g_routebuf, k_traceBufSize);
+      // printf("Received %d bytes: %s\n", retval, msgbuf);
+      strncpy(prevmsgbuf, msgbuf, k_maxBufSize);
     }
     else //got a repeat of the last received command, so ignore it
       continue;
     //do stuff with commands received
-    start_barrier_threads();
-    while (!route_complete) {
-      usleep(1*1000*1000);//sleep while waiting for route_complete
+    retval = emperor_parse_and_execute(msgbuf);
+    if (retval != 0)
+    {
+      printf("Error in emperor_parse_and_execute\n");
+      emperor_terminator(SIGTERM);
+      return -1;
     }
-    stop_barrier_threads();
-    printf("Trace following complete for: %s\n", g_routebuf);
   }
+
+  // //play "what is thy bidding" here (or maybe inside loop)
+  // while(1)
+  // {
+  //   memset(g_routebuf, 0, sizeof(g_routebuf)); //clear buffer **THIS MIGHT CAUSE PROBLEMS**
+  //   retval = recv(sockfd, &g_routebuf, sizeof(g_routebuf), 0);
+  //   if (retval < 0)
+  //   {
+  //     printf("Error in recv\n");
+  //     emperor_terminator(SIGTERM);
+  //     return -1;
+  //   }
+  //   if (retval == 0)
+  //   {
+  //     printf("Sender closed connection\n");
+  //     emperor_terminator(SIGTERM);
+  //     return -1;
+  //   }
+  //   //if we get here, we have something useful in msgbuf, so do something with it
+  //   if (strncmp(g_routebuf, prevmsgbuf, k_traceBufSize) != 0) //received new command
+  //   {
+  //     strncpy(prevmsgbuf, g_routebuf, k_traceBufSize);
+  //   }
+  //   else //got a repeat of the last received command, so ignore it
+  //     continue;
+  //   //do stuff with commands received
+  //   start_barrier_threads();
+  //   while (!route_complete) {
+  //     usleep(1*1000*1000);//sleep while waiting for route_complete
+  //   }
+  //   stop_barrier_threads();
+  //   printf("Trace following complete for: %s\n", g_routebuf);
+  // }
   //cleanup done in terminator (called automatically when program terminates)
   return 0;
 }
 
 
-void the_force_terminator(int signum)
+void emperor_terminator(int signum)
 {
   //SEND A STOP FIRST, JUST IN CASE
   motor_stop(motor_fd);
@@ -325,6 +379,155 @@ void the_force_terminator(int signum)
   close(sockfd);
   printf("command socket closed, exiting\n");
   exit(signum);
+}
+
+int emperor_parse_and_execute(char* msgbuf)
+{
+  char logbuf[k_LogBufSize];
+  int retval;
+  if (strncmp(msgbuf, cmd_start_cameras, strlen(cmd_start_cameras)) == 0) 
+  { //start cameras
+    //printf("Matched start_cameras command\n");
+    return 0; //do nothing here b/c cameras start automatically
+  }
+  if (strncmp(msgbuf, cmd_stop_cameras, strlen(cmd_stop_cameras)) == 0)
+  { //stop cameras
+    //printf("Matched stop_cameras command\n");
+    emperor_terminator(SIGTERM);
+    return 0;
+  }  
+  if (strncmp(msgbuf, cmd_servo, strlen(cmd_servo)) == 0)
+  { //tilt & motor
+    // printf("Matched servo & motor command\n");
+    //do stuff
+    //parse the command
+    char *servo, *tilt, *pan, *motor;
+    servo = strtok(msgbuf, " :");
+    tilt = strtok(NULL, " :");
+    pan = strtok(NULL, " :");
+    motor = strtok(NULL, " :");
+    // printf("Parsed: servo = %s, tilt = %s, pan = %s, motor = %s\n", 
+    // 	   servo, tilt, pan, motor);
+    // printf("strlen: servo = %d, tilt = %d, tilt = %d, motor = %d\n", 
+    // 	   strlen(servo), strlen(tilt), strlen(pan), strlen(motor));
+    if (strlen(servo) > 0) ; //dummy statement to kill warning
+    //write commands to pan and tilt fds 
+    //  first check if command is duplicated
+    if ((strncmp(pan, pan_prev, strlen(pan)) !=0) ||
+	(strncmp(tilt, tilt_prev, strlen(tilt)) != 0)) //if either is different
+    {
+      memset(pan_prev, 0, sizeof(pan_prev));
+      strncpy(pan_prev, pan, strlen(pan));
+      memset(tilt_prev, 0, sizeof(tilt_prev));
+      strncpy(tilt_prev, tilt, strlen(tilt));
+      retval = write(tilt_fd, tilt, strlen(tilt));
+      if(retval < 0)
+      {
+	printf("error writing tilt\n");
+	return -1;
+      }
+      //printf("wrote tilt...");
+      retval = write(pan_fd, pan, strlen(pan));
+      if(retval < 0)
+      {
+	printf("error writing pan\n");
+	return -1;
+      }
+      //printf("wrote pan\n");
+      //now log pan & tilt
+      sprintf(logbuf, "executed: pan_%s, tilt_%s", pan, tilt );
+      retval = emperor_log_data(logbuf, log_sockfd);
+      if (retval != 0)
+	printf("logging failed for \'%s\'\n", logbuf);
+    }
+    //send motor command
+    //  first check if motor command is new -- no need to send repeats
+    if (strncmp(motor, motor_prev, strlen(motor)) != 0)
+    {
+      // printf("new motor command: motor_prev = %s, motor = %s\n", motor_prev, motor);
+      memset(motor_prev, 0, sizeof(motor_prev));
+      strncpy(motor_prev, motor, strlen(motor));
+
+      if (strncmp(motor, cmd_stop, strlen(cmd_stop)) == 0){ //stop
+ 	motor_stop(motor_fd);
+	// g_motor_cmd_L = L_STOP; 
+	// g_motor_cmd_R = R_STOP;
+      }
+      else if (strncmp(motor, cmd_forward_1, strlen(cmd_forward_1)) == 0){ //forward_1
+      	motor_forward_1(motor_fd);
+	// g_motor_cmd_L = L_FWD_1; 
+	// g_motor_cmd_R = R_FWD_1;
+      }
+      else if (strncmp(motor, cmd_forward_2, strlen(cmd_forward_2)) == 0){ //forward_2
+	motor_forward_2(motor_fd);
+	// g_motor_cmd_L = L_FWD_2; 
+	// g_motor_cmd_R = R_FWD_2;
+      }
+      else if (strncmp(motor, cmd_forward_3, strlen(cmd_forward_3)) == 0){ //forward_3
+	motor_forward_3(motor_fd);
+	// g_motor_cmd_L = L_FWD_3; 
+	// g_motor_cmd_R = R_FWD_3;
+      }
+      else if (strncmp(motor, cmd_forward_4, strlen(cmd_forward_4)) == 0){ //forward_4
+	motor_forward_4(motor_fd);
+	// g_motor_cmd_L = L_FWD_FULL; 
+	// g_motor_cmd_R = R_FWD_FULL;
+      }
+      else if (strncmp(motor, cmd_reverse_1, strlen(cmd_reverse_1)) == 0) //reverse_1
+	motor_reverse_1(motor_fd);
+      else if (strncmp(motor, cmd_reverse_2, strlen(cmd_reverse_2)) == 0) //reverse_2
+	motor_reverse_2(motor_fd);
+      else if (strncmp(motor, cmd_reverse_3, strlen(cmd_reverse_3)) == 0) //reverse_3
+	motor_reverse_3(motor_fd);
+      else if (strncmp(motor, cmd_reverse_4, strlen(cmd_reverse_4)) == 0) //reverse_4
+	motor_reverse_4(motor_fd);
+      else if (strncmp(motor, cmd_forward_right_1, 
+		       strlen(cmd_forward_right_1)) == 0) //forward_right_1
+	motor_forward_right_1(motor_fd);
+      else if (strncmp(motor, cmd_forward_right_2, 
+		       strlen(cmd_forward_right_2)) == 0) //forward_right_2
+	motor_forward_right_2(motor_fd);
+      else if (strncmp(motor, cmd_forward_left_1, 
+		       strlen(cmd_forward_left_1)) == 0) //forward_left_1
+	motor_forward_left_1(motor_fd);
+      else if (strncmp(motor, cmd_forward_left_2, 
+		       strlen(cmd_forward_left_2)) == 0) //forward_left_2
+	motor_forward_left_2(motor_fd);
+      else if (strncmp(motor, cmd_pivot_left_1, 
+		       strlen(cmd_pivot_left_1)) == 0) //pivot_left_1
+	motor_pivot_left_1(motor_fd);
+      else if (strncmp(motor, cmd_pivot_left_2, 
+		       strlen(cmd_pivot_left_2)) == 0) //pivot_left_2
+	motor_pivot_left_2(motor_fd);
+      else if (strncmp(motor, cmd_pivot_right_1, 
+		       strlen(cmd_pivot_right_1)) == 0) //pivot_right_1
+	motor_pivot_right_1(motor_fd);
+      else if (strncmp(motor, cmd_pivot_right_2, 
+		       strlen(cmd_pivot_right_2)) == 0) //pivot_right_2
+	motor_pivot_right_2(motor_fd);
+      else if (strncmp(motor, cmd_reverse_right_1, 
+		       strlen(cmd_reverse_right_1)) == 0) //reverse_right_1
+	motor_reverse_right_1(motor_fd);
+      else if (strncmp(motor, cmd_reverse_right_2, 
+		       strlen(cmd_reverse_right_2)) == 0) //reverse_right_2
+	motor_reverse_right_2(motor_fd);
+      else if (strncmp(motor, cmd_reverse_left_1, 
+		       strlen(cmd_reverse_left_1)) == 0) //reverse_left_1
+	motor_reverse_left_1(motor_fd);
+      else if (strncmp(motor, cmd_reverse_left_2, 
+		       strlen(cmd_reverse_left_2)) == 0) //reverse_left_2
+	motor_reverse_left_2(motor_fd);
+      //now log the motor command
+      sprintf(logbuf, "executed: motor_%s", motor);
+      retval = emperor_log_data(logbuf, log_sockfd);
+      if (retval != 0)
+	printf("logging failed for \'%s\'\n", logbuf);
+    }
+    return 0;
+  }
+  //if we get here without returning, it means we didn't match any commands
+  //printf("emperor_parse_and_execute error: no command matched msgbuf\n");
+  return -1;
 }
 
 int emperor_log_data(char* databuf, int log_fd)
@@ -1004,7 +1207,7 @@ void initialize_imu(unsigned int id) {
   printf("Connecting to %s on port %s for IMU, Encoder, and GPS logging...\n",
   	 k_Server, k_imuLogPort);
   log_sensors_sockfd = -1;
-  sprintf(logbuf, "%.6f:ALL:IMU, Encoders, and GPS logging started in AUTOMATIC (the-force) mode\n", 
+  sprintf(logbuf, "%.6f:ALL:IMU, Encoders, and GPS logging started in MANUAL (emperor) mode\n", 
 	  sensors_current_time());
   strncpy(sendbuf, logbuf, k_LogBufSize);
   while (log_sensors_sockfd == -1)
@@ -1139,21 +1342,22 @@ void *imu_task(void *args) {
     if (!running) break;
     double last = emperor_current_time();
     write_imu(id);
+    double pre = emperor_current_time() - last;
 
     if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("imu","after pipeline");}
     else {BARRIER("imu", "after pipeline");}
 
-    rep_count++;
-
-    read_imu(id);
     double now = emperor_current_time();
-
+    rep_count++;
+    read_imu(id);
+    double post = emperor_current_time() - now;
+    //SAB: comment below might now be moot
     /* This intentionally ignores the time for the two barriers, the
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
        timings become entangled with other threads. */
     //I think this timing might be wrong, but not sure it matters
-    double fraction_remaining = 1.0-fps*(now-last);
+    double fraction_remaining = 1.0-fps*(pre+post);//(now-last);
     if (fraction_remaining<0.0) {
       printf("imu %u can't keep up in frame %lu, overused: %lf\n",
 	     id, frame_number, -fraction_remaining);
@@ -1196,16 +1400,18 @@ void *encoders_task(void *args) {
     BARRIER("encoders", "before pipeline");
 
     if (!running) break;
+    double last = emperor_current_time();
     write_encoders(id);
+    double pre = emperor_current_time() - last;
 
     if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("encoders","after pipeline");}
     else {BARRIER("encoders", "after pipeline");}
 
-    rep_count++;
-
-    double last = emperor_current_time();
-    read_encoders(id);
     double now = emperor_current_time();
+    rep_count++;
+    read_encoders(id);
+    double post = emperor_current_time() - now;
+    //SAB: comment below might now be moot
     /* SAB: I know this timing is bogus, but I don't think I need to worry 
        about it.  The sensors and cameras all run at the proper speeds. 
        If I really cared, I could duplicate this timing on the write task 
@@ -1215,7 +1421,7 @@ void *encoders_task(void *args) {
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
        timings become entangled with other threads. */
-    double fraction_remaining = 1.0-fps*(now-last);
+    double fraction_remaining = 1.0-fps*(pre+post);//(now-last);
     if (fraction_remaining<0.0) {
       printf("encoders %u can't keep up in frame %lu, overused: %lf\n",
 	     id, frame_number, -fraction_remaining);
@@ -1279,16 +1485,18 @@ void *gps_task(void *args){
     BARRIER("gps", "before pipeline");   
 
     if (!running) break;
+    double last = emperor_current_time();
     write_gps(id);
+    double pre = emperor_current_time() - last;
 
     if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("gps","after pipeline");}
     else {BARRIER("gps", "after pipeline");}
 
-    rep_count++;
-
-    double last = emperor_current_time();
-    read_gps(id);
     double now = emperor_current_time();
+    rep_count++;
+    read_gps(id);
+    double post = emperor_current_time() - now;
+    //SAB: comment below might now be moot
     /* SAB: I know this timing is bogus, but I don't think I need to worry 
        about it.  The sensors and cameras all run at the proper speeds. 
        If I really cared, I could duplicate this timing on the write task 
@@ -1298,7 +1506,7 @@ void *gps_task(void *args){
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
        timings become entangled with other threads. */
-    double fraction_remaining = 1.0-fps*(now-last);
+    double fraction_remaining = 1.0-fps*(pre+post);//(now-last);
     if (fraction_remaining<0.0) {
       printf("gps %u can't keep up in frame %lu, overused: %lf\n",
 	     id, frame_number, -fraction_remaining);
@@ -1332,98 +1540,98 @@ void read_buffer_and_send(unsigned int id) {
   char imubuf[k_LogBufSize];
   char encoderbuf[k_LogBufSize];
   char gpsbuf[k_LogBufSize];
-  if (!last_send) 
-  { //check route complete and if true, set last send
-    if (route_complete)
-      last_send = true;
-    //read g_imu_data and parse into text
-    r = snprintf(imubuf, k_LogBufSize, "%.6f:IMU:time:%lu:dt:%lu:"
-		 "Y:%.2f:P:%.2f:R:%.2f:"
-		 "Y(a):%.2f:M_h(a):%.2f:M_h:%.2f:"
-		 "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
-		 "Gx:%.2f:Gy:%.2f:Gz:%.2f\n",
-		 sensors_current_time(),
-		 g_imu_data->timestamp, g_imu_data->dt,
-		 g_imu_data->data[0], g_imu_data->data[1], g_imu_data->data[2],
-		 g_imu_data->data[3], g_imu_data->data[4], g_imu_data->data[5],
-		 g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
-		 g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
-		 g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
-    if (r > k_LogBufSize)
-      sprintf(imubuf,"IMU:BOGUS READING");
-    //write text to g_msg_buf
-    if (msg_count < k_msg_buf_size) {//buffer has room
-      strncpy(&g_msg_buf[msg_count * k_LogBufSize], imubuf, k_LogBufSize); //pad buffer   
-      ++msg_count; //increment msg_count
-    }
-    else { //buffer is full
-      printf("ERROR in read_buffer_and_send: buffer full on imu write\n");
-      return;
-    }
-    //read g_encoders_data and parse into text
-    r =  snprintf(encoderbuf,k_LogBufSize,
-		  "%.6f:ENC:time:%lu:dt:%lu:L:%.1f:R:%.1f:MCL:%d:MCR:%d\n",
-		  sensors_current_time(),
-		  g_encoders_data->timestamp, g_encoders_data->dt,
-		  g_encoders_data->ticks[0], g_encoders_data->ticks[1],
-		  g_motor_cmd_L, g_motor_cmd_R);
-    if (r > k_LogBufSize)
-      sprintf(encoderbuf, "ENC:BOGUS READING");
-    //write text to g_msg_buf
-    if (msg_count < k_msg_buf_size) {//buffer has room
-      strncpy(&g_msg_buf[msg_count * k_LogBufSize], encoderbuf, k_LogBufSize); //pad buffer
-      ++msg_count; //increment msg_count
-    }
-    else { //buffer is full
-      printf("ERROR in read_buffer_and_send: buffer full on encoder write\n");
-      return;
-    }
-    if (g_gps_new_data == 0) {//if new GPS data
-      //write g_gps_buf to g_msg_buf
-      r = snprintf(gpsbuf,k_LogBufSize, "%.6f:GPS:%s\n", sensors_current_time(), g_gps_buf);
-      if (r > k_LogBufSize)
-	sprintf(gpsbuf, "GPS:BOGUS READING");
-      if (msg_count < k_msg_buf_size) {//buffer has room
-	strncpy(&g_msg_buf[msg_count * k_LogBufSize], gpsbuf, k_LogBufSize); //pad buffer   
-	++msg_count; //increment msg_count
-      }
-      else { //buffer is full
-	printf("ERROR in read_buffer_and_send: buffer full on gps write\n");
-	return;
-      } 
-    }
-    //write estimate to buffer
-    if (msg_count < k_msg_buf_size) {//buffer has room
-      strncpy(&g_msg_buf[msg_count * k_LogBufSize], global_estimate_buf, k_LogBufSize); 
-      ++msg_count; //increment msg_count
-    }
-    else { //buffer is full
-      printf("ERROR in read_buffer_and_send: buffer full on estimate write\n");
-      return;
-    }
-    //write waypoint to buffer
-    if (global_waypoint_flag) {
-      if (msg_count < k_msg_buf_size) {//buffer has room
-	strncpy(&g_msg_buf[msg_count * k_LogBufSize], global_waypoint_buf, k_LogBufSize); 
-	++msg_count; //increment msg_count
-	global_waypoint_flag = false; //reset flag
-      }
-      else { //buffer is full
-	printf("ERROR in read_buffer_and_send: buffer full on waypoint write\n");
-	return;
-      }
-    }
-    //check msg_count
-    if ((msg_count >= k_msg_buf_threshold) || halt) { //send data
-      if (!sensors_send_data(g_msg_buf, msg_count))
-	printf("ERROR sending buffer in read_buffer_and_send\n");
-      //clear buffer
-      memset(g_msg_buf, 0, k_msg_buf_bytes);
-      //reset msg_count
-      msg_count = 0;
-    } //else just return
+  //  if (!last_send) 
+  //  { //check route complete and if true, set last send
+  //    if (route_complete) //FIXME--route_complete not valid anymore
+  //      last_send = true;
+  //read g_imu_data and parse into text
+  r = snprintf(imubuf, k_LogBufSize, "%.6f:IMU:time:%lu:dt:%lu:"
+	       "Y:%.2f:P:%.2f:R:%.2f:"
+	       "Y(a):%.2f:M_h(a):%.2f:M_h:%.2f:"
+	       "Ax:%.2f:Ay:%.2f:Az:%.2f:Mx:%.2f:My:%.2f:Mz:%.2f:"
+	       "Gx:%.2f:Gy:%.2f:Gz:%.2f\n",
+	       sensors_current_time(),
+	       g_imu_data->timestamp, g_imu_data->dt,
+	       g_imu_data->data[0], g_imu_data->data[1], g_imu_data->data[2],
+	       g_imu_data->data[3], g_imu_data->data[4], g_imu_data->data[5],
+	       g_imu_data->data[6], g_imu_data->data[7], g_imu_data->data[8],
+	       g_imu_data->data[9], g_imu_data->data[10], g_imu_data->data[11],
+	       g_imu_data->data[12], g_imu_data->data[13], g_imu_data->data[14]);
+  if (r > k_LogBufSize)
+    sprintf(imubuf,"IMU:BOGUS READING");
+  //write text to g_msg_buf
+  if (msg_count < k_msg_buf_size) {//buffer has room
+    strncpy(&g_msg_buf[msg_count * k_LogBufSize], imubuf, k_LogBufSize); //pad buffer   
+    ++msg_count; //increment msg_count
+  }
+  else { //buffer is full
+    printf("ERROR in read_buffer_and_send: buffer full on imu write\n");
     return;
   }
+  //read g_encoders_data and parse into text
+  r =  snprintf(encoderbuf,k_LogBufSize,
+		"%.6f:ENC:time:%lu:dt:%lu:L:%.1f:R:%.1f:MCL:%d:MCR:%d\n",
+		sensors_current_time(),
+		g_encoders_data->timestamp, g_encoders_data->dt,
+		g_encoders_data->ticks[0], g_encoders_data->ticks[1],
+		g_motor_cmd_L, g_motor_cmd_R);
+  if (r > k_LogBufSize)
+    sprintf(encoderbuf, "ENC:BOGUS READING");
+  //write text to g_msg_buf
+  if (msg_count < k_msg_buf_size) {//buffer has room
+    strncpy(&g_msg_buf[msg_count * k_LogBufSize], encoderbuf, k_LogBufSize); //pad buffer
+    ++msg_count; //increment msg_count
+  }
+  else { //buffer is full
+    printf("ERROR in read_buffer_and_send: buffer full on encoder write\n");
+    return;
+  }
+  if (g_gps_new_data == 0) {//if new GPS data
+    //write g_gps_buf to g_msg_buf
+    r = snprintf(gpsbuf,k_LogBufSize, "%.6f:GPS:%s\n", sensors_current_time(), g_gps_buf);
+    if (r > k_LogBufSize)
+      sprintf(gpsbuf, "GPS:BOGUS READING");
+    if (msg_count < k_msg_buf_size) {//buffer has room
+      strncpy(&g_msg_buf[msg_count * k_LogBufSize], gpsbuf, k_LogBufSize); //pad buffer   
+      ++msg_count; //increment msg_count
+    }
+    else { //buffer is full
+      printf("ERROR in read_buffer_and_send: buffer full on gps write\n");
+      return;
+    } 
+  }
+  //write estimate to buffer
+  if (msg_count < k_msg_buf_size) {//buffer has room
+    strncpy(&g_msg_buf[msg_count * k_LogBufSize], global_estimate_buf, k_LogBufSize); 
+    ++msg_count; //increment msg_count
+  }
+  else { //buffer is full
+    printf("ERROR in read_buffer_and_send: buffer full on estimate write\n");
+    return;
+  }
+  // //write waypoint to buffer
+  // if (global_waypoint_flag) {
+  //   if (msg_count < k_msg_buf_size) {//buffer has room
+  // 	strncpy(&g_msg_buf[msg_count * k_LogBufSize], global_waypoint_buf, k_LogBufSize); 
+  // 	++msg_count; //increment msg_count
+  // 	global_waypoint_flag = false; //reset flag
+  //   }
+  //   else { //buffer is full
+  // 	printf("ERROR in read_buffer_and_send: buffer full on waypoint write\n");
+  // 	return;
+  //   }
+  // }
+  //check msg_count
+  if ((msg_count >= k_msg_buf_threshold) || halt) { //send data
+    if (!sensors_send_data(g_msg_buf, msg_count))
+      printf("ERROR sending buffer in read_buffer_and_send\n");
+    //clear buffer
+    memset(g_msg_buf, 0, k_msg_buf_bytes);
+    //reset msg_count
+    msg_count = 0;
+  } //else just return
+  return;
+  //  }
 }
 
 void finalize_buffer_and_send(unsigned int id) {
@@ -1448,16 +1656,18 @@ void *buffer_and_send_task(void *args) {
     BARRIER("buffer_and_send", "before pipeline");  
 
     if (!running) break;
+    double last = emperor_current_time();
     write_buffer_and_send(id);
+    double pre = emperor_current_time() - last;
 
     if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("buffer_and_send","after pipeline");}
     else {BARRIER("buffer_and_send", "after pipeline");}
 
-    rep_count++;
-    
-    double last = emperor_current_time();
-    read_buffer_and_send(id);
     double now = emperor_current_time();
+    rep_count++;  
+    read_buffer_and_send(id);
+    double post = emperor_current_time() - now;
+    //SAB: comment below might now be moot
     /* SAB: I know this timing is bogus, but I don't think I need to worry 
        about it.  The sensors and cameras all run at the proper speeds. 
        If I really cared, I could duplicate this timing on the write task 
@@ -1467,7 +1677,7 @@ void *buffer_and_send_task(void *args) {
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
        timings become entangled with other threads. */
-    double fraction_remaining = 1.0-fps*(now-last);
+    double fraction_remaining = 1.0-fps*(pre+post);//(now-last);
     if (fraction_remaining<0.0) {
       printf("buffer_and_send %u can't keep up in frame %lu, overused: %lf\n",
 	     id, frame_number, -fraction_remaining);
@@ -1485,29 +1695,30 @@ void *buffer_and_send_task(void *args) {
 
 //KF/move thread
 void initialize_estimate_and_move(unsigned int id){
-  //parse route into array of points (global)
-  char *str_num, *str_x, *str_y;   //parse raw route into x,y points. Format of string is: n:x1,y1;x2,y2;...;xn,yn
-  char msgbuf[k_traceBufSize];
-  strncpy(msgbuf, g_routebuf, k_traceBufSize);
-  str_num = strtok(msgbuf, ":");   // n:x1,y1;x2,y2;...;xn,yn
-  g_num_waypoints = atoi(str_num);
-  if (g_num_waypoints == 0) //bad string/no points, so must quit
-  {
-    printf("IMPROPERLY FORMATTED STRING passed to initialize_estimate_and_move, exiting\n");
-    //play error sound here?
-    route_complete = true;
-    return;
-  }
-  //finish parsing route into points
-  for (int i = 0; i < g_num_waypoints; i++) {
-    str_x = strtok(NULL, ",");
-    str_y = strtok(NULL, ";");
-    g_waypoints[i].x = atof(str_x);
-    g_waypoints[i].y = atof(str_y);
-  }
-  //initialize global point index
-  g_waypoint_index = 0;
-  memset(g_motor_prev, 0, k_maxBufSize);
+  // //parse route into array of points (global)
+  // char *str_num, *str_x, *str_y;   //parse raw route into x,y points. Format of string is: n:x1,y1;x2,y2;...;xn,yn
+  // char msgbuf[k_traceBufSize];
+  // strncpy(msgbuf, g_routebuf, k_traceBufSize);
+  // str_num = strtok(msgbuf, ":");   // n:x1,y1;x2,y2;...;xn,yn
+  // g_num_waypoints = atoi(str_num);
+  // if (g_num_waypoints == 0) //bad string/no points, so must quit
+  // {
+  //   printf("IMPROPERLY FORMATTED STRING passed to initialize_estimate_and_move, exiting\n");
+  //   //play error sound here?
+  //   route_complete = true;
+  //   return;
+  // }
+  // //finish parsing route into points
+  // for (int i = 0; i < g_num_waypoints; i++) {
+  //   str_x = strtok(NULL, ",");
+  //   str_y = strtok(NULL, ";");
+  //   g_waypoints[i].x = atof(str_x);
+  //   g_waypoints[i].y = atof(str_y);
+  // }
+  // //initialize global point index
+  // g_waypoint_index = 0;
+  // memset(g_motor_prev, 0, k_maxBufSize);
+
   //initialize Kalman Filter
   g_KF.measurementNoiseCov = *(Mat_<float>(7,7) <<
 			       mXN, 0,   0,       0,        0,    0,    0,     
@@ -1587,18 +1798,18 @@ void initialize_estimate_and_move(unsigned int id){
 void write_estimate_and_move(unsigned int id) {
   //copy local estimate to global
   strncpy(global_estimate_buf, local_estimate_buf, k_LogBufSize);
-  //if new waypoint, write it and set flag
-  if (strlen(local_waypoint_buf) > 0) {
-    strncpy(global_waypoint_buf, local_waypoint_buf, k_LogBufSize);
-    global_waypoint_flag = true;
-  }
+  // //if new waypoint, write it and set flag
+  // if (strlen(local_waypoint_buf) > 0) {
+  //   strncpy(global_waypoint_buf, local_waypoint_buf, k_LogBufSize);
+  //   global_waypoint_flag = true;
+  // }
   //printf("write_estimate_and_move, task %u\n", id);
   return;} 
 
 void read_estimate_and_move(unsigned int id) {
   float Lat, Long, Alt, HDOP, Quality, Heading, MagVar, Speed;
   int year, month, day, hour, min, sec;
-  char logbuf[k_LogBufSize];
+  //  char logbuf[k_LogBufSize];
   char tempbuf[k_LogBufSize];
   Mat Measurement = Mat::zeros(7,1,CV_32F);
   Mat control = Mat::zeros(2,1,CV_32F);
@@ -1690,134 +1901,134 @@ void read_estimate_and_move(unsigned int id) {
 	  g_my_pose.x, g_my_pose.y, g_my_pose.theta);
   strncpy(local_estimate_buf, tempbuf, k_LogBufSize);
 
-  //delay here to let cameras get going before the robot moves
-  if (frame_number < 50) return;
+  // //delay here to let cameras get going before the robot moves
+  // if (frame_number < 50) return; //FIXME--probably need this somewhere else
       
-  //check distance between robot and point
-  double the_distance = DistanceBetween(g_my_pose, g_waypoints[g_waypoint_index]);
-  //if d < some threshold, declare at point and increment global point index
-  if (the_distance <= k_distance_threshold) 
-  {
-    motor_stop(motor_fd); //stop robot
-    //log command (no need to check if different from last here) b/c break is coming
-    sprintf(logbuf,"REACHED POINT %d, auto-executed: motor_%s", g_waypoint_index+1, cmd_stop);
-    int retval = emperor_log_data(logbuf, log_sockfd);
-    if (retval != 0)
-      printf("logging failed for \'%s'\n", logbuf);
-    //***LOG INTO IMU LOG AS WELL***  
-    sprintf(tempbuf,"\nWAYPOINT %d %f %f\n",g_waypoint_index+1, 
-	    g_waypoints[g_waypoint_index].x, g_waypoints[g_waypoint_index].y);
-    strncpy(local_waypoint_buf, tempbuf, k_LogBufSize);
-    //clear g_motor_prev and increment g_waypoint_index
-    memset(g_motor_prev, 0, k_maxBufSize);
-    ++g_waypoint_index;
-    //if at last point, stop motors and stop threads
-    if (g_waypoint_index == g_num_waypoints) {
-      motor_stop(motor_fd); //stop robot
-      route_complete = true;
-      //stop_barrier_threads(); //we're done!
-      return;
-    }
-    else
-      return;
-  }
-  else if (!route_complete) {  //move 
-    //Steps: 1. Decide command 
-    //       2. check against previous command-->send and log only if different
-    //clear local waypoint buffer
-    memset(local_waypoint_buf, 0, k_LogBufSize);
-    double phi = AngleBetween(g_my_pose, g_waypoints[g_waypoint_index]);
-    //fix possible loop-around in thetas
-    while (phi <= g_my_pose.theta - k_PI)
-      phi += 2*k_PI;
-    while (phi >= g_my_pose.theta + k_PI)
-      phi -= 2*k_PI;
-    double phi_theta_diff = phi - g_my_pose.theta;
-    char motor[k_maxBufSize];
-    memset(motor,0,k_maxBufSize); //clear for new command
-    if (fabs(phi_theta_diff) < k_angle_threshold_2) //drive straight
-    {
-      strncpy(motor, cmd_forward_2, strlen(cmd_forward_2)); //stay with speed 2 for now
-      if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
-	return; //go back to top of position-checking loop
-      else
-      {
-	motor_forward_2(motor_fd); //send command to motors
-	memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
-	strncpy(g_motor_prev, motor, strlen(motor));
-      }
-    }
-    //********************NEED SOMETHING HERE TO BACK UP IF PAST POINT (FABS(PHI_THETA_DIF) CLOSE TO PI)
-    else if (phi_theta_diff < 0) //need to turn or pivot right
-    {//***NEED TO INCLUDE STOPS WHEN COMING OUT OF/GOING INTO PIVOTS
-      //decide if pivot or turn
-      if (fabs(phi_theta_diff) < k_angle_threshold_1) //turn right
-      {
-	strncpy(motor, cmd_forward_right_2, strlen(cmd_forward_right_2)); 
-	//stay with speed 2 for now
-	if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
-	  return; //go back to top of position-checking loop
-	else
-	{
-	  //motor_stop(motor_fd); //stop before turning in case coming out of a pivot
-	  motor_forward_right_2(motor_fd); //send command to motors
-	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
-	  strncpy(g_motor_prev, motor, strlen(motor));
-	}
-      }
-      else //pivot right
-      {
-	strncpy(motor, cmd_pivot_right_2, strlen(cmd_pivot_right_2)); 
-	if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
-	  return; //go back to top of position-checking loop
-	else
-	{
-	  //motor_stop(motor_fd); //stop before pivoting
-	  motor_pivot_right_2(motor_fd); //send command to motors
-	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
-	  strncpy(g_motor_prev, motor, strlen(motor));
-	}
-      }
-    }
-    else // phi_theta_diff > 0, so need to turn or pivot left
-    {
-      if (fabs(phi_theta_diff) < k_angle_threshold_1) //turn left
-      {
-	strncpy(motor, cmd_forward_left_2, strlen(cmd_forward_left_2)); 
-	//stay with speed 2 for now
-	if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
-	  return; //go back to top of position-checking loop
-	else
-	{
-	  //motor_stop(motor_fd); //stop before turning in case coming out of a pivot
-	  motor_forward_left_2(motor_fd); //send command to motors
-	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
-	  strncpy(g_motor_prev, motor, strlen(motor));
-	}
-      }
-      else //pivot left
-      {
-	strncpy(motor, cmd_pivot_left_2, strlen(cmd_pivot_left_2)); 
-	if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
-	  return; //go back to top of position-checking loop
-	else
-	{
-	  //motor_stop(motor_fd); //stop before pivoting
-	  motor_pivot_left_2(motor_fd); //send command to motors
-	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
-	  strncpy(g_motor_prev, motor, strlen(motor));
-	}
-      }
-    }
-    //log the command if different from last 
-    //(returns will keep execution from getting here on repeated commands
-    memset(logbuf,0,k_LogBufSize);
-    sprintf(logbuf,"auto-executed: motor_%s", motor);
-    //printf("%s\n", logbuf);
-    int retval = emperor_log_data(logbuf,log_sockfd);
-    if (retval != 0)
-      printf("logging failed for \'%s'\n", logbuf);
-  }
+  // //check distance between robot and point
+  // double the_distance = DistanceBetween(g_my_pose, g_waypoints[g_waypoint_index]);
+  // //if d < some threshold, declare at point and increment global point index
+  // if (the_distance <= k_distance_threshold) 
+  // {
+  //   motor_stop(motor_fd); //stop robot
+  //   //log command (no need to check if different from last here) b/c break is coming
+  //   sprintf(logbuf,"REACHED POINT %d, auto-executed: motor_%s", g_waypoint_index+1, cmd_stop);
+  //   int retval = emperor_log_data(logbuf, log_sockfd);
+  //   if (retval != 0)
+  //     printf("logging failed for \'%s'\n", logbuf);
+  //   //***LOG INTO IMU LOG AS WELL***  
+  //   sprintf(tempbuf,"\nWAYPOINT %d %f %f\n",g_waypoint_index+1, 
+  // 	    g_waypoints[g_waypoint_index].x, g_waypoints[g_waypoint_index].y);
+  //   strncpy(local_waypoint_buf, tempbuf, k_LogBufSize);
+  //   //clear g_motor_prev and increment g_waypoint_index
+  //   memset(g_motor_prev, 0, k_maxBufSize);
+  //   ++g_waypoint_index;
+  //   //if at last point, stop motors and stop threads
+  //   if (g_waypoint_index == g_num_waypoints) {
+  //     motor_stop(motor_fd); //stop robot
+  //     route_complete = true;
+  //     //stop_barrier_threads(); //we're done!
+  //     return;
+  //   }
+  //   else
+  //     return;
+  // }
+  // else if (!route_complete) {  //move 
+  //   //Steps: 1. Decide command 
+  //   //       2. check against previous command-->send and log only if different
+  //   //clear local waypoint buffer
+  //   memset(local_waypoint_buf, 0, k_LogBufSize);
+  //   double phi = AngleBetween(g_my_pose, g_waypoints[g_waypoint_index]);
+  //   //fix possible loop-around in thetas
+  //   while (phi <= g_my_pose.theta - k_PI)
+  //     phi += 2*k_PI;
+  //   while (phi >= g_my_pose.theta + k_PI)
+  //     phi -= 2*k_PI;
+  //   double phi_theta_diff = phi - g_my_pose.theta;
+  //   char motor[k_maxBufSize];
+  //   memset(motor,0,k_maxBufSize); //clear for new command
+  //   if (fabs(phi_theta_diff) < k_angle_threshold_2) //drive straight
+  //   {
+  //     strncpy(motor, cmd_forward_2, strlen(cmd_forward_2)); //stay with speed 2 for now
+  //     if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
+  // 	return; //go back to top of position-checking loop
+  //     else
+  //     {
+  // 	motor_forward_2(motor_fd); //send command to motors
+  // 	memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
+  // 	strncpy(g_motor_prev, motor, strlen(motor));
+  //     }
+  //   }
+  //   //********************NEED SOMETHING HERE TO BACK UP IF PAST POINT (FABS(PHI_THETA_DIF) CLOSE TO PI)
+  //   else if (phi_theta_diff < 0) //need to turn or pivot right
+  //   {//***NEED TO INCLUDE STOPS WHEN COMING OUT OF/GOING INTO PIVOTS
+  //     //decide if pivot or turn
+  //     if (fabs(phi_theta_diff) < k_angle_threshold_1) //turn right
+  //     {
+  // 	strncpy(motor, cmd_forward_right_2, strlen(cmd_forward_right_2)); 
+  // 	//stay with speed 2 for now
+  // 	if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
+  // 	  return; //go back to top of position-checking loop
+  // 	else
+  // 	{
+  // 	  //motor_stop(motor_fd); //stop before turning in case coming out of a pivot
+  // 	  motor_forward_right_2(motor_fd); //send command to motors
+  // 	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
+  // 	  strncpy(g_motor_prev, motor, strlen(motor));
+  // 	}
+  //     }
+  //     else //pivot right
+  //     {
+  // 	strncpy(motor, cmd_pivot_right_2, strlen(cmd_pivot_right_2)); 
+  // 	if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
+  // 	  return; //go back to top of position-checking loop
+  // 	else
+  // 	{
+  // 	  //motor_stop(motor_fd); //stop before pivoting
+  // 	  motor_pivot_right_2(motor_fd); //send command to motors
+  // 	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
+  // 	  strncpy(g_motor_prev, motor, strlen(motor));
+  // 	}
+  //     }
+  //   }
+  //   else // phi_theta_diff > 0, so need to turn or pivot left
+  //   {
+  //     if (fabs(phi_theta_diff) < k_angle_threshold_1) //turn left
+  //     {
+  // 	strncpy(motor, cmd_forward_left_2, strlen(cmd_forward_left_2)); 
+  // 	//stay with speed 2 for now
+  // 	if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
+  // 	  return; //go back to top of position-checking loop
+  // 	else
+  // 	{
+  // 	  //motor_stop(motor_fd); //stop before turning in case coming out of a pivot
+  // 	  motor_forward_left_2(motor_fd); //send command to motors
+  // 	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
+  // 	  strncpy(g_motor_prev, motor, strlen(motor));
+  // 	}
+  //     }
+  //     else //pivot left
+  //     {
+  // 	strncpy(motor, cmd_pivot_left_2, strlen(cmd_pivot_left_2)); 
+  // 	if (strncmp(g_motor_prev, motor, k_maxBufSize) == 0) //repeated command
+  // 	  return; //go back to top of position-checking loop
+  // 	else
+  // 	{
+  // 	  //motor_stop(motor_fd); //stop before pivoting
+  // 	  motor_pivot_left_2(motor_fd); //send command to motors
+  // 	  memset(g_motor_prev,0,k_maxBufSize); //copy motor to g_motor_prev
+  // 	  strncpy(g_motor_prev, motor, strlen(motor));
+  // 	}
+  //     }
+  //   }
+  //   //log the command if different from last 
+  //   //(returns will keep execution from getting here on repeated commands
+  //   memset(logbuf,0,k_LogBufSize);
+  //   sprintf(logbuf,"auto-executed: motor_%s", motor);
+  //   //printf("%s\n", logbuf);
+  //   int retval = emperor_log_data(logbuf,log_sockfd);
+  //   if (retval != 0)
+  //     printf("logging failed for \'%s'\n", logbuf);
+  // }
   return;
 }
 
@@ -1842,23 +2053,24 @@ void *estimate_and_move_task(void *args)
     BARRIER("estimate_and_move", "before pipeline");
 
     if (!running) break;
+    double last = emperor_current_time();
     write_estimate_and_move(id);
+    double pre = emperor_current_time() - last;
 
     if ((rep_count % sensor_cam_ratio) == 0) {BARRIER2("estimate_and_move","after pipeline");}
     else {BARRIER("estimate_and_move", "after pipeline");}
     
-    rep_count++;
-    
-    double last = emperor_current_time();
-    if (!route_complete)
-      read_estimate_and_move(id);
-
     double now = emperor_current_time();
+    rep_count++;
+    //    if (!route_complete) //FIXME--route_complete not valid anymore
+    read_estimate_and_move(id);
+    double post = emperor_current_time() - now;
+    //SAB: comment below might now be moot
     /* SAB: I know this timing is bogus, but I don't think I need to worry 
        about it.  The sensors and cameras all run at the proper speeds. 
        If I really cared, I could duplicate this timing on the write task 
        above the barrier. */
-    double fraction_remaining = 1.0-fps*(now-last);
+    double fraction_remaining = 1.0-fps*(pre+post);//(now-last);
     if (fraction_remaining<0.0) {
       printf("estimate_and_move %u can't keep up in frame %lu, overused: %lf\n",
 	     id, frame_number, -fraction_remaining);
@@ -1948,17 +2160,20 @@ void *cameras_task(void *args)
 
   while (TRUE) 
   {
-    frame_number_cameras++;
 
+    double last = emperor_current_time();
+    frame_number_cameras++;
     write_cameras(id);
+    double pre = emperor_current_time() - last;
 
     if (!running) break; 
     //need to do this right before the barrier to prevent a race condition / hang
     BARRIER2("cameras", "after pipeline");
 
-    double last = emperor_current_time();
-    read_cameras(id);
     double now = emperor_current_time();
+    read_cameras(id);
+    double post = emperor_current_time() - now;
+    //SAB: comment below might now be moot
     /* SAB: I know this timing is bogus, but I don't think I need to worry 
        about it.  The sensors and cameras all run at the proper speeds. 
        If I really cared, I could duplicate this timing on the write task 
@@ -1969,10 +2184,11 @@ void *cameras_task(void *args)
        two calls to current_time() instead of one. Because otherwise the
        timings become entangled with other threads. */
     //I think this timing might be wrong, but not sure it matters
-    double fraction_remaining = 1.0-fps2*(now-last);
+    double fraction_remaining = 1.0-fps2*(pre+post);//(now-last);
     if (fraction_remaining<0.0) {
-      printf("camera %u can't keep up in frame %lu, overused: %lf\n",
-  	     id, frame_number_cameras, -fraction_remaining);
+      // printf("camera %u can't keep up in frame %lu, overused: %lf\n",
+      // 	     id, frame_number_cameras, -fraction_remaining);
+      //SAB:muting this printf b/c it happens too often--camera can take slightly longer than 1/10s, but it's still in lock-step with the sensors, so no big deal
     }
     else if (time_threads) {
       printf("unused camera %u thread time in frame %lu: %lf\n",
@@ -2082,18 +2298,20 @@ void *bump_switches_task(void *args)
     BARRIER("bump_switches", "before pipeline");   
 
     if (!running) break;
-    //    double last = emperor_current_time();
+    double last = emperor_current_time();
     write_bump_switches(id);
+    double pre = emperor_current_time() - last;
 
     if ((rep_count % sensor_cam_ratio) == 0) {
       BARRIER2("bump_switches","after pipeline");}
     else 
       BARRIER("bump_switches", "after pipeline");
 
-    rep_count++;
-    double last = emperor_current_time();
-    read_bump_switches(id);
     double now = emperor_current_time();
+    rep_count++;
+    read_bump_switches(id);
+    double post = emperor_current_time() - now;
+    //SAB: comment below might now be moot
     /* SAB: I know this timing is bogus, but I don't think I need to worry 
        about it.  The sensors and cameras all run at the proper speeds. 
        If I really cared, I could duplicate this timing on the write task 
@@ -2103,7 +2321,7 @@ void *bump_switches_task(void *args)
        conditional break, the conditional printfs, and the loop. And it does
        two calls to current_time() instead of one. Because otherwise the
        timings become entangled with other threads. */
-    double fraction_remaining = 1.0-fps*(now-last);
+    double fraction_remaining = 1.0-fps*(pre+post);//(now-last);
     if (fraction_remaining<0.0) {
       printf("bump_switches %u can't keep up in frame %lu, overused: %lf\n",
 	     id, frame_number, -fraction_remaining);

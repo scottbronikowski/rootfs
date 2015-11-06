@@ -1,6 +1,9 @@
 /*
 
-  Header for main control program to run vader-rover for automated driving.
+  Header for main control program to run vader-rover for MANUAL driving.
+
+  **THIS IS BUILT FROM A MERGE OF THE-FORCE AND EMPEROR-BEFORE-BARRIERS**
+
   Started with a merge of the old emperor and run-sensors programs, along with Dan's code in log_to_track.cpp to do Kalman filter position finding from sensor data.
   Then removed code dealing with listening for commands from game controller.
   Replaced that section with code that listens for a trace (series of waypoints) and drives to those waypoints automatically.
@@ -9,6 +12,8 @@
   Date: 16 October 2014
 
   Edited beginning on 28 October 2015 to add a second barrier to control the camera thread and ensure that this thread executes at exactly 10 Hz while the other threads execute at 50 Hz.
+
+  CONVERTED starting 5 Nov 15 to put manual driving back in while keeping most other stuff the same.
 */
 
 #ifndef EMPEROR_H
@@ -215,7 +220,8 @@ struct task_args {
 
 //prototypes 
 //(from emperor)
-void the_force_terminator(int signum);
+void emperor_terminator(int signum);
+int emperor_parse_and_execute(char* msgbuf);
 int emperor_log_data(char* databuf, int log_fd);
 double emperor_current_time(void);
 //(from run-sensors)

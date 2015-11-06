@@ -858,3 +858,42 @@ Older:
        have emperor start cameras automatically (delay???)
        map old stop cameras command to stop emperor
        rip out all move stuff from estimate_and_move (rename?)
+
+-----------git commit b6e48c9----------------
+
+6 Nov 15
+
+--Odometry calibration procedure is to manually drive to known
+  measured points on floor, marking them in the log file (should be a
+  button in driver-gui, if not look at old versions in git).  Then Dan
+  has code that optimizes the parameters (rover width, R and L
+  ticks/cm) so that estimated locations match measured locations.
+  Should be able to do this on each floor surface we use.
+
+--Completed to-dos from above and new emperor seems to work.  Cameras
+  get 10fps, but getting occasional encoder dts that are too large.
+  Also seeing some imu can't keep up messages, but that is happening
+  because the imu thread is the timekeeper.  Changing around timing to
+  not account for barrier wait time to try and find the culprit.
+  PROBABLY WILL HAVE TO PORT THIS BACK TO THE-FORCE.
+
+--Discovered that the camera thread is the culprit.  Every few frames,
+  it takes just slightly longer than 100ms (as judged by the
+  timestamps in camera_front.txt) to record a frame.  This is not
+  critical, though, because even though the framerate is not exact,
+  the camera is still locked in sync with the other sensors, so that
+  there are always 5 sensor readings / position estimates for every
+  frame.  That means when we are trying to plot traces in sync with
+  videos, every 5th estimate corresponds to 1 frame of the video.
+  De-stitching the video at 10fps should still be correct, since
+  that's the rate at which it was put together.  Also, I muted
+  (commented out) the printf that announces the camera can't keep up
+  since it's not important.  DID NOT PORT NEW TIMING BACK TO
+  THE-FORCE.
+
+--Declaring success on barrier methods for both the-force and
+  emperor.  Haven't identified any problems that need to be fixed yet.
+
+--Do I want to go through and clean up all the commented out stuff in
+  the new emperor?
+
